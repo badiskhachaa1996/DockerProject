@@ -14,7 +14,7 @@ export class NotificationService {
   public notifs: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   socket = io(environment.origin.replace('/soc', ''));
   apiUrl = environment.origin + "notification/"
-  httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
+  httpOptions1 = { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) };
 
   constructor(private http: HttpClient) { }
 
@@ -71,6 +71,11 @@ export class NotificationService {
   }
   reloadNotif(data) {
     this.socket.emit("reloadNotif", (data))
+  }
+
+  newEtudiantIMS(user) {
+    let url = this.apiUrl + "newEtudiantIMS"
+    return this.http.post<any>(url, user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
 }

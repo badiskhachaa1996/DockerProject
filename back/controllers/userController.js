@@ -194,6 +194,14 @@ app.get("/get-all-for-cv", (_, res) => {
 });
 
 
+//Recuperation de la liste des users pour la partie project
+app.get("/get-all-salarie", (_, res) => {
+    User.find({ $or: [{type: 'Salarié'}, {role: 'Admin'}, {role: 'Agent'}, {role: 'Responsable'}] })
+        .then((usersFromDb) => { res.status(200).send(usersFromDb); })
+        .catch((error) => { res.status(400).send(error.message); });
+});
+
+
 //Recuperation de la liste des users populate sur les services
 app.get("/getAllPopulate", (_, res) => {
     User.find().populate("service_id")
@@ -276,6 +284,7 @@ app.patch("/patchById", (req, res) => {
         rue_adresse: user.rue_adresse,
         numero_adresse: user.numero_adresse,
         postal_adresse: user.postal_adresse,
+        date_creation: user.date_creation
     })
         .then((response) => { res.status(201).send(response); })
         .catch((error) => { res.status(400).json({ msg: error.message }); });

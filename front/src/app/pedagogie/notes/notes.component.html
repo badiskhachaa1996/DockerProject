@@ -678,7 +678,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
-            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par groupe: {{
+            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Bulletin de {{
                 classeForBGenerateBulletin.titre }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"

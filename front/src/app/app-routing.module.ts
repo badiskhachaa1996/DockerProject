@@ -135,14 +135,20 @@ import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/result
 import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
+import { MyTaskComponent } from './projects/my-task/my-task.component';
+import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
+import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
+import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
         children: [
             { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
-            { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'notes', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
             { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
@@ -218,6 +224,11 @@ const routes: Routes = [
 
             /** end */
 
+            /** IMS Project */
+            { path: 'my-tasks', canActivate: [AuthGuardService], component: MyTaskComponent },
+            { path: 'task-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
+            /** end */
+
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
             { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
@@ -244,8 +255,10 @@ const routes: Routes = [
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
-            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService] }
-
+            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService]},
+            { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

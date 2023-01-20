@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
   isEtudiant = false
   isFormateur = false
   isCommercial = false
+  isCEO = false
   isReinscrit = false
   isUnknow = false
 
@@ -83,8 +84,8 @@ export class DashboardComponent implements OnInit {
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
-    minTime:'08:00:00',
-    firstDay:1
+    minTime: '08:00:00',
+    firstDay: 1
   }
 
   //Options du calendrier etudiant
@@ -103,8 +104,8 @@ export class DashboardComponent implements OnInit {
     eventClick: this.eventClickFC.bind(this),
     events: [],
     defaultView: "timeGridDay",
-    minTime:'08:00:00',
-    firstDay:1
+    minTime: '08:00:00',
+    firstDay: 1
   }
 
   dernotes: Note[] = [];
@@ -124,8 +125,8 @@ export class DashboardComponent implements OnInit {
     eventClick: this.eventClickFC.bind(this),
     events: [],
     defaultView: "timeGridDay",
-    minTime:'08:00:00',
-    firstDay:1
+    minTime: '08:00:00',
+    firstDay: 1
   }
 
   seanceNow: Seance[] = [];
@@ -251,41 +252,34 @@ export class DashboardComponent implements OnInit {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
         }
-        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant"
+        this.isEtudiant = dataUser.type == "Initial" || dataUser.type == "Alternant"
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
-        if (this.isEtudiant) {
-          this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+        this.isCEO = dataUser.type == "CEO Entreprise";
+        this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+          if (dataEtu) {
             this.dataEtudiant = dataEtu
-            if (dataEtu) {
-              this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
-              if (dataEtu.classe_id)
-                this.refreshEvent(dataEtu)
-              this.isEtudiant = !this.isReinscrit;
-              this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
-                ((responseNote) => {
-                  this.notes = responseNote;
-                  this.dernotes = this.notes.slice(1, 6)
-                }));
-            } else {
-              this.isEtudiant = false
-            }
-          })
-          // recuperation de la liste des notes par étudiant
-          this.EtuService.getByUser_id(this.token.id).subscribe(
-            (responseEtu) => {
-              if (responseEtu) {
-
-              }
-            });
-        }
+            this.isEtudiant = true
+            this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
+            if (dataEtu.classe_id)
+              this.refreshEvent(dataEtu)
+            this.isEtudiant = !this.isReinscrit;
+            this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
+              ((responseNote) => {
+                this.notes = responseNote;
+                this.dernotes = this.notes.slice(1, 6)
+              }));
+          } else {
+            this.isEtudiant = false
+          }
+        })
         if (this.isFormateur) {
           this.seanceService.getAllbyFormateur(this.token.id).subscribe(
             ((resSea) => {
               this.showEvents(resSea)
             }));
         }
-        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial);
+        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO);
       }
     })
 
@@ -303,7 +297,7 @@ export class DashboardComponent implements OnInit {
 
     //Initialisation du formulaire de tache
     this.onInitFormDailyActivityDetails()
-  
+
   }
 
   SCIENCE() {
@@ -471,27 +465,23 @@ export class DashboardComponent implements OnInit {
 
 
   //Initialiser le formulaire 
-  onInitFormDailyActivityDetails()
-  {
+  onInitFormDailyActivityDetails() {
     this.formDailyActivityDetails = this.formBuilder.group({
       task: ['', Validators.required],
       tasks: this.formBuilder.array([]),
     });
   }
 
-  getTasks()
-  {
+  getTasks() {
     return this.formDailyActivityDetails.get('tasks') as FormArray;
   }
 
-  onAddTask()
-  {
+  onAddTask() {
     const newTaskControl = this.formBuilder.control('', Validators.required);
-    this.getTasks().push(newTaskControl); 
+    this.getTasks().push(newTaskControl);
   }
 
-  onRemoveTask(i: number)
-  {
+  onRemoveTask(i: number) {
     this.getTasks().removeAt(i);
   }
 

@@ -44,7 +44,7 @@ export class ProspectsComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  showAssignForm: Prospect = null;
+  showAssignForm: any = null;
 
   groupeList = [];
 
@@ -136,7 +136,7 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    let data = { _id: this.showAssignForm._id, groupe: this.AssignForm.value.groupe, email: this.users[this.showAssignForm.user_id].email }
+    let data = { _id: this.showAssignForm._id, groupe: this.AssignForm.value.groupe, email: this.showAssignForm.user_id.email }
     //this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
     this.etudiantService.assignToGroupe(data).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Etudiant assigné à un groupe", detail: "L'étudiant a été assigné" })

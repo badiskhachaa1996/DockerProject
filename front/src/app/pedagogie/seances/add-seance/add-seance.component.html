@@ -157,11 +157,17 @@
                     <input type="date" formControlName="date_fin_plannification"
                         min="{{ seanceForm.value.date_debut | date:'yyyy-MM-dd' }}" pInputText>
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label>Autorisation de signature <span style="color: red;"> * </span></label>
                     <p-selectButton
                         [options]="[{label:'Signature autorisée par le formateur seulement',value:true},{label:'Signature en début de séance',value:false}]"
                         formControlName="forcedAllowedByFormateur"></p-selectButton>
+                </div>
+                <div class="field col-6">
+                    <label>Signature optionnel <span style="color: red;"> * </span></label>
+                    <p-selectButton
+                        [options]="[{label:'Signature optionnel',value:true},{label:'Signature obligatoire',value:false}]"
+                        formControlName="isOptionnel"></p-selectButton>
                 </div>
                 <div>
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"

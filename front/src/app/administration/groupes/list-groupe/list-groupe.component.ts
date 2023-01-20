@@ -266,7 +266,6 @@ export class ListGroupeComponent implements OnInit {
     semestre: ['', Validators.required]
   });
   initPV(rowData) {
-    this.semestreList = [{ label: "Annuel", value: "Annuel" }]
     this.ExamenService.getAllByClasseId(rowData._id).subscribe(examens => {
       this.showPV = rowData
     })
@@ -274,6 +273,10 @@ export class ListGroupeComponent implements OnInit {
 
   generatePV() {
     this.router.navigate(['pv-annuel', this.formPV.value.semestre, this.showPV._id])
+  }
+
+  generatePVApp() {
+    this.router.navigate(['pv-appreciation', this.formPV.value.semestre, this.showPV._id])
   }
 
 }

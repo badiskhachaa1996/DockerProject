@@ -3,8 +3,7 @@
     <div>
         <div class="col-12">
             <div class="card">
-                <img src="\assets\images\logoIMS.png" alt="logo INTED"
-                style="width: 10%;" class="m-2">
+                <img src="\assets\images\logoIMS.png" alt="logo INTED" style="width: 10%;" class="m-2">
                 <h4 style="text-align: center;">Questionnaire de satisfaction </h4>
                 <p style="text-align: center; font-size: 12px;">Vous êtes étudiant dans une des écoles de INTED GROUP
                     (ESTYA,ESPIC,ADG,STUDINFO,INTUNS). Afin d'améliorer la qualité de nos offres, veuillez remplir le
@@ -22,22 +21,19 @@
                     <div class="field col-12">
                         <label>Question 2 :</label><br>
                         <label>Dans quelle école êtes-vous inscrit ?</label>
-                        <p-dropdown [options]="ecoleDropdown" formControlName="ecoleInscrit"
-                            placeholder="Choissisez votre école"></p-dropdown>
+                        <input type="text" pInputText formControlName="ecoleInscrit" placeholder="Ex: Estya" />
                     </div>
 
                     <div class="field col-12">
                         <label>Question 3 :</label><br>
                         <label>Dans quel campus ?</label>
-                        <p-dropdown [options]="campusDropdown" formControlName="campus"
-                            placeholder="Choissisez votre campus"></p-dropdown>
+                        <input type="text" pInputText formControlName="campus" placeholder="Ex: Paris" />
                     </div>
 
                     <div class="field col-12">
                         <label>Question 4 :</label><br>
                         <label>En quelle année de formation êtes-vous ?</label>
-                        <p-dropdown [options]="choixAnnee" formControlName="annee_formation"
-                            placeholder="Choissisez votre année scolaire"></p-dropdown>
+                        <input type="text" pInputText formControlName="annee_formation" placeholder="Ex: 2022-2024" />
                     </div>
 
                     <div class="field col-12">
@@ -101,8 +97,13 @@
                     <div class="field col-12">
                         <label>Question 16 :</label><br>
                         <label>L’école répond-elle à vos attentes premières ?</label>
-                        <p-dropdown [options]="dropdownAttentes" formControlName="ecole"
+                        <p-dropdown [options]="dropdownAttentes" formControlName="ecole" (onChange)="changeAttente()"
                             placeholder="Choissisez votre réponse"></p-dropdown>
+                    </div>
+                    <div class="field col-12" *ngIf="satisfactionsForm.value.ecole=='Pas tout à fait'">
+                        <label>Question 16b :</label><br>
+                        <label>Que manque-t-il à l'école pour répondre à vos attentes premières ?</label>
+                        <textarea pInputTextarea formControlName="ecole_propositions"></textarea>
                     </div>
                     <div class="field col-12">
                         <label>Question 17 :</label><br>

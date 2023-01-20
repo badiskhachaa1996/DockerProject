@@ -241,7 +241,13 @@ import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
+import { MyTaskComponent } from './projects/my-task/my-task.component';
+import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
+import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
+import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 
 
 @NgModule({
@@ -493,7 +499,13 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
     QuestionnaireFinFormationComponent,
     ResultatQFFComponent,
     PovFormateurComponent,
+    MyTaskComponent,
+    TaskManagementComponent,
     PvAnnuelComponent,
+    BulletinComponent,
+    ListEntrepriseCeoComponent,
+    PvAppreciationComponent,
+    AppreciationInputComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

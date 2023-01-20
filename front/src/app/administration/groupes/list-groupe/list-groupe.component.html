@@ -53,13 +53,16 @@
 			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
 				(click)="showPV = null; formPV.reset()"> </i>
 			<h4 style="text-align: center;">Générer un PV</h4>
-			<form class="p-fluid p-formgrid grid" [formGroup]="formPV" (ngSubmit)="generatePV()">
+			<form class="p-fluid p-formgrid grid" [formGroup]="formPV">
 				<div class="field col-12">
 					<label for="campus">Semestre</label>
 					<p-dropdown [options]="semestreList" formControlName="semestre" placeholder="Choissisez un semestre"></p-dropdown>
 				</div>
-				<div style="justify-content: right;">
-					<button pButton label="Générer" type="submit" [disabled]="formPV.invalid"></button>
+				<div style="justify-content: right;" class="col-6">
+					<button pButton label="PV Note" type="button" [disabled]="formPV.invalid" (click)="generatePV()"></button>
+				</div>
+				<div style="justify-content: right;" class="col-6">
+					<button pButton label="PV Appreciations" type="button" [disabled]="formPV.invalid" (click)="generatePVApp()"></button>
 				</div>
 			</form>
 		</div>

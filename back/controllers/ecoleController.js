@@ -13,8 +13,7 @@ const logoStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
         let id = req.body.id;
         let link = 'storage/ecole/' + id;
-        if(!fs.existsSync(link))
-        {
+        if (!fs.existsSync(link)) {
             fs.mkdirSync(link, { recursive: true });
         }
 
@@ -30,8 +29,7 @@ const uploadLogo = multer({ storage: logoStorage });
 app.post("/sendLogo", uploadLogo.single("file"), (req, res, next) => {
     const file = req.file;
 
-    if(!file) 
-    {
+    if (!file) {
         const error = new Error('Aucun fichier chargé');
         error.httpStatusCode = 400;
         return next(error);
@@ -45,8 +43,7 @@ const cachetStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
         let id = req.body.id;
         let link = 'storage/ecole/' + id;
-        if(!fs.existsSync(link))
-        {
+        if (!fs.existsSync(link)) {
             fs.mkdirSync(link, { recursive: true });
         }
         callBack(null, link);
@@ -61,8 +58,7 @@ const uploadCachet = multer({ storage: cachetStorage });
 app.post("/sendCachet", uploadCachet.single('file'), (req, res, next) => {
     const file = req.file;
 
-    if(!file)
-    {
+    if (!file) {
         const error = new Error('Aucun fichier choisis');
         error.httpStatusCode = 400;
         return next(error);
@@ -78,8 +74,7 @@ const pPStorage = multer.diskStorage({
         let id = req.body.id;
         let link = 'storage/ecole/' + id;
 
-        if(!fs.existsSync(link))
-        {
+        if (!fs.existsSync(link)) {
             fs.mkdirSync(link, { recursive: true });
         }
         callBack(null, link);
@@ -89,13 +84,12 @@ const pPStorage = multer.diskStorage({
     }
 });
 
-const uploadPp = multer({storage: pPStorage});
+const uploadPp = multer({ storage: pPStorage });
 
 app.post("/sendPp", uploadPp.single('file'), (req, res, next) => {
     const file = req.file;
 
-    if(!file)
-    {
+    if (!file) {
         const error = new Error('Aucun fichier choisis');
         error.httpStatusCode = 400;
         return next(error);
@@ -120,17 +114,17 @@ app.post("/createecole", (req, res) => {
         site: data.site,
         telephone: data.telephone,
         logo: data.logo,
-        });
-        ecole.save().then((ecoleFromDB) => {
-            res.status(200).send(ecoleFromDB);
-        }).catch((error) => {
-            res.status(404).send(error);
-        })
+    });
+    ecole.save().then((ecoleFromDB) => {
+        res.status(200).send(ecoleFromDB);
+    }).catch((error) => {
+        res.status(404).send(error);
+    })
 
 });
 
 app.put("/editById", (req, res) => {
-    Ecole.findByIdAndUpdate(req.body._id, 
+    Ecole.findByIdAndUpdate(req.body._id,
         {
             libelle: req.body.libelle,
             annee_id: req.body.annee_id,
@@ -157,14 +151,14 @@ app.get("/getAll", (req, res) => {
     Ecole.find().then(result => {
         res.send(result.length > 0 ? result : [])
     })
-    .catch((error) => { 
-        console.error(error);
-    })
+        .catch((error) => {
+            console.error(error);
+        })
 });
 
 app.get("/getById/:id", (req, res) => {
     //Récupérer une école via un ID
-    Ecole.findOne({_id: req.params.id}).then((dataEcole) => {
+    Ecole.findOne({ _id: req.params.id }).then((dataEcole) => {
         res.status(200).send({ dataEcole });
     }).catch((error) => {
         res.status(404).send(error);
@@ -173,11 +167,25 @@ app.get("/getById/:id", (req, res) => {
 
 app.get("/getAllByAnnee/:id", (req, res) => {
     //Récupérer une école via une année scolaire
-    Ecole.find({annee_id: req.params.id}).then((dataAnneeScolaire) => {
-        res.status(200).send( dataAnneeScolaire );
+    Ecole.find({ annee_id: req.params.id }).then((dataAnneeScolaire) => {
+        res.status(200).send(dataAnneeScolaire);
     }).catch((error) => {
         res.status(404).send(error);
     })
 });
-
+app.get("/downloadCachet/:id", (req, res) => {
+    Ecole.findById(req.params.id).then(data => {
+        res.sendFile('storage/ecole/' + data._id + "/cachet.png", { root: "./" })
+    })
+})
+app.get("/downloadLogo/:id", (req, res) => {
+    Ecole.findById(req.params.id).then(data => {
+        res.sendFile('storage/ecole/' + data._id + "/logo.png", { root: "./" })
+    })
+})
+app.get("/downloadPied/:id", (req, res) => {
+    Ecole.findById(req.params.id).then(data => {
+        res.sendFile('storage/ecole/' + data._id + "/pied_de_page.png", { root: "./" })
+    })
+})
 module.exports = app;

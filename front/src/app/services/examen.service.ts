@@ -63,15 +63,21 @@ export class ExamenService {
     return this.httpClient.put<Examen>(registreUrl, examen, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getModulesByGroupeID(classe_id){
+  getModulesByGroupeID(classe_id) {
     let url = this.apiUrl + "getModulesByGroupeID/" + classe_id
     return this.httpClient.get<Matiere[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  
-  getFormateurByModuleID(module_id){
+
+  getFormateurByModuleID(module_id) {
     let url = this.apiUrl + "getFormateurByModuleID/" + module_id
     return this.httpClient.get<Formateur[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAppreciation(semestre, classe_id, formateur_id) {
+    let url = this.apiUrl + "getAppreciation/" + semestre + "/" + classe_id + "/" + formateur_id
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
   }
 
 }

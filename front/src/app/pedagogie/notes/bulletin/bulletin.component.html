@@ -1,0 +1,238 @@
+<div class="col-12" *ngIf="askGroupeSemestrePV">
+    <div class="card">
+        <h3>Générer un bulletin de note</h3>
+
+        <form [formGroup]="formAGSPV" (ngSubmit)="onGenerateClasse()" class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-6">
+                <label For="classe">Groupe</label>
+                <p-dropdown formControlName="classe" [options]="dropdownClasse" (onChange)="updateDropdownPV()"
+                    emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du Groupe" filter="true"
+                    placeholder='Choissisez le groupe'>
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="semestre">Semestre</label>
+                <p-dropdown formControlName="semestre" [options]="dropdownSemestre" (onChange)="updateDropdownPV()"
+                    emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif"
+                    placeholder='Choissisez le semestre' filter="true">
+                </p-dropdown>
+            </div>
+
+            <div class="field col-12" *ngIf="dropdownPV">
+                <label>Chargé un PV enregistré:</label>
+                <p-dropdown formControlName="pv" [options]="dropdownPV" placeholder='Choissisez un PV'>
+                </p-dropdown>
+            </div>
+
+            <div>
+                <button pButton label="Afficher le groupe" type="submit" [disabled]="formAGSPV.invalid"></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Table d'affichage de toutes les notes par classes -->
+<div class="col-12" *ngIf="showGroupe">
+    <div class="card">
+        <h3 *ngIf="GROUPE && SEMESTRE">Bulletin de {{
+            GROUPE.abbrv }} - {{ SEMESTRE }}</h3>
+
+        <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
+            [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Nom
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Prénom
+                        </div>
+                    </th>
+                    <th>
+                        <div pSortableColumn="date_telechargement_bulletin"
+                            class="flex justify-content-between align-items-center">
+                            Date du dernier téléchargement
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-etudiant>
+                <tr *ngIf="etudiant && etudiant.user_id">
+                    <td>{{ etudiant.user_id?.firstname }}</td>
+                    <td>{{ etudiant.user_id?.lastname }}</td>
+                    <td *ngIf="etudiant.user_id.date_telechargement_bulletin">{{
+                        etudiant.user_id.date_telechargement_bulletin | date:'dd/MM/yyyy' }}</td>
+                    <td *ngIf="!etudiant.user_id.date_telechargement_bulletin">Jamais</td>
+                    <td>
+                        <i class="pi pi-file-excel" pTooltip="Générer le bulletin"
+                            (click)="configureBulletin(etudiant)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<!-- Modèle de bulletin de note -->
+<div class="col-12 grid" *ngIf="NOTES">
+    <div style="float: left;" class="col-12">
+        <p-dropdown [options]="dropdownEcoles" [(ngModel)]="ECOLE" (onChange)="loadEcoleImage()"></p-dropdown>
+        <button pButton class="ml-1" icon="pi pi-save" (click)="saveToPV()" type="button" style="float:right;"
+            label="Enregistrer les modifications dans le PV">
+        </button>
+        <button pButton class="ml-1" icon="pi pi-file-pdf" (click)="exportToPDF('semestriel')" type="button"
+            style="float:right;" label="Exporter en pdf">
+        </button>
+    </div>
+    <div class="col-12 card">
+        <h3>Prévisualisation du bulletin</h3>
+        <div id="semestriel">
+            <div style="float: left; margin-left: 20px;">
+                <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
+                <p *ngIf="SEMESTRE && GROUPE?.diplome_id">
+                    <!--Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>-->
+                    Bulletin du {{ SEMESTRE }} <br>
+                    <strong>{{ GROUPE.diplome_id.titre_long }}</strong>
+                    <br>
+                </p>
+            </div>
+
+            <div style="float: right; margin-top: 80px;">
+                <p>
+                    <strong>{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}} {{
+                        ETUDIANT.user_id?.lastname | uppercase }} {{
+                        ETUDIANT.user_id?.firstname | titlecase }} </strong> <br>
+                    Né(e) le {{ ETUDIANT.date_naissance | date:'dd/MM/yyyy' }} <br>
+                </p>
+                <p>
+                    {{ETUDIANT.user_id?.numero_adresse}}
+                    {{ETUDIANT.user_id?.rue_adresse}}
+                    {{ETUDIANT.user_id?.postal_adresse}} <br>
+                    {{ETUDIANT.user_id?.ville_adresse}}
+                    {{ETUDIANT.user_id?.pays_adresse}}
+                </p>
+            </div>
+
+            <figure>
+                <figcaption *ngIf="ECOLE" style="margin: 10px;">{{ ECOLE?.adresse }} <br> {{
+                    ECOLE?.ville }},
+                    {{ ECOLE?.pays }}</figcaption>
+            </figure>
+
+            <p-table [value]="NOTES" class="bulletin" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th colspan="3"></th>
+                        <th colspan="1" style="text-align: center;">Etudiant</th>
+                        <th colspan="3" style="text-align: center;">Groupe</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">Modules</th>
+                        <th style="text-align: center;">Formateur</th>
+                        <th style="text-align: center;">Coef</th>
+                        <th style="text-align: center;">Moyenne</th>
+                        <th style="text-align: center;">Moyenne</th>
+                        <th style="width: 5em;" style="text-align: center;">Min.</th>
+                        <th style="width: 5em;" style="text-align: center;">Max.</th>
+                        <!--<th style="text-align: center;">ECTS</th>-->
+                        <th style="text-align: center;">Appréciations</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-note>
+                    <tr>
+                        <td>{{note.module}}</td>
+                        <td> {{note.formateur}} </td>
+                        <td>{{ note.coeff }}</td>
+                        <td class="text-center" [pEditableColumn]="note.note_etudiant"
+                            pEditableColumnField="note_etudiant">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="note.note_etudiant"
+                                        (input)="calculMoy()">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{note.note_etudiant | number : '0.2-2'}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].moy | number : '0.1-2' }}</td>
+                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].min | number : '0.1-2' }}</td>
+                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].max | number : '0.1-2' }}</td>
+                        <!--<td>{{ note.ects }}</td>-->
+                        <td [pEditableColumn]="note.appreciation_module[note.module]" pEditableColumnField="appreciation_module[note.module]">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="note.appreciation_module[note.module]">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{note.appreciation_module[note.module]}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="3">Moyenne générale</td>
+                        <td style="text-align: right;">{{ calculMoyenne() | number : '0.1-2' }}</td>
+                        <td colspan="3"></td>
+                        <td style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
+                            pEditableColumnField="APPRECIATION_GENERALE">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="APPRECIATION_GENERALE">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{APPRECIATION_GENERALE}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+
+                    <br><br>
+
+                    <tr>
+                        <td colspan="2">Décision du conseil de classe</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Semestre validé</td>
+                        <td *ngIf="calculMoyenne() >= 10">X</td>
+                        <td *ngIf="calculMoyenne() < 10"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Semestre non validé</td>
+                        <td *ngIf="calculMoyenne() >= 10"></td>
+                        <td *ngIf="calculMoyenne() < 10">X</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <br>
+            <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+            <img [src]="PICTURE.cachet" alt="signature"
+                style="float: right; max-width: 50%; max-height: 20vh;">
+            <img [src]="PICTURE.pied_de_page" alt="footer"
+                style="display: block; max-width: 50%; max-height: 20vh;">
+
+        </div>
+    </div>
+</div>  
