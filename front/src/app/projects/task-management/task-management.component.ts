@@ -30,8 +30,11 @@ export class TaskManagementComponent implements OnInit {
   showProjectTaches: boolean = false;
   projectTaches: Tache[] = [];
   taches: Tache[] = [];
+  tacheSelected: Tache;
   showFormAddTache: boolean = false;
   formAddTache: FormGroup;
+  showFormUpdateTache: boolean = false;
+  formUpdateTache: FormGroup;
 
   token: any;
   dropdownUser: any[] = []; // contient tous les salariés, agent, responsable
@@ -54,6 +57,13 @@ export class TaskManagementComponent implements OnInit {
 
     // initialize form add task
     this.formAddTache = this.formBuilder.group({
+      libelle: ['', Validators.required],
+      attribuateTo: [''],
+      dateLimite: [''],
+    });
+    
+    // initialize form update task
+    this.formUpdateTache = this.formBuilder.group({
       libelle: ['', Validators.required],
       attribuateTo: [''],
       dateLimite: [''],
@@ -168,9 +178,10 @@ export class TaskManagementComponent implements OnInit {
       tache.attribuate_to.push(data.value);
     });
 
-    tache.project_id = this.projectSelected._id;
-    tache.date_limite = formValue.dateLimite;
-    tache.created_at = new Date();
+    tache.project_id        = this.projectSelected._id;
+    tache.date_limite       = formValue.dateLimite;
+    tache.created_at        = new Date();
+    tache.creator_id        = this.userConnected._id;
 
     this.projectService.postTask(tache)
     .then((response) => { 
@@ -182,4 +193,62 @@ export class TaskManagementComponent implements OnInit {
     .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
   }
 
+
+  // methode de remplissage du formulaire de mise à jour d'une tâche
+  onFillFormUpdateTache(tache: Tache): void
+  {
+    this.tacheSelected = tache;
+
+    this.formUpdateTache.patchValue({
+      libelle: this.tacheSelected.libelle,
+      dateLimite: this.tacheSelected.date_limite,
+    });
+  }
+
+  // formulaire de modification d'une tâche
+  onUpdateTask()
+  {
+    const formValue = this.formUpdateTache.value;
+    const tache = new Tache();
+
+    tache._id = this.tacheSelected._id;
+    tache.libelle = formValue.libelle;
+    tache.percent = this.tacheSelected.percent;
+    tache.attribuate_to = [];
+
+    formValue.attribuateTo.forEach((data: any) => {
+      tache.attribuate_to.push(data.value);
+    });
+
+    tache.project_id = this.tacheSelected.project_id;
+    tache.date_limite = this.tacheSelected.date_limite;
+    tache.created_at = this.tacheSelected.created_at;
+    tache.creator_id = this.tacheSelected.creator_id;
+
+    this.projectService.putTask(tache)
+    .then((response) => {
+      this.messageService.add({severity:'success', summary:'Tâche', detail: response.success});
+      this.onGetAllClasses();
+      this.formUpdateTache.reset();
+      this.showProjectTaches = false;
+      this.showFormUpdateTache = false;
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+
+  }
+
+  // suppression de la tâche
+  onDeleteTask(id: string): void
+  {
+    this.projectService.deleteTask(id)
+    .then((response) => {
+      this.messageService.add({severity:'success', summary:'Tâche', detail: response.success}); 
+      this.showProjectTaches = false;
+      this.showFormAddTache = false;
+      this.showFormUpdateTache = false;
+      this.showFormAddProject = false;
+      this.onGetAllClasses();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+  }
 }

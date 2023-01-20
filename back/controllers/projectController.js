@@ -82,7 +82,7 @@ app.post("/post-task", (req, res, next) => {
 app.put("/put-task", (req, res, next) => {
     const task = new Task({ ...req.body });
 
-    Task.updateOne({ _id: task._id }, { task })
+    Task.updateOne({ _id: task._id }, { ...req.body })
     .then((taskUpdated) => { res.status(201).json({ task: taskUpdated, success: 'Tâche mis à jour' }); })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de mettre à jour cette tâche' }); });
 });
@@ -109,6 +109,14 @@ app.get("/get-tasks/:id", (req, res, next) => {
     Task.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')
     .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
+});
+
+
+// suppression d'une tâche
+app.delete("/delete-task/:id", (req, res, next) => {
+    Task.deleteOne({ _id: req.params.id })
+    .then((response) => { res.status(200).json({ success: 'Tâche supprimé' }) })
+    .catch((error) => {console.log(error); res.status(400).json({ error: 'Impossible de supprimer cette tâche' });})
 });
 
 
