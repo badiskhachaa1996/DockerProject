@@ -214,10 +214,11 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     /*if (isNaN(avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']))) {
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'] = [0]
                                     }*/
+                                    if (e_id == "62f35b97fca344641bcb3e53")
+                                        console.log(listNotesEtudiantsCoeff[e_id])
                                     if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
-                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0){
-                                        
+                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
                                     }
                                     else
