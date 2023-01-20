@@ -201,7 +201,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     else
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
                                 }
-                                else console.log(e_id, note._id, note.examen_id)
+                                else console.log(e_id, note._id, note.examen_id._id)
                         })
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
