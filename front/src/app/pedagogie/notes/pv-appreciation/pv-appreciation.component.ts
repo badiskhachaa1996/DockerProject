@@ -21,6 +21,7 @@ export class PvAppreciationComponent implements OnInit {
   cols = []//{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
   ID = this.route.snapshot.paramMap.get('classe_id');
   SEMESTRE = this.route.snapshot.paramMap.get('semestre');
+  PVID = "Nouveau"
   classe: Classe;
   hideForPDF = false;
   loaded = false;
@@ -82,6 +83,7 @@ export class PvAppreciationComponent implements OnInit {
         })
         pv.pv_annuel_data[index] = d
       })
+      this.PVID = pv._id
       this.cols = pv.pv_annuel_cols
       this.dataPV = pv.pv_annuel_data
       this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
