@@ -96,7 +96,7 @@ export class ProjectService {
       this.httpClient.put<Tache>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Tâches modifié')
+        complete: () => console.log('Tâche modifié')
       });
     });
   }
@@ -139,6 +139,20 @@ export class ProjectService {
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches du projet récuperés')
+      });
+    });
+  }
+
+  // suppression d'une tache
+  deleteTask(id: string): Promise<any> 
+  {
+    const url = `${this.apiUrl}/delete-task/${id}`
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.delete<Tache>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches supprimé')
       });
     });
   }
