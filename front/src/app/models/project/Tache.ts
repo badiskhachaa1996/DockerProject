@@ -8,5 +8,6 @@ export class Tache{
         public project_id?:     string,
         public date_limite?:    Date,
         public created_at?:     Date,
+        public creator_id?:     String,
     ){}
 }
