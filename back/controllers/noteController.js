@@ -195,9 +195,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
                                 if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false) {
-                                    if (m_nom = "Culture économique, juridique et managériale") {
-                                        console.log(note.etudiant_id.user_id.lastname, note.note_val)
-                                    }
                                     if (note.examen_id.niveau == 'Control Continu')
                                         for (let i = 0; i < note.examen_id.coef; i++)
                                             listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
@@ -219,7 +216,8 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     }*/
                                     if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
-                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
+                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0){
+                                        
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
                                     }
                                     else
