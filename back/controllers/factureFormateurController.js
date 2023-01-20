@@ -83,7 +83,6 @@ app.get("/download/:formateur_id/:_id", (req, res) => {
         if (err) {
             return console.error(err);
         }
-        console.log(files)
         files.forEach(function (file) {
             if (file.startsWith(req.params._id)) {
                 const pathFileFinal = `${pathFile}/${file}`

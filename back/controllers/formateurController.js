@@ -167,7 +167,6 @@ app.post('/updateById/:id', (req, res, next) => {
                 res.send(err)
             }
             else {
-                console.log(formateurUpdated)
                 res.send(formateurUpdated)
             }
         });
@@ -336,7 +335,6 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
             let documents = {} //{formateur_id:[{ seance: Seance }]}
             let formateurIds = []
             let totalHeureFormateur = {}//{formateur_id:Number}
-            console.log(db, df)
             presences.forEach(p => {
                 if (p.seance_id && p.user_id && p.user_id.type == "Formateur") {
                     let date_fin = new Date(p.seance_id.date_fin)

@@ -20,7 +20,6 @@ let transporter = nodemailer.createTransport({
 
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {
-    console.log(req.body)
     if (req.body.type == "Traitement de votre ticket") {
         //Si le ticket est traité alors on supprime tout les notifications lié à ce ticket
         Notification.deleteMany({ info_id: req.body.info_id }, (err, resultat) => {
@@ -99,13 +98,11 @@ app.get("/getAllByUserID/:id", (req, res) => {
 //Récuperer les 20 notifications dernières d'un user
 app.get("/get20ByUserID/:id", (req, res) => {
     Notification.find({ user_id: req.params.id, etat: false }).then(Notifications => {
-        console.log(Notification)
         res.status(200).send(Notifications.slice(0, 20))
     })
 });
 app.get("/getAdmissionNotifi", (req, res) => {
     Notification.find({ info_id: null, etat: false }).then(notifications => {
-        console.log(notifications)
         res.status(200).send(notifications)
     }).catch(error => { console.log(error) })
 });

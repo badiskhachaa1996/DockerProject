@@ -35,7 +35,6 @@ app.get("/getById/:id", (req, res, next) => {
 });
 
 app.get('/getAllByFormateurID/:id', (req, res, next) => {
-    console.log(req.params.id)
     Examen.find({ formateur_id: req.params.id }).populate('classe_id').populate('matiere_id').populate({ path: 'formateur_id', populate: { path: "user_id" } })
         .then((examenFromDb) => { res.status(200).send(examenFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
@@ -55,7 +54,6 @@ app.post("/create", (req, res, next) => {
 
     //creation du nouvel objet examen
     let data = req.body;
-    console.log(data)
 
     let examen = new Examen(
         {
@@ -150,7 +148,6 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
             })
 
         })
-        console.log(examens)
         Note.find({ examen_id: { $in: examens } }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
             notes.forEach(n => {
                 if (n.etudiant_id && n.etudiant_id.user_id && n.examen_id) {

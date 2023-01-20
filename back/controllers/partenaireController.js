@@ -220,7 +220,6 @@ app.get("/getAll", (req, res) => {
 app.get("/getNBAll", (req, res) => {
     Partenaire.find()
         .then(result => {
-            console.log(result.length);
             res.status(200).send({ nb: result.length });
         })
         .catch(err => {
@@ -281,7 +280,6 @@ app.put("/updatePartenaire", (req, res, next) => {
 
     //Récupération des infos du partenaire
     const partenaireData = req.body;
-    console.log(partenaireData);
     //Mise à jour du partenaire
     Partenaire.findOneAndUpdate({ _id: partenaireData._id },
         {
