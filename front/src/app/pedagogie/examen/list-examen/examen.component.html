@@ -262,7 +262,10 @@
                             </span>
                         </td>
                         <td>
-                            {{examen.matiere_id[0].nom}}
+                            <span *ngFor="let mid of examen.matiere_id; let index = index">
+                                <span *ngIf="mid && index==0">{{mid.nom}}</span>
+                                <span *ngIf="mid && index!=0">|<br>{{mid.nom}}</span>
+                            </span>
                         </td>
                         <td>{{ examen.libelle }}</td>
                         <td>{{ examen.date | date:'dd/MM/YYYY' }}</td>

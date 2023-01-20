@@ -117,13 +117,27 @@ app.get("/getAllByEcoleID/:id", (req, res) => {
 //Récupérer getAll by diplome
 app.get('/getALLByDiplomeABBRV/:abbrv', (req, res) => {
     Diplome.findOne({ titre: req.params.abbrv }).then(diplome => {
-        console.log(diplome)
         Classe.find({ diplome_id: diplome._id }).then(classes => {
-            console.log(classes)
             res.status(200).send(classes)
         })
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
+    })
+})
+
+app.get('/getAllByFormateurID/:formateur_id', (req, res) => {
+    Seance.find({ formateur_id: req.params.formateur_id }).populate('classe_id').then(seances => {
+        let r = []
+        let rid = []
+        seances.forEach(seance => {
+            seance.classe_id.forEach(classe => {
+                if (rid.includes(classe._id) == false) {
+                    r.push(classe)
+                    rid.push(classe._id)
+                }
+            })
+        })
+        res.status(200).send(r)
     })
 })
 module.exports = app;

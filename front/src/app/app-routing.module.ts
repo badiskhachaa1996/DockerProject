@@ -141,6 +141,7 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
 import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 
 const routes: Routes = [
     {
@@ -255,8 +256,9 @@ const routes: Routes = [
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
-            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] }
-
+            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService]},
+            { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

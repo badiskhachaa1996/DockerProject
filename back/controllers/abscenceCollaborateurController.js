@@ -86,7 +86,6 @@ app.get("/download-file/:id/:fileName", (req, res) => {
             if (error) {
                 res.status(400).json({ error: error });
             }
-            console.log(file);
         });
         
         res.status(200).json({ file: file, extension: fileExtention });

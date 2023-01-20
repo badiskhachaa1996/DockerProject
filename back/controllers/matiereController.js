@@ -149,7 +149,6 @@ app.get("/getAllVolume", (req, res, next) => {
                     }
                 }
             })
-            console.log({ rPlan, rCons })
             res.status(200).send({ rPlan, rCons })
         })
         .catch((error) => {
@@ -171,10 +170,8 @@ app.get('/getAllByFormateurID/:formateur_id', (req, res, next) => {
             })
 
         })
-        console.log
         Matiere.find({ _id: { $in: listModules } }).populate('formation_id').then(matieres => {
             Classe.find({ _id: { $in: listGroupes } }).then(groupes => {
-                console.log(listGroupes, groupes)
                 res.send({ matieres, groupes })
             })
         })

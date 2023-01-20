@@ -277,6 +277,29 @@
 		</div>
 	</div>
 
+	<div class="col-12" *ngIf="showFormApp">
+        <div class="card">
+            <h3>Compte rendu des appréciations des modules</h3>
+            <i class="pi pi-times" style="float:right;" (click)="showFormApp = null"
+                aria-hidden="true">
+            </i>
+            <form [formGroup]="formApp" (ngSubmit)="showApp()"
+                class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label For="appreciation">Semestre</label>
+					<p-dropdown [options]="dropdownSemestre" formControlName="semestre" placeholder="Choissisez un semestre"></p-dropdown>
+                </div>
+				<div class="field col-12 md:col-6">
+                    <label For="appreciation">Groupe</label>
+					<p-dropdown [options]="dropdownGroupe" formControlName="classe_id" placeholder="Choissisez un groupe"></p-dropdown>
+                </div>
+                <div class="col-12">
+                    <button pButton label="Voir la liste des appréciations" type="submit"
+                        [disabled]="formApp.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 	<div class="col-12">
 		<div class="card">
@@ -358,6 +381,8 @@
 								(click)="sendCalendar(rowData)" pTooltip="Envoyer le calendrier au groupe"></i>
 							<i style="margin-left: 1%;" pTooltip="Ajouter un document" tooltipPosition="bottom"
 								class="pi pi-upload" (click)="showUploadFile=formateur" aria-hidden="true"></i>
+							<i style="margin-left: 1%;" class="pi pi-book" aria-hidden="true"
+								(click)="showFormAppFc(formateur)" pTooltip="Voir le compte rendu des appréciations"></i>
 						</td>
 					</tr>
 				</ng-template>

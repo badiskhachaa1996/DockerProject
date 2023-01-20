@@ -69,4 +69,9 @@ export class ClasseService {
     return this.http.get<Classe[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllByFormateurID(formateur_id){
+    let url = this.apiUrl + "getAllByFormateurID/" + formateur_id
+    return this.http.get<Classe[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

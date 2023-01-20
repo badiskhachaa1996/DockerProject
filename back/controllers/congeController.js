@@ -15,7 +15,6 @@ app.post("/new-holidays", (req, res) => {
         User.findOne({ service_id: user.service_id, role: 'Responsable' })
         .then((referent) => {
             conge.referent_id = referent._id;
-            console.log(conge)
             //Enregistrement du congé dans la base de données
             conge.save()
             .then((response) => { res.status(201).send(response); })

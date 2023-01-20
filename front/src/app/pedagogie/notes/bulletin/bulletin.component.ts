@@ -8,6 +8,7 @@ import { NoteService } from 'src/app/services/note.service';
 import * as html2pdf from 'html2pdf.js';
 import { MessageService } from 'primeng/api';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-bulletin',
   templateUrl: './bulletin.component.html',
@@ -15,21 +16,51 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class BulletinComponent implements OnInit {
   constructor(private GroupeService: ClasseService, private NoteS: NoteService, private EtuService: EtudiantService,
-    private CFAService: EcoleService, private messageService: MessageService, private sanitizer: DomSanitizer) { }
-
+    private CFAService: EcoleService, private messageService: MessageService, private sanitizer: DomSanitizer, private route: ActivatedRoute) { }
+  //:semestre/:classe_id/:etudiant_id/:pv_id
   ngOnInit(): void {
     this.GroupeService.getAll().subscribe(classes => {
       classes.forEach(c => {
         this.dropdownClasse.push({ label: c.abbrv, value: c._id })
       })
     })
+    if (this.route.snapshot.paramMap.get('semestre')) {
+      this.askGroupeSemestrePV = false
+      this.SEMESTRE = this.route.snapshot.paramMap.get('semestre')
+      this.GroupeService.getPopulate(this.route.snapshot.paramMap.get('classe_id')).subscribe(classe => {
+        this.GROUPE = classe
+        this.EtuService.getAllByClasseId(this.route.snapshot.paramMap.get('classe_id')).subscribe(etudiants => {
+          this.etudiantFromClasse = etudiants
+          this.etudiantFromClasse.forEach(etudiant => {
+            if (etudiant.custom_id == this.route.snapshot.paramMap.get('etudiant_id')) {
+              console.log(etudiant)
+              if (this.route.snapshot.paramMap.get('pv_id') != "Nouveau") {
+                if (this.route.snapshot.paramMap.get('classe_id') && this.SEMESTRE) {
+                  this.NoteS.loadPV(this.SEMESTRE, this.route.snapshot.paramMap.get('classe_id')).subscribe(pv => {
+                    pv.forEach(pvD => {
+                      if (pvD._id == this.route.snapshot.paramMap.get('pv_id')) {
+                        this.PV = pvD
+                        this.configureBulletin(etudiant)
+                      }
+                    })
+                  })
+                }
+              } else {
+                this.formAGSPV.patchValue({ pv: "Aucun/Nouveau PV" })
+                this.configureBulletin(etudiant)
+              }
+            }
+          })
+        })
+      })
+    }
   }
 
   //Formulaire: Générer un bulletin de note
   askGroupeSemestrePV = true
   dropdownClasse = []
   dropdownSemestre = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }, { label: "Semestre 3", value: "Semestre 3" }]
-  dropdownPV = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]
+  dropdownPV: any = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]
   formAGSPV: FormGroup = new FormGroup({
     classe: new FormControl('', Validators.required),
     semestre: new FormControl('', Validators.required),
@@ -141,10 +172,17 @@ export class BulletinComponent implements OnInit {
       this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"" }
         if (pv.email == this.ETUDIANT.user_id.email) {
           this.APPRECIATION_GENERALE = pv.appreciation
+          console.log(listModule)
           listModule.forEach(n => {
-            let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: "" }
-            if (pv?.appreciation_module && pv?.appreciation_module[n]) {
-              t.appreciation_module = pv.appreciation_module[n]
+            let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
+
+            if (!t.appreciation_module) {
+              t.appreciation_module = {}
+            }
+            if (!t.appreciation_module[n]) {
+              t.appreciation_module[n] = ""
+            } else {
+              t.appreciation_module[n] = pv.appreciation_module[n]
             }
             this.NOTES.push(t)
           })

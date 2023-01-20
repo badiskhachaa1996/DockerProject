@@ -86,7 +86,6 @@ app.post("/create", (req, res, next) => {
     let data = req.body;
     delete data._id
     data.date_creation = new Date()
-    console.log(data)
     let note = new Note(
         {
             ...data
@@ -166,7 +165,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 if (!Array.isArray(n.examen_id.matiere_id))
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
-                    //console.log(n.etudiant_id,mid.formation_id)
                     if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
 
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
@@ -178,16 +176,18 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 })
             }
             notes.forEach(n => {
-                if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1) {
+                if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1 && n.etudiant_id.classe_id._id == req.params.classe_id) {
                     dicEtudiant[n.etudiant_id._id] = n.etudiant_id
                     listEtudiantID.push(n.etudiant_id._id)
                 }
             })
         })
         listEtudiantID.forEach(e_id => {
-            listNotesEtudiantsCoeff[e_id] = {}
+            if (!listNotesEtudiantsCoeff[e_id])
+                listNotesEtudiantsCoeff[e_id] = {}
             listMatiereNOM.forEach(m_nom => {
-                listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0 }
+                if (!listNotesEtudiantsCoeff[e_id][m_nom])
+                    listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0 }
                 notes.forEach(note => {
                     if (note.examen_id && note.examen_id.matiere_id) {
                         if (!Array.isArray(note.examen_id.matiere_id))
@@ -201,20 +201,16 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     else
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
                                 }
+                                else console.log(e_id, note._id, note.examen_id._id)
                         })
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
-                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false) {
-                                    listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
-                                    if (isNaN(listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'])) {
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'] = 0
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'] = [0]
-                                    }
-                                    if (isNaN(avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']))) {
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'] = [0]
-                                    }
-                                    if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0)
+                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom) {
+                                    if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
+                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
+                                    }
                                     else
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])
                                 }

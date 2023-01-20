@@ -16,6 +16,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { ClasseService } from 'src/app/services/classe.service';
 
 @Component({
   selector: 'app-list-formateurs',
@@ -25,6 +26,27 @@ import * as XLSX from 'xlsx';
 })
 export class ListFormateursComponent implements OnInit {
   expandedRows = {};
+  showFormApp;
+  formApp = this.formBuilder.group({
+    classe_id: ['', Validators.required],
+    semestre: ['']
+  });
+  dropdownGroupe = []
+  dropdownSemestre = [{ value: 'Semestre 1', label: 'Semestre 1' }, { value: 'Semestre 2', label: 'Semestre 2' }, { value: 'Semestre 3', label: 'Semestre 3' }, { value: 'Annuel', label: 'Annuel' }]
+  showApp() {
+    this.router.navigate(['appreciation', this.formApp.value.semestre, this.formApp.value.classe_id, this.showFormApp._id])
+  }
+
+  showFormAppFc(formateur) {
+    this.showFormApp = formateur
+    this.dropdownGroupe = []
+    this.GroupeService.getAllByFormateurID(formateur._id).subscribe(classes => {
+      console.log(classes)
+      classes.forEach(cl => {
+        this.dropdownGroupe.push({ label: cl.abbrv, value: cl._id })
+      })
+    })
+  }
 
   typeFormateur = [
     { label: 'Interne', value: true },
@@ -37,6 +59,7 @@ export class ListFormateursComponent implements OnInit {
   diplomesListe = [];
   jury_diplomesList = []
   formUpdateFormateur: FormGroup;
+
   showFormUpdateFormateur: boolean = false;
   formateurToUpdate: Formateur;
 
@@ -106,7 +129,8 @@ export class ListFormateursComponent implements OnInit {
   }
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private diplomeService: DiplomeService,
-    private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService, private EntrepriseService: EntrepriseService) { }
+    private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService, private EntrepriseService: EntrepriseService,
+    private GroupeService: ClasseService) { }
 
   ngOnInit(): void {
     //Recuperation de la liste des formateurs

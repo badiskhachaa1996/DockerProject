@@ -247,6 +247,7 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 
 
 @NgModule({
@@ -504,6 +505,7 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
     BulletinComponent,
     ListEntrepriseCeoComponent,
     PvAppreciationComponent,
+    AppreciationInputComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

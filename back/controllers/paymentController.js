@@ -21,7 +21,6 @@ app.post("/postIndividualAccount", (req, res, next) => {
         .then((userFromDb) => {
             if(userFromDb)
             {
-                console.log(user);
                 account.user_id = userFromDb._id;
                 account.save()
                        .then((accountSaved) => {
@@ -36,7 +35,6 @@ app.post("/postIndividualAccount", (req, res, next) => {
                 user.save()
                     .then((userSaved) => {
                         account.user_id = userSaved._id;
-                        console.log(account)
                         account.save()
                                .then((accountSaved) => {
                                     res.status(201).send(accountSaved);

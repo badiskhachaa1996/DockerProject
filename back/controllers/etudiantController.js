@@ -141,7 +141,6 @@ app.post("/create", (req, res, next) => {
         {
             ...etudiantData
         });
-    console.log(etudiant)
     //Creation du nouveau user
     let userData = req.body.newUser;
     let user = new User(

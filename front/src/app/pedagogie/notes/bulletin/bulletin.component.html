@@ -179,13 +179,13 @@
                         <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].min | number : '0.1-2' }}</td>
                         <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].max | number : '0.1-2' }}</td>
                         <!--<td>{{ note.ects }}</td>-->
-                        <td [pEditableColumn]="note.appreciation_module" pEditableColumnField="appreciation_module">
+                        <td [pEditableColumn]="note.appreciation_module[note.module]" pEditableColumnField="appreciation_module[note.module]">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="note.appreciation_module">
+                                    <input pInputText type="text" [(ngModel)]="note.appreciation_module[note.module]">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{note.appreciation_module}}
+                                    {{note.appreciation_module[note.module]}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>

@@ -18,6 +18,9 @@
             <ng-template pTemplate="header">
                 <tr>
                     <!--<th style="width: 3rem"></th>-->
+                    <th class="text-center" rowspan="2" pSortableColumn="custom_id">ID Etudiant <p-sortIcon
+                            *ngIf="!hideForPDF" field="custom_id"></p-sortIcon>
+                    </th>
                     <th class="text-center" rowspan="2" pSortableColumn="nom">Nom <p-sortIcon *ngIf="!hideForPDF"
                             field="nom"></p-sortIcon>
                     </th>
@@ -49,7 +52,7 @@
                     </th>
                 </tr>
                 <tr>
-                    <th class="text-center" colspan="5">Coefficient</th>
+                    <th class="text-center" colspan="6">Coefficient</th>
                     <th class="text-center" *ngFor="let col of cols">
                         {{col.coeff}}
                     </th>
@@ -57,6 +60,10 @@
             </ng-template>
             <ng-template pTemplate="body" let-data let-ri="rowIndex">
                 <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
+                    <td class="text-center">
+                        <a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
+                            target="_blank">{{data.custom_id}}</a>
+                    </td>
                     <td class="text-center">{{data.nom}}</td>
                     <td class="text-center">{{data.prenom}}</td>
                     <td class="text-center">{{data.date_naissance}}</td>
@@ -184,7 +191,7 @@
                     <td class="text-center">{{data.date_inscrit}}</td>
                     <td class="text-center">{{data.email}}</td>
                     <td class="text-center" *ngFor="let col of pv.pv_annuel_cols"
-                        [pEditableColumn]="data.notes[col.module]" pEditableColumnField="module">
+                        [pEditableColumn]="data?.notes[col.module]" pEditableColumnField="module">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
