@@ -424,42 +424,37 @@ export class DashboardComponent implements OnInit {
 
   //Methode de check in
   onCheckIn() {
+    const inTime = new InTime();
 
-    this.inTimeService.getIpAdress()
-      .then((response: any) => {
-        const inTime = new InTime();
+    inTime.user_id = this.token.id;
+    inTime.in_ip_adress = "None";
 
-        inTime.user_id = this.token.id;
-        inTime.in_ip_adress = response.ip;
+    let today = new Date().toLocaleDateString();
+    let todayReplaced = '';
 
-        let today = new Date().toLocaleDateString();
-        let todayReplaced = '';
+    for (let i = 0; i < today.length; i++) {
+      if (today[i] === '/') {
+        todayReplaced += '-';
+      }
+      else {
+        todayReplaced += today[i];
+      }
 
-        for (let i = 0; i < today.length; i++) {
-          if (today[i] === '/') {
-            todayReplaced += '-';
-          }
-          else {
-            todayReplaced += today[i];
-          }
+    }
 
-        }
+    inTime.date_of_the_day = todayReplaced;
+    inTime.in_date = new Date();
+    inTime.out_date = null;
+    inTime.statut = 'Au travail';
+    inTime.isCheckable = true;
 
-        inTime.date_of_the_day = todayReplaced;
-        inTime.in_date = new Date();
-        inTime.out_date = null;
-        inTime.statut = 'Au travail';
-        inTime.isCheckable = true;
-
-        this.inTimeService.postJustArrived(inTime)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
-            this.onIsCheck();
-          })
-          .catch((error) => { console.log(error) })
-
+    this.inTimeService.postJustArrived(inTime)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
+        this.onIsCheck();
       })
       .catch((error) => { console.log(error) })
+
 
   }
 

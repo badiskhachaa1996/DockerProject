@@ -46,6 +46,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
       this.cols = data.cols
       this.dataPV = data.data
+      console.log(data)
     })
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
