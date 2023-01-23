@@ -104,20 +104,22 @@
             style="float:right;" label="Exporter en pdf">
         </button>
     </div>
-    <div class="col-12 card">
+    <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
-        <div id="semestriel">
-            <div style="float: left; margin-left: 20px;">
+        <div class="col-12 grid" id="semestriel">
+            <div class="col-9">
                 <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
-                <p *ngIf="SEMESTRE && GROUPE?.diplome_id">
-                    <!--Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>-->
-                    Bulletin du {{ SEMESTRE }} <br>
-                    <strong>{{ GROUPE.diplome_id.titre_long }}</strong>
+                <p style="width: 50%;" *ngIf="GROUPE?.diplome_id && ECOLE">
+                    {{ ECOLE?.adresse }} <br>
+                    {{ ECOLE?.ville }},
+                    {{ ECOLE?.pays }}<br>
+                    <strong>{{ GROUPE.diplome_id?.titre_long }}</strong>
                     <br>
                 </p>
             </div>
 
-            <div style="float: right; margin-top: 80px;">
+            <div class="col-3">
+                <h4><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
                 <p>
                     <strong>{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}} {{
                         ETUDIANT.user_id?.lastname | uppercase }} {{
@@ -132,14 +134,7 @@
                     {{ETUDIANT.user_id?.pays_adresse}}
                 </p>
             </div>
-
-            <figure>
-                <figcaption *ngIf="ECOLE" style="margin: 10px;">{{ ECOLE?.adresse }} <br> {{
-                    ECOLE?.ville }},
-                    {{ ECOLE?.pays }}</figcaption>
-            </figure>
-
-            <p-table [value]="NOTES" class="bulletin" styleClass="p-datatable-gridlines">
+            <p-table [value]="NOTES" class="bulletin col-12" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th colspan="3"></th>
@@ -161,16 +156,16 @@
                 <ng-template pTemplate="body" let-note>
                     <tr>
                         <td>{{note.module}}</td>
-                        <td> {{note.formateur}} </td>
+                        <td>{{note.formateur}} </td>
                         <td>{{ note.coeff }}</td>
                         <td class="text-center" [pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
+                            <p-cellEditor class="text-center">
+                                <ng-template pTemplate="input" class="text-center">
                                     <input pInputText type="text" [(ngModel)]="note.note_etudiant"
                                         (input)="calculMoy()">
                                 </ng-template>
-                                <ng-template pTemplate="output">
+                                <ng-template pTemplate="output" class="text-center">
                                     {{note.note_etudiant | number : '0.2-2'}}
                                 </ng-template>
                             </p-cellEditor>
@@ -179,7 +174,8 @@
                         <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].min | number : '0.1-2' }}</td>
                         <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].max | number : '0.1-2' }}</td>
                         <!--<td>{{ note.ects }}</td>-->
-                        <td [pEditableColumn]="note.appreciation_module[note.module]" pEditableColumnField="appreciation_module[note.module]">
+                        <td [pEditableColumn]="note.appreciation_module[note.module]"
+                            pEditableColumnField="appreciation_module[note.module]">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="text" [(ngModel)]="note.appreciation_module[note.module]">
@@ -208,31 +204,37 @@
                             </p-cellEditor>
                         </td>
                     </tr>
-
-                    <br><br>
-
-                    <tr>
-                        <td colspan="2">Décision du conseil de classe</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Semestre validé</td>
-                        <td *ngIf="calculMoyenne() >= 10">X</td>
-                        <td *ngIf="calculMoyenne() < 10"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Semestre non validé</td>
-                        <td *ngIf="calculMoyenne() >= 10"></td>
-                        <td *ngIf="calculMoyenne() < 10">X</td>
-                    </tr>
                 </ng-template>
             </p-table>
             <br>
-            <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
-            <img [src]="PICTURE.cachet" alt="signature"
-                style="float: right; max-width: 50%; max-height: 20vh;">
-            <img [src]="PICTURE.pied_de_page" alt="footer"
-                style="display: block; max-width: 50%; max-height: 20vh;">
+            <div class="col-6" style="margin-top:12%">
+                <p-table styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th colspan="2">Décision du conseil de classe</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Semestre validé</th>
+                            <th *ngIf="calculMoyenne() >= 10">X</th>
+                            <th *ngIf="calculMoyenne() < 10"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Semestre non validé</th>
+                            <th *ngIf="calculMoyenne() >= 10"></th>
+                            <th *ngIf="calculMoyenne() < 10">X</th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+            </div>
+            <div class="col-6" style="margin-top:12%">
+                <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 20vh;">
+            </div>
+            <div style="text-align: center;" class="col-12">
+                <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 100%; max-height: 20vh;">
+            </div>
+
 
         </div>
     </div>
-</div>  
+</div>

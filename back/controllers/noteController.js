@@ -33,6 +33,8 @@ app.get("/getAllByEtudiantId/:id", (req, res, next) => {
 
 //Recuperation de la liste des notes via un id et un semestre
 app.get("/getAllByIdBySemestre/:id/:semestre", (req, res, next) => {
+    if (req.params.semestre == "Annuel")
+        req.params.semestre = /./i
     Note.find({ etudiant_id: req.params.id, semestre: req.params.semestre })
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(400).send(error); });
@@ -41,6 +43,8 @@ app.get("/getAllByIdBySemestre/:id/:semestre", (req, res, next) => {
 
 //Recuperation de la liste des notes par semestre et par classe
 app.get("/getAllByClasseBySemestreByExam/:semestre/:classe/:exam", (req, res, next) => {
+    if (req.params.semestre == "Annuel")
+        req.params.semestre = /./i
     Note.find({ semestre: req.params.semestre, classe_id: req.params.classe, examen_id: req.params.exam })
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(400).send(error); });
@@ -65,6 +69,8 @@ app.get("/getAllByClasse/:id", (req, res, next) => {
 
 //Permet de verifier si un etudiant à deja une note pour le meme semestre et pour la meme matiere
 app.get("/verifNoteByIdBySemestreByExam/:id/:semestre/:exam", (req, res, next) => {
+    if (req.params.semestre == "Annuel")
+        req.params.semestre = /./i
     Note.findOne({ etudiant_id: req.params.id, semestre: req.params.semestre, examen_id: req.params.exam })
         .then((noteFromDb) => {
             if (noteFromDb) {
@@ -150,6 +156,8 @@ app.put("/updateV2/:id", (req, res) => {
 })
 
 app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
+    if (req.params.semestre == "Annuel")
+        req.params.semestre = /./i
     Note.find({ classe_id: req.params.classe_id, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
@@ -296,7 +304,6 @@ function avgDic(myDic) {
 }
 function compare(a, b) {
     let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
-    let inList = false
     let aInList = -1
     let bInList = -1
     listModule.forEach((val, index) => {
@@ -314,15 +321,16 @@ function compare(a, b) {
             return 1;
         }
         return 0;
-    }else if(aInList != -1 && bInList != -1){
-        if (aInList <bInList) {
+    } else if (aInList != -1 && bInList != -1) {
+        if (aInList < bInList) {
             return -1;
         }
-        if (aInList >bInList) {
+        if (aInList > bInList) {
             return 1;
         }
         return 0;
-    }else if(aInList != -1){
+    } else if (aInList != -1) {
+        //SI B n'est pas dans la liste alors
         if (a.formateur < b.formateur) {
             return -1;
         }
@@ -330,7 +338,8 @@ function compare(a, b) {
             return 1;
         }
         return 0;
-    }else{
+    } else {
+        //SI A n'est pas dans la liste alors
         if (a.formateur < b.formateur) {
             return -1;
         }

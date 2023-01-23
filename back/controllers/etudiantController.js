@@ -480,6 +480,8 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
             etudiants.forEach(etu => {
                 listEtudiantID.push(etu._id)
             })
+            if (req.params.semestre == "Annuel")
+                req.params.semestre = /./i
             Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
                 let listMatiereNOM = []
                 let listNotesEtudiantsCoeff = {}

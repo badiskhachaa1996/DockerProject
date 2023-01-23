@@ -120,4 +120,12 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   isOdd(number: number) {
     return number % 2 == 0
   }
+
+  totalCoeff() {
+    let r = 0
+    this.cols.forEach(col => {
+      r += col.coeff
+    })
+    return r
+  }
 }

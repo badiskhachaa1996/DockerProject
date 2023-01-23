@@ -199,7 +199,7 @@ export class BulletinComponent implements OnInit {
       filename: 'BULLETIN_' + this.SEMESTRE + '_' + this.ETUDIANT.user_id.lastname + "_" + this.ETUDIANT.user_id.firstname + '.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'px', format: [element.offsetWidth, element.offsetHeight], orientation: 'l', hotfixes: ['px_scaling'] }
+      jsPDF: { unit: 'px', format: [element.offsetWidth, element.offsetHeight], orientation: 'p', hotfixes: ['px_scaling'] }
     };
     this.hideForPDF = true
     html2pdf().set(opt).from(element).save().then(() => {

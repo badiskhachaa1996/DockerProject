@@ -240,10 +240,6 @@ export class ListGroupeComponent implements OnInit {
     })
   }
 
-  sendNotes(rowData: Classe) {
-    this.router.navigate(['/pv', rowData._id]);
-  }
-
   onRedirect() {
     this.router.navigate(['ajout-groupe']);
   }

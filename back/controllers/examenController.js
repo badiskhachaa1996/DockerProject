@@ -130,6 +130,8 @@ app.get('/getFormateurByModuleID/:module_id', (req, res) => {
 })
 
 app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
+    if (req.params.semestre == "Annuel")
+        req.params.semestre = /./i
     Examen.find({ classe_id: { $in: req.params.classe_id }, formateur_id: req.params.formateur_id, semestre: req.params.semestre }).populate("matiere_id").populate({ path: 'formateur_id', populate: { path: "user_id" } }).then(seances => {
         let cols = { module: [], eval: {} } // {module:['Module1'],eval:{'Module1':['Eval1']}}
         let data = {}// {'etudiant_email':{'Eval1':{'appreciation':'dab','note':10}}}
@@ -137,7 +139,7 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
 
         seances.forEach(s => {
             examens.push(s._id)
-            s.matiere_id.forEach(mid=>{
+            s.matiere_id.forEach(mid => {
                 if (mid && cols.module.includes(mid.nom) == false) {
                     cols.module.push(mid.nom)
                     if (!cols.eval[mid.nom])
@@ -153,7 +155,7 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
                 if (n.etudiant_id && n.etudiant_id.user_id && n.examen_id) {
                     if (data[n.etudiant_id.user_id.email])
                         data[n.etudiant_id.user_id.email][n.examen_id.libelle] = { 'appreciation': n.appreciation, 'note': n.note_val }
-                    else{
+                    else {
                         data[n.etudiant_id.user_id.email] = {}
                         data[n.etudiant_id.user_id.email][n.examen_id.libelle] = { 'appreciation': n.appreciation, 'note': n.note_val }
                     }
