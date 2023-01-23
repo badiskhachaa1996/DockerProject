@@ -38,12 +38,18 @@ export class AddDiplomeComponent implements OnInit {
     { value: "Commerce", actif: false },
     { value: "Construction", actif: false },
     { value: "Tertiaire", actif: false },
+    { value: "Service à la personne", actif: false },
+    { value: "Hôtellerie", actif: false },
   ]
 
   typeDiplome = [
     { value: "Choissisez le type du diplôme", actif: true },
     { value: "BTS", actif: false },
-    { value: "RNCP", actif: false }
+    { value: "RNCP", actif: false },
+    { value: "CAP AEPE (Accompagnant Educatif Petite Enfance)", actif: false },
+    { value: "Titre Professionnel de Gouvernant(e) en hôtellerie", actif: false },
+    { value: "Gouvernant(e) de Maison- Majordome", actif: false },
+    { value: "Titre Professionnel de Gouvernant(e) d'enfants", actif: false },
   ]
 
   typeEtude = [
@@ -55,6 +61,8 @@ export class AddDiplomeComponent implements OnInit {
 
   niveauEtude = [
     { value: "Choissisez le type d'étude", actif: true },
+    { value: "Niveau 3", actif: false },
+    { value: "Niveau 4", actif: false },
     { value: "Niveau 5", actif: false },
     { value: "Niveau 6", actif: false },
     { value: "Niveau 7", actif: false }
