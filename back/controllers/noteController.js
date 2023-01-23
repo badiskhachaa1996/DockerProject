@@ -323,9 +323,21 @@ function compare(a, b) {
         }
         return 0;
     }else if(aInList != -1){
-
+        if (a.formateur < b.formateur) {
+            return -1;
+        }
+        if (a.formateur > b.formateur) {
+            return 1;
+        }
+        return 0;
     }else{
-        
+        if (a.formateur < b.formateur) {
+            return -1;
+        }
+        if (a.formateur > b.formateur) {
+            return 1;
+        }
+        return 0;
     }
 
 }
