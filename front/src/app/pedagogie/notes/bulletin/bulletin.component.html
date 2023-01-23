@@ -156,16 +156,16 @@
                 <ng-template pTemplate="body" let-note>
                     <tr>
                         <td>{{note.module}}</td>
-                        <td> {{note.formateur}} </td>
+                        <td>{{note.formateur}} </td>
                         <td>{{ note.coeff }}</td>
                         <td class="text-center" [pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
+                            <p-cellEditor class="text-center">
+                                <ng-template pTemplate="input" class="text-center">
                                     <input pInputText type="text" [(ngModel)]="note.note_etudiant"
                                         (input)="calculMoy()">
                                 </ng-template>
-                                <ng-template pTemplate="output">
+                                <ng-template pTemplate="output" class="text-center">
                                     {{note.note_etudiant | number : '0.2-2'}}
                                 </ng-template>
                             </p-cellEditor>

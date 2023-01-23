@@ -43,7 +43,7 @@
                     <th *ngFor="let col of cols">
                         {{col.module}}
                     </th>
-                    <th class="text-center" rowspan="3">Moyenne</th>
+                    <th class="text-center" rowspan="2">Moyenne</th>
                     <th class="text-center" rowspan="3">Appréciations</th>
                 </tr>
                 <tr>
@@ -55,6 +55,9 @@
                     <th class="text-center" colspan="6">Coefficient</th>
                     <th class="text-center" *ngFor="let col of cols">
                         {{col.coeff}}
+                    </th>
+                    <th class="text-center">
+                        {{totalCoeff()}}
                     </th>
                 </tr>
             </ng-template>
