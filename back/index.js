@@ -14,7 +14,7 @@ let dblog = 'mongodb://127.0.0.1:27017/learningNode'
 if (process.argv[2]) {
     let argProd = process.argv[2]
     console.log(argProd)
-    if (!argProd.includes('dev')) {
+    if (!argProd.includes('dev') || !argProd.includes('prod')) {
         dblog = 'mongodb://localhost:27017/' + argProd
     } else if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]

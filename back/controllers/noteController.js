@@ -295,14 +295,39 @@ function avgDic(myDic) {
     return summ / ArrayLen;
 }
 function compare(a, b) {
-    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, "Culture économique, juridique et managériale", "Culture économique, juridique et managériale appliquée", /Support et mise à disposition de services informatiques/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
-    if (a.formateur < b.formateur) {
-        return -1;
+    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
+    let inList = false
+    let aInList = -1
+    let bInList = -1
+    listModule.forEach((val, index) => {
+        let temp = new RegExp(val)
+        if (temp.test(a.module))
+            aInList = index
+        if (temp.test(b.module))
+            bInList = index
+    })
+    if (aInList == -1 && bInList == -1) {
+        if (a.formateur < b.formateur) {
+            return -1;
+        }
+        if (a.formateur > b.formateur) {
+            return 1;
+        }
+        return 0;
+    }else if(aInList != -1 && bInList != -1){
+        if (aInList <bInList) {
+            return -1;
+        }
+        if (aInList >bInList) {
+            return 1;
+        }
+        return 0;
+    }else if(aInList != -1){
+
+    }else{
+        
     }
-    if (a.formateur > b.formateur) {
-        return 1;
-    }
-    return 0;
+
 }
 //Sauvegarde d'un PV
 app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
