@@ -423,43 +423,38 @@ export class DashboardComponent implements OnInit {
 
 
   //Methode de check in
-  onCheckIn() {
+  onCheckIn() 
+  {
+    const inTime = new InTime();
 
-    this.inTimeService.getIpAdress()
-      .then((response: any) => {
-        const inTime = new InTime();
+    inTime.user_id = this.token.id;
+    inTime.in_ip_adress = null;
 
-        inTime.user_id = this.token.id;
-        inTime.in_ip_adress = response.ip;
+    let today = new Date().toLocaleDateString();
+    let todayReplaced = '';
 
-        let today = new Date().toLocaleDateString();
-        let todayReplaced = '';
+    for (let i = 0; i < today.length; i++) {
+      if (today[i] === '/') {
+        todayReplaced += '-';
+      }
+      else {
+        todayReplaced += today[i];
+      }
 
-        for (let i = 0; i < today.length; i++) {
-          if (today[i] === '/') {
-            todayReplaced += '-';
-          }
-          else {
-            todayReplaced += today[i];
-          }
+    }
 
-        }
+    inTime.date_of_the_day = todayReplaced;
+    inTime.in_date = new Date();
+    inTime.out_date = null;
+    inTime.statut = 'Au travail';
+    inTime.isCheckable = true;
 
-        inTime.date_of_the_day = todayReplaced;
-        inTime.in_date = new Date();
-        inTime.out_date = null;
-        inTime.statut = 'Au travail';
-        inTime.isCheckable = true;
-
-        this.inTimeService.postJustArrived(inTime)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
-            this.onIsCheck();
-          })
-          .catch((error) => { console.log(error) })
-
+    this.inTimeService.postJustArrived(inTime)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
+        this.onIsCheck();
       })
-      .catch((error) => { console.log(error) })
+      .catch((error) => { console.log(error) });
 
   }
 
@@ -486,41 +481,37 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  onCheckOut() {
-    this.inTimeService.getIpAdress()
-      .then((response: any) => {
-        const today = new Date().toLocaleDateString();
-        let todayReplaced = '';
-        for (let i = 0; i < today.length; i++) {
-          if (today[i] === '/') {
-            todayReplaced += '-';
-          }
-          else {
-            todayReplaced += today[i];
-          }
-        }
+  onCheckOut() 
+  {
+    const today = new Date().toLocaleDateString();
+    let todayReplaced = '';
+    for (let i = 0; i < today.length; i++) {
+      if (today[i] === '/') {
+        todayReplaced += '-';
+      }
+      else {
+        todayReplaced += today[i];
+      }
+    }
 
-        const userId = this.token.id;
-        const outDate = new Date();
-        const dateOfToday = todayReplaced;
-        const ipAdress = response.ip;
-        const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
-        let activityDetails = this.formDailyActivityDetails.get('tasks').value;
+    const userId = this.token.id;
+    const outDate = new Date();
+    const dateOfToday = todayReplaced;
+    const ipAdress = null;
+    const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
+    let activityDetails = this.formDailyActivityDetails.get('tasks').value;
 
-        activityDetails.push(principaleActivityDetails);
+    activityDetails.push(principaleActivityDetails);
 
-        this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, principale_activity_details: principaleActivityDetails, activity_details: activityDetails })
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
-            this.dailyCheck = response;
-            this.formDailyActivityDetails.reset();
-            this.showFormDailyActivityDetails = false;
-            this.onIsCheck();
-          })
-          .catch((err) => { console.error(err); });
-
+    this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, principale_activity_details: principaleActivityDetails, activity_details: activityDetails })
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
+        this.dailyCheck = response;
+        this.formDailyActivityDetails.reset();
+        this.showFormDailyActivityDetails = false;
+        this.onIsCheck();
       })
-      .catch((error) => { console.log(error) })
+      .catch((err) => { console.error(err); });
 
   }
 
