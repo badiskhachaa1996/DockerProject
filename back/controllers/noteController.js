@@ -296,7 +296,6 @@ function avgDic(myDic) {
 }
 function compare(a, b) {
     let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
-    let inList = false
     let aInList = -1
     let bInList = -1
     listModule.forEach((val, index) => {
@@ -323,6 +322,7 @@ function compare(a, b) {
         }
         return 0;
     }else if(aInList != -1){
+        //SI B n'est pas dans la liste alors
         if (a.formateur < b.formateur) {
             return -1;
         }
@@ -331,6 +331,7 @@ function compare(a, b) {
         }
         return 0;
     }else{
+        //SI A n'est pas dans la liste alors
         if (a.formateur < b.formateur) {
             return -1;
         }
