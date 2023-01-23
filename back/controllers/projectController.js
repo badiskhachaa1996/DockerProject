@@ -104,6 +104,14 @@ app.get("/get-task/:id", (req, res, next) => {
 });
 
 
+// get task by id task
+app.get("/get-tasks-by-id-user/:id", (req, res, next) => {
+    Task.find({ attribuate_to: { $in: req.params.id } })?.populate('project_id')?.populate('attribuate_to')
+    .then((taskFromDb) => { res.status(200).send(taskFromDb) })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
+});
+
+
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
     Task.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')

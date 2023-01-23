@@ -2,6 +2,50 @@
     <div class="col-12">
         <div class="card">
             <h3>Les taches qui vous sont attribuées</h3>
+            <div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="taches?.length > 0">
+				<div class="md:col-4" *ngFor="let task of taches; let i = index">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
+						<p>
+							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
+						</p>
+						<p>
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
+						</p>
+						<p>
+							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
+						</p>
+						<div *ngIf="userConnected._id == task.creator_id ">
+							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
+							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
+						</div>
+					</p-card>
+				</div>
+			</div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <h3>Les taches que vous vous êtes attribuées</h3>
+            <div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="taches?.length > 0">
+				<div class="md:col-4" *ngFor="let task of taches; let i = index">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
+						<p>
+							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
+						</p>
+						<p>
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
+						</p>
+						<p>
+							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
+						</p>
+						<div *ngIf="userConnected._id == task.creator_id ">
+							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
+							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
+						</div>
+					</p-card>
+				</div>
+			</div>
         </div>
     </div>
 </div>
