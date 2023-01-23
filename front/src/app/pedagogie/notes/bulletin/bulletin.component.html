@@ -104,9 +104,9 @@
             style="float:right;" label="Exporter en pdf">
         </button>
     </div>
-    <div class="col-12 card">
+    <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
-        <div class="grid" id="semestriel">
+        <div class="col-12 grid" id="semestriel">
             <div class="col-9">
                 <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
                 <p style="width: 50%;" *ngIf="GROUPE?.diplome_id && ECOLE">
@@ -207,7 +207,7 @@
                 </ng-template>
             </p-table>
             <br>
-            <div class="col-6">
+            <div class="col-6" style="margin-top:12%">
                 <p-table styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
@@ -227,7 +227,7 @@
                 </p-table>
                 <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
             </div>
-            <div class="col-6">
+            <div class="col-6" style="margin-top:12%">
                 <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 20vh;">
             </div>
             <div style="text-align: center;" class="col-12">

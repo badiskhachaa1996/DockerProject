@@ -25,27 +25,28 @@
                     </th>
                     <th class="text-center" rowspan="3">Moyenne</th>
                     <th *ngFor="let col of cols">
-                        {{col.module}}
+                        {{col.module}} <br><br> {{col.formateur}}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-data let-ri="rowIndex">
                 <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
                     <td><a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
-                        target="_blank">{{data.custom_id}}</a></td>
+                            target="_blank">{{data.custom_id}}</a></td>
                     <td class="text-center">{{data.nom |uppercase}} {{data.prenom |titlecase}}</td>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
-                    <td class="text-center" *ngFor="let col of cols"
-                        [pEditableColumn]="data.appreciation_modules[col.module]" pEditableColumnField="module">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.appreciation_modules[col.module]"
-                                    (input)="modified=true">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{data.appreciation_modules[col.module]}}
-                            </ng-template>
-                        </p-cellEditor>
+                    <td class="text-center" *ngFor="let col of cols">
+                        <div [pEditableColumn]="data.appreciation_module[col.module]" pEditableColumnField="module">
+                            <p-cellEditor *ngIf="data.appreciation_module && data.appreciation_module[col.module]">
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="data.appreciation_module[col.module]"
+                                        (input)="modified=true">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{data.appreciation_module[col.module]}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </div>
                     </td>
                 </tr>
             </ng-template>
@@ -115,7 +116,7 @@
                     <td class="text-center">{{data.nom |uppercase}} {{data.prenom |titlecase}}</td>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
                     <td class="text-center" *ngFor="let col of cols">
-                        {{data.appreciation_modules[col.module]}}
+                        {{data.appreciation_module[col.module]}}
                     </td>
                 </tr>
             </ng-template>

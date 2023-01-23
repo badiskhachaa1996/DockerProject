@@ -46,6 +46,16 @@ export class PvAppreciationComponent implements OnInit {
       console.log(data)
       this.cols = data.cols
       this.dataPV = data.data
+      this.dataPV.forEach((d, index) => {
+        if (!d.appreciation_module) {
+          d.appreciation_module = {}
+        }
+        this.cols.forEach(col => {
+          if (!d.appreciation_module[col.module])
+            d.appreciation_module[col.module] = ""
+        })
+        this.dataPV[index] = d
+      })
     })
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
@@ -74,12 +84,12 @@ export class PvAppreciationComponent implements OnInit {
   loadPV(pv) {
     if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
       pv.pv_annuel_data.forEach((d, index) => {
-        if (!d.appreciation_modules) {
-          d.appreciation_modules = {}
+        if (!d.appreciation_module) {
+          d.appreciation_module = {}
         }
         this.cols.forEach(col => {
-          if (!d.appreciation_modules[col.module])
-            d.appreciation_modules[col.module] = ""
+          if (!d.appreciation_module[col.module])
+            d.appreciation_module[col.module] = ""
         })
         pv.pv_annuel_data[index] = d
       })

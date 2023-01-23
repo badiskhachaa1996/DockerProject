@@ -145,7 +145,7 @@ app.post("/newEtudiantIMS",(req,res)=>{
         cid: 'red' //same cid value as in the html img src
     }]
     let mailOptions = {
-        from: 'noreply@intedgroup.com',
+        from: 'ims@intedgroup.com',
         to: 'm.hue@intedgroup.com',
         subject: '[IMS] Nouveau Etudiant',
         html: htmlmail,
