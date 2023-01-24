@@ -46,10 +46,7 @@ export class AddDiplomeComponent implements OnInit {
     { value: "Choissisez le type du diplôme", actif: true },
     { value: "BTS", actif: false },
     { value: "RNCP", actif: false },
-    { value: "CAP AEPE (Accompagnant Educatif Petite Enfance)", actif: false },
-    { value: "Titre Professionnel de Gouvernant(e) en hôtellerie", actif: false },
-    { value: "Gouvernant(e) de Maison- Majordome", actif: false },
-    { value: "Titre Professionnel de Gouvernant(e) d'enfants", actif: false },
+    { value: "CAP", actif: false },
   ]
 
   typeEtude = [
