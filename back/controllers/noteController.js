@@ -156,9 +156,10 @@ app.put("/updateV2/:id", (req, res) => {
 })
 
 app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
-    if (req.params.semestre == "Annuel")
-        req.params.semestre = /./i
-    Note.find({ classe_id: req.params.classe_id, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+    let sem = req.params.semestre
+    if (sem == "Annuel")
+        sem = /./i
+    Note.find({ classe_id: req.params.classe_id, semestre: sem }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
         let listMatiereNOM = []
@@ -235,8 +236,10 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
                                     }
-                                    else
+                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length == 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])
+                                    else
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = 0
                                 }
                         })
                     }
@@ -263,7 +266,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
         })
 
         listEtudiantID.forEach(e_id => {
-            console.log(dicAppreciation[e_id])
             data.push({
                 custom_id: dicEtudiant[e_id].custom_id,
                 nom: dicEtudiant[e_id].user_id.lastname,

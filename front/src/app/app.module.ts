@@ -243,11 +243,12 @@ import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/re
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
-import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { PvSemestrielComponent } from './pedagogie/notes/pv-semestriel/pv-semestriel.component';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
+import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 
 
 @NgModule({
@@ -501,11 +502,12 @@ import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-
     PovFormateurComponent,
     MyTaskComponent,
     TaskManagementComponent,
-    PvAnnuelComponent,
+    PvSemestrielComponent,
     BulletinComponent,
     ListEntrepriseCeoComponent,
     PvAppreciationComponent,
     AppreciationInputComponent,
+    PvAnnuelComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

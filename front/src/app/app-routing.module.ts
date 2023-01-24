@@ -137,11 +137,12 @@ import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fi
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
-import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { PvSemestrielComponent } from './pedagogie/notes/pv-semestriel/pv-semestriel.component';
 import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
+import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 
 const routes: Routes = [
     {
@@ -202,7 +203,7 @@ const routes: Routes = [
             { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
             { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
-            { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService]  },
+            { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
@@ -255,9 +256,10 @@ const routes: Routes = [
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
-            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'pv-annuel/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'pv-semestriel/:semestre/:classe_id', component: PvSemestrielComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
-            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService]},
+            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService] },
             { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
         ],
     },

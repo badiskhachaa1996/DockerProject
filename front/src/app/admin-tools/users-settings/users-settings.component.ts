@@ -21,7 +21,7 @@ import { MessageService } from 'primeng/api';
 export class UsersSettingsComponent implements OnInit {
 
   users: User[] = [];
-  userToUpdate: User;
+  userToUpdate: any;
   formUpdate: FormGroup;
   showFormUpdate: boolean = false;
   showUsersList: boolean = true;
@@ -183,7 +183,7 @@ export class UsersSettingsComponent implements OnInit {
       phone: this.userToUpdate.phone,
       email: this.userToUpdate.email,
       email_perso: this.userToUpdate.email_perso,
-      service: { label: this.services[this.userToUpdate.service_id]?.label, value: this.services[this.userToUpdate.service_id]?._id },
+      service: this.userToUpdate.service_id._id,
       mention: { label: this.userToUpdate.mention, value: this.userToUpdate.mention },
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
@@ -215,7 +215,7 @@ export class UsersSettingsComponent implements OnInit {
     user.phone = this.formUpdate.get('phone')?.value;
     user.email = this.formUpdate.get('email')?.value;
     user.email_perso = this.formUpdate.get('email_perso')?.value;
-    user.service_id = this.formUpdate.get('service')?.value.value;
+    user.service_id = this.formUpdate.get('service')?.value;
     user.mention = this.formUpdate.get('mention')?.value.value;
     user.type = this.formUpdate.get('type')?.value.value;
     user.role = this.formUpdate.get('role')?.value.value;
