@@ -44,7 +44,8 @@ export class ListDiplomeComponent implements OnInit {
 
   typeDiplome = [
     { value: "BTS" },
-    { value: "RNCP" }
+    { value: "RNCP" },
+    { value: "CAP" },
   ]
 
   typeEtude = [
@@ -54,6 +55,8 @@ export class ListDiplomeComponent implements OnInit {
   ]
 
   niveauEtude = [
+    { value: "Niveau 3" },
+    { value: "Niveau 4" },
     { value: "Niveau 5" },
     { value: "Niveau 6" },
     { value: "Niveau 7" }
