@@ -1,24 +1,22 @@
 <p-toast></p-toast>
 <div class="grid">
     <div class="col-12">
-        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouvelle étudiant" [(visible)]="display"
             modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
+                Voici les informationns à connaître pour ajouter un nouvel étudiant:
             </p>
+            <ul>
+                <li><span style="color: red;">Informations générale du (de la) formateur(rice) </span> : Entrez toutes les Informations
+                concernant le (la) formateur(rice). </li>
+            </ul>
             <ng-template pTemplate="footer">
-                <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                <button pButton icon="pi pi-check" (click)="display=false" label="J'ai compris"
                     class="p-button-outlined"></button>
                     </ng-template>
                 </p-dialog>
                 <div class="grid">
-                    <div class="col-12">
+                    <div class="col-12" style="text-align: center;">
                         <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
                             style="width:auto;"></button>
                     </div>
@@ -34,7 +32,7 @@
                     </div>
                     <br>
                     <form class="p-fluid p-formgrid grid" [formGroup]="formAddEtudiant" (ngSubmit)="onAddEtudiant()">
-                        <h2 class="col-12 text-center" style="font-weight: bold;">Informations Etudiants</h2>
+                        <h4 class="col-12 text-center" style="font-weight: bold;">Informations générale étudiants</h4>
                         <div class="field col-5 md:col-4">
                             <label For="civilite">Civilité <span style="color: red;"> * </span></label>
                             <p-dropdown [options]="civiliteList" formControlName="civilite" placeholder="Choissisez une civilité"></p-dropdown>
@@ -145,8 +143,8 @@
                         </div>
 
                         <div class="field col-6 md:col-3">
-                            <label For="code_postale">Code postale</label>
-                            <input pInputText id="code_postale" type="text" placeholder="Code postale"
+                            <label For="code_postale">Code postal</label>
+                            <input pInputText id="code_postal" type="text" placeholder="Code postal"
                                 formControlName="postal_adresse" />
                         </div>
 
