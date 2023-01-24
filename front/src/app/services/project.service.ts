@@ -157,6 +157,37 @@ export class ProjectService {
     });
   }
 
+
+  // get tasks in progress by id user
+  getTasksInProgressByIdUser(id: string): Promise<Tache[]>
+  {
+    const url = `${this.apiUrl}/get-tasks-in-progress-by-id-user/${id}`;
+
+    return new Promise<Tache[]>((resolve, reject) => {
+      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches du projet récuperés')
+      });
+    });
+  }
+  
+  
+  // get tasks finished by id user
+  getTasksFinishedByIdUser(id: string): Promise<Tache[]>
+  {
+    const url = `${this.apiUrl}/get-tasks-finished-by-id-user/${id}`;
+
+    return new Promise<Tache[]>((resolve, reject) => {
+      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches du projet récuperés')
+      });
+    });
+  }
+
+
   // suppression d'une tache
   deleteTask(id: string): Promise<any> 
   {
