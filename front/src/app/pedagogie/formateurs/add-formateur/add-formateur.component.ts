@@ -162,7 +162,7 @@ export class AddFormateurComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@estya+\\.com$")]],
+      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")]],
       email_perso: ['', Validators.email],
       pays_adresse: ['', [Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
