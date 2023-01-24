@@ -1,9 +1,9 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h3>Les taches qui vous sont attribuées</h3>
-            <div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="taches?.length > 0">
-				<div class="md:col-4" *ngFor="let task of taches; let i = index">
+			<h3>Vos tâches en cours</h3>
+			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="taches?.length > 0">
+				<div class="md:col-4" *ngFor="let task of tachesInProgress; let i = index">
 					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
@@ -26,9 +26,9 @@
 
     <div class="col-12">
         <div class="card">
-            <h3>Les taches que vous vous êtes attribuées</h3>
+            <h3>Vos tâches finis</h3>
             <div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="taches?.length > 0">
-				<div class="md:col-4" *ngFor="let task of taches; let i = index">
+				<div class="md:col-4" *ngFor="let task of tachesFinished; let i = index">
 					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
