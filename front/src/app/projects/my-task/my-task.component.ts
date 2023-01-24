@@ -26,7 +26,8 @@ export class MyTaskComponent implements OnInit {
 
 
   /** Task */
-  taches: Tache[] = [];
+  tachesInProgress: Tache[] = [];
+  tachesFinished: Tache[] = [];
   tacheSelected: Tache;
   showFormAddTache: boolean = false;
   formAddTache: FormGroup;
@@ -89,10 +90,16 @@ export class MyTaskComponent implements OnInit {
     .then((response) => { this.projects = response; })
     .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: "Impossible de récuperer les projets, veuillez contacter un administrateur" }); });
 
-    // récuperation de la liste des taches de l'utilisateur
-    this.projectService.getTasksByIdUser(this.token.id)
-    .then((response) => { this.taches = response; })
+    // recuperation de la liste des taches en cours
+    this.projectService.getTasksInProgressByIdUser(this.token.id)
+    .then((response) => { this.tachesInProgress = response; })
     .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
+  
+    // recuperation de la liste des taches finis
+    this.projectService.getTasksFinishedByIdUser(this.token.id)
+    .then((response) => { this.tachesFinished = response; })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
+  
   }
 
 }
