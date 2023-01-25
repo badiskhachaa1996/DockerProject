@@ -111,4 +111,14 @@ export class NoteService {
 
   }
 
+  replacePV(id, PV) {
+    let url = this.apiUrl + "replacePV/" + id
+    return this.httpClient.post<any>(url, PV, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  repairNote() {
+    let url = this.apiUrl + "repairNote"
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 }

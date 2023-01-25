@@ -68,6 +68,12 @@ export class ExamenComponent implements OnInit {
     { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
   ]
+  showAppreciation = false
+
+  formAppreciation = this.formBuilder.group({
+    classe_id: [
+      "", Validators.required]
+  });
   //Données liées à la modification d'examens
   examenToUpdate: Examen;
   idExamenToUpdate: string;
@@ -508,7 +514,7 @@ export class ExamenComponent implements OnInit {
     else
       this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
         this.dropdownModule = [{ label: 'Tous les modules', value: null }]
-        console.log(classe_id._id,modules)
+        console.log(classe_id._id, modules)
         modules.forEach(matiere => {
           let bypa: any = matiere.formation_id
           if (Array.isArray(matiere.formation_id))
@@ -548,7 +554,7 @@ export class ExamenComponent implements OnInit {
         'Appréciation': '',
         'Date de Notation': '',
         'Absence Justifié': '',
-        '':'',
+        '': '',
         'Formateur': examen.formateur_id?.user_id?.firstname + ' ' + examen.formateur_id?.user_id?.lastname,
         'Module': examen.matiere_id[0].abbrv,
         'Date de l\'éxamen': new Date(examen.date).toLocaleString('fr-FR'),
@@ -592,5 +598,28 @@ export class ExamenComponent implements OnInit {
         clearInterval(scrollInterval);
       }
     }, 15);
+  }
+
+  onShowAppreciation() {
+    //appreciation/:semestre/:classe_id/:formateur_id
+    let fid: any = this.examSelected.formateur_id
+    this.router.navigate(['appreciation', this.examSelected.semestre, this.formAppreciation.value.classe_id, fid._id])
+  }
+  dropdownClasseExamen = []
+  updateDropdown(exam) {
+    this.dropdownClasseExamen = []
+    exam.classe_id.forEach(ex => {
+      this.dropdownClasseExamen.push({ label: ex.abbrv, value: ex._id })
+    })
+  }
+  deleteExamen(exam) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette examen?\nToutes les notes rattachés seront supprimés également"))
+      this.examenService.delete(exam._id).subscribe(exam => {
+        this.messageService.add({ severity: 'success', summary: "L'examen a été supprimé avec succès" })
+        this.examens.splice(this.examens.indexOf(exam), 1)
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+        console.error(err)
+      })
   }
 }

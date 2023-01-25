@@ -1,7 +1,38 @@
 <p-toast></p-toast>
 <div class="grid">
     <!-- Partie changement de statut -->
+    <div class="col-12" *ngIf="showAppreciation">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="showAppreciation = false;formAppreciation.reset()" aria-hidden="true">
+            </i>
+            <h3 style="text-align: center;" *ngIf="showAppreciation"> Voir les appréciations de:</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAppreciation" (ngSubmit)="onShowAppreciation()">
 
+                <div class="field col-12">
+                    <small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
+                        obligatoires</small>
+                </div>
+
+                <div class="field col-12">
+                    <label>Groupe<span style="color:red">*</span>:</label><br>
+
+                    <p-dropdown [options]="dropdownClasseExamen" placeholder="Choissisez un groupe"
+                        formControlName="classe_id">
+                    </p-dropdown>
+
+                </div>
+                <div>
+                    <button pButton type="submit" label="Voir les appréciations de ce groupe"
+                        [disabled]="formAppreciation.invalid"></button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
     <!-- Table d'ajout de note par classe -->
     <div class="col-12" *ngIf="examSelected">
         <div class="card">
@@ -29,7 +60,8 @@
                         <button pButton
                             pTooltip="Merci d'enregistrer les appréciations des étudiants de ce Module avant la fin du semestre"
                             label="Enregistrer les appréciations du Module" icon="pi pi-send"
-                            (click)="toAppreciation();" style="margin-right: 3px;"></button>
+                            (click)="showAppreciation=examSelected;updateDropdown(examSelected)"
+                            style="margin-right: 3px;"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -282,6 +314,8 @@
                             idMatiereToUpdate = examen.matiere_id;
                             formateurToUpdate = examen.formateur_id;
                             onGetById();" aria-hidden="true"></i>
+                            <i type="button" pTooltip="Supprimer" tooltipPosition="bottom" *ngIf="!isFormateur"
+                                class="pi pi-trash" (click)="deleteExamen(examen)" aria-hidden="true"></i>
 
                             <i class="pi pi-file-excel ml-1" pTooltip="Attribuer des notes" tooltipPosition="bottom"
                                 (click)="loadEtudiantsForNote(examen);scrollToTop()"></i>
