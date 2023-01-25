@@ -508,7 +508,7 @@ export class ExamenComponent implements OnInit {
     else
       this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
         this.dropdownModule = [{ label: 'Tous les modules', value: null }]
-        console.log(classe_id._id,modules)
+        console.log(classe_id._id, modules)
         modules.forEach(matiere => {
           let bypa: any = matiere.formation_id
           if (Array.isArray(matiere.formation_id))
@@ -548,7 +548,7 @@ export class ExamenComponent implements OnInit {
         'Appréciation': '',
         'Date de Notation': '',
         'Absence Justifié': '',
-        '':'',
+        '': '',
         'Formateur': examen.formateur_id?.user_id?.firstname + ' ' + examen.formateur_id?.user_id?.lastname,
         'Module': examen.matiere_id[0].abbrv,
         'Date de l\'éxamen': new Date(examen.date).toLocaleString('fr-FR'),
@@ -592,5 +592,18 @@ export class ExamenComponent implements OnInit {
         clearInterval(scrollInterval);
       }
     }, 15);
+  }
+
+  toAppreciation() {
+    //appreciation/:semestre/:classe_id/:formateur_id
+    let ids = ''
+    this.examSelected.classe_id.forEach(c => {
+      let cla: any = c
+      ids = ids + ',' + cla._id
+    })
+    ids.replace(',', '')
+    console.log(ids)
+    let fid: any = this.examSelected.formateur_id
+    this.router.navigate(['appreciation', this.examSelected.semestre, ids, fid._id])
   }
 }

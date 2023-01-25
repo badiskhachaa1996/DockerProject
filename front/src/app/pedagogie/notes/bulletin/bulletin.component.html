@@ -106,7 +106,7 @@
     </div>
     <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
-        <div class="col-12 grid" id="semestriel">
+        <div class="col-12 grid py-1" id="semestriel">
             <div class="col-9">
                 <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
                 <p style="width: 50%;" *ngIf="GROUPE?.diplome_id && ECOLE">
@@ -118,7 +118,7 @@
                 </p>
             </div>
 
-            <div class="col-3">
+            <div class="col-3" style="margin-bottom:20% ;">
                 <h4><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
                 <p>
                     <strong>{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}} {{
@@ -144,9 +144,9 @@
                     <tr>
                         <th style="text-align: center;">Modules</th>
                         <th style="text-align: center;">Formateur</th>
-                        <th style="text-align: center;">Coef</th>
-                        <th style="text-align: center;">Moyenne</th>
-                        <th style="text-align: center;">Moyenne</th>
+                        <th style="width: 5em;text-align: center;">Coef</th>
+                        <th style="width: 5em;text-align: center;">Moyenne</th>
+                        <th style="width: 5em;text-align: center;">Moy</th>
                         <th style="width: 5em;" style="text-align: center;">Min.</th>
                         <th style="width: 5em;" style="text-align: center;">Max.</th>
                         <!--<th style="text-align: center;">ECTS</th>-->
@@ -157,8 +157,8 @@
                     <tr>
                         <td>{{note.module}}</td>
                         <td>{{note.formateur}} </td>
-                        <td>{{ note.coeff }}</td>
-                        <td class="text-center" [pEditableColumn]="note.note_etudiant"
+                        <td style="width: 5em;">{{ note.coeff }}</td>
+                        <td class="text-center" style="width: 5em;" [pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
                             <p-cellEditor class="text-center">
                                 <ng-template pTemplate="input" class="text-center">
@@ -227,11 +227,11 @@
                 </p-table>
                 <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
             </div>
-            <div class="col-6" style="margin-top:12%">
-                <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 20vh;">
+            <div class="col-6" style="margin-top:30%;">
+                <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 25vh;">
             </div>
-            <div style="text-align: center;" class="col-12">
-                <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 100%; max-height: 20vh;">
+            <div style="text-align: center;margin-top:30%" class="col-12">
+                <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 90%; max-height: 20vh;">
             </div>
 
 
