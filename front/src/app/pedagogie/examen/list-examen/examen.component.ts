@@ -612,4 +612,14 @@ export class ExamenComponent implements OnInit {
       this.dropdownClasseExamen.push({ label: ex.abbrv, value: ex._id })
     })
   }
+  deleteExamen(exam) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette examen?\nToutes les notes rattachés seront supprimés également"))
+      this.examenService.delete(exam._id).subscribe(exam => {
+        this.messageService.add({ severity: 'success', summary: "L'examen a été supprimé avec succès" })
+        this.examens.splice(this.examens.indexOf(exam), 1)
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+        console.error(err)
+      })
+  }
 }

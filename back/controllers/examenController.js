@@ -169,5 +169,19 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
     })
 })
 
+app.delete('/delete/:id', (req, res) => {
+    Note.deleteMany({ examen_id: req.params.id }, {}, (err, doc) => {
+        if (!err)
+            Examen.deleteOne({ _id: req.params.id }, {}, (err2, doc2) => {
+                if (!err2)
+                    res.send(doc2)
+                else
+                    res.status(500).send(err2)
+            })
+        else
+            res.status(500).send(err)
+    })
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

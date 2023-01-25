@@ -243,6 +243,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                             })
                             note.examen_id.matiere_id.forEach(mid => {
                                 if (note.etudiant_id && note.etudiant_id.classe_id)//&& mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id)
+
                                     if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && !note.isAbsent) {
                                         if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0) {
                                             listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
@@ -389,6 +390,17 @@ app.delete("/deletePV/:id", (req, res) => {
 app.get('/getLastPV/:semestre/:classe_id', (req, res) => {
     PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }, {}, { sort: { date_creation: -1 } }).then(pv => {
         res.send(pv)
+    })
+})
+
+app.get('/repairNote', (req, res) => {
+    Note.find().populate('etudiant_id').then(notes => {
+        notes.forEach(n => {
+            if (n.classe_id && n.etudiant_id)
+                if (n.classe_id != n.etudiant_id.classe_id)
+                    Note.findByIdAndUpdate(n._id, { classe_id: n.etudiant_id.classe_id }, { new: true }, (err, doc) => { })
+        })
+        res.send({ message: "DAB" })
     })
 })
 
