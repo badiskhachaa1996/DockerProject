@@ -96,8 +96,7 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="semestre">Semestre <span style="color: red;"> * </span></label>
-                        <input pInputText id="semestre" type="text" formControlName="semestre"
-                            placeholder="Semestre 1" />
+                        <p-dropdown [options]="semestreList" formControlName="semestre"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="niveau">Année <span style="color: red;"> * </span></label>
@@ -312,7 +311,8 @@
                             <p-tag styleClass="mr-2" icon="pi pi-times" severity="danger" value="Hors Bulletin"></p-tag>
                         </td>
                         <td style="min-width: 12rem;" *ngIf="!matiere.hors_bulletin">
-                            <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Pris en compte"></p-tag>
+                            <p-tag styleClass="mr-2" icon="pi pi-check" severity="success"
+                                value="Pris en compte"></p-tag>
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.remarque}}

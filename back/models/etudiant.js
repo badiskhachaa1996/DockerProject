@@ -59,7 +59,8 @@ const etudiantSchema = mongoose.Schema({
     lien_livret: { type: mongoose.Schema.Types.Mixed, default: { 'read': null, 'edit': null } },
     lien_dossier_professionel: { type: String, default: null },
     lien_tableau_synthese: { type: String, default: null },
-    date_inscription: { type: Date, default: Date.now() }
+    date_inscription: { type: Date, default: Date.now() },
+    lien_bulletin: { type: mongoose.Schema.Types.Mixed, default: { 'Semestre 1': null, 'Semestre 2': null, 'Semestre 3': null, 'Annuel': null } }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

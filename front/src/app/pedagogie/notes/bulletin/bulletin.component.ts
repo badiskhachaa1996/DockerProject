@@ -126,7 +126,7 @@ export class BulletinComponent implements OnInit {
     })
 
     if (this.formAGSPV.value.pv == "Aucun/Nouveau PV") {
-      this.NoteS.getPVAnnuel(this.SEMESTRE, this.GROUPE._id).subscribe(pv => {
+      this.NoteS.getPVAnnuel(this.SEMESTRE, this.GROUPE._id, "Bulletin").subscribe(pv => {
         this.PV = { date_creation: new Date(), semestre: this.SEMESTRE, classe_id: this.GROUPE._id, pv_annuel_data: pv.data, pv_annuel_cols: pv.cols }
         this.generateBulletin()
       })
@@ -253,17 +253,18 @@ export class BulletinComponent implements OnInit {
             } else {
               calculMoyenne[n] = { total: pv.notes[n], nb: 1 }
             }
-            if (minMoyenne[n] && pv.notes[n] < minMoyenne[n]) {
-              minMoyenne[n] = pv.notes[n]
-            } else {
-              minMoyenne[n] = pv.notes[n]
+            if (minMoyenne[n]) {
+              if (pv.notes[n] < minMoyenne[n])
+                minMoyenne[n] = pv.notes[n]
             }
+            else
+              minMoyenne[n] = pv.notes[n]
 
-            if (maxMoyenne[n] && pv.notes[n] > maxMoyenne[n]) {
+            if (maxMoyenne[n]) {
+              if (pv.notes[n] > maxMoyenne[n])
+                maxMoyenne[n] = pv.notes[n]
+            } else
               maxMoyenne[n] = pv.notes[n]
-            } else {
-              maxMoyenne[n] = pv.notes[n]
-            }
           }
         })
         listModule.forEach(n => {

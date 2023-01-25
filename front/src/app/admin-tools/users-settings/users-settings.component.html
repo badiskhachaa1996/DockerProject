@@ -107,7 +107,8 @@
                 </div>
                 <div class="field col-12">
                     <label For="service">Service</label>
-                    <p-dropdown [options]="dropDownService" formControlName="service" optionLabel="label"></p-dropdown>
+                    <p-dropdown [options]="dropDownService" formControlName="service"
+                        placeholder="Tous les services"></p-dropdown>
                 </div>
                 <div class="field col-12">
                     <label For="type">Type</label>
@@ -187,7 +188,7 @@
                         <th>Email</th>
                         <th>Email perso</th>
                         <th pSortableColumn="date_creation">Date d'insertion <p-sortIcon field="date_creation">
-                        </p-sortIcon></th>
+                            </p-sortIcon></th>
                         <th>Action</th>
                     </tr>
                 </ng-template>

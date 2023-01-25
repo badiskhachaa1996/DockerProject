@@ -277,7 +277,7 @@ export class FirstConnectionComponent implements OnInit {
         }
         this.AuthService.updateEtudiant(user, this.dataEtudiant).subscribe((data: any) => {
           localStorage.removeItem('modify')
-          this.NotifService.newEtudiantIMS(data).subscribe(d => {
+          this.NotifService.newEtudiantIMS({ firstname: this.RegisterForm.value.firstname, lastname: this.RegisterForm.value.lastname }).subscribe(d => {
 
           }, err => {
             console.error(err);

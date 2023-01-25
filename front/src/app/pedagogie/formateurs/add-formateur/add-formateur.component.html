@@ -23,39 +23,39 @@
 <div class="grid">
     <div>
         <div class="col-12">
-            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module" [(visible)]="display"
+            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau formateur" [(visible)]="display"
                 modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
                 <p class="line-height-3 m-0">
-                    Voici les informationns à savoir pour ajouter une nouveau formateur:
+                    Voici les informationns à connaître pour ajouter un nouveau formateur:
                 </p>
                 <ul>
-                    <li><span style="color: red;">Informations générale du (de la) formateur(rice) </span> : E. </li>
+                    <li><span style="color: red;">Informations générale du (de la) formateur(rice) </span> : Entrez toutes les Informations
+                    concernant le (la) formateur(rice). </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Nom/Prénom</span> : Entrez le nom et prénom du formateur(rice). </li>
+                    <li><span style="color: red;">Liste des modules sur lesquelles il est rattaché</span> : Parmi les choix de la liste déroulante, vous devez
+                        choisir le ou les modules auxquels est rattaché le ou la formateur(rice) en indiquant le volume et le côut horaire. </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans
-                        laquelle vous voulez ajoutez la module. </li>
-                </ul>
-                <ul>
-                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum du module.
+                    <li><span style="color: red;">Disponiblité jury</span> : Parmi les choix de la liste déroulante, vous pouvez choisir un ou plusieurs diplôme pour lesquels
+                        le ou la formatrice sera jury en indiquant également le coût horaire.
                     </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire du module. </li>
+                    <li><span style="color: red;">Remarque</span> : Vous permet d'ajouter des remarques sur le ou la formateur(rice).
+                    </li>
                 </ul>
                 <p class="line-height-3 m-0">
                     Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter le
-                        module"</span> pour finaliser l'ajout du module.
+                        formateur"</span> pour finaliser l'ajout du formateur.
                 </p>
                 <ng-template pTemplate="footer">
-                    <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                    <button pButton icon="pi pi-check" (click)="display=false" label="J'ai compris"
                         class="p-button-outlined"></button>
                 </ng-template>
             </p-dialog>
             <div class="grid">
-                <div class="col-12">
+                <div class="col-12" style="text-align: center;">
                     <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
                         style="width:auto;"></button>
                 </div>
@@ -115,7 +115,7 @@
                             formControlName="email" />
                         <div *ngIf="email.invalid && (email.touched || email.dirty)">
                             <span *ngIf="email.errors?.pattern" style="color: red;">
-                                L'email' n'est pas dans le bon format, 'xxx@estya.com'
+                                L'email n'est pas dans le bon format, 'xxx@estya.com','xxx@estya.group.com', 'xxx@intedgroup.com', 'xxx@adgedcucation.com'.
                             </span>
                         </div>
                     </div>

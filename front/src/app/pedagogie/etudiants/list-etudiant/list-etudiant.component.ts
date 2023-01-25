@@ -80,6 +80,11 @@ export class ListEtudiantComponent implements OnInit {
     lien_word_edit: [''],
     lien_dossier_professionel: [''],
     lien_tableau_synthese: [''],
+    lien_bulletin_Semestre_1: [''],
+    lien_bulletin_Semestre_2: [''],
+    lien_bulletin_Semestre_3: [''],
+    lein_bulletin_annuel: [''],
+
   });
 
   typeEtudiant = [
@@ -1152,10 +1157,12 @@ export class ListEtudiantComponent implements OnInit {
     this.showLivrets.lien_livret = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
     this.showLivrets.lien_dossier_professionel = this.formLivret.value.lien_dossier_professionel
     this.showLivrets.lien_tableau_synthese = this.formLivret.value.lien_tableau_synthese
+    this.showLivrets.lien_bulletin = { 'Semestre 1': this.formLivret.value.lien_bulletin_Semestre_1, 'Semestre 2': this.formLivret.value.lien_bulletin_Semestre_2, 'Semestre 3': this.formLivret.value.lien_bulletin_Semestre_3, 'Annuel': this.formLivret.value.lien_bulletin_annuel }
     this.etudiantService.update(this.showLivrets).subscribe(data => {
       this.etudiants[index].lien_livret = this.showLivrets.lien_livret
       this.etudiants[index].lien_dossier_professionel = this.showLivrets.lien_dossier_professionel
       this.etudiants[index].lien_tableau_synthese = this.showLivrets.lien_tableau_synthese
+      this.etudiants[index].lien_bulletin = this.showLivrets.lien_bulletin
       this.showLivrets = null
       this.formLivret.reset()
       this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
@@ -1168,6 +1175,11 @@ export class ListEtudiantComponent implements OnInit {
       lien_word_edit: this.showLivrets.lien_livret.edit,
       lien_dossier_professionel: this.showLivrets.lien_dossier_professionel,
       lien_tableau_synthese: this.showLivrets.lien_tableau_synthese,
+      lien_bulletin_Semestre_1: this.showLivrets.lien_bulletin['Semestre 1'],
+      lien_bulletin_Semestre_2: this.showLivrets.lien_bulletin['Semestre 2'],
+      lien_bulletin_Semestre_3: this.showLivrets.lien_bulletin['Semestre 3'],
+      lein_bulletin_annuel: this.showLivrets.lien_bulletin['Annuel'],
+
     })
   }
 }
