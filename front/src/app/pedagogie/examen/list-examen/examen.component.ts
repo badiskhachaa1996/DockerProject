@@ -68,6 +68,12 @@ export class ExamenComponent implements OnInit {
     { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
   ]
+  showAppreciation = false
+
+  formAppreciation = this.formBuilder.group({
+    classe_id: [
+      "", Validators.required]
+  });
   //Données liées à la modification d'examens
   examenToUpdate: Examen;
   idExamenToUpdate: string;
@@ -594,16 +600,16 @@ export class ExamenComponent implements OnInit {
     }, 15);
   }
 
-  toAppreciation() {
+  onShowAppreciation() {
     //appreciation/:semestre/:classe_id/:formateur_id
-    let ids = ''
-    this.examSelected.classe_id.forEach(c => {
-      let cla: any = c
-      ids = ids + ',' + cla._id
-    })
-    ids.replace(',', '')
-    console.log(ids)
     let fid: any = this.examSelected.formateur_id
-    this.router.navigate(['appreciation', this.examSelected.semestre, ids, fid._id])
+    this.router.navigate(['appreciation', this.examSelected.semestre, this.formAppreciation.value.classe_id, fid._id])
+  }
+  dropdownClasseExamen = []
+  updateDropdown(exam) {
+    this.dropdownClasseExamen = []
+    exam.classe_id.forEach(ex => {
+      this.dropdownClasseExamen.push({ label: ex.abbrv, value: ex._id })
+    })
   }
 }
