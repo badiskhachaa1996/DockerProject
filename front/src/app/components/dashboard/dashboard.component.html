@@ -366,6 +366,31 @@
                         src="assets/images/word.png" /></a>
             </div>
         </div>
+        <h4>Bulletin</h4>
+        <div class="grid"
+            *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] ||dataEtudiant.lien_bulletin['Semestre 3'] || dataEtudiant.lien_bulletin['Annuel']">
+
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1']">
+                <h5>Semestre 1</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 1']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2']">
+                <h5>Semestre 2</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 3']">
+                <h5>Semestre 3</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 3']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
+                <h5>Annuel</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Annuel']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
     </div>
 
     <div class="col-12 md:col-6">
