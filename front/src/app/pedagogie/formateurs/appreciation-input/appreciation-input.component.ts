@@ -88,6 +88,7 @@ export class AppreciationInputComponent implements OnInit {
     this.ExamenService.getAppreciation(this.SEMESTRE, this.ID, this.FORMATEUR_ID).subscribe(data => {
       this.colsExamen = data.cols
       this.dataExamen = data.data
+      console.log(data)
     })
   }
 
@@ -156,6 +157,13 @@ export class AppreciationInputComponent implements OnInit {
       this.hideForPDF = false
       //element.style.transform = '';
     });
+  }
+
+  libelleCleaner(libelle: string) {
+    if (libelle.lastIndexOf('|') != -1) {
+      return libelle.slice(libelle.lastIndexOf('|') + 2)
+    }
+    return libelle
   }
 
 }

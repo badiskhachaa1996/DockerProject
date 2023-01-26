@@ -33,7 +33,7 @@
                     <ng-container *ngFor="let col_m of colsExamen.module">
                         <ng-container *ngFor="let col_eval of colsExamen.eval[col_m]">
                             <th>
-                                {{col_eval}}
+                                {{libelleCleaner(col_eval)}}
                             </th>
                         </ng-container>
                         <th rowspan="3">

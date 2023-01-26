@@ -19,7 +19,8 @@ export class Formateur {
         public nda?: string,
         public IsJury?: any,
         public absences?: Date[],
-        public coutHbyModule?: any
+        public coutHbyModule?: any,
+        public lien_sequentiel?: string
     ) { }
 
 }

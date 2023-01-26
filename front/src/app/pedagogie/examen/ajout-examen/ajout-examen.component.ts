@@ -35,8 +35,6 @@ export class AjoutExamenComponent implements OnInit {
   dropdownSemestre = [
     { label: 'Semestre 1', value: 'Semestre 1' },
     { label: 'Semestre 2', value: 'Semestre 2' },
-    { label: 'Semestre 3', value: 'Semestre 3' },
-    { label: 'Semestre 4', value: 'Semestre 4' },
   ]
 
   dropdownFormateur: any[] = [];

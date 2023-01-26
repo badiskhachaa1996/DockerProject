@@ -1,5 +1,48 @@
 <p-toast></p-toast>
+<p-dialog header="Merci de suivre ces instructions pour ajouter les livrets" [(visible)]="display" modal="modal"
+	showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '75vw'}">
+	<p class="line-height-3 m-0">
+		Voici les informations à savoir pour générer les liens des livrets :
+	</p>
+	<img src="assets/images/Tuto Sharepoint Part 1.png" />
+	<p>Connectez-vous sur <a href="office.com">office.com</a>, puis uploadez le livret, ouvrez le et cliquez sur
+		"Fichier" comme ci-dessus, choissisez "Partagez" et "Partagez avec d'autres utilisateurs" </p>
+	<img src="assets/images/Tuto Sharepoint Part 2.png" />
+	<p>Cliquez ensuite sur "Les membres de INTED GROUP disposant du lien peuvent modifier le contenu"</p>
+	<img src="assets/images/Tuto Sharepoint Part 3.png" />
+	<p>Ensuite dans "Autres paramètres" changer la valeur par "Peut modifier" pour avoir le lien pour les formateurs et
+		par "Consultation possible" pour avoir le lien pour les étudiants et sur le boutton "Appliquer" pour générer le
+		lien à coller dans IMS</p>
+	<ng-template pTemplate="footer">
+		<button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
+	</ng-template>
+</p-dialog>
 <div class="grid">
+	<div class="col-12" *ngIf="showLien">
+		<div class="card">
+			<button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+				style="width:auto;"></button>
+			<h4 *ngIf="showLien.user_id" style="text-align: center;">Mis à jour des liens
+				{{showLien.user_id.firstname}}
+				{{showLien.user_id.lastname}} </h4>
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showLien = null; formLien.reset()" aria-hidden="true"></i>
+
+			<form class="p-fluid p-formgrid grid" [formGroup]="formLien" (ngSubmit)="onSubmitLien()">
+
+				<div class="field col-12 md:col-12">
+					<label>Lien du Dossier des sequentiels </label>
+					<input formControlName="lien_sequentiel" pInputText type="text" />
+				</div>
+
+
+				<div>
+					<button pButton label="Valider" type="submit" [disabled]="formLien.invalid"></button>
+				</div>
+			</form>
+
+		</div>
+	</div>
 	<!-- Formulaire de modification d'un formateur -->
 	<div class="col-12" *ngIf="showFormUpdateFormateur">
 		<div class="card">
@@ -278,28 +321,28 @@
 	</div>
 
 	<div class="col-12" *ngIf="showFormApp">
-        <div class="card">
-            <h3>Compte rendu des appréciations des modules</h3>
-            <i class="pi pi-times" style="float:right;" (click)="showFormApp = null"
-                aria-hidden="true">
-            </i>
-            <form [formGroup]="formApp" (ngSubmit)="showApp()"
-                class="p-fluid p-formgrid grid">
-                <div class="field col-12 md:col-6">
-                    <label For="appreciation">Semestre</label>
-					<p-dropdown [options]="dropdownSemestre" formControlName="semestre" placeholder="Choissisez un semestre"></p-dropdown>
-                </div>
+		<div class="card">
+			<h3>Compte rendu des appréciations des modules</h3>
+			<i class="pi pi-times" style="float:right;" (click)="showFormApp = null" aria-hidden="true">
+			</i>
+			<form [formGroup]="formApp" (ngSubmit)="showApp()" class="p-fluid p-formgrid grid">
 				<div class="field col-12 md:col-6">
-                    <label For="appreciation">Groupe</label>
-					<p-dropdown [options]="dropdownGroupe" formControlName="classe_id" placeholder="Choissisez un groupe"></p-dropdown>
-                </div>
-                <div class="col-12">
-                    <button pButton label="Voir la liste des appréciations" type="submit"
-                        [disabled]="formApp.invalid"></button>
-                </div>
-            </form>
-        </div>
-    </div>
+					<label For="appreciation">Semestre</label>
+					<p-dropdown [options]="dropdownSemestre" formControlName="semestre"
+						placeholder="Choissisez un semestre"></p-dropdown>
+				</div>
+				<div class="field col-12 md:col-6">
+					<label For="appreciation">Groupe</label>
+					<p-dropdown [options]="dropdownGroupe" formControlName="classe_id"
+						placeholder="Choissisez un groupe"></p-dropdown>
+				</div>
+				<div class="col-12">
+					<button pButton label="Voir la liste des appréciations" type="submit"
+						[disabled]="formApp.invalid"></button>
+				</div>
+			</form>
+		</div>
+	</div>
 
 	<div class="col-12">
 		<div class="card">
@@ -382,7 +425,11 @@
 							<i style="margin-left: 1%;" pTooltip="Ajouter un document" tooltipPosition="bottom"
 								class="pi pi-upload" (click)="showUploadFile=formateur" aria-hidden="true"></i>
 							<i style="margin-left: 1%;" class="pi pi-book" aria-hidden="true"
-								(click)="showFormAppFc(formateur)" pTooltip="Voir le compte rendu des appréciations"></i>
+								(click)="showFormAppFc(formateur)"
+								pTooltip="Voir le compte rendu des appréciations"></i>
+							<i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom"
+								class="pi pi-file-excel" style="margin-left: 2%;"
+								(click)="onInitLien(formateur);scrollToTop()" aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>

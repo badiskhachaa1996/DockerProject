@@ -134,7 +134,7 @@
                     {{ETUDIANT.user_id?.pays_adresse}}
                 </p>
             </div>
-            <p-table [value]="NOTES" class="bulletin col-12" styleClass="p-datatable-gridlines" >
+            <p-table [value]="NOTES" class="bulletin col-12" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header" style="font-size: x-large;">
                     <tr>
                         <th colspan="3"></th>
@@ -192,7 +192,7 @@
                         <td colspan="3">Moyenne générale</td>
                         <td style="text-align: right;">{{ calculMoyenne() | number : '0.1-2' }}</td>
                         <td colspan="3"></td>
-                        <td style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
+                        <td *ngIf="!showAnnuel" style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
                             pEditableColumnField="APPRECIATION_GENERALE">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -203,9 +203,42 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        <td *ngIf="showAnnuel"></td>
                     </tr>
                 </ng-template>
             </p-table>
+            <br>
+            <div *ngIf="showAnnuel" class="col-6" style="margin-top:25%">
+                <p-table styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngFor="let semestre of SemestreList">Moyenne du {{semestre}}</th>
+                            <th>Moyenne Annuel</th>
+                            <th>Appréciation générale</th>
+                        </tr>
+                        <tr>
+                            <th *ngFor="let semestre of SemestreList">
+                                {{(dicSemestreMoy[semestre])?dicSemestreMoy[semestre]:0| number : '0.1-2' }}
+                            </th>
+                            <th *ngIf="dicSemestreMoy['Annuel']">{{dicSemestreMoy['Annuel']| number : '0.1-2' }}</th>
+                            <th style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
+                                pEditableColumnField="APPRECIATION_GENERALE">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="APPRECIATION_GENERALE">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{APPRECIATION_GENERALE}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div *ngIf="showAnnuel" class="col-6">
+
+            </div>
             <br>
             <div class="col-6" style="margin-top:25%">
                 <p-table styleClass="p-datatable-gridlines">

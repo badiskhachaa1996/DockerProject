@@ -6,7 +6,7 @@ import { NoteService } from 'src/app/services/note.service';
 import * as html2pdf from 'html2pdf.js';
 import { MessageService } from 'primeng/api';
 import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-changes.guard';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { Table } from 'primeng/table';
 
@@ -55,17 +55,32 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
           this.cols[semestre] = data.cols
           this.dataPV[semestre] = data.data
           data.data.forEach(d => {
-            let t = d
             if (!this.StpFonctionne[d.email])
               this.StpFonctionne[d.email] = {}
+            if (!this.StpFonctionne[d.email][semestre])
+              this.StpFonctionne[d.email][semestre] = {}
             this.StpFonctionne[d.email][semestre] = d.notes
-            t['notes'] = {}
-            this.dataPVAnnuel.push(t)
+            if (this.dataInPV(d.email) == -1)
+              this.dataPVAnnuel.push(d)
           })
         })
       })
-    })
+      setTimeout(() => {
+        this.SemestreList.forEach((semestrev2) => {
+          this.dataPVAnnuel.forEach((val) => {
+            this.cols[semestrev2].forEach(col => {
+              if (!this.StpFonctionne[val.email][semestrev2]) {
+                this.StpFonctionne[val.email][semestrev2] = {}
+              }
+              if (!this.StpFonctionne[val.email][semestrev2][col.module]) {
+                this.StpFonctionne[val.email][semestrev2][col.module] = 0
+              }
+            })
 
+          })
+        })
+      }, 1000)
+    })
   }
 
   dataInPV(email) {
@@ -123,4 +138,33 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     })
     return r
   }
+  avg(myArray) {
+    var i = 0, summ = 0, ArrayLen = myArray.length;
+    while (i < ArrayLen) {
+      summ = summ + myArray[i++];
+    }
+    return summ / ArrayLen;
+  }
+
+  calculAnnuel(notes) {
+    let Moy = []
+    this.SemestreList.forEach(semestre => {
+      let dicModuleCoeff = {}
+      this.cols[semestre].forEach(col => {
+        dicModuleCoeff[col.module] = col.coeff
+      })
+
+      var i = 0, summ = 0, ArrayDic = Object.keys(notes[semestre]), ArrayLen = ArrayDic.length, coeffTotal = 0;
+      while (i < ArrayLen) {
+        if (!Number.isNaN(notes[semestre][ArrayDic[i]])) {
+          summ = summ + (notes[semestre][ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
+          coeffTotal += dicModuleCoeff[ArrayDic[i]]
+        }
+        i++;
+      }
+      Moy.push(summ / coeffTotal)
+    })
+    return this.avg(Moy)
+  }
+
 }
