@@ -136,20 +136,21 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
         let cols = { module: [], eval: {} } // {module:['Module1'],eval:{'Module1':['Eval1']}}
         let data = {}// {'etudiant_email':{'Eval1':{'appreciation':'dab','note':10}}}
         let examens = []
-
+        console.log(seances)
         seances.forEach(s => {
             examens.push(s._id)
             s.matiere_id.forEach(mid => {
-                if (mid && cols.module.includes(mid.nom) == false) {
+                if (mid && cols.module.includes(mid.nom) == false)
                     cols.module.push(mid.nom)
-                    if (!cols.eval[mid.nom])
-                        cols.eval[mid.nom] = [s.libelle]
-                    else
-                        cols.eval[mid.nom].push(s.libelle)
-                }
+                if (!cols.eval[mid.nom])
+                    cols.eval[mid.nom] = [s.libelle]
+                else if (cols.eval[mid.nom].includes(s.libelle)==false)
+                    cols.eval[mid.nom].push(s.libelle)
+
             })
 
         })
+        console.log(examens)
         Note.find({ examen_id: { $in: examens } }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
             notes.forEach(n => {
                 if (n.etudiant_id && n.etudiant_id.user_id && n.examen_id) {
@@ -166,6 +167,20 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
             res.status(201).send({ cols, data })
         })
 
+    })
+})
+
+app.delete('/delete/:id', (req, res) => {
+    Note.deleteMany({ examen_id: req.params.id }, {}, (err, doc) => {
+        if (!err)
+            Examen.deleteOne({ _id: req.params.id }, {}, (err2, doc2) => {
+                if (!err2)
+                    res.send(doc2)
+                else
+                    res.status(500).send(err2)
+            })
+        else
+            res.status(500).send(err)
     })
 })
 

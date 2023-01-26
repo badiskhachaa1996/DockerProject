@@ -120,7 +120,7 @@
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
 						</p>
-						<div *ngIf="userConnected._id == task.creator_id ">
+						<div *ngIf="userConnected._id == task.creator_id._id">
 							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
 							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
 						</div>

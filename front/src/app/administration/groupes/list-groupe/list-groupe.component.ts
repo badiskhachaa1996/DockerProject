@@ -256,7 +256,7 @@ export class ListGroupeComponent implements OnInit {
   placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien edt>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" +
     "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n"
     + "La signature par défaut sera celle d'espic\nCordialement,\nl'équipe IMS"
-  semestreList = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }, { label: "Semestre 3", value: "Semestre 3" }]
+  semestreList = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }]
   showPV: Classe = null
   formPV: FormGroup = this.formBuilder.group({
     semestre: ['', Validators.required]
@@ -268,7 +268,10 @@ export class ListGroupeComponent implements OnInit {
   }
 
   generatePV() {
-    this.router.navigate(['pv-semestriel', this.formPV.value.semestre, this.showPV._id])
+    if (this.formPV.value.semestre != "Annuel")
+      this.router.navigate(['pv-semestriel', this.formPV.value.semestre, this.showPV._id])
+    else
+      this.router.navigate(['pv-annuel', this.showPV._id])
   }
 
   generatePVApp() {

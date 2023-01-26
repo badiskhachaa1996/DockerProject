@@ -24,42 +24,57 @@ export class BulletinComponent implements OnInit {
         this.dropdownClasse.push({ label: c.abbrv, value: c._id })
       })
     })
-    if (this.route.snapshot.paramMap.get('semestre')) {
-      this.askGroupeSemestrePV = false
+    if (this.route.snapshot.paramMap.get('semestre') && this.route.snapshot.paramMap.get('semestre') == "Annuel")
+      this.NoteS.getAllByClasse(this.route.snapshot.paramMap.get('classe_id')).subscribe(data => {
+        data.forEach(c => {
+          if (!this.SemestreList.includes(c.semestre))
+            this.SemestreList.push(c.semestre)
+        })
+        this.SemestreList = this.SemestreList.sort()
+        this.SEMESTRE = this.SemestreList[this.SemestreList.length - 1]
+        this.semestreLoader()
+      })
+    else if (this.route.snapshot.paramMap.get('semestre')) {
       this.SEMESTRE = this.route.snapshot.paramMap.get('semestre')
-      this.GroupeService.getPopulate(this.route.snapshot.paramMap.get('classe_id')).subscribe(classe => {
-        this.GROUPE = classe
-        this.EtuService.getAllByClasseId(this.route.snapshot.paramMap.get('classe_id')).subscribe(etudiants => {
-          this.etudiantFromClasse = etudiants
-          this.etudiantFromClasse.forEach(etudiant => {
-            if (etudiant.custom_id == this.route.snapshot.paramMap.get('etudiant_id')) {
-              console.log(etudiant)
-              if (this.route.snapshot.paramMap.get('pv_id') != "Nouveau") {
-                if (this.route.snapshot.paramMap.get('classe_id') && this.SEMESTRE) {
-                  this.NoteS.loadPV(this.SEMESTRE, this.route.snapshot.paramMap.get('classe_id')).subscribe(pv => {
-                    pv.forEach(pvD => {
-                      if (pvD._id == this.route.snapshot.paramMap.get('pv_id')) {
-                        this.PV = pvD
-                        this.configureBulletin(etudiant)
-                      }
-                    })
+      this.semestreLoader()
+    }
+
+  }
+
+  semestreLoader() {
+    this.askGroupeSemestrePV = false
+    this.GroupeService.getPopulate(this.route.snapshot.paramMap.get('classe_id')).subscribe(classe => {
+      this.GROUPE = classe
+      this.EtuService.getAllByClasseId(this.route.snapshot.paramMap.get('classe_id')).subscribe(etudiants => {
+        this.etudiantFromClasse = etudiants
+        this.etudiantFromClasse.forEach(etudiant => {
+          if (etudiant.custom_id == this.route.snapshot.paramMap.get('etudiant_id')) {
+            console.log(etudiant)
+            if (this.route.snapshot.paramMap.get('pv_id') != "Nouveau") {
+              if (this.route.snapshot.paramMap.get('classe_id') && this.SEMESTRE) {
+                this.NoteS.loadPV(this.SEMESTRE, this.route.snapshot.paramMap.get('classe_id')).subscribe(pv => {
+                  pv.forEach(pvD => {
+                    if (pvD._id == this.route.snapshot.paramMap.get('pv_id')) {
+                      this.PV = pvD
+                      this.configureBulletin(etudiant)
+                    }
                   })
-                }
-              } else {
-                this.formAGSPV.patchValue({ pv: "Aucun/Nouveau PV" })
-                this.configureBulletin(etudiant)
+                })
               }
+            } else {
+              this.formAGSPV.patchValue({ pv: "Aucun/Nouveau PV" })
+              this.configureBulletin(etudiant)
             }
-          })
+          }
         })
       })
-    }
+    })
   }
 
   //Formulaire: Générer un bulletin de note
   askGroupeSemestrePV = true
   dropdownClasse = []
-  dropdownSemestre = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }, { label: "Semestre 3", value: "Semestre 3" }]
+  dropdownSemestre = [{ label: "Annuel", value: "Annuel" }, { label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }]
   dropdownPV: any = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]
   formAGSPV: FormGroup = new FormGroup({
     classe: new FormControl('', Validators.required),
@@ -110,7 +125,8 @@ export class BulletinComponent implements OnInit {
     })
   }
 
-
+  SemestreList = []
+  dicSemestreMoy = {}
 
   configureBulletin(etu) {
     this.dropdownEcoles = []
@@ -126,13 +142,46 @@ export class BulletinComponent implements OnInit {
     })
 
     if (this.formAGSPV.value.pv == "Aucun/Nouveau PV") {
-      this.NoteS.getPVAnnuel(this.SEMESTRE, this.GROUPE._id).subscribe(pv => {
+      this.NoteS.getPVAnnuel(this.SEMESTRE, this.GROUPE._id, "Bulletin").subscribe(pv => {
         this.PV = { date_creation: new Date(), semestre: this.SEMESTRE, classe_id: this.GROUPE._id, pv_annuel_data: pv.data, pv_annuel_cols: pv.cols }
         this.generateBulletin()
       })
     } else {
       this.generateBulletin()
     }
+    if (this.route.snapshot.paramMap.get('semestre') == "Annuel")
+      this.SemestreList.forEach((semestre, index) => {
+        this.NoteS.getPVAnnuel(semestre, this.GROUPE._id).subscribe(data => {
+          //this.cols[semestre] = data.cols
+          data.data.forEach(d => {
+            if (d.custom_id == this.ETUDIANT.custom_id) {
+
+              let dicModuleCoeff = {}
+              data.cols.forEach(col => {
+                dicModuleCoeff[col.module] = col.coeff
+              })
+
+              var i = 0, summ = 0, ArrayDic = Object.keys(d.notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
+              while (i < ArrayLen) {
+                if (!Number.isNaN(d.notes[ArrayDic[i]])) {
+                  summ = summ + (d.notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
+                  coeffTotal += dicModuleCoeff[ArrayDic[i]]
+                }
+                i++;
+              }
+              this.dicSemestreMoy[semestre] = summ / coeffTotal
+              let moy = 0
+              this.SemestreList.forEach(v => {
+                console.log(this.dicSemestreMoy[v])
+                moy += this.dicSemestreMoy[v]
+              })
+              this.dicSemestreMoy['Annuel'] = moy / this.SemestreList.length
+
+            }
+          })
+          this.showAnnuel = true
+        })
+      })
   }
 
   //Bulletin PDF
@@ -169,7 +218,7 @@ export class BulletinComponent implements OnInit {
         dicCoeff[col.module] = col.coeff
         listModule.push(col.module)
       })
-      this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"" }
+      this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"", appreciation_annuel:"" }
         if (pv.email == this.ETUDIANT.user_id.email) {
           this.APPRECIATION_GENERALE = pv.appreciation
           console.log(listModule)
@@ -253,17 +302,18 @@ export class BulletinComponent implements OnInit {
             } else {
               calculMoyenne[n] = { total: pv.notes[n], nb: 1 }
             }
-            if (minMoyenne[n] && pv.notes[n] < minMoyenne[n]) {
-              minMoyenne[n] = pv.notes[n]
-            } else {
-              minMoyenne[n] = pv.notes[n]
+            if (minMoyenne[n]) {
+              if (pv.notes[n] < minMoyenne[n])
+                minMoyenne[n] = pv.notes[n]
             }
+            else
+              minMoyenne[n] = pv.notes[n]
 
-            if (maxMoyenne[n] && pv.notes[n] > maxMoyenne[n]) {
+            if (maxMoyenne[n]) {
+              if (pv.notes[n] > maxMoyenne[n])
+                maxMoyenne[n] = pv.notes[n]
+            } else
               maxMoyenne[n] = pv.notes[n]
-            } else {
-              maxMoyenne[n] = pv.notes[n]
-            }
           }
         })
         listModule.forEach(n => {
@@ -275,7 +325,10 @@ export class BulletinComponent implements OnInit {
       })
     }
   }
-
+  showAnnuel = false
+  calculMoyenneAnnuel() {
+    return 0
+  }
 
 
 }

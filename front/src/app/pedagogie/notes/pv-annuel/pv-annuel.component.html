@@ -1,4 +1,3 @@
-{{StpFonctionne|json}}
 <div class="col-12">
     <div class="card">
         <h5 *ngIf="classe">PV Annuel de {{classe.abbrv}}</h5>
@@ -24,7 +23,7 @@
                             {{semestre}}
                         </th>
                     </ng-container>
-                    <th class="text-center">
+                    <th colspan="2" class="text-center">
                         Annuel
                     </th>
                 </tr>
@@ -59,6 +58,8 @@
                         <th class="text-center" rowspan="2">Moyenne</th>
                         <th class="text-center" rowspan="3">Appréciations</th>
                     </ng-container>
+                    <th class="text-center" rowspan="3">Moyenne Annuel</th>
+                    <th class="text-center" rowspan="3">Appréciations Générale</th>
                 </tr>
                 <tr>
                     <ng-container *ngFor="let semestre of SemestreList">
@@ -95,7 +96,8 @@
                     <ng-container *ngFor="let semestre of SemestreList">
                         <ng-container *ngIf="cols && cols[semestre] && StpFonctionne[data.email][semestre]">
                             <ng-container *ngFor="let col of cols[semestre]">
-                                <td class="text-center" *ngIf="StpFonctionne[data.email][semestre][col.module]"
+                                <td class="text-center"
+                                    *ngIf="StpFonctionne[data.email][semestre][col.module] || StpFonctionne[data.email][semestre][col.module]==''"
                                     [pEditableColumn]="StpFonctionne[data.email][semestre][col.module]"
                                     pEditableColumnField="module">
                                     <p-cellEditor>
@@ -113,9 +115,6 @@
                             <td class="text-center" *ngIf="StpFonctionne[data.email][semestre]">
                                 {{calculMoyenne(StpFonctionne[data.email][semestre],semestre) | number : '0.2-2'}}
                             </td>
-                            <td *ngIf="!StpFonctionne[data.email][semestre]">
-                                WTF
-                            </td>
                             <td class="text-center" [pEditableColumn]="data.appreciation"
                                 pEditableColumnField="appreciation">
                                 <p-cellEditor>
@@ -130,6 +129,8 @@
                             </td>
                         </ng-container>
                     </ng-container>
+                    <td>{{calculAnnuel(StpFonctionne[data.email])}}</td>
+                    <td>{{data.appreciation_annuel}}</td>
                 </tr>
             </ng-template>
         </p-table>

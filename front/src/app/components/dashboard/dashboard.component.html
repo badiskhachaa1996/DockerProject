@@ -346,10 +346,9 @@
     </div>
 
     <div class="col-12 card">
-        <h4>Documents</h4>
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
-
+            <h4>Documents</h4>
             <div class="card col-3" *ngIf="dataEtudiant.lien_livret.read">
                 <h5>Livret</h5>
                 <a href="{{dataEtudiant.lien_livret.read}}" target="_blank"><img style="max-height: 20vh;"
@@ -363,6 +362,25 @@
             <div class="card col-3" *ngIf="dataEtudiant.lien_tableau_synthese">
                 <h5>Tableau synthèse</h5>
                 <a href="{{dataEtudiant.lien_tableau_synthese}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
+        <div class="grid"
+            *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel']">
+            <h4>Bulletin</h4>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1']">
+                <h5>Semestre 1</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 1']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2']">
+                <h5>Semestre 2</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
+                <h5>Annuel</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Annuel']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
         </div>
@@ -455,6 +473,16 @@
                 </div>
 
             </form>
+        </div>
+        <div class="col-12 card" *ngIf="dataFormateur">
+            <div class="grid" *ngIf="dataFormateur.lien_sequentiel">
+                <h4>Documents</h4>
+                <div class="card col-12" *ngIf="dataFormateur.lien_sequentiel">
+                    <h5>Sequentiels</h5>
+                    <a href="{{dataFormateur.lien_sequentiel}}" target="_blank"><img style="max-height: 20vh;"
+                            src="assets/images/word.png" /></a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -765,7 +793,7 @@
         <div class="grid">
             <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
                 <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
-                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;"
+                <i class="col-1 pi pi-trash" style="font-size: 20px; color: red; cursor: pointer; margin-left: 1%;"
                     (click)="deleteLink(i)" aria-hidden="true"> </i>
             </div>
         </div>

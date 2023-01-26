@@ -109,7 +109,7 @@
         <div class="col-12 grid" id="semestriel">
             <div class="col-9">
                 <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
-                <p style="width: 50%;" *ngIf="GROUPE?.diplome_id && ECOLE">
+                <p style="font-size: 2vh;width: 50%;" *ngIf="GROUPE?.diplome_id && ECOLE">
                     {{ ECOLE?.adresse }} <br>
                     {{ ECOLE?.ville }},
                     {{ ECOLE?.pays }}<br>
@@ -118,15 +118,15 @@
                 </p>
             </div>
 
-            <div class="col-3">
+            <div class="col-3" style="margin-bottom:20% ;">
                 <h4><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
-                <p>
+                <p style="font-size: 2vh;">
                     <strong>{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}} {{
                         ETUDIANT.user_id?.lastname | uppercase }} {{
                         ETUDIANT.user_id?.firstname | titlecase }} </strong> <br>
                     Né(e) le {{ ETUDIANT.date_naissance | date:'dd/MM/yyyy' }} <br>
                 </p>
-                <p>
+                <p style="font-size: 2vh;">
                     {{ETUDIANT.user_id?.numero_adresse}}
                     {{ETUDIANT.user_id?.rue_adresse}}
                     {{ETUDIANT.user_id?.postal_adresse}} <br>
@@ -135,7 +135,7 @@
                 </p>
             </div>
             <p-table [value]="NOTES" class="bulletin col-12" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
+                <ng-template pTemplate="header" style="font-size: x-large;">
                     <tr>
                         <th colspan="3"></th>
                         <th colspan="1" style="text-align: center;">Etudiant</th>
@@ -144,9 +144,9 @@
                     <tr>
                         <th style="text-align: center;">Modules</th>
                         <th style="text-align: center;">Formateur</th>
-                        <th style="text-align: center;">Coef</th>
-                        <th style="text-align: center;">Moyenne</th>
-                        <th style="text-align: center;">Moyenne</th>
+                        <th style="width: 5em;text-align: center;">Coef</th>
+                        <th style="width: 5em;text-align: center;">Moyenne</th>
+                        <th style="width: 5em;text-align: center;">Moy</th>
                         <th style="width: 5em;" style="text-align: center;">Min.</th>
                         <th style="width: 5em;" style="text-align: center;">Max.</th>
                         <!--<th style="text-align: center;">ECTS</th>-->
@@ -157,8 +157,8 @@
                     <tr>
                         <td>{{note.module}}</td>
                         <td>{{note.formateur}} </td>
-                        <td>{{ note.coeff }}</td>
-                        <td class="text-center" [pEditableColumn]="note.note_etudiant"
+                        <td style="width: 5em;">{{ note.coeff }}</td>
+                        <td class="text-center" style="width: 5em;" [pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
                             <p-cellEditor class="text-center">
                                 <ng-template pTemplate="input" class="text-center">
@@ -192,7 +192,7 @@
                         <td colspan="3">Moyenne générale</td>
                         <td style="text-align: right;">{{ calculMoyenne() | number : '0.1-2' }}</td>
                         <td colspan="3"></td>
-                        <td style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
+                        <td *ngIf="!showAnnuel" style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
                             pEditableColumnField="APPRECIATION_GENERALE">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -203,11 +203,44 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
+                        <td *ngIf="showAnnuel"></td>
                     </tr>
                 </ng-template>
             </p-table>
             <br>
-            <div class="col-6" style="margin-top:12%">
+            <div *ngIf="showAnnuel" class="col-6" style="margin-top:25%">
+                <p-table styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngFor="let semestre of SemestreList">Moyenne du {{semestre}}</th>
+                            <th>Moyenne Annuel</th>
+                            <th>Appréciation générale</th>
+                        </tr>
+                        <tr>
+                            <th *ngFor="let semestre of SemestreList">
+                                {{(dicSemestreMoy[semestre])?dicSemestreMoy[semestre]:0| number : '0.1-2' }}
+                            </th>
+                            <th *ngIf="dicSemestreMoy['Annuel']">{{dicSemestreMoy['Annuel']| number : '0.1-2' }}</th>
+                            <th style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
+                                pEditableColumnField="APPRECIATION_GENERALE">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="APPRECIATION_GENERALE">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{APPRECIATION_GENERALE}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div *ngIf="showAnnuel" class="col-6">
+
+            </div>
+            <br>
+            <div class="col-6" style="margin-top:25%">
                 <p-table styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
@@ -225,13 +258,13 @@
                         </tr>
                     </ng-template>
                 </p-table>
-                <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+                <p style="font-size: 1.8vh;">AUCUN DUPLICATA NE SERA DELIVRE</p>
             </div>
-            <div class="col-6" style="margin-top:12%">
-                <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 20vh;">
+            <div class="col-6" style="margin-top:18%;">
+                <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 30vh;">
             </div>
-            <div style="text-align: center;" class="col-12">
-                <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 100%; max-height: 20vh;">
+            <div style="text-align: center;margin-top:25%" class="col-12">
+                <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 90%; max-height: 20vh;">
             </div>
 
 

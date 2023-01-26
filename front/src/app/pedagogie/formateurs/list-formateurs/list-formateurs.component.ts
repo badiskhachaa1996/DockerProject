@@ -32,7 +32,7 @@ export class ListFormateursComponent implements OnInit {
     semestre: ['']
   });
   dropdownGroupe = []
-  dropdownSemestre = [{ value: 'Semestre 1', label: 'Semestre 1' }, { value: 'Semestre 2', label: 'Semestre 2' }, { value: 'Semestre 3', label: 'Semestre 3' }, { value: 'Annuel', label: 'Annuel' }]
+  dropdownSemestre = [{ value: 'Semestre 1', label: 'Semestre 1' }, { value: 'Semestre 2', label: 'Semestre 2' }, { value: 'Annuel', label: 'Annuel' }]
   showApp() {
     this.router.navigate(['appreciation', this.formApp.value.semestre, this.formApp.value.classe_id, this.showFormApp._id])
   }
@@ -94,6 +94,21 @@ export class ListFormateursComponent implements OnInit {
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
+  showLien;
+  display = false
+
+  formLien: FormGroup = this.formBuilder.group({
+    lien_sequentiel: [''],
+  });
+
+  onSubmitLien() {
+    this.showLien.lien_sequentiel = this.formLien.value.lien_sequentiel
+    this.formateurService.updateById(this.showLien).subscribe(d => {
+      console.log(d)
+      this.showLien = null
+      this.messageService.add({ severity: "success", summary: "Les liens du formateur ont été mis à jour" })
+    })
+  }
 
   onAddJ_diplome() {
     this.jury_diplomesList.push({ diplome_id: "", cout_h: 0, isNew: true })
@@ -557,4 +572,26 @@ export class ListFormateursComponent implements OnInit {
     });
     FileSaver.saveAs(data, "formateurs" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
   }
+
+  onInitLien(formateur){
+    this.showLien = formateur
+    this.formLien.setValue({
+      lien_sequentiel: formateur.lien_sequentiel,
+
+    })
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
 }

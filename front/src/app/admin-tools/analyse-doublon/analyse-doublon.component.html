@@ -50,6 +50,10 @@
     <div class="card">
         <div style="float: right;">
             <button pButton
+                pTooltip="Réparer les notes avec les mauvais groupe (Si un étudiant à changé de groupe mais doit garder ses notes)"
+                label="Réparer les notes" icon="pi pi-wrench" class="p-button-danger" (click)="repairNote();"
+                style="margin-right: 3px;"></button>
+            <button pButton
                 pTooltip="Les étudiants sans classe et sans Dossier complet seront renvoyer dans la liste de l'administration pour valider leur dossier"
                 label="Attribuer à l'administration" icon="pi pi-send" class="p-button-danger" (click)="toAdmin();"
                 style="margin-right: 3px;"></button>
@@ -238,8 +242,8 @@
         <div style="float: right;">
             <button pButton
                 pTooltip="Nettoyer une partie en reconnaisant les mails gmail, outlook, yahoo, estya et elitech.education"
-                label="Nettoyer les évidents" icon="pi pi-bolt" class="p-button-danger" (click)="cleanAllWithSameEmail();"
-                style="margin-right: 3px;"></button>
+                label="Nettoyer les évidents" icon="pi pi-bolt" class="p-button-danger"
+                (click)="cleanAllWithSameEmail();" style="margin-right: 3px;"></button>
         </div>
         <h5>Gestion des utilisateurs avec le même email</h5>
         <p-table [value]="sameEmailPersoIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
