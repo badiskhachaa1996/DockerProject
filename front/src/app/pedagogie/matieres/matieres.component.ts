@@ -33,7 +33,7 @@ export class MatieresComponent implements OnInit {
 
   classeList: any = [];
   classeDic: any = {};
-  semestreList = [{ label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }, { label: "Semestre 3", value: "Semestre 3" }]
+  semestreList = [{ label: "Semestre 1", value: "Semestre 1" }, { label: "Semestre 2", value: "Semestre 2" }]
 
   classeIDTOdiplomeID: any = {};
 

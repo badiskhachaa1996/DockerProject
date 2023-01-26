@@ -20,6 +20,7 @@ const formateurSchema = mongoose.Schema({
     IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {} },
     absences: { type: [Date], default: [] },
     coutHbyModule: { type: mongoose.Schema.Types.Mixed, default: {} },
+    lien_sequentiel: { type: String, default: "" }
 });
 
 //Création de la table formateur via le schema de données

@@ -183,7 +183,7 @@ export class UsersSettingsComponent implements OnInit {
       phone: this.userToUpdate.phone,
       email: this.userToUpdate.email,
       email_perso: this.userToUpdate.email_perso,
-      service: this.userToUpdate.service_id._id,
+      service: this.userToUpdate?.service_id?._id,
       mention: { label: this.userToUpdate.mention, value: this.userToUpdate.mention },
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },

@@ -198,6 +198,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
         })
 
         Examen.find({ _id: { $nin: listExamen }, classe_id: req.params.classe_id, semestre: sem }).populate('matiere_id').populate({ path: "formateur_id", populate: { path: "user_id" } }).then(examens => {
+            req.params.source = "PV"
             if (req.params.source == "PV" && examens)
                 examens.forEach(ex => {
                     ex.matiere_id.forEach(mid => {
@@ -291,7 +292,8 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                     notes: listMoyenneEtudiants[e_id],
                     moyenne: avgDic(listMoyenneEtudiants[e_id]),
                     appreciation_module: dicAppreciation[e_id],
-                    appreciation: ""
+                    appreciation: "", //Du semestre
+                    appreciation_annuel: "" //De l'année
                 })
             })
             //listMoyenneEtudiants Vide TODO

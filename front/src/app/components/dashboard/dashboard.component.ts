@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit {
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
+  dataFormateur: Formateur = null
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
@@ -278,6 +279,9 @@ export class DashboardComponent implements OnInit {
             ((resSea) => {
               this.showEvents(resSea)
             }));
+          this.formateurService.getByUserId(this.token.id).subscribe(data => {
+            this.dataFormateur = data
+          })
         }
         this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO);
       }
@@ -423,8 +427,7 @@ export class DashboardComponent implements OnInit {
 
 
   //Methode de check in
-  onCheckIn() 
-  {
+  onCheckIn() {
     const inTime = new InTime();
 
     inTime.user_id = this.token.id;
@@ -482,8 +485,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  onCheckOut() 
-  {
+  onCheckOut() {
     const today = new Date().toLocaleDateString();
     let todayReplaced = '';
     for (let i = 0; i < today.length; i++) {
