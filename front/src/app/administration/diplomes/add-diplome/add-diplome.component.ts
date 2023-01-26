@@ -27,6 +27,7 @@ export class AddDiplomeComponent implements OnInit {
 
   rythmeList = [
     { value: "Choissisez le rythme de la formmation", actif: true },
+    { value: "Tous les jours", actif: false },
     { value: "2 jours par semaine", actif: false },
     { value: "1 semaine sur 3", actif: false },
     { value: "1 jour par semaine", actif: false }
