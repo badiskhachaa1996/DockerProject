@@ -167,7 +167,7 @@ export class ProjectService {
       this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Tâches du projet récuperés')
+        complete: () => console.log('Tâches en cours du projet récuperés')
       });
     });
   }
@@ -182,7 +182,7 @@ export class ProjectService {
       this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Tâches du projet récuperés')
+        complete: () => console.log('Tâches finis du projet récuperés')
       });
     });
   }
