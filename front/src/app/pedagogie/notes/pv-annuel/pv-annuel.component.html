@@ -11,6 +11,8 @@
                         pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
                     <button type="button" pButton pRipple icon="pi pi-save" (click)="savePv()" class="mr-2"
                         pTooltip="Sauvegarder dans IMS" tooltipPosition="bottom"></button>
+                    <button type="button" pButton pRipple icon="pi pi-cog" (click)="repairBtn()" class="mr-2"
+                        pTooltip="Réparer le PV" tooltipPosition="bottom"></button> <i class="fa-solid fa-wrench"></i>
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
                 </div>
@@ -23,7 +25,7 @@
                             {{semestre}}
                         </th>
                     </ng-container>
-                    <th colspan="2" class="text-center">
+                    <th [attr.colspan]="colsAnnuel.length+2" class="text-center">
                         Annuel
                     </th>
                 </tr>
@@ -58,12 +60,22 @@
                         <th class="text-center" rowspan="2">Moyenne</th>
                         <th class="text-center" rowspan="3">Appréciations</th>
                     </ng-container>
-                    <th class="text-center" rowspan="3">Moyenne Annuel</th>
+                    <ng-container *ngIf="colsAnnuel">
+                        <th class="text-center" *ngFor="let col of colsAnnuel">
+                            {{col.module}}
+                        </th>
+                    </ng-container>
+                    <th class="text-center" rowspan="2">Moyenne Annuel</th>
                     <th class="text-center" rowspan="3">Appréciations Générale</th>
                 </tr>
                 <tr>
                     <ng-container *ngFor="let semestre of SemestreList">
                         <th class="text-center" *ngFor="let col of cols[semestre]">
+                            {{col.formateur}}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngIf="colsAnnuel">
+                        <th class="text-center" *ngFor="let col of colsAnnuel">
                             {{col.formateur}}
                         </th>
                     </ng-container>
@@ -79,6 +91,14 @@
                                 {{totalCoeff(semestre)}}
                             </th>
                         </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="colsAnnuel">
+                        <th class="text-center" *ngFor="let col of colsAnnuel">
+                            {{col.coeff}}
+                        </th>
+                        <th class="text-center">
+                            {{totalCoeff('Annuel')}}
+                        </th>
                     </ng-container>
                 </tr>
             </ng-template>
@@ -104,7 +124,7 @@
                                         <ng-template pTemplate="input">
                                             <input pInputText type="text"
                                                 [(ngModel)]="StpFonctionne[data.email][semestre][col.module]"
-                                                (input)="modified=true">
+                                                (input)="modified=true;updateAnnuel(col.module,data.email)">
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{StpFonctionne[data.email][semestre][col.module] | number : '0.2-2'}}
@@ -129,10 +149,154 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    <td>{{calculAnnuel(StpFonctionne[data.email])}}</td>
-                    <td>{{data.appreciation_annuel}}</td>
+                    <ng-container *ngIf="colsAnnuel">
+                        <ng-container *ngFor="let col of colsAnnuel">
+                            <td class="text-center"
+                                *ngIf="dataAnnuel[data.email][col.module] || dataAnnuel[data.email][col.module]==''">
+                                {{dataAnnuel[data.email][col.module] | number : '0.2-2'}}
+                        </ng-container>
+                        <td class="text-center" *ngIf="dataAnnuel[data.email]">
+                            {{calculMoyenne(dataAnnuel[data.email],'Annuel') | number : '0.2-2'}}
+                        </td>
+                        <td class="text-center" [pEditableColumn]="data.appreciation_annuel"
+                            pEditableColumnField="appreciation_annuel">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="data.appreciation_annuel"
+                                        (input)="modified=true">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{data.appreciation_annuel}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </ng-container>
                 </tr>
             </ng-template>
+        </p-table>
+    </div>
+    <div class="card" *ngFor="let semestre of SemestreList">
+        <h5 *ngIf="classe">Liste des PVs {{semestre}} de {{classe.abbrv}}</h5>
+        <p-toast></p-toast>
+        <p-table #dt1 *ngIf="pvAnnuel[semestre]" [value]="pvAnnuel[semestre]" dataKey="_id" responsiveLayout="scroll" id="dt1"
+            [totalRecords]="pvAnnuel[semestre].length" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th class="text-center">Date du PV</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pv>
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="pv"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td>
+                        {{pv.date_creation | date : 'dd/MM/YYYY à HH:mm'}}
+                    </td>
+                    <td>
+                        <i (click)="loadPV(pv,semestre)" pTooltip="Charger le pv" style="margin-left: 2%;"
+                            tooltipPosition="bottom" class="pi pi-download" aria-hidden="true"></i>
+                        <i (click)="delete(pv)" pTooltip="Supprimer le pv" style="margin-left: 2%;"
+                            tooltipPosition="bottom" class="pi pi-trash" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-pv>
+                <tr>
+                    <td colspan="3">
+                        <p-table #dt2 [value]="pv.pv_annuel_data" dataKey="_id" responsiveLayout="scroll" id="dt1"
+                            [globalFilterFields]="['nom', 'prenom', 'date_naissance' , 'date_inscrit' , 'email']"
+                            [totalRecords]="pv.pv_annuel_data.length" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="caption">
+                                <div>
+                                    <input pInputText type="text" #filter
+                                        (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                                        placeholder="Recherche" />
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                <tr>
+                    <!--<th style="width: 3rem"></th>-->
+                    <th class="text-center" rowspan="2" pSortableColumn="custom_id">ID Etudiant<p-sortIcon
+                            *ngIf="!hideForPDF" field="custom_id"></p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="prenom">Prénom<p-sortIcon field="prenom">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="date_naissance">Date de naissance <p-sortIcon
+                            field="date_naissance">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="date_inscrit">Date d'intégration <p-sortIcon
+                            *ngIf="!hideForPDF" field="date_inscrit">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="email">Email INTED <p-sortIcon
+                            *ngIf="!hideForPDF" field="email">
+                        </p-sortIcon>
+                    </th>
+                    <th *ngFor="let col of pv.pv_annuel_cols">
+                        {{col.module}}
+                    </th>
+                    <th class="text-center" rowspan="3">Moyenne</th>
+                    <th class="text-center" rowspan="3">Appréciations</th>
+                </tr>
+                <tr>
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols">
+                        {{col.formateur}}
+                    </th>
+                </tr>
+                <tr>
+                    <th class="text-center" colspan="5">Coefficient</th>
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols">
+                        {{col.coeff}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td class="text-center">{{data.custom_id}}</td>
+                    <td class="text-center">{{data.nom}}</td>
+                    <td class="text-center">{{data.prenom}}</td>
+                    <td class="text-center">{{data.date_naissance}}</td>
+                    <td class="text-center">{{data.date_inscrit}}</td>
+                    <td class="text-center">{{data.email}}</td>
+                    <td class="text-center" *ngFor="let col of pv.pv_annuel_cols"
+                        [pEditableColumn]="data?.notes[col.module]" pEditableColumnField="module">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.notes[col.module] | number : '0.2-2'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td class="text-center">
+                        <!--{{calculMoyenne(data.notes) | number : '0.2-2'}}-->
+                    </td>
+                    <td class="text-center" [pEditableColumn]="data.appreciation" pEditableColumnField="appreciation">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="data.appreciation">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.appreciation}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </td>
+        </tr>
+        </ng-template>
         </p-table>
     </div>
 </div>

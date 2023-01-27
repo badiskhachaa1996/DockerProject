@@ -884,13 +884,15 @@ app.get('/disable/:id', (req, res) => {
 
     Etudiant.findById(req.params.etudiant_id).then(et => {
         let token = jwt.decode(req.header("token"))
+        let dab = new Etudiant({ ...et })
+        dab.isActive = false
         let me = new MonitoringEtudiant(
             {
                 agent_id: token.id,
                 etudiant_id: req.params.etudiant_id,
                 date: new Date(),
                 etudiant_before: et,
-                etudiant_after: { ...req.body },
+                etudiant_after: dab,
                 remarque: "Désactiver"
             }
         )
