@@ -20,6 +20,8 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   StpFonctionne = {}
   dataPV = {}//semestre:{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15" }
   cols = {}//semestre:{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
+  colsAnnuel = {}
+  dataAnnuel = {}
   ID = this.route.snapshot.paramMap.get('classe_id');
   SEMESTRE = "Annuel";
   SemestreList = []

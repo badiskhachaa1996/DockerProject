@@ -79,7 +79,8 @@
                 </form>
             </div>
         </div>
-        <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="getSignature();"></button>
+        <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer"
+            (click)="getSignature();"></button>
     </div>
 </div>
 <div class="card" *ngIf="showUploadFile">
@@ -263,6 +264,9 @@
                     <th pSortableColumn="isPresent" scope="col">
                         Présent <p-sortIcon field="isPresent"></p-sortIcon>
                     </th>
+                    <th pSortableColumn="PresentielOrDistanciel" scope="col">
+                        Distanciel/Presentiel <p-sortIcon field="PresentielOrDistanciel"></p-sortIcon>
+                    </th>
                     <th pSortableColumn="Sign" scope="col">
                         A Signé <p-sortIcon field="Sign"></p-sortIcon>
                     </th>
@@ -282,10 +286,23 @@
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-selectButton [options]="[ {value:true,label:'Présent'},{value:false,label:'Absent'}]"
-                                    [(ngModel)]="data.isPresent" (onChange)='onRowEditSave(data,ri)'></p-selectButton>
+                                    [(ngModel)]="data.isPresent" (onChange)='onRowEditSave(data,ri,"presence")'></p-selectButton>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{(data.isPresent)?"Oui":"Non"}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-selectButton
+                                    [options]="[ {value:'Présentiel',label:'Présentiel'},{value:'Distanciel',label:'Distanciel'}]"
+                                    [(ngModel)]="data.PresentielOrDistanciel"
+                                    (onChange)='onRowEditSave(data,ri,"type")'></p-selectButton>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.PresentielOrDistanciel}}
                             </ng-template>
                         </p-cellEditor>
                     </td>

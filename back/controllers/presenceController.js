@@ -33,7 +33,7 @@ app.get("/getAll", (req, res) => {
 //Récupérer tous les presence d'un user
 app.get("/getAllByUser/:id", (req, res) => {
 
-    Presence.find({user_id: req.params.id}, {date_signature: {$gt: new Date(2023, 0, 1)}}).populate("seance_id").then((data) => {
+    Presence.find({ user_id: req.params.id }, { date_signature: { $gt: new Date(2023, 0, 1) } }).populate("seance_id").then((data) => {
 
 
         res.status(200).send(data);
@@ -276,7 +276,8 @@ app.post("/isPresent/:id", (req, res) => {
     Presence.findByIdAndUpdate(req.params.id,
         {
             isPresent: req.body.isPresent,
-            allowedByFormateur: req.body.isPresent
+            allowedByFormateur: req.body.isPresent,
+            PresentielOrDistanciel: req.body.PresentielOrDistanciel
         }, { new: true }, (err, campus) => {
             if (err) {
                 res.send(err)
