@@ -221,7 +221,8 @@ export class BulletinComponent implements OnInit {
       this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"", appreciation_annuel:"" }
         if (pv.email == this.ETUDIANT.user_id.email) {
           this.APPRECIATION_GENERALE = pv.appreciation
-          console.log(listModule)
+          if (pv.appreciation_annuel && this.route.snapshot.paramMap.get('semestre') == "Annuel")
+            this.APPRECIATION_GENERALE = pv.appreciation_annuel
           listModule.forEach(n => {
             let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
 
