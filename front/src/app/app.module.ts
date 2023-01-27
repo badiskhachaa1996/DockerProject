@@ -249,6 +249,7 @@ import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entrepr
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { TeamComponent } from './projects/team/team.component';
 
 
 @NgModule({
@@ -508,6 +509,7 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
     PvAppreciationComponent,
     AppreciationInputComponent,
     PvAnnuelComponent,
+    TeamComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -182,8 +182,8 @@ export class UsersSettingsComponent implements OnInit {
       phone: this.userToUpdate.phone,
       email: this.userToUpdate.email,
       email_perso: this.userToUpdate.email_perso,
+      mention: this.userToUpdate.mention,
       service: this.userToUpdate?.service_id?._id,
-      mention: { label: this.userToUpdate.mention, value: this.userToUpdate.mention },
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
       pays_adresse: { value: this.userToUpdate.pays_adresse, viewValue: this.userToUpdate.pays_adresse, actif: false },
@@ -215,7 +215,7 @@ export class UsersSettingsComponent implements OnInit {
     user.email = this.formUpdate.get('email')?.value;
     user.email_perso = this.formUpdate.get('email_perso')?.value;
     user.service_id = this.formUpdate.get('service')?.value;
-    user.mention = this.formUpdate.get('mention')?.value.value;
+    user.mention = this.formUpdate.get('mention')?.value;
     user.type = this.formUpdate.get('type')?.value.value;
     user.role = this.formUpdate.get('role')?.value.value;
     user.pays_adresse = this.formUpdate.get('pays_adresse')?.value.value;

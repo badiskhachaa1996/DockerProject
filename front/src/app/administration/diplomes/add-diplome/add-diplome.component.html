@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Departement <span style="color: red;"> * </span></label>
+                    <label>Département <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine" optionDisabled="actif"></p-dropdown>
                     <div *ngIf="domaine.invalid && (domaine.touched || domaine.dirty)">
                         <span  style="color: red;" class="error" *ngIf="domaine.errors?.required" style="color: red;">* Le domaine est obligatoire </span>
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'étude <span style="color: red;"> * </span></label>
+                    <label>Niveau d'études <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau" optionDisabled="actif"></p-dropdown>
                     <div *ngIf="niveau.invalid && (niveau.touched || niveau.dirty)">
                         <span  style="color: red;" class="error" *ngIf="niveau.errors?.required" style="color: red;">* Le niveau est obligatoire </span>
