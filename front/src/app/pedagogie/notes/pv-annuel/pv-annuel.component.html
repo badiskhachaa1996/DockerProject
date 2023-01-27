@@ -271,7 +271,7 @@
                         [pEditableColumn]="data?.notes[col.module]" pEditableColumnField="module">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
+                                <input pInputText type="number" [(ngModel)]="data.notes[col.module]">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{data.notes[col.module] | number : '0.2-2'}}
