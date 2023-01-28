@@ -224,6 +224,8 @@ export class DashboardComponent implements OnInit {
   dailyCheck: InTime;
   showFormDailyActivityDetails: boolean = false;
   formDailyActivityDetails: FormGroup;
+  today: Date = new Date();
+  craIsValidate: boolean = false;
 
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
@@ -451,6 +453,7 @@ export class DashboardComponent implements OnInit {
     inTime.out_date = null;
     inTime.statut = 'Au travail';
     inTime.isCheckable = true;
+    inTime.craIsValidate = false;
 
     this.inTimeService.postJustArrived(inTime)
       .then((response) => {
@@ -458,8 +461,13 @@ export class DashboardComponent implements OnInit {
         this.onIsCheck();
       })
       .catch((error) => { console.log(error) });
+  }
 
 
+  // methode appeler au clique du bouton valider mon CRA
+  onValidateCra(): void
+  {
+    this.craIsValidate = true;
   }
 
 
