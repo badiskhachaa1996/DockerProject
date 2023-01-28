@@ -261,22 +261,28 @@
 </div>
 
 <div *ngIf="isAdmin">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
-    </h2>
+    <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}</h1>
+    <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
 
     <div class="col-12">
         <div class="card">
-            <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
-                style="float: right" (click)="onCheckIn()"></button>
-            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2"
-                label="Check out" icon="pi pi-sign-out" style="float: right"
-                (click)="showFormDailyActivityDetails = true"></button>
+            <h6 *ngIf="dailyCheck">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}</h6>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}"
                     style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
+                |
+                <span style="color: red;">Si vous ne validez pas votre CRA vos heures ne seront pas prises en compte</span>
             </h5>
-            <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date |
-                    date: 'd/M/yy à h:mm a' }}</span></small>
+            
+            <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
+                (click)="onCheckIn()"></button>
+
+            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" label="Valider mon CRA" icon="pi pi-sign-in"
+                (click)="onValidateCra()"></button>
+
+            <button [disabled]="!dailyCheck?.isCheckable || !dailyCheck?.craIsValidate" pButton class="p-button-danger mr-2 mb-2"
+                label="Check out" icon="pi pi-sign-out"
+                (click)="showFormDailyActivityDetails = true"></button>
 
             <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails"
                 (ngSubmit)="onCheckOut()">
