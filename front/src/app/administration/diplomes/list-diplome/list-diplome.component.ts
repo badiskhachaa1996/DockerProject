@@ -30,6 +30,7 @@ export class ListDiplomeComponent implements OnInit {
 
 
   rythmeList = [
+    { value: "Tous les jours"},
     { value: "2 jours par semaine" },
     { value: "1 semaine sur 3" },
     { value: "1 jour par semaine" }

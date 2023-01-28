@@ -20,6 +20,8 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   StpFonctionne = {}
   dataPV = {}//semestre:{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15" }
   cols = {}//semestre:{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
+  colsAnnuel = []
+  dataAnnuel = {}
   ID = this.route.snapshot.paramMap.get('classe_id');
   SEMESTRE = "Annuel";
   SemestreList = []
@@ -27,7 +29,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   hideForPDF = false;
   loaded = false;
   modified = false
-  pvAnnuel = []
+  pvAnnuel = { }
   PVID = "Nouveau"
   @ViewChild('dt1') pTableRef: Table;
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
@@ -51,6 +53,9 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
           this.SemestreList.push(c.semestre)
       })
       this.SemestreList.forEach((semestre, index) => {
+        this.NoteService.loadPV(semestre, this.ID).subscribe(data => {
+          this.pvAnnuel[semestre] = data
+        })
         this.NoteService.getPVAnnuel(semestre, this.ID).subscribe(data => {
           this.cols[semestre] = data.cols
           this.dataPV[semestre] = data.data
@@ -59,6 +64,9 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
               this.StpFonctionne[d.email] = {}
             if (!this.StpFonctionne[d.email][semestre])
               this.StpFonctionne[d.email][semestre] = {}
+            if (!this.dataAnnuel[d.email]) {
+              this.dataAnnuel[d.email] = {}
+            }
             this.StpFonctionne[d.email][semestre] = d.notes
             if (this.dataInPV(d.email) == -1)
               this.dataPVAnnuel.push(d)
@@ -66,21 +74,80 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
         })
       })
       setTimeout(() => {
-        this.SemestreList.forEach((semestrev2) => {
-          this.dataPVAnnuel.forEach((val) => {
-            this.cols[semestrev2].forEach(col => {
-              if (!this.StpFonctionne[val.email][semestrev2]) {
-                this.StpFonctionne[val.email][semestrev2] = {}
-              }
-              if (!this.StpFonctionne[val.email][semestrev2][col.module]) {
-                this.StpFonctionne[val.email][semestrev2][col.module] = 0
-              }
-            })
-
-          })
-        })
+        this.repairBtn()
       }, 1000)
     })
+  }
+
+  repairBtn() {
+    this.SemestreList.forEach((semestrev2) => {
+      this.dataPVAnnuel.forEach((val) => {
+        this.cols[semestrev2].forEach(col => {
+          if (!this.StpFonctionne[val.email][semestrev2]) {
+            this.StpFonctionne[val.email][semestrev2] = {}
+          }
+          if (!this.StpFonctionne[val.email][semestrev2][col.module]) {
+            this.StpFonctionne[val.email][semestrev2][col.module] = 0
+          }
+          if (!this.dataAnnuel[val.email]) {
+            this.dataAnnuel[val.email] = {}
+          }
+          if (!this.dataAnnuel[val.email][col.module]) {
+            this.dataAnnuel[val.email][col.module] = 0
+          }
+        })
+      })
+
+    })
+    this.SemestreList.forEach((semestrev2) => {
+      this.cols[semestrev2].forEach(col => {
+        if (!this.includesDic(col.module, this.colsAnnuel)) {
+          this.colsAnnuel.push(col)
+        }
+      })
+    })
+    this.dataPVAnnuel.forEach((val) => {
+      this.colsAnnuel.forEach(col => {
+        let coeff = 0
+        let note = 0
+        this.SemestreList.forEach(semestrev2 => {
+          if (this.StpFonctionne[val.email][semestrev2][col.module] || this.StpFonctionne[val.email][semestrev2][col.module] == 0) {
+            note += this.StpFonctionne[val.email][semestrev2][col.module]
+            coeff += 1
+          }
+        })
+        if (note != 0 && coeff != 0)
+          this.dataAnnuel[val.email][col.module] = note / coeff
+        else
+          this.dataAnnuel[val.email][col.module] = note
+      })
+    })
+  }
+
+  includesDic(m_nom, arrayDic) {
+    let r = false
+    arrayDic.forEach(d => {
+      if (d.module == m_nom)
+        r = true
+    })
+    return r
+  }
+
+  updateAnnuel(mdl, email) {
+    let coeff = 0
+    let note = 0
+    this.SemestreList.forEach(semestrev2 => {
+      if ((this.StpFonctionne[email][semestrev2][mdl] && !isNaN(Number(this.StpFonctionne[email][semestrev2][mdl]))) || this.StpFonctionne[email][semestrev2][mdl] == 0) {
+        console.log(this.StpFonctionne[email][semestrev2][mdl])
+        note += Number(this.StpFonctionne[email][semestrev2][mdl])
+        coeff += 1
+      }
+    })
+    console.log(note, coeff)
+    if (note != 0 && coeff != 0)
+      this.dataAnnuel[email][mdl] = note / coeff
+    else
+      this.dataAnnuel[email][mdl] = note
   }
 
   dataInPV(email) {
@@ -111,20 +178,38 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   }
 
   calculMoyenne(notes, semestre) {
-    let dicModuleCoeff = {}
-    this.cols[semestre].forEach(col => {
-      dicModuleCoeff[col.module] = col.coeff
-    })
+    if (semestre != "Annuel") {
+      let dicModuleCoeff = {}
+      this.cols[semestre].forEach(col => {
+        dicModuleCoeff[col.module] = col.coeff
+      })
 
-    var i = 0, summ = 0, ArrayDic = Object.keys(notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
-    while (i < ArrayLen) {
-      if (!Number.isNaN(notes[ArrayDic[i]])) {
-        summ = summ + (notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
-        coeffTotal += dicModuleCoeff[ArrayDic[i]]
+      var i = 0, summ = 0, ArrayDic = Object.keys(notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
+      while (i < ArrayLen) {
+        if (!Number.isNaN(notes[ArrayDic[i]])) {
+          summ = summ + (notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
+          coeffTotal += dicModuleCoeff[ArrayDic[i]]
+        }
+        i++;
       }
-      i++;
+      return summ / coeffTotal;
+    } else {
+      let dicModuleCoeff = {}
+      this.colsAnnuel.forEach(col => {
+        dicModuleCoeff[col.module] = col.coeff
+      })
+
+      var i = 0, summ = 0, ArrayDic = Object.keys(notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
+      while (i < ArrayLen) {
+        if (!Number.isNaN(notes[ArrayDic[i]])) {
+          summ = summ + (notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
+          coeffTotal += dicModuleCoeff[ArrayDic[i]]
+        }
+        i++;
+      }
+      return summ / coeffTotal;
     }
-    return summ / coeffTotal;
+
   }
 
   isOdd(number: number) {
@@ -132,11 +217,20 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   }
 
   totalCoeff(semestre) {
-    let r = 0
-    this.cols[semestre].forEach(col => {
-      r += col.coeff
-    })
-    return r
+    if (semestre != "Annuel") {
+      let r = 0
+      this.cols[semestre].forEach(col => {
+        r += col.coeff
+      })
+      return r
+    } else {
+      let r = 0
+      this.colsAnnuel.forEach(col => {
+        r += col.coeff
+      })
+      return r
+    }
+
   }
   avg(myArray) {
     var i = 0, summ = 0, ArrayLen = myArray.length;
@@ -165,6 +259,47 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       Moy.push(summ / coeffTotal)
     })
     return this.avg(Moy)
+  }
+
+  savePv() {
+    //Save le PV de chaque Semestre
+    this.SemestreList.forEach(semestre => {
+      this.dataPVAnnuel.forEach((val) => {
+        this.cols[semestre].forEach(col => {
+          this.dataPV[semestre].forEach((d, idx) => {
+            this.dataPV[semestre][idx]["notes"][col.module] = this.StpFonctionne[d.email][semestre][col.module]
+          })
+        })
+      })
+      this.NoteService.savePV(semestre, this.ID, { cols: this.cols[semestre], data: this.dataPV[semestre] }).subscribe(data => {
+        if (data) {
+          this.modified = false
+          this.messageService.add({ severity: 'success', summary: `Sauvegarde du PV de ${semestre} avec succès` })
+          this.pvAnnuel[semestre].push(data)
+        }
+      })
+    })
+  }
+  loadPV(pv,semestre){
+    if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
+      this.cols[semestre] = pv.pv_annuel_cols
+      this.dataPV[semestre] = pv.pv_annuel_data
+      pv.pv_annuel_data.forEach(d => {
+        if (!this.StpFonctionne[d.email])
+          this.StpFonctionne[d.email] = {}
+        if (!this.StpFonctionne[d.email][semestre])
+          this.StpFonctionne[d.email][semestre] = {}
+        if (!this.dataAnnuel[d.email]) {
+          this.dataAnnuel[d.email] = {}
+        }
+        this.StpFonctionne[d.email][semestre] = d.notes
+        if (this.dataInPV(d.email) == -1)
+          this.dataPVAnnuel.push(d)
+      })
+      this.PVID = pv._id
+      this.repairBtn()
+      this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
+    }
   }
 
 }

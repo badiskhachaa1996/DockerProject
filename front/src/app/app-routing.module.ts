@@ -143,6 +143,7 @@ import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { TeamComponent } from './projects/team/team.component';
 
 const routes: Routes = [
     {
@@ -228,6 +229,7 @@ const routes: Routes = [
             /** IMS Project */
             { path: 'my-tasks', canActivate: [AuthGuardService], component: MyTaskComponent },
             { path: 'task-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
+            { path: 'team', canActivate: [AuthGuardService], component: TeamComponent },
             /** end */
 
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
