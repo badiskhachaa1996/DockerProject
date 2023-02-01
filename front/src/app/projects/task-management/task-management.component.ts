@@ -110,7 +110,6 @@ export class TaskManagementComponent implements OnInit {
     const project = new Project();
 
     project.libelle = formValue.libelle;
-    project.percent         = 0;
     project.created_at      = new Date();
     project.creator_id      = this.userConnected._id;
 
