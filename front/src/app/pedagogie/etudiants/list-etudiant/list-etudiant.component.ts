@@ -82,7 +82,7 @@ export class ListEtudiantComponent implements OnInit {
     lien_tableau_synthese: [''],
     lien_bulletin_Semestre_1: [''],
     lien_bulletin_Semestre_2: [''],
-    lein_bulletin_annuel: [''],
+    lien_bulletin_annuel: [''],
 
   });
 
