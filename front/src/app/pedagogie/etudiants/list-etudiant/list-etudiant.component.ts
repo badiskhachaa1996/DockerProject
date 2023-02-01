@@ -1174,9 +1174,9 @@ export class ListEtudiantComponent implements OnInit {
       lien_word_edit: this.showLivrets.lien_livret.edit,
       lien_dossier_professionel: this.showLivrets.lien_dossier_professionel,
       lien_tableau_synthese: this.showLivrets.lien_tableau_synthese,
-      lien_bulletin_Semestre_1: this.showLivrets.lien_bulletin['Semestre 1'],
-      lien_bulletin_Semestre_2: this.showLivrets.lien_bulletin['Semestre 2'],
-      lien_bulletin_annuel: this.showLivrets.lien_bulletin['Annuel'],
+      lien_bulletin_Semestre_1: (this.showLivrets.lien_bulletin['Semestre 1']) ? this.showLivrets.lien_bulletin['Semestre 1'] : "",
+      lien_bulletin_Semestre_2: (this.showLivrets.lien_bulletin['Semestre 2']) ? this.showLivrets.lien_bulletin['Semestre 2'] : "",
+      lien_bulletin_annuel: (this.showLivrets.lien_bulletin['Annuel']) ? this.showLivrets.lien_bulletin['Annuel'] : "",
 
     })
   }
