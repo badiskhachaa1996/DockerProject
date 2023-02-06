@@ -6,7 +6,7 @@ var workbook = XLSX.readFile('exportUsers_2023-2-6.csv', { cellDates: true });
 var sheet_name_list = workbook.SheetNames; // Classes Name
 var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 mongoose
-    .connect(`mongodb://localhost:27017/backup`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
