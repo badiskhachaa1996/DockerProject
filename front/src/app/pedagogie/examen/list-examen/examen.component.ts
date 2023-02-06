@@ -34,6 +34,7 @@ export class ExamenComponent implements OnInit {
 
   formUpdateExamen: FormGroup;
   showFormUpdateExamen: boolean = false;
+  importExcel = false
 
   users: User[] = [];
   formateurs: Formateur[] = [];
@@ -539,6 +540,51 @@ export class ExamenComponent implements OnInit {
       })
   }
 
+  exportExcel(examen) {
+    let tableauNotes = []
+    let classe_ids = []
+    let oldNote = []
+    this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
+      examen.classe_id.forEach(c => { classe_ids.push(c._id) })
+
+      this.EtudiantService.getAllByMultipleClasseID(classe_ids).subscribe(etudiants => {
+        notes.forEach(n => {
+          let bypass: any = n.etudiant_id
+          if (bypass) {
+            oldNote.push(bypass._id)
+            tableauNotes.push({
+              id: bypass.custom_id,
+              etudiant_f: bypass?.user_id?.firstname,
+              etudiant_l: bypass?.user_id?.lastname,
+              note: n.note_val,
+              _id: n._id,
+              isAbsent: n.isAbsent
+            })
+          }
+        })
+        etudiants.forEach(etu => {
+          if (oldNote.indexOf(etu._id) == -1)
+            tableauNotes.push({
+              id: etu.custom_id,
+              etudiant_f: etu.user_id.firstname,
+              etudiant_l: etu.user_id.lastname,
+              note: '',
+              _id: etu.user_id._id + "NEW",
+              isAbsent: false
+            })
+        })
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableauNotes);
+        //const worksheet2: XLSX.WorkSheet = XLSX.utils.json_to_sheet();
+        const workbook: XLSX.WorkBook = { Sheets: { 'notes': worksheet }, SheetNames: ['notes'] };
+        const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+        const data: Blob = new Blob([excelBuffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+        });
+        FileSaver.saveAs(data, "examen_template_" + examen.libelle + "_" + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+      })
+    })
+  }
+
   exportExel(examen) {
     let tableauNotes = []
     this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
@@ -673,5 +719,36 @@ export class ExamenComponent implements OnInit {
       console.error(err)
     })
 
+  }
+  arrayBuffer: any;
+  file: File;
+  incomingfile(event) {
+    this.file = event.files[0];
+  }
+
+  Upload() {
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.arrayBuffer = fileReader.result;
+      var data = new Uint8Array(this.arrayBuffer);
+      var arr = new Array();
+      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      var temp_list: any = XLSX.utils.sheet_to_json(worksheet, { raw: true })
+      temp_list.forEach(val => {
+        this.tableauNotes.forEach((value, index) => {
+          if (val._id == value._id) {
+            this.tableauNotes[index].note = val.note
+            this.tableauNotes[index].isAbsent = val.isAbsent
+          }
+        })
+      })
+      this.messageService.add({ severity: "success", summary: "Importation avec succès", detail: "N'oubliez pas d'enregister les notes avec le bouton 'Enregistrer les notes et voir les appréciations du Module'" })
+
+    }
+    fileReader.readAsArrayBuffer(this.file);
   }
 }

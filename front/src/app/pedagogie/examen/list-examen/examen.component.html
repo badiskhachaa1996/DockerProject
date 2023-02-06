@@ -1,5 +1,28 @@
 <p-toast></p-toast>
 <div class="grid">
+    <!-- Import Excel pour note-->
+    <div class="col-12" *ngIf="importExcel">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="importExcel = null;" aria-hidden="true">
+            </i>
+            <h3>Importation de notes depuis Excel</h3>
+            <div class="grid">
+                <div class="field col-12">
+                    <label>Fichier Excel<span style="color:red">*</span>:</label><br>
+                    <p-fileUpload mode="basic" [customUpload]="true" [auto]="true" (uploadHandler)="incomingfile($event)"
+                        accept=".xlsx"></p-fileUpload>
+                    <p *ngIf="file">
+                        Fichier uploadé
+                    </p>
+                </div>
+                <div class="col-12">
+                    <button pButton pTooltip="Merci de prendre le modèle du bouton 'Exporter la template en Excel'"
+                        label="Importer" icon="pi pi-upload" (click)="Upload()" style="margin-right: 3px;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Partie changement de statut -->
     <div class="col-12" *ngIf="showAppreciation">
         <div class="card">
@@ -57,6 +80,11 @@
                                 (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
+                        <button pButton label="Exporter la template en Excel" icon="pi pi-file-excel"
+                            (click)="exportExcel(examSelected)" style="margin-right: 3px;"></button>
+                        <button pButton pTooltip="Merci de prendre le modèle du bouton 'Exporter la template en Excel'"
+                            label="Importer depuis Excel" icon="pi pi-upload" (click)="importExcel=true"
+                            style="margin-right: 3px;"></button>
                         <button pButton
                             pTooltip="Merci d'enregistrer les appréciations des étudiants de ce Module avant la fin du semestre"
                             label="Enregistrer les notes et voir les appréciations du Module" icon="pi pi-send"
