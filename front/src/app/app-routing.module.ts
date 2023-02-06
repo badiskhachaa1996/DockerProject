@@ -161,7 +161,7 @@ const routes: Routes = [
             { path: 'ecole', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ecole/:id', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ajout-ecole', component: AddEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-            { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService] },
             { path: 'campus/:id', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ajout-campus', component: AddCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
