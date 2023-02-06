@@ -89,6 +89,7 @@ app.put("/updateById/:id", (req, res, next) => {
             note_max: req.body.note_max,
             coef: req.body.coef,
             libelle: req.body.libelle,
+            canEdit:req.body.canEdit
         })
         .then((examenUpdated) => { res.status(200).send(examenUpdated); })
         .catch((error) => { res.status(400).send(error.message); });

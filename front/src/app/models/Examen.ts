@@ -11,7 +11,9 @@ export class Examen {
         public coef?: number,
         public libelle?: string,
         public niveau?: string,
-        public semestre?: string
+        public semestre?: string,
+        public canEdit?: Boolean,
+        public date_fin?: string
     ) { };
 
 }

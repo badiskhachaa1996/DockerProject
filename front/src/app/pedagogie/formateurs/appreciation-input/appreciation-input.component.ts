@@ -166,4 +166,8 @@ export class AppreciationInputComponent implements OnInit {
     return libelle
   }
 
+  isNaN(note){
+    return isNaN(note)
+  }
+
 }

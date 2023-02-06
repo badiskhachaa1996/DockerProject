@@ -333,10 +333,6 @@ export class ExamenComponent implements OnInit {
   onRedirect() {
     this.router.navigate(['ajout-examen']);
   }
-
-  onLoadModules(event) {
-    console.log(event)
-  }
   notes: Note[] = []
   loadNotes(examen) {
     this.notes = []
@@ -364,7 +360,8 @@ export class ExamenComponent implements OnInit {
             oldNote.push(bypass._id)
             this.tableauNotes.push({
               id: bypass.custom_id,
-              etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname,
+              etudiant_f: bypass?.user_id?.firstname,
+              etudiant_l: bypass?.user_id?.lastname,
               note: parseFloat(n.note_val),
               appreciation: n.appreciation,
               date_note: n.date_creation,
@@ -382,7 +379,8 @@ export class ExamenComponent implements OnInit {
           if (oldNote.indexOf(etu._id) == -1)
             this.tableauNotes.push({
               id: etu.custom_id,
-              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname,
+              etudiant_f: etu.user_id.firstname,
+              etudiant_l: etu.user_id.lastname,
               note: NaN,
               appreciation: '',
               date_note: null,
@@ -430,7 +428,7 @@ export class ExamenComponent implements OnInit {
         this.NotesService.create(note).subscribe(r => {
           rowData._id = r._id
           this.tableauNotes[index] = rowData
-          this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant })
+          this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant_f + " " + rowData.etudiant_l })
         }, err => {
           this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
           console.error(err)
@@ -439,7 +437,7 @@ export class ExamenComponent implements OnInit {
         //C'est une mise à jour de Note
         this.NotesService.updateV2(note).subscribe(r => {
           this.tableauNotes[index] = rowData
-          this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant })
+          this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant_f + " " + rowData.etudiant_l })
         }, err => {
           this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
           console.error(err)
@@ -477,7 +475,7 @@ export class ExamenComponent implements OnInit {
       this.NotesService.create(note).subscribe(r => {
         rowData._id = r._id
         this.tableauNotes[index] = rowData
-        this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant })
+        this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant_f + " " + rowData.etudiant_l })
       }, err => {
         this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
         console.error(err)
@@ -486,7 +484,7 @@ export class ExamenComponent implements OnInit {
       //C'est une mise à jour de Note
       this.NotesService.updateV2(note).subscribe(r => {
         this.tableauNotes[index] = rowData
-        this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant })
+        this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant_f + " " + rowData.etudiant_l })
       }, err => {
         this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
         console.error(err)
@@ -498,7 +496,6 @@ export class ExamenComponent implements OnInit {
 
   formatDate(date) {
     date = new Date(date)
-    console.log(date)
     if (date != 'Invalid Date' && date.getFullYear() != '1970')
       return [this.padTo2Digits(date.getDate()), this.padTo2Digits(date.getMonth() + 1), date.getFullYear(),].join('/');
     else return ''
@@ -514,7 +511,6 @@ export class ExamenComponent implements OnInit {
     else
       this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
         this.dropdownModule = [{ label: 'Tous les modules', value: null }]
-        console.log(classe_id._id, modules)
         modules.forEach(matiere => {
           let bypa: any = matiere.formation_id
           if (Array.isArray(matiere.formation_id))
@@ -526,7 +522,6 @@ export class ExamenComponent implements OnInit {
   }
 
   filterFormateurByModule(module_id) {
-    console.log(module_id)
     if (!module_id)
       this.filterFormateur = this.defaultFilterFormateur
     else
@@ -549,7 +544,8 @@ export class ExamenComponent implements OnInit {
     this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
       tableauNotes.push({
         'ID Etudiant': '',
-        'Etudiant': '',
+        'Prénom': '',
+        'Nom': '',
         'Note': '',
         'Appréciation': '',
         'Date de Notation': '',
@@ -566,7 +562,8 @@ export class ExamenComponent implements OnInit {
         if (bypass) {
           let t = {}
           t['ID Etudiant'] = bypass.custom_id;
-          t['Etudiant'] = bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname;
+          t['Prénom'] = bypass?.user_id?.firstname;
+          t['Nom'] = bypass?.user_id?.lastname;
           t['Note'] = parseFloat(n.note_val);
           t['Appréciation'] = n.appreciation
           t['Date de Notation'] = new Date(n.date_creation).toLocaleString('fr-FR')
@@ -608,9 +605,13 @@ export class ExamenComponent implements OnInit {
   dropdownClasseExamen = []
   updateDropdown(exam) {
     this.dropdownClasseExamen = []
-    exam.classe_id.forEach(ex => {
-      this.dropdownClasseExamen.push({ label: ex.abbrv, value: ex._id })
-    })
+    if (Array.isArray(exam.classe_id))
+      exam.classe_id.forEach(ex => {
+        this.dropdownClasseExamen.push({ label: ex.abbrv, value: ex._id })
+      })
+    else
+      this.dropdownClasseExamen.push({ label: exam.classe_id.abbrv, value: exam.classe_id._id })
+
   }
   deleteExamen(exam) {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette examen?\nToutes les notes rattachés seront supprimés également"))
@@ -621,5 +622,56 @@ export class ExamenComponent implements OnInit {
         this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
         console.error(err)
       })
+  }
+  validationNotes() {
+    this.tableauNotes.forEach(rowData => {
+      if (rowData.note <= this.examSelected.note_max) {
+        let note = new Note(
+          rowData._id,
+          rowData.note.toString(),
+          rowData.semestre,
+          rowData.etudiant_id,
+          rowData.examen_id,
+          rowData.appreciation,
+          rowData.classe_id,
+          rowData.matiere_id,
+          false,
+          new Date()
+        )
+        if (rowData._id.includes('NEW')) {
+          //C'est un Nouvelle Note
+          delete note._id
+          this.NotesService.create(note).subscribe(r => {
+          }, err => {
+            this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+            console.error(err)
+          })
+        } else {
+          //C'est une mise à jour de Note
+          this.NotesService.updateV2(note).subscribe(r => {
+          }, err => {
+            this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+            console.error(err)
+          })
+        }
+      }
+    })
+    this.examSelected.canEdit = false
+    this.examenService.update(this.examSelected).subscribe(r => {
+      this.messageService.add({ severity: 'success', summary: "Les notes ont été mis à jour avec succès" })
+    }, err => {
+      this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+      console.error(err)
+    })
+  }
+  allowEdit(examen: Examen) {
+    examen.canEdit = true
+    this.examenService.update(examen).subscribe(r => {
+      this.messageService.add({ severity: 'success', summary: "Le formateur pourra modifié les notes." })
+    }, err => {
+      this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+      console.error(err)
+    })
+
   }
 }
