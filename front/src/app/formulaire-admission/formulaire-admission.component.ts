@@ -63,7 +63,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   ];
 
   rentreeList = [
-    { label: "Janvier 2023", value: "Janvier 2023" },
+    { label: "Mars 2023", value: "Mars 2023" },
     { label: "Septembre 2023", value: "Septembre 2023" }
   ]
 
@@ -96,10 +96,25 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     ];
 
+  niveauFR =
+    [
+      { label: "Langue maternelle", value: "Langue maternelle" },
+      { label: "J’ai une attestation de niveau (TCF DALF DELF..)", value: "J’ai une attestation de niveau (TCF DALF DELF..)" },
+      { label: "Aucun de ces choix", value: "Aucun de ces choix" },
+    ]
+  niveauEN =
+    [
+      { label: "Langue maternelle", value: "Langue maternelle" },
+      { label: "Avancé", value: "Avancé" },
+      { label: "Intermédiaire", value: "Intermédiaire" },
+      { label: "Basique", value: "Basique" },
+      { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
+    ]
+
   programList =
     [
-      { value: "Programme Anglais" },
       { value: "Programme Français" },
+      { value: "Programme Anglais" },
     ];
 
   /*
@@ -118,53 +133,53 @@ export class FormulaireAdmissionComponent implements OnInit {
     */
   programeFrDropdown =
     [
-      { value: "BTS MCO - Management Commercial Opérationnel" },
-      { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-      { value: "BTS CG - Comptabilité et Gestion" },
-      { value: "RNCP CI - Commerce International" },
-      { value: "RNCP NTC 1 - Négociateur Technico-Commercial" },
-      { value: "RNCP NTC 2 - Négociateur Technico-Commercial" },
-      { value: "Chargé de gestion commerciale - Spécialité service commercial" },
-      { value: "RNCP - Chargé de Développement Marketing et Commercial" },
-      { value: "RNCP MDO - Manager des organisations" },
-      { value: "RNCP IA - Ingénieur d'Affaires" },
+      { value: "1ere année BTS MCO - Management Commercial Opérationnel" },
+      { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+      { value: "1ere année BTS CI - Commerce International " },
+      { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
+      { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
+      { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial  " },
+      { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial ( ancien RMC ) " },
+      { value: "Mastère 1 : MDO : Manager des organisations " },
+      { value: "Mastère 1 : IA - Ingénieur d'Affaires " },
+      { value: "1ere année BTS CG - Comptabilité et Gestion " },
+      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
+      { value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel) " },
+      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
+      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
+      { value: "Mastère 1 : Manager en ressources humaines )" },
+      { value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines" },
+      { value: "Mastère 1 : Manager des organisations - Management et stratégies financières" },
+      { value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel) " },
+      { value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment" },
 
-      { value: "BTS SIO Services Informatique aux Organisations" },
-      { value: "RNCP TSSR 1 - Technicien Supérieur Systèmes et Réseaux" },
-      { value: "RNCP TSSR 2 - Technicien Supérieur Systèmes et Réseaux" },
-      { value: "RNCP DWWM 1 - Développeur Web & Web Mobile" },
-      { value: "RNCP DWWM 2 - Développeur Web & Web Mobile" },
-      { value: "Bachelor AIS - Administrateur d'Infrastructures Sécurisées" },
-      { value: "Bachelor CDA - Concepteur Développeur d'Applications" },
-      { value: "RNCP MPI Big Data - Expert IT – Applications Intelligentes & Big Data" },
-      { value: "RNCP MPI CyberSecurité - Expert IT – Cybersécurité et Haute Disponibilité" },
+      { value: "Assistant maternel - Garde d’enfants " },
+      { value: "Gouvernant d’enfants" },
+      { value: "CAP AEPE - Accompagnant éducatif petite enfance" },
+      { value: "Année 1 : BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social " },
+      { value: "Chargé de gestion commerciale - Spécialité Tourisme  " },
+      { value: "Chargé de gestion commerciale - Spécialité hôtellerie restauration" },
+      { value: "TP GH Gouvernant en Hôtellerie  " },
 
-      { value: "BTS CG - Comptabilité et Gestion" },
-      { value: "RNCP ARH - Assistant Ressources Humaines" },
-      { value: "Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise" },
-      { value: "Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise" },
-      { value: "Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
-      { value: "Manager en ressources humaines" },
-      { value: "RNCP MRH - Management des Ressources Humaines" },
-      { value: "Manager des organisations - Management et stratégies financières" },
-      { value: "RNCP BIM Modeleur du Bâtiment" },
-      { value: "Bachelor Coordinateur BIM du Bâtiment" },
+      { value: "1ere année BTS SIO - Services Informatiques aux Organisations " },
+      { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
+      { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
+      { value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)" },
+      { value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
+      { value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées" },
+      { value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications " },
+      { value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ" },
+      { value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA" }
 
-      { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
     ];
 
   programEnDropdown =
     [
-      { value: "Level 3 - Foundation Diploma for Higher Education Studies" },
-      { value: "Level 4 - Business Management " },
-      { value: "Level 4 - Information Technology " },
-      { value: "Level 4 - Tourism and Hospitality Management" },
-      { value: "Level 4 - Health and Social care Management" },
-      { value: "Level 5 - Business Management" },
-      { value: "Level 5 - Information Technology" },
-      { value: "Level 7 - Project Management" },
-      { value: "Level 7 - Tourism and Hospitality Management" },
-      { value: "Level 7 - Health and Social care Management", }
+      { value: "LEVEL 7-  Diploma in Project Management " },
+      { value: "LEVEL 7 - Diploma in Business Management   " },
+      { value: "LEVEL 4 : Diploma in Information Technology " },
+      { value: "Level 4 : Diploma in Tourism and Hospitality Management " },
+      { value: "Level 4 : Diploma Business Management " },
 
     ];
   defaultDropdown = this.programeFrDropdown
@@ -228,31 +243,13 @@ export class FormulaireAdmissionComponent implements OnInit {
       ]
 
       this.programeFrDropdown = [
-        { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" },
-        { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" },
-        { value: "GM - Gouvernant(e) de maison - Diplôme maison" },
-        { value: "BTS MCO - Management Commercial Operationnel" },
-        { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-        { value: "BTS GPME" },
-        { value: "BTS CI - Commerce International" },
-        { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
-        { value: "Chargé de gestion commerciale - Spécialité service commercial" },
-        { value: "IA - Ingénieur d'Affaires" },
-        { value: "Management et Stratégie d’Entreprise " },
-        { value: "BTS SIO - Services Informatiques aux Organisations" },
-        { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
-        { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
-        { value: "AIS - Administrateur d’Infrastructures Sécurisées" },
-        { value: "CDA - Concepteur Développeur d’Applications" },
-        { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " },
-        { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " },
-        { value: "BTS CJN  - Collaborateur Juriste Notarial" },
-        { value: "BTS CG - Comptabilité et Gestion" },
-        { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" },
-        { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" },
-        { value: "Coordinateur BIM du Bâtiment" },
-        { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
-        { value: "Formations continues IPERIA" }
+        { value: "Assistant maternel - Garde d’enfants " },
+        { value: "Gouvernant d’enfants" },
+        { value: "CAP AEPE - Accompagnant éducatif petite enfance" },
+        { value: "Année 1 : BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social " },
+        { value: "Chargé de gestion commerciale - Spécialité Tourisme  " },
+        { value: "Chargé de gestion commerciale - Spécialité hôtellerie restauration" },
+        { value: "TP GH Gouvernant en Hôtellerie  " }
       ]
     } else if (this.form_origin == "espic") {
       this.campusDropdown = [
@@ -260,13 +257,46 @@ export class FormulaireAdmissionComponent implements OnInit {
         { value: "France - Montpellier" },
         { value: "En ligne" }
       ]
-    }else if (this.form_origin == "intuns") {
+      this.programeFrDropdown = [
+        { value: "1ere année BTS MCO - Management Commercial Opérationnel" },
+        { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+        { value: "1ere année BTS CI - Commerce International " },
+        { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
+        { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
+        { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial  " },
+        { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial ( ancien RMC ) " },
+        { value: "Mastère 1 : MDO : Manager des organisations " },
+        { value: "Mastère 1 : IA - Ingénieur d'Affaires " },
+        { value: "1ere année BTS CG - Comptabilité et Gestion " },
+        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
+        { value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel) " },
+        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
+        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
+        { value: "Mastère 1 : Manager en ressources humaines )" },
+        { value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines" },
+        { value: "Mastère 1 : Manager des organisations - Management et stratégies financières" },
+        { value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel) " },
+        { value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment" },
+      ]
+    } else if (this.form_origin == "intuns") {
       this.programeFrDropdown = [
         { value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
         { value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
         { value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
         { value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
         { value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
+      ]
+    } else if (this.form_origin == "studinfo") {
+      this.programeFrDropdown = [
+        { value: "1ere année BTS SIO - Services Informatiques aux Organisations " },
+        { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
+        { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
+        { value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)" },
+        { value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
+        { value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées" },
+        { value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications " },
+        { value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ" },
+        { value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA" }
       ]
     }
     this.defaultDropdown = this.programeFrDropdown
@@ -295,18 +325,21 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'),]),
-      indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      numero_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+'),]),
+      indicatif_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+      numero_telegram: new FormControl('', [Validators.pattern('[- +()0-9]+'),]),
+      indicatif_telegram: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
       // ****** Informations suplumentaires si alternant *******
       nir: new FormControl(''),
       mobilite_reduite: new FormControl(false),
       sportif_hn: new FormControl(false),
 
       //******* Parcours académiques et professionnel *******
-      validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
+      validated_academic_level: new FormControl('', [Validators.required]),
       statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
       other: new FormControl(''),
-      languages: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      languages_fr: new FormControl('', [Validators.required]),
+      languages_en: new FormControl('', [Validators.required]),
       is_professional_experience: new FormControl(false, [Validators.required]),
       professional_experience: new FormControl('', Validators.required),
 
@@ -334,6 +367,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       agence: new FormControl(false),
       nomAgence: new FormControl(''),
       mailAgence: new FormControl(''),
+      numeroAgence: new FormControl(''),
       donneePerso: new FormControl(false, Validators.required),
       code_commercial: new FormControl(this.route.snapshot.paramMap.get('code_commercial')),
 
@@ -345,6 +379,10 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   nextPage() {
     this.ActiveIndex++
+    if (this.ActiveIndex == 3) {
+      //A la demande de Haithem caché la page Accompagnement
+      this.ActiveIndex = 4
+    }
   }
 
   previousPage() {
@@ -400,6 +438,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   get email() { return this.RegisterForm.get('email'); }
   get numero_whatsapp() { return this.RegisterForm.get('numero_whatsapp'); }
   get indicatif_whatsapp() { return this.RegisterForm.get('indicatif_whatsapp'); }
+  get numero_telegram() { return this.RegisterForm.get('numero_telegram'); }
+  get indicatif_telegram() { return this.RegisterForm.get('indicatif_telegram'); }
   get code_commercial() { return this.RegisterForm.get('code_commercial'); }
 
   //******* Parcours académiques et professionnel *******
@@ -407,7 +447,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   get statut_actuel() { return this.RegisterForm.get('statut_actuel').value; }
   get other() { return this.RegisterForm.get('other'); }
   get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
-  get languages() { return this.RegisterForm.get('languages'); }
+  get languages_fr() { return this.RegisterForm.get('languages_fr'); }
+  get languages_en() { return this.RegisterForm.get('languages_en'); }
   get is_professional_experience() { return this.RegisterForm.get('is_professional_experience'); }
   get professional_experience() { return this.RegisterForm.get('professional_experience'); }
 
@@ -478,13 +519,16 @@ export class FormulaireAdmissionComponent implements OnInit {
     let phone = this.RegisterForm.get('phone').value;
     let numero_whatsapp = this.RegisterForm.get('numero_whatsapp').value;
     let indicatif_whatsapp = this.RegisterForm.get('indicatif_whatsapp').value;
+    let numero_telegram = this.RegisterForm.get('numero_telegram').value;
+    let indicatif_telegram = this.RegisterForm.get('indicatif_telegram').value;
     let code_commercial = this.RegisterForm.get('code_commercial').value;
 
     //******* Parcours académiques et professionnel *******
     let validated_academic_level = this.RegisterForm.get('validated_academic_level').value.value;
     let statut_actuel = this.RegisterForm.get('statut_actuel').value.value;
     let other = this.RegisterForm.get('other').value;
-    let languages = this.RegisterForm.get('languages').value;
+    let languages_fr = this.RegisterForm.get('languages_fr').value;
+    let languages_en = this.RegisterForm.get('languages_en').value;
     let is_professional_experience = this.RegisterForm.get('is_professional_experience').value;
     let professional_experience = this.RegisterForm.get('professional_experience').value;
 
@@ -518,6 +562,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     //****** Une dernière étape *******
     let agence = this.RegisterForm.get('agence').value;
     let nomAgence = this.RegisterForm.get('nomAgence').value;
+    let numeroAgence = this.RegisterForm.get('numeroAgence').value
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
     let source = (code_commercial != "" || hors_Admission) ? "Partenaire" : "Interne";
@@ -527,9 +572,9 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     //Creation du nouveau prospect
 
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages_fr + ", " + languages_en, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
       "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
-      hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire);
+      hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire, null, numeroAgence, languages_fr, languages_en, numero_telegram, indicatif_telegram);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
@@ -585,6 +630,18 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   redirectLogin() {
     this.router.navigate(["/loginExterne"])
+  }
+
+  choixRentree() {
+    if (this.RegisterForm.value.rentree_scolaire == "Mars 2023") {
+      this.programeFrDropdown = [
+        { value: "Bac + 1 : TP NTC - Négociateur Technico-Commercial ( année 1 )" },
+        { value: "Bac + 3 : CDMC : Chargé de Développement Marketing et Commercial " },
+        { value: "Mastère : MSE ( Manager Des Organisations )  " }
+      ]
+    } else {
+      this.programeFrDropdown = this.defaultDropdown
+    }
   }
 
 

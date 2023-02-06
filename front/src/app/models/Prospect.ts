@@ -53,7 +53,12 @@ export class Prospect {
         public origin?:string,
         public source?:string,
         public rentree_scolaire?:string,
-        public isCalled?:boolean
+        public isCalled?:boolean,
+        public numeroAgence?:string,
+        public languages_fr?:string,
+        public languages_en?:string,
+        public numero_telegram?:string,
+        public indicatif_telegram?:string,
     ) { }
 
 }
