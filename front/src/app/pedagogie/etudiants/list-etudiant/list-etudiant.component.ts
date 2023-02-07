@@ -1203,4 +1203,5 @@ export class ListEtudiantComponent implements OnInit {
       this.resteAPayer = toPay - total
     })
   }
+  isNaN(nb) { return isNaN(nb) }
 }

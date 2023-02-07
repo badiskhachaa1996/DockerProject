@@ -135,7 +135,8 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="statut">Reste à Payer</label>
-                    <p>{{resteAPayer}}</p>
+                    <p *ngIf="!isNaN(resteAPayer)">{{resteAPayer}}</p>
+                    <p *ngIf="isNaN(resteAPayer)">Un problème est survenu, vérifiez les frais du diplôme</p>
                 </div>
             </form>
             <div class="p-fluid p-formgrid grid">
