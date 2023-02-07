@@ -9,33 +9,7 @@ app.post("/creatediplome", (req, res) => {
     //Ajout d'un diplôme
     let data = req.body;
     let diplome = new Diplome({
-        titre: data?.titre,
-        titre_long: data?.titre_long,
-        campus_id: data?.campus_id,
-        description: data?.description,
-        type_diplome: data?.type_diplome,
-        type_etude: data?.type_etude,
-        domaine: data?.domaine,
-        niveau: data?.niveau,
-        certificateur: data?.certificateur,
-        code_RNCP: data?.code_RNCP,
-        nb_heure: data?.nb_heure,
-        date_debut: data?.date_debut,
-        date_fin: data?.date_fin,
-        rythme: data?.rythme,
-        frais: data?.frais,
-        frais_en_ligne: data?.frais_en_ligne,
-        isCertified: data?.isCertified,
-        date_debut_examen: data?.date_debut_examen,
-        date_fin_examen: data?.date_fin_examen,
-        date_debut_stage: data?.date_debut_stage,
-        date_fin_stage: data?.date_fin_stage,
-        date_debut_semestre_1: data?.date_debut_semestre_1,
-        date_fin_semestre_1: data?.date_fin_semestre_1,
-        date_debut_semestre_2: data?.date_debut_semestre_2,
-        date_fin_semestre_2: data?.date_fin_semestre_2,
-        code_diplome: data?.code_diplome,
-        formateur_id: data?.formateur_id
+        ...data
     });
     diplome.save().then((diplomeFromDB) => {
         res.status(200).send(diplomeFromDB);
@@ -49,37 +23,11 @@ app.post("/editById/:id", (req, res) => {
     //Modifier un diplome
     Diplome.findByIdAndUpdate(req.params.id,
         {
-            titre: req.body.titre,
-            titre_long: req.body.titre_long,
-            description: req.body.description,
-            campus_id: req.body.campus_id,
-            type_diplome: req.body.type_diplome,
-            type_etude: req.body.type_etude,
-            domaine: req.body.domaine,
-            niveau: req.body.niveau,
-            certificateur: req.body.certificateur,
-            code_RNCP: req.body.code_RNCP,
-            nb_heure: req.body.nb_heure,
-            date_debut: req.body.date_debut,
-            date_fin: req.body.date_fin,
-            rythme: req.body.rythme,
-            frais: req.body.frais,
-            frais_en_ligne: req.body.frais_en_ligne,
-            isCertified: req.body.isCertified,
-            date_debut_examen: req.body.date_debut_examen,
-            date_fin_examen: req.body.date_fin_examen,
-            date_debut_stage: req.body.date_debut_stage,
-            date_fin_stage: req.body.date_fin_stage,
-            date_debut_semestre_1: req.body.date_debut_semestre_1,
-            date_fin_semestre_1: req.body.date_fin_semestre_1,
-            date_debut_semestre_2: req.body.date_debut_semestre_2,
-            date_fin_semestre_2: req.body.date_fin_semestre_2,
-            code_diplome: req.body.code_diplome,
-            formateur_id: req.body.formateur_id
+            ...req.body
 
         }, { new: true }, (err, diplome) => {
             if (err) {
-                res.send(err)
+                res.status(500).send(err)
             }
             else {
                 res.send(diplome)

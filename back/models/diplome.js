@@ -33,7 +33,7 @@ const diplomeSchema = mongoose.Schema({
     date_fin_semestre_3: { type: Date },
     date_debut_semestre_4: { type: Date },
     date_fin_semestre_4: { type: Date },
-    cb_an: { type: String },
+    cb_an: { type: String,default:"2 ans" },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema
