@@ -26,7 +26,8 @@
             <p-toast key="tst" [baseZIndex]="99999"></p-toast>
             <h4 style="text-align: center;">Ajouter un diplôme</h4>
             <div style="text-align: center;">
-                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont obligatoires</small><br>
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
             </div>
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddDiplome" (ngSubmit)="onAddDiplome()">
@@ -35,87 +36,103 @@
                     <label For="titre">Titre RNCP du diplôme <span style="color: red;"> * </span></label>
                     <input pInputText id="titre" type="text" formControlName="titre" placeholder="NDRC" />
                     <div *ngIf="titre.invalid && (titre.touched || titre.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="titre.errors?.required" style="color: red;">* Le titre RNCP du diplôme est obligatoire </span>
-                    </div>  
+                        <span style="color: red;" class="error" *ngIf="titre.errors?.required" style="color: red;">* Le
+                            titre RNCP du diplôme est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-2">
                     <label For="code_RNCP">Code RNCP <span style="color: red;"> * </span></label>
                     <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" placeholder="RNCP 0222" />
                     <div *ngIf="code_RNCP.invalid && (code_RNCP.touched || code_RNCP.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="code_RNCP.errors?.required" style="color: red;">* Le Code RNCP est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="code_RNCP.errors?.required" style="color: red;">*
+                            Le Code RNCP est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12">
                     <label For="titre_long">Titre long du diplôme <span style="color: red;"> * </span></label>
-                    <input pInputText id="titre_long" type="text" formControlName="titre_long" placeholder="BTS NDRC - Négociation et Digitalisation de la Relation Client" />
+                    <input pInputText id="titre_long" type="text" formControlName="titre_long"
+                        placeholder="BTS NDRC - Négociation et Digitalisation de la Relation Client" />
                     <div *ngIf="titre_long.invalid && (titre_long.touched || titre_long.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="titre_long.errors?.required" style="color: red;">* Le titre long du diplôme est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="titre_long.errors?.required"
+                            style="color: red;">* Le titre long du diplôme est obligatoire </span>
+                    </div>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus <span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="campusList" placeholder="Choissisez le campus" formControlName="campus_id"></p-multiSelect>
+                    <p-multiSelect [options]="campusList" placeholder="Choissisez le campus"
+                        formControlName="campus_id"></p-multiSelect>
                     <div *ngIf="campus_id.invalid && (campus_id.touched || campus_id.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="campus_id.errors?.required" style="color: red;">* Le campus est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="campus_id.errors?.required" style="color: red;">*
+                            Le campus est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Type de diplôme <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome" optionDisabled="actif"></p-dropdown>
+                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"
+                        optionDisabled="actif"></p-dropdown>
                     <div *ngIf="type_diplome.invalid && (type_diplome.touched || type_diplome.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="type_diplome.errors?.required" style="color: red;">* Le type de diplôme est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="type_diplome.errors?.required"
+                            style="color: red;">* Le type de diplôme est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Département <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine" optionDisabled="actif"></p-dropdown>
+                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"
+                        optionDisabled="actif"></p-dropdown>
                     <div *ngIf="domaine.invalid && (domaine.touched || domaine.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="domaine.errors?.required" style="color: red;">* Le domaine est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="domaine.errors?.required" style="color: red;">*
+                            Le domaine est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Niveau d'études <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau" optionDisabled="actif"></p-dropdown>
+                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"
+                        optionDisabled="actif"></p-dropdown>
                     <div *ngIf="niveau.invalid && (niveau.touched || niveau.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="niveau.errors?.required" style="color: red;">* Le niveau est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="niveau.errors?.required" style="color: red;">* Le
+                            niveau est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12">
                     <label>Cette formation est-elle diplômante ? <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="choiceList" formControlName="isCertified" ></p-dropdown>
+                    <p-dropdown [options]="choiceList" formControlName="isCertified"></p-dropdown>
                     <div *ngIf="isCertified.invalid && (isCertified.touched || isCertified.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="isCertified.errors?.required" style="color: red;">* Choix obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="isCertified.errors?.required"
+                            style="color: red;">* Choix obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-8">
                     <label For="certificateur">Certificateur <span style="color: red;"> * </span></label>
                     <input pInputText id="certificateur" type="text" formControlName="certificateur" />
                     <div *ngIf="certificateur.invalid && (certificateur.touched || certificateur.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="certificateur.errors?.required" style="color: red;">* Le certificateur est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="certificateur.errors?.required"
+                            style="color: red;">* Le certificateur est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-4">
                     <label For="code_diplome">Code diplôme <span style="color: red;"> * </span></label>
                     <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
                     <div *ngIf="code_diplome.invalid && (code_diplome.touched || code_diplome.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="code_diplome.errors?.required" style="color: red;">* Le code diplôme est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="code_diplome.errors?.required"
+                            style="color: red;">* Le code diplôme est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-2">
                     <label For="nb_heure">Durée en heure <span style="color: red;"> * </span></label>
                     <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
                     <div *ngIf="nb_heure.invalid && (nb_heure.touched || nb_heure.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="nb_heure.errors?.required" style="color: red;">* La durée en heure est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="nb_heure.errors?.required" style="color: red;">*
+                            La durée en heure est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-5">
@@ -130,10 +147,12 @@
 
                 <div class="field col-12 md:col-4">
                     <label>Rythme de la formation <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme" optionDisabled="actif"></p-dropdown>
+                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"
+                        optionDisabled="actif"></p-dropdown>
                     <div *ngIf="rythme.invalid && (rythme.touched || rythme.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="rythme.errors?.required" style="color: red;">* Le rythme de la formation est obligatoire </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="rythme.errors?.required" style="color: red;">* Le
+                            rythme de la formation est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-12 md:col-4">
@@ -173,25 +192,60 @@
                     <p-dropdown [options]="dropdownFormateur" optionLabel="label" formControlName="formateur_id">
                     </p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <label>Sur combien d'année se porte la formation (au maximum) ? <span style="color: red;"> *
+                        </span></label>
+                    <p-selectButton [options]="[{label:'1 an',value:'1 an'},{label:'2 ans',value:'2 ans'}]"
+                        formControlName="cb_an"></p-selectButton>
+                </div>
+
 
                 <div class="field col-12 md:col-6">
                     <label>Date de début semestre 1</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_1"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_debut_semestre_1"></p-calendar>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Date de fin semestre 1</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_1"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_fin_semestre_1"></p-calendar>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Date de début semestre 2</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_2"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_debut_semestre_2"></p-calendar>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Date de fin semestre 2</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_2"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_fin_semestre_2"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="cb_an.value=='2 ans'">
+                    <label>Date de début semestre 3</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_debut_semestre_3"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="cb_an.value=='2 ans'">
+                    <label>Date de fin semestre 3</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_fin_semestre_3"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="cb_an.value=='2 ans'">
+                    <label>Date de début semestre 4</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_debut_semestre_4"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="cb_an.value=='2 ans'">
+                    <label>Date de fin semestre 4</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true"
+                        formControlName="date_fin_semestre_4"></p-calendar>
                 </div>
 
                 <div style="justify-content: right;">

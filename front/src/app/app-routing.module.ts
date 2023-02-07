@@ -197,7 +197,7 @@ const routes: Routes = [
             { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
             { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
             { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-            { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
+            { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
             { path: 'contact', component: ContactComponent },
             { path: 'list-events', component: ListEventsComponent, canActivate: [AuthGuardService] },

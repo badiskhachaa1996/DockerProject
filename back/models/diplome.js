@@ -28,7 +28,12 @@ const diplomeSchema = mongoose.Schema({
     code_diplome: { type: String, required: true },
     imgNames:{type:[String],default:[]},
     imgTypes:{type:[String],default:[]},
-    formateur_id:{type:mongoose.Schema.Types.ObjectId, ref: "formateur"}
+    formateur_id:{type:mongoose.Schema.Types.ObjectId, ref: "formateur"},
+    date_debut_semestre_3: { type: Date },
+    date_fin_semestre_3: { type: Date },
+    date_debut_semestre_4: { type: Date },
+    date_fin_semestre_4: { type: Date },
+    cb_an: { type: String },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

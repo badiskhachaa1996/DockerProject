@@ -181,6 +181,7 @@ export class AddDiplomeComponent implements OnInit {
       frais: [''],
       frais_en_ligne: [''],
       isCertified: [this.choiceList[1], Validators.required],
+      cb_an: ['2 ans', Validators.required],
       date_debut_examen: [''],
       date_fin_examen: [''],
       date_debut_stage: [''],
@@ -189,6 +190,10 @@ export class AddDiplomeComponent implements OnInit {
       date_fin_semestre_1: [''],
       date_debut_semestre_2: [''],
       date_fin_semestre_2: [''],
+      date_debut_semestre_3: [''],
+      date_fin_semestre_3: [''],
+      date_debut_semestre_4: [''],
+      date_fin_semestre_4: [''],
       code_diplome: ['', Validators.required],
       formateur_id: [''],
     });
@@ -208,6 +213,7 @@ export class AddDiplomeComponent implements OnInit {
   get rythme() { return this.formAddDiplome.get('rythme'); }
   get isCertified() { return this.formAddDiplome.get('isCertified'); }
   get code_diplome() { return this.formAddDiplome.get('code_diplome'); }
+  get cb_an() { return this.formAddDiplome.get('cb_an'); }
 
   resetAddDiplome() {
     this.onInitFormAddDiplome()
@@ -240,6 +246,11 @@ export class AddDiplomeComponent implements OnInit {
     let date_fin_semestre_1 = this.formAddDiplome.get('date_fin_semestre_1')?.value;
     let date_debut_semestre_2 = this.formAddDiplome.get('date_debut_semestre_2')?.value;
     let date_fin_semestre_2 = this.formAddDiplome.get('date_fin_semestre_2')?.value;
+    let date_debut_semestre_3 = this.formAddDiplome.get('date_debut_semestre_3')?.value;
+    let date_fin_semestre_3 = this.formAddDiplome.get('date_fin_semestre_3')?.value;
+    let date_debut_semestre_4 = this.formAddDiplome.get('date_debut_semestre_4')?.value;
+    let date_fin_semestre_4 = this.formAddDiplome.get('date_fin_semestre_4')?.value;
+    let cb_an = this.formAddDiplome.get('cb_an')?.value;
     let code_diplome = this.formAddDiplome.get('code_diplome')?.value;
     let formateur_id = this.formAddDiplome.get('formateur_id')?.value.value;
 
@@ -247,7 +258,8 @@ export class AddDiplomeComponent implements OnInit {
     let newDiplome = new Diplome(
       null, titre, titre_long, campus_id, type_diplome, domaine, niveau, certificateur,
       code_RNCP, nb_heure, date_debut, date_fin, rythme, frais, frais_en_ligne,
-      isCertified, date_debut_examen, date_fin_examen, date_debut_stage, date_fin_stage, date_debut_semestre_1, date_fin_semestre_1, date_debut_semestre_2, date_fin_semestre_2, code_diplome, null, null, formateur_id
+      isCertified, date_debut_examen, date_fin_examen, date_debut_stage, date_fin_stage, date_debut_semestre_1, date_fin_semestre_1, date_debut_semestre_2, date_fin_semestre_2, 
+      code_diplome, null, null, formateur_id,date_debut_semestre_3,date_fin_semestre_3,date_debut_semestre_4,date_fin_semestre_4,cb_an
     );
     this.diplomeService.create(newDiplome).subscribe(
       (() => {
