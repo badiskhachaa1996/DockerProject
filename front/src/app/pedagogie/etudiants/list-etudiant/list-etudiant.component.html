@@ -133,6 +133,10 @@
                     <p-multiSelect [options]="statutDossier" formControlName="statut_dossier">
                     </p-multiSelect>
                 </div>
+                <div class="field col-12 md:col-6">
+                    <label For="statut">Reste à Payer</label>
+                    <p>{{resteAPayer}}</p>
+                </div>
             </form>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
@@ -144,7 +148,7 @@
                     </div>
                     <div class="field col-12 md:col-3">
                         <label>Montant:</label><br>
-                        <input type="number" (change)="changeMontant(i,$event,'montant')"
+                        <input type="number" (change)="changeMontant(i,$event,'montant');getResteAPayer()"
                             [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
                     </div>
                     <div class="field col-12 md:col-3">
