@@ -29,7 +29,7 @@
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 title="Fermer" (click)="showAppreciation = false;formAppreciation.reset()" aria-hidden="true">
             </i>
-            <h3 style="text-align: center;" *ngIf="showAppreciation"> Voir les appréciations de:</h3>
+            <h3 style="text-align: center;" *ngIf="showAppreciation"> Saisir les appréciations de:</h3>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAppreciation" (ngSubmit)="onShowAppreciation()">
 
                 <div class="field col-12">
@@ -87,7 +87,7 @@
                             style="margin-right: 3px;"></button>
                         <button pButton
                             pTooltip="Merci d'enregistrer les appréciations des étudiants de ce Module avant la fin du semestre"
-                            label="Enregistrer les notes et voir les appréciations du Module" icon="pi pi-send"
+                            label="Enregistrer les notes et saisir les appréciations du Module" icon="pi pi-send"
                             (click)="showAppreciation=examSelected;updateDropdown(examSelected);validationNotes()"
                             style="margin-right: 3px;"></button>
                     </div>
@@ -117,7 +117,8 @@
                         <td>{{ data.etudiant_l}}</td>
                         <td>{{ data.date_IMS }}</td>
                         <td>{{ data.date_TEAMS }}</td>
-                        <td class="text-center">{{ data.date_note | date:'dd/MM' }}</td>
+                        <td class="text-center">
+                            {{ data.date_note | date:'dd/MM' }}</td>
                         <td class="text-center" [pEditableColumn]="data.note" pEditableColumnField="note">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">

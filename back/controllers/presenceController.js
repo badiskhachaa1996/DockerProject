@@ -32,12 +32,11 @@ app.get("/getAll", (req, res) => {
 
 //Récupérer tous les presence d'un user
 app.get("/getAllByUser/:id", (req, res) => {
-
-    Presence.find({ user_id: req.params.id }, { date_signature: { $gt: new Date(2023, 0, 1) } }).populate("seance_id").then((data) => {
-
-
+    let date = new Date(2023, 0, 1)
+    Presence.find({ user_id: req.params.id }, { date_signature: { $gt: date  } }).populate("seance_id").then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
+        console.error(error)
         res.status(404).send(error);
     })
 });

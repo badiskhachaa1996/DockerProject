@@ -61,8 +61,8 @@ export class AddSeanceComponent implements OnInit {
     seance_type: new FormControl('Séance'),
     periode_seance: new FormControl('', Validators.required),
     time_max_sign: new FormControl(30, Validators.required),
-    forcedAllowedByFormateur: new FormControl(false, Validators.required),
-    isOptionnel: new FormControl(false,Validators.required)
+    forcedAllowedByFormateur: new FormControl(true, Validators.required),
+    isOptionnel: new FormControl(false, Validators.required)
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }

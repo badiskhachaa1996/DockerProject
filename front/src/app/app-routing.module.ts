@@ -180,7 +180,7 @@ const routes: Routes = [
             { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'progression-pedagogique/:formateur_id', component: ProgressionPedagogiqueComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-            { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
             { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
