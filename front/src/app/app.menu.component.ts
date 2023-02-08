@@ -44,6 +44,8 @@ export class AppMenuComponent implements OnInit {
     isAdministration: Boolean = false;
     isConseiller: teamCommercial = null
     isIntuns: Boolean = false
+    isRH = false
+    isConsulting = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
@@ -271,6 +273,8 @@ export class AppMenuComponent implements OnInit {
                     this.isAdministration = service.label.includes('dministration')
                     this.isFinance = service.label.includes('inanc')
                     this.isIntuns = service.label.includes('Intuns')
+                    this.isRH = service.label.includes('umaine') || service.label == "RH"
+                    this.isConsulting = service.label.includes('onsult')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -910,6 +914,77 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },]
                         }]
+                } else if (this.isRH) {
+                    this.model = [
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        }, ,
+                        {
+                            label: 'Gestions des étudiants', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                            ]
+                        },
+                        {
+                            label: 'Gestions des formateurs', icon: 'pi pi-id-card',
+                            items: [
+                                { label: 'Ajouter un formateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-formateur'] },
+                                { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
+                            ]
+                        },
+                        {
+                            label: 'Gestions des agents', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un agent', icon: 'pi pi-user-plus', routerLink: ['/admin/ajout-agent'] },
+                                { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
+                            ]
+                        },
+                        {
+                            label: 'RH',
+                            items: [
+                                { label: 'Gestion des ressources humaines', icon: 'pi pi-list', routerLink: ['/gestion-des-ressources-humaines'] },
+                            ]
+                        },
+                        {
+                            label: 'Finance',
+                            items: [
+                                { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                            ]
+                        },
+                    ]
+                } else if (this.isConsulting) {
+                    this.model = [
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        }, ,
+                        {
+                            label: 'Gestions des étudiants', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Gestion des compétences', icon: 'pi pi-book', routerLink: ['/skills-management'] },
+                            ]
+                        },
+                    ]
                 } else {
                     this.model = [
                         {

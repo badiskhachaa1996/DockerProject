@@ -763,8 +763,9 @@ app.post('/addNewPayment/:id', (req, res) => {
         )
         me.save()
     })
+    console.log(req.body.payement)
     var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(req.body.payement), 'd8a0707da72cadb').toString();
-    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, function (err, data) {
+    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(500).send(err)

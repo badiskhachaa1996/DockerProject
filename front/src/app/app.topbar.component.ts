@@ -41,7 +41,6 @@ export class AppTopBarComponent {
 
     if (temp.service_id) {
       this.serv.getAServiceByid(temp.service_id).subscribe(service => {
-
         let serviceName = service.dataService.label
         if (serviceName.includes("Admission")) {
           this.NotificationService.getAdmissionNotifi().subscribe(notifAdmission => {

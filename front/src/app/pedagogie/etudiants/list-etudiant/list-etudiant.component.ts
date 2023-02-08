@@ -177,7 +177,15 @@ export class ListEtudiantComponent implements OnInit {
   isMinor = false;
   isCommercial: boolean = false;
   isAdministration: boolean = false;
-
+  typePaiement = [
+    { value: "Espèces", label: "Espèces" },
+    { value: "Virement", label: "Virement" },
+    { value: "Chèque de caution", label: "Chèque de caution" },
+    { value: "Chèque en échange d'espèces", label: "Chèque en échange d'espèces" },
+    { value: "Chèque de scolarité", label: "Chèque de scolarité" },
+    { value: "Chèque", label: "Chèque" },
+    { value: "Autre", label: "Autre" },
+  ]
 
   prospects = {}
 
@@ -195,7 +203,9 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   changeMontant(i, event, type) {
-    if (type == "montant") {
+    if (type == "type") {
+      this.payementList[i][type] = event.value;
+    } else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
     } else {
       this.payementList[i][type] = event.target.value;
@@ -210,8 +220,10 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   addNewPayment() {
+    console.log(this.payementList)
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
+      console.log(data.payment_reinscrit)
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
       this.payementList = null
@@ -505,6 +517,8 @@ export class ListEtudiantComponent implements OnInit {
       statut_dossier = []
     if (this.resteAPayer == 0 && statut_dossier.indexOf('Paiement finalisé') == -1 && confirm('Le reste a payer est égale à 0, Voulez-vous marquer le dossier avec "Paiement finalisé" ?'))
       statut_dossier.push('Paiement finalisé')
+    else if (this.resteAPayer != 0 && statut_dossier.indexOf('Paiement non finalisé') == -1 && confirm('Le reste a payer n\'est pas égale à 0, Voulez-vous marquer le dossier avec "Paiement non finalisé" ?'))
+      statut_dossier.push('Paiement non finalisé')
     this.etudiantService.updateDossier(this.etudiantToUpdate._id, statut_dossier).subscribe(
       ((responde) => {
         this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });

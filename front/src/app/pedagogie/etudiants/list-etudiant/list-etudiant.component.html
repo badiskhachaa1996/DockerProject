@@ -144,8 +144,10 @@
                     <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                     <div class="field col-12 md:col-4">
                         <label>Type de paiement:</label><br>
-                        <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                        <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']" placeholder="Choissisez la méthode de paiement"
+                            (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
+                        <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
                     </div>
                     <div class="field col-12 md:col-3">
                         <label>Montant:</label><br>
