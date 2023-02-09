@@ -299,6 +299,25 @@ export class FormulaireAdmissionComponent implements OnInit {
         { value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ" },
         { value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA" }
       ]
+    } else if (this.form_origin == "estya-dubai") {
+      this.programeFrDropdown = [
+        { value: 'Project Management' },
+        { value: 'Information Technology' },
+        { value: 'Business Management' },
+        { value: 'Master Manager en ressources humaine' },
+        { value: 'Master Ingénieur d\'affaire' },
+        { value: 'Chargé de gestion commerciale' },
+        { value: 'English Foundation Year' },
+      ]
+      this.campusDropdown = [
+        { value: "UAE - Dubai" },
+        { value: "En ligne" },
+        { value: "France - Paris" },
+        { value: "France - Montpellier" },
+        { value: "Brazzaville - Congo" },
+        { value: "Rabat - Maroc " },
+        { value: "Malte" }
+      ]
     }
     this.defaultDropdown = this.programeFrDropdown
 
