@@ -23,9 +23,10 @@ app.post("/just-arrived", (req, res) => {
 //Methode de depointage depart
 app.patch("/just-gone", (req, res) => {
     const userId = req.body.user_id;
-    const outDate = new Date(req.body.out_date);
+    const outDate = req.body.out_date;
     const dateOfToday = req.body.date_of_the_day;
-    const ipAdress = req.body.ip_adress;  
+    const ipAdress = req.body.ip_adress; 
+    const craIsValidated = req.body.craIsValidate; 
     // const principaleActivityDetails = req.body.principale_activity_details;      
     const activityDetails = req.body.activity_details;
 
@@ -65,6 +66,7 @@ app.patch("/just-gone", (req, res) => {
                     out_ip_adress: ipAdress,
                     statut: statut,
                     isCheckable: false,
+                    craIsValidate: craIsValidated,
                     // principale_activity_details: principaleActivityDetails,
                     activity_details: activityDetails,
                   })
@@ -74,6 +76,17 @@ app.patch("/just-gone", (req, res) => {
           })
           .catch((error) => { res.status(500).send(error.message) });
 
+});
+
+
+// methode de check out
+app.patch("/patch-check-out", (req, res, next) => {
+    const check = new InTime({ ...req.body });
+    const outDate = new Date();
+
+    InTime.updateOne({ _id: check._id }, { out_date: outDate })
+    .then((response) => { res.status(201).json({ success: "Merci d'avoir validé votre journée", check: response }); })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de valider votre CheckOut, veuillez contacter un administrateur' }); });
 });
 
 
@@ -126,6 +139,16 @@ app.get("/get-by-date-by-user-id/:userId/:dateOfTheDay", (req, res) => {
     InTime.findOne({ user_id: req.params.userId, date_of_the_day: req.params.dateOfTheDay })
           .then((inTime) => { res.status(200).send(inTime) })
           .catch((error) => { res.status(400).send(error.message) });
+});
+
+
+// modification d'un check
+app.patch("/patch-check", (req, res) => {
+    const check = new InTime({ ...req.body });
+
+    InTime.updateOne({ _id: check._id }, { ...req.body })
+    .then((response) => { res.status(201).json({success: 'Check mis à jour', check: response }) })
+    .catch((error) => { console.log(error); res.status(400).json({error: 'Impossible de mettre le check à jour'}) });
 });
 
 

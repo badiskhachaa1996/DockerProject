@@ -270,22 +270,30 @@
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}"
                     style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
-                |
-                <span style="color: red;">Si vous ne validez pas votre CRA vos heures ne seront pas prises en compte</span>
+                <span *ngIf="dailyCheck" style="color: red;">
+                    |
+                    Si vous ne validez pas votre CRA vos heures ne seront pas prises en compte
+                </span>
             </h5>
             
             <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
                 (click)="onCheckIn()"></button>
 
             <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" label="Valider mon CRA" icon="pi pi-sign-in"
-                (click)="onValidateCra()"></button>
+                (click)="showButtonsValidateCra = !showButtonsValidateCra"></button>
 
             <button [disabled]="!dailyCheck?.isCheckable || !dailyCheck?.craIsValidate" pButton class="p-button-danger mr-2 mb-2"
-                label="Check out" icon="pi pi-sign-out"
-                (click)="showFormDailyActivityDetails = true"></button>
+                label="Check out" icon="pi pi-sign-out" (click)="onCheckOut();"></button>
 
-            <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails"
-                (ngSubmit)="onCheckOut()">
+            <!-- Bouton affiché au clique sur le bouton valider mon cra -->
+            <div *ngIf="showButtonsValidateCra">
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail();"></button>
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
+            </div>
+            
+            <!-- Formulaire pour remplir les tâches du jour -->
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
+                (ngSubmit)="onValidateCraByForm()">
                 <h2>Tâches du jour</h2>
                 <div class="p-formgrid grid">
                     <div class="field col-12">
@@ -308,12 +316,79 @@
                         class="p-button-outlined p-button-info"></button>
                 </div>
 
-                <div class="field col-4 md:col-2">
+                <div class="field col-4 md:col-4">
                     <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid"
-                        label="Valider & Check Out"></button>
+                        label="Valider"></button>
                 </div>
-
             </form>
+
+            <!-- Table d'affichage de la liste des tâches en cours de l'utilisateur -->
+            <div *ngIf="showTaskForUser" style="margin-top: 3px;">
+                <h5>Vos tâches en cours</h5>
+                <small>Merci de mettre à jour les pourcentages d'évolutions des tâches</small>
+                <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row"
+                        [rows]="5" [rowHover]="true" [paginator]="true"
+                        [globalFilterFields]="['libelle','percent','project_id?.libelle']"
+                        responsiveLayout="scroll">
+
+                    <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" #filter
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Libelle</th>
+                            <th>Avancement</th>
+                            <th>Projet</th>
+                            <th>DeadLine</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-task let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="task">
+                            <td>
+                                {{ task.libelle }}
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="task.percent">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{task.percent}}%
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                {{ task.project_id?.libelle }}
+                            </td>
+                            <td>
+                                {{ task.date_limite | date: 'dd/MM/YYYY' }}
+                            </td>
+                            <td>
+                                <div class="flex align-items-center justify-content-center gap-2">
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                        icon="pi pi-pencil" (click)="onRowEditInit(task)"
+                                        class="p-button-rounded p-button-text"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                        icon="pi pi-check" (click)="onRowEditSave(task)"
+                                        class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                        icon="pi pi-times" (click)="onRowEditCancel(task, ri)"
+                                        class="p-button-rounded p-button-text p-button-danger"></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
 </div>

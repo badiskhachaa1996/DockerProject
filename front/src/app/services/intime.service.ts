@@ -27,7 +27,7 @@ export class IntimeService {
   }
 
 
-  //Methode de depointage depart
+  //Methode de depointage depart validation du cra
   patchJustGone(data: any)
   {
     let url = `${this.apiUrl}just-gone`;
@@ -37,6 +37,21 @@ export class IntimeService {
         (response) => (resolve(response)),
         (error) => (reject(error))
       );
+    });
+  }
+
+
+  // methode de check out
+  patchCheckOut(check: InTime): Promise<any>
+  {
+    let url = `${this.apiUrl}patch-check-out`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch<any>(url, check, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Check out effectué correctement')
+      });
     });
   }
 
@@ -121,6 +136,20 @@ export class IntimeService {
         (response) => (resolve(response)),
         (error) => (reject(error))
       );
+    });
+  }
+
+  // methode de modification d'un check
+  patchCheck(check: InTime): Promise<any> 
+  {
+    const url = `${this.apiUrl}/patch-check`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch(url, check, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Ckeck mis à jour')
+      })
     });
   }
 
