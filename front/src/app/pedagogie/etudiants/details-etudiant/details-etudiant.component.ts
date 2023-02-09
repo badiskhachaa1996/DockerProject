@@ -169,7 +169,9 @@ export class DetailsEtudiantComponent implements OnInit {
           this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
 
           this.pourcentageAssiduite = Math.round(100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length));
-
+          this.chart2.data = this.barDataHor
+          this.chart.data = this.barData
+          this.barDataHorAJ = this.barDataHor
         })
 
 
@@ -226,9 +228,8 @@ export class DetailsEtudiantComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.chart2.data = this.barDataHor
-      this.chart.data = this.barData
-      this.barDataHorAJ = this.barDataHor
+      this.chart.refresh();
+      this.chart2.refresh();
     }, 200);
   }
 }

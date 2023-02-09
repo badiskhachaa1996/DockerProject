@@ -194,12 +194,13 @@ export class FormulaireAdmissionComponent implements OnInit {
   choixCampus() {
     if (this.RegisterForm.value.campusChoix1.value == "UAE - Dubai") {
       this.programeFrDropdown = [
-        { value: 'English Foundation Year - Rentrée Janvier' },
-        { value: 'Negociateur technico-commercial 2eme année - Rentrée Janvier ' },
-        { value: 'Development Web et Web Mobile 2eme année - Rentrée Janvier ' },
-        { value: 'Management en commerce international 2eme année' },
-        { value: 'Ingenieur d\'affaires Master 1er année - Rentrée Mars' },
-        { value: 'Master en Ressource Humaine 1er année - Rentrée Mars' },
+        { value: 'Project Management' },
+        { value: 'Information Technology' },
+        { value: 'Business Management' },
+        { value: 'Master Manager en ressources humaine' },
+        { value: 'Master Ingénieur d\'affaire' },
+        { value: 'Chargé de gestion commerciale' },
+        { value: 'English Foundation Year' },
       ]
     } else
       this.programeFrDropdown = this.defaultDropdown
