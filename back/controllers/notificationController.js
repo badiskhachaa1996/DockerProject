@@ -126,11 +126,43 @@ app.post("/viewNotifs", (req, res) => {
     res.status(200).send(returnTick)
 });
 
-app.post("/newEtudiantIMS",(req,res)=>{
+app.get('/sendEmail/:email_etudiant/:document', (req, res) => {
     let htmlmail = `
     <p style="font-size:20px; color:black">Bonjour,</p>
     <p>   </p>
-    <p style="font-size:20px; color:black">Un nouveau étudiant `+req.body.lastname+' '+req.body.firstname +` s'est inscrit sur la plateforme <a href='https://ims.intedgroup.com'>IMS</a>.</p>
+    <p style="font-size:20px; color:black">Un nouveau document ${req.params.document} est disponible dans votre espace Documents sur <a href='https://ims.intedgroup.com/#/'>IMS</a></p>
+    <p style="font-size:20px; color:black">Merci de consulter ce document, si le document ne s'affiche pas merci d'aller régulariser votre situation à l'administration de l'école (15 Rue du Louvre 75001 Paris)</p>
+    <p>   </p>
+    <p style="font-size:20px; color:red">Ce mail étant envoyé par un robot, merci d'adresser vos demandes à <a href='mailto:m.hue@intedgroup.com'>m.hue@intedgroup.com</a></p>
+    <p>   </p>
+    <p style="font-size:20px;">Cordialement,</p>
+    
+    <footer> <img src="cid:red"/></footer>
+    `
+    let attachments = [{
+        filename: 'signature_mh.png',
+        path: '/home/ubuntu/ems3/back/assets/signature_mh.png',
+        cid: 'red' //same cid value as in the html img src
+    }]
+    let mailOptions = {
+        from: 'ims@intedgroup.com',
+        to: req.params.email_etudiant,
+        subject: '[IMS] Nouveau Document',
+        html: htmlmail,
+        attachments: attachments
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+    });
+})
+
+app.post("/newEtudiantIMS", (req, res) => {
+    let htmlmail = `
+    <p style="font-size:20px; color:black">Bonjour,</p>
+    <p>   </p>
+    <p style="font-size:20px; color:black">Un nouveau étudiant `+ req.body.lastname + ' ' + req.body.firstname + ` s'est inscrit sur la plateforme <a href='https://ims.intedgroup.com'>IMS</a>.</p>
     <p style="font-size:20px; color:black">Merci de vérifier ces documents et de le mettre dans la bonne formation avec <a href='https://ims.intedgroup.com/#/validation-inscrit'>cette page</a></p>
     <p>   </p>
     <p style="font-size:20px; color:red">Ce mail étant envoyé par un robot, merci d'adresser vos demandes à <a href='mailto:m.hue@intedgroup.com'>m.hue@intedgroup.com</a></p>
@@ -146,7 +178,7 @@ app.post("/newEtudiantIMS",(req,res)=>{
     }]
     let mailOptions = {
         from: 'ims@intedgroup.com',
-        to: ['m.hue@intedgroup.com','administration.paris@estya.com'],
+        to: ['m.hue@intedgroup.com', 'administration.paris@estya.com'],
         subject: '[IMS] Nouveau Etudiant',
         html: htmlmail,
         attachments: attachments

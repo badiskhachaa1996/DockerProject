@@ -1,15 +1,63 @@
 <p-toast></p-toast>
+<div class="grid card" *ngIf="showPDF">
+    <div class="grid col-12">
+        <div class="col-6">
+            <label>Date de début et de fin de l'attestation :</label><br>
+            <p-calendar [(ngModel)]="dateValue" [disabledDates]="invalidDates" selectionMode="range"
+                [disabledDays]="[0,6]"></p-calendar>
+        </div>
+        <div class="col-3">
+            <label>Choix de l'école :</label><br>
+            <p-dropdown [options]="dropdownEcoles" [(ngModel)]="ECOLE" (onChange)="loadEcoleImage()"></p-dropdown>
+        </div>
 
-<div class="grid">
+        <div class="col-3">
+            <p-button label="Télécharger l'attestation" icon="pi pi-download" iconPos="left"
+                (click)="exportToPDF()"></p-button>
+        </div>
+    </div>
+    <div class="grid col-12 m-1" id="rendu">
+        <img [src]="PICTURE.logo" alt="LOGO" style="max-height: 20vh;">
+        <h1 class="col-12 text-center" style="font-weight: bold;">Attestation d'assiduité</h1>
+        <h5 class="col-12 text-center">Nous soussignés, "{{ECOLE.libelle}}", Établissement d'Enseignement Supérieur
+            privé,attestons
+            par la présente que
+            :</h5>
+        <h2 class="col-12 text-center" style="font-weight: bold;">
+            {{Etudiant_userdata.civilite}}
+            {{Etudiant_userdata.lastname | uppercase}}
+            {{Etudiant_userdata.firstname | titlecase}}
+        </h2>
+        <h2 class="col-12 text-center" style="font-weight: bold;">Né le {{EtudiantDetail.date_naissance|
+            date:'dd/MM/YYYY'}} de
+            nationalité
+            {{EtudiantDetail.nationalite}}</h2>
+        <h5 class="col-10 col-offset-1">A suivi avec assiduité la formation intitulée:</h5>
+        <h3 class="text-center col-12" style="font-weight: bold;">{{diplome_libelle}}</h3>
+        <h5 class="col-10 col-offset-1" *ngIf="dateValue && dateValue[0] && dateValue[1]">Dates: du {{dateValue[0] |
+            date:'d/MM/YYYY'}} au {{dateValue[1]| date:'d/MM/YYYY'}} </h5>
+        <h5 class="col-10 col-offset-1">Fait pour servir et valoir ce que de droit à Paris le {{date_aj | date:'d MMMM
+            y'}}.</h5>
+        <div class="col-12">
+            <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 30vh;">
+        </div>
+        <div style="text-align: center;" class="col-12">
+            <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 90%; max-height: 20vh;">
+        </div>
+    </div>
+</div>
+<div class="grid pt-2">
     <div class="grid card col-12 ">
         <div class="col-12 md:col-6">
-            <h4>Récapitulatif sur l'assiduité de {{ Etudiant_userdata?.civilite == 'Monsieur' ? 'M.': 'Mme.' }} {{Etudiant_userdata?.firstname | titlecase }} {{ Etudiant_userdata?.lastname | uppercase }}</h4>
+            <h4>Récapitulatif sur l'assiduité de {{ Etudiant_userdata?.civilite == 'Monsieur' ? 'M.': 'Mme.' }}
+                {{Etudiant_userdata?.firstname | titlecase }} {{ Etudiant_userdata?.lastname | uppercase }}</h4>
             <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" [style]="{'width': 'full-vw'}">
             </p-chart>
         </div>
         <p-divider class="col-1" layout="vertical"></p-divider>
         <div class="col-12 md:col-5">
-            <p-chart #chart2 type="pie" [data]="barDataHorAJ" [options]="horizontalOptions" [style]="{'width': 'full-vw'}">
+            <p-chart #chart2 type="pie" [data]="barDataHorAJ" [options]="horizontalOptions"
+                [style]="{'width': 'full-vw'}">
             </p-chart>
 
         </div>
@@ -28,6 +76,8 @@
     <div class="card col-12">
         <p-toast></p-toast>
         <h4>Listes des présences</h4>
+        <p-button label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button>
+
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="[]"
             [rows]="10" [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
             <ng-template pTemplate="header">
