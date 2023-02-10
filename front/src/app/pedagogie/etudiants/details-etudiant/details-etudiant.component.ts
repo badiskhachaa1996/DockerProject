@@ -39,6 +39,7 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_absencesNJ = 0;
   nb_presences = 0;
   showPDF = false
+  isNotEtudiant = false
   barDataHor: any = {
     labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [
@@ -115,7 +116,15 @@ export class DetailsEtudiantComponent implements OnInit {
     private userService: AuthService, private DiplomeService: DiplomeService, private GroupeService: ClasseService, public datepipe: DatePipe) { }
 
   ngOnInit(): void {
-
+    let token = null
+    try {
+      token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      token = null
+      console.error(e)
+    }
+    if (token.type == "Initial" || token.type == "Alternant")
+      this.isNotEtudiant = false
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;

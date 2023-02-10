@@ -76,7 +76,7 @@
     <div class="card col-12">
         <p-toast></p-toast>
         <h4>Listes des présences</h4>
-        <p-button label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button>
+        <p-button *ngIf="isNotEtudiant" label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button>
 
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="[]"
             [rows]="10" [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
