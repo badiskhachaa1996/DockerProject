@@ -37,6 +37,8 @@ import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@ang
 import { IntimeService } from 'src/app/services/intime.service';
 import { InTime } from 'src/app/models/InTime';
 import { info } from 'console';
+import { ProjectService } from 'src/app/services/project.service';
+import { Tache } from 'src/app/models/project/Tache';
 
 
 @Component({
@@ -225,7 +227,10 @@ export class DashboardComponent implements OnInit {
   showFormDailyActivityDetails: boolean = false;
   formDailyActivityDetails: FormGroup;
   today: Date = new Date();
-  craIsValidate: boolean = false;
+  showButtonsValidateCra: boolean = false; // permet d'afficher les boutons qui s'affiche au click pour remplir le cra
+  taskForUser: Tache[] = [];
+  showTaskForUser: boolean = false; // permet d'afficher les tâches de l'utilisateur qui sont en cours
+  clonedTaches: { [s: string]: Tache; } = {}; // pour le tableau éditable des taches
 
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
@@ -235,7 +240,7 @@ export class DashboardComponent implements OnInit {
     private formateurService: FormateurService, private paySer: PaymentService,
     private dashboardService: DashboardService, private http: HttpClient,
     private inTimeService: IntimeService, private messageService: MessageService,
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, private projectService: ProjectService,
   ) { }
 
 
@@ -464,13 +469,6 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  // methode appeler au clique du bouton valider mon CRA
-  onValidateCra(): void
-  {
-    this.craIsValidate = true;
-  }
-
-
   //Initialiser le formulaire 
   onInitFormDailyActivityDetails() {
     this.formDailyActivityDetails = this.formBuilder.group({
@@ -492,8 +490,15 @@ export class DashboardComponent implements OnInit {
     this.getTasks().removeAt(i);
   }
 
+  // toggle the form daily activity
+  onToggleFormDailyActivityDetail(): void
+  {
+    this.showFormDailyActivityDetails = !this.showFormDailyActivityDetails;
+  }
 
-  onCheckOut() {
+  // methode de calidation du cra via le formulaire
+  onValidateCraByForm() 
+  {
     const today = new Date().toLocaleDateString();
     let todayReplaced = '';
     for (let i = 0; i < today.length; i++) {
@@ -506,7 +511,7 @@ export class DashboardComponent implements OnInit {
     }
 
     const userId = this.token.id;
-    const outDate = new Date();
+    const outDate = null;
     const dateOfToday = todayReplaced;
     const ipAdress = null;
     const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
@@ -514,7 +519,9 @@ export class DashboardComponent implements OnInit {
 
     activityDetails.push(principaleActivityDetails);
 
-    this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, principale_activity_details: principaleActivityDetails, activity_details: activityDetails })
+    // todo: créer une nouvelle variable inTime à envoyer et ne pas oublier de retirer le out date
+
+    this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, craIsValidate: true, activity_details: activityDetails })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
         this.dailyCheck = response;
@@ -523,8 +530,70 @@ export class DashboardComponent implements OnInit {
         this.onIsCheck();
       })
       .catch((err) => { console.error(err); });
-
   }
+
+  // toggle sur l'affichage des tâches de l'utilisateur
+  onToggleShowTaskForUser(): void 
+  {
+    this.showTaskForUser = !this.showTaskForUser;
+  }
+
+  // methode de recuperation de la liste des tâches en cours de l'utilisateur connecté
+  onGetTaskInProgressForUser(): void
+  {
+    this.projectService.getTasksInProgressByIdUser(this.token.id)
+    .then((response) => {
+      this.taskForUser = [];
+      this.taskForUser = response;
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
+  }
+
+  // au clic du bouton de modification
+  onRowEditInit(tache: Tache) {
+    this.clonedTaches[tache._id] = {...tache};
+  }
+
+  // methode de validation du cra via la liste des tâches en cours
+  onRowEditSave(tache: Tache) {
+    // ajout de la tache au dailycheck
+    this.dailyCheck.activity_details.push(tache.libelle);
+
+    console.log(this.dailyCheck);
+    // envoi du projet modifié en base de données
+    this.projectService.putTask(tache)
+    .then((response) => {
+      this.messageService.add({severity:'success', summary:'Tâche', detail: response.success});
+
+      // modification du dailycheck en bd
+      this.inTimeService.patchCheck(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({severity:'success', summary:'Check', detail: response.success });
+      })
+      .catch((error) => { this.messageService.add({severity:'error', summary:'Check', detail: response.error}); })
+
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+
+    // après la validation
+    delete this.clonedTaches[tache._id];
+    this.messageService.add({severity:'success', summary: 'Tâche', detail:'Votre tâche a été mis à jour'});
+  }
+
+  // a l'annulation de la modif
+  onRowEditCancel(tache: Tache, index: number) {
+    delete this.clonedTaches[tache._id];
+  }
+
+
+  // methode checkout récupère l'heure du checkout
+  onCheckOut(): void
+  {
+    this.inTimeService.patchCheckOut(this.dailyCheck)
+    .then((response) => { this.messageService.add({severity:'success', summary: 'Check', detail: response.success }); })
+    .catch((error) => { this.messageService.add({severity:'error', summary: 'Check', detail: error.error }); })
+  }
+  
 
 
   onGetBackgroundColor() {

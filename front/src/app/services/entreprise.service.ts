@@ -34,6 +34,20 @@ export class EntrepriseService {
     return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  // recuperation de la liste des entreprises d'un CEO
+  getEntreprisesByIdCEO(id: string): Promise<Entreprise[]>
+  {
+    const url = `${this.apiUrl}/get-entreprises-by-id-ceo/${id}`;
+
+    return new Promise<Entreprise[]>((resolve, reject) => {
+      this.httpClient.get<Entreprise[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (err) => { reject(err); },
+        complete: () => { console.log('liste des entreprises du CEO récuperé') }
+      });
+    });
+  }
+
   //Recuperation d'une entreprise via un id
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
