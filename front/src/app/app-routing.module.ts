@@ -144,6 +144,7 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
+import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 
 const routes: Routes = [
     {
@@ -210,6 +211,7 @@ const routes: Routes = [
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+            { path: 'liste-entreprises-ceo', component: ListEntrepriseCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
