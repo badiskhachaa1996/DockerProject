@@ -404,28 +404,7 @@
         dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
     </p>
 
-    <div class="col-12">
-        <div class="card">
-            <h5>
-                Besoin d'un logement ?
-                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des
-                logements tout neufs et pas cher.
-            </h5>
-
-            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions"
-                [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
-                <ng-template pTemplate="item" let-item>
-                    <img [src]="item.previewImageSrc" style="width: 100%;" />
-                </ng-template>
-                <ng-template pTemplate="thumbnail" let-item>
-                    <div class="grid grid-nogutter justify-content-center">
-                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px" />
-                    </div>
-                </ng-template>
-            </p-galleria>
-        </div>
-    </div>
-
+    
     <div class="col-12 card">
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
@@ -503,6 +482,29 @@
             </p-table>
         </div>
     </div>
+
+    <div class="col-12">
+        <div class="card">
+            <h5>
+                Besoin d'un logement ?
+                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des
+                logements tout neufs et pas cher.
+            </h5>
+
+            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.previewImageSrc" style="width: 100%;" />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="grid grid-nogutter justify-content-center">
+                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px" />
+                    </div>
+                </ng-template>
+            </p-galleria>
+        </div>
+    </div>
+
 </div>
 
 <div *ngIf="isFormateur">
@@ -706,7 +708,7 @@
                 </div>
                 <hr>
                 <div formArrayName="tasks">
-                    <h3>tâches supplémentaires</h3>
+                    <h3>Tâches supplémentaires</h3>
                     <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
                         <div class="field col-10">
                             <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">

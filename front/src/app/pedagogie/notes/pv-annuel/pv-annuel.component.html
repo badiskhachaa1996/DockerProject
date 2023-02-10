@@ -57,15 +57,15 @@
                         <th *ngFor="let col of cols[semestre]">
                             {{col.module}}
                         </th>
-                        <th class="text-center" rowspan="2">Moyenne</th>
-                        <th class="text-center" rowspan="3">Appréciations</th>
+                        <th class="text-center" rowspan="2">Moyenne {{semestre}}</th>
+                        <th class="text-center" rowspan="3">Appréciations {{semestre}}</th>
                     </ng-container>
-                    <ng-container *ngIf="colsAnnuel">
+                    <!--<ng-container *ngIf="colsAnnuel">
                         <th class="text-center" *ngFor="let col of colsAnnuel">
                             {{col.module}}
                         </th>
-                    </ng-container>
-                    <th class="text-center" rowspan="2">Moyenne Annuel</th>
+                    </ng-container>-->
+                    <th class="text-center" rowspan="3">Moyenne Annuelle</th>
                     <th class="text-center" rowspan="3">Appréciations Générale</th>
                 </tr>
                 <tr>
@@ -74,11 +74,11 @@
                             {{col.formateur}}
                         </th>
                     </ng-container>
-                    <ng-container *ngIf="colsAnnuel">
+                    <!--<ng-container *ngIf="colsAnnuel">
                         <th class="text-center" *ngFor="let col of colsAnnuel">
                             {{col.formateur}}
                         </th>
-                    </ng-container>
+                    </ng-container>-->
                 </tr>
                 <tr>
                     <th class="text-center" colspan="6">Coefficient</th>
@@ -92,14 +92,14 @@
                             </th>
                         </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="colsAnnuel">
+                   <!-- <ng-container *ngIf="colsAnnuel">
                         <th class="text-center" *ngFor="let col of colsAnnuel">
                             {{col.coeff}}
                         </th>
                         <th class="text-center">
                             {{totalCoeff('Annuel')}}
                         </th>
-                    </ng-container>
+                    </ng-container>-->
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-data let-ri="rowIndex">
@@ -150,11 +150,11 @@
                         </ng-container>
                     </ng-container>
                     <ng-container *ngIf="colsAnnuel">
-                        <ng-container *ngFor="let col of colsAnnuel">
+                        <!--<ng-container *ngFor="let col of colsAnnuel">
                             <td class="text-center"
                                 *ngIf="dataAnnuel[data.email][col.module] || dataAnnuel[data.email][col.module]==''">
                                 {{dataAnnuel[data.email][col.module] | number : '0.2-2'}}
-                        </ng-container>
+                        </ng-container>-->
                         <td class="text-center" *ngIf="dataAnnuel[data.email]">
                             {{calculMoyenne(dataAnnuel[data.email],'Annuel') | number : '0.2-2'}}
                         </td>

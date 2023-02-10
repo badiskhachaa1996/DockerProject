@@ -1,68 +1,77 @@
 <p-toast></p-toast>
 <div class="grid">
 	<!-- To see all contracts for an enterprise -->
-	<div class="col-12">
+	<div class="col-12" *ngIf="showContractForEnterprise">
 		<div class="card">
-			<h5>Liste des contrats de l'entreprise</h5>
-			<p-table #dt1 [value]="contracts" dataKey="_id" responsiveLayout="scroll" [rowHover]="true" [paginator]="true" [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']">
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
-						<span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th style="width: 3rem"></th>
-						<th>Prénom &amp; NOM</th>
-						<th>Poste</th>
-						<th>Statut</th>
-						<th>Formation</th>
-						<th>Ecole</th>
-						<th>Date du contrat</th>
-						<th>Action</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-contract let-expanded="expanded">
-					<tr>
-						<td>
-							<button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-						</td>
-						<td style="min-width: 12rem;">
-							{{ contrat.alternant_id?.user_id?.firstname }}
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showContractForEnterprise = false; entrepriseSelected = null;" aria-hidden="true"></i>
+
+			<h5>Liste des contrats de l'entreprise: {{ entrepriseSelected.r_sociale }}</h5>
+			<p-table #dt1 [value]="contracts"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
+                [rows]="10">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 8rem;"></th>
+                        <th>Prenom &amp; Nom</th>
+                        <th>Poste</th>
+                        <th>Statut</th>
+                        <th>Formation</th>
+                        <th>Ecole</th>
+                        <th>Dates du contrat</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-contrat let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="contrat"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 11rem;">
+                            {{ contrat.alternant_id?.user_id?.firstname }}
                             {{ contrat.alternant_id?.user_id?.lastname }}
-						</td>
-						<td style="min-width: 8rem;">{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
-						<td style="min-width: 10rem;">
-							<p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
+                        </td>
+                        <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
+                        <td>
+                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut =='signé'" icon="pi pi-chevron-right" severity="success"
                                 [value]="contrat.statut">
                             </p-tag>
-						</td>
-						<td>{{ contrat.formation.titre_long }}</td>
+                        </td>
+
+                        <td>{{ contrat.formation.titre_long }}</td>
                         <td>{{ contrat.ecole?.libelle }}</td>
                         <td>{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
                         </td>
                         <td>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
-                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red;"></i>
-                            <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
-                                (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
-                                style="text-align: center; margin-left: 3px; color: blue" *ngIf="token.type != 'CEO Entreprise'"></i>
+                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red; cursor: pointer;"></i>
                         </td>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="rowexpansion" let-contract>
-					<tr>
-						<td colspan="8">
-							<div class="p-3">
-								<p-table responsiveLayout="scroll">
-									<ng-template pTemplate="header">
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-contrat>
+                    <tr>
+                        <td colspan="8">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
 										<tr>
 											<th>Horaire</th>
 											<th>Classification</th>
@@ -73,13 +82,14 @@
 											<th>Année-scolaires</th>
 										</tr>
 									</ng-template>
-									<ng-template pTemplate="body" let-order>
+									<ng-template pTemplate="emptymessage">
 										<tr>
-											<td>{{contract.horaire}}</td>
-											<td>{{contract.classification}}</td>
-											<td>{{contract.niveau_formation}}</td>
+											<td>{{contrat.horaire}}</td>
+											<td>{{contrat.classification}}</td>
+											<td>{{contrat.niveau_formation}}</td>
 											<td>{{contrat.coeff_hierachique}}</td>
 											<td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
+											
 											<td *ngIf="contrat.tuteur_id != null">
 												{{ contrat.tuteur_id?.user_id?.lastname }} 
 												{{ contrat.tuteur_id?.user_id?.firstname }}
@@ -88,6 +98,7 @@
 												{{ contrat.directeur_id?.lastname }} 
 												{{ contrat.directeur_id?.firstname }}
 											</td>
+
 											<td>
 												<ul>
 													<li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
@@ -95,17 +106,12 @@
 											</td>
 										</tr>
 									</ng-template>
-									<ng-template pTemplate="emptymessage">
-										<tr>
-											<td colspan="8">Aucun contrat n' été inseré pour cette entreprise</td>
-										</tr>
-									</ng-template>
-								</p-table>
-							</div>
-						</td>
-					</tr>
-				</ng-template>
-			</p-table>
+            					</p-table>
+        					</div>
+        				</td>
+        			</tr>
+        		</ng-template>
+        	</p-table>
 		</div>
 	</div>
 
@@ -163,7 +169,7 @@
 							{{entreprise?.ville_ent}}
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
-							<i class="pi pi-user" title="Voir les alternants sur cette entreprise" style="cursor: pointer; color: blue;" (click)="onLoadContracts(entreprise._id);"></i>
+							<i class="pi pi-user" title="Voir les alternants sur cette entreprise" style="cursor: pointer; color: blue;" (click)="onLoadContracts(entreprise);"></i>
 						</td>
 					</tr>
 				</ng-template>

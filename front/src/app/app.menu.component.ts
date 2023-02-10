@@ -44,6 +44,8 @@ export class AppMenuComponent implements OnInit {
     isAdministration: Boolean = false;
     isConseiller: teamCommercial = null
     isIntuns: Boolean = false
+    isRH = false
+    isConsulting = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
@@ -271,6 +273,8 @@ export class AppMenuComponent implements OnInit {
                     this.isAdministration = service.label.includes('dministration')
                     this.isFinance = service.label.includes('inanc')
                     this.isIntuns = service.label.includes('Intuns')
+                    this.isRH = service.label.includes('umaine') || service.label == "RH"
+                    this.isConsulting = service.label.includes('onsult')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -314,6 +318,7 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
                                     ]
                                 })
                         })
@@ -339,7 +344,7 @@ export class AppMenuComponent implements OnInit {
                                                 { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
                                                 { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
                                             ]
-                                        }, { label: 'Liste des étudiants', icon: 'pi pi-users', routerLink: '/formateur/etudiants' }
+                                        }, { label: 'Liste de vos étudiants', icon: 'pi pi-users', routerLink: '/formateur/etudiants' }
                                         //{ label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                                     ]
                                 }
@@ -372,7 +377,8 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id }
+
                                     ]
                                 },
                                 {
@@ -388,6 +394,9 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                             ];
+                            if (dataEtu.statut_dossier.includes('Paiement finalisé')) {
+                                this.model[1]["items"].push({ label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id })
+                            }
                         } else {
                             this.model = [
                                 {
@@ -479,6 +488,7 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
                                     ]
                                 })
                         })
@@ -732,8 +742,28 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
                                     ]
                                 })
+                        })
+                    }
+                    if (this.isFormateur) {
+                        this.FService.getByUserId(this.token.id).subscribe(dataF => {
+                            if (dataF)
+                                this.model.push(
+                                    {
+                                        label: "Accès Formateur",
+                                        items: [
+                                            { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
+                                            {
+                                                label: 'Gestions des évaluations', icon: 'pi pi-copy', items: [
+                                                    { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
+                                                    { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                                                ]
+                                            }, { label: 'Liste de vos étudiants', icon: 'pi pi-users', routerLink: '/formateur/etudiants' }
+                                            //{ label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
+                                        ]
+                                    })
                         })
                     }
                 } else if (this.isFinance) {
@@ -884,6 +914,77 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },]
                         }]
+                } else if (this.isRH) {
+                    this.model = [
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        }, ,
+                        {
+                            label: 'Gestions des étudiants', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                            ]
+                        },
+                        {
+                            label: 'Gestions des formateurs', icon: 'pi pi-id-card',
+                            items: [
+                                { label: 'Ajouter un formateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-formateur'] },
+                                { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
+                            ]
+                        },
+                        {
+                            label: 'Gestions des agents', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un agent', icon: 'pi pi-user-plus', routerLink: ['/admin/ajout-agent'] },
+                                { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
+                            ]
+                        },
+                        {
+                            label: 'RH',
+                            items: [
+                                { label: 'Gestion des ressources humaines', icon: 'pi pi-list', routerLink: ['/gestion-des-ressources-humaines'] },
+                            ]
+                        },
+                        {
+                            label: 'Finance',
+                            items: [
+                                { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                            ]
+                        },
+                    ]
+                } else if (this.isConsulting) {
+                    this.model = [
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        }, ,
+                        {
+                            label: 'Gestions des étudiants', icon: 'pi pi-users',
+                            items: [
+                                { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Gestion des compétences', icon: 'pi pi-book', routerLink: ['/skills-management'] },
+                            ]
+                        },
+                    ]
                 } else {
                     this.model = [
                         {

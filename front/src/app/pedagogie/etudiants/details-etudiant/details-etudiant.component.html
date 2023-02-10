@@ -3,15 +3,13 @@
 <div class="grid">
     <div class="grid card col-12 ">
         <div class="col-12 md:col-6">
-            <small style="color: green;">Pour voir les graphes appuyez sur le bouton burger du ménu, sur mobile faite une rotation d'écran</small>
-            <h4>Récapitulatif sur l'assiduité de {{ Etudiant_userdata?.civilite == 'Monsieur' ? 'M.': 'Mme.' }} {{Etudiant_userdata?.firstname }} {{ Etudiant_userdata?.lastname }}</h4>
-            <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" width="full-vw" height="40vh">
+            <h4>Récapitulatif sur l'assiduité de {{ Etudiant_userdata?.civilite == 'Monsieur' ? 'M.': 'Mme.' }} {{Etudiant_userdata?.firstname | titlecase }} {{ Etudiant_userdata?.lastname | uppercase }}</h4>
+            <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" [style]="{'width': 'full-vw'}">
             </p-chart>
         </div>
         <p-divider class="col-1" layout="vertical"></p-divider>
-        <div class=" col-12 md:col-5">
-            <p-chart #chart2 type="pie" [data]="barDataHorAJ" [options]="horizontalOptions" width="full-vw"
-                height="40vh">
+        <div class="col-12 md:col-5">
+            <p-chart #chart2 type="pie" [data]="barDataHorAJ" [options]="horizontalOptions" [style]="{'width': 'full-vw'}">
             </p-chart>
 
         </div>
@@ -20,7 +18,7 @@
             <p-progressBar class="customProgress" [value]="pourcentageAssiduite">
             </p-progressBar>
         </div>
-        <div class="col-11 sd:col-11 " *ngIf="pourcentageAssiduite>=80">
+        <div class="col-12" *ngIf="pourcentageAssiduite>=80">
             <h3>Pourcentage d'assiduité: </h3>
             <p-progressBar class="customProgress2" [value]="pourcentageAssiduite">
             </p-progressBar>

@@ -60,11 +60,11 @@
                         <ng-container *ngIf="colsExamen.eval && colsExamen.eval[col_m]">
                             <ng-container *ngFor="let col_eval of colsExamen.eval[col_m]">
                                 <td
-                                    *ngIf="dataExamen && dataExamen[data.email] && dataExamen[data.email][col_eval] && dataExamen[data.email][col_eval]?.note">
+                                    *ngIf="dataExamen && dataExamen[data.email] && dataExamen[data.email][col_eval] && dataExamen[data.email][col_eval]?.note && !isNaN(dataExamen[data.email][col_eval]?.note)">
                                     {{dataExamen[data.email][col_eval]?.note}}
                                 </td>
                                 <td
-                                    *ngIf="!dataExamen[data.email]||  !dataExamen[data.email][col_eval] || !dataExamen[data.email][col_eval]?.note ">
+                                    *ngIf="!dataExamen[data.email]||  !dataExamen[data.email][col_eval] || !dataExamen[data.email][col_eval]?.note  || isNaN(dataExamen[data.email][col_eval]?.note)">
                                     Non Noté
                                 </td>
                             </ng-container>

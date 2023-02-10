@@ -30,7 +30,7 @@ export class ListDiplomeComponent implements OnInit {
 
 
   rythmeList = [
-    { value: "Tous les jours"},
+    { value: "Tous les jours" },
     { value: "2 jours par semaine" },
     { value: "1 semaine sur 3" },
     { value: "1 jour par semaine" }
@@ -183,7 +183,7 @@ export class ListDiplomeComponent implements OnInit {
     } else {
       this.formUpdateDiplome.patchValue({ formateur_id: null })
     }
-
+    console.log(this.diplomeToUpdate)
     this.formUpdateDiplome.patchValue({
       titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long,
       type_diplome: { value: this.diplomeToUpdate.type_diplome }, domaine: { value: this.diplomeToUpdate.domaine },
@@ -196,15 +196,31 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_examen: this.diplomeToUpdate.date_fin_examen,
       date_debut_stage: this.diplomeToUpdate.date_debut_stage,
       date_fin_stage: this.diplomeToUpdate.date_fin_stage,
-      date_debut_semestre_1: this.diplomeToUpdate.date_debut_semestre_1,
-      date_fin_semestre_1: this.diplomeToUpdate.date_fin_semestre_1,
-      date_debut_semestre_2: this.diplomeToUpdate.date_debut_semestre_2,
-      date_fin_semestre_2: this.diplomeToUpdate.date_fin_semestre_2,
-      code_diplome: this.diplomeToUpdate.code_diplome
+      date_debut_semestre_1: this.convertTime(this.diplomeToUpdate.date_debut_semestre_1),
+      date_fin_semestre_1: this.convertTime(this.diplomeToUpdate.date_fin_semestre_1),
+      date_debut_semestre_2: this.convertTime(this.diplomeToUpdate.date_debut_semestre_2),
+      date_fin_semestre_2: this.convertTime(this.diplomeToUpdate.date_fin_semestre_2),
+      code_diplome: this.diplomeToUpdate.code_diplome,
+      date_debut_semestre_3: this.convertTime(this.diplomeToUpdate.date_debut_semestre_3),
+      date_fin_semestre_3: this.convertTime(this.diplomeToUpdate.date_fin_semestre_3),
+      date_debut_semestre_4: this.convertTime(this.diplomeToUpdate.date_debut_semestre_4),
+      date_fin_semestre_4: this.convertTime(this.diplomeToUpdate.date_fin_semestre_4),
+      cb_an: this.diplomeToUpdate.cb_an,
     });
 
   }
+  get cb_an() { return this.formUpdateDiplome.get('cb_an'); }
 
+  convertTime(v) {
+    let date = new Date(v)
+    let day = date.getUTCDate() + 1
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    if (year != 1970)
+      return `${day}-${month}-${year}`
+    else
+      return ""
+  }
   //Methode d'initialisation du formulaire de modification de diplome
   onInitFormUpdateDiplome() {
     this.formUpdateDiplome = this.formBuilder.group({
@@ -231,8 +247,13 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_semestre_1: [''],
       date_debut_semestre_2: [''],
       date_fin_semestre_2: [''],
+      date_debut_semestre_3: [''],
+      date_fin_semestre_3: [''],
+      date_debut_semestre_4: [''],
+      date_fin_semestre_4: [''],
       code_diplome: ['', Validators.required],
-      formateur_id: ['']
+      formateur_id: [''],
+      cb_an: ['']
     });
   }
 
@@ -259,10 +280,15 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.date_fin_examen = this.formUpdateDiplome.get('date_fin_examen')?.value;
     this.diplomeToUpdate.date_debut_stage = this.formUpdateDiplome.get('date_debut_stage')?.value;
     this.diplomeToUpdate.date_fin_stage = this.formUpdateDiplome.get('date_fin_stage')?.value;
-    this.diplomeToUpdate.date_debut_semestre_1 = this.formUpdateDiplome.get('date_debut_semestre_1')?.value;
-    this.diplomeToUpdate.date_fin_semestre_1 = this.formUpdateDiplome.get('date_fin_semestre_1')?.value;
-    this.diplomeToUpdate.date_debut_semestre_2 = this.formUpdateDiplome.get('date_debut_semestre_2')?.value;
-    this.diplomeToUpdate.date_fin_semestre_2 = this.formUpdateDiplome.get('date_fin_semestre_2')?.value;
+    this.diplomeToUpdate.date_debut_semestre_1 = new Date(this.formUpdateDiplome.get('date_debut_semestre_1')?.value);
+    this.diplomeToUpdate.date_fin_semestre_1 = new Date(this.formUpdateDiplome.get('date_fin_semestre_1')?.value);
+    this.diplomeToUpdate.date_debut_semestre_2 = new Date(this.formUpdateDiplome.get('date_debut_semestre_2')?.value);
+    this.diplomeToUpdate.date_fin_semestre_2 = new Date(this.formUpdateDiplome.get('date_fin_semestre_2')?.value);
+    this.diplomeToUpdate.date_debut_semestre_3 = new Date(this.formUpdateDiplome.get('date_debut_semestre_3')?.value);
+    this.diplomeToUpdate.date_fin_semestre_3 = new Date(this.formUpdateDiplome.get('date_fin_semestre_3')?.value);
+    this.diplomeToUpdate.date_debut_semestre_4 = new Date(this.formUpdateDiplome.get('date_debut_semestre_4')?.value);
+    this.diplomeToUpdate.date_fin_semestre_4 = new Date(this.formUpdateDiplome.get('date_fin_semestre_4')?.value);
+    this.diplomeToUpdate.cb_an = this.formUpdateDiplome.get('cb_an')?.value;
     this.diplomeToUpdate.code_diplome = this.formUpdateDiplome.get('code_diplome')?.value;
     if (this.formUpdateDiplome.get('formateur_id')?.value)
       this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
@@ -271,7 +297,7 @@ export class ListDiplomeComponent implements OnInit {
 
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
       ((response) => {
-        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
+        this.messageService.add({ severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
         this.diplomeService.getAll().subscribe(
           (data) => {
             this.diplomes = data;
@@ -279,11 +305,10 @@ export class ListDiplomeComponent implements OnInit {
           },
           (error) => { console.error(error) }
         );
-      }),
-      ((error) => {
+      }), error => {
         console.error(error);
-        this.messageService.add({ key: 'tst', severity: 'error', summary: 'Modification de diplôme', detail: 'Impossible de modifier cet diplôme, veuillez contacter un administrateur' });
-      })
+        this.messageService.add({ severity: 'error', summary: 'Modification de diplôme', detail: 'Impossible de modifier cet diplôme, veuillez contacter un administrateur' });
+      }
     );
 
   }

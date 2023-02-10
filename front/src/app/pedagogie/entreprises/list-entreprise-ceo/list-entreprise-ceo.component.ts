@@ -17,6 +17,10 @@ export class ListEntrepriseCeoComponent implements OnInit {
   loading:boolean = true;
   entreprises: Entreprise[] = [];
   contracts: ContratAlternance[] = [];
+  showContractForEnterprise: boolean = false;
+
+  // entreprise selectionné
+  entrepriseSelected: Entreprise;
 
   token: any;
 
@@ -32,14 +36,26 @@ export class ListEntrepriseCeoComponent implements OnInit {
     .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); })
   }
 
-  // Methode de redirection vers la liste des alternants de l'entreprise
-  onLoadContracts(id: string): void
+  // Methode de recuperation des alternants de l'entreprise
+  onLoadContracts(entreprise: Entreprise): void
   {
-    this.entrepriseService.getAllContratsbyEntreprise(id).subscribe({
-      next: (response) => { this.contracts = response },
+    this.entrepriseSelected = entreprise;
+
+    this.entrepriseService.getAllContratsbyEntreprise(entreprise._id).subscribe({
+      next: (response) => { 
+        this.contracts = response; 
+        console.log(this.contracts); 
+        this.showContractForEnterprise = true; 
+      },
       error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.error }); },
       complete: () => { console.log('Liste des contrats récuperé')}
     });
+  }
+
+  // methode de edirection vers la liste des présences
+  showPresence(alternant_id: String): void 
+  {
+    this.router.navigate(["details/" + alternant_id]);
   }
 
 }
