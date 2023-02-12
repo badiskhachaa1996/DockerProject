@@ -10,12 +10,13 @@ import { SeanceService } from 'src/app/services/seance.service';
 import { UIChart } from 'primeng/chart';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { MessageService } from 'primeng/api';
-import { TagModule } from 'primeng/tag';
-import { pipe } from 'rxjs';
-import { saveAs as importedSaveAs } from "file-saver";
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { AdmissionService } from 'src/app/services/admission.service';
+import { Ecole } from 'src/app/models/Ecole';
+import { EcoleService } from 'src/app/services/ecole.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { ClasseService } from 'src/app/services/classe.service';
+import * as html2pdf from 'html2pdf.js';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
@@ -26,6 +27,7 @@ export class DetailsEtudiantComponent implements OnInit {
   @ViewChild('chart2') chart2: UIChart;
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
+  date_aj = new Date()
   Etudiant_userdata: User;
   AssiduiteListe: any[];
   ListeSeanceDIC: any[] = [];
@@ -36,6 +38,8 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_absences = 0;
   nb_absencesNJ = 0;
   nb_presences = 0;
+  showPDF = false
+  isNotEtudiant = false
   barDataHor: any = {
     labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [
@@ -105,14 +109,40 @@ export class DetailsEtudiantComponent implements OnInit {
       console.error(error)
     })
   }
-
-  constructor(private admissionService: AdmissionService, private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+  dropdownEcoles = []
+  constructor(private CFAService: EcoleService, private sanitizer: DomSanitizer, private messageService: MessageService,
+    private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService,
+    private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute,
+    private userService: AuthService, private DiplomeService: DiplomeService, private GroupeService: ClasseService, public datepipe: DatePipe) { }
 
   ngOnInit(): void {
-
+    let token = null
+    try {
+      token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      token = null
+      console.error(e)
+    }
+    if (token.type == "Initial" || token.type == "Alternant")
+      this.isNotEtudiant = false
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
+      if (response.ecole_id)
+        this.CFAService.getByID(response.ecole_id).subscribe(ecole => {
+          this.ECOLE = ecole.dataEcole
+        })
+      this.CFAService.getAll().subscribe(ecoles => {
+        ecoles.forEach(ecol => {
+          if (ecol == response.ecole_id)
+            this.ECOLE = ecol
+          this.dropdownEcoles.push({ value: ecol, label: ecol.libelle })
+        })
+        if (!this.ECOLE) {
+          this.ECOLE = this.dropdownEcoles[0].value
+        }
+
+      })
 
 
       this.userService.getById(this.EtudiantDetail.user_id).subscribe((userdata) => {
@@ -231,5 +261,51 @@ export class DetailsEtudiantComponent implements OnInit {
       this.chart.refresh();
       this.chart2.refresh();
     }, 200);
+  }
+  invalidDates = []
+  dateValue: Date[] = []
+  PICTURE;
+  ECOLE: Ecole;
+  diplome_libelle: string = ""
+  initGenerer() {
+    console.log(this.ECOLE)
+    this.loadEcoleImage()
+    this.showPDF = true
+    if (this.EtudiantDetail.filiere)
+      this.DiplomeService.getById(this.EtudiantDetail.filiere).subscribe(data => {
+        this.diplome_libelle = data.titre_long
+      })
+    else
+      this.GroupeService.getPopulate(this.EtudiantDetail.classe_id).subscribe(data => {
+        let buffer: any = data.diplome_id
+        this.diplome_libelle = buffer.titre_long
+      })
+  }
+  loadEcoleImage() {
+    this.ECOLE.libelle
+    this.PICTURE = { cachet: 'assets/images/service-administratif.png', logo: "assets/images/logo-estya-flag.png", pied_de_page: "assets/images/footer-bulletinv2.png" }
+    this.CFAService.downloadCachet(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.cachet = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+    this.CFAService.downloadLogo(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.logo = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+    this.CFAService.downloadPied(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.pied_de_page = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+  }
+  exportToPDF(id = "rendu") {
+    var element = document.getElementById(id);
+    var opt = {
+      margin: 0,
+      filename: 'ATTESTATION_' + this.Etudiant_userdata.lastname + '_' + this.Etudiant_userdata.firstname + "_" + this.datepipe.transform(this.date_aj, 'd-MM-y') + '.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'px', format: 'a4', orientation: 'p', hotfixes: ['px_scaling'] } //[element.offsetWidth, element.offsetHeight]
+    };
+    html2pdf().set(opt).from(element).save();
   }
 }

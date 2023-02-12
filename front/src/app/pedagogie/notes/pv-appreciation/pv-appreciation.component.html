@@ -1,6 +1,6 @@
 <div class="col-12">
     <div class="card">
-        <h5 *ngIf="classe">PV des appréciations {{SEMESTRE}} de {{classe.abbrv}}</h5>
+        <h5 *ngIf="classe">PV Pédagogique des appréciations {{SEMESTRE}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1"
             [globalFilterFields]="['etudiant']" [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
@@ -37,13 +37,13 @@
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
                     <td class="text-center" *ngFor="let col of cols">
                         <div [pEditableColumn]="data.appreciation_module[col.module]" pEditableColumnField="module">
-                            <p-cellEditor *ngIf="data.appreciation_module && data.appreciation_module[col.module]">
+                            <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="text" [(ngModel)]="data.appreciation_module[col.module]"
                                         (input)="modified=true">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{data.appreciation_module[col.module]}}
+                                    {{data.appreciation_module[col.module]}}&nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </div>
