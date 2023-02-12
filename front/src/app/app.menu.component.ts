@@ -604,7 +604,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Alternants par entreprises', icon: 'pi pi-file', routerLink: ['/liste-entreprises-ceo'] },
                                 //{ label: 'Liste des alternants', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
-                                { label: 'Liste des tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur'] },
+                                { label: 'Tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur-ceo'] },
                             ]
                         },
                         {

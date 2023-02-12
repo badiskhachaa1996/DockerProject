@@ -145,6 +145,7 @@ import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
+import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 
 const routes: Routes = [
     {
@@ -206,6 +207,7 @@ const routes: Routes = [
             { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService] },
+            { path: 'tuteur-ceo', component: TuteurCeoComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
