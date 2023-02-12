@@ -250,6 +250,7 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
+import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 
 
 @NgModule({
@@ -510,6 +511,7 @@ import { TeamComponent } from './projects/team/team.component';
     AppreciationInputComponent,
     PvAnnuelComponent,
     TeamComponent,
+    TuteurCeoComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

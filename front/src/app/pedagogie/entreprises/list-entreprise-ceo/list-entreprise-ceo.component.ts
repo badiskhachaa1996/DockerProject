@@ -44,7 +44,6 @@ export class ListEntrepriseCeoComponent implements OnInit {
     this.entrepriseService.getAllContratsbyEntreprise(entreprise._id).subscribe({
       next: (response) => { 
         this.contracts = response; 
-        console.log(this.contracts); 
         this.showContractForEnterprise = true; 
       },
       error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.error }); },

@@ -119,6 +119,7 @@
         <div class="card">
             <!-- Table d'affichage de la liste des entreprises -->
             <h5>Liste des entreprises</h5>
+			<small style="color: red;">Pour voir les contrats sur une entreprise, veuillez la choisir</small>
 			<p-table #dt1 [value]="entreprises" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['r_sociale','fm_juridique','nb_salarie','ville_ent']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
