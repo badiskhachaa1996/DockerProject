@@ -32,6 +32,7 @@ import { info } from 'console';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { EcoleService } from 'src/app/services/ecole.service';
+import { NotificationService } from 'src/app/services/notification.service';
 var CryptoJS = require("crypto-js");
 
 @Component({
@@ -83,6 +84,7 @@ export class ListEtudiantComponent implements OnInit {
     lien_bulletin_Semestre_1: [''],
     lien_bulletin_Semestre_2: [''],
     lien_bulletin_annuel: [''],
+    lien_attestation: ['']
 
   });
 
@@ -223,7 +225,6 @@ export class ListEtudiantComponent implements OnInit {
     console.log(this.payementList)
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
-      console.log(data.payment_reinscrit)
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
       this.payementList = null
@@ -262,7 +263,8 @@ export class ListEtudiantComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService,
+    private notificationService: NotificationService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -1177,15 +1179,37 @@ export class ListEtudiantComponent implements OnInit {
 
   onUpdateLivret() {
     let index = this.etudiants.indexOf(this.showLivrets)
+    let document = ""
+    if (this.showLivrets.lien_livret.read != this.formLivret.value.lien_word_read)
+      document += "Livret,"
     this.showLivrets.lien_livret = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
+    if (this.showLivrets.lien_dossier_professionel != this.formLivret.value.lien_dossier_professionel)
+      document += "Dossier Professionel,"
     this.showLivrets.lien_dossier_professionel = this.formLivret.value.lien_dossier_professionel
+    if (this.showLivrets.lien_tableau_synthese != this.formLivret.value.lien_tableau_synthese)
+      document += "Tableau Synthèse,"
     this.showLivrets.lien_tableau_synthese = this.formLivret.value.lien_tableau_synthese
+    if (this.showLivrets.lien_bulletin['Semestre 1'] != this.formLivret.value.lien_bulletin_Semestre_1)
+      document += "Bulletin du Semestre 1,"
+    if (this.showLivrets.lien_bulletin['Semestre 2'] != this.formLivret.value.lien_bulletin_Semestre_2)
+      document += "Bulletin du Semestre 2,"
+    if (this.showLivrets.lien_bulletin['Annuel'] != this.formLivret.value.lien_bulletin_annuel)
+      document += "Bulletin Annuel,"
     this.showLivrets.lien_bulletin = { 'Semestre 1': this.formLivret.value.lien_bulletin_Semestre_1, 'Semestre 2': this.formLivret.value.lien_bulletin_Semestre_2, 'Annuel': this.formLivret.value.lien_bulletin_annuel }
+    if (this.showLivrets.lien_attestation != this.formLivret.value.lien_attestation)
+      document += "Attestation,"
+    this.showLivrets.lien_attestation = this.formLivret.value.lien_attestation
+    document.substring(-1)
+    console.log(document)
     this.etudiantService.update(this.showLivrets).subscribe(data => {
+      let user: any = this.etudiants[index].user_id
+      if (document && confirm('Voulez-vous notifier à l\'étudiant de la disponibilité des documents ' + document + " ?"))
+        this.notificationService.newDocument(user.email, document)
       this.etudiants[index].lien_livret = this.showLivrets.lien_livret
       this.etudiants[index].lien_dossier_professionel = this.showLivrets.lien_dossier_professionel
       this.etudiants[index].lien_tableau_synthese = this.showLivrets.lien_tableau_synthese
       this.etudiants[index].lien_bulletin = this.showLivrets.lien_bulletin
+      this.etudiants[index].lien_attestation = this.showLivrets.lien_attestation
       this.showLivrets = null
       this.formLivret.reset()
       this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
@@ -1201,6 +1225,7 @@ export class ListEtudiantComponent implements OnInit {
       lien_bulletin_Semestre_1: (this.showLivrets.lien_bulletin['Semestre 1']) ? this.showLivrets.lien_bulletin['Semestre 1'] : "",
       lien_bulletin_Semestre_2: (this.showLivrets.lien_bulletin['Semestre 2']) ? this.showLivrets.lien_bulletin['Semestre 2'] : "",
       lien_bulletin_annuel: (this.showLivrets.lien_bulletin['Annuel']) ? this.showLivrets.lien_bulletin['Annuel'] : "",
+      lien_attestation: (this.showLivrets.lien_attestation) ? this.showLivrets.lien_attestation : "",
 
     })
   }

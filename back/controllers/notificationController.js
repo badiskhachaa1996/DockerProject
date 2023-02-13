@@ -126,7 +126,7 @@ app.post("/viewNotifs", (req, res) => {
     res.status(200).send(returnTick)
 });
 
-app.get('/sendEmail/:email_etudiant/:document', (req, res) => {
+app.get('/newDocument/:email_etudiant/:document', (req, res) => {
     let htmlmail = `
     <p style="font-size:20px; color:black">Bonjour,</p>
     <p>   </p>
