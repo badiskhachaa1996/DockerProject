@@ -373,7 +373,7 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="width: 3rem"></th>
-						<th pSortableColumn="nom_prenom" style="text-align: center;">Nom & Prénom <p-sortIcon
+						<th pSortableColumn="nom_prenom" style="text-align: center;">Prénom & NOM<p-sortIcon
 								field="nom_prenom"></p-sortIcon>
 						</th>
 						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon
@@ -397,8 +397,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;">
-							{{formateur.user_id.lastname | uppercase}}
 							{{formateur.user_id.firstname | titlecase}}
+							{{formateur.user_id.lastname | uppercase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
