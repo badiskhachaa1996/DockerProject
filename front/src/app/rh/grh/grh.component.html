@@ -47,7 +47,7 @@
                                     <button type="button" pButton pRipple [pRowToggler]="presence" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
                                 <td style="min-width: 8rem;">{{ presence.user_id?.firstname | titlecase }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id?.firstname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.lastname | uppercase }}</td>
                                 <td style="min-width: 8rem;">{{ presence.user_id?.email }}</td>
                                 <td style="min-width: 8rem;">{{ presence.user_id?.type }}</td>
                                 <td style="min-width: 8rem;">{{ presence.date_of_the_day }}</td>
