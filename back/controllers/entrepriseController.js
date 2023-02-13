@@ -96,7 +96,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
 
                                     // création du mail à envoyer
                                     let Ceo_htmlmail =
-                                    "<p>Bonjour,</p><p>Une nouvelle entreprise vous à été attribuer sur votre espace, merci de consulter et de consulter les contrats d'alternances, vous récevrez un mail à chaque ajout de contrat.</p>" +
+                                    "<p>Bonjour,</p><p>Une nouvelle entreprise vous à été attribué sur votre espace IMS, merci de consulter les contrats d'alternances, vous récevrez un mail à chaque ajout de contrat.</p>" +
                                     " <p>Cordialement.</p>";
 
 
