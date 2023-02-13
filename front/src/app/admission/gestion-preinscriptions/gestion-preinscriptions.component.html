@@ -286,8 +286,8 @@
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
-                            Email perso <p-sortIcon field="user_id.email_perso"></p-sortIcon>
+                        <th scope="col" style="text-align: center;">
+                            Emails
                         </th>
                         <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
                             ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
@@ -353,7 +353,7 @@
                             {{ prospect.campus_choix_1 }}
                         </td>
                         <td>
-                            {{ prospect.user_id?.email_perso }}
+                            {{prospect.user_id?.email}} {{ prospect.user_id?.email_perso }}
                         </td>
                         <td>
                             {{ prospect.code_commercial }}
@@ -415,7 +415,6 @@
                         <th>Date de naissance</th>
                         <th>Nationnalité</th>
                         <th>Pays de résidence</th>
-                        <th>Email</th>
                         <th>Statut Pro</th>
                         <th>Téléphone</th>
                     </tr>
@@ -429,7 +428,6 @@
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
                         <td>{{prospect.user_id.nationnalite}}</td>
                         <td>{{prospect.user_id.pays_adresse}}</td>
-                        <td>{{prospect.user_id.email}}</td>
                         <td>{{prospect.statut_actuel}}</td>
                         <td>
                             {{ prospect.user_id.indicatif }}

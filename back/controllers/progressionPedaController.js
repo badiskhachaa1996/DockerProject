@@ -18,7 +18,7 @@ app.post("/create", (req, res, next) => {
 });
 
 app.get('/getAllByUserID/:user_id', (req, res, next) => {
-    ProgressionPeda.find({ user_id: req.params.user_id }).populate('seance_id').then(pps => {
+    ProgressionPeda.find({ user_id: req.params.user_id }).populate('seance_id').populate({ path: "seance_id", populate: { path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } } }).then(pps => {
         res.status(201).send(pps)
     }).catch((error) => { res.status(500).send(error); });
 });

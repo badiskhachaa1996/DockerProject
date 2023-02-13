@@ -594,7 +594,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Date de naissance'] = p.date_naissance
       t['Pays de residence'] = p['pays_de_residence']
       t['Nationalite'] = p?.user_id?.nationnalite
-      t['Email'] = p?.user_id?.email
+      t['Email'] = p?.user_id?.email + " " + p?.user_id?.email_perso
       t['Telephone'] = p?.user_id?.indicatif + p?.user_id?.phone
       t['Ecole demande'] = p?.type_form
       t['1er choix'] = p.campus_choix_1
