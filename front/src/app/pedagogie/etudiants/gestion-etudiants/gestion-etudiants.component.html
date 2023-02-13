@@ -30,7 +30,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th pSortableColumn="user_id.firstname">Prénom Nom</th>
+                        <th pSortableColumn="user_id.firstname">Prénom NOM</th>
                         <th pSortableColumn="classe_id.abbrv">Groupe</th>
                         <th pSortableColumn="email">Email</th>
                         <th pSortableColumn="user_id.last_connection">Dernière connexion</th>
@@ -46,7 +46,7 @@
                         </td>
 
                         <td>
-                            {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
+                            {{ etudiant.user_id.firstname | titlecase }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
                         <td style="min-width: 10rem;">{{ etudiant.classe_id?.abbrv }}</td>
                         <td style="min-width: 10rem;">

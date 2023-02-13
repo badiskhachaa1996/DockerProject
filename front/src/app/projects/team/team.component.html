@@ -33,7 +33,7 @@
 					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
 					pTooltip="Fermer" (click)="showFormAddSalaries = false" aria-hidden="true"></i>
             <h4 style="text-align: center;">Ajouter à l'équipe :</h4>
-            <form class="p-fluid" [formGroup]="formAddTeam" (ngSubmit)="onAddTeam()">
+            <form class="p-fluid" [formGroup]="formAddTeam">
                 <div class="p-formgrid grid">
                     <div class="field col-12">
 						<label htmlFor="attribuateTo">Sélectionner les membres à ajouter à l'équipe</label>
@@ -117,8 +117,8 @@
                    <div class="flex align-items-center justify-content-center gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-list" 
                             class="p-button-rounded p-button-text" (click)="showTableOfSalaries = true"></button>        
-                        <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-user-plus" 
-                            class="p-button-rounded p-button-text p-button-success mr-2" (click)="showFormAddSalaries = true">  </button>        
+                        <!--<button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-user-plus" 
+                            class="p-button-rounded p-button-text p-button-success mr-2" (click)="showFormAddSalaries = true">  </button>-->        
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
                            icon="pi pi-pencil" (click)="onRowEditInit(team)"
                            class="p-button-rounded p-button-text p-button-danger"></button>
