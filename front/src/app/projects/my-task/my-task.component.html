@@ -1,6 +1,141 @@
 <div class="grid">
-    <div class="col-12">
+	<!-- Formulaire d'ajout d'une nouvelle tâche à un projet -->
+	<div class="col-12" *ngIf="showFormAddTache">
+		<div class="card">
+			<i class="pi pi-times-circle"
+					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+					pTooltip="Fermer" (click)="showFormAddTache = false" aria-hidden="true"> </i>
+
+			<h3>Ajouter une tâche</h3>
+			<form class="p-fluid" [formGroup]="formAddTache" (ngSubmit)="onAddTask()">
+				<div class="p-formgrid grid">
+					<div class="field col-12">
+						<label htmlFor="libelle">Libelle</label>
+						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+					</div>
+					<div class="field col-12">
+						<label For="projet">Projet</label>
+						<p-dropdown  [options]="dropdownProjet" formControlName="projet"
+							emptyFilterMessage="Pas de projet trouvé" filterPlaceholder="Trouver un projet" filter="true">
+						</p-dropdown>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="dateLimite">Date limite</label>
+						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="attribuateTo">Attribution</label>
+						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette tâche" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
+									Selectionner les personnes qui vont effectuer cette tâche
+								</div>
+							</ng-template>
+							<ng-template let-user pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{user.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+					
+					<div>
+						<button pButton type="submit" label="Ajouter la tâche" icon="pi pi-plus" [disabled]="formAddTache.invalid"></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Formulaire d'ajout de modification d'une tâche d'un projet -->
+	<div class="col-12" *ngIf="showFormUpdateTache">
+		<div class="card">
+			<i class="pi pi-times-circle"
+					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+					pTooltip="Fermer" (click)="showFormUpdateTache = false" aria-hidden="true"> </i>
+
+			<h3>Modifier la tâche</h3>
+			<form class="p-fluid" [formGroup]="formUpdateTache" (ngSubmit)="onUpdateTask()">
+				<div class="p-formgrid grid">
+					<div class="field col-12">
+						<label htmlFor="libelle">Libelle</label>
+						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+					</div>
+					<div class="field col-12">
+						<label For="projet">Projet</label>
+						<p-dropdown  [options]="dropdownProjet" formControlName="projet"
+							emptyFilterMessage="Pas de projet trouvé" filterPlaceholder="Trouver un projet" filter="true">
+						</p-dropdown>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="dateLimite">Date limite</label>
+						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="attribuateTo">Attribution</label>
+						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette tâche" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
+									Selectionner les personnes qui vont effectuer cette tâche
+								</div>
+							</ng-template>
+							<ng-template let-user pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{user.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+					
+					<div>
+						<button pButton type="submit" label="Modifier la tâche" icon="pi pi-pencil" [disabled]="formUpdateTache.invalid"></button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+
+
+	<!-- Formulaire de mise à jour du pourcentage d'une tâche -->
+	<div class="col-12" *ngIf="showFormUpdateTachePercent">
+		<div class="card">
+			<i class="pi pi-times-circle"
+				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+				pTooltip="Fermer" (click)="showFormUpdateTachePercent = false;" aria-hidden="true"> </i>
+
+			<h5>Mettre à jour le pourcentage de la tâche</h5>
+			<small>Mettre une valeur entre 0 et 100</small>
+			<form class="p-fluid" [formGroup]="formUpdateTachePercent" (ngSubmit)="onUpdateTachePercent();">
+				<div class="p-formgrid grid">
+					<div class="field col-8">
+						<input pInputText id="pourcentage" type="number" min="0" max="100" formControlName="percent" placeholder="Pourcentage" />
+					</div>
+					<div class="field col-4">
+						<button pButton label="Valider" type="submit" [disabled]="formUpdateTachePercent.invalid"></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+    <div class="col-12" *ngIf="showTacheInProgress">
+		<i class="pi pi-times-circle"
+				style="float: right; margin-top: 10px; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+				pTooltip="Fermer" (click)="showTacheInProgress = false;" aria-hidden="true"> </i>
         <div class="card">
+			<div style="clear: right;"></div>
+
+			<button pButton type="button" class="mt-4" label="Ajouter" icon="pi pi-plus" style="float: right;" (click)="showFormAddTache = true;"></button>
+
 			<h3>Vos tâches en cours</h3>
 			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="tachesInProgress?.length > 0">
 				<div class="md:col-4" *ngFor="let task of tachesInProgress; let i = index">
@@ -14,10 +149,14 @@
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
 						</p>
-						<div *ngIf="userConnected._id == task.creator_id ">
-							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
-							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
+
+						<div>
+							
 						</div>
+
+						<button pButton type="submit" icon="pi pi-percentage" title="Mettre le pourcentage à jour" (click)="onFillFormUpdatePercent(task);"></button>
+						<button pButton type="submit" icon="pi pi-pencil" title="Modifier la tâche" class="p-button-info ml-2" (click)="onFillFormUpdateTache(task);"></button>
+						<button pButton type="submit" title="Supprimer la tâche" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
 					</p-card>
 				</div>
 			</div>
@@ -25,27 +164,83 @@
     </div>
 
     <div class="col-12">
-        <div class="card">
-            <h3>Vos tâches finis</h3>
-            <div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="tachesFinished?.length > 0">
-				<div class="md:col-4" *ngFor="let task of tachesFinished; let i = index">
-					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
-						<p>
-							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
-						</p>
-						<p>
-							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
-						</p>
-						<p>
-							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
-						</p>
-						<div *ngIf="userConnected._id == task.creator_id ">
-							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
-							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
-						</div>
-					</p-card>
-				</div>
-			</div>
-        </div>
+		<div class="card">
+			<button pButton type="button" label="Lister les tâches en cours" icon="pi pi-plus" style="float: right;" (click)="showTacheInProgress = true;"></button>
+
+			<h5>Vos tâches finis</h5>
+			<p-table #dt1 [value]="tachesFinished" dataKey="_id" [rows]="10" [loading]="loading" 
+					 [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['libelle', 'project_id.libelle', 'date_limite']" 
+					 responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Faire une recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Libelle
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Projet
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Deadline
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Créateur
+							</div>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Participant
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-tache>
+					<tr>
+						<td style="min-width: 14rem;">
+							{{tache.libelle}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{tache.project_id?.libelle}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{tache.date_limite | date: 'dd-MM-YYYY'}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{tache.creator_id?.firstname | titlecase}} {{tache.creator_id?.lastname | uppercase}}
+						</td>
+						<td style="min-width: 12rem; ">
+							<ul>
+								<li *ngFor="let user_id of tache.attribuate_to; let i = index;">
+									{{user_id.firstname | titlecase}} {{user_id.lastname | uppercase}}
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="5">Aucune tâches finis.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="5">Chargement des données...</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
     </div>
 </div>

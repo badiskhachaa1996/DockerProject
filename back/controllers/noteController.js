@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
 const { PVAnnuel } = require("../models/pvAnnuel");
-const { get } = require("mongoose");
+const { Examen } = require("../models/examen");
 
 
 //Recuperation de la liste des notes
@@ -155,7 +155,7 @@ app.put("/updateV2/:id", (req, res) => {
         .catch((error) => { res.status(500).send(error.message); })
 })
 
-app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
+app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
     let sem = req.params.semestre
     if (sem == "Annuel")
         sem = /./i
@@ -170,7 +170,11 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
         let dicMatiere = {}
         let listEtudiantID = []
         let dicEtudiant = {}
+        let listExamen = []
         notes.forEach(n => {
+            if (n.examen_id && !listExamen.includes(n.examen_id._id))
+                listExamen.push(n.examen_id._id)
+
             if (n.examen_id && n.examen_id.matiere_id) {
                 if (!Array.isArray(n.examen_id.matiere_id))
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
@@ -192,95 +196,110 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 }
             })
         })
-        listEtudiantID.forEach(e_id => {
-            if (!listNotesEtudiantsCoeff[e_id])
-                listNotesEtudiantsCoeff[e_id] = {}
-            if (!dicAppreciation[e_id])
-                dicAppreciation[e_id] = {}
-            listMatiereNOM.forEach(m_nom => {
-                if (!listNotesEtudiantsCoeff[e_id][m_nom])
-                    listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0, Appreciation: [] }
-                if (!dicAppreciation[e_id][m_nom])
-                    dicAppreciation[e_id][m_nom] = []
-                notes.forEach(note => {
-                    if (note.examen_id && note.examen_id.matiere_id) {
-                        if (!Array.isArray(note.examen_id.matiere_id))
-                            note.examen_id.matiere_id = [note.examen_id.matiere_id]
-                        note.examen_id.matiere_id.forEach(mid => {
-                            /*if (mid.nom == m_nom && mid.nom.includes('Culture économique, juridique et managériale') == true && note.examen_id.niveau != 'Control Continu')
-                                console.log(note._id, note.examen_id.niveau, note.note_val, note.etudiant_id.user_id.lastname, 1)*/
-                            if (note.etudiant_id && note.etudiant_id.classe_id)// && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id)
-                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && !note.isAbsent) {
-                                    if (note.examen_id.niveau == 'Control Continu') {
-                                        if (note.appreciation && !dicAppreciation[e_id][m_nom].includes(note.appreciation))
-                                            dicAppreciation[e_id][m_nom].push(note.appreciation)
-                                        for (let i = 0; i < note.examen_id.coef; i++)
-                                            listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                    }
-                                    else {
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max));
-                                        if (note.appreciation && !dicAppreciation[e_id][m_nom].includes(note.appreciation))
-                                            dicAppreciation[e_id][m_nom].push(note.appreciation)
-                                    }
-                                }
-                            //else console.log(e_id, note._id, note.examen_id._id)
-                        })
-                        note.examen_id.matiere_id.forEach(mid => {
-                            if (note.etudiant_id && note.etudiant_id.classe_id)//&& mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id)
-                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && !note.isAbsent) {
-                                    if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0) {
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
-                                        if (mid.nom == m_nom && mid.nom.includes('Culture économique, juridique et managériale'))
-                                            listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])) / 2
-                                    }
-                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
-                                    }
-                                    else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length == 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])
-                                    else
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = 0
-                                }
-                        })
-                    }
+
+        Examen.find({ _id: { $nin: listExamen }, classe_id: req.params.classe_id, semestre: sem }).populate('matiere_id').populate({ path: "formateur_id", populate: { path: "user_id" } }).then(examens => {
+            req.params.source = "PV"
+            if (req.params.source == "PV" && examens)
+                examens.forEach(ex => {
+                    ex.matiere_id.forEach(mid => {
+                        if (notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
+                            listMatiereNOM.push(mid.nom)
+                            dicMatiere[mid.nom] = mid
+                            cols.push({ module: mid.nom, formateur: ex.formateur_id.user_id.lastname.toUpperCase() + " " + ex.formateur_id.user_id.firstname, coeff: mid.coeff })
+                        }
+                    })
                 })
-                notes.forEach(n => {
-                    if (Array.isArray(dicAppreciation[e_id][m_nom]))
-                        dicAppreciation[e_id][m_nom] = dicAppreciation[e_id][m_nom].join(', ')
-                })
-            })
-        })
-        listEtudiantID.forEach(e_id => {
-            listMoyenneEtudiants[e_id] = {}
-            listMatiereNOM.forEach(m_nom => {
-                listMoyenneEtudiants[e_id][m_nom] = 0
-                if (listNotesEtudiantsCoeff[e_id][m_nom]['Total'])
-                    listMoyenneEtudiants[e_id][m_nom] = listNotesEtudiantsCoeff[e_id][m_nom]['Total']
-            })
-        })
-        listMatiereNOM.forEach(m_nom => {
-            listMoyenne[m_nom] = []
             listEtudiantID.forEach(e_id => {
-                listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
+                if (!listNotesEtudiantsCoeff[e_id])
+                    listNotesEtudiantsCoeff[e_id] = {}
+                if (!dicAppreciation[e_id])
+                    dicAppreciation[e_id] = {}
+                listMatiereNOM.forEach(m_nom => {
+                    if (!listNotesEtudiantsCoeff[e_id][m_nom])
+                        listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0, Appreciation: [] }
+                    if (!dicAppreciation[e_id][m_nom])
+                        dicAppreciation[e_id][m_nom] = []
+                    notes.forEach(note => {
+                        if (note.examen_id && note.examen_id.matiere_id) {
+                            if (!Array.isArray(note.examen_id.matiere_id))
+                                note.examen_id.matiere_id = [note.examen_id.matiere_id]
+                            note.examen_id.matiere_id.forEach(mid => {
+                                /*if (mid.nom == m_nom && mid.nom.includes('Culture économique, juridique et managériale') == true && note.examen_id.niveau != 'Control Continu')
+                                    console.log(note._id, note.examen_id.niveau, note.note_val, note.etudiant_id.user_id.lastname, 1)*/
+                                if (note.etudiant_id && note.etudiant_id.classe_id)// && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id)
+                                    if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && !note.isAbsent) {
+                                        if (note.examen_id.niveau == 'Control Continu') {
+                                            if (note.appreciation && !dicAppreciation[e_id][m_nom].includes(note.appreciation))
+                                                dicAppreciation[e_id][m_nom].push(note.appreciation)
+                                            for (let i = 0; i < note.examen_id.coef; i++)
+                                                listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                        }
+                                        else {
+                                            listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max));
+                                            if (note.appreciation && !dicAppreciation[e_id][m_nom].includes(note.appreciation))
+                                                dicAppreciation[e_id][m_nom].push(note.appreciation)
+                                        }
+                                    }
+                                //else console.log(e_id, note._id, note.examen_id._id)
+                            })
+                            note.examen_id.matiere_id.forEach(mid => {
+                                if (note.etudiant_id && note.etudiant_id.classe_id)//&& mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id)
+
+                                    if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && !note.isAbsent) {
+                                        if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0) {
+                                            listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
+                                            if (mid.nom == m_nom && mid.nom.includes('Culture économique, juridique et managériale'))
+                                                listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])) / 2
+                                        }
+                                        else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
+                                            listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
+                                        }
+                                        else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length == 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
+                                            listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])
+                                    }
+                            })
+                        }
+                    })
+                    notes.forEach(n => {
+                        if (Array.isArray(dicAppreciation[e_id][m_nom]))
+                            dicAppreciation[e_id][m_nom] = dicAppreciation[e_id][m_nom].join(', ')
+                    })
+                })
             })
+            listEtudiantID.forEach(e_id => {
+                listMoyenneEtudiants[e_id] = {}
+                listMatiereNOM.forEach(m_nom => {
+                    listMoyenneEtudiants[e_id][m_nom] = 0
+                    if (listNotesEtudiantsCoeff[e_id][m_nom]['Total'])
+                        listMoyenneEtudiants[e_id][m_nom] = listNotesEtudiantsCoeff[e_id][m_nom]['Total']
+                })
+            })
+            listMatiereNOM.forEach(m_nom => {
+                listMoyenne[m_nom] = []
+                listEtudiantID.forEach(e_id => {
+                    listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
+                })
+            })
+
+            listEtudiantID.forEach(e_id => {
+                data.push({
+                    custom_id: dicEtudiant[e_id].custom_id,
+                    nom: dicEtudiant[e_id].user_id.lastname,
+                    prenom: dicEtudiant[e_id].user_id.firstname,
+                    date_naissance: formatDate(new Date(dicEtudiant[e_id]?.date_naissance)),
+                    date_inscrit: formatDate((dicEtudiant[e_id].user_id?.date_creation)),
+                    email: dicEtudiant[e_id].user_id.email,
+                    notes: listMoyenneEtudiants[e_id],
+                    moyenne: avgDic(listMoyenneEtudiants[e_id]),
+                    appreciation_module: dicAppreciation[e_id],
+                    appreciation: "", //Du semestre
+                    appreciation_annuel: "" //De l'année
+                })
+            })
+            //listMoyenneEtudiants Vide TODO
+            res.send({ data, cols: cols.sort(compare) })
         })
 
-        listEtudiantID.forEach(e_id => {
-            data.push({
-                custom_id: dicEtudiant[e_id].custom_id,
-                nom: dicEtudiant[e_id].user_id.lastname,
-                prenom: dicEtudiant[e_id].user_id.firstname,
-                date_naissance: formatDate(new Date(dicEtudiant[e_id]?.date_naissance)),
-                date_inscrit: formatDate((dicEtudiant[e_id].user_id?.date_creation)),
-                email: dicEtudiant[e_id].user_id.email,
-                notes: listMoyenneEtudiants[e_id],
-                moyenne: avgDic(listMoyenneEtudiants[e_id]),
-                appreciation_module: dicAppreciation[e_id],
-                appreciation: ""
-            })
-        })
-        //listMoyenneEtudiants Vide TODO
-        res.send({ data, cols: cols.sort(compare) })
     })
 })
 function padTo2Digits(num) { return num.toString().padStart(2, '0'); }
@@ -305,7 +324,7 @@ function avgDic(myDic) {
     return summ / ArrayLen;
 }
 function compare(a, b) {
-    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
+    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration Réseaux et Services/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
     let aInList = -1
     let bInList = -1
     listModule.forEach((val, index) => {
@@ -316,13 +335,7 @@ function compare(a, b) {
             bInList = index
     })
     if (aInList == -1 && bInList == -1) {
-        if (a.formateur < b.formateur) {
-            return -1;
-        }
-        if (a.formateur > b.formateur) {
-            return 1;
-        }
-        return 0;
+        return 1;
     } else if (aInList != -1 && bInList != -1) {
         if (aInList < bInList) {
             return -1;
@@ -333,22 +346,10 @@ function compare(a, b) {
         return 0;
     } else if (aInList != -1) {
         //SI B n'est pas dans la liste alors
-        if (a.formateur < b.formateur) {
-            return -1;
-        }
-        if (a.formateur > b.formateur) {
-            return 1;
-        }
         return 0;
     } else {
         //SI A n'est pas dans la liste alors
-        if (a.formateur < b.formateur) {
-            return -1;
-        }
-        if (a.formateur > b.formateur) {
-            return 1;
-        }
-        return 0;
+        return 1;
     }
 
 }
@@ -365,6 +366,14 @@ app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
         res.send(newPv)
     })
 });
+app.post('/replacePV/:id', (req, res) => {
+    PVAnnuel.findByIdAndUpdate(req.params.id, { ...req.body }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.send(doc)
+        } else
+            res.status(500).send(err)
+    })
+})
 //Chargement d'un PV
 app.get("/loadPV/:semestre/:classe_id", (req, res) => {
     PVAnnuel.find({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
@@ -383,6 +392,17 @@ app.delete("/deletePV/:id", (req, res) => {
 app.get('/getLastPV/:semestre/:classe_id', (req, res) => {
     PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }, {}, { sort: { date_creation: -1 } }).then(pv => {
         res.send(pv)
+    })
+})
+
+app.get('/repairNote', (req, res) => {
+    Note.find().populate('etudiant_id').then(notes => {
+        notes.forEach(n => {
+            if (n.classe_id && n.etudiant_id)
+                if (n.classe_id != n.etudiant_id.classe_id)
+                    Note.findByIdAndUpdate(n._id, { classe_id: n.etudiant_id.classe_id }, { new: true }, (err, doc) => { })
+        })
+        res.send({ message: "DAB" })
     })
 })
 

@@ -19,6 +19,7 @@ export class AppreciationInputComponent implements OnInit {
   colsExamen;
   dataExamen;
   ID = this.route.snapshot.paramMap.get('classe_id');
+  CLASSES_ID = []
   FORMATEUR_ID = this.route.snapshot.paramMap.get('formateur_id');
   SEMESTRE = this.route.snapshot.paramMap.get('semestre');
   classe: Classe;
@@ -26,44 +27,89 @@ export class AppreciationInputComponent implements OnInit {
   loaded = false;
   modified = false
   pvAnnuel = []
+  PVLOADED: any = "Nouveau"
   @ViewChild('dt1') pTableRef: Table;
-  constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService, private ExamenService: ExamenService) { }
+  constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService,
+    private ExamenService: ExamenService) { }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.modified
   }
-  
+
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
   }
 
   ngOnInit(): void {
+    this.ID = this.ID.replace(',', '')
+    this.CLASSES_ID = this.ID.split(',')
+    this.ID = this.ID.split(',')[0]
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
-    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
-      this.cols = data.cols
-      this.dataPV = data.data
+    this.NoteService.getLastPVAnnuel(this.SEMESTRE, this.ID).subscribe(pv => {
+      if (pv) {
+        pv.pv_annuel_data.forEach((d, index) => {
+          if (!d.appreciation_module) {
+            d.appreciation_module = {}
+          }
+          pv.pv_annuel_cols.forEach(col_m => {
+            if (!d.appreciation_module[col_m.module])
+              d.appreciation_module[col_m.module] = ""
+          })
+          pv.pv_annuel_data[index] = d
+        })
+        this.cols = pv.pv_annuel_cols
+        this.dataPV = pv.pv_annuel_data
+        this.PVLOADED = pv
+        this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
+      } else {
+        this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+          this.cols = data.cols
+          this.dataPV = data.data
+          this.dataPV.forEach((d, index) => {
+            if (!d.appreciation_module) {
+              d.appreciation_module = {}
+            }
+            this.cols.forEach(col_m => {
+              if (!d.appreciation_module[col_m.module])
+                d.appreciation_module[col_m.module] = ""
+            })
+            this.dataPV[index] = d
+          })
+        })
+      }
     })
+
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
     })
     this.ExamenService.getAppreciation(this.SEMESTRE, this.ID, this.FORMATEUR_ID).subscribe(data => {
       this.colsExamen = data.cols
       this.dataExamen = data.data
-      console.log(this.colsExamen, this.dataExamen)
+      console.log(data)
     })
   }
 
   savePv() {
-    this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
-      if (data) {
+    if (this.PVLOADED == "Nouveau")
+      this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
+        if (data) {
+          this.modified = false
+          this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
+          this.pvAnnuel.push(data)
+        }
+      })
+    else {
+      this.PVLOADED.pv_annuel_data = this.dataPV
+      this.PVLOADED.pv_annuel_cols = this.cols
+      this.NoteService.replacePV(this.PVLOADED._id, this.PVLOADED).subscribe(data => {
         this.modified = false
         this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
-        this.pvAnnuel.push(data)
-      }
-    })
+      })
+    }
+
   }
 
   delete(pv) {
@@ -79,12 +125,12 @@ export class AppreciationInputComponent implements OnInit {
   loadPV(pv) {
     if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
       pv.pv_annuel_data.forEach((d, index) => {
-        if (!d.appreciation_modules) {
-          d.appreciation_modules = {}
+        if (!d.appreciation_module) {
+          d.appreciation_module = {}
         }
         this.colsExamen.module.forEach(col_m => {
-          if (!d.appreciation_modules[col_m])
-            d.appreciation_modules[col_m] = ""
+          if (!d.appreciation_module[col_m])
+            d.appreciation_module[col_m] = ""
         })
         pv.pv_annuel_data[index] = d
       })
@@ -111,6 +157,17 @@ export class AppreciationInputComponent implements OnInit {
       this.hideForPDF = false
       //element.style.transform = '';
     });
+  }
+
+  libelleCleaner(libelle: string) {
+    if (libelle.lastIndexOf('|') != -1) {
+      return libelle.slice(libelle.lastIndexOf('|') + 2)
+    }
+    return libelle
+  }
+
+  isNaN(note){
+    return isNaN(note)
   }
 
 }

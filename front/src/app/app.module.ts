@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-
+import { registerLocaleData } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -221,7 +221,7 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
-
+import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
 import {
   MsalInterceptor,
@@ -250,6 +250,7 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
+import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 
 
 @NgModule({
@@ -510,16 +511,21 @@ import { TeamComponent } from './projects/team/team.component';
     AppreciationInputComponent,
     PvAnnuelComponent,
     TeamComponent,
+    TuteurCeoComponent,
   ],
-  providers: [MessageService, ConfirmationService,
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
+  { provide: LocationStrategy, useClass: HashLocationStrategy },
     MenuService, ConfigService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true,
-    },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: MsalInterceptor,
+    multi: true,
+  },
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    registerLocaleData(fr.default);
+  }
+}

@@ -144,6 +144,8 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
 import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
+import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
+import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 
 const routes: Routes = [
     {
@@ -161,7 +163,7 @@ const routes: Routes = [
             { path: 'ecole', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ecole/:id', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ajout-ecole', component: AddEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-            { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService] },
             { path: 'campus/:id', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ajout-campus', component: AddCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
@@ -180,7 +182,7 @@ const routes: Routes = [
             { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'progression-pedagogique/:formateur_id', component: ProgressionPedagogiqueComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-            { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
             { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
@@ -197,7 +199,7 @@ const routes: Routes = [
             { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
             { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
             { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-            { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
+            { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
             { path: 'contact', component: ContactComponent },
             { path: 'list-events', component: ListEventsComponent, canActivate: [AuthGuardService] },
@@ -205,11 +207,13 @@ const routes: Routes = [
             { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService] },
+            { path: 'tuteur-ceo', component: TuteurCeoComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+            { path: 'liste-entreprises-ceo', component: ListEntrepriseCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 

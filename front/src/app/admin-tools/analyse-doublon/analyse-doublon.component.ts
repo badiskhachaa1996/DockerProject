@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FormateurService } from 'src/app/services/formateur.service';
+import { NoteService } from 'src/app/services/note.service';
 import { runInThisContext } from 'vm';
 
 @Component({
@@ -21,7 +22,8 @@ export class AnalyseDoublonComponent implements OnInit {
   sameEmailPersoIMS: User[] = []
 
   constructor(private UserService: AuthService, private EtudiantService: EtudiantService, private MessageService: MessageService,
-    private FormateurService: FormateurService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService) { }
+    private FormateurService: FormateurService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
+    private NoteService: NoteService) { }
 
   ngOnInit(): void {
     this.MessageService.add({ severity: 'info', summary: 'Chargement en cours des doublons', detail: 'Cela prends du temps merci de patienter' })
@@ -191,6 +193,13 @@ export class AnalyseDoublonComponent implements OnInit {
       this.UserService.getAllWithSameEmail().subscribe(r => {
         this.sameEmailPersoIMS = r
       })
+    }, err => {
+      this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu', detail: err.message })
+    })
+  }
+  repairNote() {
+    this.NoteService.repairNote().subscribe(d => {
+      this.MessageService.add({ severity: 'success', summary: 'Les Notes ont été reparés' })
     }, err => {
       this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu', detail: err.message })
     })

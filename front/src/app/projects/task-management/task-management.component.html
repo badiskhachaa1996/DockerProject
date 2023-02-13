@@ -48,7 +48,7 @@
 </div>
 
 
-<!-- Formulaire d'ajout de modification d'une tâche d'un projet -->
+<!-- Formulaire de modification d'une tâche d'un projet -->
 <div class="grid" *ngIf="showFormUpdateTache">
 	<div class="col-12">
 		<div class="card">
@@ -120,15 +120,15 @@
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
 						</p>
-						<div *ngIf="userConnected._id == task.creator_id ">
-							<button pButton type="submit" label="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
-							<button pButton type="submit" label="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
+						<div *ngIf="userConnected._id == task.creator_id._id">
+							<button pButton type="submit" title="Modifier" icon="pi pi-pencil" (click)="onFillFormUpdateTache(task); showFormUpdateTache = true;"></button>
+							<button pButton type="submit" title="Supprimer" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
 						</div>
 					</p-card>
 				</div>
 			</div>
 
-			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="projectTasks?.length == 0">
+			<div class="flex align-items-center justify-content-center flex-wrap card-container blue-container" *ngIf="projectTasks?.length == 0">
 				<div class="col-12">
 					<h5 style="text-align: center; background-color: green; border-radius: 30px; color: white;">Cet projet n'a aucune tâches</h5>
 				</div>
@@ -190,7 +190,6 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th>Libelle</th>
-						<th>Avancement</th>
 						<th>Créateur</th>
 						<th>Date de création</th>
 						<th></th>
@@ -207,9 +206,6 @@
 									{{project.libelle}}
 								</ng-template>
 							</p-cellEditor>
-						</td>
-						<td>
-							{{project.percent}}%
 						</td>
 						<td>
 							{{ project.creator_id?.firstname  }} {{ project.creator_id?.lastname  }}

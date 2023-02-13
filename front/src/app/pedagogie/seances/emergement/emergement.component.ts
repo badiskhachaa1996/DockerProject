@@ -59,7 +59,7 @@ export class EmergementComponent implements OnInit {
   seance: Seance;
   showFiles: [{ name: string, right: string, upload_by: string }];
   date = new Date().getTime()
-  date_debut; date_fin;date_fin_seance;
+  date_debut; date_fin; date_fin_seance;
   formateurInfo: Formateur = null;
   dropdownEtudiant = []
   groupeFilter: [{ label: string, value: string }];
@@ -106,6 +106,7 @@ export class EmergementComponent implements OnInit {
     //this.seance.classe_id
     this.PresenceService.getAllPopulateBySeance(this.ID).subscribe(data => {
       this.presences = data;
+      console.log(data)
       let oldPresence = []
       this.tableauPresence = []
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(etudiants => {
@@ -113,6 +114,7 @@ export class EmergementComponent implements OnInit {
           let bypass: any = p.user_id
           if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {
             oldPresence.push(bypass._id)
+            console.log(p)
             this.tableauPresence.push({
               etudiant: bypass?.lastname + ' ' + bypass?.firstname,
               _id: p._id,
@@ -121,7 +123,8 @@ export class EmergementComponent implements OnInit {
               justificatif: p.justificatif,
               date_signature: p.date_signature,
               user_id: bypass._id,
-              isFormateur: bypass?.type == "Formateur"
+              isFormateur: this.formateurInfo && (bypass._id == this.formateurInfo.user_id),
+              PresentielOrDistanciel: p.PresentielOrDistanciel
             })
           }
         })
@@ -137,7 +140,8 @@ export class EmergementComponent implements OnInit {
                 justificatif: false,
                 date_signature: null,
                 user_id: etu.user_id?._id,
-                isFormateur: etu.user_id?.type == "Formateur"
+                isFormateur: this.formateurInfo && (etu.user_id?._id == this.formateurInfo.user_id),
+                PresentielOrDistanciel: "Présentiel"
               })
             }
         })
@@ -363,7 +367,7 @@ export class EmergementComponent implements OnInit {
   }
 
   acceptJustif(rowData, bool) {
-    this.PresenceService.isPresent(rowData._id, bool).subscribe((data) => {
+    this.PresenceService.isPresent(rowData._id, bool, rowData.PresentielOrDistanciel).subscribe((data) => {
       this.reloadPresence();
     }, (error) => {
       console.error(error)
@@ -487,7 +491,8 @@ export class EmergementComponent implements OnInit {
     this.clonedRowData[rowData._id] = { ...rowData };
   }
 
-  onRowEditSave(rowData, index: number) {
+  onRowEditSave(rowData, index: number, type: string) {
+    console.log(rowData)
     let presence = new Presence(
       rowData._id,
       this.seance._id,
@@ -496,28 +501,38 @@ export class EmergementComponent implements OnInit {
       rowData.Sign,
       rowData.justificatif,
       rowData.date_signature,
-      rowData.isPresent
+      rowData.isPresent,
+      rowData.PresentielOrDistanciel
     )
     if (rowData._id.includes('NEW')) {
       delete presence._id
       this.PresenceService.create(presence).subscribe(data => {
         rowData._id = data._id
         this.tableauPresence[index] = rowData
-        this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
+        if (type != "type")
+          this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
+        else
+          this.MessageService.add({ severity: "success", summary: "Cette étudiant a été noté étant en " + rowData.PresentielOrDistanciel })
       }, error => {
-        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error })
+        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error.error })
       })
     } else if (rowData.isPresent == false) {
-      this.PresenceService.isPresent(presence._id, false).subscribe(data => {
-        this.MessageService.add({ severity: "success", summary: "L'étudiant a été noté absent" })
+      this.PresenceService.isPresent(presence._id, false, presence.PresentielOrDistanciel).subscribe(data => {
+        if (type != "type")
+          this.MessageService.add({ severity: "success", summary: "L'étudiant a été noté absent" })
+        else
+          this.MessageService.add({ severity: "success", summary: "Cette étudiant a été noté étant en " + rowData.PresentielOrDistanciel })
       }, error => {
-        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error })
+        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error.error })
       })
     } else if (rowData.isPresent == true) {
-      this.PresenceService.isPresent(presence._id, true).subscribe(data => {
-        this.MessageService.add({ severity: "success", summary: "L'étudiant a été noté présent", detail: "Il peut maintenant signer sa présence" })
+      this.PresenceService.isPresent(presence._id, true, presence.PresentielOrDistanciel).subscribe(data => {
+        if (type != "type")
+          this.MessageService.add({ severity: "success", summary: "L'étudiant a été noté présent", detail: "Il peut maintenant signer sa présence" })
+        else
+          this.MessageService.add({ severity: "success", summary: "Cette étudiant a été noté étant en " + rowData.PresentielOrDistanciel })
       }, error => {
-        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error })
+        this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error.error })
       })
     }
 

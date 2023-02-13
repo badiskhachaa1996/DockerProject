@@ -763,8 +763,9 @@ app.post('/addNewPayment/:id', (req, res) => {
         )
         me.save()
     })
-    var ciphertext = CryptoJS.AES.encrypt(req.body.payement.toString(), 'd8a0707da72cadb1b4cc3258604154cb').toString();
-    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, function (err, data) {
+    console.log(req.body.payement)
+    var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(req.body.payement), 'd8a0707da72cadb').toString();
+    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(500).send(err)
@@ -803,6 +804,7 @@ app.post('/validateProspect/:user_id', (req, res) => {
 })
 
 app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
+    let l = req.params.statut_dossier.split(',')
     Etudiant.findById(req.params.etudiant_id).then(et => {
         let token = jwt.decode(req.header("token"))
         let me = new MonitoringEtudiant(
@@ -817,7 +819,7 @@ app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
         )
         me.save()
     })
-    Etudiant.findByIdAndUpdate(req.params.etudiant_id, { statut_dossier: req.params.statut_dossier, date_dernier_modif_dossier: new Date() }, { new: true }, (err, doc) => {
+    Etudiant.findByIdAndUpdate(req.params.etudiant_id, { statut_dossier: l, date_dernier_modif_dossier: new Date() }, { new: true }, (err, doc) => {
         if (err) {
             console.error(err)
             res.status(400).send(err)
@@ -884,13 +886,15 @@ app.get('/disable/:id', (req, res) => {
 
     Etudiant.findById(req.params.etudiant_id).then(et => {
         let token = jwt.decode(req.header("token"))
+        let dab = new Etudiant({ ...et })
+        dab.isActive = false
         let me = new MonitoringEtudiant(
             {
                 agent_id: token.id,
                 etudiant_id: req.params.etudiant_id,
                 date: new Date(),
                 etudiant_before: et,
-                etudiant_after: { ...req.body },
+                etudiant_after: dab,
                 remarque: "Désactiver"
             }
         )

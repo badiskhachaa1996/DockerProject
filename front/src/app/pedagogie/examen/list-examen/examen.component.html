@@ -1,7 +1,61 @@
 <p-toast></p-toast>
 <div class="grid">
+    <!-- Import Excel pour note-->
+    <div class="col-12" *ngIf="importExcel">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="importExcel = null;" aria-hidden="true">
+            </i>
+            <h3>Importation de notes depuis Excel</h3>
+            <div class="grid">
+                <div class="field col-12">
+                    <label>Fichier Excel<span style="color:red">*</span>:</label><br>
+                    <p-fileUpload mode="basic" [customUpload]="true" [auto]="true" (uploadHandler)="incomingfile($event)"
+                        accept=".xlsx"></p-fileUpload>
+                    <p *ngIf="file">
+                        Fichier uploadé
+                    </p>
+                </div>
+                <div class="col-12">
+                    <button pButton pTooltip="Merci de prendre le modèle du bouton 'Exporter la template en Excel'"
+                        label="Importer" icon="pi pi-upload" (click)="Upload()" style="margin-right: 3px;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Partie changement de statut -->
+    <div class="col-12" *ngIf="showAppreciation">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="showAppreciation = false;formAppreciation.reset()" aria-hidden="true">
+            </i>
+            <h3 style="text-align: center;" *ngIf="showAppreciation"> Saisir les appréciations de:</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAppreciation" (ngSubmit)="onShowAppreciation()">
 
+                <div class="field col-12">
+                    <small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
+                        obligatoires</small>
+                </div>
+
+                <div class="field col-12">
+                    <label>Groupe<span style="color:red">*</span>:</label><br>
+
+                    <p-dropdown [options]="dropdownClasseExamen" placeholder="Choissisez un groupe"
+                        formControlName="classe_id">
+                    </p-dropdown>
+
+                </div>
+                <div>
+                    <button pButton type="submit" label="Voir les appréciations de ce groupe"
+                        [disabled]="formAppreciation.invalid"></button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
     <!-- Table d'ajout de note par classe -->
     <div class="col-12" *ngIf="examSelected">
         <div class="card">
@@ -26,40 +80,59 @@
                                 (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
+                        <button pButton label="Exporter la template en Excel" icon="pi pi-file-excel"
+                            (click)="exportExcel(examSelected)" style="margin-right: 3px;"></button>
+                        <button pButton pTooltip="Merci de prendre le modèle du bouton 'Exporter la template en Excel'"
+                            label="Importer depuis Excel" icon="pi pi-upload" (click)="importExcel=true"
+                            style="margin-right: 3px;"></button>
+                        <button pButton
+                            pTooltip="Merci d'enregistrer les appréciations des étudiants de ce Module avant la fin du semestre"
+                            label="Enregistrer les notes et saisir les appréciations du Module" icon="pi pi-send"
+                            (click)="showAppreciation=examSelected;updateDropdown(examSelected);validationNotes()"
+                            style="margin-right: 3px;"></button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width:10%">ID Etudiant </th>
-                        <th style="width:25%">Prénom & Nom </th>
+                        <th pSortableColumn="etudiant_f" style="width:15%">Prénom
+                            <p-sortIcon field="etudiant_f"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="etudiant_l" style="width:15%">Nom
+                            <p-sortIcon field="etudiant_l"></p-sortIcon>
+                        </th>
                         <th style="width:5%">Date d'intégration IMS </th>
                         <th style="width:5%">Date d'intégration Teams </th>
                         <th style="width:5%">Date de notation </th>
-                        <th style="width:15%">Note </th>
-                        <th style="width:25%">Appreciation</th>
+                        <th style="width:10%">Note
+                        </th>
+                        <!--<th style="width:25%">Appreciation</th>-->
                         <th style="width:10%">Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="data">
                         <td>{{ data.id}}</td>
-                        <td>{{ data.etudiant}}</td>
+                        <td>{{ data.etudiant_f}}</td>
+                        <td>{{ data.etudiant_l}}</td>
                         <td>{{ data.date_IMS }}</td>
                         <td>{{ data.date_TEAMS }}</td>
-                        <td class="text-center">{{ data.date_note | date:'dd/MM' }}</td>
-                        <td>
+                        <td class="text-center">
+                            {{ data.date_note | date:'dd/MM' }}</td>
+                        <td class="text-center" [pEditableColumn]="data.note" pEditableColumnField="note">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" step="0.1" [(ngModel)]="data.note" required>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    <p *ngIf="!data.isAbsent && !isNaN(data.note)">{{ data.note }}</p>
+                                    <p class="text-center" *ngIf="!data.isAbsent && !isNaN(data.note)">{{ data.note }}
+                                    </p>
                                     <p *ngIf="!data.isAbsent && isNaN(data.note)">Non Noté</p>
                                     <p *ngIf="data.isAbsent">Absence Justifiée</p>
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>
+                        <!-- <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="text" [(ngModel)]="data.appreciation">
@@ -68,7 +141,7 @@
                                     {{ data.appreciation }}
                                 </ng-template>
                             </p-cellEditor>
-                        </td>
+                        </td>-->
                         <td>
                             <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                                 pTooltip="Modifier la note" tooltipPosition="bottom" (click)="onRowEditInit(data)"
@@ -95,7 +168,7 @@
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 title="Fermer" (click)="showFormUpdateExamen = false;formUpdateExamen.reset()" aria-hidden="true">
             </i>
-            <h3 style="text-align: center;" *ngIf="examenToUpdate"> de {{examenToUpdate.libelle}}</h3>
+            <h3 style="text-align: center;" *ngIf="examenToUpdate"> Evaluation {{examenToUpdate.libelle}}</h3>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
 
                 <div class="field col-12">
@@ -116,7 +189,7 @@
                     <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-multiSelect [options]="dropdownMatiere" laceholder="Choissisez un module"
-                            (onChange)="onLoadModules($event)" formControlName="matiere_id">
+                            formControlName="matiere_id"> <!--(onChange)="onLoadModules($event)"-->
                         </p-multiSelect>
                     </span>
                 </div>
@@ -270,16 +343,20 @@
                         <td>{{ examen.libelle }}</td>
                         <td>{{ examen.date | date:'dd/MM/YYYY' }}</td>
                         <td>
-                            <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
-                                class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
+                            <i type="button" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
                             showFormAddExamen = false;
                             idExamenToUpdate = examen._id;
                             idClasseToUpdate = examen.classe_id;
                             idMatiereToUpdate = examen.matiere_id;
                             formateurToUpdate = examen.formateur_id;
                             onGetById();" aria-hidden="true"></i>
-
-                            <i class="pi pi-file-excel ml-1" pTooltip="Attribuer des notes" tooltipPosition="bottom"
+                            <i type="button" pTooltip="Supprimer" tooltipPosition="bottom" *ngIf="!isFormateur"
+                                class="pi pi-trash ml-1" (click)="deleteExamen(examen)" aria-hidden="true"></i>
+                            <i *ngIf="!isFormateur && !examen.canEdit" class="pi pi-lock-open ml-1"
+                                pTooltip="Autorisez le formateur a modifié" tooltipPosition="bottom"
+                                (click)="allowEdit(examen)"></i>
+                            <i *ngIf="!isFormateur || examen.canEdit" class="pi pi-file-excel ml-1"
+                                pTooltip="Attribuer des notes" tooltipPosition="bottom"
                                 (click)="loadEtudiantsForNote(examen);scrollToTop()"></i>
                             <i class="pi pi-download ml-1" pTooltip="Télécharger les notes" tooltipPosition="bottom"
                                 (click)="exportExel(examen)"></i>
@@ -320,9 +397,9 @@
                         <th pSortableColumn="firstname">Prénom & Nom</th>
                         <th pSortableColumn="note_val"> Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
-                        <th>
+                        <!--<th>
                             Appreciation
-                        </th>
+                        </th>-->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -334,9 +411,9 @@
                         <td style="min-width: 10rem;">
                             {{ note.note_val | number : '0.2-9' }}
                         </td>
-                        <td style="min-width: 12rem; ">
+                        <!--<td style="min-width: 12rem; ">
                             {{ note.appreciation }}
-                        </td>
+                        </td>-->
                     </tr>
                 </ng-template>
             </p-table>

@@ -8,7 +8,8 @@ const presenceSchema = mongoose.Schema({
     signature: { type: Boolean, default: false },
     justificatif: { type: Boolean, default: false },
     date_signature: { type: Date },
-    allowedByFormateur: { type: Boolean, default: false }
+    allowedByFormateur: { type: Boolean, default: false },
+    PresentielOrDistanciel: { type: String, default: "Présentiel" }
 });
 
 //Creation de la table presence et export du model Presence   

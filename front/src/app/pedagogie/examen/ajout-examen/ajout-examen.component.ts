@@ -35,8 +35,6 @@ export class AjoutExamenComponent implements OnInit {
   dropdownSemestre = [
     { label: 'Semestre 1', value: 'Semestre 1' },
     { label: 'Semestre 2', value: 'Semestre 2' },
-    { label: 'Semestre 3', value: 'Semestre 3' },
-    { label: 'Semestre 4', value: 'Semestre 4' },
   ]
 
   dropdownFormateur: any[] = [];
@@ -241,7 +239,7 @@ export class AjoutExamenComponent implements OnInit {
     let niveau = this.formAddExamen.get("niveau")?.value;
     if (niveau == 'Examen final')
       coef = 2
-    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau);
+    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date[0], type, note_max, coef, libelle, niveau, this.matieres[matiere_id].semestre, true, date[1]);
     this.examenService.create(examen).subscribe(
       (response) => {
         this.messageService.add({

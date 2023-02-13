@@ -185,7 +185,22 @@ const prospect_schema = new mongoose.Schema({
     },
     isCalled: {
         type: Boolean,
-        default : false
+        default: false
+    },
+    numeroAgence: {
+        type: String
+    },
+    languages_fr: {
+        type: String
+    },
+    languages_en: {
+        type: String
+    },
+    numero_telegram: {
+        type: String
+    },
+    indicatif_telegram: {
+        type: String
     }
 });
 

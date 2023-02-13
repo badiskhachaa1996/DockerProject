@@ -33,7 +33,7 @@
                     <ng-container *ngFor="let col_m of colsExamen.module">
                         <ng-container *ngFor="let col_eval of colsExamen.eval[col_m]">
                             <th>
-                                {{col_eval}}
+                                {{libelleCleaner(col_eval)}}
                             </th>
                         </ng-container>
                         <th rowspan="3">
@@ -57,26 +57,32 @@
                     <td>{{data.custom_id}}</td>
                     <td class="text-center">{{data.nom |uppercase}} {{data.prenom |titlecase}}</td>
                     <ng-container *ngFor="let col_m of colsExamen.module">
-                        <ng-container *ngFor="let col_eval of colsExamen.eval[col_m]">
-                            <td *ngIf="dataExamen[data.email][col_eval]?.note">
-                                {{dataExamen[data.email][col_eval]?.note}}
-                            </td>
-                            <td *ngIf="!dataExamen[data.email][col_eval]?.note">
-                                Non Noté
+                        <ng-container *ngIf="colsExamen.eval && colsExamen.eval[col_m]">
+                            <ng-container *ngFor="let col_eval of colsExamen.eval[col_m]">
+                                <td
+                                    *ngIf="dataExamen && dataExamen[data.email] && dataExamen[data.email][col_eval] && dataExamen[data.email][col_eval]?.note && !isNaN(dataExamen[data.email][col_eval]?.note)">
+                                    {{dataExamen[data.email][col_eval]?.note}}
+                                </td>
+                                <td
+                                    *ngIf="!dataExamen[data.email]||  !dataExamen[data.email][col_eval] || !dataExamen[data.email][col_eval]?.note  || isNaN(dataExamen[data.email][col_eval]?.note)">
+                                    Non Noté
+                                </td>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="data && data?.appreciation_module && (data?.appreciation_module[col_m] || data?.appreciation_module[col_m]=='')">
+                            <td class="text-center" [pEditableColumn]="data?.appreciation_module[col_m]"
+                                pEditableColumnField="module">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="data.appreciation_module[col_m]"
+                                            (input)="modified=true">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{data.appreciation_module[col_m]}}
+                                    </ng-template>
+                                </p-cellEditor>
                             </td>
                         </ng-container>
-                        <td class="text-center" [pEditableColumn]="data?.appreciation_modules[col_m]"
-                            pEditableColumnField="module">
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="data.appreciation_modules[col_m]"
-                                        (input)="modified=true">
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{data.appreciation_modules[col_m]}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
                     </ng-container>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
                 </tr>
@@ -108,8 +114,8 @@
                     <td>
                         <i (click)="loadPV(pv)" pTooltip="Charger le pv" style="margin-left: 2%;"
                             tooltipPosition="bottom" class="pi pi-download" aria-hidden="true"></i>
-                        <i (click)="delete(pv)" pTooltip="Supprimer le pv" style="margin-left: 2%;"
-                            tooltipPosition="bottom" class="pi pi-trash" aria-hidden="true"></i>
+                        <!--<i (click)="delete(pv)" pTooltip="Supprimer le pv" style="margin-left: 2%;"
+                            tooltipPosition="bottom" class="pi pi-trash" aria-hidden="true"></i>-->
                     </td>
                 </tr>
             </ng-template>
@@ -146,7 +152,7 @@
                     <td class="text-center">{{data.nom |uppercase}} {{data.prenom |titlecase}}</td>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
                     <td class="text-center" *ngFor="let col of cols">
-                        {{data.appreciation_modules[col.module]}}
+                        {{data.appreciation_module[col.module]}}
                     </td>
                 </tr>
             </ng-template>-->

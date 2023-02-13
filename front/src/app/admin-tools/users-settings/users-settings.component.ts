@@ -174,7 +174,6 @@ export class UsersSettingsComponent implements OnInit {
 
   //Methode pour pre-remplir le formulaire de mise à jour
   onPatchData() {
-    console.log(this.userToUpdate.date_creation)
     this.formUpdate.patchValue({
       civilite: { label: this.userToUpdate.civilite },
       lastname: this.userToUpdate.lastname,
@@ -183,8 +182,8 @@ export class UsersSettingsComponent implements OnInit {
       phone: this.userToUpdate.phone,
       email: this.userToUpdate.email,
       email_perso: this.userToUpdate.email_perso,
-      service: this.userToUpdate.service_id._id,
       mention: this.userToUpdate.mention,
+      service: this.userToUpdate?.service_id?._id,
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
       pays_adresse: { value: this.userToUpdate.pays_adresse, viewValue: this.userToUpdate.pays_adresse, actif: false },

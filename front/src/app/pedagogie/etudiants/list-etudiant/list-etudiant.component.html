@@ -133,18 +133,25 @@
                     <p-multiSelect [options]="statutDossier" formControlName="statut_dossier">
                     </p-multiSelect>
                 </div>
+                <div class="field col-12 md:col-6">
+                    <label For="statut">Reste à Payer</label>
+                    <p *ngIf="!isNaN(resteAPayer)">{{resteAPayer}}</p>
+                    <p *ngIf="isNaN(resteAPayer)">Un problème est survenu, vérifiez les frais du diplôme</p>
+                </div>
             </form>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                     <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                     <div class="field col-12 md:col-4">
                         <label>Type de paiement:</label><br>
-                        <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                        <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']" placeholder="Choissisez la méthode de paiement"
+                            (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
+                        <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
                     </div>
                     <div class="field col-12 md:col-3">
                         <label>Montant:</label><br>
-                        <input type="number" (change)="changeMontant(i,$event,'montant')"
+                        <input type="number" (change)="changeMontant(i,$event,'montant');getResteAPayer()"
                             [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
                     </div>
                     <div class="field col-12 md:col-3">
@@ -246,7 +253,23 @@
                     <input formControlName="lien_dossier_professionel" pInputText type="text" />
                 </div>
 
-                <div>
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Lien du Bulletin de note du Semestre 1 </label>
+                    <input formControlName="lien_bulletin_Semestre_1" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Lien du Bulletin de note du Semestre 2 </label>
+                    <input formControlName="lien_bulletin_Semestre_2" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Lien du Bulletin de note Annuel </label>
+                    <input formControlName="lien_bulletin_annuel" pInputText type="text" />
+                </div>
+
+
+                <div class="field col-12">
                     <button pButton label="Valider" type="submit" [disabled]="formLivret.invalid"></button>
                 </div>
             </form>

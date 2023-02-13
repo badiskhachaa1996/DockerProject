@@ -53,7 +53,7 @@ export class ReinscritComponent implements OnInit {
     { value: "Virement", label: "Virement" },
     { value: "Chèque de caution", label: "Chèque de caution" },
     { value: "Chèque en échange d'espèces", label: "Chèque en échange d'espèces" },
-    { value: "Chèque de Garantie", label: "Chèque de Garantie" },
+    { value: "Chèque de scolarité", label: "Chèque de scolarité" },
     { value: "Chèque", label: "Chèque" },
     { value: "Autre", label: "Autre" },
   ]

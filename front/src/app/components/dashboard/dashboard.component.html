@@ -261,25 +261,39 @@
 </div>
 
 <div *ngIf="isAdmin">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
-    </h2>
+    <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}</h1>
+    <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
 
     <div class="col-12">
         <div class="card">
-            <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
-                style="float: right" (click)="onCheckIn()"></button>
-            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2"
-                label="Check out" icon="pi pi-sign-out" style="float: right"
-                (click)="showFormDailyActivityDetails = true"></button>
+            <h6 *ngIf="dailyCheck">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}</h6>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}"
                     style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
+                <span *ngIf="dailyCheck" style="color: red;">
+                    |
+                    Si vous ne validez pas votre CRA vos heures ne seront pas prises en compte
+                </span>
             </h5>
-            <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date |
-                    date: 'd/M/yy à h:mm a' }}</span></small>
+            
+            <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
+                (click)="onCheckIn()"></button>
 
-            <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails"
-                (ngSubmit)="onCheckOut()">
+            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" label="Valider mon CRA" icon="pi pi-sign-in"
+                (click)="showButtonsValidateCra = !showButtonsValidateCra"></button>
+
+            <button [disabled]="!dailyCheck?.isCheckable || !dailyCheck?.craIsValidate" pButton class="p-button-danger mr-2 mb-2"
+                label="Check out" icon="pi pi-sign-out" (click)="onCheckOut();"></button>
+
+            <!-- Bouton affiché au clique sur le bouton valider mon cra -->
+            <div *ngIf="showButtonsValidateCra">
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail();"></button>
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
+            </div>
+            
+            <!-- Formulaire pour remplir les tâches du jour -->
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
+                (ngSubmit)="onValidateCraByForm()">
                 <h2>Tâches du jour</h2>
                 <div class="p-formgrid grid">
                     <div class="field col-12">
@@ -302,12 +316,79 @@
                         class="p-button-outlined p-button-info"></button>
                 </div>
 
-                <div class="field col-4 md:col-2">
+                <div class="field col-4 md:col-4">
                     <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid"
-                        label="Valider & Check Out"></button>
+                        label="Valider"></button>
                 </div>
-
             </form>
+
+            <!-- Table d'affichage de la liste des tâches en cours de l'utilisateur -->
+            <div *ngIf="showTaskForUser" style="margin-top: 3px;">
+                <h5>Vos tâches en cours</h5>
+                <small>Merci de mettre à jour les pourcentages d'évolutions des tâches</small>
+                <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row"
+                        [rows]="5" [rowHover]="true" [paginator]="true"
+                        [globalFilterFields]="['libelle','percent','project_id?.libelle']"
+                        responsiveLayout="scroll">
+
+                    <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" #filter
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Libelle</th>
+                            <th>Avancement</th>
+                            <th>Projet</th>
+                            <th>DeadLine</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-task let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="task">
+                            <td>
+                                {{ task.libelle }}
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="task.percent">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{task.percent}}%
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                {{ task.project_id?.libelle }}
+                            </td>
+                            <td>
+                                {{ task.date_limite | date: 'dd/MM/YYYY' }}
+                            </td>
+                            <td>
+                                <div class="flex align-items-center justify-content-center gap-2">
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                        icon="pi pi-pencil" (click)="onRowEditInit(task)"
+                                        class="p-button-rounded p-button-text"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                        icon="pi pi-check" (click)="onRowEditSave(task)"
+                                        class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                        icon="pi pi-times" (click)="onRowEditCancel(task, ri)"
+                                        class="p-button-rounded p-button-text p-button-danger"></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
 </div>
@@ -323,33 +404,11 @@
         dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
     </p>
 
-    <div class="col-12">
-        <div class="card">
-            <h5>
-                Besoin d'un logement ?
-                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des
-                logements tout neufs et pas cher.
-            </h5>
-
-            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions"
-                [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
-                <ng-template pTemplate="item" let-item>
-                    <img [src]="item.previewImageSrc" style="width: 100%;" />
-                </ng-template>
-                <ng-template pTemplate="thumbnail" let-item>
-                    <div class="grid grid-nogutter justify-content-center">
-                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px" />
-                    </div>
-                </ng-template>
-            </p-galleria>
-        </div>
-    </div>
-
+    
     <div class="col-12 card">
-        <h4>Documents</h4>
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
-
+            <h4>Documents</h4>
             <div class="card col-3" *ngIf="dataEtudiant.lien_livret.read">
                 <h5>Livret</h5>
                 <a href="{{dataEtudiant.lien_livret.read}}" target="_blank"><img style="max-height: 20vh;"
@@ -363,6 +422,25 @@
             <div class="card col-3" *ngIf="dataEtudiant.lien_tableau_synthese">
                 <h5>Tableau synthèse</h5>
                 <a href="{{dataEtudiant.lien_tableau_synthese}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
+        <div class="grid"
+            *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel']">
+            <h4>Bulletin</h4>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1']">
+                <h5>Semestre 1</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 1']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2']">
+                <h5>Semestre 2</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
+                <h5>Annuel</h5>
+                <a href="{{dataEtudiant.lien_bulletin['Annuel']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
         </div>
@@ -404,6 +482,29 @@
             </p-table>
         </div>
     </div>
+
+    <div class="col-12">
+        <div class="card">
+            <h5>
+                Besoin d'un logement ?
+                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des
+                logements tout neufs et pas cher.
+            </h5>
+
+            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions"
+                [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.previewImageSrc" style="width: 100%;" />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="grid grid-nogutter justify-content-center">
+                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px" />
+                    </div>
+                </ng-template>
+            </p-galleria>
+        </div>
+    </div>
+
 </div>
 
 <div *ngIf="isFormateur">
@@ -455,6 +556,16 @@
                 </div>
 
             </form>
+        </div>
+        <div class="col-12 card" *ngIf="dataFormateur">
+            <div class="grid" *ngIf="dataFormateur.lien_sequentiel">
+                <h4>Documents</h4>
+                <div class="card col-12" *ngIf="dataFormateur.lien_sequentiel">
+                    <h5>Sequentiels</h5>
+                    <a href="{{dataFormateur.lien_sequentiel}}" target="_blank"><img style="max-height: 20vh;"
+                            src="assets/images/word.png" /></a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -597,7 +708,7 @@
                 </div>
                 <hr>
                 <div formArrayName="tasks">
-                    <h3>tâches supplémentaires</h3>
+                    <h3>Tâches supplémentaires</h3>
                     <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
                         <div class="field col-10">
                             <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
@@ -765,7 +876,7 @@
         <div class="grid">
             <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
                 <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
-                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;"
+                <i class="col-1 pi pi-trash" style="font-size: 20px; color: red; cursor: pointer; margin-left: 1%;"
                     (click)="deleteLink(i)" aria-hidden="true"> </i>
             </div>
         </div>

@@ -80,6 +80,10 @@ export class ListEtudiantComponent implements OnInit {
     lien_word_edit: [''],
     lien_dossier_professionel: [''],
     lien_tableau_synthese: [''],
+    lien_bulletin_Semestre_1: [''],
+    lien_bulletin_Semestre_2: [''],
+    lien_bulletin_annuel: [''],
+
   });
 
   typeEtudiant = [
@@ -173,13 +177,21 @@ export class ListEtudiantComponent implements OnInit {
   isMinor = false;
   isCommercial: boolean = false;
   isAdministration: boolean = false;
-
+  typePaiement = [
+    { value: "Espèces", label: "Espèces" },
+    { value: "Virement", label: "Virement" },
+    { value: "Chèque de caution", label: "Chèque de caution" },
+    { value: "Chèque en échange d'espèces", label: "Chèque en échange d'espèces" },
+    { value: "Chèque de scolarité", label: "Chèque de scolarité" },
+    { value: "Chèque", label: "Chèque" },
+    { value: "Autre", label: "Autre" },
+  ]
 
   prospects = {}
 
   absences: Presence[] = []
 
-  showPayement: Prospect
+  showPayement: any
   contrats: ContratAlternance[] = [];
 
   payementList = []
@@ -191,7 +203,9 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   changeMontant(i, event, type) {
-    if (type == "montant") {
+    if (type == "type") {
+      this.payementList[i][type] = event.value;
+    } else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
     } else {
       this.payementList[i][type] = event.target.value;
@@ -206,8 +220,10 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   addNewPayment() {
+    console.log(this.payementList)
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
+      console.log(data.payment_reinscrit)
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
       this.payementList = null
@@ -222,8 +238,14 @@ export class ListEtudiantComponent implements OnInit {
     let bypass: any = etu.user_id
     this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
+      this.getResteAPayer()
     })
-    this.payementList = JSON.parse(CryptoJS.AES.decrypt(etu.payment_reinscrit.toString(), 'd8a0707da72cadb1b4cc3258604154cb'));
+    if (etu.payment_reinscrit) {
+      let dcr = CryptoJS.AES.decrypt(etu.payment_reinscrit, 'd8a0707da72cadb').toString(CryptoJS.enc.Utf8)
+      this.payementList = JSON.parse(dcr);
+    }
+    else
+      this.payementList = []
     this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
@@ -491,6 +513,12 @@ export class ListEtudiantComponent implements OnInit {
 
   onDossierUpdate() {
     let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+    if (!statut_dossier)
+      statut_dossier = []
+    if (this.resteAPayer == 0 && statut_dossier.indexOf('Paiement finalisé') == -1 && confirm('Le reste a payer est égale à 0, Voulez-vous marquer le dossier avec "Paiement finalisé" ?'))
+      statut_dossier.push('Paiement finalisé')
+    else if (this.resteAPayer != 0 && statut_dossier.indexOf('Paiement non finalisé') == -1 && confirm('Le reste a payer n\'est pas égale à 0, Voulez-vous marquer le dossier avec "Paiement non finalisé" ?'))
+      statut_dossier.push('Paiement non finalisé')
     this.etudiantService.updateDossier(this.etudiantToUpdate._id, statut_dossier).subscribe(
       ((responde) => {
         this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
@@ -840,7 +868,7 @@ export class ListEtudiantComponent implements OnInit {
     })
     this.userService.getPopulate(this.token.id).subscribe(dataU => {
       let bypass: any = dataU?.service_id
-      this.isAdministration = bypass?.label.includes('sministration') || this.token.role == "Admin"
+      this.isAdministration = bypass?.label.includes('dministration') || this.token.role == "Admin"
     })
   }
 
@@ -1152,10 +1180,12 @@ export class ListEtudiantComponent implements OnInit {
     this.showLivrets.lien_livret = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
     this.showLivrets.lien_dossier_professionel = this.formLivret.value.lien_dossier_professionel
     this.showLivrets.lien_tableau_synthese = this.formLivret.value.lien_tableau_synthese
+    this.showLivrets.lien_bulletin = { 'Semestre 1': this.formLivret.value.lien_bulletin_Semestre_1, 'Semestre 2': this.formLivret.value.lien_bulletin_Semestre_2, 'Annuel': this.formLivret.value.lien_bulletin_annuel }
     this.etudiantService.update(this.showLivrets).subscribe(data => {
       this.etudiants[index].lien_livret = this.showLivrets.lien_livret
       this.etudiants[index].lien_dossier_professionel = this.showLivrets.lien_dossier_professionel
       this.etudiants[index].lien_tableau_synthese = this.showLivrets.lien_tableau_synthese
+      this.etudiants[index].lien_bulletin = this.showLivrets.lien_bulletin
       this.showLivrets = null
       this.formLivret.reset()
       this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
@@ -1164,10 +1194,28 @@ export class ListEtudiantComponent implements OnInit {
   onInitLivret(etudiant) {
     this.showLivrets = etudiant
     this.formLivret.setValue({
-      lien_word_read: this.showLivrets.lien_livret.read,
-      lien_word_edit: this.showLivrets.lien_livret.edit,
-      lien_dossier_professionel: this.showLivrets.lien_dossier_professionel,
-      lien_tableau_synthese: this.showLivrets.lien_tableau_synthese,
+      lien_word_read: (this.showLivrets?.lien_livret.read) ? this.showLivrets.lien_livret.read : "",
+      lien_word_edit: (this.showLivrets?.lien_livret.edit) ? this.showLivrets.lien_livret.edit : "",
+      lien_dossier_professionel: (this.showLivrets.lien_dossier_professionel) ? this.showLivrets.lien_dossier_professionel : "",
+      lien_tableau_synthese: (this.showLivrets.lien_tableau_synthese) ? this.showLivrets.lien_tableau_synthese : "",
+      lien_bulletin_Semestre_1: (this.showLivrets.lien_bulletin['Semestre 1']) ? this.showLivrets.lien_bulletin['Semestre 1'] : "",
+      lien_bulletin_Semestre_2: (this.showLivrets.lien_bulletin['Semestre 2']) ? this.showLivrets.lien_bulletin['Semestre 2'] : "",
+      lien_bulletin_annuel: (this.showLivrets.lien_bulletin['Annuel']) ? this.showLivrets.lien_bulletin['Annuel'] : "",
+
     })
   }
+
+  resteAPayer = 0
+
+  getResteAPayer() {
+    this.diplomeService.getById(this.showPayement?.filiere).subscribe(filiere => {
+      let total = 0
+      this.payementList.forEach(val => {
+        total += parseInt(val.montant)
+      })
+      let toPay = parseInt(filiere?.frais)
+      this.resteAPayer = toPay - total
+    })
+  }
+  isNaN(nb) { return isNaN(nb) }
 }

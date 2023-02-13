@@ -311,9 +311,7 @@
                             <label>Semestre: </label>
                             <p-dropdown [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
                             { libelle: '1er', value: 'Semestre 1', actif: false },
-                            { libelle: '2ème', value: 'Semestre 2', actif: false },
-                            { libelle: '3ème', value: 'Semestre 3', actif: false },
-                            { libelle: '4ème', value: 'Semestre 4', actif: false }]" optionLabel="libelle"
+                            { libelle: '2ème', value: 'Semestre 2', actif: false }]" optionLabel="libelle"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'semestre')"
                                 emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre"
                                 optionDisabled="actif" filter="true">

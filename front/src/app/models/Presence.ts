@@ -8,7 +8,8 @@ export class Presence {
         public signature?: any,
         public justificatif?: boolean,
         public date_signature?: Date,
-        public allowedByFormateur?: Boolean
+        public allowedByFormateur?: Boolean,
+        public PresentielOrDistanciel?: String
     ) { }
 
 }

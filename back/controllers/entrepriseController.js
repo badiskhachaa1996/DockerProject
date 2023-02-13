@@ -96,7 +96,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
 
                                     // création du mail à envoyer
                                     let Ceo_htmlmail =
-                                    "<p>Bonjour,</p><p>Une nouvelle entreprise vous à été attribuer sur votre espace, merci de consulter et de consulter les contrats d'alternances, vous récevrez un mail à chaque ajout de contrat.</p>" +
+                                    "<p>Bonjour,</p><p>Une nouvelle entreprise vous à été attribué sur votre espace IMS, merci de consulter les contrats d'alternances, vous récevrez un mail à chaque ajout de contrat.</p>" +
                                     " <p>Cordialement.</p>";
 
 
@@ -557,6 +557,15 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
             });
         });
 });
+
+
+// recuperation de la liste des entreprises d'un CEO
+app.get("/get-entreprises-by-id-ceo/:idCEO", (req, res, next) => {
+    Entreprise.find({ directeur_id: req.params.idCEO })
+    .then((response) => { res.status(200).send(response) })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperer la liste de vos entréprises' }) });
+});
+
 
 app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
     CAlternance.find({ entreprise_id: req.params.entreprise_id}).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
