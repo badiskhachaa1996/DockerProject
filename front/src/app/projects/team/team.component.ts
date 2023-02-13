@@ -20,10 +20,15 @@ export class TeamComponent implements OnInit {
   clonedTeams: { [s: string]: Team; } = {};
   showFormAddTeam: boolean = false;
   formAddTeam: FormGroup;  
+  showFormAddSalaries : boolean = false;
+  formAddSalaries: FormGroup;
   showFormUpdateTeam: boolean = false;
   formUpdateTeam: FormGroup;
+  showTableOfSalaries: boolean = false;
+  dropdownUser: any[] = []; 
   selectedMulti: string[] = [];
- 
+
+
   constructor(private userService: AuthService, private formBuilder: FormBuilder, private teamService: TeamService, private messageService: MessageService) { }
 
   ngOnInit(): void 
@@ -43,7 +48,7 @@ export class TeamComponent implements OnInit {
       abbreviation: ['', Validators.required],
     })
 
-    //Permet d'afficher la liste des équipes
+    //Permet d'afficher la liste des équipes et de la liste des salariés
     this.onGetAllClasses();
   }
 
@@ -53,6 +58,17 @@ export class TeamComponent implements OnInit {
     this.teamService.getTeams()
     .then((response) => { this.teams = response; })
     .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Équipes', detail: "Impossible de récupérer la liste des équipes, veuillez contacter un administrator "}); });
+
+    //Récupération de la liste des salariés
+    this.userService.getAllSalarie()
+    .then((response) => {
+      this.dropdownUser = [];
+
+      response.forEach((user: User) => {
+        this.dropdownUser.push({ label: `${user.firstname} ${user.lastname}`, value: user._id });
+      });
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
 
   }
 

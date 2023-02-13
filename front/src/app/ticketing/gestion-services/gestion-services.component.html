@@ -100,9 +100,9 @@
                         </td>
                         <td>
                             <i *ngIf="rowData.active" pTooltip="Ne pas afficher dans la liste des choix"
-                                tooltipPosition="bottom" class="pi pi-eye" (click)="hide(rowData)"  aria-hidden="true"></i>
+                                tooltipPosition="bottom" class="pi pi-eye" (click)="hide(rowData)" aria-hidden="true"></i>
                             <i *ngIf="!rowData.active" pTooltip="Afficher dans la liste des choix"
-                                tooltipPosition="bottom" class="pi pi-eye-slash" (click)="show(rowData)"  aria-hidden="true"></i>
+                                tooltipPosition="bottom" class="pi pi-eye-slash" (click)="show(rowData)" aria-hidden="true"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="editService(rowData);toggleFormServiceUpdate();"  aria-hidden="true"></i>
                         </td>
@@ -195,8 +195,6 @@
     		</p-table>
 		</div>
     </div>
-
-
 </div>
 
 
