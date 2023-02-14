@@ -26,7 +26,6 @@ export class CvthequeComponent implements OnInit {
   formAddCV: FormGroup;
 
   showFormUpdateCV: boolean = false;
-  formUpdateCV: FormGroup;
 
   languesList: any[] = [
     { label: 'Français' },
@@ -272,7 +271,52 @@ export class CvthequeComponent implements OnInit {
     this.filter.nativeElement.value = '';
   }
 
-  InitUpdateCV(){
-    
+  //Partie Mis à jour du CV
+
+  showUpdateCV:CV
+  formUpdateCV = this.formBuilder.group({
+    experiences_pro: this.formBuilder.array([]),
+    experiences_sco: this.formBuilder.array([]),
+    competences: [],
+    outils: ['', Validators.required],
+    langues: [],
+    video_lien: [],
+  });
+
+  InitUpdateCV(cv) {
+    this.showUpdateCV = cv
   }
+
+  onUpdateCV(){
+
+  }
+
+    /* Xp pro */
+    getUpdateXpPros() {
+      return this.formAddCV.get('experiences_pro') as FormArray;
+    }
+  
+    onAddUpdateXpPro() {
+      const newXpProControl = this.formBuilder.control('', Validators.required);
+      this.getUpdateXpPros().push(newXpProControl);
+    }
+  
+    onRemoveUpdateXpPro(i: number) {
+      this.getUpdateXpPros().removeAt(i);
+    }
+    /* end Xp pro */
+  
+    /* Xp sco */
+    getXpUpdateScos() {
+      return this.formAddCV.get('experiences_sco') as FormArray;
+    }
+  
+    onAddUpdateXpSco() {
+      const newXpScoControl = this.formBuilder.control('', Validators.required);
+      this.getUpdateXpPros().push(newXpScoControl);
+    }
+  
+    onRemoveUpdateXpSco(i: number) {
+      this.getUpdateXpPros().removeAt(i);
+    }
 }
