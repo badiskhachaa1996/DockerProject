@@ -14,6 +14,10 @@
 						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
 					</div>
 					<div class="field col-12">
+						<label htmlFor="numberOfDay">Nombre de jours</label>
+						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+					</div>
+					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
 						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
 					</div>
@@ -62,6 +66,10 @@
 					<div class="field col-12">
 						<label htmlFor="libelle">Libelle</label>
 						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="numberOfDay">Nombre de jours</label>
+						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
@@ -113,6 +121,12 @@
 					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
+						</p>
+						<p *ngIf="task.number_of_day == 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jour restant
+						</p>
+						<p *ngIf="task.number_of_day > 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jours restants
 						</p>
 						<p>
 							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}

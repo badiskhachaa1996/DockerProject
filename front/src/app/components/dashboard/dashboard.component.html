@@ -266,33 +266,38 @@
 
     <div class="col-12">
         <div class="card">
-            <h6 *ngIf="dailyCheck">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}</h6>
+            <h6 *ngIf="dailyCheck && !isCheckOut">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}</h6>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}"
                     style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
-                <span *ngIf="dailyCheck" style="color: red;">
+                <span *ngIf="dailyCheck && !isCheckOut" style="color: red;">
                     |
                     Si vous ne validez pas votre CRA vos heures ne seront pas prises en compte
+                </span>
+                <span *ngIf="isCheckOut" style="color: green;">
+                    |
+                    Merci d'avoir validé votre journée
                 </span>
             </h5>
             
             <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
                 (click)="onCheckIn()"></button>
 
-            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" label="Valider mon CRA" icon="pi pi-sign-in"
-                (click)="showButtonsValidateCra = !showButtonsValidateCra"></button>
+            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" 
+                label="Valider mon CRA" icon="pi pi-sign-in"
+                (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
 
-            <button [disabled]="!dailyCheck?.isCheckable || !dailyCheck?.craIsValidate" pButton class="p-button-danger mr-2 mb-2"
+            <button [disabled]="!dailyCheck?.craIsValidate || isCheckOut" pButton class="p-button-danger mr-2 mb-2"
                 label="Check out" icon="pi pi-sign-out" (click)="onCheckOut();"></button>
 
             <!-- Bouton affiché au clique sur le bouton valider mon cra -->
-            <div *ngIf="showButtonsValidateCra">
+            <!-- <div *ngIf="showButtonsValidateCra">
                 <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail();"></button>
                 <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
-            </div>
+            </div> -->
             
             <!-- Formulaire pour remplir les tâches du jour -->
-            <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
+            <!-- <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
                 (ngSubmit)="onValidateCraByForm()">
                 <h2>Tâches du jour</h2>
                 <div class="p-formgrid grid">
@@ -320,10 +325,12 @@
                     <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid"
                         label="Valider"></button>
                 </div>
-            </form>
+            </form> -->
 
             <!-- Table d'affichage de la liste des tâches en cours de l'utilisateur -->
             <div *ngIf="showTaskForUser" style="margin-top: 3px;">
+                <!-- bouton de validation -->
+                <button *ngIf="dailyCheck.activity_details.length > 0" pButton label="Valider" icon="pi pi-check" style="float: right;" (click)="dailyCheck.isCheckable = false; dailyCheck.craIsValidate = true;"></button>
                 <h5>Vos tâches en cours</h5>
                 <small>Merci de mettre à jour les pourcentages d'évolutions des tâches</small>
                 <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row"
@@ -347,6 +354,7 @@
                             <th>Libelle</th>
                             <th>Avancement</th>
                             <th>Projet</th>
+                            <th>Jours restant</th>
                             <th>DeadLine</th>
                             <th></th>
                         </tr>
@@ -368,6 +376,16 @@
                             </td>
                             <td>
                                 {{ task.project_id?.libelle }}
+                            </td>
+                            <td>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="task.number_of_day">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{task.number_of_day}} J
+                                    </ng-template>
+                                </p-cellEditor>
                             </td>
                             <td>
                                 {{ task.date_limite | date: 'dd/MM/YYYY' }}
