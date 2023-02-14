@@ -722,9 +722,9 @@
                     <tr *ngIf="etudiant && etudiant.user_id">
                         <td>{{ etudiant.user_id?.firstname }}</td>
                         <td>{{ etudiant.user_id?.lastname }}</td>
-                        <td *ngIf="etudiant.user_id.date_telechargement_bulletin">{{
-                            etudiant.user_id.date_telechargement_bulletin | date:'dd/MM/yyyy' }}</td>
-                        <td *ngIf="!etudiant.user_id.date_telechargement_bulletin">Jamais</td>
+                        <td *ngIf="etudiant.date_telechargement_bulletin">{{
+                            etudiant.date_telechargement_bulletin | date:'dd/MM/yyyy' }}</td>
+                        <td *ngIf="!etudiant.date_telechargement_bulletin">Jamais</td>
                         <td>
                             <!--<i style="margin-left: 2%;" class="pi pi-file-excel" title="Générer le bulletin"
                                 aria-hidden="true" (click)="moyEtudiant = null;

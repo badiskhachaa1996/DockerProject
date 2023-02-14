@@ -74,8 +74,8 @@
                         {{result.annee_formation}}
                     </td>
                     <td>
-                        <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash" (click)="delete(result._id)"
-                            aria-hidden="true"></i>
+                        <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash"
+                            (click)="delete(result._id)" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -151,7 +151,8 @@
                             <div class="field col-12">
                                 <label>Question 18 :</label><br>
                                 <label>Quelles sont vos propositions d’améliorations éventuelles?</label><br>
-                                <textarea pInputTextarea readonly="true" [rows]="11" [ngModel]="result.propositions"></textarea>
+                                <textarea pInputTextarea readonly="true" [rows]="11"
+                                    [ngModel]="result.propositions"></textarea>
                             </div>
                         </div>
                     </td>
@@ -162,6 +163,9 @@
 </div>
 <div class="card" *ngIf="moyenne">
     <div class="p-fluid p-formgrid grid">
+        <h1 class="col-12 text-center">
+            Moyenne de tous les formulaires
+        </h1>
         <div class="field col-12">
             <label>Question 6 :</label><br>
             <label>Êtes-vous satisfait des horaires de cours ?</label>
