@@ -362,6 +362,10 @@
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filtreAgent"
                             (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals')"
                             filterPlaceholder="Choissisez un commercial"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreCampus"
+                            (onChange)="dt1.filter($event.value, 'code_commercial.campus', 'equals')"
+                            filterPlaceholder="Choissisez un commercial"></p-dropdown>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"

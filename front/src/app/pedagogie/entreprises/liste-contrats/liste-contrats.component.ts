@@ -14,6 +14,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
+import { CampusService } from 'src/app/services/campus.service';
 
 
 @Component({
@@ -72,11 +73,16 @@ export class ListeContratsComponent implements OnInit {
     { value: null, label: "Tous les commerciaux" }
   ]
 
+  filtreCampus = [
+    { value: null, label: "Tous les campus" }
+  ]
+
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService,
-    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService) { }
+    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService,
+    private campusService: CampusService) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
@@ -115,6 +121,11 @@ export class ListeContratsComponent implements OnInit {
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
+    this.campusService.getAll().subscribe(campus => {
+      campus.forEach(c => {
+        this.filtreCampus.push({ label: c.libelle, value: c._id })
+      })
+    })
 
     //Lister toutes les formations
     this.formationService.getAll().subscribe(data => {

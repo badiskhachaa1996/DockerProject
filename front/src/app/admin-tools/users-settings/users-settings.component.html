@@ -101,22 +101,27 @@
                     <input pInputText id="phone" formControlName="email_perso" type="email"
                         placeholder="s.hue@gmail.com" />
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label For="mention">Mention</label>
-                    <p-dropdown [options]="mentionList" formControlName="mention" placeholder="Choissisez une mention"></p-dropdown>
+                    <p-dropdown [options]="mentionList" formControlName="mention"
+                        placeholder="Choissisez une mention"></p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label For="service">Service</label>
                     <p-dropdown [options]="dropDownService" formControlName="service"
                         placeholder="Tous les services"></p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label For="type">Type</label>
                     <p-dropdown [options]="typeList" formControlName="type" optionLabel="label"></p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label For="role">Rôle</label>
                     <p-dropdown [options]="roleList" formControlName="role" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label For="role">Campus <span style="color:red">*</span></label>
+                    <p-dropdown [options]="campusList" formControlName="campus"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-7">
                     <label For="pays">Pays</label>
@@ -204,7 +209,8 @@
                         <td style="min-width: 8rem;">{{ user._id }}</td>
                         <td style="min-width: 10rem;">{{ user.role }}</td>
                         <td>{{ user.type }}</td>
-                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.firstname | titlecase }} {{user.lastname | uppercase }}</td>
+                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.firstname | titlecase }}
+                            {{user.lastname | uppercase }}</td>
                         <td style="min-width: 10rem;">{{ user.email }}</td>
                         <td style="min-width: 10rem;">{{ user.email_perso }}</td>
                         <td style="min-width: 10rem;">{{ user.date_creation | date:'dd/MM/YYYY' }}</td>
@@ -246,7 +252,8 @@
                         <td>{{ user.pays_adresse }}</td>
                         <td>{{ user.ville_adresse }}</td>
                         <td>{{ user.numero_adresse }} {{ user.rue_adresse }} <br /> {{ user.postal_adresse }}</td>
-                        <td style="color: red; font-weight: bolder;">{{ user.last_connection | date:'dd/MM/YYYY à HH:mm'}}</td>
+                        <td style="color: red; font-weight: bolder;">{{ user.last_connection | date:'dd/MM/YYYY à
+                            HH:mm'}}</td>
                     </tr>
                 </ng-template>
             </p-table>
