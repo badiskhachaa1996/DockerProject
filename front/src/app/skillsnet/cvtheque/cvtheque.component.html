@@ -135,29 +135,30 @@
         </div>
     </div>
 
-    <!-- Formulaire d'ajout de cv étudiant -->
+    <!-- Formulaire de mis à jour du cv étudiant -->
     <div class="col-12" *ngIf="showUpdateCV">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showUpdateCV = null; formUpdateCV.reset()" aria-hidden="true"></i>
 
-            <h4 style="text-align: center;">Mis à hour du CV de {{showUpdateCV.user_id.lastname}} {{showUpdateCV.user_id.firstname}}</h4>
+            <h4 style="text-align: center;">Mis à jour du CV de {{showUpdateCV.user_id.lastname | uppercase}}
+                {{showUpdateCV.user_id.firstname | titlecase }}</h4>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateCV" (ngSubmit)="onUpdateCV()">
                 <div formArrayName="experiences_pro">
                     <label>Expériences professionnelles</label> <br />
-                    <div class="p-formgrid grid" *ngFor="let xpProControl of getXpPros().controls; let i = index">
+                    <div class="p-formgrid grid" *ngFor="let xpProControl of getUpdateXpPros().controls; let i = index">
                         <div class="field col-10">
-                            <textarea pInputTextarea type="text" placeholder="2018-2019: expérience"
+                            <textarea pInputTextarea type="text" placeholder="2018-2019: Expérience"
                                 [formControlName]="i"></textarea>
                         </div>
                         <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveXpPro(i)"
+                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveUpdateXpPro(i)"
                                 class="p-button-outlined p-button-danger"></button>
                         </div>
                     </div>
                     <button pButton icon="pi pi-plus" label="Ajouter une expérience" type="button"
-                        (click)="onAddXpPro()" class="p-button-outlined p-button-info"></button>
+                        (click)="onAddUpdateXpPro()" class="p-button-outlined p-button-info"></button>
                 </div>
 
                 <div class="field col-12">
@@ -208,7 +209,7 @@
                 <div class="field col-12 md:col-12">
                     <label>Langues</label>
                     <p-multiSelect [options]="languesList" [(ngModel)]="selectedMultilang"
-                        defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+                        defaultLabel="Selectionner les langues" optionLabel="label" class="multiselect-custom"
                         formControlName="langues">
                         <ng-template let-value pTemplate="selectedItems">
                             <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
@@ -229,19 +230,19 @@
                 </div>
 
                 <div formArrayName="experiences_sco">
-                    <label>expériences scolaires</label> <br />
-                    <div class="p-formgrid grid" *ngFor="let xpScoControl of getXpScos().controls; let i = index">
+                    <label>Expériences scolaires</label> <br />
+                    <div class="p-formgrid grid" *ngFor="let xpScoControl of getXpUpdateScos().controls; let i = index">
                         <div class="field col-10">
                             <textarea pInputTextarea type="text" placeholder="2018-2019: expérience"
                                 [formControlName]="i"></textarea>
                         </div>
                         <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveXpSco(i)"
+                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveUpdateXpSco(i)"
                                 class="p-button-outlined p-button-danger"></button>
                         </div>
                     </div>
                     <button pButton icon="pi pi-plus" label="Ajouter un parcours scolaire" type="button"
-                        (click)="onAddXpSco()" class="p-button-outlined p-button-info"></button>
+                        (click)="onAddUpdateXpSco()" class="p-button-outlined p-button-info"></button>
                 </div>
 
                 <div class="field col-12">
@@ -250,14 +251,8 @@
                         placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien"
                         formControlName="video_lien" />
                 </div>
-
-                <div class="field col-12">
-                    <label>joindre un fichier (pdf)</label>
-                    <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                        (change)="onUpload($event)" chooseLabel="Browse" />
-                </div>
                 <div>
-                    <button pButton label="Valider" type="submit" [disabled]="formAddCV.invalid"></button>
+                    <button pButton label="Valider" type="submit" [disabled]="formUpdateCV.invalid"></button>
                 </div>
             </form>
         </div>
@@ -341,7 +336,10 @@
                         <td class="text-center" style="min-width: 8rem;">
                             <i class="pi pi-pencil mr-2"
                                 title="Modifier le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                                (click)="InitUpdateCV(cv)" style="color: green"></i>
+                                (click)="InitUpdateCV(cv)"></i>
+                            <i class="pi pi-file-pdf mr-2"
+                                title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
+                                (click)="InitExportPDF(cv)"></i>
                             <i class="pi pi-book"
                                 title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
                                 style="color: green"></i>

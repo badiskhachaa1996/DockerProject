@@ -273,50 +273,121 @@ export class CvthequeComponent implements OnInit {
 
   //Partie Mis à jour du CV
 
-  showUpdateCV:CV
-  formUpdateCV = this.formBuilder.group({
-    experiences_pro: this.formBuilder.array([]),
-    experiences_sco: this.formBuilder.array([]),
-    competences: [],
-    outils: ['', Validators.required],
-    langues: [],
-    video_lien: [],
-  });
+  showUpdateCV: CV
+  formUpdateCV: FormGroup
 
   InitUpdateCV(cv) {
+    this.formUpdateCV = this.formBuilder.group({
+      experiences_pro: this.formBuilder.array([]),
+      experiences_sco: this.formBuilder.array([]),
+      competences: [],
+      outils: ['', Validators.required],
+      langues: [],
+      video_lien: [],
+    });
     this.showUpdateCV = cv
-  }
-
-  onUpdateCV(){
-
-  }
-
-    /* Xp pro */
-    getUpdateXpPros() {
-      return this.formAddCV.get('experiences_pro') as FormArray;
-    }
-  
-    onAddUpdateXpPro() {
-      const newXpProControl = this.formBuilder.control('', Validators.required);
+    cv.experiences_pro?.forEach(xpPro => {
+      const newXpProControl = this.formBuilder.control(xpPro, Validators.required);
       this.getUpdateXpPros().push(newXpProControl);
-    }
-  
-    onRemoveUpdateXpPro(i: number) {
-      this.getUpdateXpPros().removeAt(i);
-    }
-    /* end Xp pro */
-  
-    /* Xp sco */
-    getXpUpdateScos() {
-      return this.formAddCV.get('experiences_sco') as FormArray;
-    }
-  
-    onAddUpdateXpSco() {
-      const newXpScoControl = this.formBuilder.control('', Validators.required);
-      this.getUpdateXpPros().push(newXpScoControl);
-    }
-  
-    onRemoveUpdateXpSco(i: number) {
-      this.getUpdateXpPros().removeAt(i);
-    }
+    });
+
+    cv.experiences_sco?.forEach(xpSco => {
+      const newXpScoControl = this.formBuilder.control(xpSco, Validators.required);
+      this.getXpUpdateScos().push(newXpScoControl);
+    });
+
+    let cv_competences = [];
+    cv.competences?.forEach(cpt => {
+      this.competencesList.forEach(c => {
+        if (c.value == cpt)
+          cv_competences.push(c);
+      })
+    });
+
+    let cv_outils = [];
+    cv.outils?.forEach((outil) => {
+      cv_outils.push({ label: outil });
+    });
+
+    let cv_langues = [];
+    cv.langues?.forEach(langue => {
+      cv_langues.push({ label: langue });
+    });
+    this.selectedMultiOutils = cv_outils
+    this.selectedMultilang = cv_langues
+    this.selectedMultiCpt = cv_competences
+    this.formUpdateCV.patchValue({
+      competences: cv_competences,
+      outils: cv_outils,
+      langues: cv_langues,
+      video_lien: cv.video_lien
+    })
+  }
+
+  onUpdateCV() {
+    let cv = this.showUpdateCV
+    const formValue = this.formUpdateCV.value;
+    cv.experiences_pro = [];
+    formValue.experiences_pro?.forEach(xpPro => {
+      cv.experiences_pro.push(xpPro);
+    });
+
+    cv.experiences_sco = [];
+    formValue.experiences_sco?.forEach(xpSco => {
+      cv.experiences_sco.push(xpSco);
+    });
+
+    cv.competences = [];
+    formValue.competences?.forEach(cpt => {
+      cv.competences.push(cpt.value);
+    });
+
+    cv.outils = [];
+    formValue.outils?.forEach((outil) => {
+      cv.outils.push(outil.label);
+    });
+
+    cv.langues = [];
+    formValue.langues?.forEach(langue => {
+      cv.langues.push(langue.label);
+    });
+    cv.video_lien = formValue.video_lien
+
+    this.cvService.putCv(cv).then(data => {
+      console.log(data, cv)
+      this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
+      this.messageService.add({ severity: 'success', summary: "Mis à jour du CV avec succès" })
+      this.formUpdateCV.reset();
+      this.showUpdateCV = null;
+    })
+  }
+
+  /* Xp pro */
+  getUpdateXpPros() {
+    return this.formUpdateCV.get('experiences_pro') as FormArray;
+  }
+
+  onAddUpdateXpPro() {
+    const newXpProControl = this.formBuilder.control('', Validators.required);
+    this.getUpdateXpPros().push(newXpProControl);
+  }
+
+  onRemoveUpdateXpPro(i: number) {
+    this.getUpdateXpPros().removeAt(i);
+  }
+  /* end Xp pro */
+
+  /* Xp sco */
+  getXpUpdateScos() {
+    return this.formUpdateCV.get('experiences_sco') as FormArray;
+  }
+
+  onAddUpdateXpSco() {
+    const newXpScoControl = this.formBuilder.control('', Validators.required);
+    this.getXpUpdateScos().push(newXpScoControl);
+  }
+
+  onRemoveUpdateXpSco(i: number) {
+    this.getXpUpdateScos().removeAt(i);
+  }
 }
