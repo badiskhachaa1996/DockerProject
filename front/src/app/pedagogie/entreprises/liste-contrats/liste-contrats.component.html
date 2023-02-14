@@ -287,7 +287,7 @@
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label >Formation<span style="color: red;"> *
+                            <label>Formation<span style="color: red;"> *
                                 </span></label>
                             <p-dropdown [options]="formationList" id="form" formControlName="form" filter="true"
                                 emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Filtrer">
@@ -339,14 +339,15 @@
         <div class="col-12" *ngIf="token.type == 'CEO Entreprise'">
             <div class="card">
                 <p-panel header="Notice" [toggleable]="true" class="line-height-3 m-0">
-                    Si vous rencontrez une incohérence sur un contrat n'hésitez pas créer un ticket au service commercial via le module ticketing.
+                    Si vous rencontrez une incohérence sur un contrat n'hésitez pas créer un ticket au service
+                    commercial via le module ticketing.
                 </p-panel>
             </div>
         </div>
 
         <div class="card">
-            <button *ngIf="token.type != 'CEO Entreprise'" pButton label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()"
-                style="float: right;"></button>
+            <button *ngIf="token.type != 'CEO Entreprise'" pButton label="Nouveau contrat d'alternance"
+                (click)="ShowAddNewCA()" style="float: right;"></button>
 
             <h5>Liste des contrats</h5>
 
@@ -357,11 +358,14 @@
                 [rows]="10">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
+
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreAgent"
+                            (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals')"
+                            filterPlaceholder="Choissisez un commercial"></p-dropdown>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
                                 placeholder="Recherche" class="w-full" />
-
                         </span>
                     </div>
                 </ng-template>
@@ -406,10 +410,12 @@
                         </td>
                         <td>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
-                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red;"></i>
+                                (click)="showPresence(contrat.alternant_id._id)"
+                                style="text-align: center; color: red;"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
-                                style="text-align: center; margin-left: 3px; color: blue" *ngIf="token.type != 'CEO Entreprise'"></i>
+                                style="text-align: center; margin-left: 3px; color: blue"
+                                *ngIf="token.type != 'CEO Entreprise'"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -441,13 +447,13 @@
                         </td>
                         <td>{{contrat.coeff_hierachique}}</td>
                         <td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
-                        
+
                         <td *ngIf="contrat.tuteur_id != null">
-                            {{ contrat.tuteur_id?.user_id?.lastname }} 
+                            {{ contrat.tuteur_id?.user_id?.lastname }}
                             {{ contrat.tuteur_id?.user_id?.firstname }}
                         </td>
                         <td *ngIf="contrat.directeur_id != null">
-                            {{ contrat.directeur_id?.lastname }} 
+                            {{ contrat.directeur_id?.lastname }}
                             {{ contrat.directeur_id?.firstname }}
                         </td>
 

@@ -68,6 +68,10 @@ export class ListeContratsComponent implements OnInit {
     { label: '2025-2026' },
   ];
 
+  filtreAgent = [
+    { value: null, label: "Tous les commerciaux" }
+  ]
+
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
@@ -149,7 +153,7 @@ export class ListeContratsComponent implements OnInit {
       if (this.token.role == "Admin") {
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
           this.ListeContrats = Allcontrats;
-          
+          this.InitAgentFilter()
           Allcontrats.forEach(cont => {
             this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
               this.EntreprisesName[entpName._id] = entpName;
@@ -189,7 +193,10 @@ export class ListeContratsComponent implements OnInit {
               }, (eror) => { console.error(eror) })
 
             this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(
-              listeData => { this.ListeContrats = listeData; },
+              listeData => {
+                this.ListeContrats = listeData;
+                this.InitAgentFilter()
+              },
               (eror) => { console.error(eror) })
           }, (eror) => { console.error(eror) })
 
@@ -201,13 +208,14 @@ export class ListeContratsComponent implements OnInit {
 
           this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
             this.ListeContrats = listeData;
+            this.InitAgentFilter()
           })
         })
       }
       else {
         this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
           this.ListeContrats = listeData;
-
+          this.InitAgentFilter()
           this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
             this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
               this.tuteurInfoPerso = TuteurInfoPerso
@@ -323,7 +331,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires,this.RegisterNewCA.value.ecole)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -382,6 +390,16 @@ export class ListeContratsComponent implements OnInit {
       ecole: contrat.ecole
     });
   }
-
+  InitAgentFilter() {
+    const contrats = this.ListeContrats
+    let code_commercial = []
+    contrats.forEach(contrat => {
+      let cc: any = contrat.code_commercial
+      if (!code_commercial.includes(cc._id)) {
+        code_commercial.push(cc._id)
+        this.filtreAgent.push({ label: cc.firstname + " " + cc.lastname, value: cc._id })
+      }
+    })
+  }
 
 }

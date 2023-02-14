@@ -354,7 +354,6 @@ export class CvthequeComponent implements OnInit {
     cv.video_lien = formValue.video_lien
 
     this.cvService.putCv(cv).then(data => {
-      console.log(data, cv)
       this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
       this.messageService.add({ severity: 'success', summary: "Mis à jour du CV avec succès" })
       this.formUpdateCV.reset();
@@ -389,5 +388,12 @@ export class CvthequeComponent implements OnInit {
 
   onRemoveUpdateXpSco(i: number) {
     this.getXpUpdateScos().removeAt(i);
+  }
+
+  //Partie Exportation en PDF
+
+  showPDF: CV
+  InitExportPDF(cv) {
+    this.showPDF = cv
   }
 }
