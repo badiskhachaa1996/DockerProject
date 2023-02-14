@@ -226,6 +226,7 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
       this.prospects[this.showPayement.user_id] = data
+      this.etudiants[this.etudiants.indexOf(this.etuPayement)].payment_reinscrit = data.payment_reinscrit;
       this.showPayement = null
       this.payementList = null
       //this.refreshProspect()
@@ -235,7 +236,10 @@ export class ListEtudiantComponent implements OnInit {
     })
   }
 
+  etuPayement: Etudiant = null
+
   showPayementFC(etu: Etudiant) {
+    this.etuPayement = etu
     let bypass: any = etu.user_id
     this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
@@ -525,7 +529,7 @@ export class ListEtudiantComponent implements OnInit {
       ((responde) => {
         this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
         //Recuperation de la liste des differentes informations
-        this.onGetAllClasses();
+        this.etudiants[this.etudiants.indexOf(this.etuPayement)].statut_dossier = statut_dossier;
         //this.resetForms();
       }),
       ((error) => { console.error(error); })
