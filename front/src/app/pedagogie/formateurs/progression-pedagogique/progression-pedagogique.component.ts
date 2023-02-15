@@ -28,13 +28,10 @@ export class ProgressionPedagogiqueComponent implements OnInit {
       let moduleID = []
       data.forEach(pp => {
         let ps: any = pp.seance_id
-        moduleID.push(ps.matiere_id)
-      })
-      this.ModuleService.getAll().subscribe(data => {
-        data.forEach(d => {
-          if (moduleID.includes(d._id))
-            this.dropdownModule.push({ label: d.abbrv, value: d._id })
-        })
+        if (!moduleID.includes(ps.matiere_id._id)) {
+          this.dropdownModule.push({ label: ps.matiere_id.abbrv, value: ps.matiere_id._id })
+          moduleID.push(ps.matiere_id._id)
+        }
       })
     })
     this.AuthService.getPopulate(this.ID).subscribe(data => {

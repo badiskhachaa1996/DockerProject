@@ -11,6 +11,9 @@
                     <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownModule"
                         (onChange)="dt1.filter($event.value, 'formation', 'equals');"
                         filterPlaceholder="Choissisez un module" filter="true"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownSemestre"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');"
+                        filterPlaceholder="Choissisez un semestre" filter="true"></p-dropdown>
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -20,10 +23,6 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="seance_id.matiere_id.abbrv" style="text-align: center;">
-                        Module
-                        <p-sortIcon *ngIf="!hideForPDF" field="seance_id.matiere_id.abbrv"></p-sortIcon>
-                    </th>
                     <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
                         Date
                         <p-sortIcon *ngIf="!hideForPDF" field="seance_id.date_debut"></p-sortIcon>
@@ -47,14 +46,29 @@
                     <th>
                         Durée de la séance
                     </th>
+                    <th pSortableColumn="seance_id.matiere_id.abbrv" style="text-align: center;">
+                        Module
+                        <p-sortIcon *ngIf="!hideForPDF" field="seance_id.matiere_id.abbrv"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="seance_id.classe_id[0].diplome_id.campus_id.libelle"
+                        style="text-align: center;">
+                        Ecole
+                        <p-sortIcon *ngIf="!hideForPDF"
+                            field="seance_id.classe_id[0].diplome_id.campus_id.libelle"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="seance_id.matiere_id.semestre" style="text-align: center;">
+                        Semestre
+                        <p-sortIcon *ngIf="!hideForPDF" field="seance_id.matiere_id.semestre"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
+                        Année
+                        <p-sortIcon field="seance_id.date_debut" *ngIf="!hideForPDF"></p-sortIcon>
+                    </th>
                     <th *ngIf="!hideForPDF" style="text-align: center;">Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-pp>
                 <tr>
-                    <td>
-                        {{pp.seance_id.matiere_id.abbrv}}
-                    </td>
                     <td>
                         {{pp.seance_id.date_debut| date:'dd/MM/YYYY à HH:mm'}}
                     </td>
@@ -73,9 +87,23 @@
                     <td>
                         {{getDuree(pp.seance_id)}}
                     </td>
+                    <td>
+                        {{pp.seance_id.matiere_id.abbrv}}
+                    </td>
+                    <td>
+                        {{pp.seance_id.classe_id[0].diplome_id.campus_id.libelle}}
+                    </td>
+                    <td>
+                        {{pp.seance_id.matiere_id.semestre}}
+                    </td>
+                    <td>
+                        {{pp.seance_id.date_debut| date:'YYYY'}}
+                    </td>
                     <td *ngIf="!hideForPDF">
                         <i style="margin-left: 2%;" (click)="seeSeance(pp.seance_id);" class="pi pi-send"
                             aria-hidden="true" pTooltip="Voir le détails de la séance"></i>
+                        <i *ngIf="pp.seance_id.fileRight" style="margin-left: 2%;" (click)="seeSeance(pp.seance_id);"
+                            class="pi pi-file" aria-hidden="true" pTooltip="Voir le fichiers de la séance"></i>
                     </td>
                 </tr>
             </ng-template>
