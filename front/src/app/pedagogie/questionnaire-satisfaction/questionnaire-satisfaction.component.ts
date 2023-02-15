@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { DiplomeService } from 'src/app/services/diplome.service';
 import { QSService } from 'src/app/services/qs.service';
 
 @Component({
@@ -55,9 +56,14 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
     propositions: new FormControl(''),
   })
 
-  constructor(private QSService: QSService, private MessageService: MessageService) { }
+  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService) { }
 
   ngOnInit(): void {
+    this.DiplomeService.getAll().subscribe(diplomes => {
+      diplomes.forEach(diplome => {
+        this.dropdownFormation.push({ label: diplome.titre, value: diplome.titre })
+      })
+    })
   }
 
   onAddForm() {
@@ -71,7 +77,7 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   changeAttente() {
     if (this.satisfactionsForm.value.ecole == 'Pas tout à fait') {
       this.satisfactionsForm.get('ecole_propositions').setValidators([Validators.required])
-    }else{
+    } else {
       this.satisfactionsForm.get('ecole_propositions').setValidators([])
     }
   }

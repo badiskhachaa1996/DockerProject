@@ -15,7 +15,9 @@
                     <div class="field col-12">
                         <label>Question 1 :</label><br>
                         <label>Quelle formation suivez-vous ?</label>
-                        <input type="text" pInputText formControlName="formation" placeholder="Ex: BTS SIO" />
+                        <p-dropdown [options]="dropdownFormation" formControlName="formation"
+                            placeholder="Choissisez votre formation" [filter]="true"></p-dropdown>
+
                     </div>
 
                     <div class="field col-12">
