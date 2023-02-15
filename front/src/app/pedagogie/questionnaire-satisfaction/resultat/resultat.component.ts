@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { QSService } from 'src/app/services/qs.service';
 import { MessageService } from 'primeng/api';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { ClasseService } from 'src/app/services/classe.service';
 
 @Component({
   selector: 'app-resultat',
@@ -14,7 +15,11 @@ export class ResultatComponent implements OnInit {
 
   moyenne = {}
 
+  diplomeChoisi = ""
+
   dropdownFormation = []
+
+  dropdownGroupe = []
 
   dropdownAttentes = [
     { label: 'Oui', value: 'Oui' },
@@ -55,13 +60,19 @@ export class ResultatComponent implements OnInit {
     { label: '2022-2024', value: '2022-2024' }
   ]
 
-  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService) { }
+  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService:ClasseService) { }
 
   ngOnInit(): void {
     this.DiplomeService.getAll().subscribe(diplomes => {
       this.dropdownFormation = [{ label: "Tous les diplomes", value: null }]
       diplomes.forEach(diplome => {
         this.dropdownFormation.push({ label: diplome.titre, value: diplome.titre })
+      })
+    })
+    this.GroupeService.getAll().subscribe(groupes => {
+      this.dropdownGroupe = [{ label: "Tous les groupes", value: null }]
+      groupes.forEach(gr => {
+        this.dropdownGroupe.push({ label: gr.abbrv, value: gr.abbrv })
       })
     })
     this.QSService.getAll().subscribe(data => {

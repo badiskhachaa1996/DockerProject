@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ProgressionPedaService } from 'src/app/services/pedagogie/progression-peda.service';
 import * as html2pdf from 'html2pdf.js';
 import { MatiereService } from 'src/app/services/matiere.service';
+import { FormateurService } from 'src/app/services/formateur.service';
 
 @Component({
   selector: 'app-progression-pedagogique',
@@ -16,7 +17,7 @@ import { MatiereService } from 'src/app/services/matiere.service';
 export class ProgressionPedagogiqueComponent implements OnInit {
   hideForPDF = false
   constructor(private router: Router, private route: ActivatedRoute, private PPService: ProgressionPedaService,
-    private AuthService: AuthService, private ModuleService: MatiereService) { }
+    private AuthService: AuthService, private ModuleService: MatiereService,private FormateurService:FormateurService) { }
   ID = this.route.snapshot.paramMap.get('formateur_id');
   FORMATEUR: User;
   ppList: ProgressionPeda[] = [];

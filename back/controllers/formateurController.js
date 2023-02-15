@@ -372,5 +372,16 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
     })
 })
 
+//Recupère un formateur via un userId
+app.get("/getPopulateByUserId/:id", (req, res, next) => {
+    if (req.params.id != "null")
+        Formateur.findOne({ user_id: req.params.id }).populate('campus_id').populate('user_id')
+            .then((formateurFromDb) => { res.status(200).send(formateurFromDb) })
+            .catch((error) => { res.status(400).json({ error: "Impossible de recuperer cet formateur via son userId " + error.message }) });
+    else {
+        res.status(200).send(null)
+    }
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

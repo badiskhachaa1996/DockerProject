@@ -14,9 +14,9 @@
                 <form class="p-fluid p-formgrid grid" [formGroup]="satisfactionsForm" (ngSubmit)="onAddForm()">
                     <div class="field col-12">
                         <label>Question 1 :</label><br>
-                        <label>Quelle formation suivez-vous ?</label>
-                        <p-dropdown [options]="dropdownFormation" formControlName="formation"
-                            placeholder="Choissisez votre formation" [filter]="true"></p-dropdown>
+                        <label>Dans quelle classe êtes-vous?</label>
+                        <p-dropdown [options]="dropdownGroupe" formControlName="formation"
+                            placeholder="Choissisez votre groupe" [filter]="true"></p-dropdown>
 
                     </div>
 

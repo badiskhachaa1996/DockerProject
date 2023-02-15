@@ -1,6 +1,5 @@
 <div class="col-12">
     <div class="card">
-        <h5>Progression pédagogique de {{FORMATEUR?.firstname | titlecase}} {{FORMATEUR?.lastname | uppercase}}</h5>
         <p-table #dt2 id="dt2" [globalFilterFields]="['theme','objectif','methode','support']"
             [totalRecords]="ppList.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
             styleClass="p-datatable-gridlines" [value]="ppList" dataKey="_id" responsiveLayout="scroll">
@@ -22,6 +21,15 @@
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
+                <tr>
+                    <th colspan="8">
+                        <h5 class="col-12">Progression pédagogique de {{FORMATEUR?.firstname | titlecase}}
+                            {{FORMATEUR?.lastname | uppercase}} du {{ppList[0].seance_id.matiere_id.semestre}} au Campus
+                            {{ppList[0].seance_id.classe_id[0].diplome_id.campus_id[0].libelle}} de l'année
+                            {{ppList[0].seance_id.date_debut| date:'YYYY'}}
+                        </h5>
+                    </th>
+                </tr>
                 <tr>
                     <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
                         Date
@@ -50,7 +58,7 @@
                         Module
                         <p-sortIcon *ngIf="!hideForPDF" field="seance_id.matiere_id.abbrv"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="seance_id.classe_id[0].diplome_id.campus_id.libelle"
+                    <!--<th pSortableColumn="seance_id.classe_id[0].diplome_id.campus_id.libelle"
                         style="text-align: center;">
                         Ecole
                         <p-sortIcon *ngIf="!hideForPDF"
@@ -63,7 +71,7 @@
                     <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
                         Année
                         <p-sortIcon field="seance_id.date_debut" *ngIf="!hideForPDF"></p-sortIcon>
-                    </th>
+                    </th>-->
                     <th *ngIf="!hideForPDF" style="text-align: center;">Action</th>
                 </tr>
             </ng-template>
@@ -82,7 +90,9 @@
                         {{pp.methode}}
                     </td>
                     <td>
-                        {{pp.support}}
+                        {{pp.support}} <i *ngIf="pp.seance_id.fileRight" style="margin-left: 2%;"
+                            (click)="seeSeance(pp.seance_id);" class="pi pi-file" aria-hidden="true"
+                            pTooltip="Voir le fichiers de la séance"></i>
                     </td>
                     <td>
                         {{getDuree(pp.seance_id)}}
@@ -90,7 +100,7 @@
                     <td>
                         {{pp.seance_id.matiere_id.abbrv}}
                     </td>
-                    <td>
+                    <!--<td>
                         {{pp.seance_id.classe_id[0].diplome_id.campus_id.libelle}}
                     </td>
                     <td>
@@ -98,12 +108,11 @@
                     </td>
                     <td>
                         {{pp.seance_id.date_debut| date:'YYYY'}}
-                    </td>
+                    </td>-->
                     <td *ngIf="!hideForPDF">
                         <i style="margin-left: 2%;" (click)="seeSeance(pp.seance_id);" class="pi pi-send"
                             aria-hidden="true" pTooltip="Voir le détails de la séance"></i>
-                        <i *ngIf="pp.seance_id.fileRight" style="margin-left: 2%;" (click)="seeSeance(pp.seance_id);"
-                            class="pi pi-file" aria-hidden="true" pTooltip="Voir le fichiers de la séance"></i>
+
                     </td>
                 </tr>
             </ng-template>

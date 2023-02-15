@@ -23,8 +23,8 @@
 
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownFormation"
-                        (onChange)="dt1.filter($event.value, 'formation', 'equals');"
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownGroupe"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');diplomeChoisi=$event.value"
                         filterPlaceholder="Choissisez une formation" filter="true"></p-dropdown>
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>
@@ -174,7 +174,7 @@
 <div class="card" *ngIf="moyenne">
     <div class="p-fluid p-formgrid grid">
         <h1 class="col-12 text-center">
-            Moyenne de tous les formulaires
+            Moyenne de {{diplomeChoisi}} tous les formulaires
         </h1>
         <div class="field col-12">
             <label>Question 6 :</label><br>
