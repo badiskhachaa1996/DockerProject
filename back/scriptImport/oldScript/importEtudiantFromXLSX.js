@@ -66,7 +66,7 @@ mongoose
                                         email: data['Mail école'],
                                         email_perso: data['Mail personnel'],
                                         civilite: getCivilite(data['Sexe']),
-                                        type: "Etudiant",
+                                        type: "Initial",
                                         pays_adresse: "France",
                                         ville_adresse: adresse['Ville'],
                                         rue_adresse: adresse['Rue'],

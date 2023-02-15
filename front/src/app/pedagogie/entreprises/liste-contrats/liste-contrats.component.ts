@@ -148,8 +148,10 @@ export class ListeContratsComponent implements OnInit {
         this.listAlternantDD = []
         alternantsData.forEach(altdata => {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
-          altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
-          this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+          if(altdata.user_id){
+            altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
+            this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+          }
         })
       })
 

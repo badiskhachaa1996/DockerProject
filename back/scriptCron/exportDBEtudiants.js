@@ -6,9 +6,10 @@ const { Diplome } = require('../models/diplome')
 const { Campus } = require('../models/campus')
 var d = new Date().toLocaleDateString('fr-FR')
 const mongoose = require("mongoose");
+var fs = require('fs');
 var XLSX = require("xlsx");
 mongoose
-    .connect(`mongodb://localhost:27017/backup`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -17,7 +18,6 @@ mongoose
     .then(() => {
         //Sample data set
         d = d.replaceAll('/', '-')
-        console.log(d)
         Etudiant.find().populate('user_id').populate('classe_id').populate('campus')
             .populate('filiere').populate('conseiller').then(etudiants => {
                 var etudiantDic = {}
@@ -37,7 +37,7 @@ mongoose
                             //Informations Scolaires
                             'Campus': etudiant?.campus?.libelle,
                             'Filière': etudiant?.filiere?.titre,
-                            "Ecole": etudiant?.ecole?.libelle,
+                            "Ecole": etudiant?.ecole_id?.libelle,
                             'Statut': etudiant?.statut,
                             'Initial/Alternant': (etudiant?.isAlternant) ? 'Alternant' : 'Initial',
                             "Dernier Diplôme": etudiant?.dernier_diplome,
@@ -76,18 +76,26 @@ mongoose
                             "Date Téléchargement Bulletin": etudiant?.date_telechargement_bulletin,
                             "Source Insertion": etudiant?.source,
                             //IMS
-                            "ID USER": etudiant?.user_id?._id,
-                            "ID DIPLOME": etudiant?.filiere?._id,
-                            "ID CAMPUS": etudiant?.campus?._id,
-                            "ID ECOLE": etudiant?.ecole_id?._id
+                            "ID USER": etudiant?.user_id?.id,
+                            "ID DIPLOME": etudiant?.filiere?.id,
+                            "ID CAMPUS": etudiant?.campus?.id,
+                            "ID ECOLE": etudiant?.ecole_id?.id,
+                            "ID ETUDIANT": etudiant.id
 
                         }
-                        if (!etudiantDic[etudiant.classe_id.abbrv])
-                            etudiantDic[etudiant.classe_id.abbrv] = [data]
+                        let classe_name = etudiant.classe_id.abbrv
+                        classe_name = classe_name.replace('- ESTYA', '')
+                        classe_name = classe_name.replace('Montpellier', 'MTP')
+                        classe_name = classe_name.replace('  ', ' ')
+                        classe_name = classe_name.replace('  ', ' ')
+                        if (classe_name.length > 30)
+                            classe_name = classe_name.replace('RNCP ', '')
+                        if (!etudiantDic[classe_name])
+                            etudiantDic[classe_name] = [data]
                         else
-                            etudiantDic[etudiant.classe_id.abbrv].push(data)
-                        if (classeList.includes(etudiant.classe_id.abbrv))
-                            classeList.push(etudiant.classe_id.abbrv)
+                            etudiantDic[classe_name].push(data)
+                        if (!classeList.includes(classe_name))
+                            classeList.push(classe_name)
                     }
 
                 })
@@ -95,9 +103,31 @@ mongoose
                 classeList.forEach(classe => {
                     worksheets[classe] = XLSX.utils.json_to_sheet(etudiantDic[classe]);
                 })
-                console.log(worksheets, classeList)
+                let dir = "/home/ubuntu/backupEXCEL"
                 const workbook = { Sheets: worksheets, SheetNames: classeList };
-                XLSX.writeFile(workbook, `Etudiants_${d}.xls`);
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir);
+                }
+                var files = fs.readdirSync(dir);
+                if (files.length > 90) {
+                    let fileToDelete = ""
+                    let DateToFile = new Date()
+                    files.forEach(f => {
+                        let stats = fs.statSync(`${dir}/${f}`)
+                        if (DateToFile.getTime() < stats.mtime.getTime()) {
+                            DateToFile = stats.mtime
+                            fileToDelete = f
+                        }
+                        fs.unlink(`${dir}/${fileToDelete}`, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                        
+                            console.log(`${fileToDelete} supprimé`);
+                        });
+                    })
+                }
+                XLSX.writeFile(workbook, `${dir}/Etudiants_${d}.xls`);
                 process.exit()
             })
     })

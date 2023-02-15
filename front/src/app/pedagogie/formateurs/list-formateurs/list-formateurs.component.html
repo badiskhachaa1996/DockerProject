@@ -61,7 +61,7 @@
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
 				<div class="field col-12 md:col-6">
 					<label For="contrat">Type de contract<span style="color: red;"> * </span></label>
-					<p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
+					<p-dropdown [options]="typeContratList" placeholder="Choissisez un type de contrat" formControlName="type_contrat">
 					</p-dropdown>
 				</div>
 
@@ -69,7 +69,7 @@
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
-					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+					<p-dropdown [options]="prestataireList" placeholder="Choissisez une entreprise" formControlName="prestataire_id">
 					</p-dropdown>
 				</div>
 
@@ -237,7 +237,7 @@
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==true">
 								<label>Module: </label>
 								<p-dropdown [options]="matiereList" (onChange)="changeVolumeH(i,$event,'matiere_id')"
-									[group]="true"></p-dropdown>
+									[group]="true" [filter]="true"></p-dropdown>
 							</div>
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==false">
 								<label>Module: </label>

@@ -262,7 +262,7 @@ app.get("/getAllAlternants", (req, res, next) => {
     Etudiant.find({ isAlternant: true, isActive: { $ne: false } }).populate('user_id')
         .then(alternantsFromDb => {
 
-            let i = alternantsFromDb.length
+           /* let i = alternantsFromDb.length
             alternantsFromDb.forEach(alternatInscrit => {
 
                 CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
@@ -284,7 +284,8 @@ app.get("/getAllAlternants", (req, res, next) => {
 
                     }
                 })
-            });
+            });*/
+            res.status(200).send(alternantsFromDb);
         })
         .catch((error) => {
             console.log(error);
