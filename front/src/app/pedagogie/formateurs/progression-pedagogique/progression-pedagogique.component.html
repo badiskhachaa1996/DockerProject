@@ -5,15 +5,25 @@
             [totalRecords]="ppList.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
             styleClass="p-datatable-gridlines" [value]="ppList" dataKey="_id" responsiveLayout="scroll">
             <ng-template pTemplate="caption">
-                <div *ngIf="!hideForPDF">
+                <div class="flex justify-content-between flex-column sm:flex-row" *ngIf="!hideForPDF">
                     <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" class="mr-2"
                         pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" />
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownModule"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');"
+                        filterPlaceholder="Choissisez un module" filter="true"></p-dropdown>
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="w-full" />
+                    </span>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
+                    <th pSortableColumn="seance_id.matiere_id.abbrv" style="text-align: center;">
+                        Module
+                        <p-sortIcon *ngIf="!hideForPDF" field="seance_id.matiere_id.abbrv"></p-sortIcon>
+                    </th>
                     <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
                         Date
                         <p-sortIcon *ngIf="!hideForPDF" field="seance_id.date_debut"></p-sortIcon>
@@ -42,6 +52,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-pp>
                 <tr>
+                    <td>
+                        {{pp.seance_id.matiere_id.abbrv}}
+                    </td>
                     <td>
                         {{pp.seance_id.date_debut| date:'dd/MM/YYYY à HH:mm'}}
                     </td>

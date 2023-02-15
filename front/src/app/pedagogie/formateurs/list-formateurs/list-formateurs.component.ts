@@ -246,7 +246,8 @@ export class ListFormateursComponent implements OnInit {
           remarque: this.formateurToUpdate.remarque,
           campus: c,
           nda: this.formateurToUpdate?.nda,
-          absences: arr
+          absences: arr,
+          prestataire_id: response.prestataire_id
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -412,6 +413,7 @@ export class ListFormateursComponent implements OnInit {
         if (data.error) {
           this.messageService.add({ severity: 'error', summary: 'Erreur lors de la modification de formateur', detail: 'data.error' });
         } else {
+          console.log(data, this.formateurToUpdate)
           this.messageService.add({ severity: 'success', summary: 'Modification de formateur', detail: 'Cet formateur a bien été modifié' });
           this.formateurService.getAllPopulate().subscribe(
             (dataF) => {

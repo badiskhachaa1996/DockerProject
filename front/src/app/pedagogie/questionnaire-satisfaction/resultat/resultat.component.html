@@ -19,12 +19,12 @@
         <h5>Liste des résultats du questionnaire de satisfaction</h5>
         <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="10" [rowHover]="true"
             [totalRecords]="resultats.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-            [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll" (onFilter)="onFilter($event, 'dt1')">
+            [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll" (onFilter)="onFilter($event)">
 
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownFormation"
-                        (onChange)="dt1.filter($event.value, 'formation', 'equals');changeMoyenneResultat($event.value)"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');"
                         filterPlaceholder="Choissisez une formation" filter="true"></p-dropdown>
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>

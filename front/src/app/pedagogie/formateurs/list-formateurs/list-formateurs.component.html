@@ -463,7 +463,8 @@
 						<td>{{formateur.user_id?.email}}</td>
 						<td>{{formateur.user_id?.phone}}</td>
 						<td *ngIf="token && token.role=='Admin'">{{ formateur.taux_h }} €/{{ formateur.taux_j }} €</td>
-						<td *ngIf="formateur.prestataire_id">{{ entrepriseDic[formateur?.prestataire_id]?.r_sociale }}
+						<td *ngIf="formateur.prestataire_id">
+							{{ formateur?.prestataire_id.r_sociale }}
 						</td>
 					</tr>
 				</ng-template>
