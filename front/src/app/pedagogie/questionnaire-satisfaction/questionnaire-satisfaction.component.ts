@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { ClasseService } from 'src/app/services/classe.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 import { QSService } from 'src/app/services/qs.service';
 
 @Component({
@@ -13,6 +15,8 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   show = true
 
   dropdownFormation = []
+
+  dropdownGroupe = []
 
   dropdownAttentes = [
     { label: 'Oui', value: 'Oui' },
@@ -55,9 +59,19 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
     propositions: new FormControl(''),
   })
 
-  constructor(private QSService: QSService, private MessageService: MessageService) { }
+  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService: ClasseService) { }
 
   ngOnInit(): void {
+    this.DiplomeService.getAll().subscribe(diplomes => {
+      diplomes.forEach(diplome => {
+        this.dropdownFormation.push({ label: diplome.titre, value: diplome.titre })
+      })
+    })
+    this.GroupeService.getAll().subscribe(groupes => {
+      groupes.forEach(gr => {
+        this.dropdownGroupe.push({ label: gr.abbrv, value: gr.abbrv })
+      })
+    })
   }
 
   onAddForm() {
@@ -71,7 +85,7 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   changeAttente() {
     if (this.satisfactionsForm.value.ecole == 'Pas tout à fait') {
       this.satisfactionsForm.get('ecole_propositions').setValidators([Validators.required])
-    }else{
+    } else {
       this.satisfactionsForm.get('ecole_propositions').setValidators([])
     }
   }

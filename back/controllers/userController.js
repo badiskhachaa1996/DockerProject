@@ -62,7 +62,7 @@ app.post("/registre", (req, res) => {
                     role: data.role,
                     service_id: data?.service_id || null,
                     type: data.type,
-                    mention : data.mention,
+                    mention: data.mention,
                     entreprise: data.entreprise,
                     pays_adresse: data.pays_adresse,
                     ville_adresse: data.ville_adresse,
@@ -89,7 +89,7 @@ app.post("/registre", (req, res) => {
                 role: data.role || "user",
                 service_id: data?.service_id || null,
                 type: data.type,
-                mention : data.mention,
+                mention: data.mention,
                 entreprise: data.entreprise,
                 pays_adresse: data.pays_adresse,
                 ville_adresse: data.ville_adresse,
@@ -188,7 +188,7 @@ app.get("/getPopulate/:id", (req, res, next) => {
 
 //Recuperation de la liste des users pour la cv theque
 app.get("/get-all-for-cv", (_, res) => {
-    User.find({ $or: [{type: 'Etudiant'}, {type: 'Initial'}, {type: 'Prospect'}, {type: 'Alternant'}, {type: 'formateur'}] })
+    User.find({ $or: [{ type: 'Etudiant' }, { type: 'Initial' }, { type: 'Prospect' }, { type: 'Alternant' }, { type: 'formateur' }] })
         .then((usersFromDb) => { res.status(200).send(usersFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -196,7 +196,7 @@ app.get("/get-all-for-cv", (_, res) => {
 
 //Recuperation de la liste des users pour la partie project
 app.get("/get-all-salarie", (_, res) => {
-    User.find({ $or: [{type: 'Salarié'}, {role: 'Admin'}, {role: 'Agent'}, {role: 'Responsable'}] })
+    User.find({ $or: [{ type: 'Salarié' }, { role: 'Admin' }, { role: 'Agent' }, { role: 'Responsable' }] })
         .then((usersFromDb) => { res.status(200).send(usersFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -267,25 +267,7 @@ app.post("/updateById/:id", (req, res) => {
 app.patch("/patchById", (req, res) => {
     const user = new User({ ...req.body });
 
-    User.updateOne({ _id: user._id }, {
-        civilite: user.civilite,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        indicatif: user.indicatif,
-        phone: user.phone,
-        email: user.email,
-        email_perso: user.email_perso,
-        service_id: user.service_id,
-        mention: user.mention,
-        type: user.type,
-        role: user.role,
-        pays_adresse: user.pays_adresse,
-        ville_adresse: user.ville_adresse,
-        rue_adresse: user.rue_adresse,
-        numero_adresse: user.numero_adresse,
-        postal_adresse: user.postal_adresse,
-        date_creation: user.date_creation
-    })
+    User.updateOne({ _id: user._id }, { ...req.body })
         .then((response) => { res.status(201).send(response); })
         .catch((error) => { res.status(400).json({ msg: error.message }); });
 });
@@ -987,7 +969,7 @@ app.get('/toSupport', (req, res) => {
                 if (user.user_id.email == null || user.user_id.email == '' || user.user_id.email == ' ')
                     users.push(user.user_id._id)
         })
-        Etudiant.updateMany({ user_id: { $in: users } }, { valided_by_support: false }, { new: true },(err,doc)=>{
+        Etudiant.updateMany({ user_id: { $in: users } }, { valided_by_support: false }, { new: true }, (err, doc) => {
             res.send(doc)
         })
     }, err => {

@@ -12,6 +12,7 @@ import { EtudiantService } from '../../services/etudiant.service';
 import { FormateurService } from '../../services/formateur.service';
 import { ServService } from '../../services/service.service';
 import { MessageService } from 'primeng/api';
+import { CampusService } from 'src/app/services/campus.service';
 
 @Component({
   selector: 'app-users-settings',
@@ -68,9 +69,13 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'IGS - Inted Group Support', value: 'IGS - Inted Group Support' },
     { label: 'IGH - Inted Group RH', value: 'IGH - Inted Group RH' },
     { label: 'IGD - Inted Group Direction', value: 'IGD - Inted Group Direction' },
-    { label: 'ETUDIANT', value: 'ETUDIANT'},
-    { label: 'FORMATEUR', value: 'FORMATEUR'},
+    { label: 'ETUDIANT', value: 'ETUDIANT' },
+    { label: 'FORMATEUR', value: 'FORMATEUR' },
   ];
+
+  campusList = [
+
+  ]
   paysList = environment.pays;
 
   etudiants: Etudiant[] = [];
@@ -82,11 +87,16 @@ export class UsersSettingsComponent implements OnInit {
   constructor(private userService: AuthService, private etudiantService: EtudiantService,
     private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
     private serviceService: ServService, private formBuilder: FormBuilder,
-    private messageService: MessageService) { }
+    private messageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
     //Recuperation de toute les data
     this.onGetAllDatas();
+    this.CampusService.getAll().subscribe(data => {
+      data.forEach(c => {
+        this.campusList.push({ label: c.libelle, value: c._id })
+      })
+    })
 
     //Initialisation du formulaire de mise à jour des infos
     this.formUpdate = this.formBuilder.group({
@@ -106,7 +116,8 @@ export class UsersSettingsComponent implements OnInit {
       postal_adresse: [''],
       rue_adresse: [''],
       ville_adresse: [''],
-      date_creation:['']
+      date_creation: [''],
+      campus: ['', Validators.required]
     });
   }
 
@@ -194,7 +205,8 @@ export class UsersSettingsComponent implements OnInit {
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,
-      date_creation: this.formatDate(this.userToUpdate.date_creation)
+      date_creation: this.formatDate(this.userToUpdate.date_creation),
+      campus: this.userToUpdate.campus
     });
   }
   private formatDate(date) {
@@ -228,7 +240,7 @@ export class UsersSettingsComponent implements OnInit {
     user.rue_adresse = this.formUpdate.get('rue_adresse')?.value;
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
-
+    user.campus = this.formUpdate.value.campus
     this.userService.patchById(user)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });

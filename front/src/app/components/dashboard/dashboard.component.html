@@ -426,14 +426,14 @@
     <div class="col-12 card">
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
-            <h4>Documents</h4>
-            <div class="card col-3" *ngIf="dataEtudiant.lien_livret.read">
+            <h4 class="col-12">Documents</h4>
+            <div class="card col-6" *ngIf="dataEtudiant.lien_livret.read">
                 <h5>Livret</h5>
                 <a href="{{dataEtudiant.lien_livret.read}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
             <div class="card col-3" *ngIf="dataEtudiant.lien_dossier_professionel">
-                <h5>Dossier professionel</h5>
+                <h5 class="col-12">Dossier professionel</h5>
                 <a href="{{dataEtudiant.lien_dossier_professionel}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
@@ -445,7 +445,7 @@
         </div>
         <div class="grid"
             *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel']">
-            <h4>Bulletin</h4>
+            <h4 class="col-12">Bulletin</h4>
             <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1']">
                 <h5>Semestre 1</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Semestre 1']}}" target="_blank"><img style="max-height: 20vh;"
@@ -456,9 +456,16 @@
                 <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
-            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
+            <div class="card col-6" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
                 <h5>Annuel</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Annuel']}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
+        <div class="grid" *ngIf="dataEtudiant.lien_attestation">
+            <div class="card col-12" *ngIf="dataEtudiant.lien_attestation">
+                <h5>Attestation</h5>
+                <a href="{{dataEtudiant.lien_attestation}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
         </div>
@@ -831,7 +838,7 @@
 <div *ngIf="isReinscrit">
     <div class="card">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\Validation Dossier.jpg" style="max-width: 60%;">
+            <img src="assets\images\validation_dossier.jpg" style="max-width: 60%;">
         </div>
         <h2>Votre demande de reinscription est en cours de traitement.</h2>
         <h3 *ngIf="dataEtudiant && !dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de la

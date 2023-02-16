@@ -594,7 +594,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Date de naissance'] = p.date_naissance
       t['Pays de residence'] = p['pays_de_residence']
       t['Nationalite'] = p?.user_id?.nationnalite
-      t['Email'] = p?.user_id?.email
+      let email = ""
+      if (p?.user_id?.email)
+        email = p?.user_id?.email
+      if (p?.user_id?.email_perso)
+        email = p?.user_id?.email_perso
+      t['Email'] = email
       t['Telephone'] = p?.user_id?.indicatif + p?.user_id?.phone
       t['Ecole demande'] = p?.type_form
       t['1er choix'] = p.campus_choix_1
@@ -643,14 +648,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
     )
   }
 
-  onNavigateToCV(id : string) {
+  onNavigateToCV(id: string) {
     this.router.navigate(['/cvtheque', id]);
   }
 
-  prospectCalled(bol : boolean) {
-    if(!bol) {
+  prospectCalled(bol: boolean) {
+    if (!bol) {
       return "green";
     }
-    
+
   }
 }

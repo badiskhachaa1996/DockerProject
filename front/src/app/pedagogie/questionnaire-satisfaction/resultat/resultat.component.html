@@ -19,10 +19,13 @@
         <h5>Liste des résultats du questionnaire de satisfaction</h5>
         <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="10" [rowHover]="true"
             [totalRecords]="resultats.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-            [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll">
+            [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll" (onFilter)="onFilter($event)">
 
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownGroupe"
+                        (onChange)="dt1.filter($event.value, 'formation', 'equals');diplomeChoisi=$event.value"
+                        filterPlaceholder="Choissisez une formation" filter="true"></p-dropdown>
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -42,16 +45,20 @@
                     <th pSortableColumn="campus" style="text-align:center"> Campus <p-sortIcon field="campus">
                         </p-sortIcon>
                     </th>
-                    <th pSortableColumn="age" style="text-align:center"> Age <p-sortIcon field="age">
-                        </p-sortIcon>
+                    <th pSortableColumn="age" style="text-align:center"> Age
+                        <p-sortIcon field="age"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="annee_formation" style="text-align:center">Année <p-sortIcon
                             field="annee_formation">
                         </p-sortIcon>
                     </th>
+                    <th pSortableColumn="date_creation" style="text-align:center">Date <p-sortIcon
+                            field="date_creation">
+                        </p-sortIcon>
+                    </th>
                     <th style="text-align:center">Action</th>
             </ng-template>
-            <ng-template pTemplate="body" let-result>
+            <ng-template pTemplate="body" let-result let-expanded="expanded">
                 <tr>
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="result"
@@ -74,14 +81,17 @@
                         {{result.annee_formation}}
                     </td>
                     <td>
-                        <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash" (click)="delete(result._id)"
-                            aria-hidden="true"></i>
+                        {{result.date_creation|date:'dd/MM/YYYY à HH:mm'}}
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash"
+                            (click)="delete(result._id)" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-result>
                 <tr>
-                    <td colspan="7">
+                    <td colspan="8">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12">
                                 <label>Question 6 :</label><br>
@@ -151,7 +161,8 @@
                             <div class="field col-12">
                                 <label>Question 18 :</label><br>
                                 <label>Quelles sont vos propositions d’améliorations éventuelles?</label><br>
-                                <textarea pInputTextarea readonly="true" [rows]="11" [ngModel]="result.propositions"></textarea>
+                                <textarea pInputTextarea readonly="true" [rows]="11"
+                                    [ngModel]="result.propositions"></textarea>
                             </div>
                         </div>
                     </td>
@@ -162,6 +173,9 @@
 </div>
 <div class="card" *ngIf="moyenne">
     <div class="p-fluid p-formgrid grid">
+        <h1 class="col-12 text-center">
+            Moyenne de {{diplomeChoisi}} tous les formulaires
+        </h1>
         <div class="field col-12">
             <label>Question 6 :</label><br>
             <label>Êtes-vous satisfait des horaires de cours ?</label>

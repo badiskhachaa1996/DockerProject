@@ -52,6 +52,7 @@ export class Etudiant {
         public lien_dossier_professionel?: string,
         public lien_tableau_synthese?: string,
         public date_inscription?: Date,
-        public lien_bulletin?:any//{Semestre:''}
+        public lien_bulletin?: any,//{Semestre:''}
+        public lien_attestation?: string
     ) { }
 }

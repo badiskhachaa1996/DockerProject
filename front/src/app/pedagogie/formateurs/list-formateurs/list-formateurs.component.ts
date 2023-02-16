@@ -214,8 +214,10 @@ export class ListFormateursComponent implements OnInit {
     })
 
     this.EntrepriseService.getAll().subscribe(datEnt => {
+      this.prestataireList = []
       datEnt.forEach(ent => {
         this.entrepriseDic[ent._id] = ent;
+        this.prestataireList.push({ value: ent._id, label: ent.r_sociale })
       })
     })
 
@@ -239,12 +241,13 @@ export class ListFormateursComponent implements OnInit {
             c.push(this.campusList[cid]?._id)
           })
         this.formUpdateFormateur.patchValue({
-          type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
+          type_contrat: this.formateurToUpdate.type_contrat, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
           remarque: this.formateurToUpdate.remarque,
           campus: c,
           nda: this.formateurToUpdate?.nda,
-          absences: arr
+          absences: arr,
+          prestataire_id: response.prestataire_id
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -352,10 +355,10 @@ export class ListFormateursComponent implements OnInit {
   onUpdateFormateur() {
 
     //Mis à jour du formateur et envoi dans la base de données
-    this.formateurToUpdate.type_contrat = this.formUpdateFormateur.get('type_contrat')?.value.value;
+    this.formateurToUpdate.type_contrat = this.formUpdateFormateur.get('type_contrat')?.value;
     this.formateurToUpdate.taux_h = this.formUpdateFormateur.get('taux_h')?.value;
     this.formateurToUpdate.taux_j = this.formUpdateFormateur.get('taux_j')?.value;
-    this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value.value;
+    this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value;
     this.formateurToUpdate.remarque = this.formUpdateFormateur.get('remarque')?.value;
     this.formateurToUpdate.nda = this.formUpdateFormateur.get('nda')?.value;
 
@@ -410,6 +413,7 @@ export class ListFormateursComponent implements OnInit {
         if (data.error) {
           this.messageService.add({ severity: 'error', summary: 'Erreur lors de la modification de formateur', detail: 'data.error' });
         } else {
+          console.log(data, this.formateurToUpdate)
           this.messageService.add({ severity: 'success', summary: 'Modification de formateur', detail: 'Cet formateur a bien été modifié' });
           this.formateurService.getAllPopulate().subscribe(
             (dataF) => {
@@ -441,7 +445,7 @@ export class ListFormateursComponent implements OnInit {
 
   onGetStatutToUpdate() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
-    return this.formUpdateFormateur.get('type_contrat').value.value;
+    return this.formUpdateFormateur.get('type_contrat').value;
   }
 
   showCalendar(rowData) {
@@ -453,7 +457,7 @@ export class ListFormateursComponent implements OnInit {
   }
   onGetStatut() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
-    return this.formUpdateFormateur.get('type_contrat').value.value;
+    return this.formUpdateFormateur.get('type_contrat').value;
   }
 
 
@@ -560,7 +564,7 @@ export class ListFormateursComponent implements OnInit {
           else
             t['Campus'] = t['Campus'] + "," + this.campusList[cid]?.libelle
         })
-      t['Entreprise'] = ent?.r_sociale
+      t['Entreprise'] = ent
       t['Remarque'] = formateur.remarque
       dataExcel.push(t)
     })
@@ -573,7 +577,7 @@ export class ListFormateursComponent implements OnInit {
     FileSaver.saveAs(data, "formateurs" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
   }
 
-  onInitLien(formateur){
+  onInitLien(formateur) {
     this.showLien = formateur
     this.formLien.setValue({
       lien_sequentiel: formateur.lien_sequentiel,

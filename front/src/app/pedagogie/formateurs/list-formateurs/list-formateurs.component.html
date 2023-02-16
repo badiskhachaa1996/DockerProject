@@ -61,7 +61,7 @@
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
 				<div class="field col-12 md:col-6">
 					<label For="contrat">Type de contract<span style="color: red;"> * </span></label>
-					<p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
+					<p-dropdown [options]="typeContratList" placeholder="Choissisez un type de contrat" formControlName="type_contrat">
 					</p-dropdown>
 				</div>
 
@@ -69,7 +69,7 @@
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
-					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+					<p-dropdown [options]="prestataireList" placeholder="Choissisez une entreprise" formControlName="prestataire_id">
 					</p-dropdown>
 				</div>
 
@@ -237,7 +237,7 @@
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==true">
 								<label>Module: </label>
 								<p-dropdown [options]="matiereList" (onChange)="changeVolumeH(i,$event,'matiere_id')"
-									[group]="true"></p-dropdown>
+									[group]="true" [filter]="true"></p-dropdown>
 							</div>
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==false">
 								<label>Module: </label>
@@ -373,7 +373,7 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="width: 3rem"></th>
-						<th pSortableColumn="nom_prenom" style="text-align: center;">Nom & Prénom <p-sortIcon
+						<th pSortableColumn="nom_prenom" style="text-align: center;">Prénom & NOM<p-sortIcon
 								field="nom_prenom"></p-sortIcon>
 						</th>
 						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon
@@ -397,8 +397,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;">
-							{{formateur.user_id.lastname | uppercase}}
 							{{formateur.user_id.firstname | titlecase}}
+							{{formateur.user_id.lastname | uppercase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
@@ -463,7 +463,8 @@
 						<td>{{formateur.user_id?.email}}</td>
 						<td>{{formateur.user_id?.phone}}</td>
 						<td *ngIf="token && token.role=='Admin'">{{ formateur.taux_h }} €/{{ formateur.taux_j }} €</td>
-						<td *ngIf="formateur.prestataire_id">{{ entrepriseDic[formateur?.prestataire_id]?.r_sociale }}
+						<td *ngIf="formateur.prestataire_id">
+							{{ formateur?.prestataire_id.r_sociale }}
 						</td>
 					</tr>
 				</ng-template>

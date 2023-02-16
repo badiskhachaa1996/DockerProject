@@ -262,7 +262,7 @@ app.get("/getAllAlternants", (req, res, next) => {
     Etudiant.find({ isAlternant: true, isActive: { $ne: false } }).populate('user_id')
         .then(alternantsFromDb => {
 
-            let i = alternantsFromDb.length
+           /* let i = alternantsFromDb.length
             alternantsFromDb.forEach(alternatInscrit => {
 
                 CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
@@ -284,7 +284,8 @@ app.get("/getAllAlternants", (req, res, next) => {
 
                     }
                 })
-            });
+            });*/
+            res.status(200).send(alternantsFromDb);
         })
         .catch((error) => {
             console.log(error);
@@ -676,7 +677,7 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
                     fileRight: filearrayT,
                 }, { new: true }, (err, etudiant) => {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         res.send(err)
                     }
                     else {
@@ -763,7 +764,6 @@ app.post('/addNewPayment/:id', (req, res) => {
         )
         me.save()
     })
-    console.log(req.body.payement)
     var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(req.body.payement), 'd8a0707da72cadb').toString();
     Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, { new: true }, function (err, data) {
         if (err) {

@@ -106,10 +106,9 @@ export class EmergementComponent implements OnInit {
     //this.seance.classe_id
     this.PresenceService.getAllPopulateBySeance(this.ID).subscribe(data => {
       this.presences = data;
-      console.log(data)
       let oldPresence = []
-      this.tableauPresence = []
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(etudiants => {
+        this.tableauPresence = []
         this.presences.forEach(p => {
           let bypass: any = p.user_id
           if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {

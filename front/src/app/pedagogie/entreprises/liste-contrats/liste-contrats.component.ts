@@ -14,6 +14,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
+import { CampusService } from 'src/app/services/campus.service';
 
 
 @Component({
@@ -68,11 +69,20 @@ export class ListeContratsComponent implements OnInit {
     { label: '2025-2026' },
   ];
 
+  filtreAgent = [
+    { value: null, label: "Tous les commerciaux" }
+  ]
+
+  filtreCampus = [
+    { value: null, label: "Tous les campus" }
+  ]
+
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService,
-    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService) { }
+    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService,
+    private campusService: CampusService) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
@@ -111,6 +121,11 @@ export class ListeContratsComponent implements OnInit {
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
+    this.campusService.getAll().subscribe(campus => {
+      campus.forEach(c => {
+        this.filtreCampus.push({ label: c.libelle, value: c._id })
+      })
+    })
 
     //Lister toutes les formations
     this.formationService.getAll().subscribe(data => {
@@ -133,8 +148,10 @@ export class ListeContratsComponent implements OnInit {
         this.listAlternantDD = []
         alternantsData.forEach(altdata => {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
-          altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
-          this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+          if(altdata.user_id){
+            altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
+            this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+          }
         })
       })
 
@@ -149,7 +166,7 @@ export class ListeContratsComponent implements OnInit {
       if (this.token.role == "Admin") {
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
           this.ListeContrats = Allcontrats;
-          
+          this.InitAgentFilter()
           Allcontrats.forEach(cont => {
             this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
               this.EntreprisesName[entpName._id] = entpName;
@@ -189,7 +206,10 @@ export class ListeContratsComponent implements OnInit {
               }, (eror) => { console.error(eror) })
 
             this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(
-              listeData => { this.ListeContrats = listeData; },
+              listeData => {
+                this.ListeContrats = listeData;
+                this.InitAgentFilter()
+              },
               (eror) => { console.error(eror) })
           }, (eror) => { console.error(eror) })
 
@@ -201,13 +221,14 @@ export class ListeContratsComponent implements OnInit {
 
           this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
             this.ListeContrats = listeData;
+            this.InitAgentFilter()
           })
         })
       }
       else {
         this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
           this.ListeContrats = listeData;
-
+          this.InitAgentFilter()
           this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
             this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
               this.tuteurInfoPerso = TuteurInfoPerso
@@ -323,7 +344,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires,this.RegisterNewCA.value.ecole)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -382,6 +403,16 @@ export class ListeContratsComponent implements OnInit {
       ecole: contrat.ecole
     });
   }
-
+  InitAgentFilter() {
+    const contrats = this.ListeContrats
+    let code_commercial = []
+    contrats.forEach(contrat => {
+      let cc: any = contrat.code_commercial
+      if (!code_commercial.includes(cc._id)) {
+        code_commercial.push(cc._id)
+        this.filtreAgent.push({ label: cc.firstname + " " + cc.lastname, value: cc._id })
+      }
+    })
+  }
 
 }

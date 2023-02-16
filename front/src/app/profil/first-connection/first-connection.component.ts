@@ -252,7 +252,7 @@ export class FirstConnectionComponent implements OnInit {
             null,
             this.userConnected._id,
             null,
-            "Etudiant", //statut
+            "Initial", //statut
             this.RegisterForm.value.nationalite.value,
             this.RegisterForm.value.date_naissance,
             null,

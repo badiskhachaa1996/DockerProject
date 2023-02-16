@@ -9,8 +9,8 @@ app.post("/createTeam", (req, res) => {
     const team = new Team({...req.body});
 
     team.save()
-        .then((teamSaved) => { res.status(201).send(teamSaved); })
-        .catch((error) => { res.status(400).send(error.message); })
+        .then((teamSaved) => { res.status(201).json({success: "Équipe ajouté", teamFromDb: teamSaved}); })
+        .catch((error) => { res.status(400).json({error: "Erreur lors de l'ajout de l'équipe"}); })
 });
 
 //Modification d'une équipe
