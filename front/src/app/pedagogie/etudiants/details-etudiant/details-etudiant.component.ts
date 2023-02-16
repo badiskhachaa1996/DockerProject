@@ -123,8 +123,8 @@ export class DetailsEtudiantComponent implements OnInit {
       token = null
       console.error(e)
     }
-    if (token.type == "Initial" || token.type == "Alternant")
-      this.isNotEtudiant = false
+    if (token.type != "Initial" && token.type != "Alternant")
+      this.isNotEtudiant = true
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
@@ -165,6 +165,9 @@ export class DetailsEtudiantComponent implements OnInit {
             data.forEach(m => {
               this.matiereDic[m._id] = m
             });
+          })
+          this.PresenceService.updateAbsences(this.EtudiantDetail.user_id).subscribe(seances => {
+            this.nb_absencesNJ += seances.length
           })
 
           // boucle liste des presences totales de l'étudiants.

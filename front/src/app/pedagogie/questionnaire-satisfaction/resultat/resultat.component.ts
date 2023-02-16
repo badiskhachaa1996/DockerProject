@@ -12,6 +12,7 @@ import { ClasseService } from 'src/app/services/classe.service';
 export class ResultatComponent implements OnInit {
 
   resultats = []
+  date_auj = new Date()
 
   moyenne = {}
 
@@ -60,7 +61,7 @@ export class ResultatComponent implements OnInit {
     { label: '2022-2024', value: '2022-2024' }
   ]
 
-  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService:ClasseService) { }
+  constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService: ClasseService) { }
 
   ngOnInit(): void {
     this.DiplomeService.getAll().subscribe(diplomes => {
@@ -98,21 +99,21 @@ export class ResultatComponent implements OnInit {
 
   updateMoyenne(data) {
     this.moyenne = {
-      horaire: data.reduce((total, next) => total + next.horaire, 0) / data.length,
-      charge: data.reduce((total, next) => total + next.charge, 0) / data.length,
-      satisfait_nb_matiere: data.reduce((total, next) => total + next.satisfait_nb_matiere, 0) / data.length,
-      satisfait_programme: data.reduce((total, next) => total + next.satisfait_programme, 0) / data.length,
-      satisfait_pedagogie_enseignant: data.reduce((total, next) => total + next.satisfait_pedagogie_enseignant, 0) / data.length,
-      satisfait_support: data.reduce((total, next) => total + next.satisfait_support, 0) / data.length,
-      satisfait_modes: data.reduce((total, next) => total + next.satisfait_modes, 0) / data.length,
-      satisfait_suivi: data.reduce((total, next) => total + next.satisfait_suivi, 0) / data.length,
-      satisfait_locaux: data.reduce((total, next) => total + next.satisfait_locaux, 0) / data.length,
+      horaire: Math.trunc(((data.reduce((total, next) => total + next.horaire, 0) / data.length)*100)/5),
+      charge: Math.trunc(((data.reduce((total, next) => total + next.charge, 0) / data.length)*100)/5),
+      satisfait_nb_matiere: Math.trunc(((data.reduce((total, next) => total + next.satisfait_nb_matiere, 0) / data.length)*100)/5),
+      satisfait_programme: Math.trunc(((data.reduce((total, next) => total + next.satisfait_programme, 0) / data.length)*100)/5),
+      satisfait_pedagogie_enseignant: Math.trunc(((data.reduce((total, next) => total + next.satisfait_pedagogie_enseignant, 0) / data.length)*100)/5),
+      satisfait_support: Math.trunc(((data.reduce((total, next) => total + next.satisfait_support, 0) / data.length)*100)/5),
+      satisfait_modes: Math.trunc(((data.reduce((total, next) => total + next.satisfait_modes, 0) / data.length)*100)/5),
+      satisfait_suivi: Math.trunc(((data.reduce((total, next) => total + next.satisfait_suivi, 0) / data.length)*100)/5),
+      satisfait_locaux: Math.trunc(((data.reduce((total, next) => total + next.satisfait_locaux, 0) / data.length)*100)/5),
 
-      support: data.reduce((total, next) => total + (next.support ? 1 : 0), 0),
-      teams: data.reduce((total, next) => total + (next.teams == "Oui" ? 1 : 0), 0),
-      ims: data.reduce((total, next) => total + (next.ims == "Oui" ? 1 : 0), 0),
-      ll: data.reduce((total, next) => total + (next.ll == "Oui" ? 1 : 0), 0),
-      intuns: data.reduce((total, next) => total + (next.intuns == "Oui" ? 1 : 0), 0),
+      support: Math.trunc((data.reduce((total, next) => total + (next.support ? 1 : 0), 0) / data.length)*100),
+      teams: Math.trunc((data.reduce((total, next) => total + (next.teams == "Oui" ? 1 : 0), 0) / data.length)*100),
+      ims: Math.trunc((data.reduce((total, next) => total + (next.ims == "Oui" ? 1 : 0), 0) / data.length)*100),
+      ll: Math.trunc((data.reduce((total, next) => total + (next.ll == "Oui" ? 1 : 0), 0) / data.length)*100),
+      intuns: Math.trunc((data.reduce((total, next) => total + (next.intuns == "Oui" ? 1 : 0), 0) / data.length)*100),
     }
   }
 

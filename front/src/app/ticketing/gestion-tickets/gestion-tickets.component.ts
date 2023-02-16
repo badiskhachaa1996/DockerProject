@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { MessageService as MsgServ } from 'src/app/services/message.service';
 import { Notification } from 'src/app/models/notification';
 import { saveAs as importedSaveAs } from "file-saver";
+import { DiplomeService } from 'src/app/services/diplome.service';
 
 @Component({
   selector: 'app-gestion-tickets',
@@ -31,10 +32,10 @@ import { saveAs as importedSaveAs } from "file-saver";
 export class GestionTicketsComponent implements OnInit {
 
   /** Variable pour le nombre de ticket*/
- 
-  numberTicketWaiting : Ticket[] = [];
-  numberTicketTraite : Ticket[] = [];
-  numberTicketCours : Ticket[] = [];
+
+  numberTicketWaiting: Ticket[] = [];
+  numberTicketTraite: Ticket[] = [];
+  numberTicketCours: Ticket[] = [];
 
   /**  End */
 
@@ -47,6 +48,7 @@ export class GestionTicketsComponent implements OnInit {
   sujetList: any[] = [];
   listServices: Service[];
   dropdownService: any[] = [{ label: "Tous les services", value: null }];
+  listFiliere = [{ label: "Toutes les filières", value: null }]
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
@@ -67,7 +69,7 @@ export class GestionTicketsComponent implements OnInit {
 
   userconnected: User;
 
-  showCard : Boolean = true;
+  showCard: Boolean = true;
 
   showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
@@ -134,7 +136,8 @@ export class GestionTicketsComponent implements OnInit {
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService, private ClasseService: ClasseService) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService,
+    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -318,6 +321,11 @@ export class GestionTicketsComponent implements OnInit {
 
       this.updateAccAffList()
       this.updateUserList()
+      this.DiplomeService.getAll().subscribe(diplomes => {
+        diplomes.forEach(diplome => {
+          this.listFiliere.push({ label: diplome.titre, value: diplome._id })
+        })
+      })
 
     }
     this.socket.on("refreshMessage", () => {
@@ -355,8 +363,8 @@ export class GestionTicketsComponent implements OnInit {
 
     // Récuperation du nombre du ticket en file d'attente
     this.TicketService.getCountWaiting().subscribe(
-      ((response) => {this.numberTicketWaiting = response; } ),
-      ((error) => { console.error(error) } )
+      ((response) => { this.numberTicketWaiting = response; }),
+      ((error) => { console.error(error) })
     );
 
     // Récupération du nombre de ticket en cours de traitement
@@ -458,7 +466,7 @@ export class GestionTicketsComponent implements OnInit {
 
 
   TicketFormAdd: FormGroup = new FormGroup({
-    description: new FormControl('', [Validators.required]), 
+    description: new FormControl('', [Validators.required]),
     sujet: new FormControl('', Validators.required),
     service: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email])
@@ -635,7 +643,7 @@ export class GestionTicketsComponent implements OnInit {
     return days.toString() + Hours + " h " + minutes + " min "
   }
 
-  toggleFormAdd(){
+  toggleFormAdd() {
     this.showRevert = null;
     this.showFormAddComment = false;
     this.isModify = null;

@@ -173,60 +173,64 @@
 </div>
 <div class="card" *ngIf="moyenne">
     <div class="p-fluid p-formgrid grid">
-        <h1 class="col-12 text-center">
-            Moyenne de {{diplomeChoisi}} tous les formulaires
+        <h1 class="col-12 text-center" *ngIf="diplomeChoisi">
+            Résultat des questionnaires de satisfaction à chaud de {{diplomeChoisi}} du {{date_auj|date:'mediumDate'}}
+        </h1>
+        <h1 class="col-12 text-center" *ngIf="!diplomeChoisi">
+            Résultat des questionnaires de satisfaction à chaud du {{date_auj|date:'mediumDate'}}
         </h1>
         <div class="field col-12">
             <label>Question 6 :</label><br>
             <label>Êtes-vous satisfait des horaires de cours ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.horaire"></p-rating>
+            <!--<p-rating [cancel]="false" [ngModel]="moyenne.horaire"></p-rating>-->
+            <p-knob [ngModel]="moyenne.horaire" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 7 :</label><br>
             <label>Êtes-vous satisfait de la charge horaire par semaine ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.charge"></p-rating>
+            <p-knob [ngModel]="moyenne.charge" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 8 :</label><br>
             <label>Êtes-vous satisfait du nombre de matières ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_nb_matiere"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_nb_matiere" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 9 :</label><br>
             <label>Êtes-vous satisfait du contenu du programme ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_programme"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_programme" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 10 :</label><br>
             <label>Êtes-vous satisfait de la pédagogie des enseignants ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_pedagogie_enseignant"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_pedagogie_enseignant" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 11 :</label><br>
             <label>Avez-vous des supports de cours ?</label>
-            <p>Oui:{{moyenne.support}} Non:{{resultats.length-moyenne.support}}</p>
+            <p-knob [ngModel]="moyenne.support" valueTemplate="{value}%"  [readonly]="true"></p-knob>
 
         </div>
         <div class="field col-12">
             <label>Question 12 :</label><br>
             <label>Êtes-vous satisfait des supports de cours ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_support"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_support" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 13 :</label><br>
             <label>Êtes-vous satisfait des modes d'évaluation ? TD, Contrôle continu, Examen final
                 ...</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_modes"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_modes" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 14 :</label><br>
             <label>Êtes-vous satisfait du suivi des évaluations ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_suivi"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_suivi" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <div class="field col-12">
             <label>Question 15 :</label><br>
             <label>Êtes-vous satisfait des locaux ?</label>
-            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_locaux"></p-rating>
+            <p-knob [ngModel]="moyenne.satisfait_locaux" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
         <!--<div class="field col-12">
             <label>Question 16 :</label><br>
@@ -236,10 +240,14 @@
         <div class="field col-12">
             <label>Question 17 :</label><br>
             <label>Avez-vous accès à :</label><br>
-            <p>Microsoft TEAMS : {{moyenne.teams*100/resultats.length | number : '1.0-0'}}%</p>
-            <p>IMS : {{moyenne.ims*100/resultats.length | number : '1.0-0'}}%</p>
-            <p>LINKEDIN LEARNING : {{moyenne.ll*100/resultats.length | number : '1.0-0'}}%</p>
-            <p>INTUNS : {{moyenne.intuns*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>Microsoft TEAMS :</p>
+            <p-knob [ngModel]="moyenne.teams" valueTemplate="{value}%"  [readonly]="true"></p-knob>
+            <p>IMS :</p>
+            <p-knob [ngModel]="moyenne.ims" valueTemplate="{value}%"  [readonly]="true"></p-knob>
+            <p>LINKEDIN LEARNING :</p>
+            <p-knob [ngModel]="moyenne.ll" valueTemplate="{value}%"  [readonly]="true"></p-knob>
+            <p>INTUNS :</p>
+            <p-knob [ngModel]="moyenne.intuns" valueTemplate="{value}%"  [readonly]="true"></p-knob>
         </div>
     </div>
 </div>

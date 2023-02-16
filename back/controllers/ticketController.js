@@ -134,11 +134,11 @@ app.post("/createAdmin", (req, res) => {
                     });
 
                     ticket.save((err, doc) => {
-                        if(err){
+                        if (err) {
                             console.error(err);
                             res.status(404).send("Erreur avec la création d'un ticket")
                         }
-                        else{
+                        else {
                             res.send({ message: "Votre ticket a été crée!", doc });
                             User.findById(req.body.agent_id).then(responsable => {
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
@@ -155,8 +155,8 @@ app.post("/createAdmin", (req, res) => {
                                         cid: 'red' //same cid value as in the html img src
                                     }]
                                 };
-    
-    
+
+
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
                                         console.error(error);
@@ -176,9 +176,9 @@ app.post("/createAdmin", (req, res) => {
             res.status(404).send("Aucun sujet n'existe pour ce service")
         })
     }).catch(err => {
-            console.error(err);
-            res.status(404).send("Problème de trouver le nombre de tickets de cette agent")
-        })
+        console.error(err);
+        res.status(404).send("Problème de trouver le nombre de tickets de cette agent")
+    })
 });
 
 
@@ -543,7 +543,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } }) //.populate({ path: 'sujet_id', populate: { path: "service_id" } }).populate("createur_id").populate({ path: "agent_id", populate: { path: "service_id" } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])
         })
