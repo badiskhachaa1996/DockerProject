@@ -603,7 +603,7 @@ export class AppMenuComponent implements OnInit {
                             label: "Gestion d'Alternances",
                             items: [
                                 { label: 'Alternants par entreprises', icon: 'pi pi-file', routerLink: ['/liste-entreprises-ceo'] },
-                                { label: 'Alternants sous ma tutelles', icon: 'pi pi-file-excel', routerLink: ['/liste-contrats-ceo/'] },
+                                { label: 'Alternants sous ma tutelle', icon: 'pi pi-file-excel', routerLink: ['/liste-contrats-ceo/'] },
                                 { label: 'Tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur-ceo'] },
                             ]
                         },
