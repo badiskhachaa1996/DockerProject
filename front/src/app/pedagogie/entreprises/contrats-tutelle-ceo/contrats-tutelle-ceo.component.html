@@ -1,0 +1,115 @@
+<p-toast></p-toast>
+<div class="grid">
+	<!-- To see all contracts for an ceo -->
+	<div class="col-12">
+		<div class="card">
+
+			<h5>Liste des alternants sous votre tutelle</h5>
+			<p-table #dt1 [value]="contracts"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
+                [rows]="10">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 8rem;"></th>
+                        <th>Prenom &amp; Nom</th>
+                        <th>Poste</th>
+                        <th>Statut</th>
+                        <th>Formation</th>
+                        <th>Ecole</th>
+                        <th>Dates du contrat</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-contrat let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="contrat"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 11rem;">
+                            {{ contrat.alternant_id?.user_id?.firstname }}
+                            {{ contrat.alternant_id?.user_id?.lastname }}
+                        </td>
+                        <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
+                        <td>
+                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut =='signé'" icon="pi pi-chevron-right" severity="success"
+                                [value]="contrat.statut">
+                            </p-tag>
+                        </td>
+
+                        <td>{{ contrat.formation.titre_long }}</td>
+                        <td>{{ contrat.ecole?.libelle }}</td>
+                        <td>{{contrat.debut_contrat | date:
+                            'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
+                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red; cursor: pointer;"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-contrat>
+                    <tr>
+                        <td colspan="8">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+										<tr>
+											<th>Horaire</th>
+											<th>Classification</th>
+											<th>Niveau de la formation</th>
+											<th>Coeff hierachique</th>
+											<th>Commercial</th>
+											<th>Tuteur</th>
+											<th>Année-scolaires</th>
+										</tr>
+									</ng-template>
+									<ng-template pTemplate="emptymessage">
+										<tr>
+											<td>{{contrat.horaire}}</td>
+											<td>{{contrat.classification}}</td>
+											<td>{{contrat.niveau_formation}}</td>
+											<td>{{contrat.coeff_hierachique}}</td>
+											<td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
+											
+											<td *ngIf="contrat.tuteur_id != null">
+												{{ contrat.tuteur_id?.user_id?.lastname }} 
+												{{ contrat.tuteur_id?.user_id?.firstname }}
+											</td>
+											<td *ngIf="contrat.directeur_id != null">
+												{{ contrat.directeur_id?.lastname }} 
+												{{ contrat.directeur_id?.firstname }}
+											</td>
+
+											<td>
+												<ul>
+													<li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
+												</ul>
+											</td>
+										</tr>
+									</ng-template>
+            					</p-table>
+        					</div>
+        				</td>
+        			</tr>
+        		</ng-template>
+        	</p-table>
+		</div>
+	</div>
+</div>

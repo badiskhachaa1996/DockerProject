@@ -591,7 +591,13 @@ app.get("/getAllContrats/", (req, res, next) => {
                 error: "Impossible de recuperer la liste des contrats " + error.message
             });
         });
+});
 
+// recuperation de la liste des contrats d'un ceo
+app.get("/contrats-by-ceo/:id", (req, res) => {
+    CAlternance.find({ directeur_id: req.params.id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation')?.populate('code_commercial')?.populate('directeur_id')?.populate('ecole')?.populate('entreprise_id')
+    .then((response) => { res.status(200).json({ success: 'Liste des contrats récuperé', contrats: response }); })
+    .catch((error) => { console.log(error); res.status(400).json({ error: error, errorMsg: 'Impossible de récuperer la liste des contrats' }); });
 });
 
 //Recuperation d'une entreprise selon un id
