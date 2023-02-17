@@ -256,7 +256,7 @@
 							</span>
 							<span style="margin-left: 2px;">
 								<p-dropdown filter="true" [options]="listFiliere"
-									(onChange)="dt1.filter($event.value, 'createur_id', 'equals')"
+									(onChange)="dt1.filter($event.value, 'etudiant_id.classe_id.diplome_id', 'equals')"
 									emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Nom de la filière">
 								</p-dropdown>
 							</span>
@@ -360,6 +360,7 @@
 				<ng-template pTemplate="emptymessage">
 					<tr>
 						<td>
+							<ng-container *ngIf="rowData.etudiant_id">{{rowData.etudiant_id.custom_id}}</ng-container>
 							{{userDic[rowData.createur_id].firstname | titlecase }}
 							{{userDic[rowData.createur_id].lastname | titlecase | uppercase }}
 						</td>
@@ -376,7 +377,7 @@
 							{{userDic[rowData.createur_id].entreprise}}</td>
 						<td
 							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant')">
-							{{userDic[rowData.createur_id].campus}}</td>
+							{{campusDic[userDic[rowData.createur_id].campus].libelle}}</td>
 						<td
 							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant') && userDic[rowData.createur_id].formation && formationDic[userDic[rowData.createur_id].formation].nom_court">
 							{{formationDic[userDic[rowData.createur_id].formation].nom_court}}

@@ -55,6 +55,11 @@ const ticket_schema = new mongoose.Schema({
     customid: {
         type: String,
         default: "ESTYANOPEPE10120000001"
+    },
+    etudiant_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        default:null,
+        ref: "etudiant"
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

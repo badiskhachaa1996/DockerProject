@@ -22,6 +22,7 @@ import { MessageService as MsgServ } from 'src/app/services/message.service';
 import { Notification } from 'src/app/models/notification';
 import { saveAs as importedSaveAs } from "file-saver";
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { CampusService } from 'src/app/services/campus.service';
 
 @Component({
   selector: 'app-gestion-tickets',
@@ -54,6 +55,7 @@ export class GestionTicketsComponent implements OnInit {
   statutList = environment.statut;
 
   formationDic = [];
+  campusDic = []
 
   queueList: Ticket[] = [];
 
@@ -137,7 +139,7 @@ export class GestionTicketsComponent implements OnInit {
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService,
-    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService) { }
+    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService,private campusService:CampusService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -325,6 +327,11 @@ export class GestionTicketsComponent implements OnInit {
         diplomes.forEach(diplome => {
           this.listFiliere.push({ label: diplome.titre, value: diplome._id })
         })
+      })
+      this.campusService.getAll().subscribe(campuss => {
+        campuss.forEach(c => {
+          this.campusDic[c._id] = c
+        });
       })
 
     }

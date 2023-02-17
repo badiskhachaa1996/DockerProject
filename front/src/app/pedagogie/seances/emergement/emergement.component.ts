@@ -305,7 +305,7 @@ export class EmergementComponent implements OnInit {
         this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
         console.error(err)
       })
-    } else {
+    } else if (this.presence) {
       presence._id = this.presence._id
       this.PresenceService.addSignature(presence).subscribe(data => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
@@ -315,6 +315,8 @@ export class EmergementComponent implements OnInit {
         this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
         console.error(err)
       })
+    } else {
+      this.MessageService.add({ severity: 'error', summary: 'Vous n\'avez pas l\'autorisation de signer.', detail: `Presence:${this.presence}\nforcedAllowedByFormateur:${this.seance.forcedAllowedByFormateur}\nRechargez la page pour signer` })
     }
   }
 

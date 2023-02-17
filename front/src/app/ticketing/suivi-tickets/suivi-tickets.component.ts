@@ -19,6 +19,8 @@ import { SocketService } from 'src/app/services/socket.service';
 import { MessageService as MsgService } from 'src/app/services/message.service';
 import jwt_decode from "jwt-decode";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Etudiant } from 'src/app/models/Etudiant';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
   selector: 'app-suivi-tickets',
@@ -42,6 +44,7 @@ export class SuiviTicketsComponent implements OnInit {
   filterStatut;
 
   userconnected: User;
+  etudiant: Etudiant;
 
   first = 0;
   rows = 10;
@@ -124,7 +127,10 @@ export class SuiviTicketsComponent implements OnInit {
     })
   }
 
-  constructor(private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService, private MsgServ: MsgService, private NotifService: NotificationService, private Socket: SocketService) { }
+  constructor(private AuthService: AuthService, private router: Router, private TicketService: TicketService,
+    private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,
+    private MsgServ: MsgService, private NotifService: NotificationService, private Socket: SocketService,
+    private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
 
@@ -140,6 +146,9 @@ export class SuiviTicketsComponent implements OnInit {
         if (this.userconnected) {
           this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
         }
+        this.EtudiantService.getByUser_id(this.token.id).subscribe(etu => {
+          this.etudiant = etu
+        })
       }, (error) => {
         console.error(error)
       })
@@ -271,9 +280,9 @@ export class SuiviTicketsComponent implements OnInit {
           ticket_id: t.doc._id,
           file: this.TicketFormAssign.value.file,
           isRep: false
-    
+
         }
-    
+
         this.MsgServ.create(comment).subscribe((data) => {
           this.comments.push(data.doc);
           this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Le fichier a bien été envoyé' });
@@ -388,7 +397,8 @@ export class SuiviTicketsComponent implements OnInit {
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
-      description: this.TicketForm.value.description
+      description: this.TicketForm.value.description,
+      etudiant_id: this.etudiant._id
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
