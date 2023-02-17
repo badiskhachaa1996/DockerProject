@@ -113,7 +113,6 @@ export class EmergementComponent implements OnInit {
           let bypass: any = p.user_id
           if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {
             oldPresence.push(bypass._id)
-            console.log(p)
             this.tableauPresence.push({
               etudiant: bypass?.lastname + ' ' + bypass?.firstname,
               _id: p._id,

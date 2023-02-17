@@ -439,7 +439,7 @@ app.get("/updateAbsences/:user_id", (req, res) => {
             presences.forEach(presence => {
                 listIDSeances.push(presence.seance_id)
             })
-            Seance.find({ _id: { $nin: listIDSeances }, classe_id: { $in: [etudiant.classe_id._id] }, date_debut: { $gte: new Date("2023-1-1"), $lt: new Date() } }).then(seances => {
+            Seance.find({ _id: { $nin: listIDSeances }, classe_id: { $in: [etudiant.classe_id._id] }, date_debut: { $gte: new Date("2023-1-1"), $lt: new Date() }, isOptionnel: false }).then(seances => {
                 res.status(200).send(seances)
                 seances.forEach((seance, index) => {
                     let p = new Presence({
