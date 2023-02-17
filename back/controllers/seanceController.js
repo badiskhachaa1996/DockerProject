@@ -149,15 +149,9 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                 Presence.find({
                     user_id: req.body.user_id, seance_id: SF.id
                 }).then((data) => {
-                    console.log("data")
-                    console.log(data)
                     if (data.length > 0) {
-
-                        console.log("Prensence Trouvé")
                         ListPresences.push(data);
-                        console.log(ListPresences)
                         if (dernierS._id == SF.id) {
-                            console.log("res to send: " + ListPresences.length)
                             res.status(200).send(ListPresences);
                         }
                     }
@@ -180,11 +174,8 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                             } else {
                                 ListPresences.push(dataCreated)
 
-                                console.log("added pre")
-                                console.log(ListPresences)
                             }
                             if (dernierS._id == SF.id) {
-                                console.log("res to send: " + ListPresences.length)
                                 res.status(200).send(ListPresences);
                             }
                         })

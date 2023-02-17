@@ -35,8 +35,8 @@ app.get("/getAllByUser/:id", (req, res) => {
     Presence.find({ user_id: req.params.id }).populate("seance_id").then((data) => {
         let date = new Date("2023-01-01")
         let r = []
-        data.forEach(presence=>{
-            if(presence.seance_id && presence.seance_id.date_debut>date)
+        data.forEach(presence => {
+            if (presence.seance_id && presence.seance_id.date_debut > date)
                 r.push(presence)
         })
         res.status(200).send(r);
@@ -439,7 +439,7 @@ app.get("/updateAbsences/:user_id", (req, res) => {
             presences.forEach(presence => {
                 listIDSeances.push(presence.seance_id)
             })
-            Seance.find({ _id: { $nin: listIDSeances }, classe_id: { $in: [etudiant.classe_id._id] }, date_debut: { $gte: new Date("2023-1-1") } }).then(seances => {
+            Seance.find({ _id: { $nin: listIDSeances }, classe_id: { $in: [etudiant.classe_id._id] }, date_debut: { $gte: new Date("2023-1-1"), $lt: new Date() } }).then(seances => {
                 res.status(200).send(seances)
                 seances.forEach((seance, index) => {
                     let p = new Presence({

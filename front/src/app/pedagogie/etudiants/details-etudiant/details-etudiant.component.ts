@@ -40,6 +40,7 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   showPDF = false
   isNotEtudiant = false
+  colorBande = "#ffffff"
   barDataHor: any = {
     labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [
@@ -285,7 +286,8 @@ export class DetailsEtudiantComponent implements OnInit {
       })
   }
   loadEcoleImage() {
-    this.ECOLE.libelle
+    console.log(this.ECOLE)
+    this.colorBande = this.ECOLE.color
     this.PICTURE = { cachet: 'assets/images/service-administratif.png', logo: "assets/images/logo-estya-flag.png", pied_de_page: "assets/images/footer-bulletinv2.png" }
     this.CFAService.downloadCachet(this.ECOLE._id).subscribe(blob => {
       let objectURL = URL.createObjectURL(blob);
@@ -310,5 +312,16 @@ export class DetailsEtudiantComponent implements OnInit {
       jsPDF: { unit: 'px', format: 'a4', orientation: 'p', hotfixes: ['px_scaling'] } //[element.offsetWidth, element.offsetHeight]
     };
     html2pdf().set(opt).from(element).save();
+  }
+
+  saveColor() {
+    this.CFAService.saveColor(this.ECOLE._id, this.colorBande).subscribe(newEcole => {
+      this.ECOLE = newEcole
+      this.messageService.add({ severity: 'success', summary: "Changement de couleur sauvegardé" })
+      this.loadEcoleImage()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: 'error', summary: "Erreur lors du changement de couleur", detail: err.error })
+    })
   }
 }

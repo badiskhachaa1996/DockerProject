@@ -54,14 +54,20 @@ export class EcoleService {
 
   downloadCachet(ecole_id: string) {
     let ecoleUrl = this.apiUrl + "downloadCachet/" + ecole_id;
-    return this.http.get<Blob>(ecoleUrl, {responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<Blob>(ecoleUrl, { responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
   downloadLogo(ecole_id: string) {
     let ecoleUrl = this.apiUrl + "downloadLogo/" + ecole_id;
-    return this.http.get<Blob>(ecoleUrl, {responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<Blob>(ecoleUrl, { responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
   downloadPied(ecole_id: string) {
     let ecoleUrl = this.apiUrl + "downloadPied/" + ecole_id;
-    return this.http.get<Blob>(ecoleUrl, {responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<Blob>(ecoleUrl, { responseType: 'blob' as 'json', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  saveColor(ecole_id, color) {
+    color=color.replace('#',"")
+    let ecoleUrl = this.apiUrl + "saveColor/" + ecole_id + "/" + color;
+    return this.http.get<Ecole>(ecoleUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

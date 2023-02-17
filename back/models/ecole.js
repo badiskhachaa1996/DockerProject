@@ -13,6 +13,7 @@ const ecole_schema = new mongoose.Schema({
     logo: { type: String, required: false },
     cachet: { type: String, required: false },
     pied_de_page: { type: String, required: false },
+    color:{type:String, default:"#000fb4"}
 });
 
 //Creation de la table ecole et export du model Ecole
