@@ -27,7 +27,7 @@
                 (click)="exportToPDF()"></p-button>
         </div>
     </div>
-    <div class="grid col-12" id="rendu">
+    <div class="grid col-12" style="max-height: 1120px;" id="rendu">
 
         <div class="col-12" style="position: relative;">
             <img [src]="PICTURE.logo" alt="LOGO" style="max-height: 20vh;z-index: 1;position: relative;left:5%">
@@ -35,7 +35,8 @@
                 style="position: absolute;top:25%;width: 110%;z-index: 0;height: 25%; left:-2vh"></p>
         </div>
         <h2 class="col-8 col-offset-2 text-center" style="font-weight: bold;border: solid;">Attestation d'assiduité</h2>
-        <h6 class="col-10 col-offset-1 text-center">Nous soussignés, "{{ECOLE.libelle}}", Établissement d'Enseignement Supérieur
+        <h6 class="col-10 col-offset-1 text-center">Nous soussignés, "{{ECOLE.libelle}}", Établissement d'Enseignement
+            Supérieur
             privé, attestons par la présente que :</h6>
         <h4 class="col-12 text-center" style="font-weight: bold;">
             {{Etudiant_userdata.civilite}}
@@ -50,12 +51,13 @@
         <h5 class="text-center col-10 col-offset-1" style="font-weight: bold;">{{diplome_libelle}}</h5>
         <h6 class="col-12 text-center" *ngIf="dateValue && dateValue[0] && dateValue[1]">Dates: du {{dateValue[0] |
             date:'d/MM/YYYY'}} au {{dateValue[1]| date:'d/MM/YYYY'}} </h6>
+        <h6 class="col-12 text-center" *ngIf="!dateValue || !dateValue[0] || !dateValue[1]">&nbsp; </h6>
         <h6 class="col-12 text-center">Fait pour servir et valoir ce que de droit à Paris le {{date_aj | date:'d MMMM
             y'}}.</h6>
         <div class="col-12">
             <img [src]="PICTURE.cachet" alt="signature" style="float: right; max-height: 13vh;">
         </div>
-        <div style="text-align: center;margin-top:15%" class="col-12">
+        <div style="text-align: center;margin-top:12vh" class="col-12">
             <img [src]="PICTURE.pied_de_page" alt="footer" style="max-width: 90%; max-height: 20vh;">
         </div>
     </div>
