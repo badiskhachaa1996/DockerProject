@@ -280,7 +280,8 @@
 						<th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon
 								field="date_creation"></p-sortIcon>
 						</th>
-						<th style="text-align:center"> Temps d'attente
+						<th style="text-align:center" pSortableColumn="date_ajout"> Temps d'attente <p-sortIcon
+							field="date_ajout"></p-sortIcon>
 						</th>
 						<th style="text-align:center">Action</th>
 					</tr>
@@ -296,7 +297,7 @@
 						<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
 						<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 						<td style="min-width: 10rem;">{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
-						<td style="min-width: 10rem;">{{showWaitingTime(rowData)}}</td>
+						<td style="min-width: 10rem;">{{showWaitingTime(rowData.date_ajout)}}</td>
 						<td>
 							<i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
 								class="pi pi-check" (click)="QueueToAccAff(rowData)" aria-hidden="true"></i>

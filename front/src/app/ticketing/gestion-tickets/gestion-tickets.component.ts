@@ -139,7 +139,7 @@ export class GestionTicketsComponent implements OnInit {
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService,
-    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService,private campusService:CampusService) { }
+    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService, private campusService: CampusService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -533,14 +533,14 @@ export class GestionTicketsComponent implements OnInit {
         this.AllUsers.forEach(user => {
           if (user._id == data1.agent_id) {
             value1 = user.firstname + " " + user.lastname;
-
           }
           if (user._id == data2.agent_id) {
             value2 = user.firstname + " " + user.lastname;
           }
         })
-
-
+      } else if (event.field == "date_ajout") {
+        value1 = this.showWaitingTime(value1, "sort")
+        value2 = this.showWaitingTime(value2, "sort")
       }
       let result = null;
 
@@ -622,15 +622,22 @@ export class GestionTicketsComponent implements OnInit {
     })
   }
 
-  showWaitingTime(rawData) {
-    let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
-    let days = calc.getUTCDate() - 1
+  showWaitingTime(date_ajout, type = 'tab') {
+    let calc = new Date(new Date().getTime() - new Date(date_ajout).getTime())
+    let month = calc.getMonth()
+    let days = (calc.getUTCDate() - 1) + month * 30
     let Hours = calc.getUTCHours()
     let minutes = calc.getUTCMinutes()
     if (days == 0) {
-      return Hours.toString() + " h " + minutes + " min"
+      if (type == "tab")
+        return Hours.toString() + " h " + minutes + " min"
+      else
+        return Hours * 60 + minutes
     }
-    return days.toString() + " j " + Hours + " h " + minutes + " min "
+    if (type == "tab")
+      return days.toString() + " j " + Hours + " h " + minutes + " min"
+    else
+      return days * 24 * 3600 + Hours * 60 + minutes
 
   }
 
