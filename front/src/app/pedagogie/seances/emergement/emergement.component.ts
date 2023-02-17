@@ -121,7 +121,7 @@ export class EmergementComponent implements OnInit {
               justificatif: p.justificatif,
               date_signature: p.date_signature,
               user_id: bypass._id,
-              isFormateur: this.formateurInfo && (bypass._id == this.formateurInfo.user_id),
+              isFormateur: this.formateurInfo && (bypass._id == this.seance.formateur_id),
               PresentielOrDistanciel: p.PresentielOrDistanciel
             })
           }
@@ -138,7 +138,7 @@ export class EmergementComponent implements OnInit {
                 justificatif: false,
                 date_signature: null,
                 user_id: etu.user_id?._id,
-                isFormateur: this.formateurInfo && (etu.user_id?._id == this.formateurInfo.user_id),
+                isFormateur: this.formateurInfo && (etu.user_id?._id == this.seance.formateur_id),
                 PresentielOrDistanciel: "Présentiel"
               })
             }
@@ -296,7 +296,7 @@ export class EmergementComponent implements OnInit {
     var signature = string.substring(6, string.length - 2);
     var sign = signature.substring(signature.indexOf(",") + 1)
     let presence = new Presence(null, this.ID, this.token.id, true, sign)
-    if (!this.presence) {
+    if (!this.presence && !this.seance.forcedAllowedByFormateur) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.SocketService.addPresence();

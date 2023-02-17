@@ -41,6 +41,11 @@ export class DetailsEtudiantComponent implements OnInit {
   showPDF = false
   isNotEtudiant = false
   colorBande = "#ffffff"
+  dropdownTimes = [
+    { label: "Passé", value: "A suivi avec assiduité la formation intitulée:" },
+    { label: "Présent", value: "Suit avec assiduité la formation intitulée:" }
+  ]
+  PHRASE = this.dropdownTimes[0].value
   barDataHor: any = {
     labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [

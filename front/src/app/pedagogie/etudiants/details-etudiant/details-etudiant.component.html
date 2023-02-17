@@ -7,7 +7,7 @@
                 [disabledDays]="[0,6]"></p-calendar>
         </div>
 
-        <div class="col-4">
+        <div class="col-3">
             <label>Choix de la couleur de la bande :</label><br>
             <p-colorPicker class="mr-1" [(ngModel)]="colorBande"></p-colorPicker>
             <p-button label="Sauvegarder la couleur" icon="pi pi-save" iconPos="left" (click)="saveColor()"></p-button>
@@ -16,8 +16,13 @@
             <label>Choix de l'école :</label><br>
             <p-dropdown [options]="dropdownEcoles" [(ngModel)]="ECOLE" (onChange)="loadEcoleImage()"></p-dropdown>
         </div>
+        <div class="col-2">
+            <label>Temps de la phrase :</label><br>
+            <p-dropdown [options]="dropdownTimes" [(ngModel)]="PHRASE"></p-dropdown>
+        </div>
 
-        <div class="col-3">
+
+        <div class="col-2">
             <p-button label="Télécharger l'attestation" icon="pi pi-download" iconPos="left"
                 (click)="exportToPDF()"></p-button>
         </div>
@@ -41,7 +46,7 @@
             date:'dd/MM/YYYY'}} de
             nationalité
             {{EtudiantDetail.nationalite}}</h4>
-        <h6 class="col-12 text-center">A suivi avec assiduité la formation intitulée:</h6>
+        <h6 class="col-12 text-center">{{PHRASE}}</h6>
         <h5 class="text-center col-10 col-offset-1" style="font-weight: bold;">{{diplome_libelle}}</h5>
         <h6 class="col-12 text-center" *ngIf="dateValue && dateValue[0] && dateValue[1]">Dates: du {{dateValue[0] |
             date:'d/MM/YYYY'}} au {{dateValue[1]| date:'d/MM/YYYY'}} </h6>
