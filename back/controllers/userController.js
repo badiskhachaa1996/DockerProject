@@ -25,7 +25,7 @@ let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
     if (argProd.includes('dev')) {
-        origin = ["https://t.dev.estya.com"]
+        origin = ["https://141.94.71.25"]
     } else (
         origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
     )
@@ -792,7 +792,7 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
     if (process.argv[2]) {
         let argProd = process.argv[2]
         if (argProd.includes('dev')) {
-            origin = "https://t.dev.estya.com"
+            origin = "https://141.94.71.25"
         } else (
             origin = "https://ticket.estya.com"
         )

@@ -56,6 +56,7 @@ export class ProspectsComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement Semestre 1 finalisé", label: "Paiement Semestre 1 finalisé" },
     { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }

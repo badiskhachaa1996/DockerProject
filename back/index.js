@@ -17,7 +17,7 @@ if (process.argv[2]) {
     if (!argProd.includes('dev') && !argProd.includes('prod')) {
         dblog = 'mongodb://localhost:27017/' + argProd
     } else if (argProd.includes('dev')) {
-        origin = ["https://t.dev.estya.com"]
+        origin = ["https://141.94.71.25"]
     } else (
         origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.intedgroup.com"]
     )

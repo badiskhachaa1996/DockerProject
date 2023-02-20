@@ -400,12 +400,12 @@
     <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
         N°{{dataEtudiant?.custom_id}}
     </h1>
-    <p *ngIf="dataEtudiant && dataEtudiant?.statut_dossier?.includes('Document Manquant')" style="color:red;">Votre
-        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
+    <p *ngIf="dataEtudiant && dataEtudiant?.statut_dossier?.includes('Document Manquant') || dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')" style="color:red;">Votre
+        dossier n'est pas complet, il manque des documents ou votre statut n'est pas régularisé, veuillez contacter l'administration via Ticketing
     </p>
 
     
-    <div class="col-12 card">
+    <div class="col-12 card"> <!-- *ngIf="!dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')" -->
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
             <h4 class="col-12">Documents</h4>
