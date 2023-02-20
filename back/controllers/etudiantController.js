@@ -124,7 +124,7 @@ let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
     if (argProd.includes('dev')) {
-        origin = ["http://141.94.71.25"]
+        origin = ["https://141.94.71.25"]
     } else (
         origin = ["https://ims.estya.com"]
     )
