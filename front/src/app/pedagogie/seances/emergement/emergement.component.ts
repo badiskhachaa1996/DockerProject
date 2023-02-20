@@ -296,7 +296,7 @@ export class EmergementComponent implements OnInit {
     var signature = string.substring(6, string.length - 2);
     var sign = signature.substring(signature.indexOf(",") + 1)
     let presence = new Presence(null, this.ID, this.token.id, true, sign)
-    if (!this.presence && (!this.seance.forcedAllowedByFormateur || this.token.type=="Formateur")) {
+    if (!this.presence && (!this.seance.forcedAllowedByFormateur || this.formateurInfo)) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.SocketService.addPresence();
@@ -316,7 +316,7 @@ export class EmergementComponent implements OnInit {
         console.error(err)
       })
     } else {
-      this.MessageService.add({ severity: 'error', summary: 'Vous n\'avez pas l\'autorisation de signer.', detail: `Presence:${this.presence}\nforcedAllowedByFormateur:${this.seance.forcedAllowedByFormateur}\nRechargez la page pour signer` })
+      this.MessageService.add({ severity: 'error', summary: 'Vous n\'avez pas l\'autorisation de signer.', detail: `Presence:${this.presence}\nforcedAllowedByFormateur:${this.seance.forcedAllowedByFormateur}\nFormateur:${!this.formateurInfo}\Rechargez la page pour signer` })
     }
   }
 
