@@ -35,6 +35,11 @@
                         placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-6">
+                    <label>Temps Max pour signer (en Min)<span style="color: red;"> * </span></label><br>
+                    <input pInputText type="number" formControlName="time_max_sign" placeholder="30"
+                        class="form-control col-12">
+                </div>
+                <div class="field col-12 md:col-6">
                     <label>Campus</label><br>
                     <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
@@ -54,13 +59,13 @@
                         class="form-control col-8">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Type de séance <span style="color: red;"> * </span></label>
+                    <label>Emplacement de la séance <span style="color: red;"> * </span></label>
                     <p-selectButton
                         [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
                         formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <br>
+                    <label>Type de planification <span style="color: red;"> * </span></label>
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
                 </div>
@@ -69,6 +74,23 @@
                     <label>Salle Présentiel:</label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
                     </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Type de séance <span style="color: red;"> * </span></label>
+                    <p-selectButton (onChange)="changeType($event.value)" [options]="dropdownSeanceType"
+                        formControlName="seance_type"></p-selectButton>
+                </div>
+                <div class="field col-6">
+                    <label>Autorisation de signature <span style="color: red;"> * </span></label>
+                    <p-selectButton
+                        [options]="[{label:'Signature autorisée par le formateur seulement',value:true},{label:'Signature en début de séance',value:false}]"
+                        formControlName="forcedAllowedByFormateur"></p-selectButton>
+                </div>
+                <div class="field col-6">
+                    <label>Signature optionnel <span style="color: red;"> * </span></label>
+                    <p-selectButton
+                        [options]="[{label:'Signature optionnel',value:true},{label:'Signature obligatoire',value:false}]"
+                        formControlName="isOptionnel"></p-selectButton>
                 </div>
                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceFormUpdate.invalid"

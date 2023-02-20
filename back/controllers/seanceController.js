@@ -92,18 +92,7 @@ app.post('/edit/:id', (req, res, next) => {
     Seance.findOneAndUpdate(
         { _id: req.params.id },
         {
-            classe_id: req.body.classe_id,
-            matiere_id: req.body.matiere_id,
-            libelle: req.body.libelle,
-            date_debut: req.body.date_debut,
-            date_fin: req.body.date_fin,
-            formateur_id: req.body.formateur_id,
-            infos: req.body.infos,
-            isPresentiel: req.body.isPresentiel,
-            salle_name: req.body.salle_name,
-            isPlanified: req.body.isPlanified,
-            campus_id: req.body.campus_id,
-            nbseance: req.body.nbseance
+            ...req.body
         }, { new: true }
     ).then((Seancefromdb) => res.status(201).send(Seancefromdb))
         .catch(error => res.status(400).send(error));
