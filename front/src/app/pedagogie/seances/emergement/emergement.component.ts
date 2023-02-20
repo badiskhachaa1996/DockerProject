@@ -296,7 +296,7 @@ export class EmergementComponent implements OnInit {
     var signature = string.substring(6, string.length - 2);
     var sign = signature.substring(signature.indexOf(",") + 1)
     let presence = new Presence(null, this.ID, this.token.id, true, sign)
-    if (!this.presence && !this.seance.forcedAllowedByFormateur) {
+    if (!this.presence && (!this.seance.forcedAllowedByFormateur || this.token.type=="Formateur")) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.SocketService.addPresence();
