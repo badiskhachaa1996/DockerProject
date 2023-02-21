@@ -29,7 +29,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   hideForPDF = false;
   loaded = false;
   modified = false
-  pvAnnuel = { }
+  pvAnnuel = {}
   PVID = "Nouveau"
   @ViewChild('dt1') pTableRef: Table;
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
@@ -55,27 +55,32 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       this.SemestreList.forEach((semestre, index) => {
         this.NoteService.loadPV(semestre, this.ID).subscribe(data => {
           this.pvAnnuel[semestre] = data
+          if (data && data[data.length - 1])
+            this.loadPV(data[data.length - 1], semestre)
+          else
+            this.NoteService.getPVAnnuel(semestre, this.ID).subscribe(data => {
+              this.cols[semestre] = data.cols
+              this.dataPV[semestre] = data.data
+              this.messageService.add({ severity: 'success', summary: `Création du PV de ${semestre} avec succès` })
+              data.data.forEach(d => {
+                if (!this.StpFonctionne[d.email])
+                  this.StpFonctionne[d.email] = {}
+                if (!this.StpFonctionne[d.email][semestre])
+                  this.StpFonctionne[d.email][semestre] = {}
+                if (!this.dataAnnuel[d.email]) {
+                  this.dataAnnuel[d.email] = {}
+                }
+                this.StpFonctionne[d.email][semestre] = d.notes
+                if (this.dataInPV(d.email) == -1)
+                  this.dataPVAnnuel.push(d)
+              })
+              setTimeout(() => {
+                this.repairBtn()
+              }, 2000)
+            })
         })
-        this.NoteService.getPVAnnuel(semestre, this.ID).subscribe(data => {
-          this.cols[semestre] = data.cols
-          this.dataPV[semestre] = data.data
-          data.data.forEach(d => {
-            if (!this.StpFonctionne[d.email])
-              this.StpFonctionne[d.email] = {}
-            if (!this.StpFonctionne[d.email][semestre])
-              this.StpFonctionne[d.email][semestre] = {}
-            if (!this.dataAnnuel[d.email]) {
-              this.dataAnnuel[d.email] = {}
-            }
-            this.StpFonctionne[d.email][semestre] = d.notes
-            if (this.dataInPV(d.email) == -1)
-              this.dataPVAnnuel.push(d)
-          })
-        })
+
       })
-      setTimeout(() => {
-        this.repairBtn()
-      }, 1000)
     })
   }
 
@@ -280,7 +285,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       })
     })
   }
-  loadPV(pv,semestre){
+  loadPV(pv, semestre) {
     if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
       this.cols[semestre] = pv.pv_annuel_cols
       this.dataPV[semestre] = pv.pv_annuel_data
@@ -297,8 +302,10 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
           this.dataPVAnnuel.push(d)
       })
       this.PVID = pv._id
-      this.repairBtn()
-      this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
+      setTimeout(() => {
+        this.repairBtn()
+      }, 2000)
+      this.messageService.add({ severity: 'success', summary: `Chargement du ${semestre} PV avec succès` })
     }
   }
 
