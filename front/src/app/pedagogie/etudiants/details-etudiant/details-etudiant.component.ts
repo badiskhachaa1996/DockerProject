@@ -40,6 +40,12 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   showPDF = false
   isNotEtudiant = false
+  colorBande = "#ffffff"
+  dropdownTimes = [
+    { label: "Passé", value: "A suivi avec assiduité la formation intitulée:" },
+    { label: "Présent", value: "Suit avec assiduité la formation intitulée:" }
+  ]
+  PHRASE = this.dropdownTimes[0].value
   barDataHor: any = {
     labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [
@@ -123,11 +129,16 @@ export class DetailsEtudiantComponent implements OnInit {
       token = null
       console.error(e)
     }
-    if (token.type == "Initial" || token.type == "Alternant")
-      this.isNotEtudiant = false
+    if (token.type != "Initial" && token.type != "Alternant")
+      this.isNotEtudiant = true
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
+      let user: any = response.user_id
+      if (response.date_inscription)
+        this.dateValue[0] = new Date(response.date_inscription)
+      else if (user && user.date_creation)
+        this.dateValue[0] = new Date(user.date_creation)  
       if (response.ecole_id)
         this.CFAService.getByID(response.ecole_id).subscribe(ecole => {
           this.ECOLE = ecole.dataEcole
@@ -165,6 +176,9 @@ export class DetailsEtudiantComponent implements OnInit {
             data.forEach(m => {
               this.matiereDic[m._id] = m
             });
+          })
+          this.PresenceService.updateAbsences(this.EtudiantDetail.user_id).subscribe(seances => {
+            this.nb_absencesNJ += seances.length
           })
 
           // boucle liste des presences totales de l'étudiants.
@@ -263,7 +277,7 @@ export class DetailsEtudiantComponent implements OnInit {
     }, 200);
   }
   invalidDates = []
-  dateValue: Date[] = []
+  dateValue: Date[] = [null, new Date()]
   PICTURE;
   ECOLE: Ecole;
   diplome_libelle: string = ""
@@ -282,7 +296,8 @@ export class DetailsEtudiantComponent implements OnInit {
       })
   }
   loadEcoleImage() {
-    this.ECOLE.libelle
+    console.log(this.ECOLE)
+    this.colorBande = this.ECOLE.color
     this.PICTURE = { cachet: 'assets/images/service-administratif.png', logo: "assets/images/logo-estya-flag.png", pied_de_page: "assets/images/footer-bulletinv2.png" }
     this.CFAService.downloadCachet(this.ECOLE._id).subscribe(blob => {
       let objectURL = URL.createObjectURL(blob);
@@ -307,5 +322,16 @@ export class DetailsEtudiantComponent implements OnInit {
       jsPDF: { unit: 'px', format: 'a4', orientation: 'p', hotfixes: ['px_scaling'] } //[element.offsetWidth, element.offsetHeight]
     };
     html2pdf().set(opt).from(element).save();
+  }
+
+  saveColor() {
+    this.CFAService.saveColor(this.ECOLE._id, this.colorBande).subscribe(newEcole => {
+      this.ECOLE = newEcole
+      this.messageService.add({ severity: 'success', summary: "Changement de couleur sauvegardé" })
+      this.loadEcoleImage()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: 'error', summary: "Erreur lors du changement de couleur", detail: err.error })
+    })
   }
 }

@@ -1,4 +1,22 @@
 <p-toast></p-toast>
+<p-dialog header="Merci de suivre ces instructions pour ajouter les livrets" [(visible)]="display" modal="modal"
+	showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '75vw'}">
+	<p class="line-height-3 m-0">
+		Voici les informations à savoir pour générer les liens des livrets :
+	</p>
+	<img src="assets/images/Tuto Sharepoint Part 1.png" />
+	<p>Connectez-vous sur <a href="office.com">office.com</a>, puis uploadez le livret, ouvrez le et cliquez sur
+		"Fichier" comme ci-dessus, choissisez "Partagez" et "Partagez avec d'autres utilisateurs" </p>
+	<img src="assets/images/Tuto Sharepoint Part 2.png" />
+	<p>Cliquez ensuite sur "Les membres de INTED GROUP disposant du lien peuvent modifier le contenu"</p>
+	<img src="assets/images/Tuto Sharepoint Part 3.png" />
+	<p>Ensuite dans "Autres paramètres" changer la valeur par "Peut modifier" pour avoir le lien pour les formateurs et
+		par "Consultation possible" pour avoir le lien pour les étudiants et sur le boutton "Appliquer" pour générer le
+		lien à coller dans IMS</p>
+	<ng-template pTemplate="footer">
+		<button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
+	</ng-template>
+</p-dialog>
 <p-dialog header="Envoie de mail" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
 	[style]="{width: '90vw',height:'90vw'}" [draggable]="false" [resizable]="false">
 	<input class="mb-2" pInputText type="text" [(ngModel)]="objetMail" placeholder="Objet du mail" /><br />
@@ -56,15 +74,46 @@
 			<form class="p-fluid p-formgrid grid" [formGroup]="formPV">
 				<div class="field col-12">
 					<label for="campus">Semestre</label>
-					<p-dropdown [options]="semestreList" formControlName="semestre" placeholder="Choissisez un semestre"></p-dropdown>
+					<p-dropdown [options]="semestreList" formControlName="semestre"
+						placeholder="Choissisez un semestre"></p-dropdown>
 				</div>
 				<div style="justify-content: right;" class="col-6">
-					<button pButton label="PV Note" type="button" [disabled]="formPV.invalid" (click)="generatePV()"></button>
+					<button pButton label="PV Note" type="button" [disabled]="formPV.invalid"
+						(click)="generatePV()"></button>
 				</div>
 				<div style="justify-content: right;" class="col-6">
-					<button pButton label="PV Appreciations" type="button" [disabled]="formPV.invalid" (click)="generatePVApp()"></button>
+					<button pButton label="PV Appreciations" type="button" [disabled]="formPV.invalid"
+						(click)="generatePVApp()"></button>
 				</div>
 			</form>
+		</div>
+	</div>
+
+	<div class="col-12" *ngIf="showLien">
+		<div class="card">
+			<button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+				style="width:auto;"></button>
+			<h4 style="text-align: center;">
+				Mis à jour des liens de {{showLien.abbrv}}
+			</h4>
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showLien = null; formLiens.reset()" aria-hidden="true"></i>
+
+			<form class="p-fluid p-formgrid grid" [formGroup]="formLiens" (ngSubmit)="onUpdateLiens()">
+				<div class="field col-12 md:col-6">
+					<label For="lastname">Lien du programme </label>
+					<input formControlName="lien_programme" pInputText type="text" />
+				</div>
+
+				<div class="field col-12 md:col-6">
+					<label For="lastname">Lien du calendrier</label>
+					<input formControlName="lien_calendrier" pInputText type="text" />
+				</div>
+				<div class="field col-12">
+					<button pButton label="Valider" type="submit" [disabled]="formLiens.invalid"></button>
+				</div>
+			</form>
+
 		</div>
 	</div>
 
@@ -142,6 +191,7 @@
 							0
 						</td>
 						<td style="min-width: 10rem;">
+
 							<i aria-hidden="true" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
 								*ngIf="user.departement==rowData.diplome_id.domaine || user.role=='Admin'"
 								tooltipPosition="bottom"
@@ -151,8 +201,10 @@
 							<i class="pi pi-envelope" aria-hidden="true"
 								(click)="displayResponsive=true;mailtype='';groupeEdt=rowData" tooltipPosition="bottom"
 								pTooltip="Envoyer un mail au groupe"></i>
-							<i class="pi pi-file-excel" pTooltip="Générer un PV Semestriel/Annuel" (click)="initPV(rowData)"
-								tooltipPosition="bottom" aria-hidden="true"></i>
+							<i class="pi pi-file-excel" pTooltip="Générer un PV Semestriel/Annuel"
+								(click)="initPV(rowData)" tooltipPosition="bottom" aria-hidden="true"></i>
+							<i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom" class="pi pi-file"
+								(click)="onInitLien(rowData);scrollToTop()" aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>

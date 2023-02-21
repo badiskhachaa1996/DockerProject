@@ -247,13 +247,19 @@
 								(onChange)="dt1.filter($event.value, 'service_id', 'equals')"
 								emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
 							</p-dropdown>
-
+							<span style="margin-left: 2px;">
+								<p-multiSelect filter="true" [options]="listFiliere" placeholder="Toutes les filières"
+									(onChange)="dt1.filter($event.value, 'etudiant_id.classe_id.diplome_id', 'in')"
+									emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Nom de la filière">
+								</p-multiSelect>
+							</span>
 							<span style="margin-left: 2px;">
 								<p-dropdown filter="true" [options]="showSujetQ"
 									(onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"
 									emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
 								</p-dropdown>
 							</span>
+
 						</div>
 						<span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>
@@ -274,8 +280,8 @@
 						<th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon
 								field="date_creation"></p-sortIcon>
 						</th>
-						<th pSortableColumn="temps_attente" style="text-align:center"> Temps d'attente <p-sortIcon
-								field="temps_attente"></p-sortIcon>
+						<th style="text-align:center" pSortableColumn="date_ajout"> Temps d'attente <p-sortIcon
+							field="date_ajout"></p-sortIcon>
 						</th>
 						<th style="text-align:center">Action</th>
 					</tr>
@@ -291,7 +297,7 @@
 						<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
 						<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 						<td style="min-width: 10rem;">{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
-						<td style="min-width: 10rem;">{{showWaitingTime(rowData)}}</td>
+						<td style="min-width: 10rem;">{{showWaitingTime(rowData.date_ajout)}}</td>
 						<td>
 							<i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
 								class="pi pi-check" (click)="QueueToAccAff(rowData)" aria-hidden="true"></i>
@@ -339,13 +345,13 @@
 						<th *ngIf="userDic[rowData.createur_id].service_id">Service</th>
 						<th>Statut</th>
 						<th
-							*ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise">
+							*ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant') && userDic[rowData.createur_id].entreprise">
 							Entreprise</th>
 						<th
-							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
+							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant')">
 							Campus</th>
 						<th
-							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
+							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant')">
 							Groupe</th>
 					</tr>
 				</ng-template>
@@ -355,6 +361,7 @@
 				<ng-template pTemplate="emptymessage">
 					<tr>
 						<td>
+							<ng-container *ngIf="rowData.etudiant_id">{{rowData.etudiant_id.custom_id}}</ng-container>
 							{{userDic[rowData.createur_id].firstname | titlecase }}
 							{{userDic[rowData.createur_id].lastname | titlecase | uppercase }}
 						</td>
@@ -367,13 +374,13 @@
 							{{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</td>
 						<td>{{userDic[rowData.createur_id].type}}</td>
 						<td
-							*ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise">
+							*ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant') && userDic[rowData.createur_id].entreprise">
 							{{userDic[rowData.createur_id].entreprise}}</td>
 						<td
-							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
-							{{userDic[rowData.createur_id].campus}}</td>
+							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant')">
+							{{campusDic[userDic[rowData.createur_id].campus].libelle}}</td>
 						<td
-							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].formation && formationDic[userDic[rowData.createur_id].formation].nom_court">
+							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Initial' || userDic[rowData.createur_id].type=='Alternant') && userDic[rowData.createur_id].formation && formationDic[userDic[rowData.createur_id].formation].nom_court">
 							{{formationDic[userDic[rowData.createur_id].formation].nom_court}}
 						</td>
 					</tr>
@@ -995,8 +1002,8 @@
 											(click)="downloadFile(message)">
 										</i>
 										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-										aria-hidden="true">
-									</i>
+											aria-hidden="true">
+										</i>
 										<span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}
 										</span>
 									</div>

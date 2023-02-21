@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Presence } from '../models/Presence';
+import { Seance } from '../models/Seance';
 
 
 @Injectable({
@@ -73,20 +74,16 @@ export class PresenceService {
     let registreUrl = this.apiUrl + "getPDF/" + id + "/" + classe_id;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  getAssiduitePDF(user_id, RangeDateForPDF) {
-    let registreUrl = this.apiUrl + "getAssiduitePDF/" + user_id;
-    return this.http.post<any>(registreUrl, RangeDateForPDF, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
-  }
-  getAtt_ssiduitePDF(id: any) {
-    let registreUrl = this.apiUrl + "getAtt_ssiduitePDF/" + id;
-    return this.http.post<any>(registreUrl, id, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
-  }
 
   getAllByUserIDMois(user_id: string, mois: number, year: string) {
     let registreUrl = this.apiUrl + "getAllByUserIDMois/" + user_id + "/" + mois + "/" + year;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  updateAbsences(user_id){
+    let url = this.apiUrl + "updateAbsences/" + user_id;
+    return this.http.get<Seance[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
 
   getAllAbsences(id: string) {

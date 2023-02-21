@@ -14,8 +14,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -53,7 +53,8 @@ app.post("/create", (req, res) => {
                     sujet_id: req.body.sujet_id,
                     description: req.body.description,
                     date_ajout: d,
-                    customid: id
+                    customid: id,
+                    etudiant_id: req.body.etudiant_id
                 });
 
                 ticket.save((err, doc) => {
@@ -64,9 +65,9 @@ app.post("/create", (req, res) => {
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                                 let mailOptions = {
-                                    from: 'estya-ticketing@estya.com',
+                                    from: 'ims@intedgroup.com',
                                     to: responsable.email,
-                                    subject: '[ESTYA Ticketing] - Notification ',
+                                    subject: '[IMS - Ticketing] - Notification ',
                                     html: htmlemail,
                                     priority: 'high',
                                     attachments: [{
@@ -134,19 +135,19 @@ app.post("/createAdmin", (req, res) => {
                     });
 
                     ticket.save((err, doc) => {
-                        if(err){
+                        if (err) {
                             console.error(err);
                             res.status(404).send("Erreur avec la création d'un ticket")
                         }
-                        else{
+                        else {
                             res.send({ message: "Votre ticket a été crée!", doc });
                             User.findById(req.body.agent_id).then(responsable => {
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                                 let mailOptions = {
-                                    from: 'estya-ticketing@estya.com',
+                                    from: 'ims@intedgroup.com',
                                     to: responsable.email,
-                                    subject: '[ESTYA Ticketing] - Notification ',
+                                    subject: '[IMS - Ticketing] - Notification ',
                                     html: htmlemail,
                                     priority: 'high',
                                     attachments: [{
@@ -155,8 +156,8 @@ app.post("/createAdmin", (req, res) => {
                                         cid: 'red' //same cid value as in the html img src
                                     }]
                                 };
-    
-    
+
+
                                 transporter.sendMail(mailOptions, function (error, info) {
                                     if (error) {
                                         console.error(error);
@@ -176,9 +177,9 @@ app.post("/createAdmin", (req, res) => {
             res.status(404).send("Aucun sujet n'existe pour ce service")
         })
     }).catch(err => {
-            console.error(err);
-            res.status(404).send("Problème de trouver le nombre de tickets de cette agent")
-        })
+        console.error(err);
+        res.status(404).send("Problème de trouver le nombre de tickets de cette agent")
+    })
 });
 
 
@@ -245,7 +246,7 @@ app.get("/getAllbyUser/:id", (req, res) => {
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
-    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
+    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -257,7 +258,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -324,7 +325,7 @@ app.get("/getQueueByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id.toString())
                 }
             });
-            Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
+            Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -355,7 +356,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id)
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] }, null, { sort: { date_affec_accep: 1 } })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -393,9 +394,9 @@ app.post("/AccAff/:id", (req, res) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                         let html2 = '<p style="color:black">Bonjour ' + gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + '</strong> et qui a pour description <b> ' + ticket.description + ' </strong> vous a été affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html2,
                             attachments: [{
                                 filename: 'signature.png',
@@ -436,9 +437,9 @@ app.post("/changeService/:id", (req, res) => {
                     let html3 = '<p style="color:black">Bonjour ' + gender + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket.customid + '</strong> et qui a pour description : <b> ' + ticket.description + ' </strong> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
 
                     let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
+                        from: 'ims@intedgroup.com',
                         to: userFromDb.email,
-                        subject: '[ESTYA Ticketing] - Notification ',
+                        subject: '[IMS - Ticketing] - Notification ',
                         html: html3,
                         attachments: [{
                             filename: 'signature.png',
@@ -477,11 +478,11 @@ app.post("/changeStatut/:id", (req, res) => {
                 if (ticket.statut == "En attente d\'une réponse") {
                     User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                        let html4 = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + ticket.customid + '  </strong> et qui a pour description : <b> ' + ticket.description + '</strong>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">Vous avez reçu un nouveau message pour le ticket N°<strong> ' + ticket.customid + '  </strong> avec le détail : <br><strong> ' + ticket.description + '</strong>.</p><br><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html4,
                             attachments: [{
                                 filename: 'signature.png',
@@ -516,9 +517,9 @@ app.post("/changeStatut/:id", (req, res) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                         let html5 = '<p style="color:black"> Bonjour ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + ticket.customid + '  </strong> et qui a pour description : <b> ' + ticket.description + '</strong> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html5,
                             attachments: [{
                                 filename: 'signature.png',
@@ -543,7 +544,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }) //.populate({ path: 'sujet_id', populate: { path: "service_id" } }).populate("createur_id").populate({ path: "agent_id", populate: { path: "service_id" } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])
         })
@@ -560,9 +561,9 @@ app.post("/revertTicket/:id", (req, res) => {
                 let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + ' </strong> que vous gériez et qui a pour description <b>' + ticket.description + ' </strong>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                 let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
+                    from: 'ims@intedgroup.com',
                     to: userFromDb.email,
-                    subject: '[ESTYA Ticketing] - Notification ',
+                    subject: '[IMS - Ticketing] - Notification ',
                     html: htmlemail,
                     attachments: [{
                         filename: 'signature.png',
@@ -670,7 +671,7 @@ app.get("/getCountTraite", (req, res, next) => {
 
 //Requête de récupération du nombre de ticket crée par un user en cours de traitement
 app.get("/getCountTicketUserInWaiting/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id, statut: 'En cours de traitement' })
+    Ticket.find({ createur_id: req.params.id, $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });

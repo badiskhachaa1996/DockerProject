@@ -42,23 +42,27 @@ export class PvAppreciationComponent implements OnInit {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
-    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
-      console.log(data)
-      this.cols = data.cols
-      this.dataPV = data.data
-      this.dataPV.forEach((d, index) => {
-        if (!d.appreciation_module) {
-          d.appreciation_module = {}
-        }
-        this.cols.forEach(col => {
-          if (!d.appreciation_module[col.module])
-            d.appreciation_module[col.module] = ""
-        })
-        this.dataPV[index] = d
-      })
-    })
+
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
+      if (data && data[data.length - 1]) {
+        this.loadPV(data[data.length - 1])
+      } else
+        this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+          this.cols = data.cols
+          this.dataPV = data.data
+          this.messageService.add({ severity: 'success', summary: "Création d'un nouveau PV avec succès" })
+          this.dataPV.forEach((d, index) => {
+            if (!d.appreciation_module) {
+              d.appreciation_module = {}
+            }
+            this.cols.forEach(col => {
+              if (!d.appreciation_module[col.module])
+                d.appreciation_module[col.module] = ""
+            })
+            this.dataPV[index] = d
+          })
+        })
     })
   }
   savePv() {

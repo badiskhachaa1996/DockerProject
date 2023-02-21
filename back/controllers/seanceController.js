@@ -92,18 +92,7 @@ app.post('/edit/:id', (req, res, next) => {
     Seance.findOneAndUpdate(
         { _id: req.params.id },
         {
-            classe_id: req.body.classe_id,
-            matiere_id: req.body.matiere_id,
-            libelle: req.body.libelle,
-            date_debut: req.body.date_debut,
-            date_fin: req.body.date_fin,
-            formateur_id: req.body.formateur_id,
-            infos: req.body.infos,
-            isPresentiel: req.body.isPresentiel,
-            salle_name: req.body.salle_name,
-            isPlanified: req.body.isPlanified,
-            campus_id: req.body.campus_id,
-            nbseance: req.body.nbseance
+            ...req.body
         }, { new: true }
     ).then((Seancefromdb) => res.status(201).send(Seancefromdb))
         .catch(error => res.status(400).send(error));
@@ -149,15 +138,9 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                 Presence.find({
                     user_id: req.body.user_id, seance_id: SF.id
                 }).then((data) => {
-                    console.log("data")
-                    console.log(data)
                     if (data.length > 0) {
-
-                        console.log("Prensence Trouvé")
                         ListPresences.push(data);
-                        console.log(ListPresences)
                         if (dernierS._id == SF.id) {
-                            console.log("res to send: " + ListPresences.length)
                             res.status(200).send(ListPresences);
                         }
                     }
@@ -180,11 +163,8 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                             } else {
                                 ListPresences.push(dataCreated)
 
-                                console.log("added pre")
-                                console.log(ListPresences)
                             }
                             if (dernierS._id == SF.id) {
-                                console.log("res to send: " + ListPresences.length)
                                 res.status(200).send(ListPresences);
                             }
                         })

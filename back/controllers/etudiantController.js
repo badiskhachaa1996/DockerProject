@@ -124,7 +124,7 @@ let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
     if (argProd.includes('dev')) {
-        origin = ["https://t.dev.estya.com"]
+        origin = ["https://141.94.71.25"]
     } else (
         origin = ["https://ims.estya.com"]
     )
@@ -339,7 +339,7 @@ app.get("/getByUserid/:user_id", (req, res, next) => {
 
 //Recupere un étudiant via son user_id
 app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
-    Etudiant.findOne({ "user_id": req.params.user_id }).populate('user_id')
+    Etudiant.findOne({ "user_id": req.params.user_id }).populate('user_id').populate('classe_id')
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });

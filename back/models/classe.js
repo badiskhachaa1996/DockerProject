@@ -5,7 +5,9 @@ const classe_schema = new mongoose.Schema({
     //nom: { type: String, required: true },
     active: { type: Boolean, required: true },
     abbrv: { type: String, required: true },
-    annee: { type: String }
+    annee: { type: String },
+    lien_programme: { type: String, default: "" },
+    lien_calendrier: { type: String, default: "" }
 });
 //creation de la table avec le nom Classe ( model/classe) à l'aide de la biblio mongoose et son schema
 const Classe = mongoose.model("classe", classe_schema);

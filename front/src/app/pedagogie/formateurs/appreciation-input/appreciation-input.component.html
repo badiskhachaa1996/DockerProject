@@ -69,20 +69,18 @@
                                 </td>
                             </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="data && data?.appreciation_module && (data?.appreciation_module[col_m] || data?.appreciation_module[col_m]=='')">
-                            <td class="text-center" [pEditableColumn]="data?.appreciation_module[col_m]"
-                                pEditableColumnField="module">
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="data.appreciation_module[col_m]"
-                                            (input)="modified=true">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{data.appreciation_module[col_m]}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                        </ng-container>
+                        <td class="text-center" [pEditableColumn]="data?.appreciation_module[col_m]"
+                            pEditableColumnField="module">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="data.appreciation_module[col_m]"
+                                        (input)="modified=true">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{data.appreciation_module[col_m]}} &nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                     </ng-container>
                     <td class="text-center">{{data.moyenne| number : '0.2-2'}}</td>
                 </tr>

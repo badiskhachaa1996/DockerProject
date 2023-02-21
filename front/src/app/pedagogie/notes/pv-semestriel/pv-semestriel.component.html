@@ -1,107 +1,5 @@
 <div class="col-12">
     <div class="card">
-        <h5 *ngIf="classe">PV {{SEMESTRE}} de {{classe.abbrv}}</h5>
-        <p-toast></p-toast>
-        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1"
-            [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email']"
-            [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
-            <ng-template pTemplate="caption">
-                <div *ngIf="!hideForPDF">
-                    <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" class="mr-2"
-                        pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
-                    <button type="button" pButton pRipple icon="pi pi-save" (click)="savePv()" class="mr-2"
-                        pTooltip="Sauvegarder dans IMS" tooltipPosition="bottom"></button>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" />
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <!--<th style="width: 3rem"></th>-->
-                    <th class="text-center" rowspan="2" pSortableColumn="custom_id">ID Etudiant <p-sortIcon
-                            *ngIf="!hideForPDF" field="custom_id"></p-sortIcon>
-                    </th>
-                    <th class="text-center" rowspan="2" pSortableColumn="nom">Nom <p-sortIcon *ngIf="!hideForPDF"
-                            field="nom"></p-sortIcon>
-                    </th>
-                    <th class="text-center" rowspan="2" pSortableColumn="prenom">Prénom<p-sortIcon *ngIf="!hideForPDF"
-                            field="prenom">
-                        </p-sortIcon>
-                    </th>
-                    <th class="text-center" rowspan="2" pSortableColumn="date_naissance">Date de naissance <p-sortIcon
-                            *ngIf="!hideForPDF" field="date_naissance">
-                        </p-sortIcon>
-                    </th>
-                    <th class="text-center" rowspan="2" pSortableColumn="date_inscrit">Date d'intégration <p-sortIcon
-                            *ngIf="!hideForPDF" field="date_inscrit">
-                        </p-sortIcon>
-                    </th>
-                    <th class="text-center" rowspan="2" pSortableColumn="email">Email INTED <p-sortIcon
-                            *ngIf="!hideForPDF" field="email">
-                        </p-sortIcon>
-                    </th>
-                    <th *ngFor="let col of cols">
-                        {{col.module}}
-                    </th>
-                    <th class="text-center" rowspan="2">Moyenne</th>
-                    <th class="text-center" rowspan="3">Appréciations</th>
-                </tr>
-                <tr>
-                    <th class="text-center" *ngFor="let col of cols">
-                        {{col.formateur}}
-                    </th>
-                </tr>
-                <tr>
-                    <th class="text-center" colspan="6">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of cols">
-                        {{col.coeff}}
-                    </th>
-                    <th class="text-center">
-                        {{totalCoeff()}}
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-data let-ri="rowIndex">
-                <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
-                    <td class="text-center">
-                        <a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
-                            target="_blank">{{data.custom_id}}</a>
-                    </td>
-                    <td class="text-center">{{data.nom}}</td>
-                    <td class="text-center">{{data.prenom}}</td>
-                    <td class="text-center">{{data.date_naissance}}</td>
-                    <td class="text-center">{{data.date_inscrit}}</td>
-                    <td class="text-center">{{data.email}}</td>
-                    <td class="text-center" *ngFor="let col of cols" [pEditableColumn]="data.notes[col.module]"
-                        pEditableColumnField="module">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]"
-                                    (input)="modified=true">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{data.notes[col.module] | number : '0.2-2'}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td class="text-center">
-                        {{calculMoyenne(data.notes) | number : '0.2-2'}}
-                    </td>
-                    <td class="text-center" [pEditableColumn]="data.appreciation" pEditableColumnField="appreciation">
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.appreciation" (input)="modified=true">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{data.appreciation}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
-    <div class="card">
         <h5 *ngIf="classe">Liste des PVs {{SEMESTRE}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="pvAnnuel" dataKey="_id" responsiveLayout="scroll" id="dt1"
@@ -223,6 +121,108 @@
         </td>
         </tr>
         </ng-template>
+        </p-table>
+    </div>
+    <div class="card">
+        <h5 *ngIf="classe">PV {{SEMESTRE}} de {{classe.abbrv}}</h5>
+        <p-toast></p-toast>
+        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1"
+            [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email']"
+            [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div *ngIf="!hideForPDF">
+                    <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" class="mr-2"
+                        pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
+                    <button type="button" pButton pRipple icon="pi pi-save" (click)="savePv()" class="mr-2"
+                        pTooltip="Sauvegarder dans IMS" tooltipPosition="bottom"></button>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!--<th style="width: 3rem"></th>-->
+                    <th class="text-center" rowspan="2" pSortableColumn="custom_id">ID Etudiant <p-sortIcon
+                            *ngIf="!hideForPDF" field="custom_id"></p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="nom">Nom <p-sortIcon *ngIf="!hideForPDF"
+                            field="nom"></p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="prenom">Prénom<p-sortIcon *ngIf="!hideForPDF"
+                            field="prenom">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="date_naissance">Date de naissance <p-sortIcon
+                            *ngIf="!hideForPDF" field="date_naissance">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="date_inscrit">Date d'intégration <p-sortIcon
+                            *ngIf="!hideForPDF" field="date_inscrit">
+                        </p-sortIcon>
+                    </th>
+                    <th class="text-center" rowspan="2" pSortableColumn="email">Email INTED <p-sortIcon
+                            *ngIf="!hideForPDF" field="email">
+                        </p-sortIcon>
+                    </th>
+                    <th *ngFor="let col of cols">
+                        {{col.module}}
+                    </th>
+                    <th class="text-center" rowspan="2">Moyenne</th>
+                    <th class="text-center" rowspan="3">Appréciations</th>
+                </tr>
+                <tr>
+                    <th class="text-center" *ngFor="let col of cols">
+                        {{col.formateur}}
+                    </th>
+                </tr>
+                <tr>
+                    <th class="text-center" colspan="6">Coefficient</th>
+                    <th class="text-center" *ngFor="let col of cols">
+                        {{col.coeff}}
+                    </th>
+                    <th class="text-center">
+                        {{totalCoeff()}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data let-ri="rowIndex">
+                <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
+                    <td class="text-center">
+                        <a style="color: black;" [routerLink]="['/bulletin', SEMESTRE,ID,data.custom_id,PVID]"
+                            target="_blank">{{data.custom_id}}</a>
+                    </td>
+                    <td class="text-center">{{data.nom}}</td>
+                    <td class="text-center">{{data.prenom}}</td>
+                    <td class="text-center">{{data.date_naissance}}</td>
+                    <td class="text-center">{{data.date_inscrit}}</td>
+                    <td class="text-center">{{data.email}}</td>
+                    <td class="text-center" *ngFor="let col of cols" [pEditableColumn]="data.notes[col.module]"
+                        pEditableColumnField="module">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]"
+                                    (input)="modified=true">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.notes[col.module] | number : '0.2-2'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td class="text-center">
+                        {{calculMoyenne(data.notes) | number : '0.2-2'}}
+                    </td>
+                    <td class="text-center" [pEditableColumn]="data.appreciation" pEditableColumnField="appreciation">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="data.appreciation" (input)="modified=true">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.appreciation}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
         </p-table>
     </div>
 </div>

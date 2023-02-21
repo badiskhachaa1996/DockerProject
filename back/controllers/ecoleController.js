@@ -188,4 +188,15 @@ app.get("/downloadPied/:id", (req, res) => {
         res.sendFile('storage/ecole/' + data._id + "/pied_de_page.png", { root: "./" })
     })
 })
+
+app.get("/saveColor/:id/:hex_color", (req, res) => {
+    Ecole.findByIdAndUpdate(req.params.id, { color: "#" + req.params.hex_color }, { new: true }, (err, doc) => {
+        if (err) {
+            console.error(err)
+            res.status(500).send(error)
+        }
+        else
+            res.send(doc)
+    })
+})
 module.exports = app;

@@ -25,7 +25,7 @@ let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
     if (argProd.includes('dev')) {
-        origin = ["https://t.dev.estya.com"]
+        origin = ["https://141.94.71.25"]
     } else (
         origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
     )
@@ -36,8 +36,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -101,11 +101,11 @@ app.post("/registre", (req, res) => {
             newUser.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
                 let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+                let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte IMS a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
                 let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
+                    from: 'ims@intedgroup.com',
                     to: data.email,
-                    subject: 'Estya-Ticketing',
+                    subject: '[IMS] - Création de compte',
                     html: htmlmail,
                     attachments: [{
                         filename: 'signature.png',
@@ -792,7 +792,7 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
     if (process.argv[2]) {
         let argProd = process.argv[2]
         if (argProd.includes('dev')) {
-            origin = "https://t.dev.estya.com"
+            origin = "https://141.94.71.25"
         } else (
             origin = "https://ticket.estya.com"
         )
@@ -807,7 +807,7 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
     let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + temp2
 
     let mailOptions = {
-        from: "estya-ticketing@estya.com",
+        from: "ims@intedgroup.com",
         to: "m.hue@estya.com",
         subject: 'TEST EMAIL',
         html: htmlmail,

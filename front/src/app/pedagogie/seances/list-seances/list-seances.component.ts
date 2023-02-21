@@ -194,7 +194,11 @@ export class ListSeancesComponent implements OnInit {
       salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
       campus_id: new FormControl({ libelle: this.dicCampus[rowData.campus_id]?.libelle, value: this.dicCampus[rowData.campus_id]?._id }),
       isPlanified: new FormControl(rowData.isPlanified),
-      nbseance: new FormControl(rowData.nbseance)
+      nbseance: new FormControl(rowData.nbseance),
+      time_max_sign: new FormControl(rowData.time_max_sign),
+      forcedAllowedByFormateur: new FormControl(rowData.forcedAllowedByFormateur),
+      isOptionnel: new FormControl(rowData.isOptionnel),
+      seance_type: new FormControl(rowData.seance_type)
     });
     //{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }
     if (rowData.formateur_id && this.formateurs[rowData.formateur_id] && this.formateurs[rowData.formateur_id].firstname)
@@ -271,7 +275,8 @@ export class ListSeancesComponent implements OnInit {
       classeList.push(c)
     })
     let seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, null,
-      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
+      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value, this.seanceFormUpdate.value.nbseance, this.showFormUpdateSeance.fileRight, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.seance_type,
+      this.seanceFormUpdate.value.time_max_sign, this.seanceFormUpdate.value.forcedAllowedByFormateur, this.seanceFormUpdate.value.isOptionnel);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
       this.seanceFormUpdate.value.classe.forEach(c => {
@@ -409,6 +414,21 @@ export class ListSeancesComponent implements OnInit {
     }
     return r
 
+  }
+
+  dropdownSeanceType: any[] = [
+    { label: "Séance", value: "Séance" },
+    { label: "Séance sans Formateur", value: "Séance sans Formateur" }
+  ]
+
+  changeType(value) {
+    if (value == "Séance sans Formateur") {
+      this.seanceFormUpdate.controls.formateur.setValidators([])
+      this.seanceFormUpdate.patchValue({ formateur: { value: null, nom: "En Autonomie" } })
+    } else {
+      this.seanceFormUpdate.controls.formateur.setValidators([Validators.required])
+      this.seanceFormUpdate.patchValue({ formateur: '' })
+    }
   }
 
 }

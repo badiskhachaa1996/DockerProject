@@ -43,13 +43,16 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
-    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
-      this.cols = data.cols
-      this.dataPV = data.data
-      console.log(data)
-    })
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
+      if (data && data[data.length - 1]) {
+        this.loadPV(data[data.length - 1])
+      } else
+        this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(dataNew => {
+          this.cols = dataNew.cols
+          this.dataPV = dataNew.data
+          this.messageService.add({ severity: 'success', summary: "Création d'un nouveau PV" })
+        })
     })
   }
 

@@ -24,7 +24,7 @@ app.get("/getAllPopulate", (req, res, next) => {
 
 //Recuperation de la liste des notes via id d'un étudiant
 app.get("/getAllByEtudiantId/:id", (req, res, next) => {
-    Note.find({ etudiant_id: req.params.id })
+    Note.find({ etudiant_id: req.params.id }).populate('matiere_id')
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(400).send(error); });
 });

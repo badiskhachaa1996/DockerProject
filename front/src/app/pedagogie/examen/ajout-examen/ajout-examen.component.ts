@@ -174,10 +174,11 @@ export class AjoutExamenComponent implements OnInit {
           libelle = libelle + ' - ' + this.groupes[cid].abbrv
       })
       libelle = libelle + ' | ' + niveau
-      this.examenService.getAllByFormateurID(formateur_id).subscribe(e => {
-        libelle = libelle + " " + (e.length + 1).toString()
-        this.formAddExamen.patchValue({ libelle })
-      })
+      if (niveau != "BTS Blanc")
+        this.examenService.getAllByFormateurID(formateur_id).subscribe(e => {
+          libelle = libelle + " " + (e.length + 1).toString()
+          this.formAddExamen.patchValue({ libelle })
+        })
     }
 
   }

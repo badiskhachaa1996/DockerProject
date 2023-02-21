@@ -6,7 +6,9 @@ export class Classe {
     //public nom?: string,
     public active?: boolean,
     public abbrv?: string,
-    public annee?: string
+    public annee?: string,
+    public lien_programme?: string,
+    public lien_calendrier?: string
   ) { }
 
 }

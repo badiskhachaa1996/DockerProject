@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
 
   user: User;
   classe: Classe[] = [];
+  paimentS1 = false
+  paimentAn = false
 
   seances: Seance[] = [];
   matieres: Matiere[] = [];
@@ -265,9 +267,18 @@ export class DashboardComponent implements OnInit {
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         this.isCEO = dataUser.type == "CEO Entreprise";
-        this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+        this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
             this.dataEtudiant = dataEtu
+
+            this.paimentAn = dataEtu.isAlternant
+            this.paimentS1 = dataEtu.isAlternant
+
+            if (!dataEtu.isAlternant && dataEtu.statut_dossier) {
+              this.paimentAn = dataEtu.statut_dossier?.includes("Paiement non finalisé")
+              this.paimentS1 = dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé")
+            }
+
             this.isEtudiant = true
             this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
             if (dataEtu.classe_id)
@@ -276,7 +287,11 @@ export class DashboardComponent implements OnInit {
             this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
               ((responseNote) => {
                 this.notes = responseNote;
-                this.dernotes = this.notes.slice(1, 6)
+                this.dernotes = []
+                this.notes.forEach(n => {
+                  if (n.matiere_id && this.dernotes.length != 10)
+                    this.dernotes.push(n)
+                })
               }));
           } else {
             this.isEtudiant = false
@@ -317,8 +332,8 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  refreshEvent(etu: Etudiant) {
-    this.seanceService.getAllByClasseId(etu.classe_id).subscribe(
+  refreshEvent(etu: any) {
+    this.seanceService.getAllByClasseId(etu.classe_id._id).subscribe(
       (data) => {
         this.showEvents(data)
       },
@@ -496,14 +511,12 @@ export class DashboardComponent implements OnInit {
   }
 
   // toggle the form daily activity
-  onToggleFormDailyActivityDetail(): void
-  {
+  onToggleFormDailyActivityDetail(): void {
     this.showFormDailyActivityDetails = !this.showFormDailyActivityDetails;
   }
 
   // methode de calidation du cra via le formulaire
-  onValidateCraByForm() 
-  {
+  onValidateCraByForm() {
     const today = new Date().toLocaleDateString();
     let todayReplaced = '';
     for (let i = 0; i < today.length; i++) {
@@ -536,25 +549,23 @@ export class DashboardComponent implements OnInit {
   }
 
   // toggle sur l'affichage des tâches de l'utilisateur
-  onToggleShowTaskForUser(): void 
-  {
+  onToggleShowTaskForUser(): void {
     this.showTaskForUser = !this.showTaskForUser;
   }
 
   // methode de recuperation de la liste des tâches en cours de l'utilisateur connecté
-  onGetTaskInProgressForUser(): void
-  {
+  onGetTaskInProgressForUser(): void {
     this.projectService.getTasksInProgressByIdUser(this.token.id)
-    .then((response) => {
-      this.taskForUser = [];
-      this.taskForUser = response;
-    })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
+      .then((response) => {
+        this.taskForUser = [];
+        this.taskForUser = response;
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
   }
 
   // au clic du bouton de modification
   onRowEditInit(tache: Tache) {
-    this.clonedTaches[tache._id] = {...tache};
+    this.clonedTaches[tache._id] = { ...tache };
   }
 
   // methode de validation du cra via la liste des tâches en cours
@@ -576,12 +587,19 @@ export class DashboardComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({severity:'error', summary:'Check', detail: response.error}); })
 
-    })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+        // modification du dailycheck en bd
+        this.inTimeService.patchCheck(this.dailyCheck)
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+          })
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: response.error }); })
+
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Tâche', detail: error.error }); });
 
     // après la validation
     delete this.clonedTaches[tache._id];
-    this.messageService.add({severity:'success', summary: 'Tâche', detail:'Votre tâche a été mis à jour'});
+    this.messageService.add({ severity: 'success', summary: 'Tâche', detail: 'Votre tâche a été mis à jour' });
   }
 
   // a l'annulation de la modif
@@ -605,7 +623,7 @@ export class DashboardComponent implements OnInit {
     })
     .catch((error) => { this.messageService.add({severity:'error', summary: 'Check', detail: error.error }); })
   }
-  
+
 
 
   onGetBackgroundColor() {

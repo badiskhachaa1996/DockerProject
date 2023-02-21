@@ -21,6 +21,8 @@ import { environment } from 'src/environments/environment';
 import { MessageService as MsgServ } from 'src/app/services/message.service';
 import { Notification } from 'src/app/models/notification';
 import { saveAs as importedSaveAs } from "file-saver";
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { CampusService } from 'src/app/services/campus.service';
 
 @Component({
   selector: 'app-gestion-tickets',
@@ -31,10 +33,10 @@ import { saveAs as importedSaveAs } from "file-saver";
 export class GestionTicketsComponent implements OnInit {
 
   /** Variable pour le nombre de ticket*/
- 
-  numberTicketWaiting : Ticket[] = [];
-  numberTicketTraite : Ticket[] = [];
-  numberTicketCours : Ticket[] = [];
+
+  numberTicketWaiting: Ticket[] = [];
+  numberTicketTraite: Ticket[] = [];
+  numberTicketCours: Ticket[] = [];
 
   /**  End */
 
@@ -47,11 +49,13 @@ export class GestionTicketsComponent implements OnInit {
   sujetList: any[] = [];
   listServices: Service[];
   dropdownService: any[] = [{ label: "Tous les services", value: null }];
+  listFiliere = []
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
 
   formationDic = [];
+  campusDic = []
 
   queueList: Ticket[] = [];
 
@@ -67,7 +71,7 @@ export class GestionTicketsComponent implements OnInit {
 
   userconnected: User;
 
-  showCard : Boolean = true;
+  showCard: Boolean = true;
 
   showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
@@ -134,7 +138,8 @@ export class GestionTicketsComponent implements OnInit {
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService, private ClasseService: ClasseService) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService,
+    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService, private campusService: CampusService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -318,6 +323,16 @@ export class GestionTicketsComponent implements OnInit {
 
       this.updateAccAffList()
       this.updateUserList()
+      this.DiplomeService.getAll().subscribe(diplomes => {
+        diplomes.forEach(diplome => {
+          this.listFiliere.push({ label: diplome.titre, value: diplome._id })
+        })
+      })
+      this.campusService.getAll().subscribe(campuss => {
+        campuss.forEach(c => {
+          this.campusDic[c._id] = c
+        });
+      })
 
     }
     this.socket.on("refreshMessage", () => {
@@ -355,8 +370,8 @@ export class GestionTicketsComponent implements OnInit {
 
     // Récuperation du nombre du ticket en file d'attente
     this.TicketService.getCountWaiting().subscribe(
-      ((response) => {this.numberTicketWaiting = response; } ),
-      ((error) => { console.error(error) } )
+      ((response) => { this.numberTicketWaiting = response; }),
+      ((error) => { console.error(error) })
     );
 
     // Récupération du nombre de ticket en cours de traitement
@@ -458,7 +473,7 @@ export class GestionTicketsComponent implements OnInit {
 
 
   TicketFormAdd: FormGroup = new FormGroup({
-    description: new FormControl('', [Validators.required]), 
+    description: new FormControl('', [Validators.required]),
     sujet: new FormControl('', Validators.required),
     service: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email])
@@ -518,14 +533,14 @@ export class GestionTicketsComponent implements OnInit {
         this.AllUsers.forEach(user => {
           if (user._id == data1.agent_id) {
             value1 = user.firstname + " " + user.lastname;
-
           }
           if (user._id == data2.agent_id) {
             value2 = user.firstname + " " + user.lastname;
           }
         })
-
-
+      } else if (event.field == "date_ajout") {
+        value1 = this.showWaitingTime(value1, "sort")
+        value2 = this.showWaitingTime(value2, "sort")
       }
       let result = null;
 
@@ -607,15 +622,22 @@ export class GestionTicketsComponent implements OnInit {
     })
   }
 
-  showWaitingTime(rawData) {
-    let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
-    let days = calc.getUTCDate() - 1
+  showWaitingTime(date_ajout, type = 'tab') {
+    let calc = new Date(new Date().getTime() - new Date(date_ajout).getTime())
+    let month = calc.getMonth()
+    let days = (calc.getUTCDate() - 1) + month * 30
     let Hours = calc.getUTCHours()
     let minutes = calc.getUTCMinutes()
     if (days == 0) {
-      return Hours.toString() + " h " + minutes + " min"
+      if (type == "tab")
+        return Hours.toString() + " h " + minutes + " min"
+      else
+        return Hours * 60 + minutes
     }
-    return days.toString() + " j " + Hours + " h " + minutes + " min "
+    if (type == "tab")
+      return days.toString() + " j " + Hours + " h " + minutes + " min"
+    else
+      return days * 24 * 3600 + Hours * 60 + minutes
 
   }
 
@@ -635,7 +657,7 @@ export class GestionTicketsComponent implements OnInit {
     return days.toString() + Hours + " h " + minutes + " min "
   }
 
-  toggleFormAdd(){
+  toggleFormAdd() {
     this.showRevert = null;
     this.showFormAddComment = false;
     this.isModify = null;

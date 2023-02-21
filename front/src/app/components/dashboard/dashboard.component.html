@@ -261,7 +261,8 @@
 </div>
 
 <div *ngIf="isAdmin">
-    <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}</h1>
+    <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
+    </h1>
     <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
 
     <div class="col-12">
@@ -279,7 +280,7 @@
                     Merci d'avoir validé votre journée
                 </span>
             </h5>
-            
+
             <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
                 (click)="onCheckIn()"></button>
 
@@ -333,10 +334,9 @@
                 <button *ngIf="dailyCheck.activity_details.length > 0" pButton label="Valider" icon="pi pi-check" style="float: right;" (click)="dailyCheck.isCheckable = false; dailyCheck.craIsValidate = true;"></button>
                 <h5>Vos tâches en cours</h5>
                 <small>Merci de mettre à jour les pourcentages d'évolutions des tâches</small>
-                <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row"
-                        [rows]="5" [rowHover]="true" [paginator]="true"
-                        [globalFilterFields]="['libelle','percent','project_id?.libelle']"
-                        responsiveLayout="scroll">
+                <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row" [rows]="5" [rowHover]="true"
+                    [paginator]="true" [globalFilterFields]="['libelle','percent','project_id?.libelle']"
+                    responsiveLayout="scroll">
 
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between flex-column sm:flex-row">
@@ -414,16 +414,20 @@
 
 
 
-<div *ngIf="isEtudiant && dataEtudiant">
+<div class="grid" *ngIf="isEtudiant && dataEtudiant">
     <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
         N°{{dataEtudiant?.custom_id}}
     </h1>
-    <p *ngIf="dataEtudiant && dataEtudiant?.statut_dossier?.includes('Document Manquant')" style="color:red;">Votre
-        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
+    <p *ngIf="dataEtudiant && dataEtudiant?.statut_dossier?.includes('Document Manquant') || dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')"
+        style="color:red;">Votre
+        dossier n'est pas complet, il manque des documents ou votre statut n'est pas régularisé, veuillez contacter
+        l'administration via Ticketing
     </p>
 
-    
-    <div class="col-12 card">
+
+    <div class="col-12 card"
+        *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese || dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel'] || dataEtudiant.lien_attestation || (dataEtudiant.classe_id && (dataEtudiant.classe_id.lien_programme || dataEtudiant.classe_id.lien_calendrier))">
+        <!-- *ngIf="!dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')" -->
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
             <h4 class="col-12">Documents</h4>
@@ -446,26 +450,57 @@
         <div class="grid"
             *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel']">
             <h4 class="col-12">Bulletin</h4>
-            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1']">
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 1'] && paimentS1">
                 <h5>Semestre 1</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Semestre 1']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
-            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2']">
+            <div class="card col-6" *ngIf="!paimentS1 && dataEtudiant.lien_bulletin['Semestre 1']">
+                <h5>Semestre 1</h5>
+                <p>Vous n'avez pas régularisé votre 1er semestre, merci de contacter l'administration ou de vous rendre
+                    au
+                    campus du Louvre.</p>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2'] && paimentAn">
                 <h5>Semestre 2</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
-            <div class="card col-6" *ngIf="dataEtudiant.lien_bulletin['Annuel']">
+            <div class="card col-6" *ngIf="!paimentAn && dataEtudiant.lien_bulletin['Semestre 2']">
+                <h5>Semestre 2</h5>
+                <p>Vous n'avez pas régularisé votre 2ème semestre, merci de contacter l'administration ou de vous rendre
+                    au
+                    campus du Louvre.</p>
+            </div>
+            <div class="card col-6" *ngIf="dataEtudiant.lien_bulletin['Annuel'] && paimentAn">
                 <h5>Annuel</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Annuel']}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-6" *ngIf="!paimentAn && dataEtudiant.lien_bulletin['Annuel']">
+                <h5>Annuel</h5>
+                <p>Vous n'avez pas régularisé votre année, merci de contacter l'administration ou de vous rendre au
+                    campus du Louvre.</p>
             </div>
         </div>
         <div class="grid" *ngIf="dataEtudiant.lien_attestation">
             <div class="card col-12" *ngIf="dataEtudiant.lien_attestation">
                 <h5>Attestation</h5>
                 <a href="{{dataEtudiant.lien_attestation}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
+        <div class="grid"
+            *ngIf="dataEtudiant.classe_id && (dataEtudiant.classe_id.lien_programme || dataEtudiant.classe_id.lien_calendrier)">
+            <h4 class="col-12">Documents de Formation</h4>
+            <div class="card col-6" *ngIf="dataEtudiant.classe_id.lien_programme">
+                <h5>Programme</h5>
+                <a href="{{dataEtudiant.classe_id.lien_programme}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-6" *ngIf="dataEtudiant.classe_id.lien_calendrier">
+                <h5>Calendrier</h5>
+                <a href="{{dataEtudiant.classe_id.lien_calendrier}}" target="_blank"><img style="max-height: 20vh;"
                         src="assets/images/word.png" /></a>
             </div>
         </div>
@@ -487,21 +522,23 @@
     </div>
 
     <div class="col-12 md:col-6">
-        <div class="card" *ngIf="notes">
+        <div class="card" *ngIf="dernotes">
             <h5>Dernières notes obtenues</h5>
             <p-table [value]="dernotes">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pSortableColumn="matiere_id.nom">Matière <p-sortIcon field="matiere_id.nom"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon>
-                        </th>
+
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-note>
                     <tr>
+                        <td style="width: 35%; min-width: 7rem;">{{note.matiere_id.nom }}</td>
                         <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
-                        <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+
                     </tr>
                 </ng-template>
             </p-table>

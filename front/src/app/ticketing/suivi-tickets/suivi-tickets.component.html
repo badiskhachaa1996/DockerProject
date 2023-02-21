@@ -192,40 +192,32 @@
         </div>
     </div>
 
-    <div class="p-grid mt-2" *ngIf="selectedTicket!=null">
-        <div class="xl:col-8 xl:col-offset-2 col-12">
-            <p-card>
-                <div class="p-grid">
-                    <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="selectedTicket=null"
-                        aria-hidden="true"> </i>
-                    <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                        <h3 class="text-center" style="color: #3da827; font-weight: bold;">Envoyer un message</h3>
-                        <div class="text-center">
-                            <textarea formControlName="description" rows="5" cols="100" pInputTextarea
-                                autoResize="autoResize" placeholder="Saisir un message"></textarea>
-                        </div><br>
-                        <div class="text-center">
-                            <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic"
-                                chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
-                                accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true"
-                                #fileInput>
-                            </p-fileUpload>
-                            <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
-                        </div>
-                        <div *ngIf="value.invalid">
-                            <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
-                                max).</span>
-                        </div><br>
+    <div class="col-12 card grid mt-2 ml-0" *ngIf="selectedTicket!=null">
+        <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="selectedTicket=null" aria-hidden="true">
+        </i>
+        <form class="col-12 grid" [formGroup]="commentForm" enctype="multipart/form-data">
+            <h3 class="col-12 text-center" style="color: #3da827; font-weight: bold;">Envoyer un message</h3>
+            <div class="col-12 text-center">
+                <textarea formControlName="description" rows="5" [cols]="100" pInputTextarea autoResize="autoResize"
+                    placeholder="Saisir un message"></textarea>
+            </div><br>
+            <div class="col-12 text-center">
+                <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
+                    customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000"
+                    [auto]="true" #fileInput>
+                </p-fileUpload>
+                <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
+            </div>
+            <div class="col-12 text-center" *ngIf="value.invalid">
+                <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
+                    max).</span>
+            </div><br>
 
-                        <div class="text-center">
-                            <button [disabled]="commentForm.invalid || loading" pButton
-                                class="ui-button-raised ui-button-success" label="Envoyer"
-                                (click)="SendComment()"></button>
-                        </div>
-                    </form>
-                </div>
-            </p-card>
-        </div>
+            <div class="col-12 text-center" class="text-center">
+                <button [disabled]="commentForm.invalid || loading" pButton class="ui-button-raised ui-button-success"
+                    label="Envoyer" (click)="SendComment()"></button>
+            </div>
+        </form>
     </div>
     <div class="col-12">
         <div class="card">
@@ -396,7 +388,8 @@
                         <div class="col-6" *ngIf="message.document">
                             <ul>
                                 <li style="cursor:pointer" id="fichier" (click)="downloadFile(message)">
-                                    <em>{{message.document}}</em></li>
+                                    <em>{{message.document}}</em>
+                                </li>
                             </ul>
                         </div>
                     </ng-template>

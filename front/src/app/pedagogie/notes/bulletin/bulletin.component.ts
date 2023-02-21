@@ -297,24 +297,25 @@ export class BulletinComponent implements OnInit {
       this.PV.pv_annuel_data.forEach(pv => {
         listModule.forEach(n => {
           if (!isNaN(Number(pv.notes[n]))) {
+            let noteToAdd = Number(pv.notes[n])
             if (calculMoyenne[n]) {
-              calculMoyenne[n].total += pv.notes[n]
+              calculMoyenne[n].total += noteToAdd
               calculMoyenne[n].nb += 1
             } else {
-              calculMoyenne[n] = { total: pv.notes[n], nb: 1 }
+              calculMoyenne[n] = { total: noteToAdd, nb: 1 }
             }
             if (minMoyenne[n]) {
-              if (pv.notes[n] < minMoyenne[n])
-                minMoyenne[n] = pv.notes[n]
+              if (noteToAdd < minMoyenne[n])
+                minMoyenne[n] = noteToAdd
             }
             else
-              minMoyenne[n] = pv.notes[n]
+              minMoyenne[n] = noteToAdd
 
             if (maxMoyenne[n]) {
-              if (pv.notes[n] > maxMoyenne[n])
-                maxMoyenne[n] = pv.notes[n]
+              if (noteToAdd > maxMoyenne[n])
+                maxMoyenne[n] = noteToAdd
             } else
-              maxMoyenne[n] = pv.notes[n]
+              maxMoyenne[n] = noteToAdd
           }
         })
         listModule.forEach(n => {

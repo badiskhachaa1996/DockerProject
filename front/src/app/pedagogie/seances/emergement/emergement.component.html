@@ -141,9 +141,11 @@
     *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut && !showCanvas">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
-        <h3 *ngIf="date_fin_seance > date" style="color: red;">Vous êtes en retard, demandez au Formateur de vous
+        <h3 *ngIf="date_fin_seance > date && !seance.forcedAllowedByFormateur" style="color: red;">Vous êtes en retard,
+            demandez au Formateur de vous
             autorisez à signer puis rechargez
             la page</h3>
+        <h3 *ngIf="seance.forcedAllowedByFormateur" style="color: red;">Le Formateur doit vous autorisez à signer.</h3>
         <div class="col-12">
             <div class="md:col-offset-5 col-12">
                 <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
@@ -286,7 +288,8 @@
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-selectButton [options]="[ {value:true,label:'Présent'},{value:false,label:'Absent'}]"
-                                    [(ngModel)]="data.isPresent" (onChange)='onRowEditSave(data,ri,"presence")'></p-selectButton>
+                                    [(ngModel)]="data.isPresent"
+                                    (onChange)='onRowEditSave(data,ri,"presence")'></p-selectButton>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{(data.isPresent)?"Oui":"Non"}}

@@ -14,8 +14,8 @@ let transporter = nodemailer.createTransport({
     secure: false,
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -57,11 +57,11 @@ app.post("/create", (req, res) => {
                 if (msg.isRep) {
                     //Envoie du mail, pour avertir d'un nouveau message sur son ticket
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.customid + ' </strong> et qui a pour description <b>' + tickFromDb.description + ' </strong></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket N°<strong> ' + tickFromDb.customid + ' </strong> et qui a pour détail <br><strong>' + tickFromDb.description + ' </strong></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
+                        from: 'ims@intedgroup.com',
                         to: userFromDb.email,
-                        subject: '[ESTYA Ticketing] - Notification ',
+                        subject: '[IMS - Ticketing] - Agent Notification',
                         html: htmlemail,
                         attachments: [{
                             filename: 'signature.png',
