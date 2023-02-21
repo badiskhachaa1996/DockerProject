@@ -46,6 +46,7 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'user', value: 'user' },
     { label: 'Agent', value: 'Agent' },
     { label: 'Responsable', value: 'Responsable' },
+    { label: 'Watcher', value: 'Watcher' },
   ];
 
   civiliteList: any = [
@@ -125,7 +126,10 @@ export class UsersSettingsComponent implements OnInit {
   onGetAllDatas() {
     //Recuperation de la liste des users
     this.userService.getAllPopulate()
-      .then((response: User[]) => { this.users = response })
+      .then((response: User[]) => {
+        this.messageService.add({ severity: 'info', summary: 'Gestion des utilisateurs', detail: `Chargement de la liste des users` });
+        this.users = response;
+      })
       .catch((error) => { console.log(error) });
 
     //Recuperation de la liste des étudiants
@@ -252,7 +256,8 @@ export class UsersSettingsComponent implements OnInit {
     if (confirm('Etes-vous sur de vouloir supprimer ' + user.lastname + ' ' + user.firstname + " ?"))
       this.userService.delete(user._id).subscribe(r => {
         this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur supprimé` });
-        this.users.splice(this.customIndexOf(this.users, user._id), 1)
+        this.users.splice(this.customIndexOf(this.users, user._id), 1);
+        this.onGetAllDatas();
       }, err => {
         console.log(err)
         this.messageService.add({ severity: 'error', summary: 'L\'utilisateur n\'a pas été supprimé' });

@@ -224,6 +224,7 @@ export class DashboardComponent implements OnInit {
 
   //Partie checkin checkout
   isCheck: boolean = false;
+  isCheckOut: boolean = false;
   statut: string;
   dailyCheck: InTime;
   showFormDailyActivityDetails: boolean = false;
@@ -438,6 +439,10 @@ export class DashboardComponent implements OnInit {
           this.dailyCheck = response;
           this.statut = this.dailyCheck.statut;
           this.isCheck = true;
+          if(response.out_date != null)
+          {
+            this.isCheckOut = true;
+          }
         }
         else {
           this.statut = 'Check in non effectué';
@@ -532,8 +537,6 @@ export class DashboardComponent implements OnInit {
 
     activityDetails.push(principaleActivityDetails);
 
-    // todo: créer une nouvelle variable inTime à envoyer et ne pas oublier de retirer le out date
-
     this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, craIsValidate: true, activity_details: activityDetails })
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
@@ -568,13 +571,21 @@ export class DashboardComponent implements OnInit {
   // methode de validation du cra via la liste des tâches en cours
   onRowEditSave(tache: Tache) {
     // ajout de la tache au dailycheck
-    this.dailyCheck.activity_details.push(tache.libelle);
+    this.dailyCheck.activity_details.push(`${tache.libelle} - ${tache.percent}%`);
 
-    console.log(this.dailyCheck);
     // envoi du projet modifié en base de données
     this.projectService.putTask(tache)
+    .then((response) => {
+      this.messageService.add({severity:'success', summary:'Tâche', detail: response.success});
+
+      this.dailyCheck.statut = `En attente du checkout`;
+      // modification du dailycheck en bd
+      this.inTimeService.patchCheck(this.dailyCheck)
       .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Tâche', detail: response.success });
+        this.messageService.add({severity:'success', summary:'Check', detail: response.success });
+        this.onIsCheck();
+      })
+      .catch((error) => { this.messageService.add({severity:'error', summary:'Check', detail: response.error}); })
 
         // modification du dailycheck en bd
         this.inTimeService.patchCheck(this.dailyCheck)
@@ -593,15 +604,24 @@ export class DashboardComponent implements OnInit {
 
   // a l'annulation de la modif
   onRowEditCancel(tache: Tache, index: number) {
+    // recuperation de la liste des taches en cours de l'utilisateur
+    this.onGetTaskInProgressForUser();
     delete this.clonedTaches[tache._id];
   }
 
 
   // methode checkout récupère l'heure du checkout
-  onCheckOut(): void {
+  onCheckOut(): void
+  {
+    this.dailyCheck.isCheckable = false;
+    this.dailyCheck.craIsValidate = true;
+
     this.inTimeService.patchCheckOut(this.dailyCheck)
-      .then((response) => { this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success }); })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
+    .then((response) => { 
+      this.messageService.add({severity:'success', summary: 'Check', detail: response.success }); 
+      this.onIsCheck();
+    })
+    .catch((error) => { this.messageService.add({severity:'error', summary: 'Check', detail: error.error }); })
   }
 
 

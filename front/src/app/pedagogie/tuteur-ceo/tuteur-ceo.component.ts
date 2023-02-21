@@ -54,17 +54,17 @@ export class TuteurCeoComponent implements OnInit {
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: [''],
-      phone: ['', [Validators.pattern("^[0-9+]+$")]],
-      fonction: [''],
-      anciennete: [''],
-      niveau_formation: [''],
+      phone: ['', Validators.pattern("^[0-9+]+$")],
+      fonction: ['', Validators.required],
+      anciennete: ['', Validators.required],
+      niveau_formation: ['', Validators.required],
       email_perso: ['', [Validators.required, Validators.email]],
-      numero_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
-      rue_adresse: ['', [Validators.pattern('[^0-9]+')]],
-      postal_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
-      ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
-      pays_adresse: [this.paysList[76]],
-      nationnalite: [this.nationList[0].value],
+      // numero_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
+      // rue_adresse: ['', [Validators.pattern('[^0-9]+')]],
+      // postal_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
+      // ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
+      // pays_adresse: [this.paysList[76]],
+      // nationnalite: [this.nationList[0].value],
       date_naissance: ['']
     });
 
@@ -99,12 +99,12 @@ export class TuteurCeoComponent implements OnInit {
     let anciennete = this.formAddTuteur.get('anciennete')?.value;
     let niveau_formation = this.formAddTuteur.get('niveau_formation')?.value;
     let email_perso = this.formAddTuteur.get('email_perso')?.value
-    let numero_adresse = this.formAddTuteur.get('numero_adresse')?.value;
-    let rue_adresse = this.formAddTuteur.get('rue_adresse')?.value;
-    let postal_adresse = this.formAddTuteur.get('postal_adresse')?.value;
-    let ville_adresse = this.formAddTuteur.get('ville_adresse')?.value;
-    let pays_adresse = this.formAddTuteur.get('pays_adresse')?.value;
-    let nationnalite = this.formAddTuteur.get('nationnalite')?.value.value;
+    // let numero_adresse = this.formAddTuteur.get('numero_adresse')?.value;
+    // let rue_adresse = this.formAddTuteur.get('rue_adresse')?.value;
+    // let postal_adresse = this.formAddTuteur.get('postal_adresse')?.value;
+    // let ville_adresse = this.formAddTuteur.get('ville_adresse')?.value;
+    // let pays_adresse = this.formAddTuteur.get('pays_adresse')?.value;
+    // let nationnalite = this.formAddTuteur.get('nationnalite')?.value.value;
     let date_naissance = this.formAddTuteur.get('date_naissance')?.value;
 
     // recuperer sur le travail effectuer par slimane
@@ -125,12 +125,12 @@ export class TuteurCeoComponent implements OnInit {
       null, //typeImageProfil
       'Tuteur',
       entreprise,
-      pays_adresse.value,
-      ville_adresse,
-      rue_adresse,
-      numero_adresse,
-      postal_adresse,
-      nationnalite,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,//verifedEmail
       null);//date creation
 

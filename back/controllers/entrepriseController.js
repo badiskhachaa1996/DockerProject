@@ -33,7 +33,7 @@ let transporterINTED = nodemailer.createTransport({
 
 //Recupère la liste des entreprises
 app.get("/getAll", (req, res, next) => {
-    Entreprise.find()
+    Entreprise.find().populate('commercial_id')
         .then((entreprisesFromDb) => { res.status(200).send(entreprisesFromDb); })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
 });
@@ -561,7 +561,7 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
 
 // recuperation de la liste des entreprises d'un CEO
 app.get("/get-entreprises-by-id-ceo/:idCEO", (req, res, next) => {
-    Entreprise.find({ directeur_id: req.params.idCEO })
+    Entreprise.find({ directeur_id: req.params.idCEO })?.populate('commercial_id')
     .then((response) => { res.status(200).send(response) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperer la liste de vos entréprises' }) });
 });
@@ -591,7 +591,13 @@ app.get("/getAllContrats/", (req, res, next) => {
                 error: "Impossible de recuperer la liste des contrats " + error.message
             });
         });
+});
 
+// recuperation de la liste des contrats d'un ceo
+app.get("/contrats-by-ceo/:id", (req, res) => {
+    CAlternance.find({ directeur_id: req.params.id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation')?.populate('code_commercial')?.populate('directeur_id')?.populate('ecole')?.populate('entreprise_id')
+    .then((response) => { res.status(200).json({ success: 'Liste des contrats récuperé', contrats: response }); })
+    .catch((error) => { console.log(error); res.status(400).json({ error: error, errorMsg: 'Impossible de récuperer la liste des contrats' }); });
 });
 
 //Recuperation d'une entreprise selon un id

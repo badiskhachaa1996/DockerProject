@@ -92,6 +92,19 @@ export class EntrepriseService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  getContratsByCeo(id: string): Promise<any>
+  {
+    const url = `${this.apiUrl}contrats-by-ceo/${id}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get<ContratAlternance[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Liste des contrats du ceo récuperés')
+      });
+    });
+  }
+
   getAllContratsbyEntreprise(entreprise_id: string) {
     let registreUrl = this.apiUrl + "getAllContratsbyEntreprise/" + entreprise_id;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });

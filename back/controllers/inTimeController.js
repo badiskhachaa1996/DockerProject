@@ -34,30 +34,7 @@ app.patch("/just-gone", (req, res) => {
           .then((inTimeFromDb) => { 
             let inDate = inTimeFromDb.in_date;
             //Methode pour definir le statut de l'utilisateur calcule de la difference entre le inDate et le outDate
-            let statut = undefined;
-            var nbHeureTravail = ((outDate - inDate)/1000)/3600;
-
-            // let nbHeureTravail = moment(inDate).diff(outDate, 'hours'); 
-            // if(nbHeureTravail >= 7 && nbHeureTravail < 9 && ipAdress == inTimeFromDb.in_ip_adress)
-            if(nbHeureTravail >= 7 && nbHeureTravail < 9)
-            {
-                statut = 'Présent toute la journée';
-            }
-            // else if(nbHeureTravail > 9 && ipAdress == inTimeFromDb.in_ip_adress)
-            else if(nbHeureTravail > 9)
-            {
-                statut = "Dépointage au délà de 9h de temps";
-            }
-            // else if(nbHeureTravail < 7 && ipAdress == inTimeFromDb.in_ip_adress)
-            else if(nbHeureTravail < 7)
-            {
-                statut = "Parti avant l'heure";
-            }
-            else 
-            {
-                statut = "Inconnue";
-            }
-
+            let statut = `En attente du checkout`;
 
             //Mise à jour dans la base de données
             InTime.updateOne({ _id: inTimeFromDb._id }, 
@@ -84,7 +61,30 @@ app.patch("/patch-check-out", (req, res, next) => {
     const check = new InTime({ ...req.body });
     const outDate = new Date();
 
-    InTime.updateOne({ _id: check._id }, { out_date: outDate })
+    let inDate = check.in_date;
+    //Methode pour definir le statut de l'utilisateur calcule de la difference entre le inDate et le outDate
+    let statut = undefined;
+    var nbHeureTravail = ((outDate - inDate)/1000)/3600;
+
+    // let nbHeureTravail = moment(inDate).diff(outDate, 'hours'); 
+    if(nbHeureTravail >= 7 && nbHeureTravail < 9)
+    {
+        statut = 'Présent toute la journée';
+    }
+    else if(nbHeureTravail > 9)
+    {
+        statut = "Dépointage au délà de 9h de temps";
+    }
+    else if(nbHeureTravail < 7)
+    {
+        statut = "Parti avant l'heure";
+    }
+    else 
+    {
+        statut = "Inconnue";
+    }
+
+    InTime.updateOne({ _id: check._id }, { out_date: outDate, craIsValidate: true, statut: statut })
     .then((response) => { res.status(201).json({ success: "Merci d'avoir validé votre journée", check: response }); })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de valider votre CheckOut, veuillez contacter un administrateur' }); });
 });

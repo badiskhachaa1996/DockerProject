@@ -12,7 +12,7 @@
 
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddTuteur" (ngSubmit)="onAddTuteur()">
                 <div class="field col-12 md:col-2">
-                    <label For="civilite">Civilité</label>
+                    <label For="civilite">Civilité <span style="color: red">*</span></label>
                     <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                         formControlName="civilite"></p-dropdown>
                 </div>
@@ -28,77 +28,76 @@
 
 
                 <div class="field col-12 md:col-6">
-                    <label For="Indicatif">Indicatif </label>
+                    <label For="Indicatif">Indicatif</label>
                     <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="Téléphone">Téléphone </label>
+                    <label For="Téléphone">Téléphone</label>
                     <input pInputText id="phone" type="text" placeholder="0683838383" name="phone"
                         formControlName="phone" />
                 </div>
 
-                <div class="field col-12 md:col-6">
-                    <label For="Fonction">Fonction </label>
+                <div class="field col-12">
+                    <label For="Fonction">Fonction <span style="color: red">*</span></label>
                     <input pInputText id="fonction" type="text" placeholder="Chef Marketing"
                         formControlName="fonction" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="Ancienneté">Ancienneté </label>
+                    <label For="Ancienneté">Ancienneté <span style="color: red">*</span></label>
                     <input pInputText id="anciennete" type="text" placeholder="5 ans" formControlName="anciennete" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="niveau_formation">Niveau de formation </label>
+                    <label For="niveau_formation">Niveau de formation <span style="color: red">*</span></label>
                     <input pInputText id="niveau_formation" type="text" placeholder="BAC +5"
                         formControlName="niveau_formation" />
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <div class="field col-12">
                     <label For="Email">Email <span style="color: red">*</span></label>
                     <input pInputText id="email_perso" type="text" placeholder="email@email.com"
                         formControlName="email_perso" />
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <!-- <div class="field col-12 md:col-6">
                     <label For="Numéro de l'adresse">Numéro de la rue</label>
                     <input pInputText id="numero_adresse" type="text" placeholder="55"
                         formControlName="numero_adresse" />
-                </div>
+                </div> -->
 
-                <div class="field col-12 md:col-6">
+                <!-- <div class="field col-12 md:col-6">
                     <label For="rue_adresse">Nom de la rue</label>
                     <input pInputText id="rue_adresse" type="text" placeholder="Rue du Faubourg Saint-Honoré"
                         formControlName="rue_adresse" />
-                </div>
+                </div> -->
 
-                <div class="field col-12 md:col-6">
+                <!-- <div class="field col-12 md:col-6">
                     <label For="Code postale">Code postale</label>
                     <input pInputText id="postal_adresse" type="text" placeholder="75008"
                         formControlName="postal_adresse" />
-                </div>
-                <div class="field col-12 md:col-6">
+                </div> -->
+                <!-- <div class="field col-12 md:col-6">
                     <label For="Ville">Ville</label>
                     <input pInputText id="ville_adresse" type="text" placeholder="Paris"
                         formControlName="ville_adresse" />
-                </div>
-                <div class="field col-12 md:col-6">
+                </div> -->
+                <!-- <div class="field col-12 md:col-6">
                     <label For="Pays">Pays</label>
                     <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Pays" filter="true">
                     </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6">
+                </div> -->
+                <!-- <div class="field col-12 md:col-6">
                     <label For="nationalite">Nationalité</label>
                     <p-dropdown formControlName="nationnalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
-
-                </div>
+                </div> -->
 
                 <div class="field col-12">
-                    <label for="date_naissance">Date de naissance </label>
+                    <label for="date_naissance">Date de naissance <span style="color: red">*</span></label>
                     <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear"></p-calendar>

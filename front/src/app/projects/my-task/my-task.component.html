@@ -20,6 +20,10 @@
 						</p-dropdown>
 					</div>
 					<div class="field col-12">
+						<label htmlFor="numberOfDay">Nombre de jours</label>
+						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+					</div>
+					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
 						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
 					</div>
@@ -70,6 +74,10 @@
 						<p-dropdown  [options]="dropdownProjet" formControlName="projet"
 							emptyFilterMessage="Pas de projet trouvé" filterPlaceholder="Trouver un projet" filter="true">
 						</p-dropdown>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="numberOfDay">Nombre de jours</label>
+						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
@@ -146,6 +154,12 @@
 						<p>
 							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
 						</p>
+						<p *ngIf="task.number_of_day == 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jour restant
+						</p>
+						<p *ngIf="task.number_of_day > 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jours restants
+						</p>
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
 						</p>
@@ -193,6 +207,11 @@
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
+								Jours restants
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
 								Deadline
 							</div>
 						</th>
@@ -214,6 +233,9 @@
 						</td>
 						<td style="min-width: 10rem;">
 							{{tache.project_id?.libelle}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{tache.number_of_day}} J
 						</td>
 						<td style="min-width: 10rem;">
 							{{tache.date_limite | date: 'dd-MM-YYYY'}}
