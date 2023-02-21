@@ -401,7 +401,7 @@
 
 
 
-<div *ngIf="isEtudiant && dataEtudiant">
+<div class="grid" *ngIf="isEtudiant && dataEtudiant">
     <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
         N°{{dataEtudiant?.custom_id}}
     </h1>
@@ -510,16 +510,18 @@
             <p-table [value]="dernotes">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pSortableColumn="matiere_id">Matière <p-sortIcon field="matiere_id"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon>
-                        </th>
+
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-note>
-                    <tr>
-                        <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
+                    <tr *ngIf="note.matiere_id && matieres[note.matiere_id] && matieres[note.matiere_id].nom">
                         <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+                        <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
+
                     </tr>
                 </ng-template>
             </p-table>

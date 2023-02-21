@@ -287,7 +287,7 @@ export class DashboardComponent implements OnInit {
               ((responseNote) => {
                 this.notes = responseNote;
                 
-                this.dernotes = this.notes.slice(1, 6)
+                this.dernotes = this.notes.slice(0, 5)
                 console.log(this.notes,this.dernotes)
               }));
           } else {
