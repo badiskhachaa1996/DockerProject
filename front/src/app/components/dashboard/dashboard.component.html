@@ -412,7 +412,9 @@
     </p>
 
 
-    <div class="col-12 card" *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese || dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel'] || dataEtudiant.lien_attestation || (dataEtudiant.classe_id && (dataEtudiant.classe_id.lien_programme || dataEtudiant.classe_id.lien_calendrier))"> <!-- *ngIf="!dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')" -->
+    <div class="col-12 card"
+        *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese || dataEtudiant.lien_bulletin['Semestre 1'] || dataEtudiant.lien_bulletin['Semestre 2'] || dataEtudiant.lien_bulletin['Annuel'] || dataEtudiant.lien_attestation || (dataEtudiant.classe_id && (dataEtudiant.classe_id.lien_programme || dataEtudiant.classe_id.lien_calendrier))">
+        <!-- *ngIf="!dataEtudiant?.statut_dossier?.includes('Paiement non finalisé')" -->
         <div class="grid"
             *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
             <h4 class="col-12">Documents</h4>
@@ -442,9 +444,10 @@
             </div>
             <div class="card col-6" *ngIf="!paimentS1 && dataEtudiant.lien_bulletin['Semestre 1']">
                 <h5>Semestre 1</h5>
-                <p>Vous n'avez pas régularisé votre 1er semestre, merci de contacter l'administration ou de vous rendre au
+                <p>Vous n'avez pas régularisé votre 1er semestre, merci de contacter l'administration ou de vous rendre
+                    au
                     campus du Louvre.</p>
-            </div>            
+            </div>
             <div class="card col-3" *ngIf="dataEtudiant.lien_bulletin['Semestre 2'] && paimentAn">
                 <h5>Semestre 2</h5>
                 <a href="{{dataEtudiant.lien_bulletin['Semestre 2']}}" target="_blank"><img style="max-height: 20vh;"
@@ -452,7 +455,8 @@
             </div>
             <div class="card col-6" *ngIf="!paimentAn && dataEtudiant.lien_bulletin['Semestre 2']">
                 <h5>Semestre 2</h5>
-                <p>Vous n'avez pas régularisé votre 2ème semestre, merci de contacter l'administration ou de vous rendre au
+                <p>Vous n'avez pas régularisé votre 2ème semestre, merci de contacter l'administration ou de vous rendre
+                    au
                     campus du Louvre.</p>
             </div>
             <div class="card col-6" *ngIf="dataEtudiant.lien_bulletin['Annuel'] && paimentAn">
@@ -505,12 +509,12 @@
     </div>
 
     <div class="col-12 md:col-6">
-        <div class="card" *ngIf="notes">
+        <div class="card" *ngIf="dernotes">
             <h5>Dernières notes obtenues</h5>
             <p-table [value]="dernotes">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="matiere_id">Matière <p-sortIcon field="matiere_id"></p-sortIcon>
+                        <th pSortableColumn="matiere_id.nom">Matière <p-sortIcon field="matiere_id.nom"></p-sortIcon>
                         </th>
                         <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
@@ -518,8 +522,8 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-note>
-                    <tr *ngIf="note.matiere_id && matieres[note.matiere_id] && matieres[note.matiere_id].nom">
-                        <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+                    <tr>
+                        <td style="width: 35%; min-width: 7rem;">{{note.matiere_id.nom }}</td>
                         <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
 
                     </tr>

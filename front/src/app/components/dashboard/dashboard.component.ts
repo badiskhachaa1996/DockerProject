@@ -273,7 +273,7 @@ export class DashboardComponent implements OnInit {
             this.paimentAn = dataEtu.isAlternant
             this.paimentS1 = dataEtu.isAlternant
 
-            if(!dataEtu.isAlternant && dataEtu.statut_dossier){
+            if (!dataEtu.isAlternant && dataEtu.statut_dossier) {
               this.paimentAn = dataEtu.statut_dossier?.includes("Paiement non finalisé")
               this.paimentS1 = dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé")
             }
@@ -286,9 +286,11 @@ export class DashboardComponent implements OnInit {
             this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
               ((responseNote) => {
                 this.notes = responseNote;
-                
-                this.dernotes = this.notes.slice(0, 5)
-                console.log(this.notes,this.dernotes)
+                this.dernotes = []
+                this.notes.forEach(n => {
+                  if (n.matiere_id && this.dernotes.length != 10)
+                    this.dernotes.push(n)
+                })
               }));
           } else {
             this.isEtudiant = false
