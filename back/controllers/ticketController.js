@@ -671,7 +671,7 @@ app.get("/getCountTraite", (req, res, next) => {
 
 //Requête de récupération du nombre de ticket crée par un user en cours de traitement
 app.get("/getCountTicketUserInWaiting/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id, statut: 'En cours de traitement' })
+    Ticket.find({ createur_id: req.params.id, $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });

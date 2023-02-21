@@ -49,7 +49,7 @@ export class GestionTicketsComponent implements OnInit {
   sujetList: any[] = [];
   listServices: Service[];
   dropdownService: any[] = [{ label: "Tous les services", value: null }];
-  listFiliere = [{ label: "Toutes les filières", value: null }]
+  listFiliere = []
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;

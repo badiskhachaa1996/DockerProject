@@ -451,6 +451,19 @@
                         src="assets/images/word.png" /></a>
             </div>
         </div>
+        <div class="grid" *ngIf="dataEtudiant.classe_id && (dataEtudiant.classe_id.lien_programme || dataEtudiant.classe_id.lien_calendrier)">
+            <h4 class="col-12">Documents de Formation</h4>
+            <div class="card col-6" *ngIf="dataEtudiant.classe_id.lien_programme">
+                <h5>Programme</h5>
+                <a href="{{dataEtudiant.lien_programme}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+            <div class="card col-6" *ngIf="dataEtudiant.classe_id.lien_calendrier">
+                <h5>Calendrier</h5>
+                <a href="{{dataEtudiant.lien_calendrier}}" target="_blank"><img style="max-height: 20vh;"
+                        src="assets/images/word.png" /></a>
+            </div>
+        </div>
     </div>
 
     <div class="col-12 md:col-6">

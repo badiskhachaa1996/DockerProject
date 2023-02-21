@@ -496,9 +496,12 @@
 
         </div>
     </div>
-
+    <div class="field col-12 grid" *ngIf="!etudiants || etudiants.length<1">
+        <h5 class="col-12">Chargement des étudiants en cours ...</h5>
+        <p-skeleton class="col-12" height="80vh"></p-skeleton>
+    </div>
     <!-- Listing des étudiants -->
-    <div class="col-12">
+    <div class="col-12" *ngIf="etudiants && etudiants.length>0">
         <div class="card">
             <div style="float: right;">
                 <button pButton label="Vider les compteurs" icon="pi pi-trash" class="p-button-danger"

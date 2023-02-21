@@ -134,6 +134,11 @@ export class DetailsEtudiantComponent implements OnInit {
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
+      let user: any = response.user_id
+      if (response.date_inscription)
+        this.dateValue[0] = new Date(response.date_inscription)
+      else if (user && user.date_creation)
+        this.dateValue[0] = new Date(user.date_creation)  
       if (response.ecole_id)
         this.CFAService.getByID(response.ecole_id).subscribe(ecole => {
           this.ECOLE = ecole.dataEcole
@@ -272,7 +277,7 @@ export class DetailsEtudiantComponent implements OnInit {
     }, 200);
   }
   invalidDates = []
-  dateValue: Date[] = []
+  dateValue: Date[] = [null, new Date()]
   PICTURE;
   ECOLE: Ecole;
   diplome_libelle: string = ""

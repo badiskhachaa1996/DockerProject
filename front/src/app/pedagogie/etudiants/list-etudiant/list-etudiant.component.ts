@@ -389,7 +389,7 @@ export class ListEtudiantComponent implements OnInit {
 
   //Methode de recuperation des differentes classes
   onGetAllClasses() {
-
+    this.messageService.add({ severity: 'info', summary: "Chargement des étudiants en cours ..." })
     this.dropdownUser = [];
     this.dropdownClasse = [{ libelle: 'Choisissez une classe', value: null }];
     this.searchClass = [];
@@ -406,6 +406,7 @@ export class ListEtudiantComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
+    
     this.CommercialService.getByUserId(this.token.id).subscribe(data => {
       if (!this.code && data && data.code_commercial_partenaire) {
         this.code = data.code_commercial_partenaire
@@ -414,6 +415,7 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu;
+            this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
           }),
           ((error) => { console.error(error); })
         );
@@ -421,6 +423,7 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu
+            this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
           }),
           ((error) => { console.error(error); })
         );

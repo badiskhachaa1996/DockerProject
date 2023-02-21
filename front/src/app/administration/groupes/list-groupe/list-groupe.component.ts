@@ -248,7 +248,7 @@ export class ListGroupeComponent implements OnInit {
     this.mailtype = "Bonjour,\nVous trouverez dans le lien ci-dessous votre emploi du temps.\n<lien edt>\nCordialement,\n<signature espic>"
     this.objetMail = "Emploi du temps"
   }
-
+  display = false
   displayResponsive = false
   groupeEdt: Classe = null
   mailtype = ""
@@ -276,6 +276,34 @@ export class ListGroupeComponent implements OnInit {
 
   generatePVApp() {
     this.router.navigate(['pv-appreciation', this.formPV.value.semestre, this.showPV._id])
+  }
+
+  showLien: Classe = null
+
+  onInitLien(classe: Classe) {
+    this.showLien = classe
+    this.formLiens.setValue({
+      lien_programme: this.showLien?.lien_programme,
+      lien_calendrier: this.showLien?.lien_calendrier
+    })
+  }
+
+  formLiens: FormGroup = this.formBuilder.group({
+    lien_programme: [''],
+    lien_calendrier: [''],
+  });
+
+  onUpdateLiens() {
+    let index = this.classes.indexOf(this.showLien)
+    this.showLien.lien_programme = this.formLiens.value.lien_programme
+    this.showLien.lien_calendrier = this.formLiens.value.lien_calendrier
+    this.classeService.update(this.showLien).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Lien du groupe modifié' });
+      this.classes[index].lien_programme = this.showLien.lien_programme
+      this.classes[index].lien_calendrier = this.showLien.lien_calendrier
+      this.showLien = null
+      this.formLiens.reset()
+    })
   }
 
 }

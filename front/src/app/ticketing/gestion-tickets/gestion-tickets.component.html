@@ -247,19 +247,19 @@
 								(onChange)="dt1.filter($event.value, 'service_id', 'equals')"
 								emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
 							</p-dropdown>
-
+							<span style="margin-left: 2px;">
+								<p-multiSelect filter="true" [options]="listFiliere" placeholder="Toutes les filières"
+									(onChange)="dt1.filter($event.value, 'etudiant_id.classe_id.diplome_id', 'in')"
+									emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Nom de la filière">
+								</p-multiSelect>
+							</span>
 							<span style="margin-left: 2px;">
 								<p-dropdown filter="true" [options]="showSujetQ"
 									(onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"
 									emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
 								</p-dropdown>
 							</span>
-							<span style="margin-left: 2px;">
-								<p-dropdown filter="true" [options]="listFiliere"
-									(onChange)="dt1.filter($event.value, 'etudiant_id.classe_id.diplome_id', 'equals')"
-									emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Nom de la filière">
-								</p-dropdown>
-							</span>
+
 						</div>
 						<span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>

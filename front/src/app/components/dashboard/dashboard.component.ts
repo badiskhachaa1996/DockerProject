@@ -264,7 +264,7 @@ export class DashboardComponent implements OnInit {
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         this.isCEO = dataUser.type == "CEO Entreprise";
-        this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+        this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
             this.dataEtudiant = dataEtu
             this.isEtudiant = true
@@ -316,8 +316,8 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  refreshEvent(etu: Etudiant) {
-    this.seanceService.getAllByClasseId(etu.classe_id).subscribe(
+  refreshEvent(etu: any) {
+    this.seanceService.getAllByClasseId(etu.classe_id._id).subscribe(
       (data) => {
         this.showEvents(data)
       },

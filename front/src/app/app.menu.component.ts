@@ -394,7 +394,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                             ];
-                            if (dataEtu.statut_dossier.includes('Paiement finalisé')) {
+                            if (dataEtu.statut_dossier.includes('Paiement finalisé') || dataEtu.isAlternant) {
                                 this.model[1]["items"].push({ label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id })
                             }
                         } else {
