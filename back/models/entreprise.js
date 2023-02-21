@@ -28,6 +28,7 @@ const entrepriseSchema = mongoose.Schema({
     organisme_prevoyance: { type: String, required: false },
     
     directeur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    commercial_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
 });
 
 //Création de la table entreprise via le schema de la table

@@ -58,6 +58,7 @@ export class TaskManagementComponent implements OnInit {
     // initialize form add task
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
+      number_of_day: [''],
       attribuateTo: [''],
       dateLimite: [''],
     });
@@ -65,6 +66,7 @@ export class TaskManagementComponent implements OnInit {
     // initialize form update task
     this.formUpdateTache = this.formBuilder.group({
       libelle: ['', Validators.required],
+      number_of_day: [''],
       attribuateTo: [''],
       dateLimite: [''],
     });
@@ -178,6 +180,7 @@ export class TaskManagementComponent implements OnInit {
     });
 
     tache.project_id        = this.projectSelected._id;
+    tache.number_of_day     = formValue.number_of_day;
     tache.date_limite       = formValue.dateLimite;
     tache.created_at        = new Date();
     tache.creator_id        = this.userConnected._id;
@@ -210,10 +213,11 @@ export class TaskManagementComponent implements OnInit {
     const formValue = this.formUpdateTache.value;
     const tache = new Tache();
 
-    tache._id = this.tacheSelected._id;
-    tache.libelle = formValue.libelle;
-    tache.percent = this.tacheSelected.percent;
-    tache.attribuate_to = [];
+    tache._id               = this.tacheSelected._id;
+    tache.libelle           = formValue.libelle;
+    tache.number_of_day     = formValue.number_of_day;
+    tache.percent           = this.tacheSelected.percent;
+    tache.attribuate_to     = [];
 
     formValue.attribuateTo.forEach((data: any) => {
       tache.attribuate_to.push(data.value);

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { environment } from 'src/environments/environment';
 
@@ -23,6 +24,8 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Non', value: false },
   ];
 
+  commercials: any = [{ label: 'Choisir le commercial référent', value: null }];
+
   civiliteList = environment.civilite;
 
   formSteps: any[] = [
@@ -39,12 +42,21 @@ export class AddEntrepriseComponent implements OnInit {
     "Autre"
   ]
 
-  constructor(private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
+  constructor(private entrepriseService: EntrepriseService, private userService: AuthService ,private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
+    // recuperation de la liste des commercials
+    this.userService.getAllCommercial().subscribe({
+      next: (response) => { 
+        response.forEach((commercial: User) => {
+          this.commercials.push({ label: `${commercial.firstname} ${commercial.lastname}`, value: commercial._id });
+        });
+      },
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Commerciaux', detail: "Impossible de récuperé la liste des commerciaux" }); },
+      complete: () => { console.log('Liste des commerciaux récuperé'); }
+    });
 
-
-    //Initialisation du formulaire d'ajout d'une entreprise
+    //Initialisation du formulaire d'ajout d'une entreprisei
     this.onInitFormAddEntreprise();
   }
 
@@ -52,29 +64,30 @@ export class AddEntrepriseComponent implements OnInit {
   onInitFormAddEntreprise() {
     this.formAddEntreprise = this.formBuilder.group({
       r_sociale: ['', Validators.required],
-      fm_juridique: [''],
-      activite: [''],
-      type_ent: [''],
-      categorie: [[]],
-      isInterne: [false],
-      crc: [''], 
-      nb_salarie: ['', Validators.pattern('[0-9]+')],
-      convention: [''],
-      idcc: ['', Validators.pattern('[0-9]+')], 
-      indicatif_ent: [''],
-      phone_ent: [''],
-      adresse_ent: [''],
-      code_postale_ent: [''],
-      ville_ent: [''],
-      adresse_ec: [''],
-      postal_ec: [''],
-      ville_ec: [''],  
-      siret: [''],
-      code_ape_naf: [''],
-      num_tva: [''],
-      telecopie: [''],
-      OPCO: [''],
-      organisme_prevoyance: [''],
+      // fm_juridique: [''],
+      activite: ['', Validators.required],
+      // type_ent: [''],
+      categorie: [[], Validators.required],
+      isInterne: [false, Validators.required],
+      crc: ['', Validators.required], 
+      nb_salarie: ['', Validators.required],
+      convention: ['', Validators.required],
+      idcc: ['', Validators.required], 
+      indicatif_ent: ['', Validators.required],
+      phone_ent: ['', Validators.required],
+      adresse_ent: ['', Validators.required],
+      code_postale_ent: ['', Validators.required],
+      ville_ent: ['', Validators.required],
+      adresse_ec: ['', Validators.required],
+      postal_ec: ['', Validators.required],
+      ville_ec: ['', Validators.required],  
+      siret: ['', Validators.required],
+      code_ape_naf: ['', Validators.required],
+      // num_tva: [''],
+      // telecopie: [''],
+      OPCO: ['', Validators.required],
+      // organisme_prevoyance: [''],
+      commercial: ['', Validators.required],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: ['', Validators.required],
@@ -97,9 +110,9 @@ export class AddEntrepriseComponent implements OnInit {
   onAddEntreprise() {
     //recuperation des données du formulaire
     let r_sociale = this.formAddEntreprise.get('r_sociale')?.value;
-    let fm_juridique = this.formAddEntreprise.get('fm_juridique')?.value;
+    // let fm_juridique = this.formAddEntreprise.get('fm_juridique')?.value;
     let activite = this.formAddEntreprise.get('activite')?.value;
-    let type_ent = this.formAddEntreprise.get('type_ent')?.value;
+    // let type_ent = this.formAddEntreprise.get('type_ent')?.value;
     let categorie = this.formAddEntreprise.get('categorie')?.value;
     let isInterne = this.formAddEntreprise.get('isInterne')?.value;
     let crc = this.formAddEntreprise.get('crc')?.value;
@@ -117,10 +130,11 @@ export class AddEntrepriseComponent implements OnInit {
     let ville_ec = this.formAddEntreprise.get('ville_ec')?.value;
     let siret = this.formAddEntreprise.get('siret')?.value; 
     let code_ape_naf = this.formAddEntreprise.get('code_ape_naf')?.value;
-    let num_tva = this.formAddEntreprise.get('num_tva')?.value;
-    let telecopie = this.formAddEntreprise.get('telecopie')?.value;
-    let OPCO = this.formAddEntreprise.get('OPCO')?.value;
-    let organisme_prevoyance = this.formAddEntreprise.get('organisme_prevoyance')?.value;
+    // let num_tva = this.formAddEntreprise.get('num_tva')?.value;
+    // let telecopie = this.formAddEntreprise.get('telecopie')?.value;
+    let opco = this.formAddEntreprise.get('OPCO')?.value;
+    // let organisme_prevoyance = this.formAddEntreprise.get('organisme_prevoyance')?.value;
+    let commercial_id = this.formAddEntreprise.get('commercial')?.value;
 
     let civilite_rep = this.formAddEntreprise.get('civilite_rep')?.value;
     let nom_rep = this.formAddEntreprise.get('nom_rep')?.value;
@@ -129,12 +143,14 @@ export class AddEntrepriseComponent implements OnInit {
     let indicatif_rep = this.formAddEntreprise.get('indicatif_rep').value;
     let phone_rep = this.formAddEntreprise.get('phone_rep').value;
 
+    console.log(this.formAddEntreprise);
+
     let entreprise = new Entreprise(
       null, 
       r_sociale, 
-      fm_juridique, 
+      null, 
       activite, 
-      type_ent, 
+      null, 
       categorie, 
       isInterne, 
       crc, 
@@ -151,12 +167,14 @@ export class AddEntrepriseComponent implements OnInit {
       ville_ec, 
       siret, 
       code_ape_naf, 
-      num_tva, 
-      telecopie, 
-      OPCO, 
-      organisme_prevoyance, 
+      null, 
+      null, 
+      opco, 
+      null, 
       null,
+      commercial_id,
     );
+    console.log(entreprise);
 
     let representant = new User(
       null,
@@ -189,12 +207,12 @@ export class AddEntrepriseComponent implements OnInit {
     
     this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
       ((response) => {
-
         this.messageService.add({ severity: 'success', summary: 'Entreprise', detail: "Entreprise ajouté" });
         this.formAddEntreprise.reset();
+        this.ActiveIndex = 0;
       }),
       ((error) => { 
-        this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
+        this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, ou que les données sont bien saisies. Si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
         console.error(error); 
       })
     );

@@ -146,6 +146,7 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
 import { TeamComponent } from './projects/team/team.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
+import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tutelle-ceo/contrats-tutelle-ceo.component';
 
 const routes: Routes = [
     {
@@ -213,6 +214,7 @@ const routes: Routes = [
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+            { path: 'liste-contrats-ceo', component: ContratsTutelleCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-entreprises-ceo', component: ListEntrepriseCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },

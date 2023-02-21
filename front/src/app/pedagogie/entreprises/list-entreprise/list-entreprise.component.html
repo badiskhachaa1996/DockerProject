@@ -18,29 +18,29 @@
                 <div *ngIf="ActiveIndex==0">
                     <div style="color: black; font-weight: normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12">
                                 <label for="raison_sociale"> Raison sociale <span style="color: red;"> * </span></label>
                                 <input pInputText id="raison_sociale" type="text" formControlName="r_sociale" placeholder="Nom de l'entreprise " />
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <!-- <div class="field col-12 md:col-6">
                                 <label For="forme_juridique">Forme juridique </label>
                                 <input pInputText id="forme_juridique" type="text" formControlName="fm_juridique" placeholder="Forme juridique" />
-                            </div>
+                            </div> -->
 
-                            <div class="field col-12 md:col-12">
+                            <div class="field col-12">
                                 <label For="activite">Activité de l'entreprise</label>
                                 <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"  formControlName="activite" placeholder="Description des activités de l'entreprise"></textarea>
                             </div>
 
-                            <div class="field col-12 md:col-4">
+                            <!-- <div class="field col-12 md:col-4">
                                 <label For="type_entreprise">Type d'entreprise </label>
                                 <input pInputText id="type_entreprise" type="text" formControlName="type_ent" placeholder="Type d'entreprise" />
-                            </div>
-                            <div class="field col-12 md:col-4">
+                            </div> -->
+                            <div class="field col-12 md:col-6">
                                 <label For="categorie">Catégorie </label>
                                 <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie" formControlName="categorie"></p-multiSelect>
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-6">
                                 <label For="isInterne">Entreprise Interne ?</label>
                                 <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
                             </div>
@@ -75,22 +75,22 @@
                             <!--Adresse du siège social-->
                             <h3 class="field col-12">Adresse du siège social</h3>
                             <div class="field col-12 md:col-6">
-                                <label For="adresse_ss">Adresse du siège sociale</label>
+                                <label For="adresse_ss">Adresse</label>
                                 <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent" placeholder="Numero et Nom de la rue" />
                             </div>
                             <div class="field col-12 md:col-3">
-                                <label For="postal_ss">Code postal du siège sociale</label>
+                                <label For="postal_ss">Code postal</label>
                                 <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent" placeholder="75001"/>
                             </div>
                             <div class="field col-12 md:col-3">
-                                <label For="ville_ss">Ville du siège sociale</label>
+                                <label For="ville_ss">Ville</label>
                                 <input pInputText id="ville_ss" type="text" formControlName="ville_ent" placeholder="Paris" />
                             </div>
 
                             <!--Adresse d’exécution du contrat -->
                             <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
                             <div class="field col-12 md:col-6">
-                                <label For="adresse_ec">Adresse de l’exécution du contrat</label>
+                                <label For="adresse_ec">Adresse</label>
                                 <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec" placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
                             </div>
                             <div class="field col-12 md:col-3">
@@ -98,35 +98,39 @@
                                 <input pInputText id="postal_ec" type="text" formControlName="postal_ec" placeholder="75001" />    
                             </div>
                             <div class="field col-12 md:col-3">
-                                <label For="ville_ec">Ville de l’exécution du contrat</label>
+                                <label For="ville_ec">Ville</label>
                                 <input pInputText id="ville_ec" type="text" formControlName="ville_ec" placeholder="Paris" />
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-6">
                                 <label For="siret">SIRET</label>
                                 <input pInputText id="siret" maxlength=15 minlength=15 type="number"  formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-6">
                                 <label For="ape_naf">Code NAF</label>
                                 <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf" placeholder="CODE NAF" />
                             </div>
 
-                            <div class="field col-12 md:col-4">
+                            <!-- <div class="field col-12 md:col-4">
                                 <label For="tva">Numéro TVA </label>
                                 <input pInputText id="tva" type="text" formControlName="num_tva" placeholder="Numéro TVA" />
-                            </div>  
+                            </div>   -->
 
-                            <div class="field col-12 md:col-6">
+                            <!-- <div class="field col-12 md:col-6">
                                 <label For="lastname">Télécopie</label>
                                 <input pInputText id="telecopie" type="text" formControlName="telecopie" placeholder="Télécopie" />
-                            </div>
+                            </div> -->
 
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-4">
                                 <label For="OPCO">OPCO</label>
                                 <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
                             </div>
-                            <div class="field col-12 ">
+                            <!-- <div class="field col-12 ">
                                 <label For="organisme_prevoyance">Organisme de prevoyance</label>
                                 <input pInputText id="organisme_prevoyance" type="text" formControlName="organisme_prevoyance" placeholder="Organisme de prevoyance"/>
+                            </div> -->
+                            <div class="field col-12 md:col-8">
+                                <label For="commercial">Commercial réferent <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="commercials" filter="true" placeholder="Commercial auprès de l'entreprise" [showClear]="true" formControlName="commercial"></p-dropdown>
                             </div>
 
                             <div class="field col-6">
@@ -204,16 +208,13 @@
                         <th pSortableColumn="r_sociale"> Raison sociale <p-sortIcon field="r_sociale">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique">
-                            </p-sortIcon>
-                        </th>
                         <th pSortableColumn="activite"> Activité <p-sortIcon field="activite"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="type_ent"> Type d'entreprise <p-sortIcon field="type_ent"></p-sortIcon>
                         </th>
                         <th pSortableColumn="categorie"> Catégorie <p-sortIcon field="categorie"></p-sortIcon>
                         </th>
                         <th pSortableColumn="isInterne"> Interne/Externe <p-sortIcon field="isInterne"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="commercial_id">Commercial réferent<p-sortIcon field="commercial_id"></p-sortIcon>
                         </th>
                         <th>Action</th>
                     </tr>
@@ -224,12 +225,11 @@
                             <button type="button" pButton pRipple [pRowToggler]="entreprise" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 8rem;">{{ entreprise.r_sociale }}</td>
-                        <td style="min-width: 8rem;">{{ entreprise.fm_juridique }}</td>
                         <td style="min-width: 8rem;">{{ entreprise.activite }}</td>
-                        <td style="min-width: 8rem;">{{ entreprise.type_ent }}</td>
                         <td style="min-width: 8rem;">{{ entreprise.categorie }}</td>
                         <td *ngIf="entreprise.isInterne">Interne</td>
                         <td *ngIf="!entreprise.isInterne">Externe</td>
+                        <td>{{ entreprise.commercial_id ? entreprise.commercial_id?.firstname + ' ' + entreprise.commercial_id?.lastname.toUpperCase() : '--' }}</td>
                         <td>
                             <i style="margin-left: 2%; cursor: pointer" class="pi pi-pencil"
                                 (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
@@ -238,7 +238,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-entreprise>
                     <tr>
-                        <td colspan="8">
+                        <td colspan="7">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
@@ -267,10 +267,7 @@
                         <th>Adresse entreprise</th>
                         <th>SIRET</th>
                         <th>Code APE NAF</th>
-                        <th>Numéro TVA</th>
-                        <th>Télécopie</th>
                         <th>OPCO</th>
-                        <th>Organisme de prévoyance</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-entreprise>
@@ -283,10 +280,7 @@
                         <td>{{entreprise.adresse_ent}} {{entreprise.code_postale_ent}} {{entreprise.ville_ent}}</td>
                         <td>{{entreprise.siret}}</td>
                         <td>{{entreprise.code_ape_naf}}</td>
-                        <td>{{entreprise.num_tva}}</td>
-                        <td>{{entreprise.telecopie}}</td>
                         <td>{{entreprise.OPCO}}</td>
-                        <td>{{entreprise.organisme_prevoyance}}</td>
                     </tr>
                 </ng-template>
             </p-table>

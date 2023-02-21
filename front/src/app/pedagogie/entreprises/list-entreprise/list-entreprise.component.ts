@@ -19,6 +19,7 @@ export class ListEntrepriseComponent implements OnInit {
   token;
   entreprises: Entreprise[] = [];
   users: User[] = [];
+  commercials: any = [{ label: 'Choisir le commercial référent', value: null }];
   categorieList = [
     'Sous-traitant',
     "Alternant",
@@ -60,8 +61,15 @@ export class ListEntrepriseComponent implements OnInit {
     //Recuperation de la liste des users
     this.userService.getAll().subscribe(
       ((response) => {
-        response.forEach((user) => {
+        response.forEach((user: User) => {
           this.users[user._id] = user;
+          
+          // recuperation de la liste des commerciaux
+          if(user.type == 'Commercial')
+          {
+            this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id });
+          }
+
         })
       }),
       ((error) => { console.error(error); })
@@ -84,9 +92,9 @@ export class ListEntrepriseComponent implements OnInit {
   onInitFormUpdateEntreprise() {
     this.formUpdateEntreprise = this.formBuilder.group({
       r_sociale: ['', Validators.required],
-      fm_juridique: [''],
+      // fm_juridique: [''],
       activite: [''],
-      type_ent: [''],
+      // type_ent: [''],
       categorie: [[]],
       isInterne: [false],
       crc: [''], 
@@ -103,10 +111,11 @@ export class ListEntrepriseComponent implements OnInit {
       ville_ec: [''],  
       siret: [''],
       code_ape_naf: [''],
-      num_tva: [''],
-      telecopie: [''],
+      // num_tva: [''],
+      // telecopie: [''],
       OPCO: [''],
-      organisme_prevoyance: [''],
+      // organisme_prevoyance: [''],
+      commercial: ['', Validators.required],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: [''],
@@ -122,9 +131,9 @@ export class ListEntrepriseComponent implements OnInit {
     this.showFormUpdateEntreprise = entreprise;
     this.formUpdateEntreprise.patchValue({
       r_sociale: entreprise.r_sociale,
-      fm_juridique: entreprise.fm_juridique,
+      // fm_juridique: entreprise.fm_juridique,
       activite: entreprise.activite,
-      type_ent: entreprise.type_ent,
+      // type_ent: entreprise.type_ent,
       categorie: entreprise.categorie,
       isInterne: entreprise.isInterne,
       crc: entreprise.crc,
@@ -141,10 +150,10 @@ export class ListEntrepriseComponent implements OnInit {
       ville_ec: entreprise.ville_ec,
       siret: entreprise.siret,
       code_ape_naf: entreprise.code_ape_naf,
-      num_tva: entreprise.num_tva,
-      telecopie: entreprise.telecopie,
+      // num_tva: entreprise.num_tva,
+      // telecopie: entreprise.telecopie,
       OPCO: entreprise.OPCO,
-      organisme_prevoyance: entreprise.organisme_prevoyance,
+      // organisme_prevoyance: entreprise.organisme_prevoyance,
 
       civilite_rep: this.representantToUpdate?.civilite,
       nom_rep: this.representantToUpdate?.lastname,
@@ -158,9 +167,9 @@ export class ListEntrepriseComponent implements OnInit {
 
   /** Parti traitement pour la mise à jour des données */
   get r_sociale() { return this.formUpdateEntreprise.get('r_sociale'); };
-  get fm_juridique() { return this.formUpdateEntreprise.get('fm_juridique'); };
+  // get fm_juridique() { return this.formUpdateEntreprise.get('fm_juridique'); };
   get activite() { return this.formUpdateEntreprise.get('activite'); };
-  get type_ent() { return this.formUpdateEntreprise.get('type_ent'); };
+  // get type_ent() { return this.formUpdateEntreprise.get('type_ent'); };
   get crc() { return this.formUpdateEntreprise.get('crc'); };
   get nb_salarie() { return this.formUpdateEntreprise.get('nb_salarie'); };
   get convention() { return this.formUpdateEntreprise.get('convention'); };
@@ -175,10 +184,10 @@ export class ListEntrepriseComponent implements OnInit {
   get ville_ec() { return this.formUpdateEntreprise.get('ville_ec'); };
   get siret() { return this.formUpdateEntreprise.get('siret'); };
   get code_ape_naf() { return this.formUpdateEntreprise.get('code_ape_naf'); };
-  get num_tva() { return this.formUpdateEntreprise.get('num_tva'); };
-  get telecopie() { return this.formUpdateEntreprise.get('telecopie'); };
+  // get num_tva() { return this.formUpdateEntreprise.get('num_tva'); };
+  // get telecopie() { return this.formUpdateEntreprise.get('telecopie'); };
   get OPCO() { return this.formUpdateEntreprise.get('OPCO'); };
-  get organisme_prevoyance() { return this.formUpdateEntreprise.get('organisme_prevoyance'); };
+  // get organisme_prevoyance() { return this.formUpdateEntreprise.get('organisme_prevoyance'); };
 
 
 
@@ -186,9 +195,9 @@ export class ListEntrepriseComponent implements OnInit {
   onUpdateEntreprise() {
     //recuperation des données du formulaire
     let r_sociale = this.formUpdateEntreprise.get('r_sociale')?.value;
-    let fm_juridique = this.formUpdateEntreprise.get('fm_juridique')?.value;
+    // let fm_juridique = this.formUpdateEntreprise.get('fm_juridique')?.value;
     let activite = this.formUpdateEntreprise.get('activite')?.value;
-    let type_ent = this.formUpdateEntreprise.get('type_ent')?.value;
+    // let type_ent = this.formUpdateEntreprise.get('type_ent')?.value;
     let categorie = this.formUpdateEntreprise.get('categorie')?.value;
     let isInterne = this.formUpdateEntreprise.get('isInterne')?.value;
     let crc = this.formUpdateEntreprise.get('crc')?.value;
@@ -206,10 +215,11 @@ export class ListEntrepriseComponent implements OnInit {
     let ville_ec = this.formUpdateEntreprise.get('ville_ec')?.value;
     let siret = this.formUpdateEntreprise.get('siret')?.value; 
     let code_ape_naf = this.formUpdateEntreprise.get('code_ape_naf')?.value;
-    let num_tva = this.formUpdateEntreprise.get('num_tva')?.value;
-    let telecopie = this.formUpdateEntreprise.get('telecopie')?.value;
+    // let num_tva = this.formUpdateEntreprise.get('num_tva')?.value;
+    // let telecopie = this.formUpdateEntreprise.get('telecopie')?.value;
     let OPCO = this.formUpdateEntreprise.get('OPCO')?.value;
-    let organisme_prevoyance = this.formUpdateEntreprise.get('organisme_prevoyance')?.value;
+    // let organisme_prevoyance = this.formUpdateEntreprise.get('organisme_prevoyance')?.value;
+    let commercial_id = this.formUpdateEntreprise.get('commercial')?.value;
 
     let civilite_rep = this.formUpdateEntreprise.get('civilite_rep')?.value;
     let nom_rep = this.formUpdateEntreprise.get('nom_rep')?.value;
@@ -222,9 +232,9 @@ export class ListEntrepriseComponent implements OnInit {
     let entreprise = new Entreprise(
       this.showFormUpdateEntreprise._id, 
       r_sociale, 
-      fm_juridique, 
+      null, 
       activite, 
-      type_ent, 
+      null, 
       categorie, 
       isInterne, 
       crc, 
@@ -241,11 +251,12 @@ export class ListEntrepriseComponent implements OnInit {
       ville_ec, 
       siret, 
       code_ape_naf, 
-      num_tva, 
-      telecopie, 
+      null, 
+      null, 
       OPCO, 
-      organisme_prevoyance, 
+      null, 
       this.showFormUpdateEntreprise.directeur_id,
+      commercial_id,
       ); 
       
       let representant = new User(
@@ -278,15 +289,14 @@ export class ListEntrepriseComponent implements OnInit {
 
     this.entrepriseService.updateEntrepriseRepresentant({'entrepriseToUpdate': entreprise, 'representantToUpdate': representant}).subscribe(
       ((response) => {
-
         this.messageService.add({ severity: 'success', summary: 'Entreprise modifiée' });
-
         //Recuperation de la liste des entreprises
         this.entrepriseService.getAll().subscribe(
           ((entreprisesFromDb) => { this.entreprises = entreprisesFromDb; }),
           ((error) => { console.error(error); })
         );
         this.showFormUpdateEntreprise = null;
+        this.formUpdateEntreprise.reset();
         this.ActiveIndex = 0;
       }),
       ((error) => { console.error(error); })
