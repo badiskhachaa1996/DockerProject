@@ -14,8 +14,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -65,9 +65,9 @@ app.post("/create", (req, res) => {
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                                 let mailOptions = {
-                                    from: 'estya-ticketing@estya.com',
+                                    from: 'ims@intedgroup.com',
                                     to: responsable.email,
-                                    subject: '[ESTYA Ticketing] - Notification ',
+                                    subject: '[IMS - Ticketing] - Notification ',
                                     html: htmlemail,
                                     priority: 'high',
                                     attachments: [{
@@ -145,9 +145,9 @@ app.post("/createAdmin", (req, res) => {
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                                 let mailOptions = {
-                                    from: 'estya-ticketing@estya.com',
+                                    from: 'ims@intedgroup.com',
                                     to: responsable.email,
-                                    subject: '[ESTYA Ticketing] - Notification ',
+                                    subject: '[IMS - Ticketing] - Notification ',
                                     html: htmlemail,
                                     priority: 'high',
                                     attachments: [{
@@ -394,9 +394,9 @@ app.post("/AccAff/:id", (req, res) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                         let html2 = '<p style="color:black">Bonjour ' + gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + '</strong> et qui a pour description <b> ' + ticket.description + ' </strong> vous a été affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html2,
                             attachments: [{
                                 filename: 'signature.png',
@@ -437,9 +437,9 @@ app.post("/changeService/:id", (req, res) => {
                     let html3 = '<p style="color:black">Bonjour ' + gender + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket.customid + '</strong> et qui a pour description : <b> ' + ticket.description + ' </strong> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
 
                     let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
+                        from: 'ims@intedgroup.com',
                         to: userFromDb.email,
-                        subject: '[ESTYA Ticketing] - Notification ',
+                        subject: '[IMS - Ticketing] - Notification ',
                         html: html3,
                         attachments: [{
                             filename: 'signature.png',
@@ -478,11 +478,11 @@ app.post("/changeStatut/:id", (req, res) => {
                 if (ticket.statut == "En attente d\'une réponse") {
                     User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                        let html4 = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + ticket.customid + '  </strong> et qui a pour description : <b> ' + ticket.description + '</strong>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">Vous avez reçu un nouveau message pour le ticket N°<strong> ' + ticket.customid + '  </strong> avec le détail : <br><strong> ' + ticket.description + '</strong>.</p><br><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html4,
                             attachments: [{
                                 filename: 'signature.png',
@@ -517,9 +517,9 @@ app.post("/changeStatut/:id", (req, res) => {
                         let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                         let html5 = '<p style="color:black"> Bonjour ' + gender + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + ticket.customid + '  </strong> et qui a pour description : <b> ' + ticket.description + '</strong> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
-                            from: 'estya-ticketing@estya.com',
+                            from: 'ims@intedgroup.com',
                             to: userFromDb.email,
-                            subject: '[ESTYA Ticketing] - Notification',
+                            subject: '[IMS - Ticketing] - Notification',
                             html: html5,
                             attachments: [{
                                 filename: 'signature.png',
@@ -561,9 +561,9 @@ app.post("/revertTicket/:id", (req, res) => {
                 let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + ' </strong> que vous gériez et qui a pour description <b>' + ticket.description + ' </strong>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                 let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
+                    from: 'ims@intedgroup.com',
                     to: userFromDb.email,
-                    subject: '[ESTYA Ticketing] - Notification ',
+                    subject: '[IMS - Ticketing] - Notification ',
                     html: htmlemail,
                     attachments: [{
                         filename: 'signature.png',

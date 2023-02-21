@@ -330,6 +330,12 @@ export class AppMenuComponent implements OnInit {
                         if (dataF) {
                             this.model = [
                                 {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
+                                {
                                     label: 'Ticketing',
                                     items: [
                                         { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
@@ -356,6 +362,7 @@ export class AppMenuComponent implements OnInit {
                                         items: [
                                             { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                             { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                            { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
                                         ]
                                     })
                             })
@@ -368,6 +375,12 @@ export class AppMenuComponent implements OnInit {
                     this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
                         if (dataEtu && dataEtu.classe_id) {
                             this.model = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
                                 {
                                     label: 'Ticketing',
                                     items: [
@@ -400,6 +413,12 @@ export class AppMenuComponent implements OnInit {
                         } else {
                             this.model = [
                                 {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
+                                {
                                     label: 'Ticketing',
                                     items: [
                                         { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
@@ -415,6 +434,12 @@ export class AppMenuComponent implements OnInit {
                         if (cData && cData.statut != "Admin") {
                             //Commercial Normal
                             this.model = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
                                 {
                                     label: 'Ticketing', icon: 'pi pi-ticket',
                                     items: [
@@ -443,6 +468,12 @@ export class AppMenuComponent implements OnInit {
                         else {
                             //Commercial considéré Admin dans son Partenaire
                             this.model = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
                                 {
                                     label: 'Ticketing', icon: 'pi pi-ticket',
                                     items: [
@@ -917,6 +948,12 @@ export class AppMenuComponent implements OnInit {
                 } else if (this.isRH) {
                     this.model = [
                         {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
                                 { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
@@ -961,6 +998,12 @@ export class AppMenuComponent implements OnInit {
                 } else if (this.isConsulting) {
                     this.model = [
                         {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
                                 { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
@@ -987,6 +1030,12 @@ export class AppMenuComponent implements OnInit {
                     ]
                 } else {
                     this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
                         {
                             label: 'Ticketing',
                             items: [
