@@ -117,6 +117,7 @@ const progressionPedaController = require('./controllers/progressionPedaControll
 const QSController = require('./controllers/questionnaireSatisfactionController');
 const projectController = require('./controllers/projectController');
 const teamController = require('./controllers/teamController');
+const EvenementsController = require('./controllers/evenementController')
 const { User } = require("./models/user");
 
 
@@ -174,6 +175,7 @@ app.use('/', function (req, res, next) {
         }
     }
 });
+app.use('/soc/evenements',EvenementsController)
 
 app.use('/soc/rachatBulletin', rbc)
 

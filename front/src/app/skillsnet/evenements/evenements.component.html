@@ -1,0 +1,65 @@
+<!-- LISTE DES INSCRIPTIONS POUR AGENT PEDAGOGIE/ADMISSION -->
+<div class="card">
+    <h5>Liste des événements</h5>
+    <p-table #dt1 rowExpandMode="single" [value]="events" dataKey="_id" [rows]="10" [rowHover]="true"
+        [globalFilterFields]="['nom', 'type','description']" styleClass="p-datatable-gridlines" [paginator]="true"
+        [pageLinks]="5" responsiveLayout="scroll">
+
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <div class="field">
+                    <span style="margin-left: 2px;">
+                        <p-dropdown filter="true" [options]="typeList"
+                            (onChange)="dt1.filter($event.value, 'type', 'equals')"
+                            placeholder="Choisir un type d'événements" emptyFilterMessage="Pas de type trouvé"
+                            filterPlaceholder="Nom du type">
+                        </p-dropdown>
+                    </span>
+                </div>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="nom" style="text-align:center">
+                    Nom <p-sortIcon field="nom"></p-sortIcon>
+                </th>
+                <th pSortableColumn="type" style="text-align:center">
+                    Type <p-sortIcon field="type"></p-sortIcon>
+                </th>
+                <th pSortableColumn="date_lieu" style="text-align:center">
+                    Date <p-sortIcon field="date_lieu"></p-sortIcon>
+                </th>
+                <th pSortableColumn="list_inscrit.length" style="text-align:center">
+                    Nombre Inscrit <p-sortIcon field="list_inscrit.length"></p-sortIcon>
+                </th>
+        </ng-template>
+        <ng-template pTemplate="body" let-event  let-expanded="expanded">
+            <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="etudiant"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        (click)="loadPP(etudiant);"></button>
+                </td>
+                <td>
+                    {{ event.nom }}
+                </td>
+                <td>
+                    {{ event.type }}
+                </td>
+                <td>
+                    {{ event.date_lieu | date:'dd/MM/YYYY à hh:' }}
+                </td>
+                <td>
+                    {{ event.list_inscrit.length}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

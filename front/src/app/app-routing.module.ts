@@ -146,12 +146,15 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
 import { TeamComponent } from './projects/team/team.component';
 import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
+import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
         children: [
             { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
+            { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
+            { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
             { path: 'notes', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
@@ -249,8 +252,8 @@ const routes: Routes = [
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-            { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
-            { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
+            { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
+
 
             /*** RH paths */
 

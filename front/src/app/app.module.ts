@@ -251,6 +251,7 @@ import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { TeamComponent } from './projects/team/team.component';
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
+import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 
 
 @NgModule({
@@ -512,6 +513,7 @@ import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component'
     PvAnnuelComponent,
     TeamComponent,
     TuteurCeoComponent,
+    EvenementsComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
