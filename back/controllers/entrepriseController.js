@@ -33,7 +33,7 @@ let transporterINTED = nodemailer.createTransport({
 
 //Recupère la liste des entreprises
 app.get("/getAll", (req, res, next) => {
-    Entreprise.find()
+    Entreprise.find().populate('commercial_id')
         .then((entreprisesFromDb) => { res.status(200).send(entreprisesFromDb); })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
 });
@@ -561,7 +561,7 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
 
 // recuperation de la liste des entreprises d'un CEO
 app.get("/get-entreprises-by-id-ceo/:idCEO", (req, res, next) => {
-    Entreprise.find({ directeur_id: req.params.idCEO })
+    Entreprise.find({ directeur_id: req.params.idCEO })?.populate('commercial_id')
     .then((response) => { res.status(200).send(response) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperer la liste de vos entréprises' }) });
 });

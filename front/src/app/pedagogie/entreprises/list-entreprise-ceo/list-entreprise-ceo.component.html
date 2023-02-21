@@ -151,6 +151,11 @@
 								Ville
 							</div>
 						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Commercial réferent
+							</div>
+						</th>
 						<th style="width: 8rem">
                         </th>
 					</tr>
@@ -168,6 +173,9 @@
 						</td>
 						<td style="min-width: 12rem;">
 							{{entreprise?.ville_ent}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{entreprise?.commercial_id ? entreprise.commercial_id?.firstname + ' ' + entreprise.commercial_id?.lastname.toUpperCase() : '--' }}
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
 							<i class="pi pi-user" title="Voir les alternants sur cette entreprise" style="cursor: pointer; color: blue;" (click)="onLoadContracts(entreprise);"></i>

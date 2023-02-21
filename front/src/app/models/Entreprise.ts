@@ -29,7 +29,7 @@ export class Entreprise {
         public OPCO?: string,
         public organisme_prevoyance?: string,
         public directeur_id?: string,
-        
+        public commercial_id?: string,
     ) { }
 
 } 

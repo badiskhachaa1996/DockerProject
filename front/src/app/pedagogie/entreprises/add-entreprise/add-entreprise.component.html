@@ -39,119 +39,120 @@
                         <div *ngIf="ActiveIndex==0">
                             <div style="color: black; font-weight: normal">
                                 <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-6">
-                                        <label for="raison_sociale"> Raison sociale <span style="color: red;"> * </span></label>
+                                    <div class="field col-12">
+                                        <label for="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
                                         <input pInputText id="raison_sociale" type="text" formControlName="r_sociale" placeholder="Nom de l'entreprise " />
                                     </div>
-                                    <div class="field col-12 md:col-6">
+                                    <!-- <div class="field col-12 md:col-6">
                                         <label For="forme_juridique">Forme juridique </label>
                                         <input pInputText id="forme_juridique" type="text" formControlName="fm_juridique" placeholder="Forme juridique" />
-                                    </div>
+                                    </div> -->
 
-                                    <div class="field col-12 md:col-12">
-                                        <label For="activite">Activité de l'entreprise</label>
+                                    <div class="field col-12">
+                                        <label For="activite">Activité de l'entreprise <span style="color: red;"> * </span></label>
                                         <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"  formControlName="activite" placeholder="Description des activités de l'entreprise"></textarea>
                                     </div>
 
-                                    <div class="field col-12 md:col-4">
+                                    <!-- <div class="field col-12 md:col-4">
                                         <label For="type_entreprise">Type d'entreprise </label>
                                         <input pInputText id="type_entreprise" type="text" formControlName="type_ent" placeholder="Type d'entreprise" />
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="categorie">Catégorie </label>
+                                    </div> -->
+                                    <div class="field col-12 md:col-6">
+                                        <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
                                         <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie" formControlName="categorie"></p-multiSelect>
                                     </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="isInterne">Entreprise Interne ?</label>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="isInterne">Entreprise Interne ? <span style="color: red;"> * </span></label>
                                         <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
                                     </div>
 
                                     <div class="field col-12 md:col-8">
-                                        <label For="crc">Caisse de retraite complémentaire : </label>
+                                        <label For="crc">Caisse de retraite complémentaire <span style="color: red;"> * </span></label>
                                         <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
                                     </div>
 
                                     <div class="field col-12 md:col-4">
-                                        <label For="nb_salarie">Nombre de salariés: </label>
+                                        <label For="nb_salarie">Nombre de salariés <span style="color: red;"> * </span></label>
                                         <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
                                     </div>
         
                                     <div class="field col-12 md:col-8">
-                                        <label For="convention">Convention collective : </label>
+                                        <label For="convention">Convention collective <span style="color: red;"> * </span></label>
                                         <input pInputText id="convention" type="text" formControlName="convention" placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
                                     </div>
                                     <div class="field col-12 md:col-4">
-                                        <label For="idcc">Code IDCC: </label>
+                                        <label For="idcc">Code IDCC <span style="color: red;"> * </span></label>
                                         <input pInputText type="number" formControlName="idcc" placeholder="0000" />
                                     </div>
                                     <div class="field col-4 md:col-4">
-                                        <label For="indicatif_ent">Indicatif</label>
+                                        <label For="indicatif_ent">Indicatif <span style="color: red;"> * </span></label>
                                         <input pInputText type="number" formControlName="indicatif_ent" placeholder="+33" />
                                     </div>
                                     <div class="field col-8 md:col-8">
-                                        <label For="phone_ent">Téléphone <small>(entreprise)</small></label>
+                                        <label For="phone_ent">Téléphone <small>(entreprise)</small> <span style="color: red;"> * </span></label>
                                         <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800"/>
                                     </div>
         
                                     <!--Adresse du siège social-->
                                     <h3 class="field col-12">Adresse du siège social</h3>
                                     <div class="field col-12 md:col-6">
-                                        <label For="adresse_ss">Adresse du siège sociale </label>
+                                        <label For="adresse_ss">Adresse <span style="color: red;"> * </span></label>
                                         <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent" placeholder="Numero et Nom de la rue" />
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label For="postal_ss">Code postal du siège sociale </label>
+                                        <label For="postal_ss">Code postal <span style="color: red;"> * </span></label>
                                         <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent" placeholder="75001"/>
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label For="ville_ss">Ville du siège sociale </label>
+                                        <label For="ville_ss">Ville <span style="color: red;"> * </span></label>
                                         <input pInputText id="ville_ss" type="text" formControlName="ville_ent" placeholder="Paris" />
                                     </div>
 
                                     <!--Adresse d’exécution du contrat -->
                                     <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
                                     <div class="field col-12 md:col-6">
-                                        <label For="adresse_ec">Adresse de l’exécution du contrat</label>
+                                        <label For="adresse_ec">Adresse <span style="color: red;"> * </span></label>
                                         <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec" placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label For="postal_ec">Code postal</label>
+                                        <label For="postal_ec">Code postal <span style="color: red;"> * </span></label>
                                         <input pInputText id="postal_ec" type="text" formControlName="postal_ec" placeholder="75001" />    
                                     </div>
                                     <div class="field col-12 md:col-3">
-                                        <label For="ville_ec">Ville de l’exécution du contrat</label>
+                                        <label For="ville_ec">Ville <span style="color: red;"> * </span></label>
                                         <input pInputText id="ville_ec" type="text" formControlName="ville_ec" placeholder="Paris" />
                                     </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="siret">SIRET </label>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="siret">SIRET <span style="color: red;"> * </span></label>
                                         <input pInputText id="siret" maxlength=15 minlength=15 type="number"  formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
                                     </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="ape_naf">Code NAF</label>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="ape_naf">Code NAF <span style="color: red;"> * </span></label>
                                         <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf" placeholder="CODE NAF" />
                                     </div>
 
-                                    <div class="field col-12 md:col-4">
+                                    <!-- <div class="field col-12 md:col-4">
                                         <label For="tva">Numéro TVA </label>
                                         <input pInputText id="tva" type="text" formControlName="num_tva" placeholder="Numéro TVA" />
-                                    </div>  
+                                    </div>   -->
         
-                                    <div class="field col-12 md:col-6">
+                                    <!-- <div class="field col-12 md:col-6">
                                         <label For="lastname">Télécopie</label>
                                         <input pInputText id="telecopie" type="text" formControlName="telecopie" placeholder="Télécopie" />
-                                    </div>
+                                    </div> -->
         
-                                    <div class="field col-12 md:col-6">
-                                        <label For="OPCO">OPCO </label>
+                                    <div class="field col-12 md:col-4">
+                                        <label For="OPCO">OPCO <span style="color: red;"> * </span></label>
                                         <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
                                     </div>
-                                    <div class="field col-12 ">
+                                    <!-- <div class="field col-12 ">
                                         <label For="organisme_prevoyance">Organisme de prevoyance</label>
                                         <input pInputText id="organisme_prevoyance" type="text" formControlName="organisme_prevoyance" placeholder="Organisme de prevoyance"/>
-                                    </div>
+                                    </div> -->
 
-                                    <div class="field col-12 md:col-6">
-                                    
+                                    <div class="field col-12 md:col-8">
+                                        <label For="commercial">Commercial réferent <span style="color: red;"> * </span></label>
+                                        <p-dropdown [options]="commercials" filter="true" placeholder="Commercial auprès de l'entreprise" [showClear]="true" formControlName="commercial"></p-dropdown>
                                     </div>
             
                                     <div class="field col-6">
@@ -199,278 +200,6 @@
                             </div>
                         </div>   
                     </form>    
-            <!--<form class="p-fluid p-formgrid grid" [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
-                <div class="field col-12 md:col-6">
-                    <label For="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
-                    <input pInputText id="raison_sociale" formControlName="r_sociale" type="text"
-                        placeholder="Raison sociale" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="forme_juridique">Forme juridique </label>
-                    <input pInputText id="forme_juridique" formControlName="fm_juridique" type="text"
-                        placeholder="Forme juridique" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="vip">VIP </label>
-                    <input pInputText id="vip" type="text" formControlName="vip" placeholder="VIP" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label>NDA</label><br>
-                    <input type="text" formControlName="nda" class="form-control col-12" placeholder="NDA" pInputText>
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="type_entreprise">Type d'entreprise </label>
-                    <input pInputText id="type_entreprise" formControlName="type_ent" type="text"
-                        placeholder="Type d'entreprise" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="categorie">Catégorie </label>
-                    <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
-                        formControlName="categorie"></p-multiSelect>
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="isInterne">Entreprise Interne ou Externe ?<span style="color: red;"> *
-                        </span></label>
-                    <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="siret">Numéro de SIRET </label>
-                    <input pInputText id="siret" formControlName="siret" type="text" placeholder="Numéro de SIRET" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="code_ape">Code APE NAF </label>
-                    <input pInputText id="code_ape" formControlName="code_ape_naf" type="text"
-                        placeholder="Code APE NAF" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="tva">Numéro TVA </label>
-                    <input pInputText id="tva" formControlName="num_tva" type="text" placeholder="Numéro TVA" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="nom_contact">Nom du contact principal </label>
-                    <input pInputText id="nom_contact" formControlName="nom_contact" type="text"
-                        placeholder="Nom du contact principal" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="prenom_contact">Prénom du contact principal </label>
-                    <input pInputText id="prenom_contact" formControlName="prenom_contact" type="text"
-                        placeholder="Prénom du contact principal" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="fonction_contact">Fonction du contact principal dans l'entreprise</label>
-                    <input pInputText id="fonction_contact" type="text" formControlName="fc_contact"
-                        placeholder="Fonction du contact principal dans l'entreprise" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="adresse_contact">Adresse mail du contact principal<span style="color: red;">
-                            *</span></label>
-                    <input pInputText id="adresse_contact" type="email" formControlName="email_contact"
-                        placeholder="Adresse mail du contact principal" />
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label for="indicatif_1er">Indicatif du numéro de téléphone:</label>
-                    <input type="text" formControlName="indicatif_1er" placeholder="Numéro de téléphone contact"
-                        pInputText>
-                </div>
-                <div class="field col-12 md:col-8">
-                    <label For="num_contact">Numéro de téléphone du contact principal</label>
-                    <input pInputText id="num_contact" type="text" formControlName="phone_contact"
-                        placeholder="Numéro de téléphone du contact principal" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="nom_second">Nom du contact sécondaire </label>
-                    <input pInputText id="nom_second" type="text" placeholder="Nom du contact sécondaire"
-                        formControlName="nom_contact_2nd" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="prenom_second">Prénom du contact sécondaire </label>
-                    <input pInputText id="adresse_contact" type="text" formControlName="prenom_contact_2nd"
-                        placeholder="Adresse mail du contact principal" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="fonction_second">Fonction du contact secondaire dans l'entreprise<span
-                            style="color: red;"> * </span></label>
-                    <input pInputText id="fonction_contact" type="text" formControlName="fc_contact_2nd"
-                        placeholder="Fonction du contact principal dans l'entreprise" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="mail_second">Adresse email du contact sécondaire<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="mail_second" type="text" placeholder="Adresse email du contact sécondaire"
-                        formControlName="email_contact_2nd" />
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label for="indicatif_2nd">Indicatif du numéro de téléphone:</label>
-                    <input type="text" formControlName="indicatif_2nd" placeholder="Numéro de téléphone contact"
-                        pInputText>
-                </div>
-                <div class="field col-12 md:col-8">
-                    <label For="num_second">Numéro de téléphone du contact sécondaire<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="num_second" type="text" formControlName="phone_contact_2nd"
-                        placeholder="Numéro de téléphone du contact sécondaire" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="pays_entreprise">Pays où se situe l'entreprise<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="pays_entreprise" type="text" placeholder="Pays où se situe l'entreprise"
-                        formControlName="pays_adresse" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="ville_entreprise">Ville où se situe l'entreprise<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="ville_entreprise" type="text" placeholder="Ville où se situe l'entreprise"
-                        formControlName="ville_adresse" />
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label For="num_rue_entreprise">Numéro de la rue où se situe l'entreprise<span style="color: red;">
-                            * </span></label>
-                    <input pInputText id="num_rue_entreprise" type="text" formControlName="numero_adresse"
-                        placeholder="Numéro de la rue où se situe l'entreprise" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="nom_rue_entreprise">Nom de la rue où se situe l'entreprise<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="nom_rue_entreprise" type="text" formControlName="rue_adresse"
-                        placeholder="Nom de la rue où se situe l'entreprise" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="code_postale_entreprise">Code postale</label>
-                    <input pInputText id="code_postale_entreprise" type="text" placeholder="Code postale"
-                        formControlName="postal_adresse" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label For="email_entreprise">Email de l'entreprise</label>
-                    <input pInputText id="email_entreprise" type="text" placeholder="Email de l'entreprise"
-                        formControlName="email" />
-                </div>
-
-
-                <div class="field col-12 md:col-4">
-                    <label>Indicatif du numéro de téléphone:</label><br>
-                    <input type="text" formControlName="indicatif_ent" class="form-control col-12" placeholder="+33"
-                        pInputText>
-                </div>
-                <div class="field col-12 md:col-8">
-                    <label For="phone_entreprise">Numéro de téléphone de l'entreprise<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="phone_entreprise" type="text" formControlName="phone"
-                        placeholder="Numéro de téléphone de l'entreprise" />
-                </div>
-                <div class="field col-12 md:col-12">
-                    <label For="site_entreprise">Site internet de l'entreprise<span style="color: red;"> *
-                        </span></label>
-                    <input pInputText id="site_entreprise" type="text" placeholder="Site internet de l'entreprise"
-                        formControlName="website" />
-                </div>
-                <div class="field col-12    ">
-                    <label For="organisme_financeur">Organisme financeur</label>
-                    <input pInputText id="organisme_financeur" type="text" placeholder="Organisme financeur"
-                        formControlName="financeur" />
-                </div>
-                <div class="grid col-12" *ngIf="formAddEntreprise.get('categorie')?.value.includes('Alternant')">
-                    <div class="field col-12 md:col-12">
-                        <label For="activite">Activité<span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="activite" type="text" placeholder="Commercial"
-                            formControlName="activite" />
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <label For="adresse_ec">Adresse de l'exécution du contrat<span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="adresse_ec" type="text" placeholder="55 Rue du Faubourg Saint-Honoré"
-                            formControlName="adresse_ec" />
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <label For="ville_ec">Ville<span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="ville_ec" type="text" placeholder="Paris" formControlName="ville_ec" />
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <label For="postal_ec">Code postale<span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="postal_ec" type="text" placeholder="75001" formControlName="postal_ec" />
-                    </div>
-
-                    <div class="field col-12 md:col-8">
-                        <label For="crc">Caisse de retraite complémentaire : <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="crc" type="text" placeholder="KLESIA" formControlName="crc" />
-                        <div *ngIf="crc.invalid && (crc.touched || crc.dirty)">
-                            <span style="color: red;" class="error" *ngIf="crc.errors?.required">* La
-                                crc est obligatoire.</span>
-                            <span style="color: red;" class="error" *ngIf="crc.errors?.pattern">* Seul les
-                                lettres sont acceptés.</span>
-                        </div>
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <label For="nb_salarie">Nombre de Salariés: <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText type="number" placeholder="100" formControlName="nb_salarie" />
-                        <div *ngIf="nb_salarie.invalid && (nb_salarie.touched || nb_salarie.dirty)">
-                            <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.required">* Le
-                                nombre de salariés est obligatoire.</span>
-                            <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.pattern">* Seul
-                                les
-                                lettres sont acceptés.</span>
-                        </div>
-                    </div>
-
-                    <div class="field col-12 md:col-8">
-                        <label For="convention">Convention Collective : <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="convention" type="text"
-                            placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
-                            formControlName="convention" />
-                         <div *ngIf="convention.invalid && (convention.touched || convention.dirty)">
-                            <span style="color: red;" class="error" *ngIf="convention.errors?.required">* La
-                                convention sont obligatoire.</span>
-                            <span style="color: red;" class="error" *ngIf="convention.errors?.pattern">* Seul
-                                les
-                                lettres sont acceptés.</span>
-                        </div>
-                    </div>
-                    <div class="field col-12 md:col-4">
-                        <label For="idcc">Code IDCC: <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText type="number" placeholder="0000" formControlName="idcc" />
-                        <div *ngIf="idcc.invalid && (idcc.touched || idcc.dirty)">
-                            <span style="color: red;" class="error" *ngIf="idcc.errors?.required">* Le
-                                code IDCC est obligatoire.</span>
-                            <span style="color: red;" class="error" *ngIf="idcc.errors?.pattern">* Seul les
-                                lettres sont acceptés.</span>
-                        </div>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label For="lastname">Télécopie</label>
-                        <input pInputText id="telecopie" type="text" placeholder="Télécopie"
-                            formControlName="telecopie" />
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <label For="OPCO">OPCO <span style="color: red;"> *
-                            </span></label>
-                        <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO" />
-
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label For="organisme_prevoyance">Organisme de prevoyance</label>
-                        <input pInputText id="organisme_prevoyance" type="text" placeholder="Organisme de prevoyance"
-                            formControlName="organisme_prevoyance" />
-
-
-                    </div>
-
-                </div>
-
-                <div>
-                    <button pButton label="Ajouter l'entreprise" [disabled]="formAddEntreprise.invalid"
-                        type="submit"></button>
-                </div>
-            </form>-->
 
             <a routerLink="/entreprises" style="float: right;"><i class="pi pi-caret-right"></i> Voir les
                 entreprises</a>
