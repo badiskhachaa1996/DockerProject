@@ -179,6 +179,14 @@
                                     champs est obligatoire.</span>
                             </div>
                         </div>
+                        <div class="field col-12">
+                            <h5>Mobilité internationnale</h5>
+                            <p-selectButton [options]="mobiliteOptions" optionLabel="name" (onChange)="onShowCout($event)"></p-selectButton>
+                        </div>
+                        <div class="field col-12" *ngIf="showCout">
+                            <label for="cout_mobilite">Coût mobilité (€)</label>
+                            <input pInputText type="number" id="cout_mobilite" placeholder="1500" formControlName="cout_mobilite">
+                        </div>
                         <div class="field col-6">
                             <label>Année scolaire</label>
                             <p-multiSelect class="p-dropdown-clearable" [autoDisplayFirst]=false
@@ -348,6 +356,14 @@
                                     champs est obligatoire.</span>
                             </div>
                         </div>
+                        <div class="field col-12">
+                            <h5>Mobilité internationnale</h5>
+                            <p-selectButton [options]="mobiliteOptions" optionLabel="name" (onChange)="onShowCout($event)"></p-selectButton>
+                        </div>
+                        <div class="field col-12" *ngIf="showCout">
+                            <label for="cout_mobilite">Coût mobilité (€)</label>
+                            <input pInputText type="number" id="cout_mobilite" placeholder="1500" formControlName="cout_mobilite">
+                        </div>
                         <div class="field col-6">
                             <label>Année scolaire</label>
                             <p-multiSelect class="p-dropdown-clearable" [autoDisplayFirst]=false
@@ -370,6 +386,31 @@
                     </div>
                 </div>
             </form>
+        </div>
+
+        <!-- formulaire de mise à jour du status d'un contrat -->
+        <div class="col-12" *ngIf="showStatusForm">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showStatusForm = false;" aria-hidden="true"></i>
+                <h4 style="text-align: center;">Mettre à jour le status du contrat</h4>
+    
+                <form [formGroup]="statusForm" (ngSubmit)="onUpdateStatus()">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label for="libelle">Nouveau Status</label>
+                                <p-dropdown id="libelle" [options]="statusList" formControlName="libelle"></p-dropdown>
+                            </div>
+                            <div classe="field">
+                                <button pButton type="submit" label="Mettre à jour"
+                                    [disabled]="statusForm.invalid">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="col-12" *ngIf="token.type == 'CEO Entreprise'">
@@ -415,7 +456,6 @@
                     <tr>
                         <th style="width: 8rem;"></th>
                         <th>Prenom &amp; Nom</th>
-                        <th>Poste</th>
                         <th>Statut</th>
                         <th>Formation</th>
                         <th>Ecole</th>
@@ -434,12 +474,35 @@
                             {{ contrat.alternant_id?.user_id?.firstname }}
                             {{ contrat.alternant_id?.user_id?.lastname }}
                         </td>
-                        <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
                         <td>
-                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
+                            <p-tag *ngIf="contrat.statut==null" icon="pi pi-times" severity="danger"
+                                [value]="'Aucun status définit'">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="warning"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut =='signé'" icon="pi pi-chevron-right" severity="success"
+                            <p-tag *ngIf="contrat.statut == 'Conclu'" icon="pi pi-pencil" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'En attente d’informations'" icon="pi pi-spin pi-spinner" severity="warning"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner" severity="warning"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - champs requis'" icon="pi pi-info-circle" severity="danger"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - montant optimisé'" icon="pi pi-times" severity="danger"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Signé'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Déposé à l’OPCO'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check" severity="success"
                                 [value]="contrat.statut">
                             </p-tag>
                         </td>
@@ -452,10 +515,13 @@
                         <td>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
                                 (click)="showPresence(contrat.alternant_id._id)"
-                                style="text-align: center; color: red;"></i>
+                                style="text-align: center; color: red; margin: 2px"></i>
+                            <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags" pTooltip="Modifier le statut du contrat" aria-hidden="true"
+                                (click)="showStatusForm = true; contratToUpdate = contrat"
+                                style="text-align: center; color: gray; margin: 2px"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
-                                style="text-align: center; margin-left: 3px; color: blue"
+                                style="text-align: center; color: blue; margin: 2px"
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
                         </td>
                     </tr>
@@ -463,16 +529,15 @@
 
                 <ng-template pTemplate="rowexpansion" let-contrat>
                     <tr>
-                        <td colspan="8">
+                        <td colspan="7">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
                         <th>Horaire</th>
-                        <th>Classification</th>
                         <th>Niveau de la formation</th>
+                        <th>Mobilité internationnale</th>
                         <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
-                        <th>Coeff hierachique</th>
                         <th>Commercial</th>
                         <th>Tuteur</th>
                         <th>Année-scolaires</th>
@@ -481,12 +546,11 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{contrat.horaire}}</td>
-                        <td>{{contrat.classification}}</td>
                         <td>{{contrat.niveau_formation}}</td>
+                        <td>{{contrat.cout_mobilite != null ? contrat.cout_mobilite + ' €': 'Non' }}</td>
                         <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
                             {{ contrat.entreprise_id?.r_sociale }}
                         </td>
-                        <td>{{contrat.coeff_hierachique}}</td>
                         <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname | uppercase }}</td>
 
                         <td *ngIf="contrat.tuteur_id != null">
