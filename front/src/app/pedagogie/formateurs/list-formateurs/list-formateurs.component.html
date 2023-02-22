@@ -69,7 +69,7 @@
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
-					<p-dropdown [options]="prestataireList" placeholder="Choissisez une entreprise" formControlName="prestataire_id">
+					<p-dropdown [options]="prestataireList" placeholder="Choissisez une entreprise" formControlName="prestataire_id" filter="true">
 					</p-dropdown>
 				</div>
 

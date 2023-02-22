@@ -4,6 +4,7 @@ const { Etudiant } = require('../models/etudiant')
 const { Prospect } = require('../models/prospect')
 const { Formateur } = require('../models/formateur')
 const mongoose = require("mongoose");
+const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -24,7 +25,7 @@ mongoose
     })
     .then(() => {
         Etudiant.find().populate('user_id').then(etudiants=>{
-            let emailList=[]
+            let emailList=["k.fakhfakh@estya.com"]
             etudiants.forEach(etudiant=>{
                 if(etudiant.user_id && etudiant.user_id.email)
                     emailList.push(etudiant.user_id.email)
