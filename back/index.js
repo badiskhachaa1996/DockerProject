@@ -118,6 +118,7 @@ const QSController = require('./controllers/questionnaireSatisfactionController'
 const projectController = require('./controllers/projectController');
 const teamController = require('./controllers/teamController');
 const EvenementsController = require('./controllers/evenementController')
+const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
 const { User } = require("./models/user");
 
 
@@ -175,6 +176,8 @@ app.use('/', function (req, res, next) {
         }
     }
 });
+app.use('/soc/extSkillsnet',ExtSkillsnetController)
+
 app.use('/soc/evenements',EvenementsController)
 
 app.use('/soc/rachatBulletin', rbc)

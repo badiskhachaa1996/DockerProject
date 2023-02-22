@@ -13,6 +13,11 @@ export class EvenementsService {
     let url = this.apiUrl + 'create';
     return this.httpClient.post<Evenements>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  update(id: string, obj: any) {
+    let url = this.apiUrl + 'update/' + id;
+    return this.httpClient.put<Evenements>(url, obj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 
   getByID(id: string) {
     let url = this.apiUrl + 'getByID/' + id;

@@ -7,7 +7,7 @@ export class Evenements {
         public date_creation?: Date,
         public created_by?: User,
         public description?: string,
-        public list_inscrit?: User,
+        public list_inscrit?: User[],
         public date_lieu?: Date
     ) { }
 

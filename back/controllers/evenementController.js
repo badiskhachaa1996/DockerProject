@@ -8,9 +8,15 @@ app.post('/create', (req, res) => {
         ...req.body
     })
     event.save().then(doc => {
-        doc.populate('created_by').populate('list_inscrit').then(newDoc => {
+        Evenement.findById(doc._id).populate('created_by').populate('list_inscrit').then(newDoc => {
             res.send(newDoc)
         })
+    })
+})
+
+app.put('/update/:id', (req, res) => {
+    Evenement.findByIdAndUpdate(req.params.id, { ...req.body }, { new: true}).populate('created_by').populate('list_inscrit').then(doc => {
+        res.send(doc)
     })
 })
 
@@ -27,10 +33,8 @@ app.get('/getAll', (req, res) => {
 })
 
 app.post('/updateInscrit/:id', (req, res) => {
-    Evenement.findByIdAndUpdate(req.params.id, { list_inscrit: req.body.list_inscrit }, { new: true }).then(doc => {
-        doc.populate('created_by').populate('list_inscrit').then(newDoc => {
-            res.send(newDoc)
-        })
+    Evenement.findByIdAndUpdate(req.params.id, { list_inscrit: req.body.list_inscrit }, { new: true }).populate('created_by').populate('list_inscrit').then(doc => {
+        res.send(doc)
     })
 })
 module.exports = app;

@@ -292,7 +292,7 @@ export class ListFormateursComponent implements OnInit {
         let dicF = response.IsJury
         let kF = [];
         this.jury_diplomesList = [];
-        if (response.IsJury && response.IsJury.keys().length != 0) {
+        if (dicF && Object.keys(dicF).length != 0) {
           kF = Object.keys(dicF)
           kF.forEach(key => {
             this.jury_diplomesList.push({ titre: key, cout_h: parseInt(response.IsJury[key]), isNew: false })
