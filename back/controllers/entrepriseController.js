@@ -635,6 +635,17 @@ app.get("/getByEtudiantIdPopolate/:id", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
 })
 
+// mise à jour du status d'un contrat
+app.patch("/update-status", (req, res) => {
+    const contract_id = req.body._id;
+    const status = req.body.statut;
+
+    CAlternance.findOneAndUpdate({_id: contract_id}, {statut: status})
+    .then((response) => { res.status(201).json({successMsg: 'Status du contrat mis à jour'}) })
+    .catch((error) => { res.status(400).json({errorMsg: 'Impossible de mettre à jour le status du contrat, veuillez contacter un administrateur!', error: error}); });
+});
+
+
 //Modification d'une entreprise
 app.put("/update", (req, res, next) => {
 

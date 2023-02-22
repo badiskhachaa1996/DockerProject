@@ -71,11 +71,32 @@ export class ListeContratsComponent implements OnInit {
 
   filtreAgent = [
     { value: null, label: "Tous les commerciaux" }
-  ]
+  ];
 
   filtreCampus = [
     { value: null, label: "Tous les campus" }
-  ]
+  ];
+
+  mobiliteOptions: any = [
+    {name: 'Non', value: 0},
+    {name: 'Oui', value: 1},
+  ];
+
+  showCout: boolean = false;
+  showStatusForm: boolean = false;
+  statusForm: FormGroup;
+
+  statusList: any = [
+    { label: 'Choisir le status du contrat', value: null },
+    { label: 'Conclu', value: 'Conclu' },
+    { label: 'En attente d’informations', value: 'En attente d’informations' },
+    { label: 'En attente de validation', value: 'En attente de validation' },
+    { label: 'Contrôlé par l’équipe IGWA - champs requis', value: 'Contrôlé par l’équipe IGWA - champs requis' },
+    { label: 'Contrôlé par l’équipe IGWA - montant optimisé', value: 'Contrôlé par l’équipe IGWA - montant optimisé' },
+    { label: 'Signé', value: 'Signé' },
+    { label: 'Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
+    { label: 'Validé à facturation', value: 'Validé à facturation' },
+  ];
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
@@ -245,9 +266,14 @@ export class ListeContratsComponent implements OnInit {
         })
       })
     })
-  }
-  showPresence(alternant_id) {
 
+    // initialisation du formulaire de mise à jour du status
+    this.statusForm = this.formBuilder.group({
+      libelle: ['', Validators.required]
+    });
+  }
+
+  showPresence(alternant_id) {
     this.router.navigate(["details/" + alternant_id]);
   }
   ShowAddNewCA() {
@@ -276,8 +302,8 @@ export class ListeContratsComponent implements OnInit {
       code_commercial: new FormControl('', Validators.required),
       professionnalisation: new FormControl(''),
       anne_scolaire: new FormControl(),
-      ecole: new FormControl('', Validators.required)
-
+      ecole: new FormControl('', Validators.required),
+      cout_mobilite: new FormControl(''),
     })
   }
 
@@ -299,8 +325,8 @@ export class ListeContratsComponent implements OnInit {
       anne_scolaire: new FormControl(''),
 
       professionnalisation: new FormControl(''),
-      ecole: new FormControl('', Validators.required)
-
+      ecole: new FormControl('', Validators.required),
+      cout_mobilite: new FormControl(''),
     })
   }
 
@@ -344,7 +370,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -365,9 +391,9 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value)
 
-    this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
+      this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
       this.showFormUpdateCa = false
       this.ngOnInit()
@@ -413,6 +439,34 @@ export class ListeContratsComponent implements OnInit {
         this.filtreAgent.push({ label: cc.firstname + " " + cc.lastname, value: cc._id })
       }
     })
+  }
+
+  // methoe d'affichage du cout
+  onShowCout(event: any): void 
+  {
+    if(event.value.value == 0)
+    {
+      this.showCout = false;
+    } else {
+      this.showCout = true;
+    }
+  }
+
+  // mis à jour su status du contrat
+  onUpdateStatus(): void
+  {
+    // recuperation des donées du formulaire
+    const formValue = this.statusForm.value;
+    this.contratToUpdate.statut = formValue.libelle;
+
+    this.entrepriseService.updateStatus(this.contratToUpdate)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Contrat alternance', detail: response.successMsg });
+      this.showStatusForm = false;
+      this.statusForm.reset();
+      this.ngOnInit();
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Contrat alternance', detail: error.errorMsg }) });
   }
 
 }

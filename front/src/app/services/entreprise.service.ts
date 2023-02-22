@@ -131,12 +131,26 @@ export class EntrepriseService {
 
   getAllContrats() {
     let registreUrl = this.apiUrl + "getAllContrats/";
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   updateContratAlternance(data:ContratAlternance) {
     let url = this.apiUrl + "updateContratAlternance"
     return this.httpClient.post<ContratAlternance>(url,data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
+  }
+
+  // update contract status
+  updateStatus(contract: ContratAlternance): Promise<any>
+  {
+    const url = `${this.apiUrl}update-status`;
+    
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch<any>(url, contract, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response)},
+        error: (error: any) => { reject(error) },
+        complete: () => (console.log('Status du contrat mis à jour'))
+      });
+    });
   }
 
 }
