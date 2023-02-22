@@ -70,7 +70,7 @@
             </p>
 
             <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
-                [globalFilterFields]="['etudiant', 'appreciation']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                [globalFilterFields]="['etudiant_f','etudiant_l', 'id','appreciation']" [rows]="10" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="tableauNotes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
