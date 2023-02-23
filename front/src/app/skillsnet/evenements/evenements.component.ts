@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { EvenementsService } from 'src/app/services/skillsnet/evenements.service';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-evenements',
   templateUrl: './evenements.component.html',
@@ -147,6 +148,20 @@ export class EvenementsComponent implements OnInit {
       liste_inscrit: inscrits
     })
     this.showInscrit = event
+  }
+
+  deleteInscrit(inscrit: User, event: Evenements) {
+    let li = []
+    event.list_inscrit.forEach((u, idx) => {
+      if (u._id != inscrit._id)
+        li.push(inscrit._id)
+    })
+    this.EventService.updateInscrit(this.formInscritEvent.value._id, li).subscribe(evenement => {
+      this.events.splice(this.includesId(evenement._id), 1, evenement)
+      this.formInscritEvent.reset()
+      this.showInscrit = null
+      this.messageService.add({ summary: 'Mis à jour des inscrits de l\'évenement avec succès', severity: 'success' })
+    })
   }
 
 }

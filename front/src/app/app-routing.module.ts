@@ -149,6 +149,8 @@ import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component'
 import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tutelle-ceo/contrats-tutelle-ceo.component';
 import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
+import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
+import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 
 const routes: Routes = [
     {
@@ -256,6 +258,7 @@ const routes: Routes = [
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
+            { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */
@@ -299,7 +302,8 @@ const routes: Routes = [
     { path: 'auth', component: MsalRedirectComponent },
     { path: 'code', redirectTo: '' },
     { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent },
-    { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent }
+    { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent },
+    { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent }
 ]
 
 

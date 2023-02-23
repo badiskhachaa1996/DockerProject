@@ -119,7 +119,7 @@ export class AuthService {
   patchById(user: User) {
     let url = `${this.apiUrl}patchById`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<User>((resolve, reject) => {
       this.http.patch<User>(url, user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         ((response: User) => { resolve(response); }),
         ((error) => { reject(error); })

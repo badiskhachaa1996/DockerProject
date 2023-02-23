@@ -72,20 +72,27 @@ export class ExterneComponent implements OnInit {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
     this.AuthService.login(userToLog).subscribe((data) => {
       this.socket.isAuth()
-      this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
-        if (pData && pData.token) {
-          localStorage.setItem('ProspectConected', pData.token)
-          this.router.navigate(['/suivre-ma-preinscription'])
+      localStorage.setItem('token', data.token)
+      this.AuthService.getPopulate(jwt_decode(data.token)['id']).subscribe(user => {
+        console.log(user)
+        if (user.type == "Externe-InProgress") {
+          this.router.navigateByUrl('/#/formulaire-externe', { skipLocationChange: true })
         } else {
-          localStorage.setItem('token', data.token)
-          this.router.navigateByUrl('/#/', { skipLocationChange: true })
-        }
-      }, error => {
-        if (error.status == 404) {
-          localStorage.setItem('token', data.token)
-          this.router.navigateByUrl('/#/', { skipLocationChange: true })
-        } else {
-          console.error(error)
+          this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
+            if (pData && pData.token) {
+              localStorage.setItem('ProspectConected', pData.token)
+              localStorage.removeItem('token')
+              this.router.navigate(['/suivre-ma-preinscription'])
+            } else {
+              this.router.navigateByUrl('/#/', { skipLocationChange: true })
+            }
+          }, error => {
+            if (error.status == 404) {
+              this.router.navigateByUrl('/#/', { skipLocationChange: true })
+            } else {
+              console.error(error)
+            }
+          })
         }
       })
     }, error => {

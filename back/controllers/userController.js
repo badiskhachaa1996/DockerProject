@@ -238,21 +238,7 @@ app.get("/getNBUser", (req, res) => {
 app.post("/updateById/:id", (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id },
         {
-            civilite: req.body.user.civilite,
-            firstname: req.body.user.firstname,
-            lastname: req.body.user.lastname,
-            indicatif: req.body.user.indicatif,
-            phone: req.body.user.phone,
-            role: req.body.user?.role,
-            service_id: req.body?.user.service_id,
-            entreprise: req.body?.user.entreprise,
-            type: req.body.user?.type,
-            pays_adresse: req.body.user.pays_adresse,
-            ville_adresse: req.body.user.ville_adresse,
-            rue_adresse: req.body.user.rue_adresse,
-            numero_adresse: req.body.user.numero_adresse,
-            postal_adresse: req.body.user.postal_adresse
-
+            ...req.body.user
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
