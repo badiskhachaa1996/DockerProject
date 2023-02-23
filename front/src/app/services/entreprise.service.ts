@@ -153,4 +153,18 @@ export class EntrepriseService {
     });
   }
 
+  // méthode d'envoi du mail vers les entreprises
+  sendCreationLink(idCommercial: string, email: string): Promise<any> 
+  {
+    let url = `${this.apiUrl}send-creation-link`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, {idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Lien générer') }
+      });
+    });
+  }
+
 }

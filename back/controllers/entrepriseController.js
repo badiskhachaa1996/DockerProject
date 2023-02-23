@@ -544,6 +544,40 @@ app.post("/updateContratAlternance", (req, res, next) => {
         .catch((error) => { res.status(500).send(error); });
 });
 
+// envoi du mail de création des entreprises
+app.post("/send-creation-link", (req, res) => {
+    let idCommercial = req.body.idCommercial;
+    let email = req.body.email;
+
+    console.log(email, idCommercial);
+
+    // création du mail à envoyer
+    let Ceo_htmlmail = "<p>Bonjour,</p><p>Voici le lien de création de votre entreprise sur notre espace IMS, merci de cliquer sur le lien suivant: ims.intedgroup.com/#/creer-mon-entreprise/"+idCommercial+"</p>";
+
+    let Ceo_mailOptions =
+    {
+        from: "ims@intedgroup.com",
+        to: email,
+        subject: 'Lien de création d\'entreprise [IMS]',
+        html: Ceo_htmlmail,
+        // attachments: [{
+        //     filename: 'Image1.png',
+        //     path: 'assets/Image1.png',
+        //     cid: 'Image1' //same cid value as in the html img src
+        // }]
+    };
+
+
+    // envoi du mail
+    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+    });
+
+    res.status(200).json({success: 'Entreprise ajouté'});
+})
+
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
     CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
