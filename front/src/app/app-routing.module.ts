@@ -148,6 +148,7 @@ import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entrepr
 import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component';
 import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tutelle-ceo/contrats-tutelle-ceo.component';
+import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
 import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 
@@ -288,6 +289,7 @@ const routes: Routes = [
     { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
     { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
     { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
+    { path: 'creer-mon-entreprise/:id', component: EntrepriseFormComponent },
 
     { path: 'pages/landing', component: LandingComponent },
     { path: 'pages/error', component: ErrorComponent },
