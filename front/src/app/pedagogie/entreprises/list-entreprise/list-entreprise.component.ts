@@ -43,7 +43,12 @@ export class ListEntrepriseComponent implements OnInit {
   formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
   representantToUpdate: User;
-  IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }]
+  IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }];
+
+  // formulaire qui permet de saisir l'adresse mail d'un représentant et de lui envoyer une creation link
+  formEmail: FormGroup;
+  showFormEmail: boolean = false;
+
   constructor(private userService: AuthService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
@@ -84,6 +89,11 @@ export class ListEntrepriseComponent implements OnInit {
     );
 
     this.onInitFormUpdateEntreprise();
+
+    // initialisation du formulaire d'envoi de mail aux entreprise
+    this.formEmail = this.formBuilder.group({
+      adresse_mail: ['', [Validators.required, Validators.email]],
+    });
   }
 
 
@@ -315,6 +325,31 @@ export class ListEntrepriseComponent implements OnInit {
   onRedirect()
   {
     this.router.navigate(['ajout-entreprise']);
+  }
+
+  // méthode de redirection vers le formulaire de création d'entreprise
+  onGenerateForm(): void
+  {
+    if(confirm("Vous allez un générer un formulaire qui permettra d'envoyer un mail vers un représentant d'entreprise, afin d'enregistrer son entreprise sur IMS, votre id sera lié à cette entreprise si la création aboutit!"))
+    {
+      this.showFormEmail = true;
+    }
+  }
+
+  // méthode d'envoi du mail de création de l'entreprise à l'entreprise
+  onSendCreationLink(): void
+  {
+    // recuperation du libelle depuis le formulaire
+    const formValue = this.formEmail.value;
+
+    this.entrepriseService.sendCreationLink(this.token.id, formValue.adresse_mail)
+    .then((response) => { 
+      this.messageService.add({ severity: 'success', summary: 'Lien de création', detail: response.successMsg }); 
+      
+      this.formEmail.reset();
+      this.showFormEmail = false;
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Lien de création', detail: error.errorMsg }); });
   }
 
 }

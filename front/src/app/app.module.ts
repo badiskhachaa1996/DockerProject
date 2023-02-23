@@ -254,6 +254,7 @@ import { TuteurCeoComponent } from './pedagogie/tuteur-ceo/tuteur-ceo.component'
 import { EvenementsComponent } from './skillsnet/evenements/evenements.component';
 import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tutelle-ceo/contrats-tutelle-ceo.component';
 import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
+import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
 
 
 @NgModule({
@@ -518,6 +519,7 @@ import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe
     EvenementsComponent,
     ContratsTutelleCeoComponent,
     ExterneSkillsnetComponent,
+    EntrepriseFormComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

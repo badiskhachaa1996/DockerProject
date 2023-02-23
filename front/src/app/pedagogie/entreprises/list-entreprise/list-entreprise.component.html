@@ -181,11 +181,29 @@
         </div>
     </div>
 
+    <div class="col-12" *ngIf="showFormEmail">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showFormEmail = false;" aria-hidden="true">
+			</i>
+
+            <h4 style="text-align: center;">Génération d'un lien de création d'entreprise</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formEmail" (ngSubmit)="onSendCreationLink()">
+                <div class="field col-8">
+                    <input pInputText id="mail" type="email" formControlName="adresse_mail" required placeholder="Adresse email du représentant" />
+                </div>
+                <div class="field col-4">
+                    <button pButton type="submit" [disabled]="formEmail.invalid" label="Envoyer" style="float: right;"></button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+                <button pButton pRipple class="p-button-outlined p-button-warning mr-2 mb-2" icon="pi pi-at" label="Générer un lien de création" (click)="onGenerateForm();"></button>
+                <button pButton icon="pi pi-plus" class="p-button-outlined p-button-primary mr-2 mb-2" label="Ajouter" (click)="onRedirect();"></button>
             </div>
             <h5>Liste des entreprises</h5>
             <p-toast></p-toast>

@@ -1,0 +1,179 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card" *ngIf="showFormAddEntreprise">
+            <img [src]="logoSrc" alt="IntedGroup" style="width: 25%; height: 25%">
+            <hr>
+            <h2 class="text-center">Création de votre entreprise</h2>
+            <hr>
+            <small style="color: red; margin-top: 3px; margin-bottom: 3px;">Merci de remplir ce formulaire pour enregistrer votre entreprise dans notre système. Tous les champs marqués d'un * sont obligatoire</small>
+            <br>
+
+            <form [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
+                <div *ngIf="ActiveIndex==0">
+                    <div style="color: black; font-weight: normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label for="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
+                                <input pInputText id="raison_sociale" type="text" formControlName="r_sociale" placeholder="Nom de l'entreprise " />
+                            </div>
+
+                            <div class="field col-12">
+                                <label For="activite">Activité de l'entreprise <span style="color: red;"> * </span></label>
+                                <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"  formControlName="activite" placeholder="Description des activités de l'entreprise"></textarea>
+                            </div>
+
+                            <div class="field col-12">
+                                <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
+                                <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie" formControlName="categorie"></p-multiSelect>
+                            </div>
+
+                            <div class="field col-12 md:col-8">
+                                <label For="crc">Caisse de retraite complémentaire <span style="color: red;"> * </span></label>
+                                <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label For="nb_salarie">Nombre de salariés <span style="color: red;"> * </span></label>
+                                <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
+                            </div>
+
+                            <div class="field col-12 md:col-8">
+                                <label For="convention">Convention collective <span style="color: red;"> * </span></label>
+                                <input pInputText id="convention" type="text" formControlName="convention" placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="idcc">Code IDCC <span style="color: red;"> * </span></label>
+                                <input pInputText type="number" formControlName="idcc" placeholder="0000" />
+                            </div>
+                            <div class="field col-4 md:col-4">
+                                <label For="indicatif_ent">Indicatif <span style="color: red;"> * </span></label>
+                                <input pInputText type="number" formControlName="indicatif_ent" placeholder="+33" />
+                            </div>
+                            <div class="field col-8 md:col-8">
+                                <label For="phone_ent">Téléphone <small>(entreprise)</small> <span style="color: red;"> * </span></label>
+                                <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800"/>
+                            </div>
+
+                            <!--Adresse du siège social-->
+                            <h3 class="field col-12">Adresse du siège social</h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ss">Adresse <span style="color: red;"> * </span></label>
+                                <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent" placeholder="Numero et Nom de la rue" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ss">Code postal <span style="color: red;"> * </span></label>
+                                <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent" placeholder="75001"/>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ss">Ville <span style="color: red;"> * </span></label>
+                                <input pInputText id="ville_ss" type="text" formControlName="ville_ent" placeholder="Paris" />
+                            </div>
+
+                            <!--Adresse d’exécution du contrat -->
+                            <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ec">Adresse <span style="color: red;"> * </span></label>
+                                <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec" placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ec">Code postal <span style="color: red;"> * </span></label>
+                                <input pInputText id="postal_ec" type="text" formControlName="postal_ec" placeholder="75001" />    
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ec">Ville <span style="color: red;"> * </span></label>
+                                <input pInputText id="ville_ec" type="text" formControlName="ville_ec" placeholder="Paris" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="siret">SIRET <span style="color: red;"> * </span></label>
+                                <input pInputText id="siret" maxlength=15 minlength=15 type="number"  formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="ape_naf">Code NAF <span style="color: red;"> * </span></label>
+                                <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf" placeholder="CODE NAF" />
+                            </div>
+
+                            <div class="field col-12">
+                                <label For="OPCO">OPCO <span style="color: red;"> * </span></label>
+                                <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
+                            </div>
+    
+                            <div class="field col-12">
+                                <button pButton type="button" label="Suivant"
+                                    (click)="nextPage();"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div *ngIf="ActiveIndex==1">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label For="civilite">Civilité</label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite_rep" optionDisabled="actif"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="lastname">Nom <span style="color: red">*</span></label>
+                                <input pInputText id="lastname" type="text" formControlName="nom_rep" placeholder="Nom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="firstname">Prénom <span style="color: red">*</span></label>
+                                <input pInputText id="firstname" type="text" formControlName="prenom_rep" placeholder="Prenom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="email">Email du représentant <span style="color: red">*</span></label>
+                                <input pInputText id="email" type="email" formControlName="email_rep" placeholder="Email du dirigeant"/>
+                            </div>
+                            <div class="field col-3 md:col-4">
+                                <label For="indicatif">Indicatif</label>
+                                <input pInputText id="indicatif" type="number" formControlName="indicatif_rep" placeholder="+01"/>
+                            </div>
+                            <div class="field col-9 md:col-8">
+                                <label For="phone">Téléphone</label>
+                                <input pInputText id="phone" type="tel" formControlName="phone_rep" placeholder="0188880050" />
+                            </div>
+                            <div class="field col-6">
+                                <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()"></button>
+                            </div>
+                            <div class="field col-6">
+                                <button pButton type="submit" label="Terminer" style="float: right;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card mt-3 mr-3 ml-3" *ngIf="showEndArea">
+            <div style="text-align: center;">
+                <i class="pi pi-check" style="font-size: 5rem; color: green"></i>
+                
+                <h1 class="text-center">Félicitation</h1>
+                <hr>
+                <p>
+                    Votre entreprise est correctement enregistré dans notre système,
+                    <span style="color: #FF0000">un mail contenant un lien d'activation ainsi que vos identifiants de connexion</span> à été envoyé à l'adresse email du représentant.
+                    Merci de valider votre compte afin de suivre les contrats de vos apprentis et leurs assiduités au sein de notre école. 
+                    <br>
+                    Ci-dessous les différentes étapes pour une meilleure utilisation de notre application.
+                </p>
+                <hr>
+
+                <h4 style="font-weight: bold;">Étape 1: Verifier vos mails</h4>
+                <small style="color: #FF0000">(Si vous ne voyez pas le mail, vérifiez vos spams)</small>
+                <img [src]="etape1Src" alt="Étape 1" style="width: 100%; height: 100%">
+                <hr>
+
+                <h4 style="font-weight: bold;">Étape 2: Valider votre compte IMS</h4>
+                <img [src]="etape2Src" alt="Étape 2" style="width: 60%; height: 50%">
+
+                <hr>
+                <h4 style="font-weight: bold;">Étape 3: Consulter votre compte IMS</h4>
+                <img [src]="etape3Src" alt="Étape 3" style="width: 60%; height: 50%">
+                <hr>
+
+                <p class="text-center">Pour toutes question n'hésitez pas à ouvrir un ticket via notre module Ticketing disponible sur votre espace IMS.</p>
+            </div>
+        </div>
+    </div>
+</div>
