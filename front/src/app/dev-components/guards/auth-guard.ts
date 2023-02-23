@@ -94,19 +94,24 @@ export class AuthGuardService implements CanActivate {
             else {
                 return this.authService.HowIsIt(currenttoken.id).pipe(
                     map(stateOfUser => {
-                        if (stateOfUser.name == 'Profil complet' || state.url == "/completion-profil") {
-                            return true
+                        if (stateOfUser.type != "Externe-InProgress") {
+                            if (stateOfUser.name == 'Profil complet' || state.url == "/completion-profil") {
+                                return true
+                            }
+                            else if (stateOfUser.name == "Profil incomplet") {
+                                this.router.navigate(['/completion-profil']);
+                            } else if (stateOfUser.name == "JsonWebTokenError" || stateOfUser.name == "TokenExpiredError") {
+                                localStorage.setItem('errorToken', JSON.stringify(stateOfUser))
+                                localStorage.removeItem('token')
+                                this.router.navigate(['/login']);
+                            }
+                            else {
+                                this.router.navigate(['/login']);
+                            }
+                        }else{
+                            this.router.navigate(['/formulaire-externe']);
                         }
-                        else if (stateOfUser.name == "Profil incomplet") {
-                            this.router.navigate(['/completion-profil']);
-                        } else if (stateOfUser.name == "JsonWebTokenError" || stateOfUser.name == "TokenExpiredError") {
-                            localStorage.setItem('errorToken', JSON.stringify(stateOfUser))
-                            localStorage.removeItem('token')
-                            this.router.navigate(['/login']);
-                        }
-                        else {
-                            this.router.navigate(['/login']);
-                        }
+
                     }),
                     catchError(err => {
                         localStorage.removeItem('token')

@@ -131,4 +131,18 @@ export class ExterneSkillsnetComponent implements OnInit {
     this.showUpdate = true
   }
 
+  emailExist = false
+  verifEmailInBD() {
+    this.emailExist = false
+    this.AuthService.getByEmail(this.formAddExterne.value.email_perso).subscribe((dataMail) => {
+      if (dataMail) {
+        this.emailExist = true
+        this.messageService.add({ severity: 'error', summary: 'Cette email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        return true
+      }
+    }, (error) => {
+      return false
+    })
+  }
+
 }

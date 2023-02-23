@@ -133,8 +133,6 @@ app.post("/login", (req, res) => {
         email_perso: data.email,
     }).then((userFromDb) => {
         if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
-            console.log(userFromDb)
-            console.log(bcrypt.compareSync(data.password, userFromDb.password))
             res.status(404).send({ message: "Email ou Mot de passe incorrect" });
         }
         else {
@@ -236,10 +234,12 @@ app.get("/getNBUser", (req, res) => {
 
 //Mise à jour d'un user
 app.post("/updateById/:id", (req, res) => {
+    let user = { ...req.body.user }
+    if (user.password_clear) {
+        user['password'] = bcrypt.hashSync(user.password_clear, 8)
+    }
     User.findOneAndUpdate({ _id: req.params.id },
-        {
-            ...req.body.user
-        }, { new: true }, (err, user) => {
+        user, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
                 res.send(err)
@@ -831,11 +831,11 @@ app.get("/HowIsIt/:id", (req, res) => {
         } else {
             User.findById(req.params.id).then((userFromDb) => {
                 if (!userFromDb) {
-                    res.status(201).send({ name: "Cette utilisateur n'existe pas" })
+                    res.status(201).send({ name: "Cette utilisateur n'existe pas", type: userFromDb.type })
                 } else if (userFromDb.civilite == null) {
-                    res.status(201).send({ name: "Profil incomplet" })
+                    res.status(201).send({ name: "Profil incomplet", type: userFromDb.type })
                 } else {
-                    res.status(201).send({ name: "Profil complet" });
+                    res.status(201).send({ name: "Profil complet", type: userFromDb.type });
                 }
             }).catch((error) => {
                 console.error(error)

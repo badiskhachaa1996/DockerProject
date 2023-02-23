@@ -30,7 +30,8 @@ export class GestionEquipeComponent implements OnInit {
     team_id: ['', [Validators.required]]
   })
 
-  constructor(private router: Router, private messageService: MessageService, private formBuilder: FormBuilder, private UserService: AuthService, private TeamCommercialService: TeamCommercialService) { }
+  constructor(private router: Router, private messageService: MessageService, private formBuilder: FormBuilder, private UserService: AuthService, 
+    private TeamCommercialService: TeamCommercialService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));

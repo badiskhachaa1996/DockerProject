@@ -119,6 +119,7 @@ const projectController = require('./controllers/projectController');
 const teamController = require('./controllers/teamController');
 const EvenementsController = require('./controllers/evenementController')
 const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
+const MatchingController = require('./controllers/MatchingController')
 const { User } = require("./models/user");
 
 
@@ -176,9 +177,9 @@ app.use('/', function (req, res, next) {
         }
     }
 });
-app.use('/soc/extSkillsnet',ExtSkillsnetController)
+app.use('/soc/extSkillsnet', ExtSkillsnetController)
 
-app.use('/soc/evenements',EvenementsController)
+app.use('/soc/evenements', EvenementsController)
 
 app.use('/soc/rachatBulletin', rbc)
 
@@ -269,6 +270,7 @@ app.use('/soc/progressionPeda', progressionPedaController);
 app.use('/soc/qs', QSController)
 app.use('/soc/project', projectController);
 app.use('/soc/team', teamController);
+app.use('/soc/matching', MatchingController)
 
 
 

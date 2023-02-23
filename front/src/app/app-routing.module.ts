@@ -248,7 +248,7 @@ const routes: Routes = [
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
-            { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
+            { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
