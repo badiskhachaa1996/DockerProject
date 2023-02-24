@@ -88,14 +88,15 @@ export class ListeContratsComponent implements OnInit {
 
   statusList: any = [
     { label: 'Choisir le status du contrat', value: null },
-    { label: 'Conclu', value: 'Conclu' },
-    { label: 'En attente d’informations', value: 'En attente d’informations' },
-    { label: 'En attente de validation', value: 'En attente de validation' },
-    { label: 'Contrôlé par l’équipe IGWA - champs requis', value: 'Contrôlé par l’équipe IGWA - champs requis' },
-    { label: 'Contrôlé par l’équipe IGWA - montant optimisé', value: 'Contrôlé par l’équipe IGWA - montant optimisé' },
-    { label: 'Signé', value: 'Signé' },
-    { label: 'Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
-    { label: 'Validé à facturation', value: 'Validé à facturation' },
+    { label: '1- Conclu', value: 'Conclu' },
+    { label: '2- En attente d’informations', value: 'En attente d’informations' },
+    { label: '3- En attente de validation', value: 'En attente de validation' },
+    { label: '4- Champs requis', value: 'Champs requis' },
+    { label: '5- Montant optimisé', value: 'Montant optimisé' },
+    { label: '6- Signé', value: 'Signé' },
+    { label: '7- Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
+    { label: '8- Relance à traiter', value: 'Relance à traiter' },
+    { label: '9- Validé à facturation', value: 'Validé à facturation' },
   ];
 
 

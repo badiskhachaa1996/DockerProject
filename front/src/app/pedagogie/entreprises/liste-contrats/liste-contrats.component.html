@@ -490,16 +490,19 @@
                             <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner" severity="warning"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - champs requis'" icon="pi pi-info-circle" severity="danger"
+                            <p-tag *ngIf="contrat.statut == 'Champs requis'" icon="pi pi-info-circle" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - montant optimisé'" icon="pi pi-times" severity="danger"
+                            <p-tag *ngIf="contrat.statut == 'Montant optimisé'" icon="pi pi-times" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Signé'" icon="pi pi-check" severity="info"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Déposé à l’OPCO'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Relance à traiter'" icon="pi pi-times" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check" severity="success"
