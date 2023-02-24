@@ -27,7 +27,7 @@ export class MatchingComponent implements OnInit {
 
   matching: Matching[] = [];
 
-  statutList = ["En Cours", "Validé par l'étudiant", "Validé par l'étudiant et l'entreprise"]
+  statutList = [{ value: "En Cours" }, { value: "Validé par l'étudiant" }, { value: "Validé par l'étudiant et l'entreprise" }]
 
   isNotWinner = false
 
@@ -75,7 +75,7 @@ export class MatchingComponent implements OnInit {
   InitUpdateStatut(match: Matching) {
     this.formUpdateStatut.setValue({ _id: match._id, remarque: match.remarque, statut: match.statut })
     this.showUpdateStatut = true
-    this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
+    //this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
   }
 
   AcceptMatching(cv: CV) {
@@ -109,5 +109,21 @@ export class MatchingComponent implements OnInit {
     let m = {
       ...this.formUpdateStatut.value
     }
+    this.MatchingService.update(m._id, m).subscribe(matching => {
+      this.matching.splice(this.includesId(matching._id), 1, matching)
+      this.formUpdateStatut.reset()
+      this.showUpdateStatut = false
+      this.messageService.add({ summary: 'Mis à jour du statut de matching avec succès', severity: 'success' })
+    })
   }
+
+  includesId(id: string) {
+    let r = -1
+    this.matching.forEach((val, index) => {
+      if (val._id == id)
+        r = index
+    })
+    return r
+  }
+
 }

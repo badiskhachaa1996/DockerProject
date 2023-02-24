@@ -8,7 +8,7 @@
 
         <div class="field col-12">
             <label>Remarque<span style="color:red">*</span>:</label><br>
-            <textarea type="text" formControlName="description" class="form-control col-12"
+            <textarea type="text" formControlName="remarque" class="form-control col-12"
                 placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
                 pInputTextarea>
                     </textarea>
@@ -17,7 +17,7 @@
 
         <div class="field col-12">
             <label>Statut du Matching<span style="color:red">*</span>:</label><br>
-            <p-dropdown [options]="statutList" formControlName="statut"
+            <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value" optionValue="value"
                 placeholder="Choissisez un statut">
             </p-dropdown>
         </div>
@@ -100,8 +100,8 @@
 		<ng-template pTemplate="rowexpansion" let-match>
 			<tr>
 				<td colspan="7">
-					<p>A Afficher: Détails du CV</p>
-					<p>Mettre en vert les compétences qui sont dans l'offre</p>
+					<p>Remarque :</p>
+					<p>{{match.remarque}}</p>
 				</td>
 			</tr>
 		</ng-template>

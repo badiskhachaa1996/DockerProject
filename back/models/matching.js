@@ -8,7 +8,7 @@ const matiereSchema = mongoose.Schema({
     statut: { type: String, default: "En Cours" },
     type_matching: { type: String, default: "MU" },
     date_creation: { type: Date },
-    remarque: { type: String }
+    remarque: { type: String, default: "" }
 });
 
 //creation de la table matiere
