@@ -119,7 +119,7 @@ const projectController = require('./controllers/projectController');
 const teamController = require('./controllers/teamController');
 const EvenementsController = require('./controllers/evenementController')
 const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
-const MatchingController = require('./controllers/MatchingController')
+const MatchingController = require('./controllers/matchingController')
 const { User } = require("./models/user");
 
 

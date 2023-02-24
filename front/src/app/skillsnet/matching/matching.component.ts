@@ -5,7 +5,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { Entreprise } from 'src/app/models/Entreprise';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
@@ -27,12 +27,22 @@ export class MatchingComponent implements OnInit {
 
   matching: Matching[] = [];
 
+  statutList = ["En Cours", "Validé par l'étudiant", "Validé par l'étudiant et l'entreprise"]
+
   isNotWinner = false
+
+  showUpdateStatut = false
 
   matchingsPotentiel: {
     cv: CV,
     taux: number
   }[] = []
+
+  formUpdateStatut: FormGroup = new FormGroup({
+    statut: new FormControl('', [Validators.required]),
+    remarque: new FormControl('', [Validators.required]),
+    _id: new FormControl('', [Validators.required]),
+  })
 
   constructor(private MatchingService: MatchingService, private route: ActivatedRoute,
     private AnnonceService: AnnonceService, private UserService: AuthService, private messageService: MessageService) { }
@@ -63,6 +73,8 @@ export class MatchingComponent implements OnInit {
   }
 
   InitUpdateStatut(match: Matching) {
+    this.formUpdateStatut.setValue({ _id: match._id, remarque: match.remarque, statut: match.statut })
+    this.showUpdateStatut = true
     this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
   }
 
@@ -91,5 +103,11 @@ export class MatchingComponent implements OnInit {
           this.matchingsPotentiel.splice(idx, 1)
       })
     })
+  }
+
+  onUpdateStatut() {
+    let m = {
+      ...this.formUpdateStatut.value
+    }
   }
 }

@@ -1,3 +1,31 @@
+<div *ngIf="showUpdateStatut" class="col-12 card">
+    <h3 style="text-align: center;">Mis à jour du matching</h3>
+    <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
+        <div class="field col-12 ">
+            <small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
+                obligatoires</small>
+        </div>
+
+        <div class="field col-12">
+            <label>Remarque<span style="color:red">*</span>:</label><br>
+            <textarea type="text" formControlName="description" class="form-control col-12"
+                placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
+                pInputTextarea>
+                    </textarea>
+
+        </div>
+
+        <div class="field col-12">
+            <label>Statut du Matching<span style="color:red">*</span>:</label><br>
+            <p-dropdown [options]="statutList" formControlName="statut"
+                placeholder="Choissisez un statut">
+            </p-dropdown>
+        </div>
+        <div>
+            <button pButton type="submit" label="Mis à jour du matching" [disabled]="formUpdateStatut.invalid"></button>
+        </div>
+    </form>
+</div>
 <div class="card" *ngIf="offre && isNotWinner">
 	<h5>Liste des matchings en cours pour {{offre.missionName}} de {{offre.entreprise_name}}</h5>
 	<p-table #dt1 rowExpandMode="single" [value]="matching" dataKey="_id" [rows]="5" [rowHover]="true"
