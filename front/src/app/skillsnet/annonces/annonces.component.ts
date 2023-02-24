@@ -381,6 +381,8 @@ export class AnnoncesComponent implements OnInit {
         this.MatchingService.create(matching).subscribe(match => {
           this.messageService.add({ summary: "Matching enregistré", severity: "success" })
         })
+      } else {
+        this.messageService.add({ summary: "Non eligible au matching", severity: "error", detail: "Merci de créer votre cv pour pouvoir être eligible au matching" })
       }
     })
   }
