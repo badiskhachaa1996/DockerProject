@@ -129,8 +129,6 @@ export class DetailsEtudiantComponent implements OnInit {
       token = null
       console.error(e)
     }
-    if (token.type != "Initial" && token.type != "Alternant")
-      this.isNotEtudiant = true
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
@@ -138,7 +136,7 @@ export class DetailsEtudiantComponent implements OnInit {
       if (response.date_inscription)
         this.dateValue[0] = new Date(response.date_inscription)
       else if (user && user.date_creation)
-        this.dateValue[0] = new Date(user.date_creation)  
+        this.dateValue[0] = new Date(user.date_creation)
       if (response.ecole_id)
         this.CFAService.getByID(response.ecole_id).subscribe(ecole => {
           this.ECOLE = ecole.dataEcole
@@ -158,6 +156,8 @@ export class DetailsEtudiantComponent implements OnInit {
 
       this.userService.getById(this.EtudiantDetail.user_id).subscribe((userdata) => {
         this.Etudiant_userdata = jwt_decode(userdata.userToken)['userFromDb']
+        if (this.Etudiant_userdata.type != "Initial" && this.Etudiant_userdata.type != "Alternant")
+          this.isNotEtudiant = true
 
       }),
         ((error) => { console.error(error); })

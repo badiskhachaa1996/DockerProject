@@ -144,7 +144,8 @@
                     <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                     <div class="field col-12 md:col-4">
                         <label>Type de paiement:</label><br>
-                        <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']" placeholder="Choissisez la méthode de paiement"
+                        <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
+                            placeholder="Choissisez la méthode de paiement"
                             (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
                         <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                             [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
@@ -641,6 +642,8 @@
                             <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
                                 pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
                                 class="pi pi-trash" aria-hidden="true"></i>
+                            <i pTooltip="Voir les matchings" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-link" (click)="seeMatching(etudiant.user_id._id)" aria-hidden="true"></i>
                             <a *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
                                 href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
                                     tooltipPosition="bottom" class="pi pi-file-excel" style="margin-left: 2%;"

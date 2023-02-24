@@ -67,7 +67,8 @@
         </div>
 
         <div>
-            <button pButton type="submit" label="Ajouter l'externe" [disabled]="formAddExterne.invalid || emailExist"></button>
+            <button pButton type="submit" label="Ajouter l'externe"
+                [disabled]="formAddExterne.invalid || emailExist"></button>
         </div>
     </form>
 </div>
@@ -146,7 +147,8 @@
         </div>
 
         <div>
-            <button pButton type="submit" label="Mettre à jour l'externe" [disabled]="formUpdateExterne.invalid"></button>
+            <button pButton type="submit" label="Mettre à jour l'externe"
+                [disabled]="formUpdateExterne.invalid"></button>
         </div>
     </form>
 </div>
@@ -210,6 +212,8 @@
                 <td>
                     <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
                         (click)="InitUpdateForm(extern)" aria-hidden="true"></i>
+                    <i pTooltip="Voir les matchings" style="margin-left: 2%; cursor: pointer;" class="pi pi-link"
+                        (click)="seeMatching(extern.user_id._id)" aria-hidden="true"></i>
                 </td>
             </tr>
         </ng-template>

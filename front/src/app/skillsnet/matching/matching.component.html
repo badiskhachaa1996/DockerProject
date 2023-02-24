@@ -1,30 +1,30 @@
 <div *ngIf="showUpdateStatut" class="col-12 card">
-    <h3 style="text-align: center;">Mis à jour du matching</h3>
-    <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
-        <div class="field col-12 ">
-            <small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
-                obligatoires</small>
-        </div>
+	<h3 style="text-align: center;">Mis à jour du matching</h3>
+	<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
+		<div class="field col-12 ">
+			<small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
+				obligatoires</small>
+		</div>
 
-        <div class="field col-12">
-            <label>Remarque<span style="color:red">*</span>:</label><br>
-            <textarea type="text" formControlName="remarque" class="form-control col-12"
-                placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
-                pInputTextarea>
+		<div class="field col-12">
+			<label>Remarque<span style="color:red">*</span>:</label><br>
+			<textarea type="text" formControlName="remarque" class="form-control col-12"
+				placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
+				pInputTextarea>
                     </textarea>
 
-        </div>
+		</div>
 
-        <div class="field col-12">
-            <label>Statut du Matching<span style="color:red">*</span>:</label><br>
-            <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value" optionValue="value"
-                placeholder="Choissisez un statut">
-            </p-dropdown>
-        </div>
-        <div>
-            <button pButton type="submit" label="Mis à jour du matching" [disabled]="formUpdateStatut.invalid"></button>
-        </div>
-    </form>
+		<div class="field col-12">
+			<label>Statut du Matching<span style="color:red">*</span>:</label><br>
+			<p-dropdown [options]="statutList" formControlName="statut" optionLabel="value" optionValue="value"
+				placeholder="Choissisez un statut">
+			</p-dropdown>
+		</div>
+		<div>
+			<button pButton type="submit" label="Mis à jour du matching" [disabled]="formUpdateStatut.invalid"></button>
+		</div>
+	</form>
 </div>
 <div class="card" *ngIf="offre && isNotWinner">
 	<h5>Liste des matchings en cours pour {{offre.missionName}} de {{offre.entreprise_name}}</h5>
@@ -92,8 +92,10 @@
 					{{match.date_creation|date:medium}}
 				</td>
 				<td>
-					<i pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+					<i *ngIf="isCommercial" pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
 						(click)="InitUpdateStatut(match)" aria-hidden="true"></i>
+					<i *ngIf="!isCommercial && match.statut=='Validé par l\'étudiant'" pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
+						(click)="UpdateStatut(match)" aria-hidden="true"></i>
 				</td>
 			</tr>
 		</ng-template>
@@ -109,9 +111,9 @@
 </div>
 <div class="card" *ngIf="offre">
 	<h5>Liste des matchings potentiels sur {{offre.missionName}} de {{offre.entreprise_name}}</h5>
-	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="_id" [rows]="10" [rowHover]="true"
-		[globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']" styleClass="p-datatable-gridlines"
-		[paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
+	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="10"
+		[rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
+		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
 		<ng-template pTemplate="caption">
 			<div class="flex justify-content-between flex-column sm:flex-row">

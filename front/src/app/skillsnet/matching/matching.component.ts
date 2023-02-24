@@ -24,6 +24,7 @@ export class MatchingComponent implements OnInit {
   token;
   offre: Annonce;
   matcher: User;
+  isCommercial = false
 
   matching: Matching[] = [];
 
@@ -40,7 +41,7 @@ export class MatchingComponent implements OnInit {
 
   formUpdateStatut: FormGroup = new FormGroup({
     statut: new FormControl('', [Validators.required]),
-    remarque: new FormControl('', [Validators.required]),
+    remarque: new FormControl('', []),
     _id: new FormControl('', [Validators.required]),
   })
 
@@ -58,6 +59,7 @@ export class MatchingComponent implements OnInit {
       this.matcher = u
       if (!this.isNotWinner)
         this.isNotWinner = (u.role == "Commercial" || u.type == "Commercial" || u.type == "CEO Entreprise" || u.type == "Entreprise")
+      this.isCommercial = u.role == "Commercial" || u.type == "Commercial"
     })
     this.AnnonceService.getAnnonce(this.route.snapshot.paramMap.get('offre_id')).then(offre => {
       this.offre = offre
@@ -124,6 +126,15 @@ export class MatchingComponent implements OnInit {
         r = index
     })
     return r
+  }
+
+  UpdateStatut(m) {
+    this.MatchingService.update(m._id, { statut: "Validé par l'étudiant et l'entreprise" }).subscribe(matching => {
+      this.matching.splice(this.includesId(matching._id), 1, matching)
+      this.formUpdateStatut.reset()
+      this.showUpdateStatut = false
+      this.messageService.add({ summary: 'Mis à jour du statut de matching avec succès', severity: 'success' })
+    })
   }
 
 }

@@ -186,7 +186,7 @@ app.get("/getPopulate/:id", (req, res, next) => {
 
 //Recuperation de la liste des users pour la cv theque
 app.get("/get-all-for-cv", (_, res) => {
-    User.find({ $or: [{ type: 'Etudiant' }, { type: 'Initial' }, { type: 'Prospect' }, { type: 'Alternant' }, { type: 'formateur' }] })
+    User.find({ $or: [{ type: 'Etudiant' }, { type: 'Initial' }, { type: 'Prospect' }, { type: 'Alternant' }, { type: 'Formateur' }, { type: 'Externe' }, { type: 'Externe-InProgress' }], lastname: { $ne: null }, firstname: { $ne: null } })
         .then((usersFromDb) => { res.status(200).send(usersFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
 });

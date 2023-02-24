@@ -39,4 +39,8 @@ export class MatchingService {
     let url = this.apiUrl + 'getAllByOffreID/' + offre_id;
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllByCVUSERID(user_id:string) {
+    let url = this.apiUrl + 'getAllByCVUSERID/' + user_id;
+    return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }

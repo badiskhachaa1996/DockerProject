@@ -1251,4 +1251,7 @@ export class ListEtudiantComponent implements OnInit {
     })
   }
   isNaN(nb) { return isNaN(nb) }
+  seeMatching(id: string) {
+    this.router.navigate(['matching-externe', id])
+  }
 }

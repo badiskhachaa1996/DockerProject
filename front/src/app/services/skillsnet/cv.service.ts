@@ -86,7 +86,7 @@ export class CvService {
   {
     const url = `${this.apiUrl}/get-cv-by-user_id/${id}`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<CV>((resolve, reject) => {
       this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),

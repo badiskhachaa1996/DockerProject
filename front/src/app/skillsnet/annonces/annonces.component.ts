@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Annonce } from 'src/app/models/Annonce';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
@@ -14,6 +14,9 @@ import { Profile } from 'src/app/models/Profile';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Competence } from 'src/app/models/Competence';
 import { Router } from '@angular/router';
+import { CvService } from 'src/app/services/skillsnet/cv.service';
+import { Matching } from 'src/app/models/Matching';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
 @Component({
   selector: 'app-annonces',
@@ -93,23 +96,28 @@ export class AnnoncesComponent implements OnInit {
   ];
 
   canAddOrEdit = false
+  isCommercial = false
+  isEntreprise = false
 
   token: any;
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService,
     private entrepriseService: EntrepriseService, private messageService: MessageService,
     private formBuilder: FormBuilder, private userService: AuthService,
-    private annonceService: AnnonceService, private router: Router) { }
+    private annonceService: AnnonceService, private router: Router, private CvService: CvService,
+    private MatchingService: MatchingService) { }
 
   ngOnInit(): void {
     //Decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
     this.canAddOrEdit = this.token.role == "Admin"
-    if (!this.canAddOrEdit) {
-      this.userService.getPopulate(this.token.id).subscribe(user => {
+
+    this.userService.getPopulate(this.token.id).subscribe(user => {
+      if (!this.canAddOrEdit)
         this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
-      })
-    }
+      this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
+    })
+
 
     // recuperation de la liste des classes
     this.onGetAllClasses();
@@ -358,6 +366,23 @@ export class AnnoncesComponent implements OnInit {
 
   InitMatching(annonce: Annonce) {
     this.router.navigate(['matching', annonce._id])
+  }
+
+  InitPostulate(annonce: Annonce) {
+    this.CvService.getCvbyUserId(this.token.id).then(cv => {
+      if (cv) {
+        let matching = {
+          offre_id: annonce._id,
+          matcher_id: this.token.id,
+          cv_id: cv._id,
+          type_matching: "MA",
+          date_creation: new Date()
+        }
+        this.MatchingService.create(matching).subscribe(match => {
+          this.messageService.add({ summary: "Matching enregistré", severity: "success" })
+        })
+      }
+    })
   }
 
 

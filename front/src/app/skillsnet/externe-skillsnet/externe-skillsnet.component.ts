@@ -8,6 +8,7 @@ import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service'
 import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-externe-skillsnet',
@@ -70,7 +71,7 @@ export class ExterneSkillsnetComponent implements OnInit {
   showUpdate = false
   token;
 
-  constructor(public ExSnService: ExterneSNService, private messageService: MessageService, private AuthService: AuthService) { }
+  constructor(public ExSnService: ExterneSNService, private router: Router, private messageService: MessageService, private AuthService: AuthService) { }
 
   ngOnInit(): void {
     try {
@@ -143,6 +144,10 @@ export class ExterneSkillsnetComponent implements OnInit {
     }, (error) => {
       return false
     })
+  }
+
+  seeMatching(id: string) {
+    this.router.navigate(['matching-externe', id])
   }
 
 }
