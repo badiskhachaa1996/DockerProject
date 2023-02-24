@@ -74,7 +74,7 @@ export class ExterneComponent implements OnInit {
       this.socket.isAuth()
       localStorage.setItem('token', data.token)
       this.AuthService.getPopulate(jwt_decode(data.token)['id']).subscribe(user => {
-        if (user.type == "Externe-InProgress") {
+        if (user?.type == "Externe-InProgress") {
           this.router.navigateByUrl('/formulaire-externe', { skipLocationChange: true })
         } else {
           this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {

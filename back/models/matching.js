@@ -7,7 +7,8 @@ const matiereSchema = mongoose.Schema({
     cv_id: { type: mongoose.Schema.Types.ObjectId, ref: "cv_type", required: true },
     statut: { type: String, default: "En Cours" },
     type_matching: { type: String, default: "MU" },
-    date_creation: { type: Date }
+    date_creation: { type: Date },
+    remarque: { type: String }
 });
 
 //creation de la table matiere

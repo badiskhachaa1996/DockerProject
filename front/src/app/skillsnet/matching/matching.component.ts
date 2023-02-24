@@ -67,10 +67,10 @@ export class MatchingComponent implements OnInit {
   }
 
   AcceptMatching(cv: CV) {
-    let type_matching = "MU"
+    let type_matching = "MR"
     if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise")
       type_matching = "ME"
-    else if (this.matcher.type == "Externe")
+    else if (this.matcher.type == "Commercial")
       type_matching = "MW"
     else if (this.matcher.type == "Alternant")
       type_matching = "MA"

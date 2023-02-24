@@ -10,7 +10,8 @@ export class Matching {
         public cv_id?: CV,
         public statut?: string,
         public type_matching?: string,
-        public date_creation?: Date
+        public date_creation?: Date,
+        public remarque?: string
     ) { }
 
 }

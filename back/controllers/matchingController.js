@@ -49,7 +49,7 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
                 match.forEach(m => {
                     listIds.push(m.cv_id.user_id)
                 })
-                CvType.find({ $or: [{ competences: { $in: offre.competences } }, { outils: { $in: offre.outils } }], user_id: { $nin: listIds } }).populate('user_id').populate('competences').then(resultat => {
+                CvType.find({ user_id: { $nin: listIds } }).populate('user_id').populate('competences').then(resultat => {
                     resultat.forEach(cv => {
                         let score = 0
                         let max_score = 0
@@ -63,8 +63,6 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
                                 score += 1
                         })
                         max_score += offre.outils.length
-                        console.log(score, max_score) //4/7
-                        score = 4
                         r.push({ cv, taux: score * 100 / max_score })
                     })
                     res.send(r)
@@ -76,9 +74,8 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
 function customIncludes(listObj, Obj) {
     let r = false
     listObj.forEach(buffer => {
-        if (buffer._id == Obj._id) {
+        if (buffer._id.toString() == Obj._id.toString()) {
             r = true
-            console.log(Obj)
         }
     })
     return r
