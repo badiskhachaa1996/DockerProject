@@ -12,8 +12,7 @@ export class CvService {
   constructor(private httpClient: HttpClient) { }
 
   // methode d'ajout de cv
-  postCv(cv: CV)
-  {
+  postCv(cv: CV) {
     const url = `${this.apiUrl}/post-cv`;
 
     return new Promise((resolve, reject) => {
@@ -26,8 +25,7 @@ export class CvService {
   }
 
   //Methode d'envoi du fichier brute
-  postCVBrute(formData: FormData)
-  {
+  postCVBrute(formData: FormData) {
     const url = `${this.apiUrl}/upload-cv`;
 
     return new Promise((resolve, reject) => {
@@ -40,8 +38,7 @@ export class CvService {
   }
 
   // methode de modification de cv
-  putCv(cv: CV)
-  {
+  putCv(cv: CV) {
     const url = `${this.apiUrl}/put-cv`;
 
     return new Promise((resolve, reject) => {
@@ -54,8 +51,7 @@ export class CvService {
   }
 
   // methode de recupération des cvs
-  getCvs()
-  {
+  getCvs() {
     const url = `${this.apiUrl}/get-cvs`;
 
     return new Promise((resolve, reject) => {
@@ -68,8 +64,7 @@ export class CvService {
   }
 
   // methode de recupération d'un cv via son id
-  getCv(id: string)
-  {
+  getCv(id: string) {
     const url = `${this.apiUrl}/get-cv/${id}`;
 
     return new Promise((resolve, reject) => {
@@ -82,32 +77,28 @@ export class CvService {
   }
 
   // methode de recupération d'un cv via son user id
-  getCvbyUserId(id: string)
-  {
+  getCvbyUserId(id: string) {
     const url = `${this.apiUrl}/get-cv-by-user_id/${id}`;
+    return this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
-    return new Promise((resolve, reject) => {
+    /*return new Promise<CV>((resolve, reject) => {
       this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('CV modifié'),
       })
-    });
+    });*/
   }
 
   // verification si l'utilisateur possede un cv
-  cvExists(id: string, cvLists: CV[]): boolean
-  {
+  cvExists(id: string, cvLists: CV[]): boolean {
     let result = false;
 
-    for(let user_id in cvLists)
-    {
-      if(user_id == id)
-      {
+    for (let user_id in cvLists) {
+      if (user_id == id) {
         result = true;
       }
-      else 
-      {
+      else {
         result = false;
       }
     }

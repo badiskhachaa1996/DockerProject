@@ -128,8 +128,10 @@ export class CvthequeComponent implements OnInit {
 
         // remplissage de la dropdown des users pour ajouter le CV
         response.forEach((user: User) => {
-          let username = `${user.firstname} ${user.lastname} . ${user.type}`;
-          this.dropdownUser.push({ label: username, value: user._id });
+          if(user.firstname && user.lastname && user.type){
+            let username = `${user.firstname} ${user.lastname} | ${user.type}`;
+            this.dropdownUser.push({ label: username, value: user._id });
+          }
         })
       })
       .catch(error => console.log(error));

@@ -151,6 +151,7 @@ import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tu
 import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
 import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
+import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 
 const routes: Routes = [
     {
@@ -249,7 +250,8 @@ const routes: Routes = [
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
-            { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
+            { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
+            { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },

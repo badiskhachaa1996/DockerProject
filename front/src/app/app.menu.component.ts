@@ -46,6 +46,7 @@ export class AppMenuComponent implements OnInit {
     isIntuns: Boolean = false
     isRH = false
     isConsulting = false
+    isExterne = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
@@ -236,7 +237,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                     { label: 'Gestion des compétences', icon: 'pi pi-book', routerLink: ['/skills-management'] },
                     { label: "Gestions des externes", icon: 'pi pi-users', routerLink: ['/skillsnet/externe'] },
-                    { label: "Gestions des événements", icon: 'pi pi-flag', routerLink: ['/evenements'] } 
+                    { label: "Gestions des événements", icon: 'pi pi-flag', routerLink: ['/evenements'] }
                 ]
             },
             {
@@ -281,6 +282,7 @@ export class AppMenuComponent implements OnInit {
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
                 this.isCommercial = dataUser.type == "Commercial"
+                this.isExterne = dataUser.type == "Externe"
                 this.TCService.getMyTeam().subscribe(team => {
                     if (team) {
                         this.isConseiller = team
@@ -405,7 +407,8 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'SkillsNet',
                                     items: [
-                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                        { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                        { label: 'Mes Matching', icon: 'pi pi-link', routerLink: ['/matching-externe/' + this.token.id] },
                                     ]
                                 },
                             ];
@@ -459,7 +462,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'SkillsNet',
                                     items: [
-                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                        { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                         { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                                         { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                                     ]
@@ -494,7 +497,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'SkillsNet',
                                     items: [
-                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                        { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                         { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                                         { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                                     ]
@@ -607,7 +610,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                                 { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
@@ -643,7 +646,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                                 { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
@@ -1023,10 +1026,33 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                                 { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                                 { label: 'Gestion des compétences', icon: 'pi pi-book', routerLink: ['/skills-management'] },
+                            ]
+                        },
+                    ]
+                } else if (this.isExterne) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Mes Matching', icon: 'pi pi-link', routerLink: ['/matching-externe/' + this.token.id] },
+                                //Mon CV
                             ]
                         },
                     ]

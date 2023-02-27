@@ -256,6 +256,7 @@ import { ContratsTutelleCeoComponent } from './pedagogie/entreprises/contrats-tu
 import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
 import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
+import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 
 
 @NgModule({
@@ -522,6 +523,7 @@ import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsn
     ExterneSkillsnetComponent,
     EntrepriseFormComponent,
     FormulaireExterneSkillsnetComponent,
+    POVHorsCommercialComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

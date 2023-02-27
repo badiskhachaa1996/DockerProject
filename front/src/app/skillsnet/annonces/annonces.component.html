@@ -1,12 +1,12 @@
 <p-toast></p-toast>
 <div class="grid">
-    <!-- Formulaire d'ajout d'une nouvelle annonce -->
+	<!-- Formulaire d'ajout d'une nouvelle annonce -->
 	<div class="col-12" *ngIf="showForm">
 		<div class="card">
-			
+
 			<i class="pi pi-times-circle"
-                    style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showForm = false" aria-hidden="true"> </i>
+				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+				(click)="showForm = false" aria-hidden="true"> </i>
 
 			<h3>Nouvelle offre d'emploi</h3>
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">
@@ -16,46 +16,62 @@
 						<p-selectButton [options]="entrepriseType" formControlName="is_interne"></p-selectButton>
 					</div>
 
-					<div class="field col-12" *ngIf="form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
-						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label" formControlName="entreprise_id"
-									emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Recherche"
-									filter="true">
+					<div class="field col-12"
+						*ngIf="form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label"
+							formControlName="entreprise_id" emptyFilterMessage="Pas d'entreprise trouvé"
+							filterPlaceholder="Recherche" filter="true">
 						</p-dropdown>
 					</div>
 
-					<div class="field col-12" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="entreprise">Entreprise</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_name" placeholder="Nom de l'entreprise"/>
+						<input pInputText id="title" type="text" formControlName="entreprise_name"
+							placeholder="Nom de l'entreprise" />
 					</div>
-                    <div class="field col-12 md:col-6" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12 md:col-6"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="ville">Ville</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville" placeholder="Ville de l'entreprise"/>
+						<input pInputText id="title" type="text" formControlName="entreprise_ville"
+							placeholder="Ville de l'entreprise" />
 					</div>
-                    <div class="field col-12 md:col-6" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12 md:col-6"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="email">Email</label>
-						<input pInputText id="email" type="email" formControlName="entreprise_mail" placeholder="Email de contact de l'entreprise"/>
+						<input pInputText id="email" type="email" formControlName="entreprise_mail"
+							placeholder="Email de contact de l'entreprise" />
 					</div>
-                    <div class="field col-4" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-4"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="indicatif">Indicatif</label>
-						<input pInputText id="indicatif" type="tel" formControlName="entreprise_phone_indicatif" placeholder="00223"/>
+						<input pInputText id="indicatif" type="tel" formControlName="entreprise_phone_indicatif"
+							placeholder="00223" />
 					</div>
-                    <div class="field col-8" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-8"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="phone">Téléphone</label>
-						<input pInputText id="phone" type="tel" formControlName="entreprise_phone" placeholder="Numéro de téléphone de l'entreprise"/>
+						<input pInputText id="phone" type="tel" formControlName="entreprise_phone"
+							placeholder="Numéro de téléphone de l'entreprise" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Titre de la mission</label>
-						<input pInputText id="title" type="text" formControlName="missionName" placeholder="Développeur Full-Stack"/>
+						<input pInputText id="title" type="text" formControlName="missionName"
+							placeholder="Développeur Full-Stack" />
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="profil">Profil</label>
-						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil" (onChange)="chargeCompetence($event)"></p-dropdown>
+						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"
+							(onChange)="chargeCompetence($event)"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="competences">Compétences</label>
-						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
+						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti"
+							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+							formControlName="competences">
 							<ng-template let-value pTemplate="selectedItems">
-								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+									*ngFor="let option of selectedMulti">
 									<div>{{option.label}}</div>
 								</div>
 								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
@@ -71,12 +87,16 @@
 					</div>
 					<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
-						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="outils">
+						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
+							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+							formControlName="outils">
 							<ng-template let-value pTemplate="selectedItems">
-								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiOutils">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+									*ngFor="let option of selectedMultiOutils">
 									<div>{{option.label}}</div>
 								</div>
-								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0" class="country-placeholder">
+								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0"
+									class="country-placeholder">
 									Selectionner un ou plusieurs outils
 								</div>
 							</ng-template>
@@ -88,27 +108,32 @@
 						</p-multiSelect>
 					</div>
 					<div class="field col-12">
-						<p-selectButton [options]="locationOptions" optionLabel="label" formControlName="workplaceType"></p-selectButton>
+						<p-selectButton [options]="locationOptions" optionLabel="label"
+							formControlName="workplaceType"></p-selectButton>
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Description</label>
-						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30" formControlName="missionDesc"></textarea>
+						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
+							formControlName="missionDesc"></textarea>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
-						<p-dropdown id="type" [options]="missionTypes" optionLabel="label" formControlName="missionType"></p-dropdown>
+						<p-dropdown id="type" [options]="missionTypes" optionLabel="label"
+							formControlName="missionType"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="debut">Date de début</label>
-						<input pInputText id="debut" type="date" formControlName="debut"/>
+						<input pInputText id="debut" type="date" formControlName="debut" />
 					</div>
-                    <div class="field col-12" *ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12"
+						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="source">Source</label>
-						<input pInputText id="source" type="text" formControlName="source"/>
+						<input pInputText id="source" type="text" formControlName="source" />
 					</div>
 
 					<div>
-						<button pButton type="submit" label="Ajouter l'offre" icon="pi pi-plus" [disabled]="form.invalid"></button>
+						<button pButton type="submit" label="Ajouter l'offre" icon="pi pi-plus"
+							[disabled]="form.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -116,58 +141,74 @@
 		</div>
 	</div>
 
-    <!-- Formulaire d'ajout de modification d'une annonce -->
+	<!-- Formulaire d'ajout de modification d'une annonce -->
 	<div class="col-12" *ngIf="showFormUpdate">
 		<div class="card">
-			
+
 			<i class="pi pi-times-circle"
-                    style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showFormUpdate = false" aria-hidden="true"> </i>
+				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+				(click)="showFormUpdate = false" aria-hidden="true"> </i>
 
 			<h3>Modifier cette offre</h3>
 			<form class="p-fluid" [formGroup]="formUpdate" (ngSubmit)="onUpdateAnnonce()">
 				<div class="p-formgrid grid">
 
-					<div class="field col-12" *ngIf="annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
-						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label" formControlName="entreprise_id"
-									emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Recherche"
-									filter="true">
+					<div class="field col-12"
+						*ngIf="annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label"
+							formControlName="entreprise_id" emptyFilterMessage="Pas d'entreprise trouvé"
+							filterPlaceholder="Recherche" filter="true">
 						</p-dropdown>
 					</div>
 
-					<div class="field col-12" *ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12"
+						*ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="entreprise">Entreprise</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_name" placeholder="Nom de l'entreprise"/>
+						<input pInputText id="title" type="text" formControlName="entreprise_name"
+							placeholder="Nom de l'entreprise" />
 					</div>
-                    <div class="field col-12 md:col-6" *ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12 md:col-6"
+						*ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="ville">Ville</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville" placeholder="Ville de l'entreprise"/>
+						<input pInputText id="title" type="text" formControlName="entreprise_ville"
+							placeholder="Ville de l'entreprise" />
 					</div>
-                    <div class="field col-12 md:col-6" *ngIf="!annonceSelected?.is_interne  && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12 md:col-6"
+						*ngIf="!annonceSelected?.is_interne  && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="email">Email</label>
-						<input pInputText id="email" type="email" formControlName="entreprise_mail" placeholder="Email de contact de l'entreprise"/>
+						<input pInputText id="email" type="email" formControlName="entreprise_mail"
+							placeholder="Email de contact de l'entreprise" />
 					</div>
-                    <div class="field col-4" *ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-4"
+						*ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="indicatif">Indicatif</label>
-						<input pInputText id="indicatif" type="tel" formControlName="entreprise_phone_indicatif" placeholder="00223"/>
+						<input pInputText id="indicatif" type="tel" formControlName="entreprise_phone_indicatif"
+							placeholder="00223" />
 					</div>
-                    <div class="field col-8" *ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-8"
+						*ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="phone">Téléphone</label>
-						<input pInputText id="phone" type="tel" formControlName="entreprise_phone" placeholder="Numéro de téléphone de l'entreprise"/>
+						<input pInputText id="phone" type="tel" formControlName="entreprise_phone"
+							placeholder="Numéro de téléphone de l'entreprise" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Titre de la mission</label>
-						<input pInputText id="title" type="text" formControlName="missionName" placeholder="Développeur Full-Stack"/>
+						<input pInputText id="title" type="text" formControlName="missionName"
+							placeholder="Développeur Full-Stack" />
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="profil">Profil</label>
-						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil" (onChange)="chargeCompetence($event)"></p-dropdown>
+						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"
+							(onChange)="chargeCompetence($event)"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="competences">Compétences</label>
-						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
+						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti"
+							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+							formControlName="competences">
 							<ng-template let-value pTemplate="selectedItems">
-								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+									*ngFor="let option of selectedMulti">
 									<div>{{option.label}}</div>
 								</div>
 								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
@@ -183,12 +224,16 @@
 					</div>
 					<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
-						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="outils">
+						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
+							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
+							formControlName="outils">
 							<ng-template let-value pTemplate="selectedItems">
-								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiOutils">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+									*ngFor="let option of selectedMultiOutils">
 									<div>{{option.label}}</div>
 								</div>
-								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0" class="country-placeholder">
+								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0"
+									class="country-placeholder">
 									Selectionner un ou plusieurs outils
 								</div>
 							</ng-template>
@@ -200,27 +245,32 @@
 						</p-multiSelect>
 					</div>
 					<div class="field col-12">
-						<p-selectButton [options]="locationOptions" optionLabel="label" formControlName="workplaceType"></p-selectButton>
+						<p-selectButton [options]="locationOptions" optionLabel="label"
+							formControlName="workplaceType"></p-selectButton>
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Description</label>
-						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30" formControlName="missionDesc"></textarea>
+						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
+							formControlName="missionDesc"></textarea>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
-						<p-dropdown id="type" [options]="missionTypes" optionLabel="label" formControlName="missionType"></p-dropdown>
+						<p-dropdown id="type" [options]="missionTypes" optionLabel="label"
+							formControlName="missionType"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="debut">Date de début</label>
-						<input pInputText id="debut" type="date" formControlName="debut"/>
+						<input pInputText id="debut" type="date" formControlName="debut" />
 					</div>
-                    <div class="field col-12" *ngIf="!formUpdate.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+					<div class="field col-12"
+						*ngIf="!formUpdate.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="source">Source</label>
-						<input pInputText id="source" type="text" formControlName="source"/>
+						<input pInputText id="source" type="text" formControlName="source" />
 					</div>
 
 					<div>
-						<button pButton type="submit" label="Modifier l'offre" icon="pi pi-pencil" [disabled]="formUpdate.invalid"></button>
+						<button pButton type="submit" label="Modifier l'offre" icon="pi pi-pencil"
+							[disabled]="formUpdate.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -228,21 +278,24 @@
 		</div>
 	</div>
 
-    <!-- Affichage des offres -->
-    <div class="col-12">
+	<!-- Affichage des offres -->
+	<div class="col-12">
 		<div class="card">
-            <button pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2" (click)="showForm = true" style="float: right"></button>
-            <button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"></button>
+			<button pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2"
+				(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
+			<button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
+				*ngIf="canAddOrEdit"></button>
 
-			<h3>Offres d'emplois</h3>
+			<h3>Offres</h3>
 
 			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<span class="p-input-icon-left mb-2 md:mb-0">
-                            <i class="pi pi-search"></i>
-                            <input type="search" pInputText placeholder="Filtrer par poste" (input)="dv.filter($event.target.value)">
-                        </span>	
+							<i class="pi pi-search"></i>
+							<input type="search" pInputText placeholder="Filtrer par poste"
+								(input)="dv.filter($event.target.value)">
+						</span>
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
 				</ng-template>
@@ -251,11 +304,21 @@
 					<div class="col-12">
 						<div class="flex flex-column md:flex-row align-items-center p-3 w-full">
 
-							<img style="border: none;" src="assets/skillsnet/cdd.png" *ngIf="annonce.missionType == 'CDD'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-							<img style="border: none;" src="assets/skillsnet/cdi.png" *ngIf="annonce.missionType == 'CDI'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-							<img style="border: none;" src="assets/skillsnet/pro.png" *ngIf="annonce.missionType == 'Professionnalisation'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-							<img style="border: none;" src="assets/skillsnet/alternance.png" *ngIf="annonce.missionType == 'Alternance'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-							<img style="border: none;" src="assets/skillsnet/stage.png" *ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/cdd.png"
+								*ngIf="annonce.missionType == 'CDD'" alt="{{annonce.missionType}}"
+								class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+							<img style="border: none;" src="assets/skillsnet/cdi.png"
+								*ngIf="annonce.missionType == 'CDI'" alt="{{annonce.missionType}}"
+								class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+							<img style="border: none;" src="assets/skillsnet/pro.png"
+								*ngIf="annonce.missionType == 'Professionnalisation'" alt="{{annonce.missionType}}"
+								class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+							<img style="border: none;" src="assets/skillsnet/alternance.png"
+								*ngIf="annonce.missionType == 'Alternance'" alt="{{annonce.missionType}}"
+								class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+							<img style="border: none;" src="assets/skillsnet/stage.png"
+								*ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}"
+								class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
 
 							<div class="flex-1 text-center md:text-left">
 								<div class="font-bold text-2xl">{{ annonce.missionName }}</div>
@@ -267,30 +330,39 @@
 									<span class="font-semibold">{{ annonce.missionType }}</span>
 								</div>
 							</div>
-							<div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end" *ngIf="!annonce?.is_interne">{{ annonce.entreprise_name }}</span>
-								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end" *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.r_sociale }}</span>
-								<p-button type="button" icon="pi pi-play" (click)="visibleSidebar = true; annonceSelected = annonce;"  label="Voir l'annonce" class="mb-2"></p-button>
+							<div
+								class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end"
+									*ngIf="!annonce?.is_interne">{{ annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end"
+									*ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.r_sociale }}</span>
+								<p-button type="button" icon="pi pi-play"
+									(click)="visibleSidebar = true; annonceSelected = annonce;" label="Voir l'annonce"
+									class="mb-2"></p-button>
 								<span [class]="'product-badge'">Début {{ annonce.debut | date: 'dd/MM/YY' }}</span>
 							</div>
 						</div>
 					</div>
 
-					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="!annonceSelected?.is_interne">
+					<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right"
+						[baseZIndex]="10000" *ngIf="!annonceSelected?.is_interne" [modal]="false">
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
-						<hr/>
+						<hr />
 						<p>
-							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
-							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
+							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+							annonceSelected?.workplaceType }}) <br />
+							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
 						</p>
-						
+
 						<h5 style="font-weight: bold">Description</h5>
 						<p>
-							{{ annonceSelected?.missionDesc }} <br/>
-							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
-							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
+							{{ annonceSelected?.missionDesc }} <br />
+							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+								annonceSelected?.missionType }}</span> <br />
+							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+								}}</span>
 						</p>
-						
+
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul>
@@ -303,29 +375,38 @@
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
-						<hr/>
-						<button *ngIf="token.role == 'Admin'" pButton type="button" label="Modifier" icon="pi pi-pencil" (click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
-
+						<hr />
+						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+							icon="pi pi-link" (click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+							icon="pi pi-briefcase"
+							(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 					</p-sidebar>
 
-					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="annonceSelected?.is_interne">
+					<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right"
+						[baseZIndex]="10000" *ngIf="annonceSelected?.is_interne" [modal]="false">
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
-						<hr/>
+						<hr />
 						<p>
-							{{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent }} ({{ annonceSelected?.workplaceType }}) <br />
-							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
+							{{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent
+							}} ({{ annonceSelected?.workplaceType }}) <br />
+							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
 						</p>
-						
+
 						<h5 style="font-weight: bold">Description</h5>
 						<p>
-							{{ annonceSelected?.missionDesc }} <br/>
-							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
-							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
+							{{ annonceSelected?.missionDesc }} <br />
+							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+								annonceSelected?.missionType }}</span> <br />
+							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+								}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
-						<ul >
+						<ul>
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
@@ -335,10 +416,16 @@
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
-						<hr/>
-						<button *ngIf="token.role == 'Admin'" pButton type="button" label="Modifier" icon="pi pi-pencil" (click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<hr />
+						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+							icon="pi pi-link" (click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+							icon="pi pi-briefcase"
+							(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 					</p-sidebar>
-				
+
 				</ng-template>
 
 				<ng-template let-annonce pTemplate="gridItem">
@@ -352,44 +439,62 @@
 								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY' }}</span>
 							</div>
 							<div class="text-center">
-								
-								<img style="border: none;" src="assets/skillsnet/cdd.png" *ngIf="annonce.missionType == 'CDD'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-								<img style="border: none;" src="assets/skillsnet/cdi.png" *ngIf="annonce.missionType == 'CDI'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-								<img style="border: none;" src="assets/skillsnet/pro.png" *ngIf="annonce.missionType == 'Professionnalisation'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-								<img style="border: none;" src="assets/skillsnet/alternance.png" *ngIf="annonce.missionType == 'Alternance'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-								<img style="border: none;" src="assets/skillsnet/stage.png" *ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
-								
+
+								<img style="border: none;" src="assets/skillsnet/cdd.png"
+									*ngIf="annonce.missionType == 'CDD'" alt="{{annonce.missionType}}"
+									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+								<img style="border: none;" src="assets/skillsnet/cdi.png"
+									*ngIf="annonce.missionType == 'CDI'" alt="{{annonce.missionType}}"
+									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+								<img style="border: none;" src="assets/skillsnet/pro.png"
+									*ngIf="annonce.missionType == 'Professionnalisation'" alt="{{annonce.missionType}}"
+									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+								<img style="border: none;" src="assets/skillsnet/alternance.png"
+									*ngIf="annonce.missionType == 'Alternance'" alt="{{annonce.missionType}}"
+									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+								<img style="border: none;" src="assets/skillsnet/stage.png"
+									*ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}"
+									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
+
 								<div class="text-2xl font-bold">{{ annonce.missionName | slice: 0:20 }}</div>
 								<div class="mb-3">{{ annonce.missionDesc | slice: 0:20 }}...</div>
 								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
 								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{ annonce.entreprise_name }}</span>
-								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.r_sociale }}</span>
-								<button pButton type="button" (click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play" title="Plus de détails"></button>
+								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{
+									annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{
+									annonce.entreprise_id?.r_sociale }}</span>
+								<button pButton type="button"
+									(click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play"
+									title="Plus de détails"></button>
 							</div>
 						</div>
 					</div>
 
-					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="!annonceSelected?.is_interne">
+					<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right"
+						[baseZIndex]="10000" *ngIf="!annonceSelected?.is_interne" [modal]="false">
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
-						<hr/>
+						<hr />
 						<p>
-							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
-							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
+							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+							annonceSelected?.workplaceType }}) <br />
+							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
 						</p>
-						
+
 						<h5 style="font-weight: bold">Description</h5>
 						<p>
-							{{ annonceSelected?.missionDesc }} <br/>
-							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
-							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
+							{{ annonceSelected?.missionDesc }} <br />
+							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+								annonceSelected?.missionType }}</span> <br />
+							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+								}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
-						<ul >
+						<ul>
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
@@ -399,28 +504,38 @@
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
-						<hr/>
-						<button *ngIf="token.role == 'Admin'" pButton type="button" label="Modifier" icon="pi pi-pencil" (click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<hr />
+						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+							icon="pi pi-link" (click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+							icon="pi pi-briefcase"
+							(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 					</p-sidebar>
 
-					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="annonceSelected?.is_interne">
+					<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right"
+						[baseZIndex]="10000" *ngIf="annonceSelected?.is_interne" [modal]="false">
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
-						<hr/>
+						<hr />
 						<p>
-							{{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent }} ({{ annonceSelected?.workplaceType }}) <br />
-							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
+							{{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent
+							}} ({{ annonceSelected?.workplaceType }}) <br />
+							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
 						</p>
-						
+
 						<h5 style="font-weight: bold">Description</h5>
 						<p>
-							{{ annonceSelected?.missionDesc }} <br/>
-							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
-							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
+							{{ annonceSelected?.missionDesc }} <br />
+							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+								annonceSelected?.missionType }}</span> <br />
+							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+								}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
-						<ul >
+						<ul>
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
@@ -430,10 +545,16 @@
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
-						<hr/>
-						<button *ngIf="token.role == 'Admin'" pButton type="button" label="Modifier" icon="pi pi-pencil" (click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<hr />
+						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
+						<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+							icon="pi pi-link" (click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+							icon="pi pi-briefcase"
+							(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 					</p-sidebar>
-				
+
 				</ng-template>
 			</p-dataView>
 		</div>

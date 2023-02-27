@@ -17,6 +17,7 @@ mongoose
     })
     .then(() => {
         //Sample data set
+        var d = new Date().toLocaleDateString('fr-FR')
         d = d.replaceAll('/', '-')
         Etudiant.find().populate('user_id').populate('classe_id').populate('campus')
             .populate('filiere').populate('conseiller').then(etudiants => {
