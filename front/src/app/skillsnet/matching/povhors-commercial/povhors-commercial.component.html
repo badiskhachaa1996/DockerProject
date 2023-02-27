@@ -1,5 +1,5 @@
 <div class="card" *ngIf="USER">
-	<h5>Liste des matchings en cours pour {{USER.firstname | titlecase}} {{USER.lastname | uppercase}}</h5>
+	<h5>Liste des matchings en cours pour <strong>{{USER.firstname | titlecase}} {{USER.lastname | uppercase}}</strong></h5>
 	<p-table #dt1 rowExpandMode="single" [value]="matching" dataKey="_id" [rows]="5" [rowHover]="true"
 		[globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']" styleClass="p-datatable-gridlines"
 		[paginator]="true" [pageLinks]="5" responsiveLayout="scroll">

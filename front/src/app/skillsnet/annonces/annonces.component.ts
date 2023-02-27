@@ -369,7 +369,7 @@ export class AnnoncesComponent implements OnInit {
   }
 
   InitPostulate(annonce: Annonce) {
-    this.CvService.getCvbyUserId(this.token.id).then(cv => {
+    this.CvService.getCvbyUserId(this.token.id).subscribe(cv => {
       if (cv) {
         let matching = {
           offre_id: annonce._id,
