@@ -411,7 +411,11 @@ export class ListDiplomeComponent implements OnInit {
     formData.append('file', this.calendarFile);
     // envoi du calendrier de la formation
     this.diplomeService.uploadCalendar(formData)
-    .then((response) => { this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); })
+    .then((response) => { 
+      this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); 
+      this.showFormAddCalendar = false;
+      
+    })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.errorMsg}); } )
 
   }
