@@ -522,6 +522,10 @@
                             <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags" pTooltip="Modifier le statut du contrat" aria-hidden="true"
                                 (click)="showStatusForm = true; contratToUpdate = contrat"
                                 style="text-align: center; color: gray; margin: 2px"></i>
+                            <i class="pi pi-calendar" pTooltip="Calendrier de l'apprentis" aria-hidden="true"
+                                style="text-align: center; color: green; margin: 2px"></i>
+                            <i class="pi pi-file" pTooltip="Certificat de scolarité de l'apprentis" aria-hidden="true"
+                                style="text-align: center; color: orangered; margin: 2px"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
                                 style="text-align: center; color: blue; margin: 2px"

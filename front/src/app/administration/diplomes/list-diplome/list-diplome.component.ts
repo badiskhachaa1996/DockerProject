@@ -406,6 +406,13 @@ export class ListDiplomeComponent implements OnInit {
 
   onAddCalendar(): void
   {
-    console.log(this.calendarFile);
+    let formData = new FormData();
+    formData.append('id', this.idDiplomeToUpdate);
+    formData.append('file', this.calendarFile);
+    // envoi du calendrier de la formation
+    this.diplomeService.uploadCalendar(formData)
+    .then((response) => { this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); })
+    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.errorMsg}); } )
+
   }
 }
