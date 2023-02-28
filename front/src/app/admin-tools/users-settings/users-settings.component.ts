@@ -38,6 +38,7 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Alternant', value: 'Alternant' },
     { label: 'Formateur', value: 'Formateur' },
     { label: 'Commercial', value: 'Commercial' },
+    { label: 'Visitor', value: 'Visitor' },
   ];
 
   roleList: any = [
@@ -117,7 +118,7 @@ export class UsersSettingsComponent implements OnInit {
       rue_adresse: [''],
       ville_adresse: [''],
       date_creation: [''],
-      campus: ['', Validators.required]
+      campus: ['']
     });
   }
 

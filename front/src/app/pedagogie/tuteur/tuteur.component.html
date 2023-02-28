@@ -198,8 +198,10 @@
     <div class="col-12" *ngIf="!isCEO">
         <div class="card">
             <div style="float: right;">
-                <button pButton label="Ajouter un tuteur"
+                <button pButton label="Ajouter un tuteur" *ngIf="token.role != 'Watcher'"
                     (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
+                <button pButton label="Ajouter un tuteur" *ngIf="token.role == 'Watcher'"
+                    (click)="showFormAddTuteur = true; showFormModifTuteur = false" disabled></button>
             </div>
             <h5>Liste des tuteurs</h5>
             <p-table #dt1 [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
@@ -242,10 +244,13 @@
                         <td>
                             {{ entreprises[tuteur.user_id?.entreprise]?.r_sociale }}
                         </td>
-                        <td>
+                        <td *ngIf="token.role != 'Watcher'">
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; onFillForm(tuteur); showFormAddTuteur = false;"
                                 aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="token.role == 'Watcher'">
+                            <small style="color: red">Aucune action disponible pour ce compte</small>
                         </td>
                     </tr>
                 </ng-template>

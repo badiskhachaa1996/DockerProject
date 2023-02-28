@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="grid">
 
-    <!-- formulaire de modification d'un diplome -->
+    <!-- formulaire de modification d'un diplôme -->
     <div class="col-12" *ngIf="showFormUpdateDiplome">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;" title="Fermer"
@@ -188,7 +188,19 @@
             style="display: none;" pInputFile />
     </div>
 
-    <!-- Affichage des diplomes -->
+    <!-- upload du calendrier de la formation -->
+    <div class="col-12" *ngIf="showFormAddCalendar">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddCalendar = false;"></i>
+            <h4>Ajouter le calendrier de la formation</h4>
+            <div class="field col-12">
+                <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+            </div>
+            <button pButton label="Envoyer" (click)="onAddCalendar()"></button>
+        </div>
+    </div>
+
+    <!-- Affichage des diplômes -->
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
@@ -257,6 +269,9 @@
                                 class="pi pi-pencil" aria-hidden="true"></i>
                             <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
                                 *ngIf="!this.isCommercial" (click)="clickFile(diplome)" style="margin-left: 2%;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Ajouter le calendrier de la formation" tooltipPosition="bottom" class="pi pi-calendar"
+                                (click)="idDiplomeToUpdate = diplome._id; showFormAddCalendar = true;" style="margin-left: 2%;" style="color: blue;"
                                 aria-hidden="true"></i>
                         </td>
                     </tr>

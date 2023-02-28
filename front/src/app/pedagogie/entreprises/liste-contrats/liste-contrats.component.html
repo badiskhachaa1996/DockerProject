@@ -423,8 +423,10 @@
         </div>
 
         <div class="card">
-            <button *ngIf="token.type != 'CEO Entreprise'" pButton label="Nouveau contrat d'alternance"
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role != 'Watcher'" pButton label="Nouveau contrat d'alternance"
                 (click)="ShowAddNewCA()" style="float: right;"></button>
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton label="Nouveau contrat d'alternance"
+                (click)="ShowAddNewCA()" [disabled]="true" style="float: right;"></button>
 
             <h5>Liste des contrats</h5>
 
@@ -490,16 +492,19 @@
                             <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner" severity="warning"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - champs requis'" icon="pi pi-info-circle" severity="danger"
+                            <p-tag *ngIf="contrat.statut == 'Champs requis'" icon="pi pi-info-circle" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Contrôlé par l’équipe IGWA - montant optimisé'" icon="pi pi-times" severity="danger"
+                            <p-tag *ngIf="contrat.statut == 'Montant optimisé'" icon="pi pi-times" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Signé'" icon="pi pi-check" severity="info"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Déposé à l’OPCO'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Relance à traiter'" icon="pi pi-times" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check" severity="success"
@@ -512,17 +517,24 @@
                         <td>{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
                         </td>
-                        <td>
+                        <td *ngIf="token.role != 'Watcher'">
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
                                 (click)="showPresence(contrat.alternant_id._id)"
                                 style="text-align: center; color: red; margin: 2px"></i>
                             <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags" pTooltip="Modifier le statut du contrat" aria-hidden="true"
                                 (click)="showStatusForm = true; contratToUpdate = contrat"
                                 style="text-align: center; color: gray; margin: 2px"></i>
+                            <i class="pi pi-calendar" pTooltip="Calendrier de l'apprentis" aria-hidden="true"
+                                style="text-align: center; color: green; margin: 2px"></i>
+                            <i class="pi pi-file" pTooltip="Certificat de scolarité de l'apprentis" aria-hidden="true"
+                                style="text-align: center; color: orangered; margin: 2px"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
                                 style="text-align: center; color: blue; margin: 2px"
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
+                        </td>
+                        <td *ngIf="token.role == 'Watcher'">
+                            <small style="color: red;">Aucune action disponible pour ce compte</small>
                         </td>
                     </tr>
                 </ng-template>

@@ -201,7 +201,11 @@
 
     <div class="col-12">
         <div class="card">
-            <div style="float: right;">
+            <div style="float: right;" *ngIf="userConnected?.role == 'Watcher'">
+                <button pButton pRipple class="p-button-outlined p-button-warning mr-2 mb-2" icon="pi pi-at" label="Générer un lien de création" [disabled]="true" (click)="onGenerateForm();"></button>
+                <button pButton icon="pi pi-plus" class="p-button-outlined p-button-primary mr-2 mb-2" label="Ajouter" [disabled]="true" (click)="onRedirect();"></button>
+            </div>
+            <div style="float: right;" *ngIf="userConnected?.role != 'Watcher'">
                 <button pButton pRipple class="p-button-outlined p-button-warning mr-2 mb-2" icon="pi pi-at" label="Générer un lien de création" (click)="onGenerateForm();"></button>
                 <button pButton icon="pi pi-plus" class="p-button-outlined p-button-primary mr-2 mb-2" label="Ajouter" (click)="onRedirect();"></button>
             </div>
@@ -248,9 +252,12 @@
                         <td *ngIf="entreprise.isInterne">Interne</td>
                         <td *ngIf="!entreprise.isInterne">Externe</td>
                         <td>{{ entreprise.commercial_id ? entreprise.commercial_id?.firstname + ' ' + entreprise.commercial_id?.lastname.toUpperCase() : '--' }}</td>
-                        <td>
+                        <td *ngIf="userConnected?.role != 'Watcher'">
                             <i style="margin-left: 2%; cursor: pointer" class="pi pi-pencil"
                                 (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="userConnected?.role == 'Watcher'">
+                            <small style="color: red;">Aucune action disponible pour ce compte</small>
                         </td>
                     </tr>
                 </ng-template>
