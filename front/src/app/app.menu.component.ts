@@ -1040,6 +1040,29 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 } else if (this.isExterne) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                { label: 'Mes Matching', icon: 'pi pi-link', routerLink: ['/matching-externe/' + this.token.id] },
+                                //Mon CV
+                            ]
+                        },
+                    ]
+
                 } 
                 // menu visiteur
                 else if(this.isVisitor)
