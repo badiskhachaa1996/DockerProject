@@ -47,11 +47,12 @@ export class AppMenuComponent implements OnInit {
     isRH = false
     isConsulting = false
     isExterne = false
+    isVisitor: boolean = false;
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
     ngOnInit() {
-        //Decodage du token
+        //Décodage du token
         this.token = jwt_decode(localStorage.getItem('token'));
 
         this.modelAdmin = [
@@ -262,6 +263,11 @@ export class AppMenuComponent implements OnInit {
 
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
+                // accès visiteur
+                if(dataUser.type == 'Visitor' && dataUser.role == 'Watcher')
+                {
+                    this.isVisitor = true;
+                }
                 this.isAdmin = dataUser.role == "Admin"
                 this.isAgent = dataUser.role == "Agent"
                 this.isReponsable = dataUser.role == "Responsable"
@@ -1034,6 +1040,10 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 } else if (this.isExterne) {
+                } 
+                // menu visiteur
+                else if(this.isVisitor)
+                {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -1042,21 +1052,51 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            label: 'Ticketing',
                             items: [
                                 { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                             ]
                         },
                         {
+                            label: "Pédagogie",
+                            items: [
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                        { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                                    ]
+                                },
+                            ]
+            
+                        },
+                        {
+                            label: 'Alternance',
+                            items: [
+                                { label: 'Liste des contrats Alternance', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+                                {
+                                    label: 'Gestions des entreprises', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter une entreprise', icon: 'pi pi-user-plus', routerLink: ['/ajout-entreprise'] },
+                                        { label: 'Liste des entreprises', icon: 'pi pi-sort-alpha-down', routerLink: ['/entreprises'] },
+                                    ]
+                                },
+                            ],
+                        },{
+                            label: 'Commercial',
+                            items: [
+                                { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                            ]
+                        },
+                        {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
-                                { label: 'Mes Matching', icon: 'pi pi-link', routerLink: ['/matching-externe/' + this.token.id] },
-                                //Mon CV
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                             ]
                         },
                     ]
-                } else {
+                }
+                else {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -1073,8 +1113,9 @@ export class AppMenuComponent implements OnInit {
                     ]
                     console.error("Aucun Menu disponible")
                 }
-            } else {
-                console.error("Aucun Utilisteur trouvé")
+            } 
+            else {
+                console.error("Aucun Utilisateur trouvé")
             }
         })
 

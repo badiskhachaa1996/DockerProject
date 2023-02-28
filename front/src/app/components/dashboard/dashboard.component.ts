@@ -68,7 +68,8 @@ export class DashboardComponent implements OnInit {
   isCommercial = false
   isCEO = false
   isReinscrit = false
-  isUnknow = false
+  isUnknow = false;
+  isVisitor = false;
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
@@ -267,6 +268,8 @@ export class DashboardComponent implements OnInit {
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         this.isCEO = dataUser.type == "CEO Entreprise";
+        this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
+
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
             this.dataEtudiant = dataEtu
@@ -306,7 +309,7 @@ export class DashboardComponent implements OnInit {
             this.dataFormateur = data
           })
         }
-        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO);
+        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO || this.isVisitor);
       }
     })
 

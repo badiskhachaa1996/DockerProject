@@ -281,10 +281,19 @@
 	<!-- Affichage des offres -->
 	<div class="col-12">
 		<div class="card">
-			<button pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2"
-				(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
-			<button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
-				*ngIf="canAddOrEdit"></button>
+			<div *ngIf="token.role != 'Watcher'">
+				<button pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2"
+					(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
+				<button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
+					*ngIf="canAddOrEdit"></button>
+			</div>
+			
+			<div *ngIf="token.role == 'Watcher'">
+				<button disabled pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2"
+					(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
+				<button disabled pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
+					*ngIf="canAddOrEdit"></button>
+			</div>
 
 			<h3>Offres</h3>
 

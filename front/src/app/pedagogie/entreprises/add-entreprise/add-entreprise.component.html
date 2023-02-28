@@ -191,10 +191,13 @@
                                         <input pInputText id="phone" type="tel" formControlName="phone_rep" placeholder="0188880050" />
                                     </div>
                                     <div class="field col-6">
-                                        <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()"></button>
+                                        <button pButton type="button" label="Précédent" style="float: left;" (click)="previousPage()"></button>
                                     </div>
-                                    <div class="field col-6">
+                                    <div class="field col-6" *ngIf="userConnected.role != 'Watcher'">
                                         <button pButton type="submit" label="Terminer" style="float: right;"></button>
+                                    </div>
+                                    <div class="field col-6" *ngIf="userConnected.role == 'Watcher'">
+                                        <button pButton type="submit" [disabled]="true" label="Terminer" style="float: right;"></button>
                                     </div>
                                 </div>
                             </div>

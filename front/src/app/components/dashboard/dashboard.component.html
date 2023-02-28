@@ -260,6 +260,18 @@
     </div>
 </div>
 
+<!-- Modèle visiteur -->
+<div *ngIf="isVisitor">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
+    </h2>
+    <h5 style="color: red;"> Ce compte étant un compte avec un accès limité, vous n'aurez ni droit à la modification ni à l'ajout de données</h5>
+    <div class="card">
+        <p>Bonjour, ceci est un accès limité à notre outils de gestion [IMS]. N'hésitez pas à faire le tour du menu qui vous a été attribué.</p>
+        <p>Bonne visite sur IMS 😊!</p>
+    </div>
+</div>
+
+
 <div *ngIf="isAdmin">
     <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h1>
@@ -414,7 +426,7 @@
 
 
 
-<div class="grid" *ngIf="isEtudiant && dataEtudiant">
+<div class="grid" *ngIf="isEtudiant && dataEtudiant && !isVisitor">
     <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
         N°{{dataEtudiant?.custom_id}}
     </h1>

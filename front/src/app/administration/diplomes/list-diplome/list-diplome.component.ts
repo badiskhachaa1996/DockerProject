@@ -417,6 +417,5 @@ export class ListDiplomeComponent implements OnInit {
       
     })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.errorMsg}); } )
-
   }
 }

@@ -196,6 +196,22 @@ export class ListeContratsComponent implements OnInit {
           })
         })
       }
+      // Liste des contrats à afficher pour le watcher
+      else if (this.token.role == "Watcher") {
+        this.entrepriseService.getAllContrats().subscribe({
+          next: (response) => {
+            response.forEach((contrat: ContratAlternance) => {
+              let {ecole}: any = contrat;
+              if(ecole.libelle == 'ADG')
+              {
+                this.ListeContrats.push(contrat);
+              }
+            })
+          },
+          error: (error) => { console.log(error) },
+          complete: () => { console.log('Contrats Watcher récupéré') }
+        });
+      }
 
 
       /// *******LISTE A AFFICHER POUR LES CEO ENTREPRISE******** 

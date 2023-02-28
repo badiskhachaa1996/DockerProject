@@ -16,7 +16,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./list-entreprise.component.scss']
 })
 export class ListEntrepriseComponent implements OnInit {
-  token;
+  userConnected: User;
+  token: any;
   entreprises: Entreprise[] = [];
   users: User[] = [];
   commercials: any = [{ label: 'Choisir le commercial référent', value: null }];
@@ -93,6 +94,13 @@ export class ListEntrepriseComponent implements OnInit {
     // initialisation du formulaire d'envoi de mail aux entreprise
     this.formEmail = this.formBuilder.group({
       adresse_mail: ['', [Validators.required, Validators.email]],
+    });
+
+    // recuperation de l'utilisateur connecté
+    this.userService.getInfoById(this.token.id).subscribe({
+      next: (response) => { this.userConnected = response; },
+      error: (error) => { console.log(error) },
+      complete: () => { console.log('Utilisateur connecté récupéré')}
     });
   }
 

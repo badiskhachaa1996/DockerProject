@@ -504,7 +504,7 @@
     <!-- Listing des étudiants -->
     <div class="col-12" *ngIf="etudiants && etudiants.length>0">
         <div class="card">
-            <div style="float: right;">
+            <div style="float: right;" *ngIf="userConnected.role != 'Watcher'">
                 <button pButton label="Vider les compteurs" icon="pi pi-trash" class="p-button-danger"
                     (click)="onTrashCount();" style="margin-right: 3px;"></button>
                 <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
@@ -512,6 +512,15 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>
+            <div style="float: right;" *ngIf="userConnected.role == 'Watcher'">
+                <button pButton label="Vider les compteurs" icon="pi pi-trash" class="p-button-danger"
+                    (click)="onTrashCount();" style="margin-right: 3px;" [disabled]="true"></button>
+                <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();" [disabled]="true"></button>
+                <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'" [disabled]="true">
+                </button>
+            </div>
+            
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
@@ -603,7 +612,7 @@
                         <td style="min-width: 10rem;" *ngIf="!etudiant.isAlternant">
                             Initial
                         </td>
-                        <td>
+                        <td *ngIf="userConnected.role != 'Watcher'">
                             <i style="margin-left: 2%;" class="pi pi-pencil"
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFUpdate(etudiant.user_id, etudiant);scrollToTop()" pTooltip="Modifier"
@@ -656,6 +665,9 @@
                                 href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
                                     pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom"
                                     class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
+                        </td>
+                        <td *ngIf="userConnected.role == 'Watcher'">
+                            <small style="color: red;">Aucune action disponible pour ce compte</small>
                         </td>
                     </tr>
                 </ng-template>

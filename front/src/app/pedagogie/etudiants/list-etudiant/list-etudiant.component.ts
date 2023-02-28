@@ -111,6 +111,8 @@ export class ListEtudiantComponent implements OnInit {
 
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
+  // utilisateur connecté actuellement
+  userConnected: User;
 
   dropdownClasse: any[] = [{ libelle: 'Choisissez une classe', value: null }];
   searchClass: any[] = [];
@@ -335,6 +337,13 @@ export class ListEtudiantComponent implements OnInit {
         if (tuteur.user_id)
           this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
       })
+    });
+
+    // recuperation des infos de l'utilisateur connecté
+    this.userService.getInfoById(this.token.id).subscribe({
+      next: (response) => { this.userConnected = response; },
+      error: (error) => { console.log(error) },
+      complete: () => { console.log("info de l'utilisateur connecté récupéré")}
     });
 
   }
