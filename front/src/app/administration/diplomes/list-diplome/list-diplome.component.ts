@@ -413,6 +413,5 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeService.uploadCalendar(formData)
     .then((response) => { this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.errorMsg}); } )
-
   }
 }

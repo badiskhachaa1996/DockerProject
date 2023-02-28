@@ -7,6 +7,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { environment } from 'src/environments/environment';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-add-entreprise',
@@ -40,11 +41,17 @@ export class AddEntrepriseComponent implements OnInit {
     "Alternant",
     "Prestataire",
     "Autre"
-  ]
+  ];
+
+  userConnected: User;
+  token: any;
 
   constructor(private entrepriseService: EntrepriseService, private userService: AuthService ,private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
+    // décodage du token
+    this.token = jwt_decode(localStorage.getItem("token"));
+
     // recuperation de la liste des commercials
     this.userService.getAllCommercial().subscribe({
       next: (response) => { 
@@ -54,6 +61,13 @@ export class AddEntrepriseComponent implements OnInit {
       },
       error: (error) => { this.messageService.add({ severity: 'error', summary: 'Commerciaux', detail: "Impossible de récuperé la liste des commerciaux" }); },
       complete: () => { console.log('Liste des commerciaux récuperé'); }
+    });
+
+    // recuperation de l'utilisateur connecté
+    this.userService.getInfoById(this.token.id).subscribe({
+      next: (response) => { this.userConnected = response; },
+      error: (error) => { console.log(error) },
+      complete: () => { console.log('Utilisateur connecté récupéré')}
     });
 
     //Initialisation du formulaire d'ajout d'une entreprisei

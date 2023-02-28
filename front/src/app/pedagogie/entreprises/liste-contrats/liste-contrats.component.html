@@ -423,8 +423,10 @@
         </div>
 
         <div class="card">
-            <button *ngIf="token.type != 'CEO Entreprise'" pButton label="Nouveau contrat d'alternance"
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role != 'Watcher'" pButton label="Nouveau contrat d'alternance"
                 (click)="ShowAddNewCA()" style="float: right;"></button>
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton label="Nouveau contrat d'alternance"
+                (click)="ShowAddNewCA()" [disabled]="true" style="float: right;"></button>
 
             <h5>Liste des contrats</h5>
 
@@ -515,7 +517,7 @@
                         <td>{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
                         </td>
-                        <td>
+                        <td *ngIf="token.role != 'Watcher'">
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
                                 (click)="showPresence(contrat.alternant_id._id)"
                                 style="text-align: center; color: red; margin: 2px"></i>
@@ -530,6 +532,9 @@
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
                                 style="text-align: center; color: blue; margin: 2px"
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
+                        </td>
+                        <td *ngIf="token.role == 'Watcher'">
+                            <small style="color: red;">Aucune action disponible pour ce compte</small>
                         </td>
                     </tr>
                 </ng-template>

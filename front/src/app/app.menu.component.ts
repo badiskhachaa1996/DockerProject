@@ -46,11 +46,12 @@ export class AppMenuComponent implements OnInit {
     isIntuns: Boolean = false
     isRH = false
     isConsulting = false
+    isVisitor: boolean = false;
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
     ngOnInit() {
-        //Decodage du token
+        //Décodage du token
         this.token = jwt_decode(localStorage.getItem('token'));
 
         this.modelAdmin = [
@@ -261,6 +262,11 @@ export class AppMenuComponent implements OnInit {
 
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
+                // accès visiteur
+                if(dataUser.type == 'Visitor' && dataUser.role == 'Watcher')
+                {
+                    this.isVisitor = true;
+                }
                 this.isAdmin = dataUser.role == "Admin"
                 this.isAgent = dataUser.role == "Agent"
                 this.isReponsable = dataUser.role == "Responsable"
@@ -1030,7 +1036,63 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                } else {
+                } 
+                // menu visiteur
+                else if(this.isVisitor)
+                {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing',
+                            items: [
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                            ]
+                        },
+                        {
+                            label: "Pédagogie",
+                            items: [
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                        { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                                    ]
+                                },
+                            ]
+            
+                        },
+                        {
+                            label: 'Alternance',
+                            items: [
+                                { label: 'Liste des contrats Alternance', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+                                {
+                                    label: 'Gestions des entreprises', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter une entreprise', icon: 'pi pi-user-plus', routerLink: ['/ajout-entreprise'] },
+                                        { label: 'Liste des entreprises', icon: 'pi pi-sort-alpha-down', routerLink: ['/entreprises'] },
+                                    ]
+                                },
+                            ],
+                        },{
+                            label: 'Commercial',
+                            items: [
+                                { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                            ]
+                        },
+                    ]
+                }
+                else {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -1047,7 +1109,8 @@ export class AppMenuComponent implements OnInit {
                     ]
                     console.error("Aucun Menu disponible")
                 }
-            } else {
+            } 
+            else {
                 console.error("Aucun Utilisteur trouvé")
             }
         })
