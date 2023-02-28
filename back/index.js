@@ -19,7 +19,7 @@ if (process.argv[2]) {
     } else if (argProd.includes('dev')) {
         origin = ["https://141.94.71.25"]
     } else (
-        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.intedgroup.com", "https://t.dev.estya.com"]
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.adgeducations.com","https://ims.intedgroup.com", "https://t.dev.estya.com"]
     )
 }
 app.use(cors({ origin: origin }));
