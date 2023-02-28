@@ -446,7 +446,8 @@ export class ListEtudiantComponent implements OnInit {
           let i = 1;
           response.forEach((etudiant: Etudiant) => {
             let {ecole_id}: any = etudiant;
-            if(i <= 5 && ecole_id.libelle == 'ADG')
+            console.log(ecole_id);
+            if(i <= 5 && ecole_id.email == 'contact@academiedesgouvernantes.com')
             {
               this.etudiants.push(etudiant);
             }

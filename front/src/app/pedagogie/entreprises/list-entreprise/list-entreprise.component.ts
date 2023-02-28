@@ -85,6 +85,10 @@ export class ListEntrepriseComponent implements OnInit {
     this.entrepriseService.getAll().subscribe(
       ((response) => { 
         this.entreprises = response;
+        if(this.token.role == 'Watcher')
+        {
+          this.entreprises = this.entreprises.slice(0, 5);
+        }
       }),
       ((error) => { console.error(error); })
     );
