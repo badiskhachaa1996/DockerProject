@@ -343,7 +343,7 @@ export class ListEtudiantComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
       error: (error) => { console.log(error) },
-      complete: () => { console.log("info de l'utilisateur connecté récupéré")}
+      complete: () => { console.log("info de l'utilisateur connecté récupéré") }
     });
 
   }
@@ -415,29 +415,49 @@ export class ListEtudiantComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
-    
-    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
-      if (!this.code && data && data.code_commercial_partenaire) {
-        this.code = data.code_commercial_partenaire
-      }
-      if (this.code) {
-        this.etudiantService.getAllByCode(this.code).subscribe(
-          ((responseEtu) => {
-            this.etudiants = responseEtu;
-            this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
-          }),
-          ((error) => { console.error(error); })
-        );
-      } else {
-        this.etudiantService.getAllEtudiantPopulate().subscribe(
-          ((responseEtu) => {
-            this.etudiants = responseEtu
-            this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
-          }),
-          ((error) => { console.error(error); })
-        );
-      }
-    });
+
+    if (this.token?.role != 'Watcher') {
+      this.CommercialService.getByUserId(this.token.id).subscribe(data => {
+        if (!this.code && data && data.code_commercial_partenaire) {
+          this.code = data.code_commercial_partenaire
+        }
+        if (this.code) {
+          this.etudiantService.getAllByCode(this.code).subscribe(
+            ((responseEtu) => {
+              this.etudiants = responseEtu;
+              this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
+            }),
+            ((error) => { console.error(error); })
+          );
+        } else {
+          this.etudiantService.getAllEtudiantPopulate().subscribe(
+            ((responseEtu) => {
+              this.etudiants = responseEtu
+              this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
+            }),
+            ((error) => { console.error(error); })
+          );
+        }
+      });
+    } else if(this.token?.role == 'Watcher') 
+    {
+      this.etudiantService.getAllEtudiantPopulate().subscribe({
+        next: (response) => {
+          let i = 1;
+          response.forEach((etudiant: Etudiant) => {
+            let {ecole_id}: any = etudiant;
+            if(i <= 5 && ecole_id.libelle == 'ADG')
+            {
+              this.etudiants.push(etudiant);
+            }
+            i++;
+          });
+        },
+        error: (error) => { console.log(error); },
+        complete: () => { console.log('Étudiants récupérés'); }
+      });
+    }
+
 
   }
 
