@@ -41,7 +41,7 @@ export class AppTopBarComponent {
     let temp: any = jwt_decode(localStorage.getItem("token"))
     let url = window.location.href;
     //console.log(url)
-    if (url.includes('ims.adgeducations')) //ims.adgeducations
+    if (url.includes('ims.adgeducation')) //ims.adgeducation
       this.logo = "assets/images/logo_adg.png"
     if (temp.service_id) {
       this.serv.getAServiceByid(temp.service_id).subscribe(service => {

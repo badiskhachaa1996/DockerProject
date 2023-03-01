@@ -17,8 +17,8 @@ import { AdmissionService } from 'src/app/services/admission.service';
   styleUrls: ['./externe.component.scss']
 })
 export class ExterneComponent implements OnInit {
-
-  showLoginPage = false;
+  logo = "assets/images/logo-ims.png"
+  showLoginPage = false;  
 
   formLogin: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -30,7 +30,10 @@ export class ExterneComponent implements OnInit {
     private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
-
+    let url = window.location.href;
+    //console.log(url)
+    if (url.includes('ims.adgeducation')) //ims.adgeducation
+      this.logo = "assets/images/logo_adg.png"
   }
 
   gAfterViewInit() {
