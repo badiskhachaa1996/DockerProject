@@ -234,8 +234,10 @@ export class ListeContratsComponent implements OnInit {
                     this.dropdownTuteurList.push({ label: `${userConnected.firstname} ${userConnected.lastname}`, value: userConnected._id });
 
                     this.TuteursList.forEach(tut => {
-                      tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
-                      this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
+                      if (tut.user_id && tut.user_id.firstname && tut.user_id.lastname) {
+                        tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
+                        this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
+                      }
                     })
                   }),
                   ((error) => { console.log(error); })
@@ -363,10 +365,10 @@ export class ListeContratsComponent implements OnInit {
               this.dropdownTuteurList.push({ label: `${byPassDirecteur.firstname} ${byPassDirecteur.lastname}`, value: byPassDirecteur._id });
 
             this.TuteursList.forEach(tut => {
-              if (tut.user_id && tut.user_id.firstname && tut.user_id.lastname)
+              if (tut.user_id && tut.user_id.firstname && tut.user_id.lastname) {
                 tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
-              this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
-
+                this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
+              }
               if (idTuteur && idTuteur == tut._id) {
                 this.formUpdateCa.patchValue({ tuteur_id: idTuteur, entreprise_id: idENT })
               }
