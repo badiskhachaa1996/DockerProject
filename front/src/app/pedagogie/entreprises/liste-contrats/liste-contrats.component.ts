@@ -78,8 +78,8 @@ export class ListeContratsComponent implements OnInit {
   ];
 
   mobiliteOptions: any = [
-    {name: 'Non', value: 0},
-    {name: 'Oui', value: 1},
+    { name: 'Non', value: 0 },
+    { name: 'Oui', value: 1 },
   ];
 
   showCout: boolean = false;
@@ -170,7 +170,7 @@ export class ListeContratsComponent implements OnInit {
         this.listAlternantDD = []
         alternantsData.forEach(altdata => {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
-          if(altdata.user_id){
+          if (altdata.user_id) {
             altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
             this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
           }
@@ -190,9 +190,10 @@ export class ListeContratsComponent implements OnInit {
           this.ListeContrats = Allcontrats;
           this.InitAgentFilter()
           Allcontrats.forEach(cont => {
-            this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
-              this.EntreprisesName[entpName._id] = entpName;
-            })
+            if (cont.tuteur_id && cont.tuteur_id?.entreprise_id)
+              this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
+                this.EntreprisesName[entpName._id] = entpName;
+              })
           })
         })
       }
@@ -201,9 +202,8 @@ export class ListeContratsComponent implements OnInit {
         this.entrepriseService.getAllContrats().subscribe({
           next: (response) => {
             response.forEach((contrat: ContratAlternance) => {
-              let {ecole}: any = contrat;
-              if(ecole.libelle == 'ADG')
-              {
+              let { ecole }: any = contrat;
+              if (ecole.libelle == 'ADG') {
                 this.ListeContrats.push(contrat);
               }
             })
@@ -359,10 +359,12 @@ export class ListeContratsComponent implements OnInit {
         this.tuteurService.getAllByEntrepriseId(idENT).subscribe(
           listTuteur => {
             this.TuteursList = listTuteur;
-            this.dropdownTuteurList.push({ label: `${byPassDirecteur.firstname} ${byPassDirecteur.lastname}`, value: byPassDirecteur._id });
+            if (byPassDirecteur && byPassDirecteur.firstname && byPassDirecteur.lastname)
+              this.dropdownTuteurList.push({ label: `${byPassDirecteur.firstname} ${byPassDirecteur.lastname}`, value: byPassDirecteur._id });
 
             this.TuteursList.forEach(tut => {
-              tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
+              if (tut.user_id && tut.user_id.firstname && tut.user_id.lastname)
+                tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
               this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
 
               if (idTuteur && idTuteur == tut._id) {
@@ -410,7 +412,7 @@ export class ListeContratsComponent implements OnInit {
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
       annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value)
 
-      this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
+    this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
       this.showFormUpdateCa = false
       this.ngOnInit()
@@ -459,10 +461,8 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // methoe d'affichage du cout
-  onShowCout(event: any): void 
-  {
-    if(event.value.value == 0)
-    {
+  onShowCout(event: any): void {
+    if (event.value.value == 0) {
       this.showCout = false;
     } else {
       this.showCout = true;
@@ -470,20 +470,19 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // mis à jour su status du contrat
-  onUpdateStatus(): void
-  {
+  onUpdateStatus(): void {
     // recuperation des donées du formulaire
     const formValue = this.statusForm.value;
     this.contratToUpdate.statut = formValue.libelle;
 
     this.entrepriseService.updateStatus(this.contratToUpdate)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Contrat alternance', detail: response.successMsg });
-      this.showStatusForm = false;
-      this.statusForm.reset();
-      this.ngOnInit();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Contrat alternance', detail: error.errorMsg }) });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Contrat alternance', detail: response.successMsg });
+        this.showStatusForm = false;
+        this.statusForm.reset();
+        this.ngOnInit();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Contrat alternance', detail: error.errorMsg }) });
   }
 
 }
