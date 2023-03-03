@@ -118,15 +118,15 @@ export class PvAppreciationComponent implements OnInit {
             console.log(note)
             if (note < 10)
               d.appreciation_module[col.module] = "Doit faire ses preuves"
-            else if (note > 10 && note < 12)
+            else if ((note > 10 && note < 12) || note == 10)
               d.appreciation_module[col.module] = "Passable"
-            else if (note > 12 && note < 14)
+            else if ((note > 12 && note < 14) || note == 12)
               d.appreciation_module[col.module] = "Assez Bien"
-            else if (note > 14 && note < 16)
+            else if ((note > 14 && note < 16) || note == 14)
               d.appreciation_module[col.module] = "Bien"
-            else if (note > 16 && note < 18)
+            else if ((note > 16 && note < 18) || note == 16)
               d.appreciation_module[col.module] = "Très Bien"
-            else if (note > 18)
+            else if (note > 18|| note==18)
               d.appreciation_module[col.module] = "Excellent"
             else
               d.appreciation_module[col.module] = ""
