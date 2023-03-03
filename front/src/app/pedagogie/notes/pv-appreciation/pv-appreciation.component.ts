@@ -57,10 +57,10 @@ export class PvAppreciationComponent implements OnInit {
               d.appreciation_module = {}
             }
             this.cols.forEach(col => {
-              console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
+              //console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
               if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] ||d.notes[col.module]==0)) {
                 let note = parseInt(d.notes[col.module])
-                console.log(note)
+                //console.log(note)
                 if (note < 10)
                   d.appreciation_module[col.module] = "Doit faire ses preuves"
                 else if (note > 10 && note < 12)
@@ -111,8 +111,24 @@ export class PvAppreciationComponent implements OnInit {
           d.appreciation_module = {}
         }
         this.cols.forEach(col => {
-          if (!d.appreciation_module[col.module])
-            d.appreciation_module[col.module] = ""
+          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] ||d.notes[col.module]==0)) {
+            let note = parseInt(d.notes[col.module])
+            //console.log(note)
+            if (note < 10)
+              d.appreciation_module[col.module] = "Doit faire ses preuves"
+            else if (note > 10 && note < 12)
+              d.appreciation_module[col.module] = "Passable"
+            else if (note > 12 && note < 14)
+              d.appreciation_module[col.module] = "Assez Bien"
+            else if (note > 14 && note < 16)
+              d.appreciation_module[col.module] = "Bien"
+            else if (note > 16 && note < 18)
+              d.appreciation_module[col.module] = "Très Bien"
+            else if (note > 18)
+              d.appreciation_module[col.module] = "Excellent"
+            else
+              d.appreciation_module[col.module] = ""
+          }
         })
         pv.pv_annuel_data[index] = d
       })
