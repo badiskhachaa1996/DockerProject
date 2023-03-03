@@ -57,8 +57,10 @@ export class PvAppreciationComponent implements OnInit {
               d.appreciation_module = {}
             }
             this.cols.forEach(col => {
+              console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
               if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] ||d.notes[col.module]==0)) {
                 let note = parseInt(d.notes[col.module])
+                console.log(note)
                 if (note < 10)
                   d.appreciation_module[col.module] = "Doit faire ses preuves"
                 else if (note > 10 && note < 12)
