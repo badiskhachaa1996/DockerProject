@@ -47,6 +47,7 @@ export class PvAppreciationComponent implements OnInit {
       this.pvAnnuel = data
       if (data && data[data.length - 1]) {
         this.loadPV(data[data.length - 1])
+        console.log("loadpv")
       } else
         this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
           this.cols = data.cols
@@ -110,8 +111,8 @@ export class PvAppreciationComponent implements OnInit {
         if (!d.appreciation_module) {
           d.appreciation_module = {}
         }
-        this.cols.forEach(col => {
-          console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
+        pv.pv_annuel_cols.forEach(col => {
+          console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""), (d.notes[col.module] || d.notes[col.module] == 0), col.module)
           if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
             let note = parseInt(d.notes[col.module])
             console.log(note)
