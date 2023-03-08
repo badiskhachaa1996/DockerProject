@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Prospect } from '../models/Prospect';
+import { ProspectAlternable } from '../models/ProspectAlternable';
 import { ProspectIntuns } from '../models/ProspectIntuns';
 
 
@@ -160,4 +161,86 @@ export class AdmissionService {
     let registreUrl = this.apiUrl + 'getAllProspectsIntuns';
     return this.httpClient.get<ProspectIntuns[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+
+  //* Partie dédiée aux prospects alternances
+  // recuperation de la liste des prospects alternables
+  getProspectsAlt(): Promise<ProspectAlternable[]>
+  {
+    const url = `${this.apiUrl}get-prospects-alt`;
+    return new Promise<ProspectAlternable[]>((resolve, reject) => {
+      this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (success) => { resolve(success); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Liste des prospects alternables récupérés'); }
+      });
+    });
+  }
+
+  // recuperation de la liste des prospects alternables via l'id du commercial
+  getProspectsAltByComId(id: string): Promise<ProspectAlternable[]>
+  {
+    const url = `${this.apiUrl}get-prospects-alt-by-com-id/${id}`;
+    return new Promise<ProspectAlternable[]>((resolve, reject) => {
+      this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (success) => { resolve(success); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Liste des prospects alternables du commercial récupérés'); }
+      });
+    });
+  }
+
+  // recuperation d'un prospect alternable via son id
+  getProspectAlt(id: string): Promise<ProspectAlternable>
+  {
+    const url = `${this.apiUrl}get-prospect-alt`;
+    return new Promise<ProspectAlternable>((resolve, reject) => {
+      this.httpClient.get<ProspectAlternable>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (success) => { resolve(success); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Prospects alternable récupéré'); }
+      });
+    });
+  }
+
+  // creation d'un prospect alternable
+  postProspectAlt(obj: any): Promise<any>
+  {
+    const url = `${this.apiUrl}post-prospect-alt`;
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post<any[]>(url, obj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (success) => { resolve(success); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Prospects alternable récupéré'); }
+      });
+    });
+  }
+
+  // modification des infos d'un prospect alt
+  patchProspectAlt(tbObj: any[]): Promise<any>
+  {
+    const url = `${this.apiUrl}patch-prospect-alt`;
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch<any[]>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (success) => { resolve(success); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Prospects alternable modifié'); }
+      });
+    });
+  }
+
+  // méthode d'envoi du lien de generation du formulaire
+  sendCreationLink(idCommercial: string, email: string): Promise<any> 
+  {
+    let url = `${this.apiUrl}send-creation-link`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, {idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Lien générer') }
+      });
+    });
+  } 
+
 }

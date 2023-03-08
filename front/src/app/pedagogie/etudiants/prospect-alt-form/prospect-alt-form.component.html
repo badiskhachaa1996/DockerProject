@@ -1,0 +1,147 @@
+<div class="grid">
+    <div class="col-12" *ngIf="showForm">
+        <div class="card">
+            <img [src]="logoSrc" alt="IntedGroup" style="width: 25%; height: 25%">
+            <div style="background-color: rgb(3, 120, 124)">
+                <hr>
+                <h2 class="text-center" style="color: white;">Réalisation d'un contrat d'apprentissage</h2>
+                <hr>
+            </div>
+            <div style="color: black;">
+
+                <p-timeline [value]="formSteps" layout="horizontal">
+                    <ng-template pTemplate="content" let-event>
+                        {{event}}
+                    </ng-template>
+                </p-timeline>
+
+                <p><span style="color: red;">*</span> Obligatoire</p>
+                <form [formGroup]="formAskAdmission" (ngSubmit)="onAsk()">
+                    <div *ngIf="activeIndex == 0">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-2">
+                                <label for="civility">Civilité <span style="color: red;">*</span></label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civility"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label for="lastname">Nom <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="lastname" formControlName="lastname">
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label for="firstname">Prénom <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="firstname" formControlName="firstname">
+                            </div>
+                            <div class="field col-12">
+                                <label for="nir">Numéro de sécurité social <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="nir"  formControlName="nir">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="pays">Pays <span style="color: red;">*</span></label>
+                                <p-dropdown [options]="paysList" optionLabel="viewValue" filter="true" formControlName="country"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="ville">Ville <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="ville" formControlName="city">
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label for="code_postal">Code postal <span style="color: red;">*</span></label>
+                                <input pInputText type="number" id="code_postal" formControlName="code_postal">
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label for="rue_number">Numéro de la rue <span style="color: red;">*</span></label>
+                                <input pInputText type="number" id="rue_number" formControlName="rue_number">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="rue_name">Nom de la rue <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="rue_name" formControlName="rue_name">
+                            </div>
+                            
+                            <button pButton type="submit" label="Suivant" style="color: white;" (click)="onNextPage();"></button>
+                        </div>
+                    </div>
+                    <div *ngIf="activeIndex==1">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-3">
+                                <label for="indicatif">Indicatif <span style="color: red;">*</span></label>
+                                <input pInputText type="number" id="indicatif" formControlName="indicatif">
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label for="phone">Téléphone <span style="color: red;">*</span></label>
+                                <input pInputText type="number" id="phone" formControlName="phone">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="email">Email <span style="color: red;">*</span></label>
+                                <input pInputText type="email" id="email" formControlName="email">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="date_naissance">Date de naissance <span style="color: red;">*</span></label>
+                                <input pInputText type="date" id="date_naissance" formControlName="date_naissance">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="commune_naissance">Commune de naissance <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="commune_naissance" formControlName="commune_naissance">
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label for="nationalite">Nationalité <span style="color: red;">*</span></label>
+                                <p-dropdown [options]="nationalityList" optionLabel="viewValue" filter="true" formControlName="nationalite"></p-dropdown>
+                            </div>
+                            <div class="field col-12">
+                                <label for="handicap">Déclare bénéficier de la reconnaissance travailleur handicapé <span style="color: red;">*</span></label>
+                                <p-selectButton [options]="handicapOptions" optionLabel="name" formControlName="handicap"></p-selectButton>
+                            </div>
+
+                            <div class="col-6">
+                                <button pButton type="submit" label="Précédent" style="color: white; background-color: rgb(255, 0, 0)" (click)="onPreviousPage()"></button>
+                            </div>
+                            <div class="col-6">
+                                <button pButton type="submit" label="Suivant" style="color: white;" (click)="onNextPage();"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="activeIndex==2">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label for="last_diplome">Dernier diplôme ou titre préparé <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="last_diplome" formControlName="last_diplome">
+                            </div>
+                            <div class="field col-12">
+                                <label for="diplome_prepared">Intitulé précis du diplôme ou titre en cours <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="diplome_prepared" formControlName="diplome_in_progress">
+                            </div>
+                            <div class="field col-12">
+                                <label for="diplome_up">Diplôme ou titre le plus élevé obtenu <span style="color: red;">*</span></label>
+                                <input pInputText type="text" id="diplome_up" formControlName="diplome_up">
+                            </div>
+
+                            <div class="col-6">
+                                <button pButton type="submit" label="Précédent" style="color: white; background-color: rgb(255, 0, 0)" (click)="onPreviousPage()"></button>
+                            </div>
+                            <div class="col-6">
+                                <button pButton type="submit" label="Valider" style="color: white; background-color: rgb(3, 120, 124)" [disabled]="formAskAdmission.invalid"></button>
+                            </div>                            
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showValidatedPart">
+        <div class="card">
+            <img [src]="logoSrc" alt="IntedGroup" style="width: 25%; height: 25%">
+            <div style="background-color: rgb(3, 120, 124)">
+                <hr>
+                <h2 class="text-center" style="color: white;">Votre demande à bien été prise en compte ✅</h2>
+                <hr>
+            </div>
+            
+            <p style="color: black;">
+                Un mail de confirmation vous a été envoyer sur l'adresse email que vous avez renseigné dans le formulaire.
+                Merci de verifier vos mails et de suivre les différentes étapes pour la suite de votre demande et le suivi de votre dossier, si vous ne voyez pas le mail dans votre boite de reception, merci de verifier vos spams.
+                Votre commercial referent prendra contact avec vous après que vous ayez valider votre compte.
+            </p>
+            
+        </div>
+    </div>
+</div>
