@@ -710,18 +710,18 @@ app.get('/nettoyageCA', (req, res) => {
     let toDelete = []
     CAlternance.find().then(allCA => {
         allCA.forEach(ca => {
-            if (!toDelete.includes(ca._id)) {
-                let caID = ca._id
-                delete ca._id
+            if (!toDelete.includes(ca._id.toString())) {
                 allCA.forEach(catocheck => {
-                    let tempID = catocheck._id
-                    delete catocheck._id
-                    if (ca == catocheck && caID != tempID)
-                        toDelete.push(tempID)
+                    if (catocheck._id.toString() != ca._id.toString() && catocheck._id.toString() == '6407666cc8ef7f5cebf043d8' && ca.alternant_id.toString() == catocheck.alternant_id.toString() && ca.entreprise_id.toString() == catocheck.entreprise_id.toString() && ca.fin_contrat.toString() == catocheck.fin_contrat.toString() )
+                        console.log(ca, catocheck)
+                    //console.log(ca.debut_contrat == catocheck.debut_contrat, ca.fin_contrat == catocheck.fin_contrat, ca.alternant_id == catocheck.alternant_id, ca.entreprise_id == catocheck.entreprise_id)
+                    if (ca.debut_contrat.toString() == catocheck.debut_contrat.toString() && ca.fin_contrat.toString() == catocheck.fin_contrat.toString() &&
+                        ca.alternant_id.toString() == catocheck.alternant_id.toString() && ca.entreprise_id.toString() == catocheck.entreprise_id.toString() && ca.ecole.toString() == catocheck.ecole.toString() && catocheck._id.toString() != ca._id.toString())
+                        toDelete.push(catocheck._id.toString())
                 })
             }
         })
-        CAlternance.remove({ _id: { $in: toDelete } }, (err) => {
+        CAlternance.deleteMany({ _id: { $in: toDelete } }, (err) => {
             if (err)
                 console.error(err)
         }).then(r => {

@@ -93,10 +93,14 @@
     <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
         style="display: none;" pInputFile />
 </div>
+<div class="col-12">
+    <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile2" #selectedFile2
+        style="display: none;" pInputFile />
+</div>
 <div class="grid">
     <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
     </p-confirmDialog>
-    <!-- Partie ajout de documents -->
+    <!--Partie ajout de documents 
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
             <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
@@ -116,7 +120,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
 
     <!-- partie Voir/Ajouter des payements -->
     <div class="col-12" *ngIf="showPayement!=null">
@@ -517,16 +521,17 @@
                     (click)="onTrashCount();" style="margin-right: 3px;" [disabled]="true"></button>
                 <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();" [disabled]="true"></button>
                 <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
-                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'" [disabled]="true">
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'"
+                    [disabled]="true">
                 </button>
             </div>
-            
+
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
                 (onFilter)="onFilter($event, 'dt1')"
                 [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso']"
-                [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
+                [rows]="5" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
 
@@ -559,6 +564,7 @@
                         <th style="width: 3rem"></th>
                         <th pSortableColumn="custom_id">ID <p-sortIcon field="custom_id"></p-sortIcon>
                         </th>
+                        <th>Action </th>
                         <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname">
                             </p-sortIcon>
                         </th>
@@ -580,7 +586,6 @@
                         </th>
                         <th pSortableColumn="isAlternant">Initial/Alternant<p-sortIcon field="isAlternant"></p-sortIcon>
                         </th>
-                        <th>Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-etudiant let-expanded="expanded">
@@ -592,7 +597,54 @@
                                 (click)="loadPP(etudiant);"></button>
                         </td>
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
-
+                        <td *ngIf="userConnected?.role != 'Watcher'">
+                            <i style="padding-left: 3%;" class="pi pi-pencil"
+                                *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
+                                    showFUpdate(etudiant.user_id, etudiant);scrollToTop()" pTooltip="Modifier"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 30%;" *ngIf="this.isCommercial || token.role=='Admin'"
+                                class="pi pi-search" (click)="findMission(etudiant.user_id._id)"
+                                pTooltip="Trouver une mission" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" pTooltip="Ajouter les documents pédagogique"
+                                tooltipPosition="bottom" class="pi pi-file-excel"
+                                (click)="onInitLivret(etudiant);scrollToTop()" aria-hidden="true"></i>
+                            <i style="padding-left: 30%;" pTooltip="Ajouter un fichier" tooltipPosition="bottom"
+                                class="pi pi-file" *ngIf="!this.isCommercial" (click)="clickFileDocument(etudiant)"
+                                aria-hidden="true"></i>
+                            <!--<i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
+                                style="margin-left: 2%;" (click)="showUploadFile=etudiant;scrollToTop();fileInput.click()"
+                            aria-hidden="true"></i>-->
+                            <i style="padding-left: 3%;" pTooltip="Ajouter une photo de profil" tooltipPosition="bottom"
+                                class="pi pi-id-card" (click)="clickFile(etudiant)" aria-hidden="true"
+                                *ngIf="!this.isCommercial"></i>
+                            <i style="padding-left: 30%;" (click)="router.navigate(['/details/'+etudiant._id])"
+                                pTooltip="Suivie assiduité" tooltipPosition="bottom" class="pi pi-chart-bar"
+                                aria-hidden="true">
+                            </i>
+                            <i style="padding-left: 3%;" *ngIf="isAdministration" pTooltip="Mettre à jour les paiements"
+                                tooltipPosition="bottom" class="pi pi-money-bill"
+                                (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant" aria-hidden="true"></i>
+                            <i style="padding-left: 30%;" *ngIf="this.isAdministration" (click)="disable(etudiant);scrollToTop()"
+                                pTooltip="Désactiver l'étudiant" tooltipPosition="bottom"
+                                class="pi pi-trash" aria-hidden="true"></i>
+                            <i style="padding-left: 3%;" pTooltip="Voir les matchings"
+                                class="pi pi-link" (click)="seeMatching(etudiant.user_id._id)" aria-hidden="true"></i>
+                            <a style="padding-left: 30%;" *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
+                                href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
+                                    tooltipPosition="bottom" class="pi pi-file-excel"
+                                    aria-hidden="true"></i></a>
+                            <a style="padding-left: 3%;" *ngIf="etudiant.lien_dossier_professionel!='' && etudiant.lien_dossier_professionel"
+                                href="{{etudiant.lien_dossier_professionel}}" target="_blank"><i
+                                    pTooltip="Voir le dossier professionel" tooltipPosition="bottom"
+                                    class="pi pi-file-excel" aria-hidden="true"></i></a>
+                            <a style="padding-left: 30%;" *ngIf="etudiant.lien_tableau_synthese!='' && etudiant.lien_tableau_synthese"
+                                href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
+                                    pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom"
+                                    class="pi pi-file-excel" aria-hidden="true"></i></a>
+                        </td>
+                        <td *ngIf="userConnected?.role == 'Watcher'">
+                            <small style="color: red;">Aucune action disponible pour ce compte</small>
+                        </td>
                         <td>
                             {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
@@ -612,68 +664,11 @@
                         <td style="min-width: 10rem;" *ngIf="!etudiant.isAlternant">
                             Initial
                         </td>
-                        <td *ngIf="userConnected?.role != 'Watcher'">
-                            <i style="margin-left: 2%;" class="pi pi-pencil"
-                                *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
-                                    showFUpdate(etudiant.user_id, etudiant);scrollToTop()" pTooltip="Modifier"
-                                aria-hidden="true" tooltipPosition="bottom"></i>
-                            <i style="margin-left: 2%;" *ngIf="this.isCommercial || token.role=='Admin'"
-                                class="pi pi-search" (click)="findMission(etudiant.user_id._id)"
-                                pTooltip="Trouver une mission" aria-hidden="true" tooltipPosition="bottom"></i>
-                            <!--<i style="margin-left: 2%;" class="pi pi-user-edit"
-                                *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
-                                    showFPersonalUpdate(etudiant.user_id,etudiant)"
-                                pTooltip="Modifier les informations personnelles" aria-hidden="true"
-                                tooltipPosition="bottom"></i>-->
-                            <!--
-                                                                    idEtudiantToUpdate = etudiant._id; 
-                                    idUserOfEtudiantToUpdate = etudiant.user_id._id;
-                                    statutToUpdate = etudiant.statut;
-                                    classeToUpdate = etudiant.classe_id?.nom;
-                                    nationaliteToUpdate = etudiant.nationalite;
-                            -->
-                            <i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom"
-                                class="pi pi-file-excel" style="margin-left: 2%;"
-                                (click)="onInitLivret(etudiant);scrollToTop()" aria-hidden="true"></i>
-                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
-                                style="margin-left: 2%;" (click)="showUploadFile=etudiant;scrollToTop()"
-                                aria-hidden="true"></i>
-                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
-                                style="margin-left: 2%;" (click)="clickFile(etudiant)" aria-hidden="true"
-                                *ngIf="!this.isCommercial"></i>
-                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
-                                style="margin-left: 2%;" tooltipPosition="bottom" class="pi pi-chart-bar"
-                                aria-hidden="true">
-                            </i>
-                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
-                                style="margin-left: 2%;" class="pi pi-money-bill"
-                                (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant" aria-hidden="true"></i>
-                            <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
-                                pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
-                                class="pi pi-trash" aria-hidden="true"></i>
-                            <i pTooltip="Voir les matchings" style="margin-left: 2%; cursor: pointer;"
-                                class="pi pi-link" (click)="seeMatching(etudiant.user_id._id)" aria-hidden="true"></i>
-                            <a *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
-                                href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
-                                    tooltipPosition="bottom" class="pi pi-file-excel" style="margin-left: 2%;"
-                                    aria-hidden="true"></i></a>
-                            <a *ngIf="etudiant.lien_dossier_professionel!='' && etudiant.lien_dossier_professionel"
-                                href="{{etudiant.lien_dossier_professionel}}" target="_blank"><i
-                                    pTooltip="Voir le dossier professionel" tooltipPosition="bottom"
-                                    class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
-                            <a *ngIf="etudiant.lien_tableau_synthese!='' && etudiant.lien_tableau_synthese"
-                                href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
-                                    pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom"
-                                    class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
-                        </td>
-                        <td *ngIf="userConnected?.role == 'Watcher'">
-                            <small style="color: red;">Aucune action disponible pour ce compte</small>
-                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-etudiant>
                     <tr>
-                        <td colspan="11">
+                        <td colspan="12">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">

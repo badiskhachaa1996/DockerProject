@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -33,6 +33,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { FileUpload } from 'primeng/fileupload';
 var CryptoJS = require("crypto-js");
 
 @Component({
@@ -119,7 +120,7 @@ export class ListEtudiantComponent implements OnInit {
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteur: Tuteur[] = []
   entrepriseID: Tuteur[] = [];
-
+  @ViewChild('fileInput') fileInput: FileUpload;
   civiliteList = environment.civilite;
   statutList = environment.profil;
   paysList = environment.pays;
@@ -421,11 +422,11 @@ export class ListEtudiantComponent implements OnInit {
         if (!this.code && data && data.code_commercial_partenaire) {
           this.code = data.code_commercial_partenaire
         }
-        if (this.code && this.userConnected.role != 'Admin') {
+        if (this.code && this.token?.role != 'Admin') {
           this.etudiantService.getAllByCode(this.code).subscribe(
             ((responseEtu) => {
               this.etudiants = responseEtu;
-              this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
+              this.messageService.add({ severity: 'success', summary: "Chargement des étudiants lié au code commercial avec succès" })
             }),
             ((error) => { console.error(error); })
           );
@@ -433,7 +434,7 @@ export class ListEtudiantComponent implements OnInit {
           this.etudiantService.getAllEtudiantPopulate().subscribe(
             ((responseEtu) => {
               this.etudiants = responseEtu
-              this.messageService.add({ severity: 'success', summary: "Chargement des étudiants avec succès" })
+              this.messageService.add({ severity: 'success', summary: "Chargement de tout les étudiants avec succès" })
             }),
             ((error) => { console.error(error); })
           );
@@ -859,16 +860,17 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   FileUpload(event) {
-    if (event.files != null) {
+    console.log(event)
+    if (event != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();
       formData.append('id', this.showUploadFile._id)
-      formData.append('file', event.files[0])
+      formData.append('file', event[0])
+      console.log('IWAS HREE',formData)
       this.etudiantService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
-        this.confirmRighFile(event.files[0], this.showUploadFile)
+        this.confirmRighFile(event[0], this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        this.loadPP(this.showUploadFile)
-        event.target = null;
+        event = null;
         this.showUploadFile = null;
 
       }, error => {
@@ -1281,5 +1283,10 @@ export class ListEtudiantComponent implements OnInit {
   isNaN(nb) { return isNaN(nb) }
   seeMatching(id: string) {
     this.router.navigate(['matching-externe', id])
+  }
+
+  clickFileDocument(rowData) {
+    this.showUploadFile = rowData
+    document.getElementById('selectedFile2').click();
   }
 }

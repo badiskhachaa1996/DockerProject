@@ -708,9 +708,11 @@ const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
 
 app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     const file = req.file;
+    console.log('Test')
     if (!file) {
         const error = new Error('No File')
         error.httpStatusCode = 400
+        console.log(file)
         res.status(400).send(error)
     } else {
 
