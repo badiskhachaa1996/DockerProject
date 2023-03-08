@@ -492,7 +492,7 @@ export class ListeContratsComponent implements OnInit {
 
   nettoyage() {
     this.entrepriseService.nettoyageCA().then(r => {
-      console.log(r)
+      this.ngOnInit()
       this.messageService.add({ severity: "success", summary: "Nettoyage des contracts avec succès", detail: `${r.n} contrats ont été supprimés.` })
     })
   }

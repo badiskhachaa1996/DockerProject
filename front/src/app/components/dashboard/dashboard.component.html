@@ -262,24 +262,28 @@
 
 <!-- Modèle visiteur -->
 <div *ngIf="isVisitor">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
+    <h2 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h2>
-    <h5 style="color: red;"> Ce compte étant un compte avec un accès limité, vous n'aurez ni droit à la modification ni à l'ajout de données</h5>
+    <h5 style="color: red;"> Ce compte étant un compte avec un accès limité, vous n'aurez ni droit à la modification ni
+        à l'ajout de données</h5>
     <div class="card">
-        <p>Bonjour, ceci est un accès limité à notre outils de gestion [IMS]. N'hésitez pas à faire le tour du menu qui vous a été attribué.</p>
+        <p>Bonjour, ceci est un accès limité à notre outils de gestion [IMS]. N'hésitez pas à faire le tour du menu qui
+            vous a été attribué.</p>
         <p>Bonne visite sur IMS 😊!</p>
     </div>
 </div>
 
 
 <div *ngIf="isAdmin">
-    <h1 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
+    <h1 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname
+        | uppercase}}
     </h1>
     <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
 
     <div class="col-12">
         <div class="card">
-            <h6 *ngIf="dailyCheck && !isCheckOut">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}</h6>
+            <h6 *ngIf="dailyCheck && !isCheckOut">Vous êtes arrivé au travail à {{ dailyCheck.in_date | date: 'H:mm' }}
+            </h6>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}"
                     style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
@@ -296,7 +300,7 @@
             <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
                 (click)="onCheckIn()"></button>
 
-            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2" 
+            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2"
                 label="Valider mon CRA" icon="pi pi-sign-in"
                 (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
 
@@ -308,7 +312,7 @@
                 <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail();"></button>
                 <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
             </div> -->
-            
+
             <!-- Formulaire pour remplir les tâches du jour -->
             <!-- <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
                 (ngSubmit)="onValidateCraByForm()">
@@ -343,7 +347,9 @@
             <!-- Table d'affichage de la liste des tâches en cours de l'utilisateur -->
             <div *ngIf="showTaskForUser" style="margin-top: 3px;">
                 <!-- bouton de validation -->
-                <button *ngIf="dailyCheck.activity_details.length > 0" pButton label="Valider" icon="pi pi-check" style="float: right;" (click)="dailyCheck.isCheckable = false; dailyCheck.craIsValidate = true;"></button>
+                <button *ngIf="dailyCheck.activity_details.length > 0" pButton label="Valider" icon="pi pi-check"
+                    style="float: right;"
+                    (click)="dailyCheck.isCheckable = false; dailyCheck.craIsValidate = true;"></button>
                 <h5>Vos tâches en cours</h5>
                 <small>Merci de mettre à jour les pourcentages d'évolutions des tâches</small>
                 <p-table #dt1 [value]="taskForUser" dataKey="_id" editMode="row" [rows]="5" [rowHover]="true"
@@ -582,7 +588,7 @@
 </div>
 
 <div *ngIf="isFormateur">
-    <h2 style="text-align: center;">Bienvenue {{user?.lastname | uppercase}} {{user?.firstname |
+    <h2 *ngIf="!isEtudiant" style="text-align: center;">Bienvenue {{user?.lastname | uppercase}} {{user?.firstname |
         titlecase}} </h2>
 
     <!-- Affiche la partie checking -->
