@@ -152,6 +152,8 @@ import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form
 import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe-skillsnet.component';
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
+import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
+import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
 
 const routes: Routes = [
     {
@@ -219,6 +221,7 @@ const routes: Routes = [
             { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
             { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
+            { path: 'prospects-alt', component: ProspectsAlternablesComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats-ceo', component: ContratsTutelleCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
@@ -284,6 +287,7 @@ const routes: Routes = [
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'partenaireInscription', component: PartenaireInscriptionComponent },

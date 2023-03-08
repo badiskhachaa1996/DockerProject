@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { retry } from 'rxjs';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { User } from 'src/app/models/User';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -58,31 +59,31 @@ export class EntrepriseFormComponent implements OnInit {
     // initialisation du formulaire de mise à jour d'une entreprise
     this.formAddEntreprise = this.formBuilder.group({
       r_sociale: ['', Validators.required],
-      activite: [''],
-      categorie: [[]],
-      crc: [''], 
-      nb_salarie: ['', Validators.pattern('[0-9]+')],
-      convention: [''],
-      idcc: ['', Validators.pattern('[0-9]+')], 
-      indicatif_ent: [''],
-      phone_ent: [''],
-      adresse_ent: [''],
-      code_postale_ent: [''],
-      ville_ent: [''],
-      adresse_ec: [''],
-      postal_ec: [''],
-      ville_ec: [''],  
-      siret: [''],
-      code_ape_naf: [''],
-      OPCO: [''],
+      activite: ['', Validators.required],
+      categorie: [[], Validators.required],
+      crc: ['', Validators.required], 
+      nb_salarie: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      convention: ['', Validators.required],
+      idcc: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      indicatif_ent: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      phone_ent: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      adresse_ent: ['', Validators.required],
+      code_postale_ent: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      ville_ent: ['', Validators.required],
+      adresse_ec: ['', Validators.required],
+      postale_ec: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      ville_ec: ['', Validators.required],  
+      siret: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      code_ape_naf: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      OPCO: ['', Validators.required],
       commercial: ['', Validators.required],
 
       civilite_rep: [this.civiliteList[0]],
-      nom_rep: [''],
-      prenom_rep: [''],
-      email_rep: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      indicatif_rep: [''],
-      phone_rep: [''],
+      nom_rep: ['', Validators.required],
+      prenom_rep: ['', Validators.required],
+      email_rep: ['', [Validators.required,   Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      indicatif_rep: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      phone_rep: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
     })
   }
 
@@ -96,7 +97,36 @@ export class EntrepriseFormComponent implements OnInit {
     this.ActiveIndex--
   }
 
-  // méthode d'ajout des entreprises
+  //**** Première partie du formulaire ***//
+  get r_sociale() { return this.formAddEntreprise.get('r_sociale'); }
+  get activite() { return this.formAddEntreprise.get('activite'); }
+  get categorie() { return this.formAddEntreprise.get('categorie').value; }
+  get crc() { return this.formAddEntreprise.get('crc'); }
+  get nb_salarie() { return this.formAddEntreprise.get('nb_salarie'); }
+  get convention() { return this.formAddEntreprise.get('convention'); }
+  get idcc() { return this.formAddEntreprise.get('idcc'); }
+  get indicatif_ent() { return this.formAddEntreprise.get('indicatif_ent'); }
+  get phone_ent() { return this.formAddEntreprise.get('phone_ent'); }
+  get adresse_ent() { return this.formAddEntreprise.get('adresse_ent'); }
+  get code_postale_ent() { return this.formAddEntreprise.get('code_postale_ent'); }
+  get ville_ent() { return this.formAddEntreprise.get('ville_ent'); }
+  get adresse_ec() { return this.formAddEntreprise.get('adresse_ec'); } 
+  get postale_ec() { return this.formAddEntreprise.get('postale_ec'); }
+  get ville_ec() { return this.formAddEntreprise.get('ville_ec'); }
+  get siret() { return this.formAddEntreprise.get('siret'); }
+  get code_ape_naf() { return this.formAddEntreprise.get('code_ape_naf'); }
+  get OPCO() { return this.formAddEntreprise.get('OPCO'); }
+
+  //**** Deuxième partie du formulaire ***//
+  get civilite_rep() { return this.formAddEntreprise.get('civilite_rep').value ;}
+  get nom_rep() { return this.formAddEntreprise.get('nom_rep'); }
+  get prenom_rep() { return this.formAddEntreprise.get('prenom_rep'); }
+  get email_rep() { return this.formAddEntreprise.get('email_rep'); }
+  get indicatif_rep () { return this.formAddEntreprise.get('indicatif_rep'); }
+  get phone_rep() { return this.formAddEntreprise.get('phone_rep'); }
+  
+  
+    // méthode d'ajout des entreprises
   onAddEntreprise(): void
   {
     //recuperation des données du formulaire

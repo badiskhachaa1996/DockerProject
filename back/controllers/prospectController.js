@@ -15,6 +15,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const { Etudiant } = require('../models/etudiant');
 const { ProspectIntuns } = require('../models/ProspectIntuns');
+const { ProspectAlternable } = require('../models/ProspectAlternable');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -67,6 +68,18 @@ let transporterAdg = nodemailer.createTransport({
         pass: 'ADG@@2022ims',
     },
 });
+
+let transporterINTED = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
+
 //Creation d'un nouveau prospect
 app.post("/create", (req, res, next) => {
 
@@ -719,7 +732,125 @@ app.get('/getAllProspectsIntuns', (req, res) => {
     ProspectIntuns.find().then(data => {
         res.status(200).send(data)
     }).catch((error) => { res.status(500).send(error); });
-})
+});
+
+
+//* Partie dédié aux prospects alternables
+// recuperation de la liste des prospects alternables
+app.get("/get-prospects-alt", (req, res) => {
+    ProspectAlternable.find()?.populate('user_id')?.populate({path: 'commercial_id', populate: {path: 'user_id'}})
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(500).json({ error: error, errMsg: "Impossible de récuperer la liste des prospects alternables, veuillez contacter un administrateur" }); })
+});
+
+// recuperation de la liste des prospects alternables d'un commercial
+app.get("/get-prospects-alt-by-com-id/:id", (req, res) => {
+    ProspectAlternable.find({ commercial_id: req.params.id })?.populate('user_id')?.populate({path: 'commercial_id', populate: {path: 'user_id'}})
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(500).json({ error: error, errMsg: "Impossible de récuperer la liste des prospects alternables, veuillez contacter un administrateur" }); })
+});
+
+// recuperation d'un prospect alternable via son id
+app.get("/get-prospect-alt/:id", (req, res) => {
+    ProspectAlternable.find({ _id: req.params.id })?.populate('user_id')?.populate({path: 'commercial_id', populate: {path: 'user_id'}})
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(500).json({ error: error, errMsg: "Impossible de récuperer le prospect alternable, veuillez contacter un administrateur" }); })
+});
+
+// creation d'un prospect alternable
+app.post("/post-prospect-alt", (req, res) => {
+    let user = new User({...req.body.user});
+    let prospect = new ProspectAlternable({...req.body.prospect});
+
+    // création d'un mot de passe
+    let password = user.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
+    user.password = bcrypt.hashSync(password, 8),
+
+    // ajout du nouveau prospect
+    user.save()
+    .then((userSaved) => { 
+        // modification du user_id de l'objet prospect
+        prospect.user_id = userSaved._id;
+        // création de l'objet prospect alternable
+        prospect.save()
+        .then((prospectSaved) => {
+            // création du mail à envoyer
+            let htmlMail =
+                            "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                            r + "</strong></p>" +
+                            "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
+                            "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                            " <a href=\"" + origin[0] + "/#/validation-email/" + userSaved.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                            "</li><li>S'authentifier avec vos coordonnées sur le portail en utilisant votre adresse email et le mot de passe suivant" + userSaved.password + ".</li>" +
+                            " <li>Suivre l'état d'avancement sur le portail</li>" +
+                            " </ul>" +
+                            "<p> <br/>Nous restons à votre disposition pour tout complément d'information <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a>.</p>" +
+                            " <p>Cordialement.</p>";
+
+            let mailOptions = {
+                from: "ims@intedgroup.com",
+                to: userSaved.email_perso,
+                subject: 'Votre acces [IMS] ',
+                html: htmlMail,
+                // attachments: [{
+                //     filename: 'Image1.png',
+                //     path: 'assets/Image1.png',
+                //     cid: 'Image1' //same cid value as in the html img src
+                // }]
+            };
+
+            transporterINTED.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+
+            res.status(201).json({ successMsg: "Votre demande d'admission à bien été pris en compte"});
+        })
+        .catch((error) => { res.status(400).json({ error: error, errMsg: 'Impossible de créer votre compte, veuillez contacter votre commecial référent'}); })
+     })
+    .catch((error) => { res.status(400).json({ error: error, errMsg: 'Impossible de prendre en compte votre inscription, votre adresse mail existe peut être déja, veuillez contacter votre commecial référent si le problème persiste'}); })
+});
+
+// méthode d'envoi du mail de génération du formulaire admission
+app.post("/send-creation-link", (req, res) => {
+    let idCommercial = req.body.idCommercial;
+    let email = req.body.email;
+
+    console.log(email, idCommercial);
+
+    // création du mail à envoyer
+    let htmlMail = "<p>Bonjour,</p>" + 
+                       "<p>Voici le lien pour efectuer votre demande d'admission sur notre espace IMS, merci de cliquer sur le lien suivant: <a href=\"https://ims.intedgroup.com/#/formulaire-admission-alternance/"+idCommercial+"\">Formulaire de demande d'admission</a></p>" +
+                       "<p>Cordialement.</p>";
+
+    let mailOptions =
+    {
+        from: "ims@intedgroup.com",
+        to: email,
+        subject: "Lien d'admission [IMS]",
+        html: htmlMail,
+        // attachments: [{
+        //     filename: 'Image1.png',
+        //     path: 'assets/Image1.png',
+        //     cid: 'Image1' //same cid value as in the html img src
+        // }]
+    };
+
+
+    // envoi du mail
+    transporterINTED.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+    });
+
+    res.status(200).json({successMsg: 'Email envoyé'});
+});
+
+
+// TODO: Methode de modification d'un prospect alternable et de ses informations user
+
 
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

@@ -1,24 +1,9 @@
 <div class="grid">
-    <div class="col-6" *ngIf="listAlternantDD">
+    <div class="col-12" *ngIf="ListeContrats">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Nombre d'alternants</span>
-                    <div class="text-900 font-medium text-xl">{{ listAlternantDD.length }}</div>
-                </div>
-                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-users text-blue-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-6" *ngIf="ListeContrats">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-3">
-                <div>
-                    <span class="block text-500 font-medium mb-3"> Nombre de contrats
+                    <span class="block text-500 font-medium mb-3"> Nombre de contrats insérés
                     </span>
                     <div class="text-900 font-medium text-xl">{{ ListeContrats.length }}</div>
                 </div>
@@ -522,7 +507,7 @@
                         </td>
                         <td *ngIf="token.role != 'Watcher'">
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
-                                (click)="showPresence(contrat.alternant_id._id)"
+                                (click)="showPresence(contrat.alternant_id._id)" *ngIf="token.role != 'CEO Entreprise'"
                                 style="text-align: center; color: red; margin: 2px"></i>
                             <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags"
                                 pTooltip="Modifier le statut du contrat" aria-hidden="true"
@@ -552,7 +537,7 @@
                     <tr>
                         <th>Horaire</th>
                         <th>Niveau de la formation</th>
-                        <th>Mobilité internationnale</th>
+                        <th>Mobilité internationale</th>
                         <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
                         <th>Commercial</th>
                         <th>Tuteur</th>

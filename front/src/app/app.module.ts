@@ -257,6 +257,8 @@ import { ExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/externe
 import { EntrepriseFormComponent } from './pedagogie/entreprises/entreprise-form/entreprise-form.component';
 import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsnet/formulaire-externe-skillsnet/formulaire-externe-skillsnet.component';
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
+import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
+import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
 
 
 @NgModule({
@@ -524,6 +526,8 @@ import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commerc
     EntrepriseFormComponent,
     FormulaireExterneSkillsnetComponent,
     POVHorsCommercialComponent,
+    ProspectAltFormComponent,
+    ProspectsAlternablesComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
