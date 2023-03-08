@@ -541,6 +541,7 @@
                         <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
                         <th>Commercial</th>
                         <th>Tuteur</th>
+                        <th>OPCO</th>
                         <th>Année-scolaires</th>
                     </tr>
                 </ng-template>
@@ -563,6 +564,7 @@
                             {{ contrat.directeur_id?.lastname }}
                             {{ contrat.directeur_id?.firstname }}
                         </td>
+                        <td>{{ contrat.entreprise_id?.OPCO }}</td>
 
                         <td>
                             <ul>
