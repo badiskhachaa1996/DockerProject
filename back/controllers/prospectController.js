@@ -777,7 +777,7 @@ app.post("/post-prospect-alt", (req, res) => {
             // création du mail à envoyer
             let htmlMail =
                             "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                            r + "</strong></p>" +
+                            user.password + "</strong></p>" +
                             "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
                             "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                             " <a href=\"" + origin[0] + "/#/validation-email/" + userSaved.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
@@ -807,17 +807,15 @@ app.post("/post-prospect-alt", (req, res) => {
 
             res.status(201).json({ successMsg: "Votre demande d'admission à bien été pris en compte"});
         })
-        .catch((error) => { res.status(400).json({ error: error, errMsg: 'Impossible de créer votre compte, veuillez contacter votre commecial référent'}); })
+        .catch((error) => { console.log(error); res.status(400).json({ error: error, errMsg: 'Impossible de créer votre compte, veuillez contacter votre commecial référent'}); })
      })
-    .catch((error) => { res.status(400).json({ error: error, errMsg: 'Impossible de prendre en compte votre inscription, votre adresse mail existe peut être déja, veuillez contacter votre commecial référent si le problème persiste'}); })
+    .catch((error) => { console.log(error); res.status(400).json({ error: error, errMsg: 'Impossible de prendre en compte votre inscription, votre adresse mail existe peut être déja, veuillez contacter votre commecial référent si le problème persiste'}); })
 });
 
 // méthode d'envoi du mail de génération du formulaire admission
 app.post("/send-creation-link", (req, res) => {
     let idCommercial = req.body.idCommercial;
     let email = req.body.email;
-
-    console.log(email, idCommercial);
 
     // création du mail à envoyer
     let htmlMail = "<p>Bonjour,</p>" + 

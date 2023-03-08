@@ -62,7 +62,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-prospect>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
@@ -82,6 +82,7 @@
                                             <td>{{prospect.user_id?.pays_adresse}}</td>
                                             <td>{{prospect.user_id?.ville_adresse}}</td>
                                             <td>{{prospect.user_id?.postal_adresse}}</td>
+                                            <td>{{prospect.user_id?.numero_adresse}} {{prospect.user_id?.rue_adresse}}</td>
                                             <td>{{prospect.commercial_id?.civilite}}. {{prospect.commercial_id?.firstname | titlecase}} {{prospect.commercial_id?.lastname | uppercase}}</td>
                                         </tr>
                                     </ng-template>
@@ -103,7 +104,7 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td>{{prospect.date_naissance}}</td>
+                                            <td>{{prospect.date_naissance  | date: 'dd-MM-Y'}}</td>
                                             <td>{{prospect.last_title_prepared}}</td>
                                             <td>{{prospect.title_in_progress}}</td>
                                             <td>{{prospect.highest_title}}</td>

@@ -140,7 +140,7 @@ export class ProspectAltFormComponent implements OnInit {
       this.showForm = false;
       this.showValidatedPart = true;
     })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Inscription', detail: error.errMsg }); })
+    .catch((error) => { console.log(error.error); this.messageService.add({ severity: 'error', summary: 'Inscription', detail: error.errMsg }); })
   }
 
 }
