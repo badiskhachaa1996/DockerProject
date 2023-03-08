@@ -421,7 +421,7 @@ export class ListEtudiantComponent implements OnInit {
         if (!this.code && data && data.code_commercial_partenaire) {
           this.code = data.code_commercial_partenaire
         }
-        if (this.code) {
+        if (this.code && this.userConnected.role != 'Admin') {
           this.etudiantService.getAllByCode(this.code).subscribe(
             ((responseEtu) => {
               this.etudiants = responseEtu;
@@ -439,16 +439,14 @@ export class ListEtudiantComponent implements OnInit {
           );
         }
       });
-    } else if(this.token?.role == 'Watcher') 
-    {
+    } else if (this.token?.role == 'Watcher') {
       this.etudiantService.getAllEtudiantPopulate().subscribe({
         next: (response) => {
           let i = 1;
           response.forEach((etudiant: Etudiant) => {
-            let {ecole_id}: any = etudiant;
+            let { ecole_id }: any = etudiant;
             console.log(ecole_id);
-            if(i <= 5 && ecole_id.email == 'contact@academiedesgouvernantes.com')
-            {
+            if (i <= 5 && ecole_id.email == 'contact@academiedesgouvernantes.com') {
               this.etudiants.push(etudiant);
             }
             i++;

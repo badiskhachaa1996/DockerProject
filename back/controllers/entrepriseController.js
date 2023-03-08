@@ -405,107 +405,120 @@ app.post("/createNewContrat", (req, res, next) => {
 
 app.post("/createContratAlternance", (req, res, next) => {
     let ContratData = req.body;
+    let argProd = process.argv[2]
     delete ContratData._id;
     let NewContrat = new CAlternance({
         ...ContratData
     })
+    NewContrat.directeur_id = null;
+    CAlternance.findOne(NewContrat).then(r => {
+        console.log(r)
+        if (r)
+            res.status(500).send({ message: "Un contrat similaire existe déjà" })
+        else
+            Tuteur.findOne({ _id: NewContrat.tuteur_id })
+                .then((tuteur) => {
+                    if (tuteur) {
+
+                        //création du contrat
+                        NewContrat.save()
+                            .then((NewContData) => {
+                                // recuperation de l'adresse mail du directeur de l'entreprise
+                                Entreprise.findOne({ _id: NewContData.entreprise_id })
+                                    .then((entreprise) => {
+                                        User.findOne({ _id: entreprise.directeur_id })
+                                            .then((user) => {
+                                                // création du mail à envoyer
+                                                res.status(200).send(NewContData);
+                                                if (user && !argProd.includes('dev') && !argProd.includes('prod')) {
+                                                    let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
+
+                                                    let Ceo_mailOptions =
+                                                    {
+                                                        from: "ims@intedgroup.com",
+                                                        to: user.email_perso,
+                                                        subject: 'Nouveau contrat [IMS]',
+                                                        html: Ceo_htmlmail,
+                                                        // attachments: [{
+                                                        //     filename: 'Image1.png',
+                                                        //     path: 'assets/Image1.png',
+                                                        //     cid: 'Image1' //same cid value as in the html img src
+                                                        // }]
+                                                    };
+
+
+                                                    // envoi du mail
+                                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                        if (error) {
+                                                            console.error(error);
+                                                        }
+                                                    });
+                                                }
+
+                                            })
+                                            .catch((error) => { console.log(error); res.status(400).send(error) })
+
+                                    })
+                                    .catch((error) => { res.status(400).send(error); })
+                            })
+                            .catch((error) => {
+                                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+                            })
+                    }
+                    else {
+                        NewContrat.directeur_id = NewContrat.tuteur_id;
+                        NewContrat.tuteur_id = null;
+
+                        //création du contrat
+                        NewContrat.save()
+                            .then((NewContData) => {
+                                Entreprise.findOne({ _id: NewContData.entreprise_id })
+                                    .then((entreprise) => {
+                                        User.findOne({ _id: entreprise.directeur_id })
+                                            .then((user) => {
+                                                // création du mail à envoyer
+
+                                                res.status(200).send(NewContData);
+                                                if (user && !argProd.includes('dev') && !argProd.includes('prod')) {
+                                                    let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
+
+                                                    let Ceo_mailOptions =
+                                                    {
+                                                        from: "ims@intedgroup.com",
+                                                        to: user.email_perso,
+                                                        subject: 'Nouveau contrat [IMS]',
+                                                        html: Ceo_htmlmail,
+                                                        // attachments: [{
+                                                        //     filename: 'Image1.png',
+                                                        //     path: 'assets/Image1.png',
+                                                        //     cid: 'Image1' //same cid value as in the html img src
+                                                        // }]
+                                                    };
+
+
+                                                    // envoi du mail
+                                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                        if (error) {
+                                                            console.error(error);
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                            .catch((error) => { console.log(error); res.status(400).send(error) })
+
+                                    })
+                                    .catch((error) => { res.status(400).send(error); })
+                            })
+                            .catch((error) => {
+                                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+                            })
+                    }
+                })
+                .catch((error) => { res.status(500).send(error); });
+    })
 
     // verification si le tuteur est un directeur
-    Tuteur.findOne({ _id: NewContrat.tuteur_id })
-        .then((tuteur) => {
-            if (tuteur) {
-                NewContrat.directeur_id = null;
-                //création du contrat
-                NewContrat.save()
-                    .then((NewContData) => {
-                        // recuperation de l'adresse mail du directeur de l'entreprise
-                        Entreprise.findOne({ _id: NewContData.entreprise_id })
-                            .then((entreprise) => {
-                                User.findOne({ _id: entreprise.directeur_id })
-                                    .then((user) => {
-                                        // création du mail à envoyer
-                                        let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
 
-                                        let Ceo_mailOptions =
-                                        {
-                                            from: "ims@intedgroup.com",
-                                            to: user.email_perso,
-                                            subject: 'Nouveau contrat [IMS]',
-                                            html: Ceo_htmlmail,
-                                            // attachments: [{
-                                            //     filename: 'Image1.png',
-                                            //     path: 'assets/Image1.png',
-                                            //     cid: 'Image1' //same cid value as in the html img src
-                                            // }]
-                                        };
-
-
-                                        // envoi du mail
-                                        transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                            if (error) {
-                                                console.error(error);
-                                            }
-                                        });
-
-                                        res.status(200).send(NewContData);
-                                    })
-                                    .catch((error) => { console.log(error); res.status(400).send(error) })
-
-                            })
-                            .catch((error) => { res.status(400).send(error); })
-                    })
-                    .catch((error) => {
-                        res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
-                    })
-            }
-            else {
-                NewContrat.directeur_id = NewContrat.tuteur_id;
-                NewContrat.tuteur_id = null;
-
-                //création du contrat
-                NewContrat.save()
-                    .then((NewContData) => {
-                        Entreprise.findOne({ _id: NewContData.entreprise_id })
-                            .then((entreprise) => {
-                                User.findOne({ _id: entreprise.directeur_id })
-                                    .then((user) => {
-                                        // création du mail à envoyer
-                                        let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
-
-                                        let Ceo_mailOptions =
-                                        {
-                                            from: "ims@intedgroup.com",
-                                            to: user.email_perso,
-                                            subject: 'Nouveau contrat [IMS]',
-                                            html: Ceo_htmlmail,
-                                            // attachments: [{
-                                            //     filename: 'Image1.png',
-                                            //     path: 'assets/Image1.png',
-                                            //     cid: 'Image1' //same cid value as in the html img src
-                                            // }]
-                                        };
-
-
-                                        // envoi du mail
-                                        transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                            if (error) {
-                                                console.error(error);
-                                            }
-                                        });
-
-                                        res.status(200).send(NewContData);
-                                    })
-                                    .catch((error) => { console.log(error); res.status(400).send(error) })
-
-                            })
-                            .catch((error) => { res.status(400).send(error); })
-                    })
-                    .catch((error) => {
-                        res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
-                    })
-            }
-        })
-        .catch((error) => { res.status(500).send(error); });
 
 });
 
@@ -552,7 +565,7 @@ app.post("/send-creation-link", (req, res) => {
     console.log(email, idCommercial);
 
     // création du mail à envoyer
-    let Ceo_htmlmail = "<p>Bonjour,</p><p>Voici le lien de création de votre entreprise sur notre espace IMS, merci de cliquer sur le lien suivant: ims.intedgroup.com/#/creer-mon-entreprise/"+idCommercial+"</p>";
+    let Ceo_htmlmail = "<p>Bonjour,</p><p>Voici le lien de création de votre entreprise sur notre espace IMS, merci de cliquer sur le lien suivant: ims.intedgroup.com/#/creer-mon-entreprise/" + idCommercial + "</p>";
 
     let Ceo_mailOptions =
     {
@@ -575,7 +588,7 @@ app.post("/send-creation-link", (req, res) => {
         }
     });
 
-    res.status(200).json({success: 'Entreprise ajouté'});
+    res.status(200).json({ success: 'Entreprise ajouté' });
 })
 
 
@@ -674,9 +687,9 @@ app.patch("/update-status", (req, res) => {
     const contract_id = req.body._id;
     const status = req.body.statut;
 
-    CAlternance.findOneAndUpdate({_id: contract_id}, {statut: status})
-    .then((response) => { res.status(201).json({successMsg: 'Status du contrat mis à jour'}) })
-    .catch((error) => { res.status(400).json({errorMsg: 'Impossible de mettre à jour le status du contrat, veuillez contacter un administrateur!', error: error}); });
+    CAlternance.findOneAndUpdate({ _id: contract_id }, { statut: status })
+        .then((response) => { res.status(201).json({ successMsg: 'Status du contrat mis à jour' }) })
+        .catch((error) => { res.status(400).json({ errorMsg: 'Impossible de mettre à jour le status du contrat, veuillez contacter un administrateur!', error: error }); });
 });
 
 
@@ -691,6 +704,31 @@ app.put("/update", (req, res, next) => {
         .catch((error) => { res.status(400).send("Impossible de modifier cette entreprise"); });
 
 });
+
+
+app.get('/nettoyageCA', (req, res) => {
+    let toDelete = []
+    CAlternance.find().then(allCA => {
+        allCA.forEach(ca => {
+            if (!toDelete.includes(ca._id)) {
+                let caID = ca._id
+                delete ca._id
+                allCA.forEach(catocheck => {
+                    let tempID = catocheck._id
+                    delete catocheck._id
+                    if (ca == catocheck && caID != tempID)
+                        toDelete.push(tempID)
+                })
+            }
+        })
+        CAlternance.remove({ _id: { $in: toDelete } }, (err) => {
+            if (err)
+                console.error(err)
+        }).then(r => {
+            res.send(r)
+        })
+    })
+})
 
 
 //export du module app pour l'utiliser dans les autres parties de l'application

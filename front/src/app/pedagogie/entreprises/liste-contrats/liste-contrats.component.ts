@@ -399,7 +399,10 @@ export class ListeContratsComponent implements OnInit {
         this.formAddNewCA = false
         this.ngOnInit()
 
-      }, (error => { console.error(error) }))
+      }, (error => {
+        this.messageService.add({ severity: 'error', summary: "Une erreur est arrivé", detail: error?.error?.message })
+        console.error(error)
+      }))
   }
 
 
@@ -485,6 +488,13 @@ export class ListeContratsComponent implements OnInit {
         this.ngOnInit();
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Contrat alternance', detail: error.errorMsg }) });
+  }
+
+  nettoyage() {
+    this.entrepriseService.nettoyageCA().then(r => {
+      console.log(r)
+      this.messageService.add({ severity: "success", summary: "Nettoyage des contracts avec succès", detail: `${r.n} contrats ont été supprimés.` })
+    })
   }
 
 }
