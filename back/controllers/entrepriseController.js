@@ -549,8 +549,6 @@ app.post("/send-creation-link", (req, res) => {
     let idCommercial = req.body.idCommercial;
     let email = req.body.email;
 
-    console.log(email, idCommercial);
-
     // création du mail à envoyer
     let Ceo_htmlmail = "<p>Bonjour,</p><p>Voici le lien de création de votre entreprise sur notre espace IMS, merci de cliquer sur le lien suivant: ims.intedgroup.com/#/creer-mon-entreprise/"+idCommercial+"</p>";
 
@@ -575,8 +573,8 @@ app.post("/send-creation-link", (req, res) => {
         }
     });
 
-    res.status(200).json({success: 'Entreprise ajouté'});
-})
+    res.status(200).json({success: 'Mail envoyé'});
+});
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {

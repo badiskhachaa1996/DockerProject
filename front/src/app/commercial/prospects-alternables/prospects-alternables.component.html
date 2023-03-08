@@ -1,0 +1,120 @@
+<div class="grid">
+    <div class="col-12" *ngIf="showFormGenerateLink">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showFormGenerateLink = false;" aria-hidden="true">
+			</i>
+
+            <h4 style="text-align: center;">Génération d'un lien d'admission</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formGenerateLink" (ngSubmit)="onSendCreationLink()">
+                <div class="field col-8">
+                    <input pInputText id="mail" type="email" formControlName="adresse_mail" required placeholder="Adresse email" />
+                </div>
+                <div class="field col-4">
+                    <button pButton type="submit" [disabled]="formGenerateLink.invalid" label="Envoyer" style="float: right;"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <button pButton label="Générer un lien" style="float: right;" (click)="onShowFormGenerateLink();" class="p-button-outlined p-button-warning mr-2 mb-2"></button>
+            <h5>Liste des prospects alternables</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="prospects" dataKey="_id" [globalFilterFields]="['_id', 'user_id.lastname', 'user_id.firstname']"
+                     responsiveLayout="scroll"
+                     [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>Prénom &amp; Nom</th>
+                        <th>Numéro sécurité social</th>
+                        <th>Email</th>
+                        <th>Nationalité</th>
+                        <th>Commune de naissance</th>
+                        <th>Handicape</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 12rem;">{{prospect.user_id?.civilite}}. {{prospect.user_id?.firstname | titlecase}} {{prospect.user_id?.lastname | uppercase}}</td>
+                        <td>{{prospect.nir}}</td>
+                        <td>{{prospect.user_id?.email_perso}}</td>
+                        <td>{{prospect.user_id?.nationnalite}}</td>
+                        <td>{{prospect.commune_naissance}}</td>
+                        <td>{{prospect.isHandicap == true ? 'Oui': 'Non'}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-prospect>
+                    <tr>
+                        <td colspan="6">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Pays</th>
+                                            <th>Ville</th>
+                                            <th>CP</th>
+                                            <th>Adresse</th>
+                                            <th>Commercial</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{prospect.user_id?.pays_adresse}}</td>
+                                            <td>{{prospect.user_id?.ville_adresse}}</td>
+                                            <td>{{prospect.user_id?.postal_adresse}}</td>
+                                            <td>{{prospect.commercial_id?.civilite}}. {{prospect.commercial_id?.firstname | titlecase}} {{prospect.commercial_id?.lastname | uppercase}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Date de naissance</th>
+                                            <th>Dernier diplôme préparé</th>
+                                            <th>Diplôme en cours</th>
+                                            <th>Diplôme le plus élevé</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{prospect.date_naissance}}</td>
+                                            <td>{{prospect.last_title_prepared}}</td>
+                                            <td>{{prospect.title_in_progress}}</td>
+                                            <td>{{prospect.highest_title}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
