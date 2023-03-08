@@ -47,6 +47,7 @@ export class PvAppreciationComponent implements OnInit {
       this.pvAnnuel = data
       if (data && data[data.length - 1]) {
         this.loadPV(data[data.length - 1])
+        console.log("loadpv")
       } else
         this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
           this.cols = data.cols
@@ -57,13 +58,32 @@ export class PvAppreciationComponent implements OnInit {
               d.appreciation_module = {}
             }
             this.cols.forEach(col => {
-              if (!d.appreciation_module[col.module])
-                d.appreciation_module[col.module] = ""
+              //console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
+              if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+                let note = parseInt(d.notes[col.module])
+                //console.log(note)
+                if (note < 10)
+                  d.appreciation_module[col.module] = "Doit faire ses preuves"
+                else if (note > 10 && note < 12)
+                  d.appreciation_module[col.module] = "Passable"
+                else if (note > 12 && note < 14)
+                  d.appreciation_module[col.module] = "Assez Bien"
+                else if (note > 14 && note < 16)
+                  d.appreciation_module[col.module] = "Bien"
+                else if (note > 16 && note < 18)
+                  d.appreciation_module[col.module] = "Très Bien"
+                else if (note > 18)
+                  d.appreciation_module[col.module] = "Excellent"
+                else
+                  d.appreciation_module[col.module] = ""
+              }
+
             })
             this.dataPV[index] = d
           })
         })
     })
+
   }
   savePv() {
     this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
@@ -91,9 +111,26 @@ export class PvAppreciationComponent implements OnInit {
         if (!d.appreciation_module) {
           d.appreciation_module = {}
         }
-        this.cols.forEach(col => {
-          if (!d.appreciation_module[col.module])
-            d.appreciation_module[col.module] = ""
+        pv.pv_annuel_cols.forEach(col => {
+          console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""), (d.notes[col.module] || d.notes[col.module] == 0), col.module)
+          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+            let note = parseInt(d.notes[col.module])
+            console.log(note)
+            if (note < 10)
+              d.appreciation_module[col.module] = "Doit faire ses preuves"
+            else if ((note > 10 && note < 12) || note == 10)
+              d.appreciation_module[col.module] = "Passable"
+            else if ((note > 12 && note < 14) || note == 12)
+              d.appreciation_module[col.module] = "Assez Bien"
+            else if ((note > 14 && note < 16) || note == 14)
+              d.appreciation_module[col.module] = "Bien"
+            else if ((note > 16 && note < 18) || note == 16)
+              d.appreciation_module[col.module] = "Très Bien"
+            else if (note > 18|| note==18)
+              d.appreciation_module[col.module] = "Excellent"
+            else
+              d.appreciation_module[col.module] = ""
+          }
         })
         pv.pv_annuel_data[index] = d
       })

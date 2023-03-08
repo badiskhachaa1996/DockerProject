@@ -35,8 +35,7 @@ export class EntrepriseService {
   }
 
   // recuperation de la liste des entreprises d'un CEO
-  getEntreprisesByIdCEO(id: string): Promise<Entreprise[]>
-  {
+  getEntreprisesByIdCEO(id: string): Promise<Entreprise[]> {
     const url = `${this.apiUrl}/get-entreprises-by-id-ceo/${id}`;
 
     return new Promise<Entreprise[]>((resolve, reject) => {
@@ -92,8 +91,7 @@ export class EntrepriseService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
-  getContratsByCeo(id: string): Promise<any>
-  {
+  getContratsByCeo(id: string): Promise<any> {
     const url = `${this.apiUrl}contrats-by-ceo/${id}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -134,19 +132,18 @@ export class EntrepriseService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  updateContratAlternance(data:ContratAlternance) {
+  updateContratAlternance(data: ContratAlternance) {
     let url = this.apiUrl + "updateContratAlternance"
-    return this.httpClient.post<ContratAlternance>(url,data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
+    return this.httpClient.post<ContratAlternance>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
   }
 
   // update contract status
-  updateStatus(contract: ContratAlternance): Promise<any>
-  {
+  updateStatus(contract: ContratAlternance): Promise<any> {
     const url = `${this.apiUrl}update-status`;
-    
+
     return new Promise<any>((resolve, reject) => {
       this.httpClient.patch<any>(url, contract, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
-        next: (response: any) => { resolve(response)},
+        next: (response: any) => { resolve(response) },
         error: (error: any) => { reject(error) },
         complete: () => (console.log('Status du contrat mis à jour'))
       });
@@ -154,15 +151,24 @@ export class EntrepriseService {
   }
 
   // méthode d'envoi du mail vers les entreprises
-  sendCreationLink(idCommercial: string, email: string): Promise<any> 
-  {
+  sendCreationLink(idCommercial: string, email: string): Promise<any> {
     let url = `${this.apiUrl}send-creation-link`;
 
     return new Promise<any>((resolve, reject) => {
-      this.httpClient.post(url, {idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.post(url, { idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Lien générer') }
+      });
+    });
+  }
+  nettoyageCA() {
+    let url = `${this.apiUrl}nettoyageCA`;
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Nettoyage complété') }
       });
     });
   }

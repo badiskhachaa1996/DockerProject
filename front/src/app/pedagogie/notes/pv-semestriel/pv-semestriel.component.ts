@@ -37,6 +37,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
+    
   }
 
   ngOnInit(): void {

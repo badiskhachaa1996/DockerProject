@@ -2,7 +2,7 @@
     <div class="card">
         <h5 *ngIf="classe">Liste des PVs {{SEMESTRE}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
-        <p-table #dt1 [value]="pvAnnuel" dataKey="_id" responsiveLayout="scroll" id="dt1"
+        <p-table #dt2 [value]="pvAnnuel" dataKey="_id" responsiveLayout="scroll" id="dt2"
             [totalRecords]="pvAnnuel.length" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>

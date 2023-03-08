@@ -19,11 +19,12 @@ const io = require("socket.io-client");
 })
 export class AppTopBarComponent {
 
+  logo = "assets/images/logo-ims.png"
   notif = false;
   Notifications: Notification[] = [];
   socket = io(environment.origin.replace('/soc', ''));
 
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService,private msalService:MsalService) { }
+  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService, private msalService: MsalService) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -38,7 +39,10 @@ export class AppTopBarComponent {
   }
   ngOnInit() {
     let temp: any = jwt_decode(localStorage.getItem("token"))
-
+    let url = window.location.href;
+    //console.log(url)
+    if (url.includes('ims.adgeducation')) //ims.adgeducation
+      this.logo = "assets/images/logo_adg.png"
     if (temp.service_id) {
       this.serv.getAServiceByid(temp.service_id).subscribe(service => {
         let serviceName = service.dataService.label

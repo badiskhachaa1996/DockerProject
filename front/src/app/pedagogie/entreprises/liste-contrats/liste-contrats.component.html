@@ -40,9 +40,9 @@
                         <div class="field col-12 md:col-6">
                             <label For="entreprise_id">Entreprise<span style="color: red;"> *
                                 </span></label>
-                            <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="EntrepriseList" dataKey="_id" filter="true"
-                                formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'"
+                            <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
+                                dataKey="_id" filter="true" formControlName="entreprise_id"
+                                [disabled]="token.type == 'CEO Entreprise'"
                                 (onChange)="loadTuteur(entreprise_id.value)">
                             </p-dropdown>
                         </div>
@@ -65,9 +65,9 @@
                         <div class="field col-12 md:col-6">
                             <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="debut_contrat" [monthNavigator]="true"
-                                [yearNavigator]="true" [required]="true" [showOnFocus]="false" [showIcon]="true"
-                                placeHolder="26/05/1998" dateFormat="dd/mm/yy">
+                            <p-calendar formControlName="debut_contrat" [monthNavigator]="true" [yearNavigator]="true"
+                                [required]="true" [showOnFocus]="false" [showIcon]="true" placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
                             <div *ngIf="debut_contrat.invalid && (debut_contrat.touched || debut_contrat.dirty)">
                                 <span style="color: red;" class="error" *ngIf="debut_contrat.errors?.required">*
@@ -157,8 +157,7 @@
                                 [options]="dropDownCommecialList" dataKey="_id" filter="true"
                                 formControlName="code_commercial">
                             </p-dropdown>
-                            <div
-                                *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
+                            <div *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
                                 <span style="color: red;" class="error">*
                                     Le
                                     champs est obligatoire.</span>
@@ -166,11 +165,13 @@
                         </div>
                         <div class="field col-12">
                             <h5>Mobilité internationnale</h5>
-                            <p-selectButton [options]="mobiliteOptions" optionLabel="name" (onChange)="onShowCout($event)"></p-selectButton>
+                            <p-selectButton [options]="mobiliteOptions" optionLabel="name"
+                                (onChange)="onShowCout($event)"></p-selectButton>
                         </div>
                         <div class="field col-12" *ngIf="showCout">
                             <label for="cout_mobilite">Coût mobilité (€)</label>
-                            <input pInputText type="number" id="cout_mobilite" placeholder="1500" formControlName="cout_mobilite">
+                            <input pInputText type="number" id="cout_mobilite" placeholder="1500"
+                                formControlName="cout_mobilite">
                         </div>
                         <div class="field col-6">
                             <label>Année scolaire</label>
@@ -216,9 +217,9 @@
                         <div class="field col-12 md:col-6">
                             <label For="entreprise_id">Entreprise<span style="color: red;"> *
                                 </span></label>
-                            <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="EntrepriseList" dataKey="_id" filter="true"
-                                formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'"
+                            <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
+                                dataKey="_id" filter="true" formControlName="entreprise_id"
+                                [disabled]="token.type == 'CEO Entreprise'"
                                 (onChange)="loadTuteur(entreprise_id_m.value)">
                             </p-dropdown>
                         </div>
@@ -240,12 +241,11 @@
                         <div class="field col-12 md:col-6">
                             <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="debut_contrat" [monthNavigator]="true"
-                                [yearNavigator]="true" [required]="true" [showOnFocus]="false" [showIcon]="true"
-                                placeHolder="26/05/1998" dateFormat="dd/mm/yy">
+                            <p-calendar formControlName="debut_contrat" [monthNavigator]="true" [yearNavigator]="true"
+                                [required]="true" [showOnFocus]="false" [showIcon]="true" placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
-                            <div
-                                *ngIf="debut_contrat_m.invalid && (debut_contrat_m.touched || debut_contrat_m.dirty)">
+                            <div *ngIf="debut_contrat_m.invalid && (debut_contrat_m.touched || debut_contrat_m.dirty)">
                                 <span style="color: red;" class="error" *ngIf="debut_contrat_m.errors?.required">*
                                     Le champs est vide ou n'est pas dans le format JJ/MM/AAAA</span>
                             </div>
@@ -343,11 +343,13 @@
                         </div>
                         <div class="field col-12">
                             <h5>Mobilité internationnale</h5>
-                            <p-selectButton [options]="mobiliteOptions" optionLabel="name" (onChange)="onShowCout($event)"></p-selectButton>
+                            <p-selectButton [options]="mobiliteOptions" optionLabel="name"
+                                (onChange)="onShowCout($event)"></p-selectButton>
                         </div>
                         <div class="field col-12" *ngIf="showCout">
                             <label for="cout_mobilite">Coût mobilité (€)</label>
-                            <input pInputText type="number" id="cout_mobilite" placeholder="1500" formControlName="cout_mobilite">
+                            <input pInputText type="number" id="cout_mobilite" placeholder="1500"
+                                formControlName="cout_mobilite">
                         </div>
                         <div class="field col-6">
                             <label>Année scolaire</label>
@@ -379,7 +381,7 @@
                 <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                     (click)="showStatusForm = false;" aria-hidden="true"></i>
                 <h4 style="text-align: center;">Mettre à jour le status du contrat</h4>
-    
+
                 <form [formGroup]="statusForm" (ngSubmit)="onUpdateStatus()">
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
@@ -388,8 +390,7 @@
                                 <p-dropdown id="libelle" [options]="statusList" formControlName="libelle"></p-dropdown>
                             </div>
                             <div classe="field">
-                                <button pButton type="submit" label="Mettre à jour"
-                                    [disabled]="statusForm.invalid">
+                                <button pButton type="submit" label="Mettre à jour" [disabled]="statusForm.invalid">
                                 </button>
                             </div>
                         </div>
@@ -408,10 +409,13 @@
         </div>
 
         <div class="card">
-            <button *ngIf="token.type != 'CEO Entreprise' && token.role != 'Watcher'" pButton label="Nouveau contrat d'alternance"
-                (click)="ShowAddNewCA()" style="float: right;"></button>
-            <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton label="Nouveau contrat d'alternance"
-                (click)="ShowAddNewCA()" [disabled]="true" style="float: right;"></button>
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role != 'Watcher'" pButton
+                label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" style="float: right;"></button>
+            <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton
+                label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" [disabled]="true"
+                style="float: right;"></button>
+            <button pButton label="Supprimer les contrats d'alternance en double" (click)="nettoyage()"
+                style="float: right;"></button>
 
             <h5>Liste des contrats</h5>
 
@@ -432,9 +436,8 @@
                             filterPlaceholder="Choissisez un commercial"></p-dropdown>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text"
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
                         </span>
                     </div>
                 </ng-template>
@@ -471,11 +474,11 @@
                             <p-tag *ngIf="contrat.statut == 'Conclu'" icon="pi pi-pencil" severity="info"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'En attente d’informations'" icon="pi pi-spin pi-spinner" severity="warning"
-                                [value]="contrat.statut">
+                            <p-tag *ngIf="contrat.statut == 'En attente d’informations'" icon="pi pi-spin pi-spinner"
+                                severity="warning" [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner" severity="warning"
-                                [value]="contrat.statut">
+                            <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner"
+                                severity="warning" [value]="contrat.statut">
                             </p-tag>
                             <p-tag *ngIf="contrat.statut == 'Champs requis'" icon="pi pi-info-circle" severity="danger"
                                 [value]="contrat.statut">
@@ -492,8 +495,8 @@
                             <p-tag *ngIf="contrat.statut == 'Relance à traiter'" icon="pi pi-times" severity="danger"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check" severity="success"
-                                [value]="contrat.statut">
+                            <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check"
+                                severity="success" [value]="contrat.statut">
                             </p-tag>
                         </td>
 
@@ -506,7 +509,8 @@
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
                                 (click)="showPresence(contrat.alternant_id._id)" *ngIf="token.role != 'CEO Entreprise'"
                                 style="text-align: center; color: red; margin: 2px"></i>
-                            <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags" pTooltip="Modifier le statut du contrat" aria-hidden="true"
+                            <i *ngIf="token.type != 'CEO Entreprise'" class="pi pi-tags"
+                                pTooltip="Modifier le statut du contrat" aria-hidden="true"
                                 (click)="showStatusForm = true; contratToUpdate = contrat"
                                 style="text-align: center; color: gray; margin: 2px"></i>
                             <i class="pi pi-calendar" pTooltip="Calendrier de l'apprentis" aria-hidden="true"
@@ -548,7 +552,8 @@
                         <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
                             {{ contrat.entreprise_id?.r_sociale }}
                         </td>
-                        <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname | uppercase }}</td>
+                        <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname |
+                            uppercase }}</td>
 
                         <td *ngIf="contrat.tuteur_id != null">
                             {{ contrat.tuteur_id?.user_id?.lastname }}
