@@ -15,6 +15,7 @@ import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -515,6 +516,18 @@ export class ListeContratsComponent implements OnInit {
       this.ngOnInit()
       this.messageService.add({ severity: "success", summary: "Nettoyage des contracts avec succès", detail: `${r.n} contrats ont été supprimés.` })
     })
+  }
+
+  // méthode de téléchargement du calendrier de la formation
+  onDownloadCalendar(id: string): void
+  {
+    this.entrepriseService.getCalendar(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
 }
