@@ -421,19 +421,28 @@
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreAgent"
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreAgent"
                             (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals')"
-                            filterPlaceholder="Choissisez un commercial"></p-dropdown>
+                            filterPlaceholder="Choisissez un commercial"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreCampus"
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreCampus"
                             (onChange)="dt1.filter($event.value, 'code_commercial.campus', 'equals')"
-                            filterPlaceholder="Choissisez un commercial"></p-dropdown>
+                            filterPlaceholder="Choisissez un commercial"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreStatus"
+                            (onChange)="dt1.filter($event.value, 'statut', 'equals')"
+                            filterPlaceholder="Choisissez un status"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreMobility"
+                            (onChange)="dt1.filter($event.value, 'cout_mobilite', 'equals')"
+                            filterPlaceholder="Mobilité internationale"></p-dropdown>
+
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
