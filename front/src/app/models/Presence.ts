@@ -9,7 +9,8 @@ export class Presence {
         public justificatif?: boolean,
         public date_signature?: Date,
         public allowedByFormateur?: Boolean,
-        public PresentielOrDistanciel?: String
+        public PresentielOrDistanciel?: String,
+        public approved_by_pedagogie?: boolean,
     ) { }
 
 }

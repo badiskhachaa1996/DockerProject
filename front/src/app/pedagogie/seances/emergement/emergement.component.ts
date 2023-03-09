@@ -238,9 +238,7 @@ export class EmergementComponent implements OnInit {
       if (this.token.id == dataS.formateur_id)
         this.date_fin = new Date(dataS.date_fin).getTime() + (60 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
-      console.log(`showCanvas:${this.showCanvas}\ndate:${this.date}\ndate_debut:${this.date_debut}\ndate_fin:${this.date_fin}\nd>dd:${this.date > this.date_debut}\ndf>d:${this.date_fin > this.date}`)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
-      console.log(`showCanvas:${this.showCanvas}`)
       this.date_fin_seance = new Date(dataS.date_fin).getTime()
       this.DiplomeService.getAll().subscribe(diplomes => {
         diplomes.forEach(diplome => {

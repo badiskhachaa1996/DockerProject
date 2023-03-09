@@ -17,6 +17,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { ClasseService } from 'src/app/services/classe.service';
 import * as html2pdf from 'html2pdf.js';
 import { DatePipe } from '@angular/common';
+import { Presence } from 'src/app/models/Presence';
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
@@ -103,6 +104,7 @@ export class DetailsEtudiantComponent implements OnInit {
   horizontalOptions: any;
   barOptions: any;
   pourcentageAssiduite: number;
+  isNotEntreprise = true
 
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
@@ -156,72 +158,76 @@ export class DetailsEtudiantComponent implements OnInit {
 
       this.userService.getById(this.EtudiantDetail.user_id).subscribe((userdata) => {
         this.Etudiant_userdata = jwt_decode(userdata.userToken)['userFromDb']
-        if (this.Etudiant_userdata.type != "Initial" && this.Etudiant_userdata.type != "Alternant")
-          this.isNotEtudiant = true
-
       }),
         ((error) => { console.error(error); })
-      this.seanceService.getAllFinishedByClasseId(this.EtudiantDetail.classe_id, this.EtudiantDetail.user_id).subscribe((seanceData) => {
-        this.ListeSeance = seanceData
+      this.userService.getPopulate(token.id).subscribe(userConnected => {
+        this.seanceService.getAllFinishedByClasseId(this.EtudiantDetail.classe_id, this.EtudiantDetail.user_id).subscribe((seanceData) => {
+          this.ListeSeance = seanceData
+          this.isNotEtudiant = userConnected.type != "Initial" && userConnected.type != "Alternant"
+          this.isNotEntreprise = userConnected.type != 'CEO Entreprise'
+          let type = "Agent"
+          if (!this.isNotEtudiant || userConnected.type == 'CEO Entreprise')
+            type = "EtudiantOuEntreprise"
+          this.presenceService.getAllByUser(this.EtudiantDetail.user_id, type).subscribe((presenceData) => {
+            this.AssiduiteListe = presenceData
 
-        this.presenceService.getAllByUser(this.EtudiantDetail.user_id).subscribe((presenceData) => {
-          this.AssiduiteListe = presenceData
-
-          this.ListeSeance.forEach(seance => {
-            this.ListeSeanceDIC[seance._id] = seance;
-          });
-
-
-          this.matiereService.getAll().subscribe(data => {
-            data.forEach(m => {
-              this.matiereDic[m._id] = m
+            this.ListeSeance.forEach(seance => {
+              this.ListeSeanceDIC[seance._id] = seance;
             });
-          })
-          this.PresenceService.updateAbsences(this.EtudiantDetail.user_id).subscribe(seances => {
-            this.nb_absencesNJ += seances.length
-          })
 
-          // boucle liste des presences totales de l'étudiants.
-          this.AssiduiteListe.forEach(item => {
-            if (item.isPresent != true) {
-              // absence ++1
-              let month: string = item.seance_id?.date_debut.slice(5, 7)
 
-              if (item.justificatif != true) {
-                // absence non justifié ++1
+            this.matiereService.getAll().subscribe(data => {
+              data.forEach(m => {
+                this.matiereDic[m._id] = m
+              });
+            })
+            this.PresenceService.updateAbsences(this.EtudiantDetail.user_id).subscribe(seances => {
+              this.nb_absencesNJ += seances.length
+            })
+
+            // boucle liste des presences totales de l'étudiants.
+            this.AssiduiteListe.forEach(item => {
+              if (item.isPresent != true) {
+                // absence ++1
                 let month: string = item.seance_id?.date_debut.slice(5, 7)
-                this.nb_absencesNJ++
-                this.barData.datasets[2].data[Number(month) - 1]++
+
+                if (item.justificatif != true) {
+                  // absence non justifié ++1
+                  let month: string = item.seance_id?.date_debut.slice(5, 7)
+                  this.nb_absencesNJ++
+                  this.barData.datasets[2].data[Number(month) - 1]++
+                }
+                else {
+                  this.nb_absences++
+                  this.barData.datasets[0].data[Number(month) - 1]++
+                }
               }
               else {
-                this.nb_absences++
-                this.barData.datasets[0].data[Number(month) - 1]++
+                //presence ++1
+                let month: string = item.seance_id?.date_debut.slice(5, 7)
+
+                this.nb_presences++;
+                this.barData.datasets[1].data[Number(month) - 1]++
               }
-            }
-            else {
-              //presence ++1
-              let month: string = item.seance_id?.date_debut.slice(5, 7)
+            });
+            this.barDataHor.datasets[0].data.push(this.nb_presences)
 
-              this.nb_presences++;
-              this.barData.datasets[1].data[Number(month) - 1]++
-            }
-          });
-          this.barDataHor.datasets[0].data.push(this.nb_presences)
+            this.barDataHor.datasets[0].data.push(this.nb_absences)
 
-          this.barDataHor.datasets[0].data.push(this.nb_absences)
+            this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
 
-          this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
-
-          this.pourcentageAssiduite = Math.round(100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length));
-          this.chart2.data = this.barDataHor
-          this.chart.data = this.barData
-          this.barDataHorAJ = this.barDataHor
-        })
+            this.pourcentageAssiduite = Math.round(100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length));
+            this.chart2.data = this.barDataHor
+            this.chart.data = this.barData
+            this.barDataHorAJ = this.barDataHor
+          })
 
 
 
-      }),
-        ((error) => { console.error(error); })
+        }),
+          ((error) => { console.error(error); })
+      })
+
 
 
     }),
@@ -332,6 +338,16 @@ export class DetailsEtudiantComponent implements OnInit {
     }, err => {
       console.error(err)
       this.messageService.add({ severity: 'error', summary: "Erreur lors du changement de couleur", detail: err.error })
+    })
+  }
+
+  AbsenceApproved(p: Presence, bool: boolean) {
+    p.approved_by_pedagogie = bool
+    this.PresenceService.updatePresence(p).subscribe(r => {
+      if (bool)
+        this.messageService.add({ severity: 'success', summary: "L'absence sera visible sur l'espace assiduité de l'étudiant" })
+      else
+        this.messageService.add({ severity: 'success', summary: "L'absence sera caché sur l'espace assiduité de l'étudiant" })
     })
   }
 }

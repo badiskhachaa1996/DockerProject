@@ -150,7 +150,14 @@
                             severity="danger"></p-tag>
                     </td>
                     <td>
-
+                        <i *ngIf="isNotEtudiant && isNotEntreprise && !Assiduit.isPresent && !Assiduit.approved_by_pedagogie"
+                            pTooltip="Rendre visible l'absence à l'entreprise" tooltipPosition="bottom"
+                            class="pi pi-check" style="margin-left: 2%;" (click)="AbsenceApproved(Assiduit,true)"
+                            aria-hidden="true"></i>
+                        <i *ngIf="isNotEtudiant && isNotEntreprise && !Assiduit.isPresent && Assiduit.approved_by_pedagogie"
+                            pTooltip="Cacher l'absence à l'entreprise" tooltipPosition="bottom"
+                            class="pi pi-times" style="margin-left: 2%;" (click)="AbsenceApproved(Assiduit,false)"
+                            aria-hidden="true"></i>
                         <i *ngIf="Assiduit.justificatif" pTooltip="Voir le justificatif" tooltipPosition="bottom"
                             class="pi pi-file" style="margin-left: 2%;" (click)="VoirJustificatif(Assiduit._id)"
                             aria-hidden="true"></i>

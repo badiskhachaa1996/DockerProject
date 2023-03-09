@@ -31,19 +31,33 @@ app.get("/getAll", (req, res) => {
 });
 
 //Récupérer tous les presence d'un user
-app.get("/getAllByUser/:id", (req, res) => {
-    Presence.find({ user_id: req.params.id }).populate("seance_id").then((data) => {
-        let date = new Date("2023-01-01")
-        let r = []
-        data.forEach(presence => {
-            if (presence.seance_id && presence.seance_id.date_debut > date)
-                r.push(presence)
+app.get("/getAllByUser/:id/:type", (req, res) => {
+    if (req.params.type != "Agent")
+        Presence.find({ user_id: req.params.id, $or: [{ approved_by_pedagogie: true }, { isPresent: true }] }).populate("seance_id").then((data) => {
+            let date = new Date("2023-01-01")
+            let r = []
+            data.forEach(presence => {
+                if (presence.seance_id && presence.seance_id.date_debut > date)
+                    r.push(presence)
+            })
+            res.status(200).send(r);
+        }).catch((error) => {
+            console.error(error)
+            res.status(404).send(error);
         })
-        res.status(200).send(r);
-    }).catch((error) => {
-        console.error(error)
-        res.status(404).send(error);
-    })
+    else
+        Presence.find({ user_id: req.params.id }).populate("seance_id").then((data) => {
+            let date = new Date("2023-01-01")
+            let r = []
+            data.forEach(presence => {
+                if (presence.seance_id && presence.seance_id.date_debut > date)
+                    r.push(presence)
+            })
+            res.status(200).send(r);
+        }).catch((error) => {
+            console.error(error)
+            res.status(404).send(error);
+        })
 });
 //Récupérer tous les presence d'une séance
 app.get("/getAllBySeance/:id", (req, res) => {
@@ -432,7 +446,7 @@ app.get("/getAllAbsences/:user_id", (req, res) => {
     })
 })
 
-app.get("/updateAbsences/:user_id", (req, res) => {
+app.get("/updateAbsences/:user_id/:type", (req, res) => {
     Etudiant.findOne({ user_id: req.params.user_id }).populate('user_id').populate('classe_id').then(etudiant => {
         Presence.find({ user_id: req.params.user_id }).then(presences => {
             let listIDSeances = []
@@ -440,7 +454,10 @@ app.get("/updateAbsences/:user_id", (req, res) => {
                 listIDSeances.push(presence.seance_id)
             })
             Seance.find({ _id: { $nin: listIDSeances }, classe_id: { $in: [etudiant.classe_id._id] }, date_debut: { $gte: new Date("2023-1-1"), $lt: new Date() }, isOptionnel: false }).then(seances => {
-                res.status(200).send(seances)
+                if (req.params.type != "Agent")
+                    res.status(200).send([])
+                else
+                    res.status(200).send(seances)
                 seances.forEach((seance, index) => {
                     let p = new Presence({
                         seance_id: seance._id,
@@ -516,5 +533,13 @@ app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
         })
     })
 
+})
+
+app.post('/updatePresence', (req, res) => {
+    Presence.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
+        Presence.findById(doc._id).populate("seance_id").then(docExport => {
+            res.send(docExport)
+        })
+    })
 })
 module.exports = app;
