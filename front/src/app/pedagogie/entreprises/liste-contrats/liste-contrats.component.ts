@@ -15,6 +15,7 @@ import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -70,11 +71,31 @@ export class ListeContratsComponent implements OnInit {
   ];
 
   filtreAgent = [
-    { value: null, label: "Tous les commerciaux" }
+    { value: null, label: "Commerciaux" }
   ];
 
   filtreCampus = [
-    { value: null, label: "Tous les campus" }
+    { value: null, label: "Campus" }
+  ];
+
+  filtreStatus = [
+    { label: 'Status', value: null },
+    { label: '0- Créé', value: 'Créé' },
+    { label: '1- Conclu', value: 'Conclu' },
+    { label: '2- En attente d’informations', value: 'En attente d’informations' },
+    { label: '3- En attente de validation', value: 'En attente de validation' },
+    { label: '4- Champs requis', value: 'Champs requis' },
+    { label: '5- Montant optimisé', value: 'Montant optimisé' },
+    { label: '6- Signé', value: 'Signé' },
+    { label: '7- Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
+    { label: '8- Relance à traiter', value: 'Relance à traiter' },
+    { label: '9- Validé à facturation', value: 'Validé à facturation' },
+  ];
+
+  filtreMobility = [
+    { label: 'Mobilité *', value: null },
+    { label: 'Oui', value: '500' },
+    { label: 'Non', value: '' },
   ];
 
   mobiliteOptions: any = [
@@ -495,6 +516,18 @@ export class ListeContratsComponent implements OnInit {
       this.ngOnInit()
       this.messageService.add({ severity: "success", summary: "Nettoyage des contracts avec succès", detail: `${r.n} contrats ont été supprimés.` })
     })
+  }
+
+  // méthode de téléchargement du calendrier de la formation
+  onDownloadCalendar(id: string): void
+  {
+    this.entrepriseService.getCalendar(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
 }

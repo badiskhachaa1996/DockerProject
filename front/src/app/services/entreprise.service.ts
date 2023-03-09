@@ -173,4 +173,18 @@ export class EntrepriseService {
     });
   }
 
+  // méthode de téléchargement du calendrier de la formation
+  getCalendar(idFormation: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-calendar/${idFormation}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Calendrier de la formation téléchargé') }
+      });
+    });
+  }
+
 }
