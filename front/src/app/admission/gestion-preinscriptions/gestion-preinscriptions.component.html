@@ -198,7 +198,7 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>
-            <h5>Liste des prospects</h5>
+            <h5>Liste des prospects {{infoFiltered}}</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
@@ -224,7 +224,7 @@
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
                     </p-dropdown>
 
-                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="filterEcole"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="ecoleList"
                         (onChange)="dt1.filter($event.value, 'type_form','equals')"
                         emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole" [style]="{'margin':'5px'}">
                     </p-dropdown>

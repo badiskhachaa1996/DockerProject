@@ -9,7 +9,8 @@ const presenceSchema = mongoose.Schema({
     justificatif: { type: Boolean, default: false },
     date_signature: { type: Date },
     allowedByFormateur: { type: Boolean, default: false },
-    PresentielOrDistanciel: { type: String, default: "Présentiel" }
+    PresentielOrDistanciel: { type: String, default: "Présentiel" },
+    approved_by_pedagogie: { type: Boolean, default: false }
 });
 
 //Creation de la table presence et export du model Presence   

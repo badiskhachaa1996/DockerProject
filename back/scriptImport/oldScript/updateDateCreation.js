@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const { Etudiant } = require("../models/etudiant");
-const { User } = require("../models/user");
+const { Etudiant } = require("../../models/etudiant");
+const { User } = require("../../models/user");
 var XLSX = require('xlsx')
 var workbook = XLSX.readFile('exportUsers_2023-2-6.csv', { cellDates: true });
 var sheet_name_list = workbook.SheetNames; // Classes Name

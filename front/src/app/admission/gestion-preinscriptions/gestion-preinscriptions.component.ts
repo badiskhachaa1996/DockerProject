@@ -31,9 +31,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   code = this.ActiveRoute.snapshot.paramMap.get('code');
+  STATUT = this.ActiveRoute.snapshot.paramMap.get('statut');
 
   socket = io(environment.origin.replace('/soc', ''));
-
+  infoFiltered = ""
   users: User[] = [];
   prospects: any[] = [];
   alternants: Prospect[] = [];
@@ -182,6 +183,19 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { label: "Non", value: false }
   ]
 
+  ecoleList = [
+    { label: "Toutes les écoles", value: null },
+    { label: "Estya", value: "estya" },
+    { label: "ESPIC", value: "espic" },
+    { label: "Eduhorizons", value: "eduhorizons" },
+    { label: "Académie des gouvernantes", value: "adg" },
+    { label: "Estya", value: "estya" },
+    { label: "Estya Dubai", value: "estya-dubai" },
+    { label: "Studinfo", value: "studinfo" },
+    { label: "INTUNS", value: "intuns" },
+    { label: "Intunivesity", value: "intunivesity" },
+  ]
+
   payementList = []
   filterCampus = [
     { value: null, label: "Tous les campus" },
@@ -194,7 +208,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-  filterEcole = [{ value: null, label: "Toutes les écoles" },];
 
 
   onAddPayement() {
@@ -242,6 +255,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
+    if (this.STATUT && this.STATUT == "En attente de traitement")
+      this.infoFiltered = this.STATUT
+    else if (this.STATUT && this.STATUT == 'traite')
+      this.infoFiltered = "Traités"
     this.token = jwt_decode(localStorage.getItem("token"))
     this.commercialService.getByUserId(this.token.id).subscribe(data => {
       if (data && data.code_commercial_partenaire) {
@@ -334,16 +351,26 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
-          console.log("Admission")
-          this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            let service: any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
-              this.admissionService.getAll().subscribe(
-                ((responseAdmission) => this.afterProspectload(responseAdmission)),
-                ((error) => { console.error(error); })
-              );
-            }
-          })
+          if (this.STATUT)
+            this.userService.getPopulate(this.token.id).subscribe(dataU => {
+              let service: any = dataU.service_id
+              if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
+                this.admissionService.getAllByStatut(this.STATUT).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
+          else
+            this.userService.getPopulate(this.token.id).subscribe(dataU => {
+              let service: any = dataU.service_id
+              if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
+                this.admissionService.getAll().subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
         }
       }),
       ((error) => { console.error(error); })
@@ -355,16 +382,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.prospects = data
     this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
     let tempList = []
-    let tempType = []
     let tempPays = []
     data.forEach(p => {
       if (tempList.includes(p.campus_choix_1) == false) {
         tempList.push(p.campus_choix_1)
         this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
-      }
-      if (tempType.includes(p.type_form) == false) {
-        tempType.push(p.type_form)
-        this.filterEcole.push({ label: p.type_form, value: p.type_form })
       }
       let u: any = p.user_id
       if (u && u.pays_adresse && tempPays.includes(u.pays_adresse) == false) {

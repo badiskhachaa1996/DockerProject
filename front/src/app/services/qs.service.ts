@@ -17,7 +17,7 @@ export class QSService {
   constructor(private http: HttpClient) { }
   create(data) {
     let url = this.apiUrl + "create";
-    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+    return this.http.post<any>(url, data);
   }
 
   createQFF(data) {
