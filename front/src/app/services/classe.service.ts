@@ -36,7 +36,7 @@ export class ClasseService {
 
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
-    return this.http.get<Classe[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<Classe[]>(registreUrl);
   }
 
   getAllPopulate() {
