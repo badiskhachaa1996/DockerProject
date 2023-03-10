@@ -146,10 +146,10 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td *ngIf="contrat.formation.calendrier != ''">
+                                            <td *ngIf="contrat.formation.calendrier != null">
                                                 <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
                                             </td>
-                                            <td *ngIf="contrat.formation.calendrier == ''">
+                                            <td *ngIf="contrat.formation.calendrier == null">
                                                 -- Aucun fichier --
                                             </td>
 
