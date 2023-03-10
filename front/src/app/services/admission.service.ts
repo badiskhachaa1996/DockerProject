@@ -59,6 +59,11 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllByStatut(statut) {
+    let registreUrl = this.apiUrl + 'getAllByStatut/' + statut;
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   getAllEtudiant() {
     let registreUrl = this.apiUrl + 'getAllEtudiant';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -165,8 +170,7 @@ export class AdmissionService {
 
   //* Partie dédiée aux prospects alternances
   // recuperation de la liste des prospects alternables
-  getProspectsAlt(): Promise<ProspectAlternable[]>
-  {
+  getProspectsAlt(): Promise<ProspectAlternable[]> {
     const url = `${this.apiUrl}get-prospects-alt`;
     return new Promise<ProspectAlternable[]>((resolve, reject) => {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -178,8 +182,7 @@ export class AdmissionService {
   }
 
   // recuperation de la liste des prospects alternables via l'id du commercial
-  getProspectsAltByComId(id: string): Promise<ProspectAlternable[]>
-  {
+  getProspectsAltByComId(id: string): Promise<ProspectAlternable[]> {
     const url = `${this.apiUrl}get-prospects-alt-by-com-id/${id}`;
     return new Promise<ProspectAlternable[]>((resolve, reject) => {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -191,8 +194,7 @@ export class AdmissionService {
   }
 
   // recuperation d'un prospect alternable via son id
-  getProspectAlt(id: string): Promise<ProspectAlternable>
-  {
+  getProspectAlt(id: string): Promise<ProspectAlternable> {
     const url = `${this.apiUrl}get-prospect-alt`;
     return new Promise<ProspectAlternable>((resolve, reject) => {
       this.httpClient.get<ProspectAlternable>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -204,8 +206,7 @@ export class AdmissionService {
   }
 
   // creation d'un prospect alternable
-  postProspectAlt(obj: any): Promise<any>
-  {
+  postProspectAlt(obj: any): Promise<any> {
     const url = `${this.apiUrl}post-prospect-alt`;
     return new Promise<any>((resolve, reject) => {
       this.httpClient.post<any[]>(url, obj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -217,8 +218,7 @@ export class AdmissionService {
   }
 
   // modification des infos d'un prospect alt
-  patchProspectAlt(tbObj: any[]): Promise<any>
-  {
+  patchProspectAlt(tbObj: any[]): Promise<any> {
     const url = `${this.apiUrl}patch-prospect-alt`;
     return new Promise<any>((resolve, reject) => {
       this.httpClient.patch<any[]>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -230,17 +230,16 @@ export class AdmissionService {
   }
 
   // méthode d'envoi du lien de generation du formulaire
-  sendCreationLink(idCommercial: string, email: string): Promise<any> 
-  {
+  sendCreationLink(idCommercial: string, email: string): Promise<any> {
     let url = `${this.apiUrl}send-creation-link`;
 
     return new Promise<any>((resolve, reject) => {
-      this.httpClient.post(url, {idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.post(url, { idCommercial: idCommercial, email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Lien générer') }
       });
     });
-  } 
+  }
 
 }

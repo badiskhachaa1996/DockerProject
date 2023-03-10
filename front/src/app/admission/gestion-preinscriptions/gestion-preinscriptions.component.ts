@@ -31,6 +31,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   code = this.ActiveRoute.snapshot.paramMap.get('code');
+  STATUT = this.ActiveRoute.snapshot.paramMap.get('statut');
 
   socket = io(environment.origin.replace('/soc', ''));
 
@@ -334,16 +335,26 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
-          console.log("Admission")
-          this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            let service: any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
-              this.admissionService.getAll().subscribe(
-                ((responseAdmission) => this.afterProspectload(responseAdmission)),
-                ((error) => { console.error(error); })
-              );
-            }
-          })
+          if (this.STATUT)
+            this.userService.getPopulate(this.token.id).subscribe(dataU => {
+              let service: any = dataU.service_id
+              if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
+                this.admissionService.getAllByStatut(this.STATUT).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
+          else
+            this.userService.getPopulate(this.token.id).subscribe(dataU => {
+              let service: any = dataU.service_id
+              if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
+                this.admissionService.getAll().subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
         }
       }),
       ((error) => { console.error(error); })

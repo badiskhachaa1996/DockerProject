@@ -14,8 +14,6 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
 
   show = true
 
-  dropdownFormation = []
-
   dropdownGroupe = []
 
   dropdownAttentes = [
@@ -62,11 +60,6 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   constructor(private QSService: QSService, private MessageService: MessageService, private DiplomeService: DiplomeService, private GroupeService: ClasseService) { }
 
   ngOnInit(): void {
-    this.DiplomeService.getAll().subscribe(diplomes => {
-      diplomes.forEach(diplome => {
-        this.dropdownFormation.push({ label: diplome.titre, value: diplome.titre })
-      })
-    })
     this.GroupeService.getAll().subscribe(groupes => {
       groupes.forEach(gr => {
         this.dropdownGroupe.push({ label: gr.abbrv, value: gr.abbrv })
