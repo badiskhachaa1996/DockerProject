@@ -163,11 +163,13 @@ app.post("/upload-calendar", uploadCalendar.single('file'), (req, res) => {
 
     if(!file)
     {
-        res.status(400).json({errorMsg: 'Aucun fichier sélectionnée'});
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        Diplome.findOneAndUpdate({ _id: req.body.id }, { calendrier: 'calendrier.pdf' })
+        .then((response) => { res.status(201).json({successMsg: 'Calendrier Téléversé, diplôme mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le diplôme'); });
     }
-    Diplome.findOneAndUpdate({ _id: req.body.id }, { calendrier: 'calendrier.pdf' })
-    .then((response) => { res.status(201).json({successMsg: 'Calendrier Téléversé, diplôme mis à jour'}); })
-    .catch((error) => { res.status(400).json({errorMsg: 'Impossible de mettre à jour le diplôme'}); });
+    
 });
 
 module.exports = app;

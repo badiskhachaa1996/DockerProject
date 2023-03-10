@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-contrats-tutelle-ceo',
@@ -29,6 +30,54 @@ export class ContratsTutelleCeoComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary:'Contrats', detail: response.success });
     })
     .catch((error) => { console.log(error.error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.errorMsg }); });
+  }
+
+  // méthode de téléchargement du calendrier de la formation
+  onDownloadCalendar(id: string): void
+  {
+    this.entrepriseService.getCalendar(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement du cerfa
+  onDownloadCerfa(id: string): void
+  {
+    this.entrepriseService.getCerfa(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `cerfa.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Cerfa", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Cerfa", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la convention
+  onDownloadConvention(id: string): void
+  {
+    this.entrepriseService.getConvention(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `convention.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Convention", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la résiliation
+  onDownloadResiliation(id: string): void
+  {
+    this.entrepriseService.getResiliation(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `resiliation.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
   }
 
 }

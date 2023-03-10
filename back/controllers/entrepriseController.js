@@ -9,6 +9,8 @@ const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const { application } = require('express');
 const e = require('express');
+const fs = require('fs');
+const multer = require('multer');
 
 let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
@@ -686,7 +688,42 @@ app.patch("/update-status", (req, res) => {
     const status = req.body.statut;
 
     CAlternance.findOneAndUpdate({ _id: contract_id }, { statut: status })
-        .then((response) => { res.status(201).json({ successMsg: 'Status du contrat mis à jour' }) })
+        .then((response) => {
+            // récupération du commercial référent
+            User.findOne({ _id: response.code_commercial })
+            .then((commercial) => {
+                // création du mail à envoyer
+                let htmlMail = "<p>Bonjour, le contrat numéro <span style=\"color: red\">" + response._id +"</span> vient d'être modifié.</p>" +
+                               "<p>Nouveau statut du contrat: <span style=\"color: red\">" + response.statut +"</span>.</p>" +
+                               "<p>Pour retrouver le contrat veuillez saisir le numéro du contrat dans le filtre sur la page des contrats.</p>" +
+                               "<p>Cordialement.</p>";
+
+                let mailOptions =
+                {
+                    from: "ims@intedgroup.com",
+                    to: commercial.email,
+                    subject: 'Statut de contrat mis à jour [IMS]',
+                    html: htmlMail,
+                    // attachments: [{
+                    //     filename: 'Image1.png',
+                    //     path: 'assets/Image1.png',
+                    //     cid: 'Image1' //same cid value as in the html img src
+                    // }]
+                };
+
+
+                // envoi du mail
+                transporterINTED.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
+                // envoi de la réponse du serveur
+                res.status(201).json({ successMsg: 'Status du contrat mis à jour, le commercial référent a été notifier par mail' });
+            }) 
+            .catch((error) => { res.status(400).send({ errorMsg: 'Impossible de notifier le commercial référent' }); })
+        })
         .catch((error) => { res.status(400).json({ errorMsg: 'Impossible de mettre à jour le status du contrat, veuillez contacter un administrateur!', error: error }); });
 });
 
@@ -726,7 +763,153 @@ app.get('/nettoyageCA', (req, res) => {
             res.send(r)
         })
     })
-})
+});
+
+// upload du cerfa pour le contrat d'alternance
+const uploadCerfaStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/contrat/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let filename = 'cerfa';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadCerfa = multer({storage: uploadCerfaStorage});
+
+app.post("/upload-cerfa", uploadCerfa.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+    console.log(file);
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        CAlternance.findOneAndUpdate({_id: id}, {cerfa: 'cerfa.pdf'})
+        .then((response) => { res.status(201).json({successMsg: 'Cerfa téléversé, contrat mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat'); });
+    }
+    
+});
+
+// upload de la convention pour le contrat d'alternance
+const uploadConventionStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/contrat/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let filename = 'convention';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadConvention = multer({storage: uploadConventionStorage});
+
+app.post("/upload-convention", uploadConvention.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+    console.log(file);
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        CAlternance.findOneAndUpdate({_id: id}, {convention_formation: 'convention.pdf'})
+        .then((response) => { res.status(201).json({successMsg: 'Convention téléversé, contrat mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat'); });
+    }
+    
+});
+
+
+// upload de la rupture de contrat pour le contrat d'alternance
+const uploadResiliationStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/contrat/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let filename = 'resiliation';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadResiliation = multer({storage: uploadResiliationStorage});
+
+app.post("/upload-resiliation", uploadResiliation.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+    console.log(file);
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        CAlternance.findOneAndUpdate({_id: id}, {resiliation_contrat: 'resiliation.pdf'})
+        .then((response) => { res.status(201).json({successMsg: 'Convention téléversé, contrat mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat'); });
+    }
+    
+});
+
+// méthode de téléchargement du calendrier de la formation pour un contrat d'alternance
+app.get("/download-calendar/:idFormation", (req, res) => {
+    res.download(`./storage/diplome/${req.params.idFormation}/calendrier/calendrier.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
+// méthode de téléchargement du cerfa pour un contrats d'alternance
+app.get("/download-cerfa/:idContrat", (req, res) => {
+    res.download(`./storage/contrat/${req.params.idContrat}/cerfa.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
+// méthode de téléchargement du cerfa pour un contrats d'alternance
+app.get("/download-convention/:idContrat", (req, res) => {
+    res.download(`./storage/contrat/${req.params.idContrat}/convention.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
+// méthode de téléchargement du cerfa pour un contrats d'alternance
+app.get("/download-resiliation/:idContrat", (req, res) => {
+    res.download(`./storage/contrat/${req.params.idContrat}/resiliation.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
 
 
 //export du module app pour l'utiliser dans les autres parties de l'application

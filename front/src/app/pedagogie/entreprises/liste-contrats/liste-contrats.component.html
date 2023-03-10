@@ -399,6 +399,43 @@
             </div>
         </div>
 
+        <!-- Upload du cerfa -->
+        <div class="col-12" *ngIf="showFormAddCerfa">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddCerfa = false;"></i>
+                <h4>Ajouter le cerfa au contrat (pdf)</h4>
+                <div class="field col-12">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                </div>
+                <button pButton label="Envoyer" (click)="onAddCerfa()"></button>
+            </div>
+        </div>
+
+        <!-- Upload de la convention -->
+        <div class="col-12" *ngIf="showFormAddConvention">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddConvention = false;"></i>
+                <h4>Ajouter la convention au contrat (pdf)</h4>
+                <div class="field col-12">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                </div>
+                <button pButton label="Envoyer" (click)="onAddConvention()"></button>
+            </div>
+        </div>
+
+        <!-- Upload de la resiliation -->
+        <div class="col-12" *ngIf="showFormAddResiliation">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddResiliation = false;"></i>
+                <h4>Ajouter la résiliation (pdf)</h4>
+                <div class="field col-12">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                </div>
+                <button pButton label="Envoyer" (click)="onAddResiliation()"></button>
+            </div>
+        </div>
+
+
         <div class="col-12" *ngIf="token.type == 'CEO Entreprise'">
             <div class="card">
                 <p-panel header="Notice" [toggleable]="true" class="line-height-3 m-0">
@@ -413,9 +450,9 @@
                 label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" style="float: right;"></button>
             <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton
                 label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" [disabled]="true"
-                style="float: right;"></button>
-            <button pButton label="Supprimer les contrats d'alternance en double" (click)="nettoyage()"
-                style="float: right;"></button>
+                style="float: right; margin: 2px"></button>
+            <button pButton pRipple type="button" label="Supprimer les doublons" class="p-button-warning" (click)="nettoyage()"
+                style="float: right; margin: 2px"></button>
 
             <h5>Liste des contrats</h5>
 
@@ -507,6 +544,9 @@
                             <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check"
                                 severity="success" [value]="contrat.statut">
                             </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Résilié'" icon="pi pi-times-circle"
+                                severity="danger" [value]="contrat.statut">
+                            </p-tag>
                         </td>
 
                         <td>{{ contrat.formation.titre_long }}</td>
@@ -522,14 +562,16 @@
                                 pTooltip="Modifier le statut du contrat" aria-hidden="true"
                                 (click)="showStatusForm = true; contratToUpdate = contrat"
                                 style="text-align: center; color: gray; margin: 2px"></i>
-                            <i class="pi pi-calendar" pTooltip="Calendrier de l'apprentis" aria-hidden="true"
-                                style="text-align: center; color: green; margin: 2px; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
-                            <i class="pi pi-file" pTooltip="Certificat de scolarité de l'apprentis" aria-hidden="true"
-                                style="text-align: center; color: orangered; margin: 2px"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
                                 style="text-align: center; color: blue; margin: 2px"
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
+                            <br>
+                            <!-- contract files -->
+                            <i class="pi pi-file" pTooltip="Cerfa" style="cursor: pointer; color: blue; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddCerfa = true;"></i>
+                            <i class="pi pi-file" pTooltip="Convention de formation" style="cursor: pointer; color: orangered; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddConvention = true;"></i>
+                            <i *ngIf="contrat.statut == 'Résilié'" class="pi pi-file" pTooltip="Résiliation du contrat" style="cursor: pointer; color: rgb(177, 6, 6); margin: 2px;" (click)="contratToUpdate = contrat; showFormAddResiliation = true;"></i>
+                            <!-- end files -->
                         </td>
                         <td *ngIf="token.role == 'Watcher'">
                             <small style="color: red;">Aucune action disponible pour ce compte</small>
@@ -540,54 +582,98 @@
                 <ng-template pTemplate="rowexpansion" let-contrat>
                     <tr>
                         <td colspan="7">
-                            <div class="p-3">
+                            <div class="p-2">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
-                    <tr>
-                        <th>Horaire</th>
-                        <th>Niveau de la formation</th>
-                        <th>Mobilité internationale</th>
-                        <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
-                        <th>Commercial</th>
-                        <th>Tuteur</th>
-                        <th>OPCO</th>
-                        <th>Année-scolaires</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{contrat.horaire}}</td>
-                        <td>{{contrat.niveau_formation}}</td>
-                        <td>{{contrat.cout_mobilite != null ? contrat.cout_mobilite + ' €': 'Non' }}</td>
-                        <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
-                            {{ contrat.entreprise_id?.r_sociale }}
-                        </td>
-                        <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname |
-                            uppercase }}</td>
+                                        <tr>
+                                            <th>Horaire</th>
+                                            <th>Niveau de la formation</th>
+                                            <th>Mobilité internationale</th>
+                                            <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
+                                            <th>Commercial</th>
+                                            <th>Tuteur</th>
+                                            <th>OPCO</th>
+                                            <th>Année-scolaires</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{contrat.horaire}}</td>
+                                            <td>{{contrat.niveau_formation}}</td>
+                                            <td>{{contrat.cout_mobilite != null ? contrat.cout_mobilite + ' €': 'Non' }}</td>
+                                            <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
+                                                {{ contrat.entreprise_id?.r_sociale }}
+                                            </td>
+                                            <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname |
+                                                uppercase }}</td>
 
-                        <td *ngIf="contrat.tuteur_id != null">
-                            {{ contrat.tuteur_id?.user_id?.lastname }}
-                            {{ contrat.tuteur_id?.user_id?.firstname }}
-                        </td>
-                        <td *ngIf="contrat.directeur_id != null">
-                            {{ contrat.directeur_id?.lastname }}
-                            {{ contrat.directeur_id?.firstname }}
-                        </td>
-                        <td>{{ contrat.entreprise_id?.OPCO }}</td>
+                                            <td *ngIf="contrat.tuteur_id != null">
+                                                {{ contrat.tuteur_id?.user_id?.lastname }}
+                                                {{ contrat.tuteur_id?.user_id?.firstname }}
+                                            </td>
+                                            <td *ngIf="contrat.directeur_id != null">
+                                                {{ contrat.directeur_id?.lastname }}
+                                                {{ contrat.directeur_id?.firstname }}
+                                            </td>
+                                            <td>{{ contrat.entreprise_id?.OPCO }}</td>
 
-                        <td>
-                            <ul>
-                                <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
-                            </ul>
+                                            <td>
+                                                <ul>
+                                                    <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <!-- Documents liés au contrat -->
+                            <div class="p-2">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
+                                            <th>Cerfa</th> <!-- *lié directement au contrat -->
+                                            <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                                            <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td *ngIf="contrat.formation.calendrier != ''">
+                                                <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.formation.calendrier == ''">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.cerfa != null">
+                                                <i class="pi pi-file" title="Télécharger le cerfa" style="font-size: 2em; color: blue; cursor: pointer;" (click)="onDownloadCerfa(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.cerfa == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.convention_formation != null">
+                                                <i class="pi pi-file" title="Télécharger la convention" style="font-size: 2em; color: orangered; cursor: pointer;" (click)="onDownloadConvention(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.convention_formation == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.resiliation_contrat != null">
+                                                <i class="pi pi-file" title="Télécharger la résiliation" style="font-size: 2em; color: rgb(177, 6, 6); cursor: pointer;" (click)="onDownloadResiliation(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.resiliation_contrat == null" style="color: green; font-weight: bold;">
+                                                -- Ce contrat est en cours --
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
         </div>
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
     </div>
-</div>
 </div>

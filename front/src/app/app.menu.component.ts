@@ -197,7 +197,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Alternance',
                 items: [
-                    { label: 'Liste des contrats Alternance', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+                    { label: 'Contrats d\'alternances', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
 
                 ],
             },

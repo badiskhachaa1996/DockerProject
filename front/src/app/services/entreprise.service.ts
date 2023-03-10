@@ -173,6 +173,48 @@ export class EntrepriseService {
     });
   }
 
+  // méthode d'upload de cerfa pour les contrats
+  uploadCerfa(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}upload-cerfa`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Cerfa envoyé'); }
+      });
+    });
+  }
+
+  // méthode d'upload de la convention de formation pour les contrats
+  uploadConvention(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}upload-convention`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Convention envoyé'); }
+      });
+    });
+  }
+
+  // méthode d'upload de la résiliation pour les contrats
+  uploadResiliation(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}upload-resiliation`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Résiliation envoyé'); }
+      });
+    });
+  }
+
   // méthode de téléchargement du calendrier de la formation
   getCalendar(idFormation: string): Promise<any>
   {
@@ -183,6 +225,48 @@ export class EntrepriseService {
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Calendrier de la formation téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement du cerfa
+  getCerfa(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-cerfa/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Cerfa téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement de la convention
+  getConvention(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-convention/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Convention téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement de la résiliation
+  getResiliation(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-resiliation/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Résiliation téléchargé') }
       });
     });
   }
