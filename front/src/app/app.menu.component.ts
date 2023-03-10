@@ -182,7 +182,14 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Admission',
                 items: [
-                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                    {
+                        label: 'Gestions des prospects', icon: 'pi pi-users', items: [
+                            { label: 'En attente de traitement', icon: 'pi pi-spin pi-spinner', routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement'] },
+                            { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
+                            { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/formulaire-admission'] },
+                        ]
+                    },
+                    { label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
                     { label: 'Gestions des prospects Intuns', icon: 'pi pi-user-plus', routerLink: ['/prospects-intuns'] },
                     { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
                 ],
@@ -265,8 +272,7 @@ export class AppMenuComponent implements OnInit {
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
                 // accès visiteur
-                if(dataUser.type == 'Visitor' && dataUser.role == 'Watcher')
-                {
+                if (dataUser.type == 'Visitor' && dataUser.role == 'Watcher') {
                     this.isVisitor = true;
                 }
                 this.isAdmin = dataUser.role == "Admin"
@@ -555,7 +561,13 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    {
+                                        label: 'Gestions des prospects', icon: 'pi pi-users', items: [
+                                            { label: 'En attente de traitement', icon: 'pi pi-spin pi-spinner', routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement'] },
+                                            { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
+                                            { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
+                                        ]
+                                    },{ label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             }
                         ]
@@ -577,7 +589,13 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    {
+                                        label: 'Gestions des prospects', icon: 'pi pi-users', items: [
+                                            { label: 'En attente de traitement', icon: 'pi pi-spin pi-spinner', routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement'] },
+                                            { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
+                                            { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
+                                        ]
+                                    },{ label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             },
                             {
@@ -1064,10 +1082,9 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
 
-                } 
+                }
                 // menu visiteur
-                else if(this.isVisitor)
-                {
+                else if (this.isVisitor) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -1092,7 +1109,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                             ]
-            
+
                         },
                         {
                             label: 'Alternance',
@@ -1106,7 +1123,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                             ],
-                        },{
+                        }, {
                             label: 'Commercial',
                             items: [
                                 { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
@@ -1137,7 +1154,7 @@ export class AppMenuComponent implements OnInit {
                     ]
                     console.error("Aucun Menu disponible")
                 }
-            } 
+            }
             else {
                 console.error("Aucun Utilisateur trouvé")
             }

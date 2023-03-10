@@ -198,7 +198,7 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>
-            <h5>Liste des prospects</h5>
+            <h5>Liste des prospects {{infoFiltered}}</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"

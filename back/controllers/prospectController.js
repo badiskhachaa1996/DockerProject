@@ -374,7 +374,7 @@ app.get("/getAll", (req, res, next) => {
 
 app.get("/getAllByStatut/:statut", (req, res, next) => {
     //statut = "En attente de traitement"
-    if (statut == "En attente de traitement")
+    if (req.params.statut == "En attente de traitement")
         Prospect.find({ archived: [false, null], user_id: { $ne: null }, statut_dossier: 'En attente de traitement' }).populate("user_id").populate('agent_id')
             .then((prospectsFromDb) => {
                 res.status(201).send(prospectsFromDb)

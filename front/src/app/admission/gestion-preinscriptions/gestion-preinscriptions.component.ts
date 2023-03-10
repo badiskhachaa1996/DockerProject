@@ -34,7 +34,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   STATUT = this.ActiveRoute.snapshot.paramMap.get('statut');
 
   socket = io(environment.origin.replace('/soc', ''));
-
+  infoFiltered = ""
   users: User[] = [];
   prospects: any[] = [];
   alternants: Prospect[] = [];
@@ -243,6 +243,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
+    if (this.STATUT && this.STATUT == "En attente de traitement")
+      this.infoFiltered = this.STATUT
+    else if (this.STATUT && this.STATUT == 'traite')
+      this.infoFiltered = "Traités"
     this.token = jwt_decode(localStorage.getItem("token"))
     this.commercialService.getByUserId(this.token.id).subscribe(data => {
       if (data && data.code_commercial_partenaire) {

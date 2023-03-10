@@ -154,6 +154,7 @@ import { FormulaireExterneSkillsnetComponent } from './skillsnet/externe-skillsn
 import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commercial/povhors-commercial.component';
 import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
 import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
+import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 
 const routes: Routes = [
     {
@@ -200,7 +201,9 @@ const routes: Routes = [
             { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
             { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+            { path: 'ajout-prospect', component: AddProspectComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
             { path: 'gestion-preinscriptions-filtered/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
+            { path: 'gestion-preinscriptions-filter/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
             { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
             { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
