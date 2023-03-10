@@ -19,6 +19,7 @@ export class AddProspectComponent implements OnInit {
   ecoleList = [
     { label: "Estya", value: "estya" },
     { label: "ESPIC", value: "espic" },
+    { label: "Eduhorizons", value: "eduhorizons" },
     { label: "Académie des gouvernantes", value: "adg" },
     { label: "Estya", value: "estya" },
     { label: "Estya Dubai", value: "estya-dubai" },

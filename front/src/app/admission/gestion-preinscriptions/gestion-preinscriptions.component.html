@@ -224,7 +224,7 @@
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
                     </p-dropdown>
 
-                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="filterEcole"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="ecoleList"
                         (onChange)="dt1.filter($event.value, 'type_form','equals')"
                         emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole" [style]="{'margin':'5px'}">
                     </p-dropdown>
