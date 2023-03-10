@@ -23,6 +23,9 @@ export class ContratAlternance {
         public anne_scolaire?: string[],
         public ecole?: string,
         public cout_mobilite?: number,
+        public cerfa?: string, //* file
+        public convention_formation?: string, //* file
+        public resiliation_contrat?: string, //* file
     ) { }
 
 }

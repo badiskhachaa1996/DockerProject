@@ -90,6 +90,7 @@ export class ListeContratsComponent implements OnInit {
     { label: '7- Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
     { label: '8- Relance à traiter', value: 'Relance à traiter' },
     { label: '9- Validé à facturation', value: 'Validé à facturation' },
+    { label: '10- Résilié', value: 'Résilié' },
   ];
 
   filtreMobility = [
@@ -118,7 +119,14 @@ export class ListeContratsComponent implements OnInit {
     { label: '7- Déposé à l’OPCO', value: 'Déposé à l’OPCO' },
     { label: '8- Relance à traiter', value: 'Relance à traiter' },
     { label: '9- Validé à facturation', value: 'Validé à facturation' },
+    { label: '10- Résilié', value: 'Résilié' },
   ];
+
+  showFormAddCerfa: boolean = false;
+  showFormAddConvention: boolean = false;
+  showFormAddResiliation: boolean = false;
+  doc: any;
+
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
@@ -412,7 +420,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value, null, null, null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -436,7 +444,7 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -518,6 +526,67 @@ export class ListeContratsComponent implements OnInit {
     })
   }
 
+  // méthode de selection du fichier
+  onSelectFile(event: any)
+  {
+    if(event.target.files.length > 0)
+    {
+      this.doc = event.target.files[0];
+    }
+  }
+
+  // méthode d'ajout du cerfa
+  onAddCerfa(): void
+  {    
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du document dans la base de données
+    this.entrepriseService.uploadCerfa(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddCerfa = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
+  // méthode d'ajout du la convention
+  onAddConvention(): void
+  {    
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du document dans la base de données
+    this.entrepriseService.uploadConvention(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddConvention = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
+  // méthode d'ajout du la résiliation du contrat
+  onAddResiliation(): void
+  {    
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du document dans la base de données
+    this.entrepriseService.uploadResiliation(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddResiliation = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
+
   // méthode de téléchargement du calendrier de la formation
   onDownloadCalendar(id: string): void
   {
@@ -530,4 +599,39 @@ export class ListeContratsComponent implements OnInit {
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
+  // méthode de téléchargement du cerfa
+  onDownloadCerfa(id: string): void
+  {
+    this.entrepriseService.getCerfa(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `cerfa.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Cerfa", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Cerfa", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la convention
+  onDownloadConvention(id: string): void
+  {
+    this.entrepriseService.getConvention(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `convention.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Convention", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la résiliation
+  onDownloadResiliation(id: string): void
+  {
+    this.entrepriseService.getResiliation(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `resiliation.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+  }
 }
