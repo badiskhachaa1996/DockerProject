@@ -186,7 +186,7 @@ export class AppMenuComponent implements OnInit {
                         label: 'Gestions des prospects', icon: 'pi pi-users', items: [
                             { label: 'En attente de traitement', icon: 'pi pi-spin pi-spinner', routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement'] },
                             { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
-                            { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/formulaire-admission'] },
+                            { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                         ]
                     },
                     { label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },

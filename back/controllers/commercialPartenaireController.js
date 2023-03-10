@@ -14,7 +14,7 @@ app.get("/getAll", (req, res, next) => {
 });
 
 app.get("/getAllPopulate", (req, res, next) => {
-    CommercialPartenaire.find().populate('partenaire_id')
+    CommercialPartenaire.find().populate('partenaire_id').populate('user_id')
         .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
         .catch((error) => { res.status(400).send(error.message); })
 });

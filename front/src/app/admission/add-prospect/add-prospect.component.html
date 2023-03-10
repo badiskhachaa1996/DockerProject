@@ -1,2 +1,29 @@
-<p>Faire choisir l'école</p>
-<p>Détecter le Commercial</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter un nouveau prospect</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <br>
+            <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm()"
+                [formGroup]="RegisterForm">
+                <div class="field col-12 md:col-6">
+                    <label For="role">Ecole <span style="color:red"> *</span></label>
+                    <p-dropdown [options]="ecoleList" placeholder="Choissisez l'école du prospect"
+                        formControlName="ecole"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="role">Commercial</label>
+                    <p-dropdown [options]="commercialList"
+                        placeholder="Choissisez le commercial qui a ajouté le prospect"
+                        formControlName="commercial"></p-dropdown>
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
