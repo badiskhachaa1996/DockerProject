@@ -5,8 +5,8 @@ const { Classe } = require('../models/classe')
 const { Diplome } = require('../models/diplome')
 const { User } = require('../models/user.js')
 const { Etudiant } = require('../models/etudiant')
-let ID_SIO_1_SISR = "633d4cf5c2f7a51506d7dd74" //"640ee95d3eef9e225d77c108"
-let ID_SIO_1_SLAM = "633d4cfec2f7a51506d7dd7b" //"640ee9653eef9e225d77c10d"
+let ID_SIO_1_SISR = "640ee95d3eef9e225d77c108" //"640ee95d3eef9e225d77c108"
+let ID_SIO_1_SLAM = "640ee9653eef9e225d77c10d" //"640ee9653eef9e225d77c10d"
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
