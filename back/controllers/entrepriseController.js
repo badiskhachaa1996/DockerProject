@@ -836,6 +836,41 @@ app.post("/upload-convention", uploadConvention.single('file'), (req, res) => {
 });
 
 
+// upload de l'accord de prise en charge' de contrat pour le contrat d'alternance
+const uploadAccordStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/contrat/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let filename = 'accord_prise_charge';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadAccord = multer({storage: uploadAccordStorage});
+
+app.post("/upload-accord-prise-en-charge", uploadAccord.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        CAlternance.findOneAndUpdate({_id: id}, {accord_prise_charge: 'accord_prise_charge.pdf'})
+        .then((response) => { res.status(201).json({successMsg: 'Accord téléversé, contrat mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat'); });
+    }
+    
+});
+
+
 // upload de la rupture de contrat pour le contrat d'alternance
 const uploadResiliationStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
@@ -858,7 +893,6 @@ const uploadResiliation = multer({storage: uploadResiliationStorage});
 app.post("/upload-resiliation", uploadResiliation.single('file'), (req, res) => {
     const file = req.file;
     const id = req.body.id;
-    console.log(file);
 
     if(!file)
     {
@@ -891,9 +925,19 @@ app.get("/download-cerfa/:idContrat", (req, res) => {
     });
 });
 
-// méthode de téléchargement du cerfa pour un contrats d'alternance
+// méthode de téléchargement de la convention pour un contrat d'alternance
 app.get("/download-convention/:idContrat", (req, res) => {
     res.download(`./storage/contrat/${req.params.idContrat}/convention.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
+// méthode de téléchargement de l'accord de prise en charge pour un contrat d'alternance
+app.get("/download-accord/:idContrat", (req, res) => {
+    res.download(`./storage/contrat/${req.params.idContrat}/accord_prise_charge.pdf`, function(err){
         if(err)
         {
             res.status(400).send(err);

@@ -201,6 +201,20 @@ export class EntrepriseService {
     });
   }
 
+  // méthode d'upload de l'accord de prise en charge
+  uploadAccordPriseEnCharge(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}upload-accord-prise-en-charge`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Accord de prise en charge envoyé'); }
+      });
+    });
+  }
+
   // méthode d'upload de la résiliation pour les contrats
   uploadResiliation(formData: FormData): Promise<any>
   {
@@ -253,6 +267,20 @@ export class EntrepriseService {
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Convention téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement de l'accord de prise en charge
+  getAccord(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-accord/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Accord téléchargé') }
       });
     });
   }

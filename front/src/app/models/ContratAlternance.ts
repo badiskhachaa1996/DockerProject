@@ -26,6 +26,7 @@ export class ContratAlternance {
         public cerfa?: string, //* file
         public convention_formation?: string, //* file
         public resiliation_contrat?: string, //* file
+        public accord_prise_charge?: string, //* file
     ) { }
 
 }
