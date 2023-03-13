@@ -133,6 +133,50 @@
 									</ng-template>
             					</p-table>
         					</div>
+                            <!-- Documents liés au contrat -->
+                            <div class="p-2">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
+                                            <th>Cerfa</th> <!-- *lié directement au contrat -->
+                                            <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                                            <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td *ngIf="contrat.formation.calendrier != null">
+                                                <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.formation.calendrier == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.cerfa != null">
+                                                <i class="pi pi-file" title="Télécharger le cerfa" style="font-size: 2em; color: blue; cursor: pointer;" (click)="onDownloadCerfa(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.cerfa == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.convention_formation != null">
+                                                <i class="pi pi-file" title="Télécharger la convention" style="font-size: 2em; color: orangered; cursor: pointer;" (click)="onDownloadConvention(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.convention_formation == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.resiliation_contrat != null">
+                                                <i class="pi pi-file" title="Télécharger la résiliation" style="font-size: 2em; color: rgb(177, 6, 6); cursor: pointer;" (click)="onDownloadResiliation(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.resiliation_contrat == null" style="color: green; font-weight: bold;">
+                                                -- Ce contrat est en cours --
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
         				</td>
         			</tr>
         		</ng-template>
