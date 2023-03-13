@@ -423,6 +423,18 @@
             </div>
         </div>
 
+        <!-- Upload de l'accord de prise en charge -->
+        <div class="col-12" *ngIf="showFormAddAccordPriseEnCharge">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddAccordPriseEnCharge = false;"></i>
+                <h4>Ajouter l'accord de prise en charge (pdf)</h4>
+                <div class="field col-12">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                </div>
+                <button pButton label="Envoyer" (click)="onAddAccordPriseEnCharge()"></button>
+            </div>
+        </div>
+
         <!-- Upload de la resiliation -->
         <div class="col-12" *ngIf="showFormAddResiliation">
             <div class="card">
@@ -570,6 +582,7 @@
                             <!-- contract files -->
                             <i class="pi pi-file" pTooltip="Cerfa" style="cursor: pointer; color: blue; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddCerfa = true;"></i>
                             <i class="pi pi-file" pTooltip="Convention de formation" style="cursor: pointer; color: orangered; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddConvention = true;"></i>
+                            <i class="pi pi-file" pTooltip="Accord de prise en charge" style="cursor: pointer; color: rgb(150, 248, 4); margin: 2px;" (click)="contratToUpdate = contrat; showFormAddAccordPriseEnCharge = true;"></i>
                             <i *ngIf="contrat.statut == 'Résilié'" class="pi pi-file" pTooltip="Résiliation du contrat" style="cursor: pointer; color: rgb(177, 6, 6); margin: 2px;" (click)="contratToUpdate = contrat; showFormAddResiliation = true;"></i>
                             <!-- end files -->
                         </td>
@@ -634,6 +647,7 @@
                                             <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
                                             <th>Cerfa</th> <!-- *lié directement au contrat -->
                                             <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                                            <th>Accord de prise en charge</th> <!-- *lié directement au contrat -->
                                             <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
                                         </tr>
                                     </ng-template>
@@ -657,6 +671,13 @@
                                                 <i class="pi pi-file" title="Télécharger la convention" style="font-size: 2em; color: orangered; cursor: pointer;" (click)="onDownloadConvention(contrat._id)"></i>
                                             </td>
                                             <td *ngIf="contrat.convention_formation == null">
+                                                -- Aucun fichier --
+                                            </td>
+
+                                            <td *ngIf="contrat.accord_prise_charge != null">
+                                                <i class="pi pi-file" title="Télécharger l'accord de prise en charge" style="font-size: 2em; color: rgb(150, 248, 4); cursor: pointer;" (click)="onDownloadAccordPriseEnCharge(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.accord_prise_charge == null" style="color: red; font-weight: bold;">
                                                 -- Aucun fichier --
                                             </td>
 
