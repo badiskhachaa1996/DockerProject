@@ -278,8 +278,8 @@ export class DashboardComponent implements OnInit {
             this.paimentS1 = dataEtu.isAlternant
 
             if (!dataEtu.isAlternant && dataEtu.statut_dossier) {
-              this.paimentAn = dataEtu.statut_dossier?.includes("Paiement non finalisé")
-              this.paimentS1 = dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé")
+              this.paimentAn = dataEtu.statut_dossier?.includes("Paiement finalisé")
+              this.paimentS1 = (dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé")||dataEtu.statut_dossier?.includes("Paiement finalisé"))
             }
 
             this.isEtudiant = true
