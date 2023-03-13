@@ -125,6 +125,7 @@ export class ListeContratsComponent implements OnInit {
   showFormAddCerfa: boolean = false;
   showFormAddConvention: boolean = false;
   showFormAddResiliation: boolean = false;
+  showFormAddAccordPriseEnCharge: boolean = false;
   doc: any;
 
 
@@ -420,7 +421,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value, null, null, null)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value, null, null, null, null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -444,7 +445,7 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -569,6 +570,23 @@ export class ListeContratsComponent implements OnInit {
     .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
   }
 
+  // méthode d'ajout de l'accord de prise en charge
+  onAddAccordPriseEnCharge(): void 
+  {
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du document dans la base de données
+    this.entrepriseService.uploadAccordPriseEnCharge(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddAccordPriseEnCharge = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
   // méthode d'ajout du la résiliation du contrat
   onAddResiliation(): void
   {    
@@ -621,6 +639,18 @@ export class ListeContratsComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: "Convention", detail: `Téléchargement réussi` });
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // methode de téléchargement de l'accord de prise en charge
+  onDownloadAccordPriseEnCharge(id: string): void
+  {
+    this.entrepriseService.getAccord(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `accord_prise_charge.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Accord de prise en charge", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Accord de prise en charge", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement de la résiliation

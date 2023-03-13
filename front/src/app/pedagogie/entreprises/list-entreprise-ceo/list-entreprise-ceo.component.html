@@ -46,11 +46,41 @@
                         </td>
                         <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
                         <td>
-                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
+                            <p-tag *ngIf="contrat.statut==null" icon="pi pi-times" severity="danger"
+                                [value]="'Aucun status définit'">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="warning"
                                 [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut =='signé'" icon="pi pi-chevron-right" severity="success"
+                            <p-tag *ngIf="contrat.statut == 'Conclu'" icon="pi pi-pencil" severity="info"
                                 [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'En attente d’informations'" icon="pi pi-spin pi-spinner"
+                                severity="warning" [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'En attente de validation'" icon="pi pi-spin pi-spinner"
+                                severity="warning" [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Champs requis'" icon="pi pi-info-circle" severity="danger"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Montant optimisé'" icon="pi pi-times" severity="danger"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Signé'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Déposé à l’OPCO'" icon="pi pi-check" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Relance à traiter'" icon="pi pi-times" severity="danger"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check"
+                                severity="success" [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut == 'Résilié'" icon="pi pi-times-circle"
+                                severity="danger" [value]="contrat.statut">
                             </p-tag>
                         </td>
 
