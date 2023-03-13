@@ -223,7 +223,8 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
                     { label: 'Gestion des équipes de conseillers', icon: 'pi pi-users', routerLink: ['/equipe-commercial'] },
-                    { label: 'Gestion des prospects alternables', icon: 'pi pi-briefcase', routerLink: ['/prospects-alt'] }
+                    { label: 'Gestion des prospects alternables', icon: 'pi pi-briefcase', routerLink: ['/prospects-alt'] },
+                    { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                 ]
             }, {
                 label: 'Support',
@@ -469,6 +470,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Partenaires',
                                     items: [
                                         { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
                                 },
@@ -503,6 +505,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Partenaires',
                                     items: [
                                         { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]

@@ -116,7 +116,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
       { value: "Programme Anglais" },
     ];
-  programeFrDropdown: any[] =
+  programeFrDropdown =
     [
       {
         label: "1ere année BTS MCO - Management Commercial Operationnel",
@@ -228,9 +228,10 @@ export class FormulaireAdmissionComponent implements OnInit {
         label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
         value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
       }
+
     ];
 
-  programEnDropdown: any[] =
+  programEnDropdown =
     [
       {
         label: "Level 4 : Business Management ",
@@ -286,13 +287,13 @@ export class FormulaireAdmissionComponent implements OnInit {
   choixCampus() {
     if (this.RegisterForm.value.campusChoix1.value == "UAE - Dubai") {
       this.programeFrDropdown = [
-        { value: 'Project Management' },
-        { value: 'Information Technology' },
-        { value: 'Business Management' },
-        { value: 'Master Manager en ressources humaine' },
-        { value: 'Master Ingénieur d\'affaire' },
-        { value: 'Chargé de gestion commerciale' },
-        { value: 'English Foundation Year' },
+        { label: 'Project Management', value: 'Project Management' },
+        { label: 'Information Technology', value: 'Information Technology' },
+        { label: 'Business Management', value: 'Business Management' },
+        { label: 'Master Manager en ressources humaine', value: 'Master Manager en ressources humaine' },
+        { label: 'Master Ingénieur d\'affaire', value: 'Master Ingénieur d\'affaire' },
+        { label: 'Chargé de gestion commerciale', value: 'Chargé de gestion commerciale' },
+        { label: 'English Foundation Year', value: 'English Foundation Year' },
       ]
     } else
       this.programeFrDropdown = this.defaultDropdown
@@ -567,22 +568,24 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     } else if (this.form_origin == "estya-dubai") {
       this.programeFrDropdown = [
-        { value: 'Project Management' },
-        { value: 'Information Technology' },
-        { value: 'Business Management' },
-        { value: 'Master Manager en ressources humaine' },
-        { value: 'Master Ingénieur d\'affaire' },
-        { value: 'Chargé de gestion commerciale' },
-        { value: 'English Foundation Year' },
+        { label: 'Project Management', value: 'Project Management' },
+        { label: 'Information Technology', value: 'Information Technology' },
+        { label: 'Business Management', value: 'Business Management' },
+        { label: 'Master Manager en ressources humaine', value: 'Master Manager en ressources humaine' },
+        { label: 'Master Ingénieur d\'affaire', value: 'Master Ingénieur d\'affaire' },
+        { label: 'Chargé de gestion commerciale', value: 'Chargé de gestion commerciale' },
+        { label: 'English Foundation Year', value: 'English Foundation Year' },
       ]
     } else if (this.form_origin == "intuns") {
       this.programeFrDropdown = [
-        { value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
-        { value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
-        { value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
-        { value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
-        { value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
+        { label: 'Niveau 6 : Chargé de Gestion et Management', value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
+        { label: 'Niveau 6 : Chargé de Gestion Commerciale', value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
+        { label: 'Niveau 7 : Manager en Ressources Humaines', value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
+        { label: 'Titre : Ingénieur d’affaire', value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
+        { label: 'ENGLISH PROGRAM L7 Project Management', value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
       ]
+    } else if (this.form_origin == "intunivesity") {
+      //PAREIL QUE ESTYA
     }
     this.defaultDropdown = this.programeFrDropdown
 
@@ -632,7 +635,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
       campusChoix2: new FormControl(this.campusDropdown[1], [Validators.required]),
       campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
-      formation: new FormControl(this.programeFrDropdown[0], [Validators.required]),
+      formation: new FormControl("", [Validators.required]),
       rentree_scolaire: new FormControl('', [Validators.required]),
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
@@ -919,11 +922,22 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   choixRentree() {
     if (this.RegisterForm.value.rentree_scolaire == "Mars 2023") {
-      this.programeFrDropdown = [
-        { value: "Bac + 1 : TP NTC - Négociateur Technico-Commercial ( année 1 )" },
-        { value: "Bac + 3 : CDMC : Chargé de Développement Marketing et Commercial " },
-        { value: "Mastère : MSE ( Manager Des Organisations )  " }
-      ]
+      if (this.form_origin == "estya" || this.form_origin == "eduhorizons" || this.form_origin == "intunivesity" || this.form_origin == "espic")
+        this.programeFrDropdown = [
+          {
+            label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
+            value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
+          },
+          {
+            label: "Mastère 1 : MDO : Manager des organisations",
+            value: "Mastère 1 : MDO : Manager des organisations"
+          },
+
+          {
+            label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
+            value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
+          }
+        ]
     } else {
       this.programeFrDropdown = this.defaultDropdown
     }
