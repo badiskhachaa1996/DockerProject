@@ -410,14 +410,14 @@
                 <p-table [value]="notesForGenerateBulletin" class="bulletin" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th colspan="3"></th>
+                            <th colspan="4"></th>
                             <th colspan="1" style="text-align: center;">Etudiant</th>
                             <th colspan="3" style="text-align: center;">Groupe</th>
                         </tr>
                         <tr>
-                            <th style="text-align: center;">Modules</th>
+                            <th colspan="2" style="text-align: center;">Modules</th>
                             <th style="text-align: center;">Formateur</th>
-                            <th style="text-align: center;">Coef</th>
+                            <th style="width: 5em;text-align: center;">Coef</th>
                             <th style="text-align: center;">Moyenne</th>
                             <th style="text-align: center;">Moyenne</th>
                             <!--<th style="width: 5em;">Moy. S2</th>
@@ -431,7 +431,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
                         <tr>
-                            <td>{{ note.matiere_name}}</td>
+                            <td colspan="2">{{ note.matiere_name}}</td>
                             <td
                                 *ngIf="dicFormateurMatiere[note.matiere_id] && users[dicFormateurMatiere[note.matiere_id]]">
                                 {{users[dicFormateurMatiere[note.matiere_id]].lastname | uppercase}}
@@ -566,14 +566,14 @@
                         <tr>
                             <th style="text-align: center;">Modules</th>
                             <th style="text-align: center;">Formateur</th>
-                            <th style="text-align: center;">Coef</th>
+                            <th style="width: 5em;text-align: center;">Coef</th>
                             <th style="width: 8em;text-align: center;">Semestre 1</th>
                             <th style="width: 8em;text-align: center;">Semestre 2</th>
                             <th style="text-align: center;">Annuelle</th>
-                            <th style="text-align: center;">Moy.</th>
-                            <th style="text-align: center;">Min.</th>
-                            <th style="text-align: center;">Max.</th>
-                            <th style="text-align: center;">ECTS</th>
+                            <th style="width: 5em;text-align: center;">Moy.</th>
+                            <th style="width: 5em;text-align: center;">Min.</th>
+                            <th style="width: 5em;text-align: center;">Max.</th>
+                            <th style="width: 5em;text-align: center;">ECTS</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>

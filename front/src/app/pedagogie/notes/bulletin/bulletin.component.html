@@ -144,11 +144,11 @@
                     <tr>
                         <th style="text-align: center;">Modules</th>
                         <th style="text-align: center;">Formateur</th>
-                        <th style="width: 5em;text-align: center;">Coef</th>
+                        <th style="width: 4em;text-align: center;">Coef</th>
                         <th style="width: 5em;text-align: center;">Moyenne</th>
-                        <th style="width: 5em;text-align: center;">Moy</th>
-                        <th style="width: 5em;" style="text-align: center;">Min.</th>
-                        <th style="width: 5em;" style="text-align: center;">Max.</th>
+                        <th style="width: 4em;text-align: center;">Moy</th>
+                        <th style="width: 4em;" style="text-align: center;">Min.</th>
+                        <th style="width: 4em;" style="text-align: center;">Max.</th>
                         <!--<th style="text-align: center;">ECTS</th>-->
                         <th style="text-align: center;">Appréciations</th>
                     </tr>
@@ -157,8 +157,8 @@
                     <tr>
                         <td>{{note.module}}</td>
                         <td>{{note.formateur}} </td>
-                        <td style="width: 5em;">{{ note.coeff }}</td>
-                        <td class="text-center" style="width: 5em;" [pEditableColumn]="note.note_etudiant"
+                        <td style="text-align: center;">{{ note.coeff }}</td>
+                        <td class="text-center"[pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
                             <p-cellEditor class="text-center">
                                 <ng-template pTemplate="input" class="text-center">
@@ -170,9 +170,9 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].moy | number : '0.1-2' }}</td>
-                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].min | number : '0.1-2' }}</td>
-                        <td style="width: 5em;text-align: right;">{{ MOYENNE[note.module].max | number : '0.1-2' }}</td>
+                        <td style="text-align: right;">{{ MOYENNE[note.module].moy | number : '0.1-2' }}</td>
+                        <td style="text-align: right;">{{ MOYENNE[note.module].min | number : '0.1-2' }}</td>
+                        <td style="text-align: right;">{{ MOYENNE[note.module].max | number : '0.1-2' }}</td>
                         <!--<td>{{ note.ects }}</td>-->
                         <td [pEditableColumn]="note.appreciation_module[note.module]"
                             pEditableColumnField="appreciation_module[note.module]">
