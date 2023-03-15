@@ -34,10 +34,11 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
     return !this.modified
   }
 
+
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
-    
+
   }
 
   ngOnInit(): void {
@@ -52,6 +53,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
         this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(dataNew => {
           this.cols = dataNew.cols
           this.dataPV = dataNew.data
+          console.log(this.cols, this.dataPV)
           this.messageService.add({ severity: 'success', summary: "Création d'un nouveau PV" })
         })
     })

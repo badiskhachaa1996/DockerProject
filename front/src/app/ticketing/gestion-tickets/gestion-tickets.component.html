@@ -236,9 +236,9 @@
 			<p-toast></p-toast>
 			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList" dataKey="_id" [rows]="10" [rowHover]="true"
 				[paginator]="true" [pageLinks]="5" rowExpandMode="single"
-				[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']" [value]="queueList"
-				(sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedRows"
-				responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+				[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
+				[value]="queueList" (sortFunction)="customSort($event)" [customSort]="true"
+				[expandedRowKeys]="expandedRows" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -257,6 +257,18 @@
 								<p-dropdown filter="true" [options]="showSujetQ"
 									(onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"
 									emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
+								</p-dropdown>
+							</span>
+							<span style="margin-left: 2px;">
+								<p-dropdown filter="true" [options]="ecoleListe"
+									(onChange)="dt1.filter($event.value, 'etudiant_id.ecole_id.libelle', 'equals')"
+									emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Nom de l'école">
+								</p-dropdown>
+							</span>
+							<span style="margin-left: 2px;">
+								<p-dropdown filter="true" [options]="domaineListe"
+									(onChange)="dt1.filter($event.value, 'etudiant_id.classe_id.diplome_id.domaine', 'equals')"
+									emptyFilterMessage="Pas de domaine trouvé" filterPlaceholder="Nom du domaine">
 								</p-dropdown>
 							</span>
 
@@ -430,7 +442,8 @@
 		<h5>Mes tickets en cours de traitement</h5>
 		<p-table #dt2 *ngIf="AccAffList" pDroppable="QueueToAccAff" dataKey="_id" [rows]="10"
 			(onDrop)="dragQueueToAccAff($event)" [rowHover]="true" [totalRecords]="AccAffList.length" [paginator]="true"
-			[pageLinks]="5" rowExpandMode="single" [globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
+			[pageLinks]="5" rowExpandMode="single"
+			[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
 			[value]="AccAffList" (sortFunction)="customSort($event)" [customSort]="true"
 			[expandedRowKeys]="expandedTraitement" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
@@ -453,6 +466,19 @@
 							<p-dropdown filter="true" [options]="showStatutTab2"
 								(onChange)="dt2.filter($event.value, 'statut', 'equals')"
 								emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="statut">
+							</p-dropdown>
+						</span>
+
+						<span style="margin-left: 2px;">
+							<p-dropdown filter="true" [options]="ecoleListe"
+								(onChange)="dt2.filter($event.value, 'etudiant_id.ecole_id._id', 'equals')"
+								emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Nom de l'école">
+							</p-dropdown>
+						</span>
+						<span style="margin-left: 2px;">
+							<p-dropdown filter="true" [options]="domaineListe"
+								(onChange)="dt2.filter($event.value, 'etudiant_id.classe_id.diplome_id.domaine', 'equals')"
+								emptyFilterMessage="Pas de domaine trouvé" filterPlaceholder="Nom du domaine">
 							</p-dropdown>
 						</span>
 					</div>

@@ -160,6 +160,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
     if (sem == "Annuel")
         sem = /./i
     Note.find({ classe_id: req.params.classe_id, semestre: sem }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+        console.log(notes[0])
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
         let listMatiereNOM = []
@@ -180,12 +181,14 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
                     if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
-
+                        
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname.toUpperCase() + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
+                    }else{
+                        console.log(mid)
                     }
                 })
             }
