@@ -173,7 +173,7 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="siret">SIRET <span style="color: red;"> * </span></label>
-                                <input pInputText id="siret" maxlength=15 minlength=15 type="text"  formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
+                                <input pInputText id="siret" type="text"  formControlName="siret" placeholder="XXXXXXXXXXXXXXX" />
 
                                 <div *ngIf="siret.invalid && (siret.touched || siret.dirty)">
                                     <span style="color: red;" class="error" *ngIf="siret.errors?.required">* Le SIRET

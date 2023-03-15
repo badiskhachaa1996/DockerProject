@@ -95,16 +95,28 @@ export class ListeContratsComponent implements OnInit {
 
   filtreMobility = [
     { label: 'Mobilité *', value: null },
-    { label: 'Oui', value: '500' },
-    { label: 'Non', value: '' },
+    { label: 'Non', value: 'Non' },
+    { label: 'En cours', value: 'En cours' },
+    { label: 'Accordé', value: 'Accordé' }, //* Un champs pour saisir la valeur sera affiché pour mentionner le montant subventionné
+    { label: 'Facturé à l\’opco', value: 'Facturé à l\’opco' },
+    { label: 'Fournis à l\'étudiant', value: 'Fournis à l\'étudiant' },
   ];
 
-  mobiliteOptions: any = [
-    { name: 'Non', value: 0 },
-    { name: 'Oui', value: 1 },
+  advantageStatusList: any[] = [
+    { label: 'Non', value: 'Non' },
+    { label: 'En cours', value: 'En cours' },
+    { label: 'Accordé', value: 'Accordé' }, //* Un champs pour saisir la valeur sera affiché pour mentionner le montant subventionné
+    { label: 'Facturé à l\’opco', value: 'Facturé à l\’opco' },
+    { label: 'Fournis à l\'étudiant', value: 'Fournis à l\'étudiant' },
   ];
-
+  
+  // pour afficher le champs de saisie du prix de la mobilité
   showCout: boolean = false;
+  // pour afficher le champs de saisie du prix du matériel pédagogique
+  showMatPedPrice: boolean = false;
+  // pour afficher le champs de saisie du prix d'aide au permis
+  showDLHelpPrice: boolean = false;
+
   showStatusForm: boolean = false;
   statusForm: FormGroup;
 
@@ -352,7 +364,12 @@ export class ListeContratsComponent implements OnInit {
       professionnalisation: new FormControl(''),
       anne_scolaire: new FormControl(),
       ecole: new FormControl('', Validators.required),
+      mob_int: [this.advantageStatusList[0].label],
       cout_mobilite: new FormControl(''),
+      mat_ped: [this.advantageStatusList[0].label],
+      cout_mat_ped: [''],
+      dl_help: [this.advantageStatusList[0].label],
+      cout_dl_help: [''],
     })
   }
 
@@ -372,10 +389,14 @@ export class ListeContratsComponent implements OnInit {
       form: new FormControl('', Validators.required),
       code_commercial: new FormControl(''),
       anne_scolaire: new FormControl(''),
-
       professionnalisation: new FormControl(''),
       ecole: new FormControl('', Validators.required),
+      mob_int: [this.advantageStatusList[0].label],
       cout_mobilite: new FormControl(''),
+      mat_ped: [this.advantageStatusList[0].label],
+      cout_mat_ped: [''],
+      dl_help: [this.advantageStatusList[0].label],
+      cout_dl_help: [''],
     })
   }
 
@@ -421,7 +442,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('cout_mobilite')?.value, null, null, null, null)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -445,7 +466,7 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.formUpdateCa.get('cout_mobilite')?.value, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -454,7 +475,6 @@ export class ListeContratsComponent implements OnInit {
 
     }, (error => { console.error(error) }))
   }
-
 
 
   //Methode pour preparer le formulaire de modification d'un contrat
@@ -495,18 +515,42 @@ export class ListeContratsComponent implements OnInit {
     })
   }
 
-  // methoe d'affichage du cout
-  onShowCout(event: any): void {
-    if (event.value.value == 0) {
-      this.showCout = false;
-    } else {
+  // méthode d'affichage du cout
+  onShowCout(event: any): void 
+  {
+    if(event.value == 'Accordé')
+    {
       this.showCout = true;
+    } else {
+      this.showCout = false;
+    }
+  }
+
+  // méthode d'affichage du champs de saisie du montant coût pédagogique
+  onShowMatPedPrice(event: any): void
+  {
+    if(event.value == 'Accordé')
+    {
+      this.showMatPedPrice = true;
+    } else {
+      this.showMatPedPrice = false;
+    }
+  }
+
+  // méthode d'affichage du champs de saisie du montant d'aide au permis
+  onShowDLPrice(event: any): void
+  {
+    if(event.value == 'Accordé')
+    {
+      this.showDLHelpPrice = true;
+    } else {
+      this.showDLHelpPrice = false;
     }
   }
 
   // mis à jour su status du contrat
   onUpdateStatus(): void {
-    // recuperation des donées du formulaire
+    // recuperation des données du formulaire
     const formValue = this.statusForm.value;
     this.contratToUpdate.statut = formValue.libelle;
 
