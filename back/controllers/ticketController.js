@@ -280,7 +280,7 @@ app.get("/getAllbyUser/:id", (req, res) => {
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
-    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })
+    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -292,7 +292,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })

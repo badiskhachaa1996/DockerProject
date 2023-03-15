@@ -398,7 +398,7 @@ export class SuiviTicketsComponent implements OnInit {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
       description: this.TicketForm.value.description,
-      etudiant_id: this.etudiant._id
+      etudiant_id: this?.etudiant?._id
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });

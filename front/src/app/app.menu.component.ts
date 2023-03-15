@@ -864,7 +864,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
-
+                                { label: 'Gestion des tickets', icon: 'pi pi-check-circle', routerLink: ['/gestion-tickets'] },
                                 { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
 
                             ]
