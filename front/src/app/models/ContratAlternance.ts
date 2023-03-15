@@ -22,7 +22,12 @@ export class ContratAlternance {
         public statut?: string,
         public anne_scolaire?: string[],
         public ecole?: string,
+        public cout_mobilite_status?: string,
         public cout_mobilite?: number,
+        public cout_mat_ped_status?: string,
+        public cout_mat_ped?: number,
+        public cout_dl_help_status?: string,
+        public cout_dl_help?: number,
         public cerfa?: string, //* file
         public convention_formation?: string, //* file
         public resiliation_contrat?: string, //* file

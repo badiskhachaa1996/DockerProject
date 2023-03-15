@@ -479,32 +479,29 @@ app.post("/createContratAlternance", (req, res, next) => {
                                         User.findOne({ _id: entreprise.directeur_id })
                                             .then((user) => {
                                                 // création du mail à envoyer
+                                                let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
 
+                                                let Ceo_mailOptions =
+                                                {
+                                                    from: "ims@intedgroup.com",
+                                                    to: user.email_perso,
+                                                    subject: 'Nouveau contrat [IMS]',
+                                                    html: Ceo_htmlmail,
+                                                    // attachments: [{
+                                                    //     filename: 'Image1.png',
+                                                    //     path: 'assets/Image1.png',
+                                                    //     cid: 'Image1' //same cid value as in the html img src
+                                                    // }]
+                                                };
+
+
+                                                // envoi du mail
+                                                transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                    if (error) {
+                                                        console.error(error);
+                                                    }
+                                                });
                                                 res.status(200).send(NewContData);
-                                                if (user && !argProd.includes('dev') && !argProd.includes('prod')) {
-                                                    let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
-
-                                                    let Ceo_mailOptions =
-                                                    {
-                                                        from: "ims@intedgroup.com",
-                                                        to: user.email_perso,
-                                                        subject: 'Nouveau contrat [IMS]',
-                                                        html: Ceo_htmlmail,
-                                                        // attachments: [{
-                                                        //     filename: 'Image1.png',
-                                                        //     path: 'assets/Image1.png',
-                                                        //     cid: 'Image1' //same cid value as in the html img src
-                                                        // }]
-                                                    };
-
-
-                                                    // envoi du mail
-                                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                                        if (error) {
-                                                            console.error(error);
-                                                        }
-                                                    });
-                                                }
                                             })
                                             .catch((error) => { console.log(error); res.status(400).send(error) })
 

@@ -94,6 +94,18 @@ export class ListEntrepriseCeoComponent implements OnInit {
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
   }
 
+  // methode de téléchargement de l'accord de prise en charge
+  onDownloadAccordPriseEnCharge(id: string): void
+  {
+    this.entrepriseService.getAccord(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `accord_prise_charge.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Accord de prise en charge", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Accord de prise en charge", detail: `Impossible de télécharger le fichier` }); });
+  }
+
   // méthode de téléchargement de la résiliation
   onDownloadResiliation(id: string): void
   {
