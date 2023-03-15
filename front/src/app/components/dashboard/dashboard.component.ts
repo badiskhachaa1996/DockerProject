@@ -278,8 +278,8 @@ export class DashboardComponent implements OnInit {
             this.paimentS1 = dataEtu.isAlternant
 
             if (!dataEtu.isAlternant && dataEtu.statut_dossier) {
-              this.paimentAn = dataEtu.statut_dossier?.includes("Paiement non finalisé")
-              this.paimentS1 = dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé")
+              this.paimentAn = dataEtu.statut_dossier?.includes("Paiement finalisé")
+              this.paimentS1 = (dataEtu.statut_dossier?.includes("Paiement Semestre 1 finalisé") || dataEtu.statut_dossier?.includes("Paiement finalisé"))
             }
 
             this.isEtudiant = true
@@ -442,8 +442,7 @@ export class DashboardComponent implements OnInit {
           this.dailyCheck = response;
           this.statut = this.dailyCheck.statut;
           this.isCheck = true;
-          if(response.out_date != null)
-          {
+          if (response.out_date != null) {
             this.isCheckOut = true;
           }
         }
@@ -578,17 +577,17 @@ export class DashboardComponent implements OnInit {
 
     // envoi du projet modifié en base de données
     this.projectService.putTask(tache)
-    .then((response) => {
-      this.messageService.add({severity:'success', summary:'Tâche', detail: response.success});
-
-      this.dailyCheck.statut = `En attente du checkout`;
-      // modification du dailycheck en bd
-      this.inTimeService.patchCheck(this.dailyCheck)
       .then((response) => {
-        this.messageService.add({severity:'success', summary:'Check', detail: response.success });
-        this.onIsCheck();
-      })
-      .catch((error) => { this.messageService.add({severity:'error', summary:'Check', detail: response.error}); })
+        this.messageService.add({ severity: 'success', summary: 'Tâche', detail: response.success });
+
+        this.dailyCheck.statut = `En attente du checkout`;
+        // modification du dailycheck en bd
+        this.inTimeService.patchCheck(this.dailyCheck)
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+            this.onIsCheck();
+          })
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: response.error }); })
 
         // modification du dailycheck en bd
         this.inTimeService.patchCheck(this.dailyCheck)
@@ -614,17 +613,16 @@ export class DashboardComponent implements OnInit {
 
 
   // methode checkout récupère l'heure du checkout
-  onCheckOut(): void
-  {
+  onCheckOut(): void {
     this.dailyCheck.isCheckable = false;
     this.dailyCheck.craIsValidate = true;
 
     this.inTimeService.patchCheckOut(this.dailyCheck)
-    .then((response) => { 
-      this.messageService.add({severity:'success', summary: 'Check', detail: response.success }); 
-      this.onIsCheck();
-    })
-    .catch((error) => { this.messageService.add({severity:'error', summary: 'Check', detail: error.error }); })
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+        this.onIsCheck();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
 
 

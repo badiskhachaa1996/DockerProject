@@ -138,12 +138,14 @@
         					</div>
 							<!-- Documents liés au contrat -->
                             <div class="p-2">
+                                <h6>Documents du contrat</h6>
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                                         <tr>
                                             <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
                                             <th>Cerfa</th> <!-- *lié directement au contrat -->
                                             <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                                            <th>Accord de prise en charge</th> <!-- *lié directement au contrat -->
                                             <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
                                         </tr>
                                     </ng-template>
@@ -170,11 +172,44 @@
                                                 -- Aucun fichier --
                                             </td>
 
+                                            <td *ngIf="contrat.accord_prise_charge != null">
+                                                <i class="pi pi-file" title="Télécharger l'accord de prise en charge" style="font-size: 2em; color: rgb(150, 248, 4); cursor: pointer;" (click)="onDownloadAccordPriseEnCharge(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.accord_prise_charge == null" style="color: red; font-weight: bold;">
+                                                -- Aucun fichier --
+                                            </td>
+
                                             <td *ngIf="contrat.resiliation_contrat != null">
                                                 <i class="pi pi-file" title="Télécharger la résiliation" style="font-size: 2em; color: rgb(177, 6, 6); cursor: pointer;" (click)="onDownloadResiliation(contrat._id)"></i>
                                             </td>
                                             <td *ngIf="contrat.resiliation_contrat == null" style="color: green; font-weight: bold;">
                                                 -- Ce contrat est en cours --
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <!-- Avantage liés au contrat -->
+                            <div class="p-2">
+                                <h6>Avantages contrat</h6>
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Mobilité internationale</th>
+                                            <th>Materiel pédagogique</th>
+                                            <th>Aide au permis</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                {{ contrat.cout_mobilite_status != 'Accordé' ? contrat.cout_mobilite_status: contrat.cout_mobilite + '€' }}
+                                            </td>
+                                            <td>
+                                                {{ contrat.cout_mat_ped_status != 'Accordé' ? contrat.cout_mat_ped_status: contrat.cout_mat_ped + '€' }}
+                                            </td>
+                                            <td>
+                                                {{ contrat.cout_dl_help_status != 'Accordé' ? contrat.cout_dl_help_status: contrat.cout_dl_help + '€' }}
                                             </td>
                                         </tr>
                                     </ng-template>

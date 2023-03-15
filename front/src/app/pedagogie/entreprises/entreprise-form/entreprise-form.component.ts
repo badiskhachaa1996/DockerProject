@@ -81,7 +81,7 @@ export class EntrepriseFormComponent implements OnInit {
       civilite_rep: [this.civiliteList[0]],
       nom_rep: ['', Validators.required],
       prenom_rep: ['', Validators.required],
-      email_rep: ['', [Validators.required,   Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      email_rep: ['', [Validators.required,   Validators.email, Validators.email]],
       indicatif_rep: ['', [Validators.pattern('^[0-9]+$')]],
       phone_rep: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
     })

@@ -53,7 +53,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
-  service_admission_id;
+
   formSteps: any[] = [
     "Infos",
     "Parcours",
@@ -89,11 +89,11 @@ export class FormulaireAdmissionComponent implements OnInit {
     [
       { value: "Paris - France" },
       { value: "Montpellier - France" },
-      { value: "Valence - Espagne" },
-      { value: "Florence - Italie" },
+      { value: "Brazzaville - Congo" },
+      { value: "Rabat - Maroc" },
+      { value: "La Valette - Malte" },
       { value: "UAE - Dubai" },
-      { value: "Tunis - Tunisie" },
-
+      { value: "En ligne" },
     ];
 
   niveauFR =
@@ -116,70 +116,162 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
       { value: "Programme Anglais" },
     ];
-
-  /*
-        { value: "1ere année BTS MCO - Management Commercial Operationnel " },
-    { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-    { value: "1ere année BTS CI - Commerce International" },
-    { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
-    { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
-    { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial " },
-    { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial" },
-    { value: "Mastère 1 : MDO : Manager des organisations" },
-    { value: "Mastère 1 : IA - Ingénieur d'Affaires" },
-    { value: "1ere année BTS SIO - Services Informatiques aux Organisations" },
-    { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
-    { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
-    */
-  programeFrDropdown =
+  programeFrDropdown: any[] =
     [
-      { value: "1ere année BTS MCO - Management Commercial Opérationnel" },
-      { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-      { value: "1ere année BTS CI - Commerce International " },
-      { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
-      { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
-      { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial  " },
-      { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial ( ancien RMC ) " },
-      { value: "Mastère 1 : MDO : Manager des organisations " },
-      { value: "Mastère 1 : IA - Ingénieur d'Affaires " },
-      { value: "1ere année BTS CG - Comptabilité et Gestion " },
-      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
-      { value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel) " },
-      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
-      { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
-      { value: "Mastère 1 : Manager en ressources humaines )" },
-      { value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines" },
-      { value: "Mastère 1 : Manager des organisations - Management et stratégies financières" },
-      { value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel) " },
-      { value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment" },
+      {
+        label: "1ere année BTS MCO - Management Commercial Operationnel",
+        value: "1ere année BTS MCO - Management Commercial Operationnel"
+      },
+      {
+        label: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client",
+        value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client"
+      },
+      {
+        label: "1ere année BTS CI - Commerce International",
+        value: "1ere année BTS CI - Commerce International"
+      },
+      {
+        label: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
+        value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
+      },
+      {
+        label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial ",
+        value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial"
+      },
+      {
+        label: "Mastère 1 : IA - Ingénieur d'Affaires",
+        value: "Mastère 1 : IA - Ingénieur d'Affaires"
+      },
+      {
+        label: "1ere année BTS SIO - Services Informatiques aux Organisations",
+        value: "1ere année BTS SIO - Services Informatiques aux Organisations"
+      },
+      {
+        label: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
+        value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
+      },
+      {
+        label: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
+        value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
+      },
+      {
+        label: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)",
+        value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)"
+      },
+      {
+        label: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)",
+        value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)"
+      },
+      {
+        label: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées",
+        value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées"
+      },
+      {
+        label: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications",
+        value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications"
+      },
+      {
+        label: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ ",
+        value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ"
+      },
+      {
+        label: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA ",
+        value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA "
+      },
+      {
+        label: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)",
+        value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)"
+      },
+      {
+        label: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise",
+        value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise"
+      },
+      {
+        label: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines",
+        value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines"
+      },
+      {
+        label: "Mastère 1 : Manager en ressources humaines",
+        value: "Mastère 1 : Manager en ressources humaines"
+      },
+      {
+        label: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines",
+        value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines"
+      },
+      {
+        label: "Mastère 1 : Manager des organisations - Management et stratégies financières ",
+        value: "Mastère 1 : Manager des organisations - Management et stratégies financièresl"
+      },
+      {
+        label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
+        value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
+      },
+      {
+        label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
+        value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
+      },
+      {
+        label: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social",
+        value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social"
+      },
+      //Septembre 2023 || Mars 2023 && Programme Français
+      {
+        label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
+        value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
+      },
+      {
+        label: "Mastère 1 : MDO : Manager des organisations",
+        value: "Mastère 1 : MDO : Manager des organisations"
+      },
 
-      { value: "Assistant maternel - Garde d’enfants " },
-      { value: "Gouvernant d’enfants" },
-      { value: "CAP AEPE - Accompagnant éducatif petite enfance" },
-      { value: "Année 1 : BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social " },
-      { value: "Chargé de gestion commerciale - Spécialité Tourisme  " },
-      { value: "Chargé de gestion commerciale - Spécialité hôtellerie restauration" },
-      { value: "TP GH Gouvernant en Hôtellerie  " },
-
-      { value: "1ere année BTS SIO - Services Informatiques aux Organisations " },
-      { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
-      { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
-      { value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)" },
-      { value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
-      { value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées" },
-      { value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications " },
-      { value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ" },
-      { value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA" }
-
+      {
+        label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
+        value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
+      }
     ];
 
-  programEnDropdown =
+  programEnDropdown: any[] =
     [
-      { value: "LEVEL 7-  Diploma in Project Management " },
-      { value: "LEVEL 7 - Diploma in Business Management   " },
-      { value: "LEVEL 4 : Diploma in Information Technology " },
-      { value: "Level 4 : Diploma in Tourism and Hospitality Management " },
-      { value: "Level 4 : Diploma Business Management " },
+      {
+        label: "Level 4 : Business Management ",
+        value: "Level 4 : Business Management "
+      },
+      {
+        label: "Level 4 : Information Technology ",
+        value: "Level 4 : Information Technology "
+      },
+      {
+        label: "Level 7 : Project Management ",
+        value: "Level 7 : Project Management "
+      },
+      {
+        label: "Level 4 : Tourism and Hospitality Management ",
+        value: "Level 4 : Tourism and Hospitality Management "
+      },
+      {
+        label: "Level 7 : Tourism and Hospitality Management ",
+        value: "Level 7 : Tourism and Hospitality Management "
+      },
+      {
+        label: "Level 5 : Business Management ",
+        value: "Level 5 : Business Management "
+      },
+      {
+        label: "Level 6 : Business Management ",
+        value: "Level 6 : Business Management "
+      },
+      {
+        label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
+        value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
+      },
+      {
+        label: "Level 5 : Information Technology ",
+        value: "Level 5 : Information Technology"
+      },
+      {
+        label: "Level 6 : Information Technology ",
+        value: "Level 6 : Information Technology"
+      }
 
     ];
   defaultDropdown = this.programeFrDropdown
@@ -212,93 +304,267 @@ export class FormulaireAdmissionComponent implements OnInit {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
     }
     if (this.form_origin == "eduhorizons") {
-      this.campusDropdown = [
-        { value: "France - Paris" },
-        { value: "France - Montpellier" },
-        { value: "Valence - Espagne" },
-        { value: "Florence - Italie" },
-        { value: "UAE - Dubai" },
-        { value: "Tunisie - Tunis" },
-        { value: "Montréal - Canada" },
-        { value: "Malte " },
-        { value: "Congo" },
-        { value: "Maroc" },
-        { value: "USA" },
-        { value: "En ligne" }
-      ]
+      //COMME ESTYA
     } else if (this.form_origin == "estya") {
-      this.campusDropdown = [
-        { value: "France - Paris" },
-        { value: "France - Montpellier" },
-        { value: "Brazzaville - Congo" },
-        { value: "Rabat - Maroc " },
-        { value: "Malte" },
-        { value: "UAE - Dubai" },
-        { value: "En ligne" }
-      ]
+      //DROPDOWN PAR DEFAUT
     } else if (this.form_origin == "adg") {
-      this.campusDropdown = [
-        { value: "Paris - France" },
-        { value: "Montpellier - France" },
-        { value: "En ligne" }
-      ]
+      //Septembre 2023 || Mars 2023 & Programme Français
+      this.programeFrDropdown.push(
+        {
+          label: "Assistant maternel - Garde d’enfants - samedi ",
+          value: "Assistant maternel - Garde d’enfants - samedi"
+        },
+        {
+          label: "Gouvernant d’enfants",
+          value: "Gouvernant d’enfants"
+        },
+        {
+          label: "CAP AEPE - Accompagnant éducatif petite enfance",
+          value: "CAP AEPE - Accompagnant éducatif petite enfance"
+        },
+        {
+          label: "Année 3 : Bachelor  Chargé de gestion commerciale - Spécialité Tourisme ",
+          value: "Année 3 : Bachelor  Chargé de gestion commerciale - Spécialité Tourisme "
+        },
+        {
+          label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité hôtellerie restauration",
+          value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité hôtellerie restauration"
+        },
+        {
+          label: "EH - Employé d'étage ",
+          value: "EH - Employé d'étage "
+        },
+        {
+          label: "TP GH Gouvernant en Hôtellerie ",
+          value: "TP GH Gouvernant en Hôtellerie "
+        }
+      )
+      this.programEnDropdown =
+        [
+          {
+            label: "Level 4 : Business Management ",
+            value: "Level 4 : Business Management "
+          },
+          {
+            label: "Level 4 : Information Technology ",
+            value: "Level 4 : Information Technology "
+          },
+          {
+            label: "Level 7 : Project Management ",
+            value: "Level 7 : Project Management "
+          },
+          {
+            label: "Level 4 : Tourism and Hospitality Management ",
+            value: "Level 4 : Tourism and Hospitality Management "
+          },
+          {
+            label: "Level 7 : Tourism and Hospitality Management ",
+            value: "Level 7 : Tourism and Hospitality Management "
+          },
+          {
+            label: "Level 5 : Business Management ",
+            value: "Level 5 : Business Management "
+          },
+          {
+            label: "Level 6 : Business Management ",
+            value: "Level 6 : Business Management "
+          },
+          {
+            label: "ENP - Diploma in Tourism and Hospitality Management",
+            value: "ENP - Diploma in Tourism and Hospitality Management"
+          },
+          {
+            label: "Level 5 : Information Technology ",
+            value: "Level 5 : Information Technology"
+          },
+          {
+            label: "Level 6 : Information Technology ",
+            value: "Level 6 : Information Technology"
+          }
 
-      this.programeFrDropdown = [
-        { value: "Assistant maternel - Garde d’enfants " },
-        { value: "Gouvernant d’enfants" },
-        { value: "CAP AEPE - Accompagnant éducatif petite enfance" },
-        { value: "Année 1 : BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social " },
-        { value: "Chargé de gestion commerciale - Spécialité Tourisme  " },
-        { value: "Chargé de gestion commerciale - Spécialité hôtellerie restauration" },
-        { value: "TP GH Gouvernant en Hôtellerie  " }
-      ]
+        ];
     } else if (this.form_origin == "espic") {
-      this.campusDropdown = [
-        { value: "France - Paris" },
-        { value: "France - Montpellier" },
-        { value: "En ligne" }
-      ]
-      this.programeFrDropdown = [
-        { value: "1ere année BTS MCO - Management Commercial Opérationnel" },
-        { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-        { value: "1ere année BTS CI - Commerce International " },
-        { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
-        { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel) " },
-        { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial  " },
-        { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial ( ancien RMC ) " },
-        { value: "Mastère 1 : MDO : Manager des organisations " },
-        { value: "Mastère 1 : IA - Ingénieur d'Affaires " },
-        { value: "1ere année BTS CG - Comptabilité et Gestion " },
-        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
-        { value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel) " },
-        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
-        { value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise " },
-        { value: "Mastère 1 : Manager en ressources humaines )" },
-        { value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines" },
-        { value: "Mastère 1 : Manager des organisations - Management et stratégies financières" },
-        { value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel) " },
-        { value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment" },
-      ]
-    } else if (this.form_origin == "intuns") {
-      this.programeFrDropdown = [
-        { value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
-        { value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
-        { value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
-        { value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
-        { value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
-      ]
+      this.programeFrDropdown =
+        [
+          {
+            label: "1ere année BTS MCO - Management Commercial Operationnel",
+            value: "1ere année BTS MCO - Management Commercial Operationnel"
+          },
+          {
+            label: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client",
+            value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client"
+          },
+          {
+            label: "1ere année BTS CI - Commerce International",
+            value: "1ere année BTS CI - Commerce International"
+          },
+          {
+            label: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
+            value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
+          },
+          {
+            label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial ",
+            value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial"
+          },
+          {
+            label: "Mastère 1 : IA - Ingénieur d'Affaires",
+            value: "Mastère 1 : IA - Ingénieur d'Affaires"
+          },
+          {
+            label: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)",
+            value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)"
+          },
+          {
+            label: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise",
+            value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise"
+          },
+          {
+            label: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines",
+            value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines"
+          },
+          {
+            label: "Mastère 1 : Manager en ressources humaines",
+            value: "Mastère 1 : Manager en ressources humaines"
+          },
+          {
+            label: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines",
+            value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines"
+          },
+          {
+            label: "Mastère 1 : Manager des organisations - Management et stratégies financières ",
+            value: "Mastère 1 : Manager des organisations - Management et stratégies financièresl"
+          },
+          {
+            label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
+            value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
+          },
+          {
+            label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
+            value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
+          },
+          {
+            label: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social",
+            value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social"
+          },
+          //Septembre 2023 || Mars 2023 && Programme Français
+          {
+            label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
+            value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
+          },
+          {
+            label: "Mastère 1 : MDO : Manager des organisations",
+            value: "Mastère 1 : MDO : Manager des organisations"
+          },
+
+          {
+            label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
+            value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
+          }
+        ];
+      this.programEnDropdown =
+        [
+          {
+            label: "Level 4 : Business Management ",
+            value: "Level 4 : Business Management "
+          },
+          {
+            label: "Level 4 : Information Technology ",
+            value: "Level 4 : Information Technology "
+          },
+          {
+            label: "Level 7 : Project Management ",
+            value: "Level 7 : Project Management "
+          },
+          {
+            label: "Level 4 : Tourism and Hospitality Management ",
+            value: "Level 4 : Tourism and Hospitality Management "
+          },
+          {
+            label: "Level 7 : Tourism and Hospitality Management ",
+            value: "Level 7 : Tourism and Hospitality Management "
+          },
+          {
+            label: "Level 5 : Business Management ",
+            value: "Level 5 : Business Management "
+          },
+          {
+            label: "Level 6 : Business Management ",
+            value: "Level 6 : Business Management "
+          },
+          {
+            label: "Level 5 : Information Technology ",
+            value: "Level 5 : Information Technology"
+          },
+          {
+            label: "Level 6 : Information Technology ",
+            value: "Level 6 : Information Technology"
+          }
+
+        ];
     } else if (this.form_origin == "studinfo") {
-      this.programeFrDropdown = [
-        { value: "1ere année BTS SIO - Services Informatiques aux Organisations " },
-        { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
-        { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel) " },
-        { value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)" },
-        { value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
-        { value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées" },
-        { value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications " },
-        { value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ" },
-        { value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA" }
-      ]
+      this.programeFrDropdown =
+        [
+          {
+            label: "1ere année BTS SIO - Services Informatiques aux Organisations",
+            value: "1ere année BTS SIO - Services Informatiques aux Organisations"
+          },
+          {
+            label: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
+            value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
+          },
+          {
+            label: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
+            value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
+          },
+          {
+            label: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)",
+            value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)"
+          },
+          {
+            label: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)",
+            value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)"
+          },
+          {
+            label: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées",
+            value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées"
+          },
+          {
+            label: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications",
+            value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications"
+          },
+          {
+            label: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ ",
+            value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ"
+          },
+          {
+            label: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA ",
+            value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA "
+          },
+          {
+            label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
+            value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
+          },
+          {
+            label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
+            value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
+          }
+        ];
+      this.programEnDropdown =
+        [
+          {
+            label: "Level 4 : Information Technology ",
+            value: "Level 4 : Information Technology "
+          },
+          {
+            label: "Level 5 : Information Technology ",
+            value: "Level 5 : Information Technology"
+          },
+          {
+            label: "Level 6 : Information Technology ",
+            value: "Level 6 : Information Technology"
+          }
+        ]
+
     } else if (this.form_origin == "estya-dubai") {
       this.programeFrDropdown = [
         { value: 'Project Management' },
@@ -309,14 +575,13 @@ export class FormulaireAdmissionComponent implements OnInit {
         { value: 'Chargé de gestion commerciale' },
         { value: 'English Foundation Year' },
       ]
-      this.campusDropdown = [
-        { value: "UAE - Dubai" },
-        { value: "En ligne" },
-        { value: "France - Paris" },
-        { value: "France - Montpellier" },
-        { value: "Brazzaville - Congo" },
-        { value: "Rabat - Maroc " },
-        { value: "Malte" }
+    } else if (this.form_origin == "intuns") {
+      this.programeFrDropdown = [
+        { value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
+        { value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
+        { value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
+        { value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
+        { value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
       ]
     }
     this.defaultDropdown = this.programeFrDropdown

@@ -67,7 +67,7 @@ export class AddAgentComponent implements OnInit {
     phone: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     role: new FormControl('', Validators.required),
     service_id: new FormControl("", Validators.required),
-    mention : new FormControl (this.mentionList[0], [Validators.required]),
+    mention : new FormControl ("", [Validators.required]),
     entreprise: new FormControl(""),
     //type: new FormControl(this.statutList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
     pays_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
