@@ -151,6 +151,11 @@
                                 <label>L’école répond-elle à vos attentes premières ?</label>
                                 <p>{{result.ecole}}</p>
                             </div>
+                            <div class="field col-12" *ngIf="result.ecole=='Pas tout à fait'">
+                                <label>Question 16b :</label><br>
+                                <label>Que manque-t-il à l'école pour répondre à vos attentes premières ?</label>
+                                <p>{{result.ecole_propositions}}</p>
+                            </div>
                             <div class="field col-12">
                                 <label>Question 17 :</label><br>
                                 <label>Avez-vous accès à :</label><br>

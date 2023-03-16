@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Prospect } from 'src/app/models/Prospect';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-suivie-preinscription',
@@ -33,7 +34,9 @@ export class SuiviePreinscriptionComponent implements OnInit {
   RdNTest: boolean = false;
   RdNTest2: boolean = false;
   TCFTest: boolean = false;
+  editInfo = false
   codeCommercial;
+  isCommercial = true
   DocTypes: any[] = [
     { value: null, label: "Choisissez le type de fichier", },
     { value: 'Carte_vitale', label: 'Carte vitale', },
@@ -58,16 +61,17 @@ export class SuiviePreinscriptionComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-  constructor(public activatedRoute: ActivatedRoute, private router: Router, private messageService: MessageService, private admissionService: AdmissionService) { }
+  constructor(public activatedRoute: ActivatedRoute, private router: Router, private messageService: MessageService, private admissionService: AdmissionService, private UserService: AuthService) { }
 
   ngOnInit(): void {
-
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
     this.codeCommercial = localStorage.getItem("CommercialCode")
-
     if (this.activatedRoute.snapshot.params?.user_id) {
       this.admissionService.getPopulateByUserid(this.activatedRoute.snapshot.params?.user_id).subscribe(doc => {
         this.ProspectConnected = doc
-        console.log(this.ProspectConnected, doc, this.activatedRoute.snapshot.params?.user_id)
+        let { _id }: any = this.ProspectConnected.user_id
         this.ecoleProspect = this.ProspectConnected.type_form
         this.boolVisa = (this.ProspectConnected.avancement_visa) ? 'true' : 'false'
         this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
@@ -101,10 +105,23 @@ export class SuiviePreinscriptionComponent implements OnInit {
           },
           (error) => { console.error(error) }
         );
+        this.UserService.getProfilePicture(_id).subscribe((data) => {
+          if (data.error) {
+            this.imageToShow = "../assets/images/avatar.PNG"
+          } else {
+            const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+            let blob: Blob = new Blob([byteArray], { type: data.documentType })
+            if (blob) {
+              this.imageToShow = "../assets/images/avatar.PNG"
+              this.reader.readAsDataURL(blob);
+            }
+          }
+        })
+        this.getResteAPayer()
       })
     } else {
       this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
-      console.log(this.ProspectConnected)
+      this.isCommercial = false
     }
 
   }
@@ -169,8 +186,98 @@ export class SuiviePreinscriptionComponent implements OnInit {
   }
 
   changementVisa(value) {
-    this.admissionService.updateVisa(this.ProspectConnected._id, value)
+    this.admissionService.updateVisa(this.ProspectConnected._id, value).subscribe(v => {
+      if (value == 'true')
+        this.messageService.add({ severity: 'success', summary: `Changement du statut du visa par: Reçu` })
+      else
+        this.messageService.add({ severity: 'success', summary: `Changement du statut du visa par: En attente` })
+    })
+  }
+  demandeConsultant: FormGroup = new FormGroup({
+    mail: new FormControl('', Validators.required)
+  })
+  sendDemande() {
+    this.admissionService.envoieMail(this.demandeConsultant.value.mail, this.ProspectConnected).subscribe(r => {
+      this.messageService.add({ severity: 'success', summary: "Demande envoyé avec succès !" })
+      this.demandeConsultant.reset()
+    })
+  }
+  editInfoForm: FormGroup = new FormGroup({
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    date_naissance: new FormControl('', Validators.required),
+    nationnalite: new FormControl('', Validators.required),
+    _id: new FormControl("", Validators.required)
+  })
+  initEditForm() {
+    let bypass: any = this.ProspectConnected?.user_id
+    this.editInfoForm.setValue({
+      lastname: bypass?.lastname,
+      firstname: bypass?.firstname,
+      phone: bypass?.phone,
+      date_naissance: new Date(this.ProspectConnected?.date_naissance),
+      nationnalite: bypass.nationnalite,
+      _id: bypass._id
+    })
+    console.log(this.editInfoForm.value.date_naissance)
+    this.editInfo = true;
   }
 
+  saveInfo() {
+    this.UserService.patchById({ ...this.editInfoForm.value }).then(users => {
+      this.admissionService.getPopulateByUserid(this.editInfoForm.value._id).subscribe(doc => {
+        this.ProspectConnected = doc
+        this.messageService.add({ severity: 'success', summary: "Modifications des informations avec succès" })
+        this.editInfo = false
+      })
+    })
+  }
+  padTo2Digits(num) { return num.toString().padStart(2, '0'); }
+  formatDate(date) {
 
+    date = new Date(date)
+    if (date != 'Invalid Date' && date.getFullYear() != '1970')
+      return [this.padTo2Digits(date.getDate()), this.padTo2Digits(date.getMonth() + 1), date.getFullYear(),].join('/');
+    else return ''
+  }
+  clickFile() {
+    document.getElementById('selectedFile').click();
+  }
+  imageToShow: any = "../assets/images/avatar.PNG";
+  reader: FileReader = new FileReader();
+  FileUploadPDP(event) {
+    if (event && event.length > 0) {
+      const formData = new FormData();
+      let { _id }: any = this.ProspectConnected.user_id
+      formData.append('id', _id)
+      formData.append('file', event[0])
+
+      this.UserService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de votre photo de profil avec succès' });
+        this.imageToShow = "../assets/images/avatar.PNG"
+        this.reader.readAsDataURL(event[0]);
+        let avoidError: any = document.getElementById('selectedFile')
+        avoidError.value = ""
+        //this.UserService.reloadImage(this.token.id)
+      }, (error) => {
+        console.error(error)
+      })
+    }
+  }
+  downloadAttestation() {
+    this.messageService.add({ severity: "info", summary: "Cette fonctionnalité est encore en développement, merci de patienter." })
+  }
+  resteAPayer = 0
+
+  getResteAPayer() {
+    let total = 0
+    this.ProspectConnected.payement.forEach(val => {
+      total += parseInt(val.montant)
+    })
+    let toPay = 0 //TODO Récupérer le reste à Payer
+    this.resteAPayer = toPay - total
+    if (this.resteAPayer < 0)
+      this.resteAPayer = 0
+  }
 }

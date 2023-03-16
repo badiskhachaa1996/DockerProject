@@ -36,7 +36,7 @@ export class Prospect {
         public customid?:string,
         public traited_by?:string,
         public validated_cf?:boolean,
-        public payement?:[],
+        public payement?:any[],
         public avancement_visa?:boolean,
         public enTraitement?:boolean,
         public etat_traitement?:string,
