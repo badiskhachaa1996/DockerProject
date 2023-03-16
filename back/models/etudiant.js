@@ -52,6 +52,7 @@ const etudiantSchema = mongoose.Schema({
     pays_origine: { type: String },
     etat_contract: { type: String },
     entreprise: { String },
+
     etat_paiement: { String },
     source: { type: String, default: 'Aucune' },
     date_valided_by_support: { type: Date },
@@ -62,7 +63,14 @@ const etudiantSchema = mongoose.Schema({
     date_inscription: { type: Date, default: Date.now() },
     lien_bulletin: { type: mongoose.Schema.Types.Mixed, default: { 'Semestre 1': "", 'Semestre 2': "", 'Annuel': "" } },
     lien_attestation: { type: String, default: null },
-    certificat_scolarite: { type: String, default: null }
+    certificat_scolarite: { type: String, default: null },
+    //Stage :
+    nom_tuteur: { String },
+    prenom_tuteur: { String },
+    adresse_entreprise: { String },
+    adresse_mail_tuteur: { String },
+    phone_tuteur: { String },
+    remarque_stage: { String }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

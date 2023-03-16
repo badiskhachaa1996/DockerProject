@@ -536,7 +536,13 @@ export class ListEtudiantComponent implements OnInit {
       filiere: ['', Validators.required],
       statut_dossier: [''],
       annee_scolaire: ['', Validators.required],
-      ecole: ['', Validators.required]
+      ecole: ['', Validators.required],
+      nom_tuteur: [''],
+      prenom_tuteur: [''],
+      adresse_entreprise: [''],
+      adresse_mail_tuteur: [''],
+      phone_tuteur: [''],
+      remarque_stage: [''],
     });
     this.formUpdateDossier = this.formBuilder.group({
       statut_dossier: ['']
@@ -608,6 +614,13 @@ export class ListEtudiantComponent implements OnInit {
     let isMinor = this.formUpdateEtudiant.get("isMinor")?.value;
     let ecole = this.formUpdateEtudiant.get('ecole')?.value;
 
+    let nom_tuteur = this.formUpdateEtudiant.get("nom_tuteur")?.value;
+    let prenom_tuteur = this.formUpdateEtudiant.get("prenom_tuteur")?.value;
+    let adresse_entreprise = this.formUpdateEtudiant.get("adresse_entreprise")?.value;
+    let adresse_mail_tuteur = this.formUpdateEtudiant.get("adresse_mail_tuteur")?.value;
+    let phone_tuteur = this.formUpdateEtudiant.get("phone_tuteur")?.value;
+    let remarque_stage = this.formUpdateEtudiant.get("remarque_stage")?.value;
+
     let etudiant = new Etudiant(
       this.etudiantToUpdate._id,
       this.etudiantToUpdate.user_id,
@@ -651,7 +664,19 @@ export class ListEtudiantComponent implements OnInit {
       this.etudiantToUpdate.pays_origine, this.etudiantToUpdate.etat_contract,
       this.etudiantToUpdate.entreprise, this.etudiantToUpdate.etat_paiement,
       this.etudiantToUpdate.source, this.etudiantToUpdate.date_valided_by_support,
-      ecole
+      ecole,
+      this.etudiantToUpdate.lien_livret,this.etudiantToUpdate.lien_dossier_professionel,
+      this.etudiantToUpdate.lien_tableau_synthese,
+      this.etudiantToUpdate.date_inscription,
+      this.etudiantToUpdate.lien_bulletin,
+      this.etudiantToUpdate.lien_attestation,
+      this.etudiantToUpdate.certificat_scolarite,
+      nom_tuteur,
+      prenom_tuteur,
+      adresse_entreprise,
+      adresse_mail_tuteur,
+      phone_tuteur,
+      remarque_stage
     );
 
     this.etudiantService.update(etudiant).subscribe(
@@ -715,7 +740,13 @@ export class ListEtudiantComponent implements OnInit {
       isOnStage: this.etudiantToUpdate.isOnStage,
       enic_naric: this.etudiantToUpdate.enic_naric,
       annee_scolaire: this.etudiantToUpdate.annee_scolaire,
-      ecole: this.etudiantToUpdate.ecole_id._id
+      ecole: this.etudiantToUpdate.ecole_id._id,
+      nom_tuteur: this.etudiantToUpdate.nom_tuteur,
+      prenom_tuteur: this.etudiantToUpdate.prenom_tuteur,
+      adresse_entreprise: this.etudiantToUpdate.adresse_entreprise,
+      adresse_mail_tuteur: this.etudiantToUpdate.adresse_mail_tuteur,
+      phone_tuteur: this.etudiantToUpdate.phone_tuteur,
+      remarque_stage: this.etudiantToUpdate.remarque_stage
     });
     bypass = response.campus
     let bypassv2: any = response.filiere

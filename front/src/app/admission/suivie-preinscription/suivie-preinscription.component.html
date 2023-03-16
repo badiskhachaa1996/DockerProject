@@ -449,7 +449,7 @@
 
                 <!--TODO Demande de rendez-vous-->
 
-                <p-fieldset legend="Demandez un rendez vous avec un Consultant" *ngIf="!isCommercial">
+                <p-fieldset legend="Demandez un rendez vous avec un Consultant">
 
                     <form class="p-fluid p-formgrid grid" [formGroup]="demandeConsultant" (onSubmit)="sendDemande()">
 
@@ -462,7 +462,7 @@
                     </form>
                 </p-fieldset>
                 <br>
-                <p-fieldset legend="Examiner ma demande d'admission" *ngIf="!isCommercial">
+                <p-fieldset legend="Examiner ma demande d'admission">
 
                     <div class="grid">
                         <div class="col-12 grid">

@@ -483,6 +483,39 @@
 
 
                 </div>
+
+                <div class="field col-12 md:col-12" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Adresse de l'entreprise</label>
+                    <input pInputText type="text" placeholder="5 Rue du centre 93160 Noisy-Le-Grand"
+                        formControlName="adresse_entreprise" />
+                </div>
+
+
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Nom du Tuteur de stage</label>
+                    <input pInputText type="text" placeholder="Smith" formControlName="nom_tuteur" />
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Prénom du Tuteur de stage</label>
+                    <input pInputText type="text" placeholder="John" formControlName="prenom_tuteur" />
+                </div>
+
+
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Adresse Email du Tuteur de stage</label>
+                    <input pInputText type="email" placeholder="adresse@email.com"
+                        formControlName="adresse_mail_tuteur" />
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Téléphone du Tuteur de stage</label>
+                    <input pInputText type="text" placeholder="+33 0123456789" formControlName="phone_tuteur" />
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isOnStage">
+                    <label For="statut">Sujet du stage et Autres remarques</label>
+                    <textarea pInputTextarea formControlName="remarque_stage"
+                        placeholder="Dévéloppement d'un CRM pour un restaurant"></textarea>
+                </div>
                 <div class="field col-12">
                     <label>Est une Personne à Mobilité Réduite ?</label>
                     <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"

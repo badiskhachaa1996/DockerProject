@@ -1,0 +1,136 @@
+<p-toast></p-toast>
+<div class="grid" *ngIf="show">
+    <div>
+        <div class="col-12">
+            <div class="card">
+                <img src="\assets\images\logoIMS.png" alt="logo INTED" style="width: 10%;" class="m-2">
+                <h4 style="text-align: center;">Questionnaire de satisfaction - Formateurs </h4>
+                <p style="text-align: center; font-size: 12px;">
+                    Dans le cadre de l'amélioration continue de nos prestations de service, nous souhaiterions
+                    recueillir votre avis quant à la qualité de notre travail.
+                    Accordez-nous quelques minutes pour répondre à ce questionnaire.
+                    Le traitement de vos réponses nous aidera à améliorer nos prestations.
+                    En vous remerciant par avance.
+                </p>
+                <form class="p-fluid p-formgrid grid" [formGroup]="satisfactionsForm" (ngSubmit)="onAddForm()">
+                    <div class="field col-12">
+                        <label>Question 1 :</label><br>
+                        <label>Quel sont vos matières enseignées à STUDINFO ?</label>
+                        <input type="text" pInputText formControlName="maiteres" placeholder="Python, C++, Ruby" />
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 2 :</label><br>
+                        <label>Quel sont les groupes auxquelles vous enseignez à STUDINFO ?</label>
+                        <input type="text" pInputText formControlName="anne_formation" placeholder="CDA, SIO 1, SIO 2 - SISR, SIO 2 - SLAM" />
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 3 :</label><br>
+                        <label>Sous quel contrat de travail enseignez-vous dans cette établissement ?</label>
+                        <input type="text" pInputText formControlName="contrat_travail" placeholder="Vacataire" />
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 4 :</label><br>
+                        <label>De manière générale, dans votre école, comment qualifieriez-vous la relation que vous
+                            avez
+                            entretenue avec les élèves ?</label>
+                        <p-rating [cancel]="false" formControlName="eleve"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 5 :</label><br>
+                        <label>De manière générale, dans votre école, comment qualifieriez-vous la relation que vous
+                            avez
+                            entretenue avec les enseignants de l'école ?</label>
+                        <p-rating [cancel]="false" formControlName="enseignant"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 6 :</label><br>
+                        <label>De manière générale, dans votre école, comment qualifieriez-vous la relation que vous
+                            avez
+                            entretenue avec la pédagogie ?</label>
+                        <p-rating [cancel]="false" formControlName="pedagogie"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 7 :</label><br>
+                        <label>De manière générale, dans votre école, comment qualifieriez-vous la relation que vous
+                            avez
+                            entretenue avec la direction de l'école ?</label>
+                        <p-rating [cancel]="false" formControlName="direction"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 8 :</label><br>
+                        <label>Quel est votre degré de satisfaction des mesures d’accueils ? </label>
+                        <p-rating [cancel]="false" formControlName="mesure_accueil"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 8b :</label><br>
+                        <label>Précisez : </label>
+                        <textarea pInputTextarea formControlName="explication_mesure"></textarea>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 9 :</label><br>
+                        <label>Participez-vous actuellement à des activités de tutorat ? </label>
+                        <p-selectButton [options]="optionSatisfaction" formControlName="tutorat"></p-selectButton>
+
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 10 :</label><br>
+                        <label>En comparaison avec les élèves des groupes des autres enseignant(e)s, vous considériez
+                            les élèves de votre groupe comme étant:</label>
+                        <p-dropdown [options]="dropdownGere" formControlName="gere"
+                            placeholder="Choissisez votre réponse"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 11 :</label><br>
+                        <label>Qu’avez-vous pensé de la salle pour la formation ou de la visio ? </label>
+                        <p-rating [cancel]="false" formControlName="salle_visio"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 12 :</label><br>
+                        <label>Qu’avez-vous pensé du matériel mis à votre disposition ?</label>
+                        <p-rating [cancel]="false" formControlName="disposition"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 13 :</label><br>
+                        <label>Êtes-vous satisfait des locaux ?</label>
+                        <p-rating [cancel]="false" formControlName="satisfait_locaux"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 14 :</label><br>
+                        <label>Qu’avez-vous pensé de l'accès au site ?</label>
+                        <p-rating [cancel]="false" formControlName="satisfait_site"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 15 :</label><br>
+                        <label>Qu’avez-vous pensé du rythme de la formation (Heure,Cadence,Jour) ?</label>
+                        <p-rating [cancel]="false" formControlName="satisfait_rythme"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 16 :</label><br>
+                        <label>Auriez-vous un commentaire global à nous communiquer ?</label>
+                        <textarea pInputTextarea formControlName="propositions"></textarea>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 17 :</label><br>
+                        <label>Globalement, quel est votre degré de satisfaction vis-à-vis de votre poste de formateur
+                            au sein de STUDINFO? </label>
+                        <p-rating [cancel]="false" formControlName="satisfait_rythme"></p-rating>
+                    </div>
+
+                    <div>
+                        <button pButton label="Validez le formulaire" type="submit"
+                            [disabled]="satisfactionsForm.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!show">
+    <h2 class="col-12 flex justify-content-center flex-wrap card-container">NOUS VOUS REMERCIONS DE VOTRE COLLABORATION
+        !
+        Votre formulaire a été envoyé !</h2>
+    <div class="col-12 flex justify-content-center flex-wrap card-container">
+        <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+    </div>
+</div>
