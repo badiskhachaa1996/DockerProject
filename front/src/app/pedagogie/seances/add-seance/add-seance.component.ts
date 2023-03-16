@@ -264,6 +264,7 @@ export class AddSeanceComponent implements OnInit {
           serror.classe_id.forEach(c => {
             classeStr = classeStr + this.classes[c].abbrv + ","
           })
+          console.error(error)
           this.messageService.add({
             severity: 'error', summary: "Informations de :" + error.seance, detail:
               "Debut: " + this.convertDate(new Date(serror.date_debut)) +
@@ -533,7 +534,7 @@ export class AddSeanceComponent implements OnInit {
     }
   }
 
-  changeDate(value) {
+  changeDate(value = this.seanceForm.value.date_debut) {
     let date_debut = new Date(value)
     let date_fin = new Date(value)
     if (this.seanceForm.value.periode_seance == 'Matin') {
@@ -543,6 +544,7 @@ export class AddSeanceComponent implements OnInit {
       date_debut.setHours(13, 30)
       date_fin.setHours(17)
     }
+    console.log({ date_debut, date_fin })
     this.seanceForm.patchValue({ date_debut, date_fin })
   }
 
