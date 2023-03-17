@@ -155,6 +155,8 @@ import { POVHorsCommercialComponent } from './skillsnet/matching/povhors-commerc
 import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-form/prospect-alt-form.component';
 import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
+import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
+import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 
 const routes: Routes = [
     {
@@ -279,12 +281,14 @@ const routes: Routes = [
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
+            { path: 'resultat-qf', component: ResultatQfComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'pv-annuel/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'pv-semestriel/:semestre/:classe_id', component: PvSemestrielComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService] },
             { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'formulaire-formateur', component: QuestionnaireFormateurComponent },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

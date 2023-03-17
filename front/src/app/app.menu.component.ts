@@ -263,9 +263,10 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Questionnaire',
+                label: 'Questionnaire', icon: 'pi pi-heart',
                 items: [
-                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
+                    { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
                 ]
             }
         ];
@@ -790,9 +791,10 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
                                 {
-                                    label: 'Questionnaire',
+                                    label: 'Questionnaire', icon: 'pi pi-heart',
                                     items: [
-                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
+                                        { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
                                     ]
                                 }
                             ]

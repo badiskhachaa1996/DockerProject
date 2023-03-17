@@ -261,6 +261,7 @@ import { ProspectAltFormComponent } from './pedagogie/etudiants/prospect-alt-for
 import { ProspectsAlternablesComponent } from './commercial/prospects-alternables/prospects-alternables.component';
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
+import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 
 
 @NgModule({
@@ -531,7 +532,8 @@ import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-forma
     ProspectAltFormComponent,
     ProspectsAlternablesComponent,
     AddProspectComponent,
-    QuestionnaireFormateurComponent
+    QuestionnaireFormateurComponent,
+    ResultatQfComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

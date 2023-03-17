@@ -15,14 +15,15 @@
                 <form class="p-fluid p-formgrid grid" [formGroup]="satisfactionsForm" (ngSubmit)="onAddForm()">
                     <div class="field col-12">
                         <label>Question 1 :</label><br>
-                        <label>Quel sont vos matières enseignées à STUDINFO ?</label>
-                        <input type="text" pInputText formControlName="maiteres" placeholder="Python, C++, Ruby" />
+                        <label>Quel sont les groupes auxquelles vous enseignez à STUDINFO ?</label>
+                        <input type="text" pInputText formControlName="annee_formation" placeholder="CDA, SIO 1, SIO 2 - SISR, SIO 2 - SLAM" />
                     </div>
                     <div class="field col-12">
                         <label>Question 2 :</label><br>
-                        <label>Quel sont les groupes auxquelles vous enseignez à STUDINFO ?</label>
-                        <input type="text" pInputText formControlName="anne_formation" placeholder="CDA, SIO 1, SIO 2 - SISR, SIO 2 - SLAM" />
+                        <label>Quel sont vos matières enseignées à STUDINFO ?</label>
+                        <input type="text" pInputText formControlName="matiere" placeholder="Python, C++, Ruby" />
                     </div>
+
                     <div class="field col-12">
                         <label>Question 3 :</label><br>
                         <label>Sous quel contrat de travail enseignez-vous dans cette établissement ?</label>
@@ -61,8 +62,7 @@
                         <label>Quel est votre degré de satisfaction des mesures d’accueils ? </label>
                         <p-rating [cancel]="false" formControlName="mesure_accueil"></p-rating>
                     </div>
-                    <div class="field col-12">
-                        <label>Question 8b :</label><br>
+                    <div class="field col-12" *ngIf="satisfactionsForm.value.mesure_accueil && satisfactionsForm.value.mesure_accueil < 3">
                         <label>Précisez : </label>
                         <textarea pInputTextarea formControlName="explication_mesure"></textarea>
                     </div>
@@ -113,7 +113,7 @@
                         <label>Question 17 :</label><br>
                         <label>Globalement, quel est votre degré de satisfaction vis-à-vis de votre poste de formateur
                             au sein de STUDINFO? </label>
-                        <p-rating [cancel]="false" formControlName="satisfait_rythme"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_global"></p-rating>
                     </div>
 
                     <div>
