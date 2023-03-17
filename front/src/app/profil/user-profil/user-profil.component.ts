@@ -548,7 +548,7 @@ export class UserProfilComponent implements OnInit {
   //Refuser une demande de congés
   onRefuseConge(id: string)
   {
-    this.congeService.patchValidateHolidays(id)
+    this.congeService.patchRefuseHolidays(id)
     .then((response) => { 
       this.messageService.add({ severity: 'warning', summary: "Demande de congés Réfusé" }); 
       this.onGetCongesForMyService();

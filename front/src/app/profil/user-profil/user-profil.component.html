@@ -326,7 +326,7 @@
             <!-- justification d'abscence -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
                 <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
-                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir son CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
+                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir mes CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
                 <h3>CRA</h3>
 
                 <i class="pi pi-times-circle" *ngIf="showFormjustification"
@@ -362,6 +362,11 @@
                 <!-- Table d'affichage du compte rendu d'activité -->
                 <div *ngIf="showPresenceList">
                     
+                    <i class="pi pi-times-circle"
+                        style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                        pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
+                    </i>
+
                     <h5>Compte rendu d'activités</h5>
                     
                     <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll"
