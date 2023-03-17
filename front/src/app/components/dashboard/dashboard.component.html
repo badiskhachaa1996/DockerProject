@@ -278,7 +278,7 @@
     <h1 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h1>
     <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
-    <p *ngIf="dailyCheck?.number_of_hour > 0" style="background-color: #15803D; border-radius: 30px ; color: white; text-align: center">
+    <p *ngIf="dailyCheck?.number_of_hour > 0 && !dailyCheck.craIsValidate" style="background-color: #15803D; border-radius: 30px ; color: white; text-align: center">
         Vous avez passé <span style="color: black; font-weight: bolder;">{{dailyCheck.number_of_hour}}h</span> sur vos tâches de la journée, pour valider votre journée vous devez effectuer un total de 7h minimum
     </p>
 
@@ -387,10 +387,10 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="number" [(ngModel)]="task.number_of_day">
+                                        <input pInputText type="number" [(ngModel)]="task.number_of_hour">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{task.number_of_day}} h
+                                        {{task.number_of_hour}} h
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -403,7 +403,7 @@
                                         icon="pi pi-pencil" (click)="onRowEditInit(task)"
                                         class="p-button-rounded p-button-text"></button>
                                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                        icon="pi pi-check" (click)="onRowEditSave(task, task.number_of_hour)"
+                                        icon="pi pi-check" (click)="onRowEditSave(task)"
                                         class="p-button-rounded p-button-text p-button-success mr-2"></button>
                                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
                                         icon="pi pi-times" (click)="onRowEditCancel(task, ri)"
