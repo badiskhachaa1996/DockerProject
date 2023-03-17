@@ -9,13 +9,28 @@
             style="width: 10%;" class="m-2">
         <img *ngIf="ecoleProspect=='espic'" src="..\assets\images\logoESPIC.png" alt="logo ESPIC" style="width: 10%;"
             class="m-2">
+        <img *ngIf="ecoleProspect=='estya-dubai'" src="\assets\images\estya-dubai-logo.png" alt="logo estya"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="ecoleProspect=='studinfo'" src="\assets\images\studinfo_logo.png" alt="logo studinfo"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="ecoleProspect=='intuns'" src="\assets\images\intuns-logo.png" alt="logo intuns" style="width: 10%;"
+            class="m-2">
+        <img *ngIf="ecoleProspect=='intunivesity'" src="\assets\images\intuniversity-logo.png" alt="logo intuniversity"
+            style="width: 10%;" class="m-2">
+    </div>
+    <div class="col-12">
+        <input type="file" (change)="FileUploadPDP($event.target.files)" id="selectedFile" #selectedFile
+            style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
     </div>
 
 
+    <h2 style="text-align: center; color: black;font-weight: bold;" *ngIf="isCommercial">Poursuivre la demande
+        d'admission </h2><br>
+    <h2 style="text-align: center; color: black;font-weight: bold;" *ngIf="!isCommercial">Poursuivre ma demande
+        d'admission </h2><br>
+    <h5 style="text-align: center;" *ngIf="!isCommercial">Vous serez contacté prochainement par notre call center !
+    </h5>
 
-    <h2 style="text-align: center; color: black;font-weight: bold;">Poursuivre ma demande d'admission </h2><br>
-    <h5 style="text-align: center;">Vous serez contacté prochainement par notre call center ! </h5>
-    
 
     <div *ngIf="codeCommercial" style="text-align: left;"><button pButton (click)="comeBack()"> <i
                 class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
@@ -29,6 +44,69 @@
 
         <p-panel header="Instructions et Détails du Cursus demandé" [toggleable]="false" [collapsed]="false"
             [style]="{'margin-bottom':'20px'}">
+            <p-fieldset legend="Informations personelles">
+                <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfo">
+                    <div class="col-12 md:col-3">
+                        <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                            style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
+                                style="border-radius: 50px;" /></a>
+                    </div>
+                    <div class="col-12 md:col-6 grid">
+                        <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
+                            {{ProspectConnected?.user_id?.firstname|titlecase}}
+                            {{ProspectConnected?.user_id?.lastname|uppercase}}</p>
+                        <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
+                            {{ProspectConnected.date_naissance|date:'dd/MM/YYYY'}}</p>
+                        <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br>
+                            {{ProspectConnected?.user_id?.nationnalite}}
+                        </p>
+                        <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br>
+                            {{ProspectConnected?.user_id?.phone}}
+                        </p>
+                    </div>
+                    <div class="col-12 md:col-3" *ngIf="!isCommercial">
+                        <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier mes informations</a></p>
+                    </div>
+                    <div class="col-12 md:col-3" *ngIf="isCommercial">
+                        <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier les informations
+                                personnelles</a></p>
+                    </div>
+                </div>
+                <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
+                    <form class="col-12 grid" [formGroup]="editInfoForm">
+                        <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
+                            <input type="text" pInputText placeholder="Prénom" formControlName="firstname" /><br>
+                            <input type="text" pInputText placeholder="Nom" formControlName="lastname" />
+                        </p>
+                        <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
+                            <p-calendar formControlName="date_naissance" placeholder="31/12/2000"></p-calendar>
+                        </p>
+                        <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br> <input type="text"
+                                pInputText placeholder="Française" formControlName="nationnalite" />
+                        </p>
+                        <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br> <input type="text"
+                                pInputText placeholder="+33 0123456789" formControlName="phone" /></p>
+                        <button class="col-12" pButton type="button" (click)="saveInfo()" *ngIf="!isCommercial"
+                            label="Enregistrer mes informations" [disabled]="editInfoForm.invalid"></button>
+                        <button class="col-12" pButton type="button" (click)="saveInfo()" *ngIf="isCommercial"
+                            label="Enregistrer ces informations" [disabled]="editInfoForm.invalid"></button>
+                    </form>
+                </div>
+            </p-fieldset>
+            <br>
+            <p-fieldset legend="Programme d'étude">
+                <div class="grid" style="color: black;font-weight:normal">
+                    <div class="col-12 grid">
+                        <p class="col-3"><strong>Formation :</strong><br> {{ProspectConnected.formation}}</p>
+                        <p class="col-3"><strong>Campus (1er choix):</strong><br> {{ProspectConnected.campus_choix_1}}
+                        </p>
+                        <p class="col-3"><strong>Campus (2ème choix):</strong><br> {{ProspectConnected.campus_choix_2}}
+                        </p>
+                        <p class="col-3"><strong>Campus (3ème choix):</strong><br> {{ProspectConnected.campus_choix_3}}
+                        </p>
+                    </div>
+                </div>
+            </p-fieldset>
 
             <!--<p-fieldset legend="Instructions" [style]="{'color':'#dc143c','font-weight': 'bold'}">
                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
@@ -127,8 +205,7 @@
                     </div>
                 </div>
             </p-fieldset>-->
-            <br>
-            <p-fieldset legend="Veuillez trouver ci-après les informations relatives au cursus choisi"
+            <!--<p-fieldset legend="Veuillez trouver ci-après les informations relatives au cursus choisi"
                 [style]="{'color':'#dc143c','font-weight': 'bold'}">
 
                 <div class="grid" style="color: black;font-weight:normal">
@@ -203,13 +280,49 @@
                         </div>
                     </div>
                 </div>
-            </p-fieldset>
+            </p-fieldset>-->
             <br>
-            <p-fieldset legend="Veuillez charger votre dossier d'admission" [style]="{'font-weight': 'bold'}">
+            <p-fieldset legend="Mon dossier d'inscription" [style]="{'font-weight': 'bold'}">
                 <div class="layout-dashboard">
 
                     <div class="card tasks">
                         <ul>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+                                <span [style.color]="CVTest ? 'green' : 'red'">Un Curriculum Vitae (CV)</span>
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+
+                                    <span *ngIf="CVTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="CV" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'CV')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+
+                                <span [style.color]="LMTest ? 'green' : 'red'" pTooltip="Ce document est optionnel">*Une
+                                    lettre de motivation expliquant le choix de votre cursus ainsi que votre
+                                    projet professionnel
+                                </span>
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="LMTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="Motiv" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'LM')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
                             <li
                                 class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
                                 <span [style.color]="piece_identiteTest ? 'green' : 'red'">Pièce d’identité (passeport
@@ -290,41 +403,8 @@
                                 </div>
                             </li>
 
-                            <li
-                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
-                                <span [style.color]="CVTest ? 'green' : 'red'">Un Curriculum Vitae (CV)</span>
 
-                                <div class="mt-2 md:mt-0 flex align-items-center">
 
-                                    <span *ngIf="CVTest">
-                                        Chargé<i class="pi pi-check" style="color: green;"></i>
-                                    </span>
-                                    <p-fileUpload #fileInput name="CV" customUpload="true" mode="basic" auto=true
-                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
-                                        (uploadHandler)="FileUpload($event,'CV')" fileLimit="1" multiple="false"
-                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
-                                    </p-fileUpload>
-                                </div>
-                            </li>
-                            <li
-                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
-
-                                <span [style.color]="LMTest ? 'green' : 'red'" pTooltip="Ce document est optionnel">*Une
-                                    lettre de motivation expliquant le choix de votre cursus ainsi que votre
-                                    projet professionnel
-                                </span>
-
-                                <div class="mt-2 md:mt-0 flex align-items-center">
-                                    <span *ngIf="LMTest">
-                                        Chargé<i class="pi pi-check" style="color: green;"></i>
-                                    </span>
-                                    <p-fileUpload #fileInput name="Motiv" customUpload="true" mode="basic" auto=true
-                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
-                                        (uploadHandler)="FileUpload($event,'LM')" fileLimit="1" multiple="false"
-                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
-                                    </p-fileUpload>
-                                </div>
-                            </li>
 
                             <li
                                 class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
@@ -347,12 +427,12 @@
                     </div>
                 </div>
 
-                <p-fieldset legend="Autres documents a joindre ?" [style]="{'color':'#dc143c'}">
+                <p-fieldset legend="Ajouter un document" [style]="{'color':'#dc143c'}">
 
                     <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
 
                         <div class="col-12 field">
-                            <label for="typeDoc">Type de document: </label>
+                            <label for="typeDoc">Intitulé du document: </label>
                             <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
                         </div>
 
@@ -367,7 +447,57 @@
                     </form>
                 </p-fieldset>
 
+                <!--TODO Demande de rendez-vous-->
+
+                <p-fieldset legend="Demandez un rendez vous avec un Consultant">
+
+                    <form class="p-fluid p-formgrid grid" [formGroup]="demandeConsultant" (onSubmit)="sendDemande()">
+
+                        <div class="col-12 field">
+                            <label>Motif de la demande</label>
+                            <textarea formControlName="mail" pInputTextarea></textarea>
+                        </div>
+                        <p-button label="Envoyer" [disabled]="demandeConsultant.invalid"></p-button>
+
+                    </form>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Examiner ma demande d'admission">
+
+                    <div class="grid">
+                        <div class="col-12 grid">
+                            <p class="col-6"><strong>Etat du dossier :</strong> {{ProspectConnected.etat_dossier}}</p>
+                            <p class="col-6"><strong>Décision admission :</strong>
+                                {{ProspectConnected.decision_admission}}</p>
+                            <div class="col-6">
+                                <strong>Montant payé:</strong>
+                                <ul>
+                                    <li *ngFor="let pay of ProspectConnected.payement">
+                                        <span>{{pay.type}} : {{pay.montant}}€</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <p class="col-6"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
+                        </div>
+                        <div class="col-12 grid">
+                            <p class="col-12"><strong>Mes attestations disponibles:</strong> <br> <p-button
+                                    label="Télécharger" icon="pi pi-download" iconPos="left"
+                                    (click)="downloadAttestation()"></p-button></p>
+                        </div>
+                        <div class="col-12 grid">
+                            <p class="col-12"><strong>Mon visa : <p-selectButton
+                                        [options]="[{label:'En attente',value:'false'},{label:'Reçu',value:'true'}]"
+                                        class="col-6" [(ngModel)]="boolVisa" (onChange)="changementVisa($event.value)">
+                                    </p-selectButton></strong></p>
+
+                        </div>
+
+                    </div>
+                </p-fieldset>
+
             </p-fieldset>
+            <!-- TODO Examiner ma demande d'admission -->
 
         </p-panel>
     </div>

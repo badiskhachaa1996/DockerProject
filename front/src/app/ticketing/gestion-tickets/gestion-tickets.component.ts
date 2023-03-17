@@ -23,6 +23,7 @@ import { Notification } from 'src/app/models/notification';
 import { saveAs as importedSaveAs } from "file-saver";
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { EcoleService } from 'src/app/services/ecole.service';
 
 @Component({
   selector: 'app-gestion-tickets',
@@ -90,6 +91,15 @@ export class GestionTicketsComponent implements OnInit {
     { label: 'Traité', value: 'Traité' }
   ]
 
+  ecoleListe = [{ label: "Toutes les écoles", value: null }]
+  domaineListe = [
+    { label: "Toutes les domaines pédagogiques", value: null },
+    { value: 'Informatique', label: 'Informatique' },
+    { value: 'Commerce', label: 'Commerce' },
+    { value: 'Construction', label: 'Construction' },
+    { value: 'Tertiaire', label: 'Tertiaire' }
+  ]
+
 
   draggedTicket: Ticket;
   selectedTicket: Ticket;
@@ -139,7 +149,8 @@ export class GestionTicketsComponent implements OnInit {
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService,
-    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService, private campusService: CampusService) { }
+    private Socket: SocketService, private ClasseService: ClasseService, private DiplomeService: DiplomeService, private campusService: CampusService,
+    private ecoleService: EcoleService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -301,6 +312,11 @@ export class GestionTicketsComponent implements OnInit {
       })
       this.updateQueue()
       this.updateAllList()
+      this.ecoleService.getAll().subscribe(data => {
+        data.forEach(ec => {
+          this.ecoleListe.push({ label: ec.libelle, value: ec._id })
+        })
+      })
       this.ServService.getAll().subscribe((data) => {
         this.listServices = data;
         if (!data.message) {

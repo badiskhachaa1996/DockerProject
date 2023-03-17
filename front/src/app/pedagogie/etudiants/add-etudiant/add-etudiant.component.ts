@@ -252,7 +252,13 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       suivi_handicaped: [''],
       statut_dossier: [''],
-      ecole: ['', Validators.required]
+      ecole: ['', Validators.required],
+      nom_tuteur: [''],
+      prenom_tuteur: [''],
+      adresse_entreprise: [''],
+      adresse_mail_tuteur: [''],
+      phone_tuteur: [''],
+      remarque_stage: [''],
     });
   }
 
@@ -351,6 +357,13 @@ export class AddEtudiantComponent implements OnInit {
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
     let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
 
+    let nom_tuteur = this.formAddEtudiant.get("nom_tuteur")?.value;
+    let prenom_tuteur = this.formAddEtudiant.get("prenom_tuteur")?.value;
+    let adresse_entreprise = this.formAddEtudiant.get("adresse_entreprise")?.value;
+    let adresse_mail_tuteur = this.formAddEtudiant.get("adresse_mail_tuteur")?.value;
+    let phone_tuteur = this.formAddEtudiant.get("phone_tuteur")?.value;
+    let remarque_stage = this.formAddEtudiant.get("remarque_stage")?.value;
+
     let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
     let valided_by_support = (email_ims != null && email_ims != '' && email_ims.length > 1)
     if (!valided_by_support)
@@ -430,7 +443,20 @@ export class AddEtudiantComponent implements OnInit {
       etat_paiement,
       source,
       new Date(),
-      this.formAddEtudiant.value.ecole
+      this.formAddEtudiant.value.ecole,
+      null,
+      null,
+      null,
+      new Date(),
+      null,
+      null,
+      null,
+      nom_tuteur,
+      prenom_tuteur,
+      adresse_entreprise,
+      adresse_mail_tuteur,
+      phone_tuteur,
+      remarque_stage
     );
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(

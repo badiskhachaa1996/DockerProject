@@ -557,9 +557,23 @@ export class DashboardComponent implements OnInit {
   }
 
   // methode de validation du cra via la liste des tâches en cours
-  onRowEditSave(tache: Tache) {
+  onRowEditSave(tache: Tache, initialNumberOfHours: number) {
+
+    console.log(initialNumberOfHours)
     // ajout de la tache au dailycheck
     this.dailyCheck.activity_details.push(`${tache.libelle} - ${tache.percent}%`);
+
+    // ajout du nombre d'heure passée sur la tâche au daily check
+    let numberOfHourAfterValidation = initialNumberOfHours - tache.number_of_hour;
+    console.log(numberOfHourAfterValidation)
+    if(this.dailyCheck.number_of_hour == null)
+    {
+      this.dailyCheck.number_of_hour = 0;
+      this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
+    } else {
+      this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
+    }
+
 
     // envoi du projet modifié en base de données
     this.projectService.putTask(tache)

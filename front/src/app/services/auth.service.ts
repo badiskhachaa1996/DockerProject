@@ -169,12 +169,12 @@ export class AuthService {
 
   uploadimageprofile(data: FormData) {
     let url = this.apiUrl + "file";
-    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.post<any>(url, data)
   }
 
   getProfilePicture(id) {
     let url = this.apiUrl + "getProfilePicture/" + id;
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<any>(url)
   }
 
   updatePassword(id: string, data) {

@@ -242,4 +242,10 @@ export class AdmissionService {
     });
   }
 
+  envoieMail(mail: string, prospect: Prospect) {
+    let url = this.apiUrl + "envoieMail";
+    return this.httpClient.post<any>(url, { mail, prospect: prospect._id });
+  }
+
+
 }

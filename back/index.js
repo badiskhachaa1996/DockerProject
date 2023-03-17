@@ -19,7 +19,7 @@ if (process.argv[2]) {
     } else if (argProd.includes('dev')) {
         origin = ["https://141.94.71.25"]
     } else (
-        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.adgeducation.com","https://ims.intedgroup.com", "https://t.dev.estya.com"]
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.adgeducation.com", "https://ims.intedgroup.com", "https://t.dev.estya.com"]
     )
 }
 app.use(cors({ origin: origin }));
@@ -165,8 +165,8 @@ app.use('/', function (req, res, next) {
     } else {
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel') || req.originalUrl == "/soc/demande-events/create"
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" || req.originalUrl == "/soc/classe/getAll" ||
-            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl == '/soc/qs/create' || req.originalUrl == '/soc/qs/createQFF' || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise') 
-            || req.originalUrl.startsWith('/soc/user/reinitPwd') || req.originalUrl.startsWith('/soc/qs/create')) {
+            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl == '/soc/qs/create' || req.originalUrl == '/soc/qs/createQFF' || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise')
+            || req.originalUrl.startsWith('/soc/user/reinitPwd') || req.originalUrl.startsWith('/soc/qs/create') || req.originalUrl.startsWith("/soc/user/getProfilePicture") || req.originalUrl == "/soc/user/file"|| req.originalUrl == "/soc/user/patchById")  {
             next()
         } else {
 

@@ -55,5 +55,11 @@ export class Etudiant {
         public lien_bulletin?: any,//{Semestre:''}
         public lien_attestation?: string,
         public certificat_scolarite?: string,
+        public nom_tuteur?: string,
+        public prenom_tuteur?: string,
+        public adresse_entreprise?: string,
+        public adresse_mail_tuteur?: string,
+        public phone_tuteur?: string,
+        public remarque_stage?: string,
     ) { }
 }
