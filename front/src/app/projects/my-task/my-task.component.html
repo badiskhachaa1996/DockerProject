@@ -11,7 +11,7 @@
 				<div class="p-formgrid grid">
 					<div class="field col-12">
 						<label htmlFor="libelle">Libellé</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de l'activité"></textarea>
+						<input pInputText id="libelle" type="text" maxlength="150" formControlName="libelle" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label For="projet">Projet</label>
@@ -67,7 +67,7 @@
 				<div class="p-formgrid grid">
 					<div class="field col-12">
 						<label htmlFor="libelle">Libellé</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de l'activité"></textarea>
+						<input pInputText id="libelle" type="text" formControlName="libelle" maxlength="100" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label For="projet">Projet</label>
@@ -147,7 +147,7 @@
 			<h3>Vos activités en cours</h3>
 			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="tachesInProgress?.length > 0">
 				<div class="md:col-4" *ngFor="let task of tachesInProgress; let i = index">
-					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin': '2em'}">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '23rem', 'height': '23rem', 'margin': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
 						</p>
@@ -235,7 +235,7 @@
 							{{tache.project_id?.libelle}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{tache.number_of_hour ? tache.number_of_hour + ' h' : '--' }}
+							{{tache.number_of_hour != null ? tache.number_of_hour + ' h' : '--' }}
 						</td>
 						<td style="min-width: 10rem;">
 							{{tache.date_limite | date: 'dd MMMM YYYY'}}
@@ -254,12 +254,12 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="5">Aucune activités finalisés.</td>
+						<td colspan="6">Aucune activités finalisés.</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">
 					<tr>
-						<td colspan="5">Chargement des données...</td>
+						<td colspan="6">Chargement des données...</td>
 					</tr>
 				</ng-template>
     		</p-table>

@@ -235,6 +235,7 @@ export class DashboardComponent implements OnInit {
   taskForUser: Tache[] = [];
   showTaskForUser: boolean = false; // permet d'afficher les tâches de l'utilisateur qui sont en cours
   clonedTaches: { [s: string]: Tache; } = {}; // pour le tableau éditable des taches
+  initialNumberOfHours: number; // Nombre d'heure d'une tâche avant modification
 
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
@@ -516,7 +517,7 @@ export class DashboardComponent implements OnInit {
       this.dailyCheck.number_of_hour += formValue.number_of_hour;
     }
     
-    this.dailyCheck.activity_details.push(`${formValue.number_of_hour}• ${formValue.task}`);
+    this.dailyCheck.activity_details.push(`${formValue.number_of_hour}h • ${formValue.task}`);
     this.dailyCheck.statut = `En attente du checkout`;
     this.dailyCheck.isCheckable = false; 
 
@@ -553,19 +554,15 @@ export class DashboardComponent implements OnInit {
 
   // au clic du bouton de modification
   onRowEditInit(tache: Tache) {
+    this.initialNumberOfHours = tache.number_of_hour;
     this.clonedTaches[tache._id] = { ...tache };
   }
 
-  // methode de validation du cra via la liste des tâches en cours
-  onRowEditSave(tache: Tache, initialNumberOfHours: number) {
-
-    console.log(initialNumberOfHours)
-    // ajout de la tache au dailycheck
-    this.dailyCheck.activity_details.push(`${tache.libelle} - ${tache.percent}%`);
-
+  // méthode de validation du cra via la liste des tâches en cours
+  onRowEditSave(tache: Tache) {
     // ajout du nombre d'heure passée sur la tâche au daily check
-    let numberOfHourAfterValidation = initialNumberOfHours - tache.number_of_hour;
-    console.log(numberOfHourAfterValidation)
+    let numberOfHourAfterValidation = this.initialNumberOfHours - tache.number_of_hour;
+
     if(this.dailyCheck.number_of_hour == null)
     {
       this.dailyCheck.number_of_hour = 0;
@@ -574,17 +571,25 @@ export class DashboardComponent implements OnInit {
       this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
     }
 
+    // ajout de la tache au daily check
+    this.dailyCheck.activity_details.push(`${numberOfHourAfterValidation}h - ${tache.percent}% • ${tache.libelle}`);
+
+    this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
 
     // envoi du projet modifié en base de données
     this.projectService.putTask(tache)
       .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Tâche', detail: response.success });
+        this.messageService.add({ severity: 'success', summary: 'Activité', detail: response.success });
 
         this.dailyCheck.statut = `En attente du checkout`;
-        // modification du dailycheck en bd
+        // modification du daily check en bd
         this.inTimeService.patchCheck(this.dailyCheck)
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+            this.showFormDailyActivityDetails = false;
+            this.showTaskForUser = false;
+            this.showButtonsValidateCra = false;
+            this.formDailyActivityDetails.reset();
             this.onIsCheck();
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
@@ -593,7 +598,7 @@ export class DashboardComponent implements OnInit {
 
     // après la validation
     delete this.clonedTaches[tache._id];
-    this.messageService.add({ severity: 'success', summary: 'Tâche', detail: 'Votre tâche a été mis à jour' });
+    // this.messageService.add({ severity: 'success', summary: 'Tâche', detail: 'Votre tâche a été mis à jour' });
   }
 
   // a l'annulation de la modif

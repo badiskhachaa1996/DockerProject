@@ -11,7 +11,7 @@
 				<div class="p-formgrid grid">
 					<div class="field col-12">
 						<label htmlFor="libelle">Libelle</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de l'activité"></textarea>
+						<input pInputText id="libelle" type="text" formControlName="libelle" maxlength="150" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label htmlFor="numberOfHour">Nombre d'heure estimé</label>
@@ -65,7 +65,7 @@
 				<div class="p-formgrid grid">
 					<div class="field col-12">
 						<label htmlFor="libelle">Libelle</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de l'activité"></textarea>
+						<input pInputText id="libelle" type="text" formControlName="libelle" maxlength="150" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label htmlFor="numberOfHour">Nombre d'heure</label>
@@ -118,7 +118,7 @@
 			
 			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="projectTaches?.length > 0">
 				<div class="md:col-4" style="margin: 3px;" *ngFor="let task of projectTaches; let i = index">
-					<p-card header="{{ task.percent }}%" [style]="{'width': '20rem', 'height': '20rem'}">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '22rem', 'height': '22rem'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
 						</p>
