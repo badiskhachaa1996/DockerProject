@@ -495,21 +495,8 @@ export class DashboardComponent implements OnInit {
   onInitFormDailyActivityDetails() {
     this.formDailyActivityDetails = this.formBuilder.group({
       task: ['', Validators.required],
-      tasks: this.formBuilder.array([]),
+      number_of_hour: ['', Validators.required],
     });
-  }
-
-  getTasks() {
-    return this.formDailyActivityDetails.get('tasks') as FormArray;
-  }
-
-  onAddTask() {
-    const newTaskControl = this.formBuilder.control('', Validators.required);
-    this.getTasks().push(newTaskControl);
-  }
-
-  onRemoveTask(i: number) {
-    this.getTasks().removeAt(i);
   }
 
   // toggle the form daily activity
@@ -517,37 +504,36 @@ export class DashboardComponent implements OnInit {
     this.showFormDailyActivityDetails = !this.showFormDailyActivityDetails;
   }
 
-  // methode de calidation du cra via le formulaire
+  // méthode de validation du cra via le formulaire
   onValidateCraByForm() {
-    const today = new Date().toLocaleDateString();
-    let todayReplaced = '';
-    for (let i = 0; i < today.length; i++) {
-      if (today[i] === '/') {
-        todayReplaced += '-';
-      }
-      else {
-        todayReplaced += today[i];
-      }
+    const formValue = this.formDailyActivityDetails.value;
+    // ajout du nombre d'heure
+    if(this.dailyCheck.number_of_hour == null)
+    {
+      this.dailyCheck.number_of_hour = 0;
+      this.dailyCheck.number_of_hour += formValue.number_of_hour;
+    } else {
+      this.dailyCheck.number_of_hour += formValue.number_of_hour;
     }
+    
+    this.dailyCheck.activity_details.push(`${formValue.number_of_hour}• ${formValue.task}`);
+    this.dailyCheck.statut = `En attente du checkout`;
+    this.dailyCheck.isCheckable = false; 
 
-    const userId = this.token.id;
-    const outDate = null;
-    const dateOfToday = todayReplaced;
-    const ipAdress = null;
-    const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
-    let activityDetails = this.formDailyActivityDetails.get('tasks').value;
+    this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    
 
-    activityDetails.push(principaleActivityDetails);
-
-    this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, craIsValidate: true, activity_details: activityDetails })
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
-        this.dailyCheck = response;
-        this.formDailyActivityDetails.reset();
-        this.showFormDailyActivityDetails = false;
-        this.onIsCheck();
-      })
-      .catch((err) => { console.error(err); });
+    // modification du dailycheck en bd
+    this.inTimeService.patchCheck(this.dailyCheck)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+      this.showFormDailyActivityDetails = false;
+      this.showTaskForUser = false;
+      this.showButtonsValidateCra = false;
+      this.formDailyActivityDetails.reset();
+      this.onIsCheck();
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
 
   // toggle sur l'affichage des tâches de l'utilisateur
@@ -555,7 +541,7 @@ export class DashboardComponent implements OnInit {
     this.showTaskForUser = !this.showTaskForUser;
   }
 
-  // methode de recuperation de la liste des tâches en cours de l'utilisateur connecté
+  // méthode de recuperation de la liste des tâches en cours de l'utilisateur connecté
   onGetTaskInProgressForUser(): void {
     this.projectService.getTasksInProgressByIdUser(this.token.id)
       .then((response) => {
@@ -587,15 +573,7 @@ export class DashboardComponent implements OnInit {
             this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
             this.onIsCheck();
           })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: response.error }); })
-
-        // modification du dailycheck en bd
-        this.inTimeService.patchCheck(this.dailyCheck)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-          })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: response.error }); })
-
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Tâche', detail: error.error }); });
 

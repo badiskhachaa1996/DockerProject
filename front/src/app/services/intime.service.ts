@@ -26,21 +26,6 @@ export class IntimeService {
     });
   }
 
-
-  //Methode de depointage depart validation du cra
-  patchJustGone(data: any)
-  {
-    let url = `${this.apiUrl}just-gone`;
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.patch<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
-        (response) => (resolve(response)),
-        (error) => (reject(error))
-      );
-    });
-  }
-
-
   // methode de check out
   patchCheckOut(check: InTime): Promise<any>
   {

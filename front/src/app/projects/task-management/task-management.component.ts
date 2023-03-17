@@ -57,16 +57,16 @@ export class TaskManagementComponent implements OnInit {
 
     // initialize form add task
     this.formAddTache = this.formBuilder.group({
-      libelle: ['', Validators.required],
-      number_of_day: [''],
-      attribuateTo: [''],
-      dateLimite: [''],
+      libelle:            ['', Validators.required],
+      number_of_hour:     [''],
+      attribuateTo:       [''],
+      dateLimite:         [''],
     });
     
     // initialize form update task
     this.formUpdateTache = this.formBuilder.group({
       libelle: ['', Validators.required],
-      number_of_day: [''],
+      number_of_hour: [''],
       attribuateTo: [''],
       dateLimite: [''],
     });
@@ -180,7 +180,7 @@ export class TaskManagementComponent implements OnInit {
     });
 
     tache.project_id        = this.projectSelected._id;
-    tache.number_of_day     = formValue.number_of_day;
+    tache.number_of_hour    = formValue.number_of_hour;
     tache.date_limite       = formValue.dateLimite;
     tache.created_at        = new Date();
     tache.creator_id        = this.userConnected._id;
@@ -215,7 +215,7 @@ export class TaskManagementComponent implements OnInit {
 
     tache._id               = this.tacheSelected._id;
     tache.libelle           = formValue.libelle;
-    tache.number_of_day     = formValue.number_of_day;
+    tache.number_of_hour    = formValue.number_of_hour;
     tache.percent           = this.tacheSelected.percent;
     tache.attribuate_to     = [];
 
