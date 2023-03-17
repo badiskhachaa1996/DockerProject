@@ -15,6 +15,11 @@
                         formControlName="ecole"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
+                    <label For="role">Source <span style="color:red"> *</span></label>
+                    <p-dropdown [options]="sourceList" placeholder="Choissisez la provenance du prospect"
+                        formControlName="source"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
                     <label For="role">Commercial</label>
                     <p-dropdown [options]="commercialList"
                         placeholder="Choissisez le commercial qui a ajouté le prospect"

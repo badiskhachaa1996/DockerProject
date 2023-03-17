@@ -20,8 +20,8 @@
 						</p-dropdown>
 					</div>
 					<div class="field col-12">
-						<label htmlFor="numberOfDay">Nombre de jours</label>
-						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+						<label htmlFor="numberOfHour">Nombre d'heure</label>
+						<input pInput pInputTextarea id="numberOfHour" type="text" formControlName="number_of_hour" placeholder="Nombre d'heure estimé pour cette tâche" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
@@ -76,8 +76,8 @@
 						</p-dropdown>
 					</div>
 					<div class="field col-12">
-						<label htmlFor="numberOfDay">Nombre de jours</label>
-						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+						<label htmlFor="numberOfHour">Nombre d'heure</label>
+						<input pInput pInputTextarea id="numberOfHour" type="text" formControlName="number_of_hour" placeholder="Nombre d'heure estimé pour cette tâche" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
@@ -147,18 +147,18 @@
 			<h3>Vos tâches en cours</h3>
 			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="tachesInProgress?.length > 0">
 				<div class="md:col-4" *ngFor="let task of tachesInProgress; let i = index">
-					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
 						</p>
 						<p>
 							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
 						</p>
-						<p *ngIf="task.number_of_day == 1">
-							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jour restant
+						<p *ngIf="task.number_of_hour == 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_hour }} heure restante
 						</p>
-						<p *ngIf="task.number_of_day > 1">
-							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jours restants
+						<p *ngIf="task.number_of_hour > 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_hour }} heures restantes
 						</p>
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
@@ -207,7 +207,7 @@
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Jours restants
+								heure(s) restante(s)
 							</div>
 						</th>
 						<th>
@@ -235,7 +235,7 @@
 							{{tache.project_id?.libelle}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{tache.number_of_day}} J
+							{{tache.number_of_hour}} J
 						</td>
 						<td style="min-width: 10rem;">
 							{{tache.date_limite | date: 'dd-MM-YYYY'}}
@@ -254,7 +254,7 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="5">Aucune tâches finis.</td>
+						<td colspan="5">Aucune tâches finalisés.</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">

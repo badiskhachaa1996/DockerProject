@@ -6,6 +6,7 @@ app.disable("x-powered-by");
 const { Ticket } = require("../models/ticket");
 const { User } = require("../models/user");
 const nodemailer = require('nodemailer');
+const { Etudiant } = require("../models/etudiant");
 
 //creation d'un transporter smtperrFile
 let transporter = nodemailer.createTransport({
@@ -59,14 +60,47 @@ app.post("/create", (req, res) => {
 
                 ticket.save((err, doc) => {
                     res.send({ message: "Votre ticket a été crée!", doc });
-                    Sujet.findOne({ _id: req.body.sujet_id }, (err3, sujet) => {
-                        User.find({ service_id: sujet.service_id, role: "Responsable" }, (err2, listResponsable) => {
-                            listResponsable.forEach(responsable => {
+                    Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
+                        if (sujet.label != "Pédagogie")
+                            User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
+                                listResponsable.forEach(responsable => {
+                                    let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
+                                    let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                                    let mailOptions = {
+                                        from: 'ims@intedgroup.com',
+                                        to: responsable.email,
+                                        subject: '[IMS - Ticketing] - Notification ',
+                                        html: htmlemail,
+                                        priority: 'high',
+                                        attachments: [{
+                                            filename: 'signature.png',
+                                            path: 'assets/signature.png',
+                                            cid: 'red' //same cid value as in the html img src
+                                        }]
+                                    };
+
+
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.error(error);
+                                        }
+                                    });
+                                })
+                            })
+                        else {
+                            Etudiant.findOne({ user_id: req.body.id }).populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(etudiant => {
+                                let responsable = []
+                                if (etudiant.classe_id.diplome_id.domaine == "Informatique") {
+                                    responsable = ["m.benzarti@iltsglobal.com", "k.fakhfakh@estya.com", "s.hafhouf@intedgroup.com"]
+                                } else if (etudiant.classe_id.diplome_id.domaine == "Commerce") {
+                                    responsable = ["k.rahmani@intedgroup.com"]
+                                    //JE SAIS PAS QUI METTRE ICI METS EN GROS FAUT METTRE COMMERCE TERTIAIRE ETC
+                                }
                                 let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                                 let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                                 let mailOptions = {
                                     from: 'ims@intedgroup.com',
-                                    to: responsable.email,
+                                    to: responsable,
                                     subject: '[IMS - Ticketing] - Notification ',
                                     html: htmlemail,
                                     priority: 'high',
@@ -84,7 +118,7 @@ app.post("/create", (req, res) => {
                                     }
                                 });
                             })
-                        })
+                        }
                     })
                 });
             })
@@ -246,7 +280,7 @@ app.get("/getAllbyUser/:id", (req, res) => {
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
-    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })
+    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -258,7 +292,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })

@@ -14,17 +14,30 @@ export class AddProspectComponent implements OnInit {
   RegisterForm: FormGroup = new FormGroup({
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
+    source: new FormControl('', Validators.required)
   })
 
   ecoleList = [
     { label: "Estya", value: "estya" },
     { label: "ESPIC", value: "espic" },
-    { label: "Eduhorizons", value: "eduhorizons" },
-    { label: "Académie des gouvernantes", value: "adg" },,
+    { label: "Académie des gouvernantes", value: "adg" }, ,
     { label: "Estya Dubai", value: "estya-dubai" },
     { label: "Studinfo", value: "studinfo" },
     { label: "INTUNS", value: "intuns" },
     { label: "Intunivesity", value: "intunivesity" },
+    { label: "ICBS Malte", value: "icbsmalte" }
+  ]
+
+  sourceList = [
+    { label: "Partenaire", value: "Partenaire" },
+    { label: "IGWI", value: "IGWI" },
+    { label: "Site web", value: "Site web" },
+    { label: "Equipe communication", value: "Equipe communication" },
+    { label: "Bureau Congo", value: "Bureau Congo" },
+    { label: "Bureau Maroc", value: "Bureau Maroc" },
+    { label: "Collaborateur interne", value: "Collaborateur interne" },
+    { label: "Report", value: "Report" },
+    { label: "IGE", value: "IGE" }
   ]
 
   commercialList = []

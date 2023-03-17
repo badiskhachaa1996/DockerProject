@@ -20,42 +20,6 @@ app.post("/just-arrived", (req, res) => {
 });
 
 
-//Methode de depointage depart
-app.patch("/just-gone", (req, res) => {
-    const userId = req.body.user_id;
-    const outDate = req.body.out_date;
-    const dateOfToday = req.body.date_of_the_day;
-    const ipAdress = req.body.ip_adress; 
-    const craIsValidated = req.body.craIsValidate; 
-    // const principaleActivityDetails = req.body.principale_activity_details;      
-    const activityDetails = req.body.activity_details;
-
-    InTime.findOne({ user_id: userId, date_of_the_day: dateOfToday })
-          .then((inTimeFromDb) => { 
-            let inDate = inTimeFromDb.in_date;
-            //Methode pour definir le statut de l'utilisateur calcule de la difference entre le inDate et le outDate
-            let statut = `En attente du checkout`;
-
-            //Mise à jour dans la base de données
-            InTime.updateOne({ _id: inTimeFromDb._id }, 
-                  {
-                    out_date: outDate,
-                    out_ip_adress: ipAdress,
-                    statut: statut,
-                    isCheckable: false,
-                    craIsValidate: craIsValidated,
-                    // principale_activity_details: principaleActivityDetails,
-                    activity_details: activityDetails,
-                  })
-                  .then((inTimeUpdated) => { res.status(201).send(inTimeUpdated) })
-                  .catch((error) => { res.status(400).send(error.message) })
-
-          })
-          .catch((error) => { res.status(500).send(error.message) });
-
-});
-
-
 // methode de check out
 app.patch("/patch-check-out", (req, res, next) => {
     const check = new InTime({ ...req.body });

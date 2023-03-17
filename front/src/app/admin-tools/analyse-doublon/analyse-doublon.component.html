@@ -72,8 +72,19 @@
         </div>
         <h5>Gestion des doublons avec IMS</h5>
         <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [globalFilterFields]="['data[0].email','data[0]?.firstname','data[0]?.lastname']"
             [totalRecords]="doublonEmailIMS.length">
+
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
@@ -171,7 +182,8 @@
                             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                         </button>
                     </td>
-                    <td style="min-width: 10rem;">{{ doublon.data[0]?.civilite }} {{ doublon.data[0]?.firstname | titlecase }} {{ doublon.data[0]?.lastname | uppercase }}</td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.civilite }} {{ doublon.data[0]?.firstname |
+                        titlecase }} {{ doublon.data[0]?.lastname | uppercase }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email_perso }}</td>
                 </tr>

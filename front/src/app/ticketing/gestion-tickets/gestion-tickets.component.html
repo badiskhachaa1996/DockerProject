@@ -236,7 +236,7 @@
 			<p-toast></p-toast>
 			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList" dataKey="_id" [rows]="10" [rowHover]="true"
 				[paginator]="true" [pageLinks]="5" rowExpandMode="single"
-				[globalFilterFields]="['customid','description']" [value]="queueList"
+				[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']" [value]="queueList"
 				(sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedRows"
 				responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
@@ -281,7 +281,7 @@
 								field="date_creation"></p-sortIcon>
 						</th>
 						<th style="text-align:center" pSortableColumn="date_ajout"> Temps d'attente <p-sortIcon
-							field="date_ajout"></p-sortIcon>
+								field="date_ajout"></p-sortIcon>
 						</th>
 						<th style="text-align:center">Action</th>
 					</tr>
@@ -294,7 +294,15 @@
 								class="p-button-text p-button-rounded p-button-plain"
 								[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 						</td>
-						<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
+						<td style="min-width: 12rem;"
+							*ngIf="serviceList[sujetList[rowData.sujet_id].service_id]!='Pédagogie'|| !rowData.etudiant_id || !rowData.etudiant_id.classe_id">
+							{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
+						<td style="min-width: 12rem;"
+							*ngIf="serviceList[sujetList[rowData.sujet_id].service_id]=='Pédagogie' && rowData.etudiant_id && rowData.etudiant_id.classe_id">
+							{{serviceList[sujetList[rowData.sujet_id].service_id]}} -
+							{{rowData.etudiant_id?.classe_id?.diplome_id?.domaine}} -
+							{{rowData.etudiant_id?.ecole_id?.libelle}}</td>
+
 						<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 						<td style="min-width: 10rem;">{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
 						<td style="min-width: 10rem;">{{showWaitingTime(rowData.date_ajout)}}</td>
@@ -422,7 +430,7 @@
 		<h5>Mes tickets en cours de traitement</h5>
 		<p-table #dt2 *ngIf="AccAffList" pDroppable="QueueToAccAff" dataKey="_id" [rows]="10"
 			(onDrop)="dragQueueToAccAff($event)" [rowHover]="true" [totalRecords]="AccAffList.length" [paginator]="true"
-			[pageLinks]="5" rowExpandMode="single" [globalFilterFields]="['customid','description']"
+			[pageLinks]="5" rowExpandMode="single" [globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
 			[value]="AccAffList" (sortFunction)="customSort($event)" [customSort]="true"
 			[expandedRowKeys]="expandedTraitement" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
@@ -471,7 +479,14 @@
 							[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
 							(click)='loadMessages(rowData,"AccAff",expanded)'></button>
 					</td>
-					<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
+					<td style="min-width: 12rem;"
+						*ngIf="serviceList[sujetList[rowData.sujet_id].service_id]!='Pédagogie' || !rowData.etudiant_id || !rowData.etudiant_id.classe_id">
+						{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
+					<td style="min-width: 12rem;"
+						*ngIf="serviceList[sujetList[rowData.sujet_id].service_id]=='Pédagogie' && rowData.etudiant_id && rowData.etudiant_id.classe_id">
+						{{serviceList[sujetList[rowData.sujet_id].service_id]}} -
+						{{rowData?.etudiant_id?.classe_id?.diplome_id?.domaine}} -
+						{{rowData?.etudiant_id?.ecole_id?.libelle}}</td>
 					<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 					<td style="min-width: 10rem;">{{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}</td>
 					<!--<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">

@@ -56,7 +56,7 @@ export class MyTaskComponent implements OnInit {
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
       projet: [''],
-      number_of_day: [''],
+      number_of_hour: [''],
       attribuateTo: [''],
       dateLimite: [''],
     });
@@ -65,7 +65,7 @@ export class MyTaskComponent implements OnInit {
     this.formUpdateTache = this.formBuilder.group({
       libelle: ['', Validators.required],
       projet: [''],
-      number_of_day: [''],
+      number_of_hour: [''],
       attribuateTo: [''],
       dateLimite: [''],
     });
@@ -168,7 +168,7 @@ export class MyTaskComponent implements OnInit {
     });
 
     tache.project_id        = formValue.projet;
-    tache.number_of_day     = formValue.number_of_day;
+    tache.number_of_hour     = formValue.number_of_hour;
     tache.date_limite       = formValue.dateLimite;
     tache.created_at        = new Date();
     tache.creator_id        = this.userConnected._id;
@@ -195,7 +195,7 @@ export class MyTaskComponent implements OnInit {
     //todo: ajouter le projet id
     this.formUpdateTache.patchValue({
       libelle: this.tacheSelected.libelle,
-      number_of_day: this.tacheSelected.number_of_day,
+      number_of_hour: this.tacheSelected.number_of_hour,
       project_id: { label: project_id.libelle, value: project_id._id },
       dateLimite: this.tacheSelected.date_limite,
     });
@@ -219,7 +219,7 @@ export class MyTaskComponent implements OnInit {
     });
 
     tache.project_id = formValue.project_id;
-    tache.number_of_day     = formValue.number_of_day;
+    tache.number_of_hour     = formValue.number_of_hour;
     tache.date_limite = this.tacheSelected.date_limite;
     tache.created_at = this.tacheSelected.created_at;
     tache.creator_id = this.tacheSelected.creator_id;

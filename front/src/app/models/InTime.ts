@@ -14,5 +14,6 @@ export class InTime
         public craIsValidate?:                  boolean,
         // public principale_activity_details?:    any,
         public activity_details?:               string[],
+        public number_of_hour?:                 number,
     ) {}
 }

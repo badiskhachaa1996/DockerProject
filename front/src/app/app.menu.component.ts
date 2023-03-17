@@ -79,10 +79,10 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Project',
+                label: 'Projet',
                 items: [
-                    { label: 'Gestion des tâches', icon: 'pi pi-check-square', routerLink: ['/task-management'] },
-                    { label: 'Mes tâches', icon: 'pi pi-circle', routerLink: ['/my-tasks'] },
+                    { label: 'Gestion des activités projets', icon: 'pi pi-check-square', routerLink: ['/task-management'] },
+                    { label: 'Mes activités projets', icon: 'pi pi-circle', routerLink: ['/my-tasks'] },
                     { label: 'Gestion des équipes', icon: 'pi pi-users', routerLink: ['/team'] },
                 ]
             },
@@ -223,7 +223,8 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
                     { label: 'Gestion des équipes de conseillers', icon: 'pi pi-users', routerLink: ['/equipe-commercial'] },
-                    { label: 'Gestion des prospects alternables', icon: 'pi pi-briefcase', routerLink: ['/prospects-alt'] }
+                    { label: 'Gestion des prospects alternables', icon: 'pi pi-briefcase', routerLink: ['/prospects-alt'] },
+                    { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                 ]
             }, {
                 label: 'Support',
@@ -469,6 +470,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Partenaires',
                                     items: [
                                         { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
                                 },
@@ -503,6 +505,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Partenaires',
                                     items: [
                                         { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
@@ -861,7 +864,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
-
+                                { label: 'Gestion des tickets', icon: 'pi pi-check-circle', routerLink: ['/gestion-tickets'] },
                                 { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
 
                             ]
