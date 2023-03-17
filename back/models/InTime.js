@@ -12,6 +12,7 @@ const inTimeSchema = mongoose.Schema({
     craIsValidate:                  { type: Boolean, required: false },
     // principale_activity_details:    { type: String, required: false },
     activity_details:               { type: [String], required: false },
+    number_of_hour:                 { type: Number, required: false },
 });
 
 const InTime = mongoose.model('intime', inTimeSchema);

@@ -6,7 +6,7 @@ export class Tache{
         public percent?:        number,
         public attribuate_to?:  string[],
         public project_id?:     string,
-        public number_of_day?:  number,
+        public number_of_hour?:  number,
         public date_limite?:    Date,
         public created_at?:     Date,
         public creator_id?:     String,

@@ -6,12 +6,12 @@
 					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
 					pTooltip="Fermer" (click)="showFormAddTache = false" aria-hidden="true"> </i>
 
-			<h3>Ajouter une tâche</h3>
+			<h3>Ajouter une activité</h3>
 			<form class="p-fluid" [formGroup]="formAddTache" (ngSubmit)="onAddTask()">
 				<div class="p-formgrid grid">
 					<div class="field col-12">
-						<label htmlFor="libelle">Libelle</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+						<label htmlFor="libelle">Libellé</label>
+						<input pInputText id="libelle" type="text" maxlength="150" formControlName="libelle" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label For="projet">Projet</label>
@@ -20,23 +20,23 @@
 						</p-dropdown>
 					</div>
 					<div class="field col-12">
-						<label htmlFor="numberOfDay">Nombre de jours</label>
-						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+						<label htmlFor="numberOfHour">Nombre d'heure</label>
+						<input pInput pInputTextarea id="numberOfHour" type="text" formControlName="number_of_hour" placeholder="Nombre d'heure estimé pour cette activité" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
-						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
+						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette activité"></p-calendar>
 					</div>
 
 					<div class="field col-12">
 						<label htmlFor="attribuateTo">Attribution</label>
-						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette tâche" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
+						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Sélectionner les personnes qui vont effectuer cette activité" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
 							<ng-template let-value pTemplate="selectedItems">
 								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
 									<div>{{option.label}}</div>
 								</div>
 								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
-									Selectionner les personnes qui vont effectuer cette tâche
+									Selectionner les personnes qui vont effectuer cette activité
 								</div>
 							</ng-template>
 							<ng-template let-user pTemplate="item">
@@ -48,7 +48,7 @@
 					</div>
 					
 					<div>
-						<button pButton type="submit" label="Ajouter la tâche" icon="pi pi-plus" [disabled]="formAddTache.invalid"></button>
+						<button pButton type="submit" label="Ajouter l'activité" icon="pi pi-plus" [disabled]="formAddTache.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -62,12 +62,12 @@
 					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
 					pTooltip="Fermer" (click)="showFormUpdateTache = false" aria-hidden="true"> </i>
 
-			<h3>Modifier la tâche</h3>
+			<h3>Modifier l'activité</h3>
 			<form class="p-fluid" [formGroup]="formUpdateTache" (ngSubmit)="onUpdateTask()">
 				<div class="p-formgrid grid">
 					<div class="field col-12">
-						<label htmlFor="libelle">Libelle</label>
-						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+						<label htmlFor="libelle">Libellé</label>
+						<input pInputText id="libelle" type="text" formControlName="libelle" maxlength="100" placeholder="Détails de l'activité">
 					</div>
 					<div class="field col-12">
 						<label For="projet">Projet</label>
@@ -76,23 +76,23 @@
 						</p-dropdown>
 					</div>
 					<div class="field col-12">
-						<label htmlFor="numberOfDay">Nombre de jours</label>
-						<input pInput pInputTextarea id="numberOfDay" type="text" formControlName="number_of_day" placeholder="Nombre de jour" />
+						<label htmlFor="numberOfHour">Nombre d'heure</label>
+						<input pInput pInputTextarea id="numberOfHour" type="text" formControlName="number_of_hour" placeholder="Nombre d'heure estimé pour cette activité" />
 					</div>
 					<div class="field col-12">
 						<label htmlFor="dateLimite">Date limite</label>
-						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
+						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette activité"></p-calendar>
 					</div>
 
 					<div class="field col-12">
 						<label htmlFor="attribuateTo">Attribution</label>
-						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette tâche" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
+						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette activité" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
 							<ng-template let-value pTemplate="selectedItems">
 								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
 									<div>{{option.label}}</div>
 								</div>
 								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
-									Selectionner les personnes qui vont effectuer cette tâche
+									Selectionner les personnes qui vont effectuer cette activité
 								</div>
 							</ng-template>
 							<ng-template let-user pTemplate="item">
@@ -104,7 +104,7 @@
 					</div>
 					
 					<div>
-						<button pButton type="submit" label="Modifier la tâche" icon="pi pi-pencil" [disabled]="formUpdateTache.invalid"></button>
+						<button pButton type="submit" label="Modifier l'activité" icon="pi pi-pencil" [disabled]="formUpdateTache.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -120,7 +120,7 @@
 				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
 				pTooltip="Fermer" (click)="showFormUpdateTachePercent = false;" aria-hidden="true"> </i>
 
-			<h5>Mettre à jour le pourcentage de la tâche</h5>
+			<h5>Mettre à jour le pourcentage de l'activité</h5>
 			<small>Mettre une valeur entre 0 et 100</small>
 			<form class="p-fluid" [formGroup]="formUpdateTachePercent" (ngSubmit)="onUpdateTachePercent();">
 				<div class="p-formgrid grid">
@@ -144,21 +144,21 @@
 
 			<button pButton type="button" class="mt-4" label="Ajouter" icon="pi pi-plus" style="float: right;" (click)="showFormAddTache = true;"></button>
 
-			<h3>Vos tâches en cours</h3>
+			<h3>Vos activités en cours</h3>
 			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="tachesInProgress?.length > 0">
 				<div class="md:col-4" *ngFor="let task of tachesInProgress; let i = index">
-					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '23rem', 'height': '23rem', 'margin': '2em'}">
 						<p>
 							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
 						</p>
 						<p>
 							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
 						</p>
-						<p *ngIf="task.number_of_day == 1">
-							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jour restant
+						<p *ngIf="task.number_of_hour == 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_hour }} heure restante
 						</p>
-						<p *ngIf="task.number_of_day > 1">
-							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_day }} jours restants
+						<p *ngIf="task.number_of_hour > 1">
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.number_of_hour }} heures restantes
 						</p>
 						<p>
 							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
@@ -169,8 +169,8 @@
 						</div>
 
 						<button pButton type="submit" icon="pi pi-percentage" title="Mettre le pourcentage à jour" (click)="onFillFormUpdatePercent(task);"></button>
-						<button pButton type="submit" icon="pi pi-pencil" title="Modifier la tâche" class="p-button-info ml-2" (click)="onFillFormUpdateTache(task);"></button>
-						<button pButton type="submit" title="Supprimer la tâche" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
+						<button pButton type="submit" icon="pi pi-pencil" title="Modifier l'activité" class="p-button-info ml-2" (click)="onFillFormUpdateTache(task);"></button>
+						<button pButton type="submit" title="Supprimer l'activité" (click)="onDeleteTask(task._id)" class="p-button-danger ml-2" icon="pi pi-trash"></button>
 					</p-card>
 				</div>
 			</div>
@@ -179,9 +179,9 @@
 
     <div class="col-12">
 		<div class="card">
-			<button pButton type="button" label="Lister les tâches en cours" icon="pi pi-plus" style="float: right;" (click)="showTacheInProgress = true;"></button>
+			<button pButton type="button" label="Lister les activités en cours" icon="pi pi-plus" style="float: right;" (click)="showTacheInProgress = true;"></button>
 
-			<h5>Vos tâches finis</h5>
+			<h5>Vos activités finis</h5>
 			<p-table #dt1 [value]="tachesFinished" dataKey="_id" [rows]="10" [loading]="loading" 
 					 [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['libelle', 'project_id.libelle', 'date_limite']" 
 					 responsiveLayout="scroll">
@@ -197,7 +197,7 @@
 					<tr>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Libelle
+								Libellé
 							</div>
 						</th>
 						<th>
@@ -207,7 +207,7 @@
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Jours restants
+								heure(s) restante(s)
 							</div>
 						</th>
 						<th>
@@ -221,7 +221,7 @@
 							</div>
 						<th style="width: 8rem">
 							<div class="flex justify-content-between align-items-center">
-								Participant
+								Participant(s)
 							</div>
 						</th>
 					</tr>
@@ -235,10 +235,10 @@
 							{{tache.project_id?.libelle}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{tache.number_of_day}} J
+							{{tache.number_of_hour != null ? tache.number_of_hour + ' h' : '--' }}
 						</td>
 						<td style="min-width: 10rem;">
-							{{tache.date_limite | date: 'dd-MM-YYYY'}}
+							{{tache.date_limite | date: 'dd MMMM YYYY'}}
 						</td>
 						<td style="min-width: 12rem;">
 							{{tache.creator_id?.firstname | titlecase}} {{tache.creator_id?.lastname | uppercase}}
@@ -254,12 +254,12 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="5">Aucune tâches finis.</td>
+						<td colspan="6">Aucune activités finalisés.</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">
 					<tr>
-						<td colspan="5">Chargement des données...</td>
+						<td colspan="6">Chargement des données...</td>
 					</tr>
 				</ng-template>
     		</p-table>

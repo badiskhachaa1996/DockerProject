@@ -79,10 +79,10 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Project',
+                label: 'Projet',
                 items: [
-                    { label: 'Gestion des tâches', icon: 'pi pi-check-square', routerLink: ['/task-management'] },
-                    { label: 'Mes tâches', icon: 'pi pi-circle', routerLink: ['/my-tasks'] },
+                    { label: 'Gestion des activités projets', icon: 'pi pi-check-square', routerLink: ['/task-management'] },
+                    { label: 'Mes activités projets', icon: 'pi pi-circle', routerLink: ['/my-tasks'] },
                     { label: 'Gestion des équipes', icon: 'pi pi-users', routerLink: ['/team'] },
                 ]
             },

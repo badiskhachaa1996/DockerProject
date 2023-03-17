@@ -275,10 +275,12 @@
 
 
 <div *ngIf="isAdmin">
-    <h1 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname
-        | uppercase}}
+    <h1 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h1>
     <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
+    <p *ngIf="dailyCheck?.number_of_hour > 0 && !dailyCheck.craIsValidate" style="background-color: #15803D; border-radius: 30px ; color: white; text-align: center">
+        Vous avez passé <span style="color: black; font-weight: bolder;">{{dailyCheck.number_of_hour}}h</span> sur vos tâches de la journée, pour valider votre journée vous devez effectuer un total de 7h minimum
+    </p>
 
     <div class="col-12">
         <div class="card">
@@ -302,47 +304,34 @@
 
             <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2"
                 label="Valider mon CRA" icon="pi pi-sign-in"
-                (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
+                (click)="showButtonsValidateCra = !showButtonsValidateCra; showTaskForUser = false; showFormDailyActivityDetails = false;"></button>
 
-            <button [disabled]="!dailyCheck?.craIsValidate || isCheckOut" pButton class="p-button-danger mr-2 mb-2"
+            <button [disabled]="!dailyCheck?.craIsValidate || isCheckOut || dailyCheck.number_of_hour < 7" pButton class="p-button-danger mr-2 mb-2"
                 label="Check out" icon="pi pi-sign-out" (click)="onCheckOut();"></button>
 
             <!-- Bouton affiché au clique sur le bouton valider mon cra -->
-            <!-- <div *ngIf="showButtonsValidateCra">
-                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail();"></button>
-                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser();"></button>
-            </div> -->
+            <div *ngIf="showButtonsValidateCra">
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-list" label="tâches spécifique" (click)="onToggleFormDailyActivityDetail(); showTaskForUser = false;"></button>
+                <button style="margin: 2px;" pButton class="p-button-primary" icon="pi pi-file" label="tâches attribuées" (click)="onGetTaskInProgressForUser(); onToggleShowTaskForUser(); showFormDailyActivityDetails = false;"></button>
+            </div>
 
             <!-- Formulaire pour remplir les tâches du jour -->
-            <!-- <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid mt-2" [formGroup]="formDailyActivityDetails"
                 (ngSubmit)="onValidateCraByForm()">
-                <h2>Tâches du jour</h2>
                 <div class="p-formgrid grid">
                     <div class="field col-12">
-                        <input pInputText type="text" placeholder="tâche 1: Description" formControlName="task" />
+                        <textarea pInputText type="text" rows="6" placeholder="Description de l'activité" formControlName="task"></textarea>
                     </div>
-                </div>
-                <hr>
-                <div formArrayName="tasks">
-                    <h3>Tâches supplémentaires</h3>
-                    <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
-                        <div class="field col-10">
-                            <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
-                        </div>
-                        <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveTask(i)"
-                                class="p-button-outlined p-button-danger"></button>
-                        </div>
+                    <div class="field col-12">
+                        <input pInputText type="number" placeholder="Nombre d'heure passée sur l'activité" formControlName="number_of_hour">
                     </div>
-                    <button pButton icon="pi pi-plus" type="button" (click)="onAddTask()"
-                        class="p-button-outlined p-button-info"></button>
                 </div>
 
                 <div class="field col-4 md:col-4">
                     <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid"
                         label="Valider"></button>
                 </div>
-            </form> -->
+            </form>
 
             <!-- Table d'affichage de la liste des tâches en cours de l'utilisateur -->
             <div *ngIf="showTaskForUser" style="margin-top: 3px;">
@@ -372,7 +361,7 @@
                             <th>Libelle</th>
                             <th>Avancement</th>
                             <th>Projet</th>
-                            <th>Jours restant</th>
+                            <th>heure(s) restante(s)</th>
                             <th>DeadLine</th>
                             <th></th>
                         </tr>
@@ -398,10 +387,10 @@
                             <td>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="number" [(ngModel)]="task.number_of_day">
+                                        <input pInputText type="number" [(ngModel)]="task.number_of_hour">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{task.number_of_day}} J
+                                        {{task.number_of_hour}} h
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
