@@ -166,7 +166,7 @@ export class DetailsEtudiantComponent implements OnInit {
           this.isNotEtudiant = userConnected.type != "Initial" && userConnected.type != "Alternant"
           this.isNotEntreprise = userConnected.type != 'CEO Entreprise'
           let type = "Agent"
-          if (!this.isNotEtudiant || userConnected.type == 'CEO Entreprise')
+          if (userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'CEO Entreprise' && userConnected.role != "Agent" && userConnected.role != "Admin" && userConnected.role != "Responsable")
             type = "EtudiantOuEntreprise"
           this.presenceService.getAllByUser(this.EtudiantDetail.user_id, type).subscribe((presenceData) => {
             this.AssiduiteListe = presenceData
