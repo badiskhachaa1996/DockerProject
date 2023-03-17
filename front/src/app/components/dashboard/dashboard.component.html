@@ -361,7 +361,7 @@
                             <th>Libelle</th>
                             <th>Avancement</th>
                             <th>Projet</th>
-                            <th>Jours restant</th>
+                            <th>heure(s) restante(s)</th>
                             <th>DeadLine</th>
                             <th></th>
                         </tr>
@@ -390,7 +390,7 @@
                                         <input pInputText type="number" [(ngModel)]="task.number_of_day">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{task.number_of_day}} J
+                                        {{task.number_of_day}} h
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -403,7 +403,7 @@
                                         icon="pi pi-pencil" (click)="onRowEditInit(task)"
                                         class="p-button-rounded p-button-text"></button>
                                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                        icon="pi pi-check" (click)="onRowEditSave(task)"
+                                        icon="pi pi-check" (click)="onRowEditSave(task, task.number_of_hour)"
                                         class="p-button-rounded p-button-text p-button-success mr-2"></button>
                                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
                                         icon="pi pi-times" (click)="onRowEditCancel(task, ri)"
