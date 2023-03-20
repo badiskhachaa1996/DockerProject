@@ -137,7 +137,7 @@ export class ListEntrepriseComponent implements OnInit {
       // telecopie: [''],
       OPCO: [''],
       // organisme_prevoyance: [''],
-      commercial: ['', Validators.required],
+      commercial: [''],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: [''],
