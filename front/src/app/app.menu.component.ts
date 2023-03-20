@@ -799,6 +799,19 @@ export class AppMenuComponent implements OnInit {
                                 }
                             ]
                         },
+                        {
+                            label: 'Alternance',
+                            items: [
+                                { label: 'Contrats d\'alternances', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+
+                            ],
+                        },
+                        {
+                            label: 'Commercial',
+                            items: [
+                                { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                            ]
+                        }
                     ]
                     if (this.isEtudiant) {
                         this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
