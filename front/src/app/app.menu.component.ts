@@ -263,9 +263,10 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
-                label: 'Questionnaire',
+                label: 'Questionnaire', icon: 'pi pi-heart',
                 items: [
-                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
+                    { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
                 ]
             }
         ];
@@ -790,13 +791,27 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
                                 {
-                                    label: 'Questionnaire',
+                                    label: 'Questionnaire', icon: 'pi pi-heart',
                                     items: [
-                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
+                                        { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
                                     ]
                                 }
                             ]
                         },
+                        {
+                            label: 'Alternance',
+                            items: [
+                                { label: 'Contrats d\'alternances', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+
+                            ],
+                        },
+                        {
+                            label: 'Commercial',
+                            items: [
+                                { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                            ]
+                        }
                     ]
                     if (this.isEtudiant) {
                         this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
