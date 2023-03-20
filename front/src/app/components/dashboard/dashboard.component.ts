@@ -622,32 +622,7 @@ export class DashboardComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
 
-
-
-  onGetBackgroundColor() {
-    let color = undefined;
-    switch (this.statut) {
-      case 'Check in non effectué':
-        color = '#ffcc00';
-        break;
-      case "Parti avant l'heure":
-        color = 'red';
-        break;
-      case "présent toute la journée":
-        color = 'green';
-        break;
-      case "Au travail":
-        color = '#ff9966';
-        break;
-      default:
-        color = 'green';
-        break;
-    }
-
-    return color;
-  }
-
-  //Methode de test pour LW
+  //Méthode de test pour LW
   test() {
     const xhr = new XMLHttpRequest();
     const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';

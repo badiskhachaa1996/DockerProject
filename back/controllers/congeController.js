@@ -30,8 +30,12 @@ app.post("/new-holidays", (req, res) => {
 app.patch("/validate-holidays", (req, res) => {
     const conge_id = req.body.conge_id;
 
+    // changement de statut du congé dans la BD
     Conge.updateOne({ _id: conge_id }, { statut: 'Validé' })
-    .then((response) => { res.status(201).send(response); })
+    .then((response) => {
+        //TODO: remplissage du compte rendu d'activité sur la période de congé avec la mention "en congé"
+        res.status(201).send(response);
+     })
     .catch((error) => { res.status(404).send(error.message); })
 });
 
