@@ -101,7 +101,7 @@ export class AddEntrepriseComponent implements OnInit {
       // telecopie: [''],
       OPCO: ['', Validators.required],
       // organisme_prevoyance: [''],
-      commercial: ['', Validators.required],
+      commercial: [''],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: ['', Validators.required],
