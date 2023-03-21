@@ -68,6 +68,12 @@ export class BulletinComponent implements OnInit {
           }
         })
       })
+      if (classe.abbrv.includes('1'))
+        this.exInfoDiplome = "1er année 2022-2023"
+      else if (classe.abbrv.includes('2'))
+        this.exInfoDiplome = "2ème année 2022-2023"
+      else
+        this.exInfoDiplome = "2022-2023"
     })
   }
 
@@ -81,6 +87,7 @@ export class BulletinComponent implements OnInit {
     semestre: new FormControl('', Validators.required),
     pv: new FormControl('', Validators.required),
   })
+  exInfoDiplome = ""// 1er année 2022-2023
 
   updateDropdownPV() {
     this.dropdownPV = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]

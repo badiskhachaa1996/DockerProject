@@ -392,7 +392,7 @@ export class NotesComponent implements OnInit {
     });
   }
 
-
+  exInfoDiplome = ""
   //Methode de selection d'une classe et d'un semestre
   onSelectClasse() {
     // this.semestreSelected = this.formSelectClasse.get('semestre').value.value;
@@ -426,6 +426,13 @@ export class NotesComponent implements OnInit {
           }),
           ((error) => { console.error(error); })
         );
+
+        if (this.classes[classe].abbrv.includes('1'))
+          this.exInfoDiplome = "1er année 2022-2023"
+        else if (this.classes[classe].abbrv.includes('2'))
+          this.exInfoDiplome = "2ème année 2022-2023"
+        else
+          this.exInfoDiplome = "2022-2023"
       }
     }
     this.dropdownEtudiant = []

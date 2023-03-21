@@ -380,7 +380,7 @@
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin du {{ semestreForGenerateBulletin }} <br>
-                        <strong>{{ classeForBGenerateBulletin.titre_long }}</strong>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>
                 </div>
@@ -535,7 +535,7 @@
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin Annuel <br>
-                        <strong>{{ classeForBGenerateBulletin.titre_long }}</strong>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>
                 </div>
