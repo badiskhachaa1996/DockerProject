@@ -73,7 +73,7 @@ export class EntrepriseService {
   //Modification d'une entreprise et de son representant
   updateEntrepriseRepresentant(tbObj: any) {
     let registreUrl = this.apiUrl + "updateEntrepriseRepresentant";
-    return this.httpClient.put<Entreprise>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.put<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   createNewContrat(objectTosend) {
