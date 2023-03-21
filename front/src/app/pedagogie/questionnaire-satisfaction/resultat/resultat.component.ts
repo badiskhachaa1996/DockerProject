@@ -134,7 +134,7 @@ export class ResultatComponent implements OnInit {
       filename: 'QUESTIONNAIRE_DE_SATISFACTION_' + `${this.date_auj.getDate()}/${this.date_auj.getMonth() + 1}/${this.date_auj.getFullYear()}` + '.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
-      pagebreak:{before:'#lastQ'}
+      pagebreak: { before: '#lastQ' }
     };
     html2pdf().set(opt).from(element).save().then(() => {
     });

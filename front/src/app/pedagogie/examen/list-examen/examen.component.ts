@@ -558,7 +558,8 @@ export class ExamenComponent implements OnInit {
               etudiant_l: bypass?.user_id?.lastname,
               note: n.note_val,
               _id: n._id,
-              isAbsent: n.isAbsent
+              isAbsent: n.isAbsent,
+              Appreciation: n.appreciation
             })
           }
         })
@@ -570,7 +571,8 @@ export class ExamenComponent implements OnInit {
               etudiant_l: etu.user_id.lastname,
               note: '',
               _id: etu.user_id._id + "NEW",
-              isAbsent: false
+              isAbsent: false,
+              Appreciation: ''
             })
         })
         const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableauNotes);
@@ -743,6 +745,7 @@ export class ExamenComponent implements OnInit {
           if (val._id == value._id) {
             this.tableauNotes[index].note = val.note
             this.tableauNotes[index].isAbsent = val.isAbsent
+            this.tableauNotes[index].appreciation = val.Appreciation
           }
         })
       })
