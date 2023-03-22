@@ -237,7 +237,23 @@ export class BulletinComponent implements OnInit {
               t.appreciation_module = {}
             }
             if (!t.appreciation_module[n]) {
-              t.appreciation_module[n] = ""
+              if ((!t.appreciation_module[n] || t.appreciation_module[n] == "") && (t.appreciation_module[n] || t.appreciation_module[n] == 0)) {
+                let note = parseInt(t.note_etudiant)
+                if (note < 10)
+                  t.appreciation_module[n] = "Doit faire ses preuves"
+                else if ((note > 10 && note < 12) || note == 10)
+                  t.appreciation_module[n] = "Passable"
+                else if ((note > 12 && note < 14) || note == 12)
+                  t.appreciation_module[n] = "Assez Bien"
+                else if ((note > 14 && note < 16) || note == 14)
+                  t.appreciation_module[n] = "Bien"
+                else if ((note > 16 && note < 18) || note == 16)
+                  t.appreciation_module[n] = "Très Bien"
+                else if (note > 18 || note == 18)
+                  t.appreciation_module[n] = "Excellent"
+                else
+                  t.appreciation_module[n] = ""
+              }
             } else {
               t.appreciation_module[n] = pv.appreciation_module[n]
             }
@@ -245,6 +261,7 @@ export class BulletinComponent implements OnInit {
           })
         }
         this.calculMoy()
+        console.log(this.NOTES)
       })
     }
   }
