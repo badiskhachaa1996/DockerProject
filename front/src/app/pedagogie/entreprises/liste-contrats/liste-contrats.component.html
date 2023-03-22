@@ -1,11 +1,28 @@
 <div class="grid">
-    <div class="col-12" *ngIf="ListeContrats">
+    <div class="col-12" *ngIf="ListeContrats.length > 0">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
                     <span class="block text-500 font-medium mb-3"> Nombre de contrats insérés
                     </span>
                     <div class="text-900 font-medium text-xl">{{ ListeContrats.length }}</div>
+                </div>
+
+                <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-file text-pink-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-4" *ngIf="listeContratsFilteredByCommercial.length > 0">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3"> Nombre de contrats pour {{ commercialFiltered.firstname }}
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ listeContratsFilteredByCommercial.length }}</div>
                 </div>
 
                 <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
@@ -529,18 +546,18 @@
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname', 'formation']"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname', 'alternant_id.campus.libelle']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreAgent"
-                            (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals')"
+                            (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals'); onFilterByCommercial($event)"
                             filterPlaceholder="Choisissez un commercial"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreCampus"
-                            (onChange)="dt1.filter($event.value, 'code_commercial.campus', 'equals')"
+                            (onChange)="dt1.filter($event.value, 'alternant_id.campus._id', 'equals'); onFilterByCampus($event)"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreFormation"
