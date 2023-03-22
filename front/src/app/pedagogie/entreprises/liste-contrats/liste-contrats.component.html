@@ -1,11 +1,28 @@
 <div class="grid">
-    <div class="col-12" *ngIf="ListeContrats">
+    <div class="col-12" *ngIf="ListeContrats.length > 0">
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
                     <span class="block text-500 font-medium mb-3"> Nombre de contrats insérés
                     </span>
                     <div class="text-900 font-medium text-xl">{{ ListeContrats.length }}</div>
+                </div>
+
+                <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-file text-pink-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-4" *ngIf="listeContratsFilteredByCommercial.length > 0">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3"> Nombre de contrats pour {{ commercialFiltered.firstname }}
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ listeContratsFilteredByCommercial.length }}</div>
                 </div>
 
                 <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
@@ -27,7 +44,8 @@
             <h4 style="text-align: center;">Nouveau contrat</h4>
 
             <form [formGroup]="RegisterNewCA" (ngSubmit)="createNewCA()">
-                <fieldset class="p-fluid p-formgrid grid" style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
+                <fieldset class="p-fluid p-formgrid grid"
+                    style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
                     <legend style="color: rgb(27, 74, 193);">Informations contrat</legend>
                     <div class="field col-12 md:col-12">
                         <label For="TypeCOntrat">Type de contrat<span style="color: red;">
@@ -42,24 +60,21 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'"
-                            (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="tuteur_id">Tuteur <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                            [options]="dropdownTuteurList" dataKey="_id" filter="true" id="alternant"
-                            formControlName="tuteur_id">
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="dropdownTuteurList"
+                            dataKey="_id" filter="true" id="alternant" formControlName="tuteur_id">
                         </p-dropdown>
                     </div>
                     <div class="field col-12">
                         <label For="alternant">Alternant<span style="color: red;"> *
                             </span> </label>
-                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                            [options]="listAlternantDD" dataKey="_id" filter="true" id="alternant"
-                            formControlName="alternant">
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="listAlternantDD"
+                            dataKey="_id" filter="true" id="alternant" formControlName="alternant">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -129,8 +144,7 @@
                     <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
                         <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
                             </span></label>
-                        <input pInputText id="coeff_hier" type="text" placeholder="5.2"
-                            formControlName="coeff_hier" />
+                        <input pInputText id="coeff_hier" type="text" placeholder="5.2" formControlName="coeff_hier" />
                         <div *ngIf="coeff_hier.invalid && (coeff_hier.touched || coeff_hier.dirty)">
                             <span style="color: red;" class="error" *ngIf="coeff_hier.errors?.required">*
                                 Le
@@ -179,13 +193,14 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="p-fluid p-formgrid grid mt-2" style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
+                <fieldset class="p-fluid p-formgrid grid mt-2"
+                    style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
                     <legend style="color: rgb(27, 74, 193);">Avantages contrat</legend>
 
                     <div class="field col-12">
                         <label for="mob_int">Mobilité internationale <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="mob_int" formControlName="mob_int" (onChange)="onShowCout($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="mob_int"
+                            formControlName="mob_int" (onChange)="onShowCout($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showCout">
@@ -195,8 +210,8 @@
 
                     <div class="field col-12">
                         <label for="mat_ped">Materiel pédagogique <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="mat_ped" formControlName="mat_ped" (onChange)="onShowMatPedPrice($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="mat_ped"
+                            formControlName="mat_ped" (onChange)="onShowMatPedPrice($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showMatPedPrice">
@@ -206,8 +221,8 @@
 
                     <div class="field col-12">
                         <label for="dl_help">Aide au permis <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="dl_help" formControlName="dl_help" (onChange)="onShowDLPrice($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="dl_help"
+                            formControlName="dl_help" (onChange)="onShowDLPrice($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showDLHelpPrice">
@@ -232,7 +247,8 @@
             <h4 style="text-align: center;">Modifier ce contrat</h4>
 
             <form [formGroup]="formUpdateCa" (ngSubmit)="onUpdateCa()">
-                <fieldset class="p-fluid p-formgrid grid" style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
+                <fieldset class="p-fluid p-formgrid grid"
+                    style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
                     <legend style="color: rgb(27, 74, 193);">Informations contrat</legend>
                     <div class="field col-12 md:col-12">
                         <label For="TypeCOntrat">Type de contrat<span style="color: red;">
@@ -247,24 +263,21 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'"
-                            (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="tuteur_id">Tuteur <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                            [options]="dropdownTuteurList" dataKey="_id" filter="true" id="alternant"
-                            formControlName="tuteur_id">
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="dropdownTuteurList"
+                            dataKey="_id" filter="true" id="alternant" formControlName="tuteur_id">
                         </p-dropdown>
                     </div>
                     <div class="field col-12">
                         <label For="alternant">Alternant<span style="color: red;"> *
                             </span> </label>
-                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                            [options]="listAlternantDD" dataKey="_id" filter="true" id="alternant"
-                            formControlName="alternant">
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="listAlternantDD"
+                            dataKey="_id" filter="true" id="alternant" formControlName="alternant">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -334,8 +347,7 @@
                     <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
                         <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
                             </span></label>
-                        <input pInputText id="coeff_hier" type="text" placeholder="5.2"
-                            formControlName="coeff_hier" />
+                        <input pInputText id="coeff_hier" type="text" placeholder="5.2" formControlName="coeff_hier" />
                         <div *ngIf="coeff_hier_m.invalid && (coeff_hier_m.touched || coeff_hier_m.dirty)">
                             <span style="color: red;" class="error" *ngIf="coeff_hier_m.errors?.required">*
                                 Le
@@ -362,7 +374,8 @@
                             [options]="dropDownCommecialList" dataKey="_id" filter="true"
                             formControlName="code_commercial">
                         </p-dropdown>
-                        <div *ngIf="code_commercial_m.invalid && (code_commercial_m.touched || code_commercial_m.dirty)">
+                        <div
+                            *ngIf="code_commercial_m.invalid && (code_commercial_m.touched || code_commercial_m.dirty)">
                             <span style="color: red;" class="error">*
                                 Le
                                 champs est obligatoire.</span>
@@ -384,13 +397,14 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="p-fluid p-formgrid grid mt-2" style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
+                <fieldset class="p-fluid p-formgrid grid mt-2"
+                    style="border: 1px solid rgb(27, 74, 193); border-radius: 10px">
                     <legend style="color: rgb(27, 74, 193);">Avantages contrat</legend>
 
                     <div class="field col-12">
                         <label for="mob_int">Mobilité internationale <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="mob_int" formControlName="mob_int" (onChange)="onShowCout($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="mob_int"
+                            formControlName="mob_int" (onChange)="onShowCout($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showCout">
@@ -400,8 +414,8 @@
 
                     <div class="field col-12">
                         <label for="mat_ped">Materiel pédagogique <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="mat_ped" formControlName="mat_ped" (onChange)="onShowMatPedPrice($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="mat_ped"
+                            formControlName="mat_ped" (onChange)="onShowMatPedPrice($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showMatPedPrice">
@@ -411,8 +425,8 @@
 
                     <div class="field col-12">
                         <label for="dl_help">Aide au permis <span style="color: red;">*</span></label>
-                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList"
-                            id="dl_help" formControlName="dl_help" (onChange)="onShowDLPrice($event)">
+                        <p-dropdown placeholder="Choisissez le statut" [options]="advantageStatusList" id="dl_help"
+                            formControlName="dl_help" (onChange)="onShowDLPrice($event)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="showDLHelpPrice">
@@ -422,7 +436,7 @@
 
                     <div classe="field">
                         <button pButton type="submit" label="Modifier" style="float: right;"
-                                [disabled]="formUpdateCa.invalid|| (professionnalisation_m.value == true && classification_m.invalid)">
+                            [disabled]="formUpdateCa.invalid|| (professionnalisation_m.value == true && classification_m.invalid)">
                         </button>
                     </div>
                 </fieldset>
@@ -456,10 +470,12 @@
         <!-- Upload du cerfa -->
         <div class="col-12" *ngIf="showFormAddCerfa">
             <div class="card">
-                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddCerfa = false;"></i>
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddCerfa = false;"></i>
                 <h4>Ajouter le cerfa au contrat (pdf)</h4>
                 <div class="field col-12">
-                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf"
+                        style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
                 </div>
                 <button pButton label="Envoyer" (click)="onAddCerfa()"></button>
             </div>
@@ -468,10 +484,12 @@
         <!-- Upload de la convention -->
         <div class="col-12" *ngIf="showFormAddConvention">
             <div class="card">
-                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddConvention = false;"></i>
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddConvention = false;"></i>
                 <h4>Ajouter la convention au contrat (pdf)</h4>
                 <div class="field col-12">
-                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf"
+                        style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
                 </div>
                 <button pButton label="Envoyer" (click)="onAddConvention()"></button>
             </div>
@@ -480,10 +498,12 @@
         <!-- Upload de l'accord de prise en charge -->
         <div class="col-12" *ngIf="showFormAddAccordPriseEnCharge">
             <div class="card">
-                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddAccordPriseEnCharge = false;"></i>
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddAccordPriseEnCharge = false;"></i>
                 <h4>Ajouter l'accord de prise en charge (pdf)</h4>
                 <div class="field col-12">
-                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf"
+                        style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
                 </div>
                 <button pButton label="Envoyer" (click)="onAddAccordPriseEnCharge()"></button>
             </div>
@@ -492,10 +512,12 @@
         <!-- Upload de la resiliation -->
         <div class="col-12" *ngIf="showFormAddResiliation">
             <div class="card">
-                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddResiliation = false;"></i>
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddResiliation = false;"></i>
                 <h4>Ajouter la résiliation (pdf)</h4>
                 <div class="field col-12">
-                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                    <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf"
+                        style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
                 </div>
                 <button pButton label="Envoyer" (click)="onAddResiliation()"></button>
             </div>
@@ -517,26 +539,30 @@
             <button *ngIf="token.type != 'CEO Entreprise' && token.role == 'Watcher'" pButton
                 label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" [disabled]="true"
                 style="float: right; margin: 2px"></button>
-            <button pButton pRipple type="button" label="Supprimer les doublons" class="p-button-warning" (click)="nettoyage()"
-                style="float: right; margin: 2px"></button>
+            <button pButton pRipple type="button" label="Supprimer les doublons" class="p-button-warning"
+                (click)="nettoyage()" style="float: right; margin: 2px"></button>
 
             <h5>Liste des contrats</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname', 'alternant_id.campus.libelle']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreAgent"
-                            (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals')"
+                            (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals'); onFilterByCommercial($event)"
                             filterPlaceholder="Choisissez un commercial"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreCampus"
-                            (onChange)="dt1.filter($event.value, 'code_commercial.campus', 'equals')"
+                            (onChange)="dt1.filter($event.value, 'alternant_id.campus._id', 'equals'); onFilterByCampus($event)"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreClasse"
+                            (onChange)="dt1.filter($event.value, 'abbrv', 'equals')"
+                            filterPlaceholder="Choisissez une classe"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreStatus"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals')"
@@ -611,8 +637,8 @@
                             <p-tag *ngIf="contrat.statut == 'Validé à facturation'" icon="pi pi-check"
                                 severity="success" [value]="contrat.statut">
                             </p-tag>
-                            <p-tag *ngIf="contrat.statut == 'Résilié'" icon="pi pi-times-circle"
-                                severity="danger" [value]="contrat.statut">
+                            <p-tag *ngIf="contrat.statut == 'Résilié'" icon="pi pi-times-circle" severity="danger"
+                                [value]="contrat.statut">
                             </p-tag>
                         </td>
 
@@ -636,10 +662,17 @@
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
                             <br>
                             <!-- contract files -->
-                            <i class="pi pi-file" pTooltip="Cerfa" style="cursor: pointer; color: blue; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddCerfa = true;"></i>
-                            <i class="pi pi-file" pTooltip="Convention de formation" style="cursor: pointer; color: orangered; margin: 2px;" (click)="contratToUpdate = contrat; showFormAddConvention = true;"></i>
-                            <i class="pi pi-file" pTooltip="Accord de prise en charge" style="cursor: pointer; color: rgb(150, 248, 4); margin: 2px;" (click)="contratToUpdate = contrat; showFormAddAccordPriseEnCharge = true;"></i>
-                            <i *ngIf="contrat.statut == 'Résilié'" class="pi pi-file" pTooltip="Résiliation du contrat" style="cursor: pointer; color: rgb(177, 6, 6); margin: 2px;" (click)="contratToUpdate = contrat; showFormAddResiliation = true;"></i>
+                            <i class="pi pi-file" pTooltip="Cerfa" style="cursor: pointer; color: blue; margin: 2px;"
+                                (click)="contratToUpdate = contrat; showFormAddCerfa = true;"></i>
+                            <i class="pi pi-file" pTooltip="Convention de formation"
+                                style="cursor: pointer; color: orangered; margin: 2px;"
+                                (click)="contratToUpdate = contrat; showFormAddConvention = true;"></i>
+                            <i class="pi pi-file" pTooltip="Accord de prise en charge"
+                                style="cursor: pointer; color: rgb(150, 248, 4); margin: 2px;"
+                                (click)="contratToUpdate = contrat; showFormAddAccordPriseEnCharge = true;"></i>
+                            <i *ngIf="contrat.statut == 'Résilié'" class="pi pi-file" pTooltip="Résiliation du contrat"
+                                style="cursor: pointer; color: rgb(177, 6, 6); margin: 2px;"
+                                (click)="contratToUpdate = contrat; showFormAddResiliation = true;"></i>
                             <!-- end files -->
                         </td>
                         <td *ngIf="token.role == 'Watcher'">
@@ -654,126 +687,139 @@
                             <div class="p-2">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Horaire</th>
-                                            <th>Niveau de la formation</th>
-                                            <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
-                                            <th>Commercial</th>
-                                            <th>Tuteur</th>
-                                            <th>Année-scolaires</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td>{{contrat.horaire}}</td>
-                                            <td>{{contrat.niveau_formation}}</td>
-                                            <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
-                                                {{ contrat.entreprise_id?.r_sociale }}
-                                            </td>
-                                            <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname |
-                                                uppercase }}</td>
+                    <tr>
+                        <th>Horaire</th>
+                        <th>Niveau de la formation</th>
+                        <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
+                        <th>Commercial</th>
+                        <th>Tuteur</th>
+                        <th>Année-scolaires</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{contrat.horaire}}</td>
+                        <td>{{contrat.niveau_formation}}</td>
+                        <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
+                            {{ contrat.entreprise_id?.r_sociale }}
+                        </td>
+                        <td>{{ contrat.code_commercial?.firstname | titlecase }} {{ contrat.code_commercial?.lastname |
+                            uppercase }}</td>
 
-                                            <td *ngIf="contrat.tuteur_id != null">
-                                                {{ contrat.tuteur_id?.user_id?.lastname }}
-                                                {{ contrat.tuteur_id?.user_id?.firstname }}
-                                            </td>
-                                            <td *ngIf="contrat.directeur_id != null">
-                                                {{ contrat.directeur_id?.lastname }}
-                                                {{ contrat.directeur_id?.firstname }}
-                                            </td>
+                        <td *ngIf="contrat.tuteur_id != null">
+                            {{ contrat.tuteur_id?.user_id?.lastname }}
+                            {{ contrat.tuteur_id?.user_id?.firstname }}
+                        </td>
+                        <td *ngIf="contrat.directeur_id != null">
+                            {{ contrat.directeur_id?.lastname }}
+                            {{ contrat.directeur_id?.firstname }}
+                        </td>
 
-                                            <td>
-                                                <ul>
-                                                    <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                            <!-- Documents liés au contrat -->
-                            <div class="p-2">
-                                <h6>Documents du contrat</h6>
-                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
-                                            <th>Cerfa</th> <!-- *lié directement au contrat -->
-                                            <th>Convention de formation</th> <!-- *lié directement au contrat -->
-                                            <th>Accord de prise en charge</th> <!-- *lié directement au contrat -->
-                                            <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td *ngIf="contrat.formation.calendrier != null">
-                                                <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
-                                            </td>
-                                            <td *ngIf="contrat.formation.calendrier == null">
-                                                -- Aucun fichier --
-                                            </td>
-
-                                            <td *ngIf="contrat.cerfa != null">
-                                                <i class="pi pi-file" title="Télécharger le cerfa" style="font-size: 2em; color: blue; cursor: pointer;" (click)="onDownloadCerfa(contrat._id)"></i>
-                                            </td>
-                                            <td *ngIf="contrat.cerfa == null">
-                                                -- Aucun fichier --
-                                            </td>
-
-                                            <td *ngIf="contrat.convention_formation != null">
-                                                <i class="pi pi-file" title="Télécharger la convention" style="font-size: 2em; color: orangered; cursor: pointer;" (click)="onDownloadConvention(contrat._id)"></i>
-                                            </td>
-                                            <td *ngIf="contrat.convention_formation == null">
-                                                -- Aucun fichier --
-                                            </td>
-
-                                            <td *ngIf="contrat.accord_prise_charge != null">
-                                                <i class="pi pi-file" title="Télécharger l'accord de prise en charge" style="font-size: 2em; color: rgb(150, 248, 4); cursor: pointer;" (click)="onDownloadAccordPriseEnCharge(contrat._id)"></i>
-                                            </td>
-                                            <td *ngIf="contrat.accord_prise_charge == null" style="color: red; font-weight: bold;">
-                                                -- Aucun fichier --
-                                            </td>
-
-                                            <td *ngIf="contrat.resiliation_contrat != null">
-                                                <i class="pi pi-file" title="Télécharger la résiliation" style="font-size: 2em; color: rgb(177, 6, 6); cursor: pointer;" (click)="onDownloadResiliation(contrat._id)"></i>
-                                            </td>
-                                            <td *ngIf="contrat.resiliation_contrat == null" style="color: green; font-weight: bold;">
-                                                -- Ce contrat est en cours --
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-                            <!-- Avantage liés au contrat -->
-                            <div class="p-2">
-                                <h6>Avantages contrat</h6>
-                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Mobilité internationale</th>
-                                            <th>Materiel pédagogique</th>
-                                            <th>Aide au permis</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td>
-                                                {{ contrat.cout_mobilite_status != 'Accordé' ? contrat.cout_mobilite_status: contrat.cout_mobilite + '€' }}
-                                            </td>
-                                            <td>
-                                                {{ contrat.cout_mat_ped_status != 'Accordé' ? contrat.cout_mat_ped_status: contrat.cout_mat_ped + '€' }}
-                                            </td>
-                                            <td>
-                                                {{ contrat.cout_dl_help_status != 'Accordé' ? contrat.cout_dl_help_status: contrat.cout_dl_help + '€' }}
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
+                        <td>
+                            <ul>
+                                <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
+                            </ul>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
         </div>
+        <!-- Documents liés au contrat -->
+        <div class="p-2">
+            <h6>Documents du contrat</h6>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
+                        <th>Cerfa</th> <!-- *lié directement au contrat -->
+                        <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                        <th>Accord de prise en charge</th> <!-- *lié directement au contrat -->
+                        <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td *ngIf="contrat.formation.calendrier != null">
+                            <i class="pi pi-calendar" title="Télécharger le calendrier"
+                                style="font-size: 2em; color: green; cursor: pointer;"
+                                (click)="onDownloadCalendar(contrat.formation?._id)"></i>
+                        </td>
+                        <td *ngIf="contrat.formation.calendrier == null">
+                            -- Aucun fichier --
+                        </td>
+
+                        <td *ngIf="contrat.cerfa != null">
+                            <i class="pi pi-file" title="Télécharger le cerfa"
+                                style="font-size: 2em; color: blue; cursor: pointer;"
+                                (click)="onDownloadCerfa(contrat._id)"></i>
+                        </td>
+                        <td *ngIf="contrat.cerfa == null">
+                            -- Aucun fichier --
+                        </td>
+
+                        <td *ngIf="contrat.convention_formation != null">
+                            <i class="pi pi-file" title="Télécharger la convention"
+                                style="font-size: 2em; color: orangered; cursor: pointer;"
+                                (click)="onDownloadConvention(contrat._id)"></i>
+                        </td>
+                        <td *ngIf="contrat.convention_formation == null">
+                            -- Aucun fichier --
+                        </td>
+
+                        <td *ngIf="contrat.accord_prise_charge != null">
+                            <i class="pi pi-file" title="Télécharger l'accord de prise en charge"
+                                style="font-size: 2em; color: rgb(150, 248, 4); cursor: pointer;"
+                                (click)="onDownloadAccordPriseEnCharge(contrat._id)"></i>
+                        </td>
+                        <td *ngIf="contrat.accord_prise_charge == null" style="color: red; font-weight: bold;">
+                            -- Aucun fichier --
+                        </td>
+
+                        <td *ngIf="contrat.resiliation_contrat != null">
+                            <i class="pi pi-file" title="Télécharger la résiliation"
+                                style="font-size: 2em; color: rgb(177, 6, 6); cursor: pointer;"
+                                (click)="onDownloadResiliation(contrat._id)"></i>
+                        </td>
+                        <td *ngIf="contrat.resiliation_contrat == null" style="color: green; font-weight: bold;">
+                            -- Ce contrat est en cours --
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <!-- Avantage liés au contrat -->
+        <div class="p-2">
+            <h6>Avantages contrat</h6>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Mobilité internationale</th>
+                        <th>Materiel pédagogique</th>
+                        <th>Aide au permis</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>
+                            {{ contrat.cout_mobilite_status != 'Accordé' ? contrat.cout_mobilite_status:
+                            contrat.cout_mobilite + '€' }}
+                        </td>
+                        <td>
+                            {{ contrat.cout_mat_ped_status != 'Accordé' ? contrat.cout_mat_ped_status:
+                            contrat.cout_mat_ped + '€' }}
+                        </td>
+                        <td>
+                            {{ contrat.cout_dl_help_status != 'Accordé' ? contrat.cout_dl_help_status:
+                            contrat.cout_dl_help + '€' }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
     </div>
+</div>
 </div>

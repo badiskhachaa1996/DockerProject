@@ -16,7 +16,7 @@ import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { saveAs } from 'file-saver';
-
+import { ClasseService } from 'src/app/services/classe.service';
 
 @Component({
   selector: 'app-liste-contrats',
@@ -52,6 +52,7 @@ export class ListeContratsComponent implements OnInit {
   TuteursList = [];
   dropdownTuteurList = []
   ListCommercial = [];
+  ListClasse = [];
 
   dropDownCommecialList = [];
   dropdownCFA = [];
@@ -76,6 +77,10 @@ export class ListeContratsComponent implements OnInit {
 
   filtreCampus = [
     { value: null, label: "Campus" }
+  ];
+
+  filtreClasse = [
+    { value: null, label: "Classe"}
   ];
 
   filtreStatus = [
@@ -140,13 +145,22 @@ export class ListeContratsComponent implements OnInit {
   showFormAddAccordPriseEnCharge: boolean = false;
   doc: any;
 
+  // partie dédié à la gestion de l'affichage par filtre par commercial
+  listeContratsFilteredByCommercial: ContratAlternance[] = [];
+  commercialFiltered: User;
+  showFilterByCommercial: boolean = false;
+  // partie dédié à la gestion de l'affichage par filtre par commercial
+  listeContratsFilteredByCampus: ContratAlternance[] = [];
+  campusFiltered: User;
+  showFilterByCampus: boolean = false;
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService,
     private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService,
-    private campusService: CampusService) { }
+    private campusService: CampusService,
+    private classeService: ClasseService) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
@@ -332,6 +346,14 @@ export class ListeContratsComponent implements OnInit {
     this.statusForm = this.formBuilder.group({
       libelle: ['', Validators.required]
     });
+
+    // Filtre pour récupérer la liste des classes
+    this.token = jwt_decode(localStorage.getItem("token"))
+    this.classeService.getAll().subscribe(classe => {
+      classe.forEach(c => {
+        this.filtreClasse.push({ label: c.abbrv, value: c._id })
+      })
+    })
   }
 
   showPresence(alternant_id) {
@@ -707,5 +729,40 @@ export class ListeContratsComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthodes pour compter le nombre de contrats filtrés par commercial
+  onFilterByCommercial(event: any): void 
+  {
+    // on vide le tableau avant de le remplir
+    this.listeContratsFilteredByCommercial = [];
+    // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
+    this.ListeContrats.forEach((contrat) => {
+      let {code_commercial}: any = contrat; 
+      this.commercialFiltered = code_commercial;
+      if(code_commercial._id == event.value)
+      {
+        this.listeContratsFilteredByCommercial.push(contrat);
+      }
+    });
+    this.showFilterByCommercial = true;
+  }
+
+  // méthodes pour compter le nombre de contrats filtrés par commercial
+  onFilterByCampus(event: any): void 
+  {
+    console.log(event)
+    // on vide le tableau avant de le remplir
+    this.listeContratsFilteredByCampus = [];
+    // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
+    this.ListeContrats.forEach((contrat) => {
+      let {code_commercial}: any = contrat; 
+      this.campusFiltered = code_commercial;
+      if(code_commercial._id == event.value)
+      {
+        this.listeContratsFilteredByCampus.push(contrat);
+      }
+    });
+    this.showFilterByCampus = true;
   }
 }
