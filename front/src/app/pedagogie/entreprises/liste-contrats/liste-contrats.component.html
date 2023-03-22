@@ -529,7 +529,7 @@
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname', 'cout_mobilite', 'statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname', 'formation']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10">
                 <ng-template pTemplate="caption">
@@ -543,8 +543,8 @@
                             (onChange)="dt1.filter($event.value, 'code_commercial.campus', 'equals')"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreClasse"
-                            (onChange)="dt1.filter($event.value, 'abbrv', 'equals')"
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreFormation"
+                            (onChange)="dt1.filter($event.value, 'formation._id', 'equals')"
                             filterPlaceholder="Choisissez une classe"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreStatus"
