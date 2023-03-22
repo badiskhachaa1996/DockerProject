@@ -177,7 +177,7 @@ export class ListSeancesComponent implements OnInit {
 
     let classeList = [];
     rowData.classe_id.forEach(classeID => {
-      classeList.push(this.classes[classeID]?._id);
+      classeList.push({ label: this.classes[classeID].abbrv, value: this.classes[classeID]._id, diplome_id: this.classes[classeID]?.diplome_id })
     });
     this.salleNames = []
     this.dicCampus[rowData.campus_id].salles.forEach(s => {
@@ -244,7 +244,6 @@ export class ListSeancesComponent implements OnInit {
       }
     })
     this.dropdownMatiere = []
-    console.log(this.listMatiere, listIDs)
     this.listMatiere.forEach(m => {
       if (this.customIncludesv2(m.formation_id, listIDs) == true) {
         console.log(m.formation_id)
@@ -272,7 +271,7 @@ export class ListSeancesComponent implements OnInit {
   modifySeance() {
     let classeList = []
     this.seanceFormUpdate.value.classe.forEach(c => {
-      classeList.push(c)
+      classeList.push(c.value)
     })
     let seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, null,
       this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value, this.seanceFormUpdate.value.nbseance, this.showFormUpdateSeance.fileRight, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.seance_type,
@@ -287,6 +286,7 @@ export class ListSeancesComponent implements OnInit {
     }*/
     this.seanceService.update(seance).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'Votre séance a bien été modifié!' });
+      console.log(data)
       this.seanceService.getAll().subscribe(
         (datas) => {
           this.loadEvents(datas)

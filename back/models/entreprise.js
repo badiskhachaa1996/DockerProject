@@ -26,9 +26,9 @@ const entrepriseSchema = mongoose.Schema({
     telecopie: { type: String, required: false },
     OPCO: { type: String, required: false },
     organisme_prevoyance: { type: String, required: false },
-    
+
     directeur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    commercial_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
+    commercial_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false }
 });
 
 //Création de la table entreprise via le schema de la table

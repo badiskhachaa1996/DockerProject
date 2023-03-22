@@ -240,7 +240,7 @@ export class AjoutExamenComponent implements OnInit {
     let niveau = this.formAddExamen.get("niveau")?.value;
     if (niveau == 'Examen final')
       coef = 2
-    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date[0], type, note_max, coef, libelle, niveau, this.matieres[matiere_id].semestre, true, date[1]);
+    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau, this.matieres[matiere_id].semestre, true, date[1]);
     this.examenService.create(examen).subscribe(
       (response) => {
         this.messageService.add({

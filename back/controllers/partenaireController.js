@@ -75,22 +75,7 @@ app.post("/inscription", (req, res, next) => {
     let partenaireData = req.body.newPartenaire;
     let partenaire = new Partenaire(
         {
-            user_id: null,
-            code_partenaire: partenaireData.code_partenaire,
-            nom: partenaireData.nom,
-            phone: partenaireData.phone,
-            email: partenaireData.email,
-            number_TVA: partenaireData.number_TVA,
-            SIREN: partenaireData.SIREN,
-            SIRET: partenaireData.SIRRET,
-            format_juridique: partenaireData.format_juridique,
-            type: partenaireData.type,
-            APE: partenaireData.APE,
-            Services: partenaireData.Services,
-            Pays: partenaireData.Pays,
-            WhatsApp: partenaireData.WhatsApp,
-            indicatifPhone: partenaireData.indicatifPhone,
-            indicatifWhatsApp: partenaireData.indicatifWhatsApp,
+            ...partenaireData
         });
 
     //Creation du nouveau user
@@ -161,9 +146,8 @@ app.post("/inscription", (req, res, next) => {
                                 commercial.save().then((commercialsaved) => {
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demarche sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe   sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>"
-                                        + "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        "<p>Bonjour,</p><p>Un nouveau partenaire a été enregistré avec succès, Voici les accès à utiliser sur <a href='https://ims.intedgroup.com/#/login'>ce lien</a> en se connectant via les identifiants </p><br>" +
+                                        `<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>` +
                                         "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Bien cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
@@ -171,7 +155,7 @@ app.post("/inscription", (req, res, next) => {
 
                                     let mailOptions = {
                                         from: "contact@eduhorizons.com",
-                                        to: userCreated.email_perso,
+                                        to: ['orientation.aa@intedgroup.com'],
                                         subject: 'Acces IMS',
                                         html: htmlmail,
                                         attachments: [{

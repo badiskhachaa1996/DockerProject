@@ -8,7 +8,7 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="seanceFormUpdate" (ngSubmit)="modifySeance()">
                 <div class="field col-12 md:col-6">
                     <label>Nom du groupe</label><br>
-                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse" optionLabel="label"
                         (onChange)="showCampus($event.value)" defaultLabel="Selection des groupes"
                         filter="true"></p-multiSelect>
                 </div>
