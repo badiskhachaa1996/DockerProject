@@ -68,6 +68,12 @@ export class BulletinComponent implements OnInit {
           }
         })
       })
+      if (classe.abbrv.includes('1'))
+        this.exInfoDiplome = "1er année 2022-2023"
+      else if (classe.abbrv.includes('2'))
+        this.exInfoDiplome = "2ème année 2022-2023"
+      else
+        this.exInfoDiplome = "2022-2023"
     })
   }
 
@@ -81,6 +87,7 @@ export class BulletinComponent implements OnInit {
     semestre: new FormControl('', Validators.required),
     pv: new FormControl('', Validators.required),
   })
+  exInfoDiplome = ""// 1er année 2022-2023
 
   updateDropdownPV() {
     this.dropdownPV = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]
@@ -230,7 +237,23 @@ export class BulletinComponent implements OnInit {
               t.appreciation_module = {}
             }
             if (!t.appreciation_module[n]) {
-              t.appreciation_module[n] = ""
+              if ((!t.appreciation_module[n] || t.appreciation_module[n] == "") && (t.appreciation_module[n] || t.appreciation_module[n] == 0)) {
+                let note = parseInt(t.note_etudiant)
+                if (note < 10)
+                  t.appreciation_module[n] = "Doit faire ses preuves"
+                else if ((note > 10 && note < 12) || note == 10)
+                  t.appreciation_module[n] = "Passable"
+                else if ((note > 12 && note < 14) || note == 12)
+                  t.appreciation_module[n] = "Assez Bien"
+                else if ((note > 14 && note < 16) || note == 14)
+                  t.appreciation_module[n] = "Bien"
+                else if ((note > 16 && note < 18) || note == 16)
+                  t.appreciation_module[n] = "Très Bien"
+                else if (note > 18 || note == 18)
+                  t.appreciation_module[n] = "Excellent"
+                else
+                  t.appreciation_module[n] = ""
+              }
             } else {
               t.appreciation_module[n] = pv.appreciation_module[n]
             }
@@ -238,6 +261,7 @@ export class BulletinComponent implements OnInit {
           })
         }
         this.calculMoy()
+        console.log(this.NOTES)
       })
     }
   }

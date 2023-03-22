@@ -16,7 +16,7 @@
 </div>
 <div class="col-12">
     <div class="card">
-        <h5>Liste des résultats du questionnaire de satisfaction</h5>
+        <h5>Liste des résultats du questionnaire de satisfaction des formateurs</h5>
         <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="10" [rowHover]="true"
             [totalRecords]="resultats.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','propositions']"
@@ -32,6 +32,9 @@
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
                             placeholder="Recherche" class="w-full" />
                     </span>
+                    <a target="_blank" href="https://ims.intedgroup.com/#/formulaire-formateur">
+                        <button pButton type="button" label="Voir le Questionnaire" icon="pi pi-align-justify"></button>
+                    </a>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -137,8 +140,7 @@
                                 <label>Quel est votre degré de satisfaction des mesures d’accueils ? </label>
                                 <p-rating [cancel]="false" [ngModel]="result.mesure_accueil"></p-rating>
                             </div>
-                            <div class="field col-12"
-                                *ngIf="result.mesure_accueil && result.mesure_accueil < 3">
+                            <div class="field col-12" *ngIf="result.mesure_accueil && result.mesure_accueil < 3">
                                 <label>Précisez : </label>
                                 <p>{{result.explication_mesure}}</p>
                             </div>

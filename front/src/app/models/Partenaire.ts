@@ -16,7 +16,14 @@ export class Partenaire {
         public Services?: string,
         public Pays?: string,
         public WhatsApp?: string,
-        public indicatifPhone?:string,
-        public indicatifWhatsapp?:string
+        public indicatifPhone?: string,
+        public indicatifWhatsapp?: string,
+        public site_web?: string,
+        public facebook?: string,
+        public description?: string,
+        public date_creation?: Date,
+        public statut_anciennete?: string,
+        public contribution?: string,
+        public etat_contrat?: string,
     ) { }
 }

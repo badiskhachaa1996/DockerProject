@@ -214,9 +214,13 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Gestions des partenaires', icon: 'pi pi-users',
                         items: [
+                            { label: 'Insérer un Partenaire', icon: 'pi pi pi-user-plus', routerLink: ['/partenaireInscription'] },
                             { label: 'Liste des partenaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/partenaire'] },
+                            { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                            { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                            { label: 'Dashboard', icon: 'pi pi-chart-line' },
                         ]
-                    },
+                    }
                 ]
             }, {
                 label: 'Commercial',

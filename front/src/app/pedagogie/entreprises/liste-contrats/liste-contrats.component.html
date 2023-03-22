@@ -560,8 +560,8 @@
                             (onChange)="dt1.filter($event.value, 'alternant_id.campus._id', 'equals'); onFilterByCampus($event)"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreClasse"
-                            (onChange)="dt1.filter($event.value, 'abbrv', 'equals')"
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreFormation"
+                            (onChange)="dt1.filter($event.value, 'formation._id', 'equals')"
                             filterPlaceholder="Choisissez une classe"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreStatus"

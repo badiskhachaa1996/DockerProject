@@ -30,37 +30,37 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   typeSoc =
     [
-      { value: "Professionel (Société)" },
-      { value: "Particulier (Personne)" },
+      { value: "Professionnelle" },
+      { value: "Particulier" },
     ];
 
   formatJuridique =
     [
-      { value: "EIRL" },
-      { value: "EURL" },
-      { value: "SARL" },
-      { value: "SA" },
-      { value: "SAS" },
-      { value: "SNC" },
-      { value: "Etudiant IMS" },
-      { value: "Individuel" },
+      { label: "EIRL", value: "EIRL" },
+      { label: "EURL", value: "EURL" },
+      { label: "SARL", value: "SARL" },
+      { label: "SA", value: "SA" },
+      { label: "SAS", value: "SAS" },
+      { label: "SNC", value: "SNC" },
+      { label: "Etudiant IMS", value: "Etudiant IMS" },
+      { label: "Individuel", value: "Individuel" },
     ];
 
   pL = Math.random() * 900;
 
 
-  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService,private UserService:AuthService) { }
+  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService, private UserService: AuthService) { }
 
   RegisterForm: FormGroup = new FormGroup({
 
     //Informations de la société
     nomSoc: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    type: new FormControl(this.typeSoc[0]),
-    format_juridique: new FormControl(this.formatJuridique[0]),
+    type: new FormControl(this.typeSoc[0], Validators.required),
+    format_juridique: new FormControl(''),
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    WhatsApp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    indicatif_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+    WhatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
     number_TVA: new FormControl(''),
     SIREN: new FormControl('', [Validators.pattern('[0-9]+')]),
@@ -87,6 +87,16 @@ export class PartenaireInscriptionComponent implements OnInit {
     statut: new FormControl("", [Validators.required]),
     password: new FormControl("", [Validators.required]),
     password_confirmed: new FormControl("", [Validators.required]),
+
+    //Ajout demandé par Haithem
+    description: new FormControl(""),
+    facebook: new FormControl(""),
+    site_web: new FormControl(""),
+    ville_ent: new FormControl("", Validators.required),
+    code_postale_ent: new FormControl("", Validators.required),
+    adresse_ent: new FormControl("", Validators.required),
+    indicatif_whatsApp: new FormControl(""),
+    numero_whatsApp: new FormControl(""),
   })
 
   //Récupération des informations de la société
@@ -121,6 +131,10 @@ export class PartenaireInscriptionComponent implements OnInit {
   get statut() { return this.RegisterForm.get('statut'); }
   get password() { return this.RegisterForm.get('password'); }
   get password_confirmed() { return this.RegisterForm.get('password_confirmed'); }
+
+  get adresse_ent() { return this.RegisterForm.get('adresse_ent'); }
+  get code_postale_ent() { return this.RegisterForm.get('code_postale_ent'); }
+  get ville_ent() { return this.RegisterForm.get('ville_ent'); }
 
 
   ngOnInit(): void {
@@ -180,13 +194,16 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.RegisterForm.value.whatsApp,
         this.RegisterForm.value.indicatifPhone,
         this.RegisterForm.value.indicatifWhatsapp,
-
+        this.RegisterForm.value.site_web,
+        this.RegisterForm.value.facebook,
+        this.RegisterForm.value.description,
+        new Date()
       )
 
       let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
 
       this.PartenaireService.inscription(u, p, c).subscribe(data => {
-        this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' });
+        this.messageService.add({ severity: 'success', summary: 'Partenaire crée', detail: "Votre demande a été envoyé au responsable du service\nPour toute question merci de contacter: orientation.aa@intedgroup.com" });
       }, error => {
         console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });

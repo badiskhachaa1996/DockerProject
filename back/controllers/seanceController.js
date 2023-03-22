@@ -89,8 +89,8 @@ app.get('/getAllByMatiere/:module_id', (req, res) => {
 //Modification d'une  via son id
 app.post('/edit/:id', (req, res, next) => {
     //Trouve et met à jour une 
-    Seance.findOneAndUpdate(
-        { _id: req.params.id },
+    Seance.findByIdAndUpdate(
+        req.params.id,
         {
             ...req.body
         }, { new: true }

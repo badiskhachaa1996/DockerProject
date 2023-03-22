@@ -40,15 +40,15 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
-                                    <label For="format_juridique">Format juridique de la société : <span
-                                            style="color: red;"> * </span></label>
-                                    <p-dropdown [options]="formatJuridique" optionLabel="value"
-                                        formControlName="format_juridique"></p-dropdown>
+                                    <label For="email_partenaire">Email : <span style="color: red;"> * </span></label>
+                                    <input pInputText id="phone_partenaire" type="email"
+                                        formControlName="email_partenaire" placeholder="Adresse email de la société" />
                                     <div
-                                        *ngIf="format_juridique.invalid && (format_juridique.touched || format_juridique.dirty)">
-                                        <span style="color: red;" class="error"
-                                            *ngIf="format_juridique.errors?.required">* Le format juridique de société
-                                            est obligatoire</span>
+                                        *ngIf="(email_partenaire.invalid || emailExist) && (email_partenaire.touched || email_partenaire.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="email_partenaire.errors">*
+                                            L'email est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="emailExist">*
+                                            L'email est déjà utilisée.</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-4">
@@ -79,72 +79,53 @@
                                             téléphone doit être composé:+33 612345678.</span>
                                     </div>
                                 </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="email_partenaire">Email : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="phone_partenaire" type="email"
-                                        formControlName="email_partenaire" placeholder="Adresse email de la société" />
-                                    <div
-                                        *ngIf="(email_partenaire.invalid || emailExist) && (email_partenaire.touched || email_partenaire.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="email_partenaire.errors">*
-                                            L'email est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="emailExist">*
-                                            L'email est déjà utilisée.</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="number_TVA">TVA : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="number_TVA" type="text" formControlName="number_TVA"
-                                        placeholder="TVA de la société" />
-                                    <div *ngIf="number_TVA.invalid && (number_TVA.touched || number_TVA.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="number_TVA.errors?.required">* Le
-                                            numéro de TVA est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="number_TVA.errors?.pattern">* Le
-                                            numéro de TVA semble incorrect.</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="SIREN">SIREN : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="SIREN" type="text" formControlName="SIREN"
-                                        placeholder="SIREN de la société" />
-                                    <div *ngIf="SIREN.invalid && (SIREN.touched || SIREN.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="SIREN.errors?.required">* Le
-                                            numéro de SIREN est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="SIREN.errors?.pattern">* Le
-                                            numéro de SIREN semble incorrect.</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="SIRET">SIRET : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="SIRET" type="text" formControlName="SIRET"
-                                        placeholder="SIRET de la société" />
-                                    <div *ngIf="SIRET.invalid && (SIRET.touched || SIRET.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="SIRET.errors?.required">* Le
-                                            numéro de SIRET est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="SIRET.errors?.pattern">* Le
-                                            numéro de SIRET semble incorrect.</span>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="APE">Code APE : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="APE" type="text" formControlName="APE"
-                                        placeholder="Code APE de la société" />
-                                    <div *ngIf="APE.invalid && (APE.touched || APE.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="APE.errors?.required">* Le code
-                                            APE est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="APE.errors?.pattern">* Le code
-                                            APE semble incorrect.</span>
-                                    </div>
-                                </div>
                                 <div class="field col-12 md:col-12">
-                                    <label For="Services">Services proposés : <span style="color: red;"> *
+                                    <label For="Services">Secteur d'activité : <span style="color: red;"> *
                                         </span></label>
                                     <textarea pInputTextarea type="text" formControlName="Services"
                                         placeholder="Hébérgement des étudiants, Recherche d'emploi pour étudiant"></textarea>
                                     <div *ngIf="Services.invalid && (Services.touched || Services.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="Services.errors?.required">* Les
-                                            services proposés est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="Services.errors?.pattern">* Les
-                                            services proposés semble incorrect.</span>
+                                        <span style="color: red;" class="error" *ngIf="Services.errors?.required">*
+                                            Secteur d'activité est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="Services.errors?.pattern">*
+                                            Secteur d'activité semble incorrect.</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="adresse_ss">Adresse du siège social <span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent"
+                                        placeholder="Numero et Nom de la rue" />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label For="postal_ss">Code postal <span style="color: red;"> * </span></label>
+                                    <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent"
+                                        placeholder="75001" />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label For="ville_ss">Ville <span style="color: red;"> * </span></label>
+                                    <input pInputText id="ville_ss" type="text" formControlName="ville_ent"
+                                        placeholder="Paris" />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Site Web</label>
+                                    <input pInputText type="text" formControlName="site_web"
+                                        placeholder="https://example.com/" />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Facebook</label>
+                                    <input pInputText type="text" formControlName="facebook"
+                                        placeholder="https://example.com/" />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="format_juridique">Format juridique de la société :</label>
+                                    <p-dropdown [options]="formatJuridique" placeholder="Choissisez le format juridique"
+                                        formControlName="format_juridique"></p-dropdown>
+                                    <div
+                                        *ngIf="format_juridique.invalid && (format_juridique.touched || format_juridique.dirty)">
+                                        <span style="color: red;" class="error"
+                                            *ngIf="format_juridique.errors?.required">* Le format juridique de société
+                                            est obligatoire</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
@@ -158,12 +139,60 @@
                                             d'activités sont incorrect.</span>
                                     </div>
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="number_TVA">TVA : </label>
+                                    <input pInputText id="number_TVA" type="text" formControlName="number_TVA"
+                                        placeholder="TVA de la société" />
+                                    <div *ngIf="number_TVA.invalid && (number_TVA.touched || number_TVA.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="number_TVA.errors?.required">* Le
+                                            numéro de TVA est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="number_TVA.errors?.pattern">* Le
+                                            numéro de TVA semble incorrect.</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="SIREN">SIREN : </label>
+                                    <input pInputText id="SIREN" type="text" formControlName="SIREN"
+                                        placeholder="SIREN de la société" />
+                                    <div *ngIf="SIREN.invalid && (SIREN.touched || SIREN.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="SIREN.errors?.required">* Le
+                                            numéro de SIREN est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="SIREN.errors?.pattern">* Le
+                                            numéro de SIREN semble incorrect.</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="SIRET">SIRET :</label>
+                                    <input pInputText id="SIRET" type="text" formControlName="SIRET"
+                                        placeholder="SIRET de la société" />
+                                    <div *ngIf="SIRET.invalid && (SIRET.touched || SIRET.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="SIRET.errors?.required">* Le
+                                            numéro de SIRET est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="SIRET.errors?.pattern">* Le
+                                            numéro de SIRET semble incorrect.</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="APE">Code APE :</label>
+                                    <input pInputText id="APE" type="text" formControlName="APE"
+                                        placeholder="Code APE de la société" />
+                                    <div *ngIf="APE.invalid && (APE.touched || APE.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="APE.errors?.required">* Le code
+                                            APE est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="APE.errors?.pattern">* Le code
+                                            APE semble incorrect.</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12">
+                                    <label>Description de l'entreprise</label>
+                                    <textarea pInputTextarea formControlName="description" placeholder=""></textarea>
+                                </div>
                             </div>
                         </div>
                         <div style="float: right;">
                             <button pButton type="button" label="Continuer" [disabled]="nomSoc.invalid || type.invalid || format_juridique.invalid || indicatifPhone.invalid || phone_partenaire.invalid
                             || email_partenaire.invalid|| number_TVA.invalid || SIREN.invalid || SIRET.invalid || APE.invalid
-                            || Services.invalid || Pays.invalid" (click)="changeEtatForm()"></button>
+                            || Services.invalid || Pays.invalid || ville_ent.invalid || code_postale_ent.invalid || adresse_ent.invalid" (click)="changeEtatForm()"></button>
                         </div>
                     </p-fieldset>
                 </div>
@@ -200,14 +229,17 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
-                                    <label For="indicatifPhoneR">Indicatif : <span style="color: red;"> * </span></label>
+                                    <label For="indicatifPhoneR">Indicatif : <span style="color: red;"> *
+                                        </span></label>
                                     <input pInputText id="indicatifPhoneR" type="text" formControlName="indicatifPhoneR"
                                         placeholder="Indicatif du numéro téléphone de la société" />
                                     <div
                                         *ngIf="indicatifPhoneR.invalid && (indicatifPhoneR.touched || indicatifPhoneR.dirty)">
                                         <span style="color: red;" class="error"
-                                            *ngIf="indicatifPhoneR.errors?.required">* L'indicatif est obligatoire</span>
-                                        <span style="color: red;" class="error" *ngIf="indicatifPhoneR.errors?.pattern">*
+                                            *ngIf="indicatifPhoneR.errors?.required">* L'indicatif est
+                                            obligatoire</span>
+                                        <span style="color: red;" class="error"
+                                            *ngIf="indicatifPhoneR.errors?.pattern">*
                                             Seul les chiffres sont acceptés</span>
                                     </div>
                                 </div>
@@ -236,8 +268,8 @@
                                         <span style="color: red;" class="error"
                                             *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">* Le numéro
                                             WhatsApp doit être composé: 0612345678.</span>
-                                            <span style="color: red;" class="error" *ngIf="whatsApp.errors?.pattern">* Seul
-                                                les chiffres sont acceptés</span>    
+                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.pattern">* Seul
+                                            les chiffres sont acceptés</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
@@ -407,8 +439,8 @@
                             </div>
                             <div class="col-12 flex justify-content-center flex-wrap card-container">
                                 <p>
-                                    Vous pouvez des à présent vous connecter avec votre adresse email et le mot de passe
-                                    que vous venez d'entrer précédemment.
+                                    Votre demande a été envoyé au responsable du service Partenaire.
+                                    Pour toute question merci de contacter: orientation.aa@intedgroup.com
                                 </p>
                             </div>
                             <div class="col-12 flex justify-content-center flex-wrap card-container">
