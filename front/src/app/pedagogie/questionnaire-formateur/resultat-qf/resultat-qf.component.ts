@@ -48,17 +48,17 @@ export class ResultatQfComponent implements OnInit {
 
   updateMoyenne(data) {
     this.moyenne = {
-      eleve: Math.trunc(((data.reduce((total, next) => total + next.eleve, 0) / data.length) * 100) / 5),
-      pedagogie: Math.trunc(((data.reduce((total, next) => total + next.pedagogie, 0) / data.length) * 100) / 5),
-      direction: Math.trunc(((data.reduce((total, next) => total + next.direction, 0) / data.length) * 100) / 5),
-      mesure_accueil: Math.trunc(((data.reduce((total, next) => total + next.mesure_accueil, 0) / data.length) * 100) / 5),
-      salle_visio: Math.trunc(((data.reduce((total, next) => total + next.salle_visio, 0) / data.length) * 100) / 5),
-      disposition: Math.trunc(((data.reduce((total, next) => total + next.disposition, 0) / data.length) * 100) / 5),
-      satisfait_locaux: Math.trunc(((data.reduce((total, next) => total + next.satisfait_locaux, 0) / data.length) * 100) / 5),
-      satisfait_site: Math.trunc(((data.reduce((total, next) => total + next.satisfait_site, 0) / data.length) * 100) / 5),
-      satisfait_global: Math.trunc(((data.reduce((total, next) => total + next.satisfait_global, 0) / data.length) * 100) / 5),
-      satisfait_rythme: Math.trunc(((data.reduce((total, next) => total + next.satisfait_rythme, 0) / data.length) * 100) / 5),
-      tutorat: Math.trunc((data.reduce((total, next) => total + (next.tutorat == "Oui" ? 1 : 0), 0) / data.length) * 100),
+      eleve: Math.trunc(((data.reduce((total, next) => total + next?.eleve, 0) / data.length) * 100) / 5),
+      pedagogie: Math.trunc(((data.reduce((total, next) => total + next?.pedagogie, 0) / data.length) * 100) / 5),
+      direction: Math.trunc(((data.reduce((total, next) => total + next?.direction, 0) / data.length) * 100) / 5),
+      mesure_accueil: Math.trunc(((data.reduce((total, next) => total + next?.mesure_accueil, 0) / data.length) * 100) / 5),
+      salle_visio: Math.trunc(((data.reduce((total, next) => total + next?.salle_visio, 0) / data.length) * 100) / 5),
+      disposition: Math.trunc(((data.reduce((total, next) => total + next?.disposition, 0) / data.length) * 100) / 5),
+      satisfait_locaux: Math.trunc(((data.reduce((total, next) => total + next?.satisfait_locaux, 0) / data.length) * 100) / 5),
+      satisfait_site: Math.trunc(((data.reduce((total, next) => total + next?.satisfait_site, 0) / data.length) * 100) / 5),
+      satisfait_global: Math.trunc(((data.reduce((total, next) => total + next?.satisfait_global, 0) / data.length) * 100) / 5),
+      satisfait_rythme: Math.trunc(((data.reduce((total, next) => total + next?.satisfait_rythme, 0) / data.length) * 100) / 5),
+      tutorat: Math.trunc((data.reduce((total, next) => total + (next?.tutorat == "Oui" ? 1 : 0), 0) / data.length) * 100),
     }
   }
 
