@@ -159,7 +159,7 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.RegisterForm.value.phone_partenaire,
         this.RegisterForm.value.email_partenaire,
         this.RegisterForm.value.email_partenaire,
-        this.RegisterForm.value.password,//TODO
+        this.generatePassword(),//TODO
         "Agent",
         true,
         null,
@@ -240,6 +240,10 @@ export class PartenaireInscriptionComponent implements OnInit {
   passwordCorrect() {
     return this.RegisterForm.value.password == this.RegisterForm.value.password_confirmed
   };
+
+  generatePassword(){
+    return "TESTWIP"
+  }
 
   redirectLogin() {
     this.router.navigate(["/login"])
