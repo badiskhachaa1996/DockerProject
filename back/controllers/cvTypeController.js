@@ -83,7 +83,7 @@ app.get("/get-cv", (req, res) => {
 
 
 // recuperation d'un cv par id du user
-app.get("/get-cv-by-user_id", (req, res) => {
+app.get("/get-cv-by-user_id/:id", (req, res) => {
     CvType.findOne({ user_id: req.params.id })?.populate('user_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
