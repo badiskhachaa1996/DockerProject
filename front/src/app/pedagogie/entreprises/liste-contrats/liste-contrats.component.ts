@@ -144,6 +144,14 @@ export class ListeContratsComponent implements OnInit {
   showFormAddAccordPriseEnCharge: boolean = false;
   doc: any;
 
+  // partie dédié à la gestion de l'affichage par filtre par commercial
+  listeContratsFilteredByCommercial: ContratAlternance[] = [];
+  commercialFiltered: User;
+  showFilterByCommercial: boolean = false;
+  // partie dédié à la gestion de l'affichage par filtre par commercial
+  listeContratsFilteredByCampus: ContratAlternance[] = [];
+  campusFiltered: User;
+  showFilterByCampus: boolean = false;
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
@@ -720,5 +728,40 @@ export class ListeContratsComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthodes pour compter le nombre de contrats filtrés par commercial
+  onFilterByCommercial(event: any): void 
+  {
+    // on vide le tableau avant de le remplir
+    this.listeContratsFilteredByCommercial = [];
+    // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
+    this.ListeContrats.forEach((contrat) => {
+      let {code_commercial}: any = contrat; 
+      this.commercialFiltered = code_commercial;
+      if(code_commercial._id == event.value)
+      {
+        this.listeContratsFilteredByCommercial.push(contrat);
+      }
+    });
+    this.showFilterByCommercial = true;
+  }
+
+  // méthodes pour compter le nombre de contrats filtrés par commercial
+  onFilterByCampus(event: any): void 
+  {
+    console.log(event)
+    // on vide le tableau avant de le remplir
+    this.listeContratsFilteredByCampus = [];
+    // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
+    this.ListeContrats.forEach((contrat) => {
+      let {code_commercial}: any = contrat; 
+      this.campusFiltered = code_commercial;
+      if(code_commercial._id == event.value)
+      {
+        this.listeContratsFilteredByCampus.push(contrat);
+      }
+    });
+    this.showFilterByCampus = true;
   }
 }
