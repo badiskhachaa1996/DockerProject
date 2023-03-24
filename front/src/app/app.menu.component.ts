@@ -459,28 +459,24 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing', icon: 'pi pi-ticket',
+                                    label: 'Prospects',
                                     items: [
-                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
-                                    label: 'Partenaires',
+                                    label: 'Collaborateurs',
                                     items: [
-                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
-                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                        //{ label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur'] },
+                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                     ]
                                 },
-                                {
-                                    label: 'SkillsNet',
-                                    items: [
-                                        { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
-                                        { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                        { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
-                                    ]
-                                },
+
+                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
                             ];
                         }
 
@@ -494,29 +490,24 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing', icon: 'pi pi-ticket',
+                                    label: 'Prospects',
                                     items: [
-                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
-                                    label: 'Partenaires',
+                                    label: 'Collaborateurs',
                                     items: [
-                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
-                                        { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
-                                        //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                        { label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur', cData.partenaire_id] },
+                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                     ]
                                 },
-                                {
-                                    label: 'SkillsNet',
-                                    items: [
-                                        { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
-                                        { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                        { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
-                                    ]
-                                },
+
+                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
                             ];
                         }
                         if (this.isConseiller) {

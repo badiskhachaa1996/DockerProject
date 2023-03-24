@@ -15,7 +15,7 @@ import { PartenaireService } from '../../services/partenaire.service';
   styleUrls: ['./partenaire-inscription.component.scss']
 })
 export class PartenaireInscriptionComponent implements OnInit {
-
+  paysList = environment.pays;
   etatForm = 1;
   nationList = environment.nationalites;
   fr = environment.fr;
@@ -56,85 +56,47 @@ export class PartenaireInscriptionComponent implements OnInit {
     //Informations de la société
     nomSoc: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     type: new FormControl(this.typeSoc[0], Validators.required),
-    format_juridique: new FormControl(''),
+    email_partenaire: new FormControl('', [Validators.required, Validators.email]),
+
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    indicatif_whatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
-    WhatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
-    email_partenaire: new FormControl('', [Validators.required, Validators.email]),
-    number_TVA: new FormControl(''),
-    SIREN: new FormControl('', [Validators.pattern('[0-9]+')]),
-    SIRET: new FormControl('', [Validators.pattern('[0-9]+')]),
-    APE: new FormControl(''),
     Services: new FormControl('', [Validators.required]),
-    Pays: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-
-    //Informations du représentant
-    civilite: new FormControl(environment.civilite[0], [Validators.required]),
-    lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    indicatifPhoneR: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    whatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    date_naissance: new FormControl(""),
-    nationalite: new FormControl(this.nationList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
-    numero_adresse: new FormControl("", [Validators.required]),
-    rue_adresse: new FormControl("", [Validators.required]),
-    postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
-    ville_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-    pays_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-    statut: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required]),
-    password_confirmed: new FormControl("", [Validators.required]),
-
-    //Ajout demandé par Haithem
-    description: new FormControl(""),
-    facebook: new FormControl(""),
-    site_web: new FormControl(""),
     ville_ent: new FormControl("", Validators.required),
     code_postale_ent: new FormControl("", Validators.required),
     adresse_ent: new FormControl("", Validators.required),
-    indicatif_whatsApp: new FormControl(""),
-    numero_whatsApp: new FormControl(""),
+    facebook: new FormControl(""),
+    site_web: new FormControl(""),
+    Pays: new FormControl([], [Validators.required]),
+    civilite: new FormControl(environment.civilite[0], [Validators.required]),
+    lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    description: new FormControl(""),
+    indicatifWhatsapp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+    whatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
   })
 
   //Récupération des informations de la société
   get nomSoc() { return this.RegisterForm.get('nomSoc'); }
   get type() { return this.RegisterForm.get('type'); }
-  get format_juridique() { return this.RegisterForm.get('format_juridique'); }
+  get email_partenaire() { return this.RegisterForm.get('email_partenaire'); }
   get indicatifPhone() { return this.RegisterForm.get('indicatifPhone'); }
   get phone_partenaire() { return this.RegisterForm.get('phone_partenaire'); }
-  get email_partenaire() { return this.RegisterForm.get('email_partenaire'); }
-  get number_TVA() { return this.RegisterForm.get('number_TVA'); }
-  get SIREN() { return this.RegisterForm.get('SIREN'); }
-  get SIRET() { return this.RegisterForm.get('SIRET'); }
-  get APE() { return this.RegisterForm.get('APE'); }
   get Services() { return this.RegisterForm.get('Services'); }
+  get adresse_ent() { return this.RegisterForm.get('adresse_ent'); }
+  get code_postale_ent() { return this.RegisterForm.get('code_postale_ent'); }
+  get ville_ent() { return this.RegisterForm.get('ville_ent'); }
+
+
   get Pays() { return this.RegisterForm.get('Pays'); }
 
   //Récupération des informations du représentant
   get civilite() { return this.RegisterForm.get('civilite'); }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
-  get indicatifPhoneR() { return this.RegisterForm.get('indicatifPhoneR'); }
-  get phone() { return this.RegisterForm.get('phone'); }
-  get whatsApp() { return this.RegisterForm.get('whatsApp'); }
-  get email() { return this.RegisterForm.get('email'); }
-  get date_naissance() { return this.RegisterForm.get('date_naissance'); }
-  get nationalite() { return this.RegisterForm.get('nationalite'); }
-  get numero_adresse() { return this.RegisterForm.get('numero_adresse'); }
-  get rue_adresse() { return this.RegisterForm.get('rue_adresse'); }
-  get postal_adresse() { return this.RegisterForm.get('postal_adresse'); }
-  get ville_adresse() { return this.RegisterForm.get('ville_adresse'); }
-  get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
-  get statut() { return this.RegisterForm.get('statut'); }
-  get password() { return this.RegisterForm.get('password'); }
-  get password_confirmed() { return this.RegisterForm.get('password_confirmed'); }
 
-  get adresse_ent() { return this.RegisterForm.get('adresse_ent'); }
-  get code_postale_ent() { return this.RegisterForm.get('code_postale_ent'); }
-  get ville_ent() { return this.RegisterForm.get('ville_ent'); }
+  get whatsApp() { return this.RegisterForm.get('whatsApp'); }
+
+
 
 
   ngOnInit(): void {
@@ -150,62 +112,58 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   submitForm() {
-    if (this.passwordCorrect()) {
-      let u = new User(
-        null,
-        this.RegisterForm.value.firstname,
-        this.RegisterForm.value.lastname,
-        this.RegisterForm.value.indicatifPhone,
-        this.RegisterForm.value.phone_partenaire,
-        this.RegisterForm.value.email_partenaire,
-        this.RegisterForm.value.email_partenaire,
-        this.generatePassword(),//TODO
-        "Agent",
-        true,
-        null,
-        this.RegisterForm.value.civilite.value,
-        null,
-        null,
-        "Commercial",
-        null
-      )
+    let u = new User(
+      null,
+      this.RegisterForm.value.firstname,
+      this.RegisterForm.value.lastname,
+      this.RegisterForm.value.indicatifPhone,
+      this.RegisterForm.value.phone_partenaire,
+      this.RegisterForm.value.email_partenaire,
+      this.RegisterForm.value.email_partenaire,
+      this.generatePassword(),//TODO
+      "Agent",
+      true,
+      null,
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      "Commercial",
+      null
+    )
 
-      let p = new Partenaire(
-        null,
-        null,
-        this.generateCode(),
-        this.RegisterForm.value.nomSoc,
-        this.RegisterForm.value.phone_partenaire,
-        this.RegisterForm.value.email_partenaire,
-        this.RegisterForm.value.number_TVA,
-        this.RegisterForm.value.SIREN,
-        this.RegisterForm.value.SIRET,
-        this.RegisterForm.value.format_juridique.value,
-        this.RegisterForm.value.type.value,
-        this.RegisterForm.value.APE,
-        this.RegisterForm.value.Services,
-        this.RegisterForm.value.Pays,
-        this.RegisterForm.value.whatsApp,
-        this.RegisterForm.value.indicatifPhone,
-        this.RegisterForm.value.indicatifWhatsapp,
-        this.RegisterForm.value.site_web,
-        this.RegisterForm.value.facebook,
-        this.RegisterForm.value.description,
-        new Date()
-      )
+    let p = new Partenaire(
+      null,
+      null,
+      this.generateCode(),
+      this.RegisterForm.value.nomSoc,
+      this.RegisterForm.value.phone_partenaire,
+      this.RegisterForm.value.email_partenaire,
+      this.RegisterForm.value.number_TVA,
+      this.RegisterForm.value.SIREN,
+      this.RegisterForm.value.SIRET,
+      null,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.APE,
+      this.RegisterForm.value.Services,
+      this.RegisterForm.value.Pays.join(','),
+      this.RegisterForm.value.whatsApp,
+      this.RegisterForm.value.indicatifPhone,
+      this.RegisterForm.value.indicatifWhatsapp,
+      this.RegisterForm.value.site_web,
+      this.RegisterForm.value.facebook,
+      this.RegisterForm.value.description,
+      new Date()
+    )
 
-      let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
+    let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
 
-      this.PartenaireService.inscription(u, p, c).subscribe(data => {
-        this.messageService.add({ severity: 'success', summary: 'Partenaire crée', detail: "Votre demande a été envoyé au responsable du service\nPour toute question merci de contacter: orientation.aa@intedgroup.com" });
-      }, error => {
-        console.error(error)
-        this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
-      })
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Mot de passe incorrect', detail: "Les mots de passe ne correspondent pas" });
-    }
-
+    this.PartenaireService.inscription(u, p, c).subscribe(data => {
+      console.log(data)
+      this.messageService.add({ severity: 'success', summary: 'Partenaire crée', detail: "Votre demande a été envoyé au responsable du service\nPour toute question merci de contacter: orientation.aa@intedgroup.com" });
+    }, error => {
+      console.error(error)
+      this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
+    })
   }
 
   verifEmailInBD() {
@@ -233,16 +191,18 @@ export class PartenaireInscriptionComponent implements OnInit {
     while (n.length < 3) {
       n = "0" + n
     }
-    let pays = this.RegisterForm.value.Pays.toUpperCase().substring(0, 3)
+    let pays = this.RegisterForm.value.Pays[0].toUpperCase().substring(0, 3)
     return "EHP" + pays + n
   };
 
-  passwordCorrect() {
-    return this.RegisterForm.value.password == this.RegisterForm.value.password_confirmed
-  };
-
-  generatePassword(){
-    return "TESTWIP"
+  generatePassword() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-$&@0123456789_-$&@0123456789';
+    let result = ' ';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 8; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result
   }
 
   redirectLogin() {

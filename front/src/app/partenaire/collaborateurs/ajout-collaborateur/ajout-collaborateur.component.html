@@ -1,0 +1,45 @@
+<div class="grid">
+    <!-- Formulaire d'ajout d'un collaborateur -->
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter un collaborateur</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCommercial" (ngSubmit)="onAddCommercial()">
+                <div class="field col-12 md:col-2">
+                    <label>Civilité</label>
+                    <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label for="nom">Nom</label>
+                    <input pInputTextarea id="nom" rows="4" formControlName="lastname" />
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label for="prenom">Prénom</label>
+                    <input pInputText id="prenom" type="text" formControlName="firstname" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="phone">Numéro de téléphone</label>
+                    <input pInputText id="phone" type="tel" formControlName="phone" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="email">Email</label>
+                    <input pInputText id="email" type="email" formControlName="email" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Statut</label>
+                    <p-dropdown [options]="statutList" optionLabel="value" formControlName="statut"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="password">Mot de passe</label>
+                    <input pInputText id="password" type="password" formControlName="password" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="password_confirmed">Confirmer le mot de passe</label>
+                    <input pInputText id="password_confirmed" type="password" formControlName="password_confirmed" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter ce commercial" [disabled]="formAddCommercial.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>

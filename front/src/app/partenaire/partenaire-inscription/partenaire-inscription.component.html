@@ -79,6 +79,26 @@
                                             téléphone doit être composé:+33 612345678.</span>
                                     </div>
                                 </div>
+                                <div class="field col-12 md:col-4">
+                                    <label For="indicatifWhatsapp">Indicatif : </label>
+                                    <input pInputText id="indicatifWhatsapp" type="text"
+                                        formControlName="indicatifWhatsapp"
+                                        placeholder="Indicatif du numéro Whatsapp de la société" />
+                                </div>
+                                <div class="field col-12 md:col-8">
+                                    <label For="whatsApp">Numéro whatsapp : </label>
+                                    <input pInputText id="whatsApp" type="text" formControlName="whatsApp"
+                                        placeholder="Numéro whatsApp du réprésentant" />
+                                    <div *ngIf="whatsApp.invalid && (whatsApp.touched || whatsApp.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.required">* Le
+                                            numéro WhatsApp est obligatoire.</span>
+                                        <span style="color: red;" class="error"
+                                            *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">* Le numéro
+                                            WhatsApp doit être composé: 0612345678.</span>
+                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.pattern">* Seul
+                                            les chiffres sont acceptés</span>
+                                    </div>
+                                </div>
                                 <div class="field col-12 md:col-12">
                                     <label For="Services">Secteur d'activité : <span style="color: red;"> *
                                         </span></label>
@@ -119,8 +139,11 @@
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label For="Pays">Pays d'activité : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="Pays" type="text" formControlName="Pays"
-                                        placeholder="France, Canada, Londres,..." />
+                                    <!--<input pInputText id="Pays" type="text" formControlName="Pays"
+                                        placeholder="France, Canada, Londres,..." />-->
+                                    <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
+                                        optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                        filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
                                     <div *ngIf="Pays.invalid && (Pays.touched || Pays.dirty)">
                                         <span style="color: red;" class="error" *ngIf="Pays.errors?.required">* Les pays
                                             d'activités sont obligatoires.</span>
@@ -145,7 +168,8 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
-                                    <label For="firstname">Prénom du contact : <span style="color: red;"> * </span></label>
+                                    <label For="firstname">Prénom du contact : <span style="color: red;"> *
+                                        </span></label>
                                     <input pInputText id="firstname" type="text" formControlName="firstname"
                                         placeholder="Prénom du réprésentant" />
                                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
@@ -218,9 +242,8 @@
                             </div>
                         </div>
                         <div style="float: right;">
-                            <button pButton type="button" label="Envoyer"
-                                [disabled]="RegisterForm.invalid"
-                                (click)="submitForm;changeEtatForm()"></button>
+                            <button pButton type="button" label="Envoyer" [disabled]="RegisterForm.invalid"
+                                (click)="submitForm();changeEtatForm()"></button>
                         </div>
                     </p-fieldset>
                 </div>
@@ -264,20 +287,7 @@
                                             les chiffres sont acceptés</span>
                                     </div>
                                 </div>
-                                <div class="field col-12 md:col-6">
-                                    <label For="whatsApp">Numéro whatsapp : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="whatsApp" type="text" formControlName="whatsApp"
-                                        placeholder="Numéro whatsApp du réprésentant" />
-                                    <div *ngIf="whatsApp.invalid && (whatsApp.touched || whatsApp.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.required">* Le
-                                            numéro WhatsApp est obligatoire.</span>
-                                        <span style="color: red;" class="error"
-                                            *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">* Le numéro
-                                            WhatsApp doit être composé: 0612345678.</span>
-                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.pattern">* Seul
-                                            les chiffres sont acceptés</span>
-                                    </div>
-                                </div>
+
                                 <div class="field col-12 md:col-6">
                                     <label For="email">Email : <span style="color: red;"> * </span></label>
                                     <input pInputText id="email" type="email" formControlName="email"

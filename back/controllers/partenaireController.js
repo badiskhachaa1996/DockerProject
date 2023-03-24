@@ -24,8 +24,8 @@ let transporterEH = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'contact@eduhorizons.com',
-        pass: 'CeHs2022$',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 //création d'un nouvel étudiant
@@ -154,7 +154,7 @@ app.post("/inscription", (req, res, next) => {
 
 
                                     let mailOptions = {
-                                        from: "contact@eduhorizons.com",
+                                        from: "ims@intedgroup.com",
                                         to: ['orientation.aa@intedgroup.com'],
                                         subject: 'Acces IMS',
                                         html: htmlmail,
