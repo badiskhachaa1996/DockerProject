@@ -323,9 +323,9 @@
             <!-- end -->
 
 
-            <!-- justification d'abscence -->
+            <!-- justification d'absence -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Justifier une absence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
                 <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir mes CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
                 <h3>CRA</h3>
 
@@ -334,16 +334,16 @@
                     pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
                 </i>
 
-                <!-- Formulaire de justification d'abscence -->
-                <form style="margin-top: 5px" class="p-fluid" [formGroup]="justificationForm" (ngSubmit)="onNewAbscence()" *ngIf="showFormjustification">
+                <!-- Formulaire de justification d'absence -->
+                <form style="margin-top: 5px" class="p-fluid" [formGroup]="justificationForm" (ngSubmit)="onNewabsence()" *ngIf="showFormjustification">
                     <div class="p-formgrid grid">
                         <div class="field col-12">
                             <label>Date</label>
-                            <p-calendar formControlName="date_of_abscence" [showIcon]="true" [showButtonBar]="true" placeholder="Jour de l'abscence"></p-calendar>
+                            <p-calendar formControlName="date_of_absence" [showIcon]="true" [showButtonBar]="true" placeholder="Jour de l'absence"></p-calendar>
                         </div>
                         <div class="field col-12">
                             <label>Motif</label>
-                            <textarea pInputTextarea formControlName="motif" rows="4" placeholder="Veuillez décrire la raison de votre abscence"></textarea>
+                            <textarea pInputTextarea formControlName="motif" rows="4" placeholder="Veuillez décrire la raison de votre absence"></textarea>
                         </div>
                         <div class="field col-12">
                             <label htmlFor="motif">Précision</label>
