@@ -49,7 +49,7 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-
+  paysList = environment.pays;
   user: User;
   classe: Classe[] = [];
   paimentS1 = false
@@ -695,10 +695,10 @@ export class DashboardComponent implements OnInit {
   editInfoCommercialForm: FormGroup = new FormGroup({
     indicatifPhone: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
-    indicatifWhatsapp: new FormControl('', Validators.required),
-    WhatsApp: new FormControl('', Validators.required),
-    site_web: new FormControl('', Validators.required),
-    facebook: new FormControl('', Validators.required),
+    indicatifWhatsapp: new FormControl(''),
+    WhatsApp: new FormControl(''),
+    site_web: new FormControl(''),
+    facebook: new FormControl(''),
     Pays: new FormControl([], Validators.required),
     Services: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -712,7 +712,7 @@ export class DashboardComponent implements OnInit {
       WhatsApp: this.PartenaireInfo.WhatsApp,
       site_web: this.PartenaireInfo.site_web,
       facebook: this.PartenaireInfo.facebook,
-      Pays: this.PartenaireInfo.indicatifWhatsapp.split(','),
+      Pays: this.PartenaireInfo.Pays.split(','),
       Services: this.PartenaireInfo.Services,
       description: this.PartenaireInfo.description,
     })

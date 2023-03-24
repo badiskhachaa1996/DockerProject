@@ -109,11 +109,12 @@ app.post("/inscription", (req, res, next) => {
             code_commercial_partenaire: commercialData.code_commercial_partenaire,
             statut: commercialData.statut,
             user_id: null,
-            partenaire_id: partenaire._id,
+            partenaire_id: null,
             isAdmin: true,
             pays: partenaireData.Pays
         }
     )
+    delete partenaire._id
     //Verification de l'existence de l'Utilisateur
     User.findOne({ email: userData.email })
         .then((userFromDb) => {
@@ -127,9 +128,41 @@ app.post("/inscription", (req, res, next) => {
                             commercial.user_id = userFromDb._id;
                             partenaire.save()
                                 .then((partenaireSaved) => {
-                                    commercial.partenaire_id = partenaireSaved._id
-                                    commercial.save().then((commercialsaved) => {
-                                        res.status(200).json({ success: "Partenaire ajouté dans la BD!", data: partenaireSaved })
+                                    Partenaire.findOne({ nom: partenaireSaved.nom, email: partenaireSaved.email, code_partenaire: partenaireSaved.code_partenaire }).then(nouveauPartenaire => {
+                                        commercial.partenaire_id = nouveauPartenaire._id
+                                        console.log(newPartenaire,nouveauPartenaire, commercial.partenaire_id)
+                                        commercial.save().then((commercialsaved) => {
+        
+                                            let htmlmail =
+                                                "<p>Bonjour,</p><p>Un nouveau partenaire a été enregistré avec succès, Voici les accès à utiliser sur <a href='https://ims.intedgroup.com/#/login'>ce lien</a> en se connectant via les identifiants </p><br>" +
+                                                `<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>` +
+                                                "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
+                                                " <p>Bien cordialement.</p>" +
+                                                "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
+        
+        
+                                            let mailOptions = {
+                                                from: "ims@intedgroup.com",
+                                                to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', ''],
+                                                subject: 'Acces IMS',
+                                                html: htmlmail,
+                                                attachments: [{
+                                                    filename: 'SignatureEmailEH.png',
+                                                    path: 'assets/SignatureEmailEH.png',
+                                                    cid: 'SignatureEmailEH' //same cid value as in the html img src
+                                                }]
+                                            };
+                                            transporterEH.sendMail(mailOptions, function (error, info) {
+                                                if (error) {
+                                                    console.error(error);
+        
+                                                }
+                                            });
+        
+        
+        
+                                            res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: newPartenaire, commercial: commercialsaved })
+                                        })
                                     })
                                 })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce partenaire " + error.message }) });
@@ -142,11 +175,11 @@ app.post("/inscription", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         commercial.user_id = userCreated._id;
-                        partenaire.save()
-                            .then((newPartenaire) => {
-                                commercial.partenaire_id = newPartenaire._id
+                        partenaire.save().then(newPartenaire => {
+                            Partenaire.findOne({ nom: newPartenaire.nom, email: newPartenaire.email, code_partenaire: newPartenaire.code_partenaire }).then(nouveauPartenaire => {
+                                commercial.partenaire_id = nouveauPartenaire._id
                                 commercial.save().then((commercialsaved) => {
-                                    console.log(`<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>`,userData.password)
+
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Un nouveau partenaire a été enregistré avec succès, Voici les accès à utiliser sur <a href='https://ims.intedgroup.com/#/login'>ce lien</a> en se connectant via les identifiants </p><br>" +
                                         `<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>` +
@@ -157,7 +190,7 @@ app.post("/inscription", (req, res, next) => {
 
                                     let mailOptions = {
                                         from: "ims@intedgroup.com",
-                                        to: ['orientation.aa@intedgroup.com','h.elkadhi@intedgroup.com',''],
+                                        to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', ''],
                                         subject: 'Acces IMS',
                                         html: htmlmail,
                                         attachments: [{
@@ -171,9 +204,6 @@ app.post("/inscription", (req, res, next) => {
                                             console.error(error);
 
                                         }
-
-
-
                                     });
 
 
@@ -181,6 +211,8 @@ app.post("/inscription", (req, res, next) => {
                                     res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: newPartenaire, commercial: commercialsaved })
                                 })
                             })
+
+                        })
                             .catch((error) => {
                                 console.error(error);
                                 res.status(400).send({ error })
