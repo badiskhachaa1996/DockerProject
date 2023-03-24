@@ -269,7 +269,7 @@
     <div class="card">
         <p>Bonjour, ceci est un accès limité à notre outils de gestion [IMS]. N'hésitez pas à faire le tour du menu qui
             vous a été attribué.</p>
-        <p>Bonne visite sur IMS 😊!</p>
+        <p>Bonne visite sur IMS!</p>
     </div>
 </div>
 
@@ -278,8 +278,8 @@
     <h1 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h1>
     <h5 style="text-align: center; margin-top: -10px;">{{ today | date: 'dd MMM y' }}</h5>
-    <p *ngIf="dailyCheck?.number_of_hour > 0 && !dailyCheck.craIsValidate" style="text-align: center">
-        Vous avez passé <span style="font-weight: bolder;">{{dailyCheck.number_of_hour}}h</span> sur vos tâches de la journée, pour valider votre journée vous devez effectuer un total de 7h minimum
+    <p *ngIf="dailyCheck?.number_of_hour > 0 && !isCheckOut" style="text-align: center">
+        Vous avez passé <span style="font-weight: bolder;">{{dailyCheck.number_of_hour}}h</span> sur vos tâches de la journée, pour valider votre journée vous devez effectuer un total de <span *ngIf="user.pays_adresse == 'Tunisie'">8h</span> <span *ngIf="user.pays_adresse != 'Tunisie'">7h</span> minimum
     </p>
 
     <div class="col-12">
@@ -301,7 +301,7 @@
             <button [disabled]="isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in"
                 (click)="onCheckIn()"></button>
 
-            <button [disabled]="!isCheck || dailyCheck?.craIsValidate" pButton class="p-button-success mr-2 mb-2"
+            <button [disabled]="!isCheck || isCheckOut" pButton class="p-button-success mr-2 mb-2"
                 label="Valider mon CRA" icon="pi pi-sign-in"
                 (click)="showButtonsValidateCra = !showButtonsValidateCra; showTaskForUser = false; showFormDailyActivityDetails = false;"></button>
 
