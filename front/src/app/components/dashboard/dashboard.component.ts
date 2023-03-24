@@ -521,16 +521,24 @@ export class DashboardComponent implements OnInit {
     this.dailyCheck.statut = `En attente du checkout`;
     this.dailyCheck.isCheckable = false; 
 
-    this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    // mention Tunis
+    if(this.user.pays_adresse != 'Tunisie')
+    {
+      this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    }
+    else
+    {
+      this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    }
     
 
     // modification du dailycheck en bd
     this.inTimeService.patchCheck(this.dailyCheck)
     .then((response) => {
       this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-      this.showFormDailyActivityDetails = false;
+      // this.showFormDailyActivityDetails = false;
       this.showTaskForUser = false;
-      this.showButtonsValidateCra = false;
+      // this.showButtonsValidateCra = false;
       this.formDailyActivityDetails.reset();
       this.onIsCheck();
     })
@@ -574,7 +582,15 @@ export class DashboardComponent implements OnInit {
     // ajout de la tache au daily check
     this.dailyCheck.activity_details.push(`${numberOfHourAfterValidation}h - ${tache.percent}% • ${tache.libelle}`);
 
-    this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    // mention Tunis
+    if(this.user.pays_adresse != 'Tunisie')
+    {
+      this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    }
+    else
+    {
+      this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
+    }
 
     // envoi du projet modifié en base de données
     this.projectService.putTask(tache)
@@ -587,8 +603,8 @@ export class DashboardComponent implements OnInit {
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
             this.showFormDailyActivityDetails = false;
-            this.showTaskForUser = false;
-            this.showButtonsValidateCra = false;
+            // this.showTaskForUser = false;
+            // this.showButtonsValidateCra = false;
             this.formDailyActivityDetails.reset();
             this.onIsCheck();
           })
@@ -609,7 +625,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  // methode checkout récupère l'heure du checkout
+  // méthode checkout récupère l'heure du checkout
   onCheckOut(): void {
     this.dailyCheck.isCheckable = false;
     this.dailyCheck.craIsValidate = true;
@@ -617,6 +633,9 @@ export class DashboardComponent implements OnInit {
     this.inTimeService.patchCheckOut(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+        this.showButtonsValidateCra = false;
+        this.showFormDailyActivityDetails = false;
+        this.showTaskForUser = false;
         this.onIsCheck();
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })

@@ -8,6 +8,7 @@ const app = express();
 app.disable("x-powered-by");
 const { InTime } = require('./../models/InTime');
 const { IpAdress } = require('./../models/IpAdress')
+const { User } = require('./../models/user')
 
 
 //Methode de pointage arrivé
@@ -31,26 +32,55 @@ app.patch("/patch-check-out", (req, res, next) => {
     var nbHeureTravail = ((outDate - inDate)/1000)/3600;
 
     // let nbHeureTravail = moment(inDate).diff(outDate, 'hours'); 
-    if(nbHeureTravail >= 7 && nbHeureTravail < 9)
-    {
-        statut = 'Présent toute la journée';
-    }
-    else if(nbHeureTravail > 9)
-    {
-        statut = "Dépointage au délà de 9h de temps";
-    }
-    else if(nbHeureTravail < 7)
-    {
-        statut = "Parti avant l'heure";
-    }
-    else 
-    {
-        statut = "Inconnue";
-    }
 
-    InTime.updateOne({ _id: check._id }, { out_date: outDate, craIsValidate: true, statut: statut })
-    .then((response) => { res.status(201).json({ success: "Merci d'avoir validé votre journée", check: response }); })
-    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de valider votre CheckOut, veuillez contacter un administrateur' }); });
+    // recuperation de l'utilisateur pour voir son pays 
+    User.findOne({_id: check.user_id})
+    .then((userFromDb) => {
+        if(userFromDb.pays_adresse != 'Tunisie')
+        {
+            if(nbHeureTravail >= 7 && nbHeureTravail < 9)
+            {
+                statut = 'Présent toute la journée';
+            }
+            else if(nbHeureTravail > 9)
+            {
+                statut = "Dépointage au delà de 9h de temps";
+            }
+            else if(nbHeureTravail < 7)
+            {
+                statut = "Parti avant l'heure";
+            }
+            else 
+            {
+                statut = "Inconnue";
+            }
+        }
+        else
+        {
+            if(nbHeureTravail >= 8 && nbHeureTravail < 9)
+            {
+                statut = 'Présent toute la journée';
+            }
+            else if(nbHeureTravail > 9)
+            {
+                statut = "Dépointage au delà de 9h de temps";
+            }
+            else if(nbHeureTravail < 8)
+            {
+                statut = "Parti avant l'heure";
+            }
+            else 
+            {
+                statut = "Inconnue";
+            }
+        }
+        
+
+        InTime.updateOne({ _id: check._id }, { out_date: outDate, craIsValidate: true, statut: statut })
+        .then((response) => { res.status(201).json({ success: "Merci d'avoir validé votre journée", check: response }); })
+        .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de valider votre CheckOut, veuillez contacter un administrateur' }); });
+    })
+    .catch((error) => { console.log(error); res.status(400).json({error: "Impossible de récupérer l'utilisateur connecté"}); })
 });
 
 
