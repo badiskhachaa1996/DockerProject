@@ -54,7 +54,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   RegisterForm: FormGroup = new FormGroup({
 
     //Informations de la société
-    nomSoc: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    nomSoc: new FormControl('', [Validators.required]),
     type: new FormControl(this.typeSoc[0], Validators.required),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
 
@@ -120,7 +120,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       this.RegisterForm.value.phone_partenaire,
       this.RegisterForm.value.email_partenaire,
       this.RegisterForm.value.email_partenaire,
-      this.generatePassword(),//TODO
+      this.generatePassword(),
       "Agent",
       true,
       null,
@@ -197,7 +197,7 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   generatePassword() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-$&@0123456789_-$&@0123456789';
-    let result = ' ';
+    let result = '';
     const charactersLength = characters.length;
     for (let i = 0; i < 8; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));

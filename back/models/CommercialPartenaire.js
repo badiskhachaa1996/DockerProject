@@ -7,7 +7,9 @@ const commercialPartenaireSchema = mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
     code_commercial_partenaire: { type: String, required: false },
     statut: { type: String, required: false },
-    isAdmin: { type: Boolean, default: false }
+    isAdmin: { type: Boolean, default: false },
+    pays: { type: String },
+    whatsapp: { type: String },
 });
 
 //Création de la table puis exportation du modele partenaire

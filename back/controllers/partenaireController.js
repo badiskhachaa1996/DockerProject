@@ -109,7 +109,9 @@ app.post("/inscription", (req, res, next) => {
             code_commercial_partenaire: commercialData.code_commercial_partenaire,
             statut: commercialData.statut,
             user_id: null,
-            partenaire_id: null
+            partenaire_id: partenaire._id,
+            isAdmin: true,
+            pays: partenaireData.Pays
         }
     )
     //Verification de l'existence de l'Utilisateur
@@ -144,7 +146,7 @@ app.post("/inscription", (req, res, next) => {
                             .then((newPartenaire) => {
                                 commercial.partenaire_id = newPartenaire._id
                                 commercial.save().then((commercialsaved) => {
-
+                                    console.log(`<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>`,userData.password)
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Un nouveau partenaire a été enregistré avec succès, Voici les accès à utiliser sur <a href='https://ims.intedgroup.com/#/login'>ce lien</a> en se connectant via les identifiants </p><br>" +
                                         `<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>` +
@@ -155,7 +157,7 @@ app.post("/inscription", (req, res, next) => {
 
                                     let mailOptions = {
                                         from: "ims@intedgroup.com",
-                                        to: ['orientation.aa@intedgroup.com'],
+                                        to: ['orientation.aa@intedgroup.com','h.elkadhi@intedgroup.com',''],
                                         subject: 'Acces IMS',
                                         html: htmlmail,
                                         attachments: [{

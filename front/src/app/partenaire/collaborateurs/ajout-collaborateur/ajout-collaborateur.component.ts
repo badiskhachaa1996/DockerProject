@@ -8,6 +8,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ajout-collaborateur',
@@ -15,6 +16,7 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
   styleUrls: ['./ajout-collaborateur.component.scss']
 })
 export class AjoutCollaborateurComponent implements OnInit {
+  paysList = environment.pays;
   civiliteList = [
     { label: 'Mr', value: 'Mr' },
     { label: 'Mme', value: 'Mme' },
@@ -22,19 +24,20 @@ export class AjoutCollaborateurComponent implements OnInit {
   ];
 
   statutList = [
-    { label: 'Interne', value: 'Interne' },
-    { label: 'Interne admin', value: 'Interne admin' },
-    { label: 'Externe', value: 'Externe' }
+    { label: 'Agent', value: 'Agent' },
+    { label: 'Admin', value: 'Admin' }
   ];
   formAddCommercial: FormGroup = new FormGroup({
     civilite: new FormControl(this.civiliteList[0]),
     firstname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
     lastname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]),
     phone: new FormControl('', [Validators.required, Validators.pattern("^[0-9+]+$")]),
+    whatsapp: new FormControl('', [Validators.pattern("^[0-9+]+$")]),
     email: new FormControl('', Validators.required),
-    statut: new FormControl(this.statutList[0], Validators.required),
+    statut: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
     password_confirmed: new FormControl('', Validators.required),
+    pays: new FormControl([], Validators.required)
   });
   partenaire: Partenaire;
   commercialPartenaires: CommercialPartenaire[] = []
@@ -60,13 +63,15 @@ export class AjoutCollaborateurComponent implements OnInit {
     let phone = this.formAddCommercial.get('phone')?.value;
     let email = this.formAddCommercial.get('email')?.value;
     let password = this.formAddCommercial.get('password')?.value;
-    let statut = this.formAddCommercial.get('statut')?.value.value;
+    let statut = this.formAddCommercial.get('statut')?.value;
+    let pays = this.formAddCommercial.get('pays')?.value.join(',');
+    let whatsapp = this.formAddCommercial.get('whatsapp')?.value;
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
-    let newUser = new User(null, firstname, lastname, null, phone, email, email, password, 'Agent', null, null, civilite, null, null, null, null, null, null, null, null, null);
+    let newUser = new User(null, firstname, lastname, null, phone, email, email, password, 'Agent', null, null, civilite);
 
     //Pour la creation du nouveau commercial
-    let newCommercialPartenaire = new CommercialPartenaire(null, this.partenaire._id, null, this.generateCode(), statut);
+    let newCommercialPartenaire = new CommercialPartenaire(null, this.partenaire._id, null, this.generateCode(), statut, statut == "Admin", pays, whatsapp);
 
     this.commercialPartenaireService.create({ 'newUser': newUser, 'newCommercialPartenaire': newCommercialPartenaire }).subscribe(
       ((response) => {
