@@ -560,7 +560,7 @@ export class AppMenuComponent implements OnInit {
                                             { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
                                             { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         ]
-                                    },{ label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
+                                    }, { label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             }
                         ]
@@ -588,7 +588,7 @@ export class AppMenuComponent implements OnInit {
                                             { label: 'Dossiers traités', icon: 'pi pi-check-circle', routerLink: ['/gestion-preinscriptions-filter/traite'] },
                                             { label: 'Ajouter un dossier', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
                                         ]
-                                    },{ label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
+                                    }, { label: 'Dashboard', icon: 'pi pi-users', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             },
                             {

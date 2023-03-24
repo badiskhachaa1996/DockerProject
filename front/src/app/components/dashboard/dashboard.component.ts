@@ -39,6 +39,10 @@ import { InTime } from 'src/app/models/InTime';
 import { info } from 'console';
 import { ProjectService } from 'src/app/services/project.service';
 import { Tache } from 'src/app/models/project/Tache';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
+import { PartenaireService } from 'src/app/services/partenaire.service';
 
 
 @Component({
@@ -136,7 +140,8 @@ export class DashboardComponent implements OnInit {
   }
 
   seanceNow: Seance[] = [];
-
+  CommercialExterne: CommercialPartenaire;
+  PartenaireInfo: Partenaire
   events: any[];
 
   addLinkForm: FormGroup = new FormGroup({
@@ -246,6 +251,7 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService, private http: HttpClient,
     private inTimeService: IntimeService, private messageService: MessageService,
     private formBuilder: FormBuilder, private projectService: ProjectService,
+    private CService: CommercialPartenaireService, private PartenaireService: PartenaireService
   ) { }
 
 
@@ -311,6 +317,14 @@ export class DashboardComponent implements OnInit {
           })
         }
         this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO || this.isVisitor);
+        if (this.isCommercial) {
+          this.CService.getByUserId(this.token.id).subscribe(cData => {
+            this.CommercialExterne = cData
+            this.PartenaireService.getById(cData.partenaire_id).subscribe(pData => {
+              this.PartenaireInfo = pData
+            })
+          })
+        }
       }
     })
 
@@ -509,40 +523,37 @@ export class DashboardComponent implements OnInit {
   onValidateCraByForm() {
     const formValue = this.formDailyActivityDetails.value;
     // ajout du nombre d'heure
-    if(this.dailyCheck.number_of_hour == null)
-    {
+    if (this.dailyCheck.number_of_hour == null) {
       this.dailyCheck.number_of_hour = 0;
       this.dailyCheck.number_of_hour += formValue.number_of_hour;
     } else {
       this.dailyCheck.number_of_hour += formValue.number_of_hour;
     }
-    
+
     this.dailyCheck.activity_details.push(`${formValue.number_of_hour}h • ${formValue.task}`);
     this.dailyCheck.statut = `En attente du checkout`;
-    this.dailyCheck.isCheckable = false; 
+    this.dailyCheck.isCheckable = false;
 
     // mention Tunis
-    if(this.user.pays_adresse != 'Tunisie')
-    {
+    if (this.user.pays_adresse != 'Tunisie') {
       this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
     }
-    else
-    {
+    else {
       this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
     }
-    
+
 
     // modification du dailycheck en bd
     this.inTimeService.patchCheck(this.dailyCheck)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-      // this.showFormDailyActivityDetails = false;
-      this.showTaskForUser = false;
-      // this.showButtonsValidateCra = false;
-      this.formDailyActivityDetails.reset();
-      this.onIsCheck();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+        // this.showFormDailyActivityDetails = false;
+        this.showTaskForUser = false;
+        // this.showButtonsValidateCra = false;
+        this.formDailyActivityDetails.reset();
+        this.onIsCheck();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
 
   // toggle sur l'affichage des tâches de l'utilisateur
@@ -571,8 +582,7 @@ export class DashboardComponent implements OnInit {
     // ajout du nombre d'heure passée sur la tâche au daily check
     let numberOfHourAfterValidation = this.initialNumberOfHours - tache.number_of_hour;
 
-    if(this.dailyCheck.number_of_hour == null)
-    {
+    if (this.dailyCheck.number_of_hour == null) {
       this.dailyCheck.number_of_hour = 0;
       this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
     } else {
@@ -583,12 +593,10 @@ export class DashboardComponent implements OnInit {
     this.dailyCheck.activity_details.push(`${numberOfHourAfterValidation}h - ${tache.percent}% • ${tache.libelle}`);
 
     // mention Tunis
-    if(this.user.pays_adresse != 'Tunisie')
-    {
+    if (this.user.pays_adresse != 'Tunisie') {
       this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
     }
-    else
-    {
+    else {
       this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
     }
 
@@ -640,6 +648,79 @@ export class DashboardComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
+  clickFile() {
+    document.getElementById('selectedFile').click();
+  }
+
+  FileUploadPC(event) {
+    if (event && event.length > 0 && this.PartenaireInfo != null) {
+      const formData = new FormData();
+      formData.append('id', this.PartenaireInfo._id)
+      formData.append('file', event[0])
+      /*this.AuthService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de la photo de profil avec succès' });
+        this.AuthService.reloadImage(this.uploadUser.user_id)
+        this.uploadUser = null
+      }, (error) => {
+        console.error(error)
+      })*/
+    }
+  }
+  imageToShow: any = "../assets/images/avatar.PNG"
+  commissions: any[] = [{
+    description: "PLACEHOLDER",
+    montant: "20"
+  }]
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    /*this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+  if (data.error) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+  } else {
+    const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+    let blob: Blob = new Blob([byteArray], { type: data.documentType })
+    let reader: FileReader = new FileReader();
+    reader.addEventListener("load", () => {
+      this.imageToShow = reader.result;
+    }, false);
+    if (blob) {
+      this.imageToShow = "../assets/images/avatar.PNG"
+      reader.readAsDataURL(blob);
+    }
+  }
+
+})*/
+  }
+  editInfoCommercial = false
+  editInfoCommercialForm: FormGroup = new FormGroup({
+    indicatifPhone: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    indicatifWhatsapp: new FormControl('', Validators.required),
+    WhatsApp: new FormControl('', Validators.required),
+    site_web: new FormControl('', Validators.required),
+    facebook: new FormControl('', Validators.required),
+    Pays: new FormControl([], Validators.required),
+    Services: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+  })
+  initEditCommercialForm() {
+    this.editInfoCommercial = true
+    this.editInfoCommercialForm.setValue({
+      indicatifPhone: this.PartenaireInfo.indicatifPhone,
+      phone: this.PartenaireInfo.phone,
+      indicatifWhatsapp: this.PartenaireInfo.indicatifWhatsapp,
+      WhatsApp: this.PartenaireInfo.WhatsApp,
+      site_web: this.PartenaireInfo.site_web,
+      facebook: this.PartenaireInfo.facebook,
+      Pays: this.PartenaireInfo.indicatifWhatsapp.split(','),
+      Services: this.PartenaireInfo.Services,
+      description: this.PartenaireInfo.description,
+    })
+  }
+
+  saveEditCommercialInfo() {
+    this.editInfoCommercial = false
+  }
 
   //Méthode de test pour LW
   test() {
@@ -671,5 +752,6 @@ export class DashboardComponent implements OnInit {
     }, err => {
       console.error(err)
     })
+
   }
 }
