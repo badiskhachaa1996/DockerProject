@@ -657,20 +657,22 @@
                             <i style="padding-left: 3%;" *ngIf="isAdministration" pTooltip="Mettre à jour les paiements"
                                 tooltipPosition="bottom" class="pi pi-money-bill"
                                 (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant" aria-hidden="true"></i>
-                            <i style="padding-left: 30%;" *ngIf="this.isAdministration" (click)="disable(etudiant);scrollToTop()"
-                                pTooltip="Désactiver l'étudiant" tooltipPosition="bottom"
-                                class="pi pi-trash" aria-hidden="true"></i>
-                            <i style="padding-left: 3%;" pTooltip="Voir les matchings"
-                                class="pi pi-link" (click)="seeMatching(etudiant.user_id._id)" aria-hidden="true"></i>
-                            <a style="padding-left: 30%;" *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
+                            <i style="padding-left: 30%;" *ngIf="this.isAdministration"
+                                (click)="disable(etudiant);scrollToTop()" pTooltip="Désactiver l'étudiant"
+                                tooltipPosition="bottom" class="pi pi-trash" aria-hidden="true"></i>
+                            <i style="padding-left: 3%;" pTooltip="Voir les matchings" class="pi pi-link"
+                                (click)="seeMatching(etudiant.user_id._id)" aria-hidden="true"></i>
+                            <a style="padding-left: 30%;"
+                                *ngIf="etudiant?.lien_livret?.edit && etudiant?.lien_livret?.edit!=''"
                                 href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
-                                    tooltipPosition="bottom" class="pi pi-file-excel"
-                                    aria-hidden="true"></i></a>
-                            <a style="padding-left: 3%;" *ngIf="etudiant.lien_dossier_professionel!='' && etudiant.lien_dossier_professionel"
+                                    tooltipPosition="bottom" class="pi pi-file-excel" aria-hidden="true"></i></a>
+                            <a style="padding-left: 3%;"
+                                *ngIf="etudiant.lien_dossier_professionel && etudiant.lien_dossier_professionel!='' "
                                 href="{{etudiant.lien_dossier_professionel}}" target="_blank"><i
                                     pTooltip="Voir le dossier professionel" tooltipPosition="bottom"
                                     class="pi pi-file-excel" aria-hidden="true"></i></a>
-                            <a style="padding-left: 30%;" *ngIf="etudiant.lien_tableau_synthese!='' && etudiant.lien_tableau_synthese"
+                            <a style="padding-left: 30%;"
+                                *ngIf="etudiant.lien_tableau_synthese && etudiant.lien_tableau_synthese!='' "
                                 href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
                                     pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom"
                                     class="pi pi-file-excel" aria-hidden="true"></i></a>

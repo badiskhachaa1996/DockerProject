@@ -144,7 +144,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   }
 
 
-  changeEtatForm(val = 1) {
+  changeEtatForm(val = 2) {
     this.etatForm += val
   }
 
@@ -155,11 +155,11 @@ export class PartenaireInscriptionComponent implements OnInit {
         null,
         this.RegisterForm.value.firstname,
         this.RegisterForm.value.lastname,
-        this.RegisterForm.value.indicatifPhoneR,
-        this.RegisterForm.value.phone,
-        this.RegisterForm.value.email,
-        this.RegisterForm.value.email,
-        this.RegisterForm.value.password,
+        this.RegisterForm.value.indicatifPhone,
+        this.RegisterForm.value.phone_partenaire,
+        this.RegisterForm.value.email_partenaire,
+        this.RegisterForm.value.email_partenaire,
+        this.generatePassword(),//TODO
         "Agent",
         true,
         null,
@@ -167,13 +167,7 @@ export class PartenaireInscriptionComponent implements OnInit {
         null,
         null,
         "Commercial",
-        null,
-        this.RegisterForm.value.pays_adresse,
-        this.RegisterForm.value.ville_adresse,
-        this.RegisterForm.value.rue_adresse,
-        this.RegisterForm.value.numero_adresse,
-        this.RegisterForm.value.postal_adresse,
-        this.RegisterForm.value.nationalite,
+        null
       )
 
       let p = new Partenaire(
@@ -246,6 +240,10 @@ export class PartenaireInscriptionComponent implements OnInit {
   passwordCorrect() {
     return this.RegisterForm.value.password == this.RegisterForm.value.password_confirmed
   };
+
+  generatePassword(){
+    return "TESTWIP"
+  }
 
   redirectLogin() {
     this.router.navigate(["/login"])

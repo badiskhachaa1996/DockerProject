@@ -205,13 +205,6 @@ export class AppMenuComponent implements OnInit {
                 label: 'Partenaires',
                 items: [
                     {
-                        label: 'Gestions des collaborateurs', icon: 'pi pi-users',
-                        items: [
-                            // {label: 'Ajouter un collaborateurs', icon: 'pi pi pi-user-plus', routerLink: ['/ajout-de-collaborateur']},
-                            { label: 'Liste des collaborateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/collaborateur'] },
-                        ]
-                    },
-                    {
                         label: 'Gestions des partenaires', icon: 'pi pi-users',
                         items: [
                             { label: 'Insérer un Partenaire', icon: 'pi pi pi-user-plus', routerLink: ['/partenaireInscription'] },
@@ -270,7 +263,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'Questionnaire', icon: 'pi pi-heart',
                 items: [
                     { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
-                    { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
+                    { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] },
+                    { label: 'Questionnaire fin de formation', icon: 'pi pi-heart', routerLink: ['resultat-qff'] },
                 ]
             }
         ];
@@ -798,7 +792,8 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Questionnaire', icon: 'pi pi-heart',
                                     items: [
                                         { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] },
-                                        { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] }
+                                        { label: 'Questionnaire formateur', icon: 'pi pi-heart', routerLink: ['resultat-qf'] },
+                                        { label: 'Questionnaire fin de formation', icon: 'pi pi-heart', routerLink: ['resultat-qff'] },
                                     ]
                                 }
                             ]
