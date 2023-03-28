@@ -1018,7 +1018,99 @@ export class AppMenuComponent implements OnInit {
                 }
                 //Menu service commerciale
                 else if (response.role == 'Agent' && service_id.label == 'Commercial') {
-                // TO DO 
+                    this.items = [
+                        {
+                            label: 'Tableau de bord',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        },
+                        {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    routerLink: ['/gestion-tickets'],
+                                },
+                                {
+                                    label: 'Suivi des tickets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    routerLink: ['/suivi-ticket'],
+                                },
+                            ]
+                        },
+                        {
+                            label: 'Partenaires',
+                            icon: 'pi pi-share-alt',
+                            items: [
+                                {
+                                    label: 'Gestions des partenaires', icon: 'pi pi-users',
+                                    items: [
+                                        { 
+                                            label: 'Insérer un Partenaire', 
+                                            icon: 'pi pi pi-user-plus', 
+                                            routerLink: ['/partenaireInscription'] 
+                                        },
+                                        { 
+                                            label: 'Liste des partenaires', 
+                                            icon: 'pi pi-sort-alpha-down', 
+                                            routerLink: ['/admin/partenaire'] 
+                                        },
+                                        { 
+                                            label: 'Support Marketing', 
+                                            icon: 'pi pi-briefcase' 
+                                        },
+                                        { 
+                                            label: 'Gestion des commissions', 
+                                            icon: 'pi pi-credit-card' 
+                                        },
+                                        { 
+                                            label: 'Dashboard', 
+                                            icon: 'pi pi-chart-line' 
+                                        },
+                                    ]
+            
+                                },
+                            ]
+                        },
+                        {
+                            label: 'Skillsnet',
+                            icon: 'pi pi-star',
+                            items: [
+                                { 
+                                    label: 'Offres d\'emplois', 
+                                    icon: 'pi pi-volume-up', 
+                                    routerLink: ['/offres'] 
+                                },
+                                { 
+                                    label: 'Mes offres', 
+                                    icon: 'pi pi-user', 
+                                    routerLink: ['/mes-offres'] 
+                                },
+                                { 
+                                    label: 'Cvthèque', 
+                                    icon: 'pi pi-briefcase', 
+                                    routerLink: ['/cvtheque']
+                                },
+                                { 
+                                    label: 'Gestion des compétences', 
+                                    icon: 'pi pi-book', 
+                                    routerLink: ['/skills-management'] 
+                                },
+                                { 
+                                    label: "Gestions des externes", 
+                                    icon: 'pi pi-users', 
+                                    routerLink: ['/skillsnet/externe'] 
+                                },
+                                { 
+                                    label: "Gestions des événements", 
+                                    icon: 'pi pi-flag', 
+                                    routerLink: ['/evenements'] 
+                                }
+                            ]
+                        },
+                    ]    
                 }
             },
             error: (error: any) => {console.log(error);
