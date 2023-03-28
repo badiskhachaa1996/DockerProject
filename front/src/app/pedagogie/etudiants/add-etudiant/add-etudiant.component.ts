@@ -211,7 +211,7 @@ export class AddEtudiantComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       date_naissance: [null, Validators.required],
       pays_origine: [this.paysList[0], Validators.required],
-      nationalite: [this.nationList[0].value, Validators.required],
+      nationalite: [this.nationList[0], Validators.required],
       indicatif: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       email: ['', [Validators.email, Validators.required]],
