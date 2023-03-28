@@ -289,28 +289,23 @@ export class AddEtudiantComponent implements OnInit {
     let prenom = firstname.substring(0, 1)
     let nom = lastname.substring(0, 1)
     let y = 0
-    console.log(nom,"STEP -1")
     for (let i = 0; i < (nom.match(" ") || []).length; i++) {
       nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
       y = nom.indexOf(" ", y) + 1
     }
-    console.log(nom,"STEP 0")
     let dn = new Date(date_naissance)
     let jour = dn.getDate()
     let mois = dn.getMonth() + 1
     let year = dn.getUTCFullYear().toString().slice(-2)
     let lengUser = this.users.length
-    console.log(lengUser,"STEP 1")
     while (lengUser > 1000)
-      lengUser - 1000
-      console.log(lengUser,"STEP 2")
+      lengUser = lengUser - 1000
     let nb = (lengUser).toString()
     if (lengUser < 10)
       nb = "00" + nb
     if (9 < lengUser && lengUser < 100)
       nb = "0" + nb
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
-    console.log(r,"STEP 3")
     return r
   }
   //Methode d'ajout d'un étudiant
@@ -368,13 +363,11 @@ export class AddEtudiantComponent implements OnInit {
     let adresse_mail_tuteur = this.formAddEtudiant.get("adresse_mail_tuteur")?.value;
     let phone_tuteur = this.formAddEtudiant.get("phone_tuteur")?.value;
     let remarque_stage = this.formAddEtudiant.get("remarque_stage")?.value;
-    console.log("STEP -3")
     let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
     let valided_by_support = (email_ims != null && email_ims != '' && email_ims.length > 1)
     if (!valided_by_support)
       email_ims = email
     //Pour la création du nouvel étudiant on crée aussi un user
-    console.log("STEP 4")
     let newUser = new User(
       null,
       firstname,
@@ -464,7 +457,6 @@ export class AddEtudiantComponent implements OnInit {
       phone_tuteur,
       remarque_stage
     );
-    console.log("STEP 5")
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         console.log(response.data)
