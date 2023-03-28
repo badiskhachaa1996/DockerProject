@@ -744,8 +744,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campusChoix1() { return this.RegisterForm.get('campusChoix1'); }
   get campusChoix2() { return this.RegisterForm.get('campusChoix2'); }
   get campusChoix3() { return this.RegisterForm.get('campusChoix3'); }
-  get programme() { return this.RegisterForm.get('programme').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value.value; }
+  get programme() { return this.RegisterForm.get('programme').value; }
+  get formation() { return this.RegisterForm.get('formation').value; }
   get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
