@@ -326,7 +326,7 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
       true, false, ["2022-2023"],
-      null,null,null,null,null,null,null,null,
+      null, null, null, null, null, null, null, null,
       this.AssignForm.value.ecole,
     )
     if (etd.statut_dossier.includes("Non Inscrit") == true)

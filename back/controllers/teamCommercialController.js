@@ -13,7 +13,6 @@ app.post("/create", (req, res, next) => {
     tCommercial.save()
         .then((tSaved) => {
             tSaved.populate('owner_id').populate('team_id').populate('createur_id')
-            console.log(tSaved)
             res.status(201).send(tSaved)
         })
         .catch((error) => { res.status(400).send(error) });

@@ -68,15 +68,11 @@ export class ListPartenaireComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
 
   ngOnInit(): void {
-
     //this.getPartenaireList();
-
     let tkn = jwt_decode(localStorage.getItem("token"))
     this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
     this.updateList();
     this.onInitFormModifPartenaire()
-
-
   }
 
 

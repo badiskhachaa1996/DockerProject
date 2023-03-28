@@ -754,4 +754,8 @@ export class ExamenComponent implements OnInit {
     }
     fileReader.readAsArrayBuffer(this.file);
   }
+
+  isArr(arr){
+    return Array.isArray(arr)
+  }
 }

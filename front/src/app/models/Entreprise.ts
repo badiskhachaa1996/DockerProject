@@ -23,13 +23,13 @@ export class Entreprise {
         public postal_ec?: Number,
         public ville_ec?: string,
         public siret?: Number,
-        public code_ape_naf?: string, 
+        public code_ape_naf?: string,
         public num_tva?: string,
         public telecopie?: string,
         public OPCO?: string,
         public organisme_prevoyance?: string,
         public directeur_id?: string,
-        public commercial_id?: string,
+        public commercial_id?: string
     ) { }
 
 } 

@@ -341,7 +341,9 @@
                             </span>
                         </td>
                         <td>{{ examen.libelle }}</td>
-                        <td>{{ examen.date | date:'dd/MM/YYYY' }}</td>
+                        <td *ngIf="!isArr(examen.date)">{{ examen.date | date:'dd/MM/YYYY' }}</td>
+                        <td *ngIf="isArr(examen.date) && examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }} - {{ examen.date[1] | date:'dd/MM/YYYY' }}</td>
+                        <td *ngIf="isArr(examen.date) && !examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
                             showFormAddExamen = false;

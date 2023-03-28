@@ -157,6 +157,8 @@ import { ProspectsAlternablesComponent } from './commercial/prospects-alternable
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
+import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
+import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 
 const routes: Routes = [
     {
@@ -171,6 +173,7 @@ const routes: Routes = [
             { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
             { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
             { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
+            { path: 'ajout-collaborateur/:id', component: AjoutCollaborateurComponent, canActivate: [AuthGuardService] },
             { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ajout-annee-scolaire', component: AddAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
             { path: 'ecole', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
@@ -282,6 +285,7 @@ const routes: Routes = [
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qf', component: ResultatQfComponent, canActivate: [AuthGuardService] },
+            { path: 'resultat-qff', component: ResultatQFFComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'pv-annuel/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'pv-semestriel/:semestre/:classe_id', component: PvSemestrielComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },

@@ -178,7 +178,7 @@ app.post("/newEtudiantIMS", (req, res) => {
     }]
     let mailOptions = {
         from: 'ims@intedgroup.com',
-        to: ['m.hue@intedgroup.com', 'administration.paris@estya.com'],
+        to: ['administration.paris@estya.com'],
         subject: '[IMS] Nouveau Etudiant',
         html: htmlmail,
         attachments: attachments

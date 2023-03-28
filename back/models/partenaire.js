@@ -17,8 +17,14 @@ const sch = mongoose.Schema({
     Pays: { type: String },
     WhatsApp: { type: String },
     indicatifPhone: { type: String },
-    indicatifWhatsapp: { type: String }
-
+    indicatifWhatsapp: { type: String },
+    site_web: { type: String },
+    facebook: { type: String },
+    description: { type: String },
+    date_creation: { type: Date },
+    statut_anciennete: { type: String, default: "Ancien" },
+    contribution: { type: String },
+    etat_contrat: { type: String }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
