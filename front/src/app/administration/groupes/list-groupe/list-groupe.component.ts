@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Campus } from 'src/app/models/Campus';
 import { ExamenService } from 'src/app/services/examen.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-list-groupe',
@@ -55,6 +56,10 @@ export class ListGroupeComponent implements OnInit {
   dropdownCampus: any = [];
 
   campus: Campus[] = [];
+
+  showFormAddCalendar: boolean = false;
+  idGroupeToUpdate: string;
+  calendarFile: any;
 
   constructor(private campusService: CampusService, private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
     , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService, private ExamenService: ExamenService) { }
@@ -151,7 +156,7 @@ export class ListGroupeComponent implements OnInit {
     let campus_id = this.formUpdateClasse.get('campus_id')?.value.value;
     let abbrv = `${this.formUpdateClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle} - ${this.formUpdateClasse.get('campus_id')?.value.libelle}`;
 
-    let classe = new Classe(this.idClasseToUpdate, diplome_id, campus_id, true, abbrv, annee);
+    let classe = new Classe(this.idClasseToUpdate, diplome_id, campus_id, true, abbrv, annee, this.classeToUpdate.calendrier);
 
     this.classeService.update(classe).subscribe(
       ((response) => {
@@ -304,6 +309,47 @@ export class ListGroupeComponent implements OnInit {
       this.showLien = null
       this.formLiens.reset()
     })
+  }
+
+  // upload du calendrier
+  onSelectFile(event: any): void
+  {
+    if(event.target.files.length > 0)
+    {
+      this.calendarFile = event.target.files[0];
+    }
+  }
+
+  onAddCalendar(): void
+  {
+    let formData = new FormData();
+    formData.append('id', this.idGroupeToUpdate);
+    formData.append('file', this.calendarFile);
+    // envoi du calendrier de la formation
+    this.classeService.uploadCalendar(formData)
+    .then((response) => { 
+      this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); 
+      this.showFormAddCalendar = false;
+      // recuperation de la liste des classes
+      this.classeService.getAllPopulate().subscribe({
+        next: (response) => { this.classes = response; },
+        error: (error) => { console.log(error); },
+        complete: () => { console.log('Liste des classes récupérer'); }
+      });
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.error}); } )
+  }
+
+  // méthode de téléchargement du calendrier
+  onDownloadCalendrier(id: string): void
+  {
+    this.classeService.downloadCalendar(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
 }

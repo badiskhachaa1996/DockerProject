@@ -7,6 +7,8 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { saveAs } from 'file-saver';
+import { ClasseService } from 'src/app/services/classe.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-list-entreprise-ceo',
@@ -19,13 +21,17 @@ export class ListEntrepriseCeoComponent implements OnInit {
   entreprises: Entreprise[] = [];
   contracts: ContratAlternance[] = [];
   showContractForEnterprise: boolean = false;
+  contractToUpdate: ContratAlternance;
 
-  // entreprise selectionné
+  // entreprise sélectionnée
   entrepriseSelected: Entreprise;
+
+  formRemarque: FormGroup;
+  showFormRemarque: boolean = false;
 
   token: any;
 
-  constructor(private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService) { }
+  constructor(private router: Router, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     // decodage du token
@@ -34,10 +40,15 @@ export class ListEntrepriseCeoComponent implements OnInit {
     // recuperation de la liste des entreprises du CEO connecté
     this.entrepriseService.getEntreprisesByIdCEO(this.token.id)
     .then((response) => { this.entreprises = response; this.loading = false;})
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); });
+
+    // méthode d'initialisation du formulaire des remarques
+    this.formRemarque = this.formBuilder.group({
+      remarque: ['', Validators.required],
+    });
   }
 
-  // Methode de recuperation des alternants de l'entreprise
+  // Méthode de recuperation des alternants de l'entreprise
   onLoadContracts(entreprise: Entreprise): void
   {
     this.entrepriseSelected = entreprise;
@@ -48,7 +59,7 @@ export class ListEntrepriseCeoComponent implements OnInit {
         this.showContractForEnterprise = true; 
       },
       error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.error }); },
-      complete: () => { console.log('Liste des contrats récuperé')}
+      complete: () => { console.log('Liste des contrats récupéré')}
     });
   }
 
@@ -61,7 +72,7 @@ export class ListEntrepriseCeoComponent implements OnInit {
   // méthode de téléchargement du calendrier de la formation
   onDownloadCalendar(id: string): void
   {
-    this.entrepriseService.getCalendar(id)
+    this.classeService.downloadCalendar(id)
     .then((response: Blob) => {
       let downloadUrl = window.URL.createObjectURL(response);
       saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
@@ -116,6 +127,38 @@ export class ListEntrepriseCeoComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la rélance
+  onDownloadRelance(id: string): void
+  {
+    this.entrepriseService.getRelance(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `relance.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Relance", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Relance", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de pre-remplissage du formulaire des remarques
+  onPatchValueRemarque(): void
+  {
+    this.formRemarque.patchValue({ remarque: this.contractToUpdate.remarque });
+  }
+
+  // méthode de mise à jur de la remarque d'un contrat d'alternance
+  onUpdateRemarque(): void
+  {
+    const remarque = this.formRemarque.value.remarque;
+    
+    this.entrepriseService.patchRemarque(this.contractToUpdate._id, remarque)
+    .then((response) => { 
+      this.messageService.add({ severity: 'success', summary: 'Remarques', detail: "Remarque mis à jour'" }); 
+      this.formRemarque.reset();
+      this.showFormRemarque = false;
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Remarques', detail: "Impossible de prendre en compte cette remarque" }); });
   }
 
 }

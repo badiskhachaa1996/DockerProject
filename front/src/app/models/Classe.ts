@@ -8,7 +8,8 @@ export class Classe {
     public abbrv?: string,
     public annee?: string,
     public lien_programme?: string,
-    public lien_calendrier?: string
+    public lien_calendrier?: string,
+    public calendrier?: string, // document pdf lié au contrat
   ) { }
 
 }

@@ -4,6 +4,10 @@ app.disable("x-powered-by");
 const { Classe } = require("./../models/classe");
 const { Diplome } = require("./../models/diplome");
 const { Seance } = require('./../models/seance')
+
+const multer = require('multer');
+const fs = require("fs");
+
 //Création d'une nouveau classe 
 app.post("/create", (req, res) => {
     //Sauvegarde d'une classe
@@ -139,5 +143,47 @@ app.get('/getAllByFormateurID/:formateur_id', (req, res) => {
         })
         res.status(200).send(r)
     })
-})
+});
+
+// upload du calendrier de la formation
+const calendarUpload = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const link = `storage/groupe/${id}`;
+        if(!fs.existsSync(link))
+        {
+            fs.mkdirSync(link, {recursive: true});
+        }
+        callBack(null, link);
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `calendrier.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadCalendar = multer({storage: calendarUpload});
+
+app.post("/upload-calendar", uploadCalendar.single('file'), (req, res) => {
+    const file = req.file;
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        Classe.findOneAndUpdate({ _id: req.body.id }, { calendrier: 'calendrier.pdf' })
+        .then((response) => { res.status(201).json({successMsg: 'Calendrier Téléversé, groupe mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le groupe'); });
+    }
+});
+
+// méthode de téléchargement du document de relance pour un contrat d'alternance
+app.get("/download-calendar/:idGroupe", (req, res) => {
+    res.download(`./storage/groupe/${req.params.idGroupe}/calendrier.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
 module.exports = app;

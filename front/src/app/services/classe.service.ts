@@ -74,4 +74,31 @@ export class ClasseService {
     return this.http.get<Classe[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  // upload du calendrier de la formation
+  uploadCalendar(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}upload-calendar`;
+    
+    return new Promise<any>((resolve, reject) => {
+      this.http.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Calendrier mis à jour'); }
+      });
+    });
+  }
+
+  // méthode de téléchargement de la relance
+  downloadCalendar(idGroupe: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-calendar/${idGroupe}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.http.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Calendrier téléchargé') }
+      });
+    });
+  }
 }

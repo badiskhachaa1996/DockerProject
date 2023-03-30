@@ -28,6 +28,9 @@ const contrat_alternanceSch = mongoose.Schema({
     convention_formation: { type: String, required: false },
     resiliation_contrat: { type: String, required: false },
     accord_prise_charge: { type: String, required: false },
+    relance: { type: String, required: false },
+    last_status_change_date: { type: Date, required: false },
+    remarque: { type: String, required: false },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema
