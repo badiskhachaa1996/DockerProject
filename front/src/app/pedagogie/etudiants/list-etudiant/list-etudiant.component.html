@@ -571,22 +571,20 @@
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
 
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
+                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals'); onFilterByCampus($event); onTrackCampusValue($event);"
+                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Campus"></p-dropdown>
+
+                    <p-dropdown [options]="searchClass" placeholder="Choisir un groupe" filter="true"
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','equals'); onFilterbyGroup($event);"
+                        [style]="{'margin':'5px'}"></p-dropdown>
+
                     <p-dropdown [style]="{'margin':'5px'}" [options]="typeEtudiant" filter="true"
                         (onChange)="dt1.filter($event.value, 'isAlternant', 'equals'); onFilterByType($event)"
                         emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type"></p-dropdown>
-
                     <!--<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
                         (onChange)="dt1.filter($event.value, 'classe_id._id','in');" [style]="{'margin':'5px'}">
                     </p-multiSelect>-->
-                    <p-dropdown [options]="searchClass" placeholder="Choisir un groupe" filter="true"
-                        (onChange)="dt1.filter($event.value, 'classe_id._id','equals'); onFilterbyGroup($event);"
-                        [style]="{'margin':'5px'}">
-                    </p-dropdown>
-
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
-                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals'); onFilterByCampus($event);"
-                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Campus"></p-dropdown>
-
                     <p-dropdown [style]="{'margin':'5px'}" [options]="filterAnneeScolaire" filter="true"
                         (onChange)="dt1.filter($event.value, 'annee_scolaire', 'contains'); onFilterByAS($event)"
                         emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Annee Scolaire"></p-dropdown>
