@@ -117,6 +117,18 @@
 		</div>
 	</div>
 
+	<!-- upload du calendrier de la formation -->
+    <div class="col-12" *ngIf="showFormAddCalendar">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddCalendar = false;"></i>
+            <h4>Ajouter le calendrier de la formation</h4>
+            <div class="field col-12">
+                <input pInputFile type="file" (change)="onSelectFile($event)" accept="application/pdf" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+            </div>
+            <button pButton label="Envoyer" (click)="onAddCalendar()"></button>
+        </div>
+    </div>
+
 	<div class="col-12">
 		<div class="card">
 			<div style="float: right;">
@@ -166,6 +178,7 @@
 						<th pSortableColumn="nb_etudiant"> Nombres d'étudiants <p-sortIcon field="nb_etudiant">
 							</p-sortIcon>
 						</th>
+						<th>Calendrier du groupe</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Action
@@ -190,6 +203,14 @@
 						<td *ngIf='!numberClasse[rowData._id]'>
 							0
 						</td>
+						<td *ngIf='rowData.calendrier != null'>
+							<i class="pi pi-file" title="Télécharger le calendrier"
+                                style="font-size: 2em; color: blue; cursor: pointer;"
+                                (click)="onDownloadCalendrier(rowData._id)"></i>
+						</td>
+						<td *ngIf='rowData.calendrier == null'>
+							-- Aucun fichier --
+						</td>
 						<td style="min-width: 10rem;">
 
 							<i aria-hidden="true" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
@@ -205,6 +226,9 @@
 								(click)="initPV(rowData)" tooltipPosition="bottom" aria-hidden="true"></i>
 							<i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom" class="pi pi-file"
 								(click)="onInitLien(rowData);scrollToTop()" aria-hidden="true"></i>
+							<i pTooltip="Ajouter le calendrier de la formation en pdf" tooltipPosition="bottom" class="pi pi-calendar"
+									(click)="idGroupeToUpdate = rowData._id; showFormAddCalendar = true;" style="margin-left: 2%;" style="color: blue;"
+									aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>

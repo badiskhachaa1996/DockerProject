@@ -1,5 +1,19 @@
 <p-toast></p-toast>
 <div class="grid">
+    <!-- Form used to add or update remarks -->
+    <div class="col-12" *ngIf="showFormRemarque">
+        <i class="pi pi-times-circle" style="float: right; font-size: 20px; color: red; cursor: pointer"
+           (click)="showFormRemarque = false"></i>
+
+           <form [formGroup]="formRemarque" class="p-fluid p-formgrid" (ngSubmit)="onUpdateRemarque()">
+                <div class="field">
+                    <h3 for="remarque">Vos remarques sur l'apprentis</h3>
+                    <textarea pInputTextarea rows="6" formControlName="remarque" id="remarque" required placeholder="Mettez à jour vos remarque sur l'apprentis"></textarea>
+                </div>
+                <button pButton type="submit" label="Envoyer"></button>
+           </form>
+    </div>
+
 	<!-- To see all contracts for an ceo -->
 	<div class="col-12">
 		<div class="card">
@@ -23,8 +37,8 @@
                     <tr>
                         <th style="width: 8rem;"></th>
                         <th>Prenom &amp; Nom</th>
-                        <th>Poste</th>
                         <th>Statut</th>
+                        <th>Dernière date de changement du statut</th>
                         <th>Formation</th>
                         <th>Ecole</th>
                         <th>Dates du contrat</th>
@@ -42,7 +56,6 @@
                             {{ contrat.alternant_id?.user_id?.firstname }}
                             {{ contrat.alternant_id?.user_id?.lastname }}
                         </td>
-                        <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
                         <td>
                             <p-tag *ngIf="contrat.statut==null" icon="pi pi-times" severity="danger"
                                 [value]="'Aucun status définit'">
@@ -79,12 +92,15 @@
                             </p-tag>
                         </td>
 
+                        <td>{{ contrat.last_status_change_date | date: 'dd MMMM YYYY' }}</td>
                         <td>{{ contrat.formation.titre_long }}</td>
                         <td>{{ contrat.ecole?.libelle }}</td>
                         <td>{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
                         </td>
                         <td>
+                            <i class="pi pi-list" style="margin:2px; color: blue; cursor: pointer;" title="Ajouter une remarque" (click)="contractToUpdate = contrat; onPatchValueRemarque(); showFormRemarque = true;">
+                            </i>
                             <!-- <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
                                 (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red; cursor: pointer;"></i> -->
                         </td>
@@ -99,8 +115,8 @@
                                     <ng-template pTemplate="header">
 										<tr>
 											<th>Horaire</th>
-											<th>Classification</th>
 											<th>Niveau de la formation</th>
+                                            <th>Groupe</th>
 											<th>Coeff hierachique</th>
 											<th>Commercial</th>
 											<th>Tuteur</th>
@@ -110,8 +126,8 @@
 									<ng-template pTemplate="emptymessage">
 										<tr>
 											<td>{{contrat.horaire}}</td>
-											<td>{{contrat.classification}}</td>
 											<td>{{contrat.niveau_formation}}</td>
+                                            <td>{{ contrat.alternant_id.classe_id?.abbrv }}</td>
 											<td>{{contrat.coeff_hierachique}}</td>
 											<td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
 											
@@ -133,6 +149,23 @@
 									</ng-template>
             					</p-table>
         					</div>
+
+                            <!-- Remarques faites par l'employeur -->
+                            <div class="p-2">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Remarques faites par l'employeur</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{contrat.remarque}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
                             <!-- Documents liés au contrat -->
                             <div class="p-2">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
@@ -141,30 +174,40 @@
                                             <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
                                             <th>Cerfa</th> <!-- *lié directement au contrat -->
                                             <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                                            <th>Document de relance</th> <!-- *lié directement au contrat -->
                                             <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td *ngIf="contrat.formation.calendrier != null">
-                                                <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.formation?._id)"></i>
+                                            <td *ngIf="contrat.alternant_id.classe_id?.calendrier != null">
+                                                <i class="pi pi-calendar" title="Télécharger le calendrier" style="font-size: 2em; color: green; cursor: pointer;" (click)="onDownloadCalendar(contrat.alternant_id.classe_id?._id)"></i>
                                             </td>
-                                            <td *ngIf="contrat.formation.calendrier == null">
-                                                -- Aucun fichier --
+                                            <td *ngIf="contrat.alternant_id.classe_id?.calendrier == null">
+                                                - aucun fichier -
                                             </td>
 
                                             <td *ngIf="contrat.cerfa != null">
                                                 <i class="pi pi-file" title="Télécharger le cerfa" style="font-size: 2em; color: blue; cursor: pointer;" (click)="onDownloadCerfa(contrat._id)"></i>
                                             </td>
                                             <td *ngIf="contrat.cerfa == null">
-                                                -- Aucun fichier --
+                                                - aucun fichier -
                                             </td>
 
                                             <td *ngIf="contrat.convention_formation != null">
                                                 <i class="pi pi-file" title="Télécharger la convention" style="font-size: 2em; color: orangered; cursor: pointer;" (click)="onDownloadConvention(contrat._id)"></i>
                                             </td>
                                             <td *ngIf="contrat.convention_formation == null">
-                                                -- Aucun fichier --
+                                                - aucun fichier -
+                                            </td>
+
+                                            <td *ngIf="contrat.relance != null">
+                                                <i class="pi pi-file" title="Télécharger le document de relance"
+                                                    style="font-size: 2em; color: rgb(147, 145, 5); cursor: pointer;"
+                                                    (click)="onDownloadRelance(contrat._id)"></i>
+                                            </td>
+                                            <td *ngIf="contrat.relance == null" style="color: red; font-weight: bold;">
+                                                - aucun fichier -
                                             </td>
 
                                             <td *ngIf="contrat.resiliation_contrat != null">

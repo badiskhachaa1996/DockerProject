@@ -50,6 +50,7 @@ export class ListEtudiantComponent implements OnInit {
 
   /* partie dedié aux filtres */
   filtedTable: any[] = []
+  groupes: any[] = [];
 
   onFilter(event, dt) {
     this.filtedTable = event.filteredValue;
@@ -1325,15 +1326,14 @@ export class ListEtudiantComponent implements OnInit {
   // dynamisation des filtres
   onTrackCampusValue(event: any): void
   {
-    var groupes = [];
-
+    this.groupes = [];
     this.searchClass.forEach((classe: any) => {
       if(classe.campus_id == event.value) 
       {
-        groupes.push(classe);
+        this.groupes.push(classe);
       }
     });
-    this.searchClass = groupes;
+    this.searchClass = this.groupes;
   }
 
 }
