@@ -120,6 +120,7 @@ const teamController = require('./controllers/teamController');
 const EvenementsController = require('./controllers/evenementController')
 const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
 const MatchingController = require('./controllers/matchingController')
+const stageController = require('./controllers/stageController')
 const { User } = require("./models/user");
 
 
@@ -272,6 +273,7 @@ app.use('/soc/qs', QSController)
 app.use('/soc/project', projectController);
 app.use('/soc/team', teamController);
 app.use('/soc/matching', MatchingController)
+app.use('/soc/stage', stageController)
 
 
 
