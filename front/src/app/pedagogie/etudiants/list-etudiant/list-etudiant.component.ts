@@ -50,6 +50,7 @@ export class ListEtudiantComponent implements OnInit {
 
   /* partie dedié aux filtres */
   filtedTable: any[] = []
+  groupes: any[] = [];
 
   onFilter(event, dt) {
     this.filtedTable = event.filteredValue;
@@ -409,7 +410,7 @@ export class ListEtudiantComponent implements OnInit {
       ((response) => {
         response.forEach(classe => {
           this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
-          this.searchClass.push({ label: classe.abbrv, value: classe._id });
+          this.searchClass.push({ label: classe.abbrv, value: classe._id, campus_id: classe.campus_id });
         })
       }),
       ((error) => { console.error(error); })
@@ -1320,4 +1321,19 @@ export class ListEtudiantComponent implements OnInit {
     this.showUploadFile = rowData
     document.getElementById('selectedFile2').click();
   }
+
+
+  // dynamisation des filtres
+  onTrackCampusValue(event: any): void
+  {
+    this.groupes = [];
+    this.searchClass.forEach((classe: any) => {
+      if(classe.campus_id == event.value) 
+      {
+        this.groupes.push(classe);
+      }
+    });
+    this.searchClass = this.groupes;
+  }
+
 }
