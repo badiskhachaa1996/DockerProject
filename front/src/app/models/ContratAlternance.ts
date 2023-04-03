@@ -35,6 +35,6 @@ export class ContratAlternance {
         public relance?: string, //* file
         public last_status_change_date?: Date,
         public remarque?: string, // remarque faite de la part de l'entreprise
+        public livret_apprentissage?: string, // *file
     ) { }
-
 }

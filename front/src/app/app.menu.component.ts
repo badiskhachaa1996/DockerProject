@@ -33,27 +33,6 @@ import { Formateur } from './models/Formateur';
 })
 export class AppMenuComponent implements OnInit {
 
-    // modelAdmin: any = [];
-    // model: any[];
-    // isAgent: Boolean = false
-    // isReponsable: Boolean = false
-    // isAdmin: Boolean = false
-    // isAdmission: Boolean = false
-    // isPedagogie: Boolean = false
-    // isFinance: Boolean = false
-    // isEtudiant: Boolean = false
-    // isFormateur: Boolean = false
-    // isCommercial: Boolean = false
-    // isTuteurAlternance: Boolean = false;
-    // isCeoEntreprise: Boolean = false;
-    // isEvent = false
-    // isAdministration: Boolean = false;
-    // isConseiller: teamCommercial = null
-    // isIntuns: Boolean = false
-    // isRH = false
-    // isConsulting = false
-    // isExterne = false
-    // isVisitor: boolean = false;
     token: any;
     items: MenuItem[];
 
@@ -437,6 +416,11 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Alternances', 
                                             icon: 'pi pi-list', 
                                             routerLink: ['/liste-contrats'] 
+                                        },
+                                        { 
+                                            label: 'Stages', 
+                                            icon: 'pi pi-briefcase', 
+                                            routerLink: ['/stages'] 
                                         },
                                     ]
                                 },
@@ -1092,6 +1076,86 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ]
+                        },
+                        {
+                            label: 'Pédagogie',
+                            icon: 'pi pi-fw pi-folder',
+                            items: [
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        { 
+                                            label: 'Ajouter un étudiant', 
+                                            icon: 'pi pi-user-plus', 
+                                            routerLink: ['/ajout-etudiant'] 
+                                        },
+                                        { 
+                                            label: 'Liste des étudiants', 
+                                            icon: 'pi pi-sort-alpha-down', 
+                                            routerLink: ['etudiants'] 
+                                        },
+                                    ]
+                                },
+                            ]
+                        },
+                        {
+                            label: 'Commerciale',
+                            icon: 'pi pi-fw pi-briefcase',
+                            items: [
+                                {
+                                    label: 'Gestions des entreprises', 
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        { 
+                                        label: 'Ajouter une entreprise', 
+                                        icon: 'pi pi-user-plus', 
+                                        routerLink: ['/ajout-entreprise'] 
+                                    },
+                                        { 
+                                        label: 'Liste des entreprises', 
+                                        icon: 'pi pi-sort-alpha-down', 
+                                        routerLink: ['/entreprises'] },
+                                    ]
+                            },
+                            { 
+                                    label: 'Gestion des tuteurs', 
+                                    icon: 'pi pi-user', 
+                                    routerLink: ['/tuteur'] 
+                                },
+                                {
+                                    label: 'Placement',
+                                    icon: 'pi pi-star',
+                                    items: [
+                                        { 
+                                            label: 'Alternances', 
+                                            icon: 'pi pi-list', 
+                                            routerLink: ['/liste-contrats'] 
+                                        },
+                                        { 
+                                            label: 'Stages', 
+                                            icon: 'pi pi-briefcase', 
+                                            routerLink: ['/stages'] 
+                                        },
+                                    ]
+                                },
+                                { 
+                                    label: 'Gestion des équipes de conseillers', 
+                                    icon: 'pi pi-users', 
+                                    routerLink: ['/equipe-commercial'] 
+                                },
+                                { 
+                                    label: 'Gestion des prospects alternables', 
+                                    icon: 'pi pi-briefcase', 
+                                    routerLink: ['/prospects-alt'] 
+                                },
+                                { 
+                                    label: 'Ajouter un dossier', 
+                                    icon: 'pi pi-user-plus', 
+                                    routerLink: ['/ajout-prospect'] 
+                                },
+            
+                            ]
+                            
                         },
                         {
                             label: 'Partenaires',
@@ -2424,6 +2488,27 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Mes activités projets',
                                             icon: 'pi pi-fw pi-list',
                                             routerLink: ['/my-tasks'],
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Pédagogie',
+                                    icon: 'pi pi-fw pi-folder',
+                                    items: [
+                                        {
+                                            label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                            items: [
+                                                { 
+                                                    label: 'Ajouter un étudiant', 
+                                                    icon: 'pi pi-user-plus', 
+                                                    routerLink: ['/ajout-etudiant'] 
+                                                },
+                                                { 
+                                                    label: 'Liste des étudiants', 
+                                                    icon: 'pi pi-sort-alpha-down', 
+                                                    routerLink: ['etudiants'] 
+                                                },
+                                            ]
                                         },
                                     ]
                                 },

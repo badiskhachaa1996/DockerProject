@@ -27,12 +27,12 @@ export class ContratsTutelleCeoComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private messageService: MessageService, private entrepriseService: EntrepriseService, private userService: AuthService, private classeService: ClasseService) { }
 
   ngOnInit(): void {
-    // decodage du token
+    // décodage du token
     this.token = jwt_decode(localStorage.getItem('token'));
 
     // recuperation de la liste des contrat sous la tutelle du ceo
     this.entrepriseService.getContratsByCeo(this.token.id)
-    .then((response) => { 
+    .then((response) => {
       this.contracts = response.contrats;
       this.messageService.add({ severity: 'success', summary:'Contrats', detail: response.success });
     })

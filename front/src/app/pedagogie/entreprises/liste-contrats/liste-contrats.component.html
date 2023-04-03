@@ -21,25 +21,8 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3"> Nombre de contrats pour {{ commercialFiltered.firstname }}
-                    </span>
-                    <div class="text-900 font-medium text-xl">{{ listeContratsFilteredByCommercial.length }}</div>
-                </div>
-
-                <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
-                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
-                    <i class="pi pi-file text-pink-500 text-xl"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TODO: Filtre par campus -->
-    <div class="col-4" *ngIf="listeContratsFilteredByCommercial.length > 0">
-        <div class="card mb-0">
-            <div class="flex justify-content-between mb-3">
-                <div>
-                    <span class="block text-500 font-medium mb-3"> Nombre de contrats pour {{ commercialFiltered.firstname }}
+                    <span class="block text-500 font-medium mb-3"> Nombre de contrats pour {{
+                        commercialFiltered.firstname }}
                     </span>
                     <div class="text-900 font-medium text-xl">{{ listeContratsFilteredByCommercial.length }}</div>
                 </div>
@@ -556,6 +539,21 @@
             </div>
         </div>
 
+        <!-- Upload du livret d'apprentissage -->
+        <div class="col-12" *ngIf="showFormAddLivret">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddLivret = false;"></i>
+                <h4>Ajouter le livret d'apprentissage (doc)</h4>
+                <div class="field col-12">
+                    <input pInputFile type="file" (change)="onSelectFile($event)"
+                        accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+                </div>
+                <button pButton label="Envoyer" (click)="onAddLivret()"></button>
+            </div>
+        </div>
+
 
         <div class="col-12" *ngIf="token.type == 'CEO Entreprise'">
             <div class="card">
@@ -704,7 +702,11 @@
                             <i class="pi pi-file" pTooltip="Accord de prise en charge"
                                 style="cursor: pointer; color: rgb(150, 248, 4); margin: 2px;"
                                 (click)="contratToUpdate = contrat; showFormAddAccordPriseEnCharge = true;"></i>
-                            <i *ngIf="contrat.statut == 'Relance à traiter'" class="pi pi-file" pTooltip="Relance à traiter"
+                            <i class="pi pi-file" pTooltip="Livret d'apprentissage"
+                                style="cursor: pointer; color: rgba(63, 30, 30, 0.744); margin: 2px;"
+                                (click)="contratToUpdate = contrat; showFormAddLivret = true;"></i>
+                            <i *ngIf="contrat.statut == 'Relance à traiter'" class="pi pi-file"
+                                pTooltip="Relance à traiter"
                                 style="cursor: pointer; color: rgb(147, 145, 5); margin: 2px;"
                                 (click)="contratToUpdate = contrat; showFormAddRelance = true;"></i>
                             <i *ngIf="contrat.statut == 'Résilié'" class="pi pi-file" pTooltip="Résiliation du contrat"
@@ -772,6 +774,7 @@
                         <th>Calendrier</th> <!-- *lié à la formation(diplôme) -->
                         <th>Cerfa</th> <!-- *lié directement au contrat -->
                         <th>Convention de formation</th> <!-- *lié directement au contrat -->
+                        <th>Livret d'apprentissage</th> <!-- *lié directement au contrat -->
                         <th>Accord de prise en charge</th> <!-- *lié directement au contrat -->
                         <th>Document de relance</th> <!-- *lié directement au contrat -->
                         <th>Résiliation de contrat</th> <!-- *lié directement au contrat -->
@@ -803,6 +806,16 @@
                                 (click)="onDownloadConvention(contrat._id)"></i>
                         </td>
                         <td *ngIf="contrat.convention_formation == null">
+                            - aucun fichier -
+                        </td>
+
+                        <td *ngIf="contrat.livret_apprentissage != null">
+                            <i class="pi pi-file" title="Télécharger le livret d'apprentissage"
+                                style="font-size: 2em; color: rgba(63, 30, 30, 0.744); cursor: pointer;"
+                                (click)="onDownloadLivret(contrat._id)">
+                            </i>
+                        </td>
+                        <td *ngIf="contrat.livret_apprentissage == null" style="color: red; font-weight: bold;">
                             - aucun fichier -
                         </td>
 

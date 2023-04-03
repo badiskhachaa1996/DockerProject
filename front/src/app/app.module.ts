@@ -262,6 +262,7 @@ import { ProspectsAlternablesComponent } from './commercial/prospects-alternable
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
+import { StageComponent } from './commercial/stage/stage.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 
 
@@ -535,6 +536,7 @@ import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-c
     AddProspectComponent,
     QuestionnaireFormateurComponent,
     ResultatQfComponent,
+    StageComponent,
     AjoutCollaborateurComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
