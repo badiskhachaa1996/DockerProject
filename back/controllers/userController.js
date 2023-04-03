@@ -3,770 +3,948 @@ const app = express();
 app.disable("x-powered-by");
 const { User } = require("./../models/user");
 const jwt = require("jsonwebtoken");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
-const multer = require('multer');
+const multer = require("multer");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
-const { Formateur } = require("../models/formateur")
-const { Etudiant } = require("../models/etudiant")
-const { pwdToken } = require("../models/pwdToken")
-const { Partenaire } = require("../models/partenaire")
-const { Prospect } = require("../models/prospect")
-const { Service } = require('../models/service')
-const { CommercialPartenaire } = require("../models/CommercialPartenaire")
+const { Formateur } = require("../models/formateur");
+const { Etudiant } = require("../models/etudiant");
+const { pwdToken } = require("../models/pwdToken");
+const { Partenaire } = require("../models/partenaire");
+const { Prospect } = require("../models/prospect");
+const { Service } = require("../models/service");
+const { CommercialPartenaire } = require("../models/CommercialPartenaire");
 
-
-
-
-
-let origin = ["http://localhost:4200"]
+let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
-    let argProd = process.argv[2]
-    if (argProd.includes('dev')) {
-        origin = ["https://141.94.71.25"]
-    } else (
-        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
-    )
+  let argProd = process.argv[2];
+  if (argProd.includes("dev")) {
+    origin = ["https://141.94.71.25"];
+  } else
+    origin = [
+      "https://ims.estya.com",
+      "https://ticket.estya.com",
+      "https://estya.com",
+      "https://adgeducations.com",
+      "https://eduhorizons.com",
+      "https://espic.com",
+      "http://partenaire.eduhorizons.com",
+      "http://login.eduhorizons.com",
+    ];
 }
 let transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false, // true for 587, false for other ports
-    requireTLS: true,
-    auth: {
-        user: 'ims@intedgroup.com',
-        pass: 'InTeDGROUP@@0908',
-    },
+  host: "smtp.office365.com",
+  port: 587,
+  secure: false, // true for 587, false for other ports
+  requireTLS: true,
+  auth: {
+    user: "ims@intedgroup.com",
+    pass: "InTeDGROUP@@0908",
+  },
 });
-
-
-
 
 //Enregsitrement d'un nouvel user
 app.post("/registre", (req, res) => {
-    let data = req.body;
-    User.findOne({ email: data?.email, role: "user" }, (errFO, user) => {
-        if (errFO) {
-            console.error(errFO)
+  let data = req.body;
+  User.findOne({ email: data?.email, role: "user" }, (errFO, user) => {
+    if (errFO) {
+      console.error(errFO);
+    }
+    if (user) {
+      User.findOneAndUpdate(
+        { _id: user._id },
+        {
+          civilite: data.civilite,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          indicatif: data.indicatif,
+          phone: data.phone,
+          role: data.role,
+          service_id: data?.service_id || null,
+          type: data.type,
+          mention: data.mention,
+          entreprise: data.entreprise,
+          pays_adresse: data.pays_adresse,
+          ville_adresse: data.ville_adresse,
+          rue_adresse: data.rue_adresse,
+          numero_adresse: data.numero_adresse,
+          postal_adresse: data.postal_adresse,
+        },
+        { new: true },
+        (err, userModified) => {
+          if (err) {
+            console.error(err);
+          } else {
+            res.send(userModified);
+          }
         }
-        if (user) {
-            User.findOneAndUpdate({ _id: user._id },
-                {
-                    civilite: data.civilite,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    indicatif: data.indicatif,
-                    phone: data.phone,
-                    role: data.role,
-                    service_id: data?.service_id || null,
-                    type: data.type,
-                    mention: data.mention,
-                    entreprise: data.entreprise,
-                    pays_adresse: data.pays_adresse,
-                    ville_adresse: data.ville_adresse,
-                    rue_adresse: data.rue_adresse,
-                    numero_adresse: data.numero_adresse,
-                    postal_adresse: data.postal_adresse
-                }, { new: true }, (err, userModified) => {
-                    if (err) {
-                        console.error(err)
-                    } else {
-                        res.send(userModified)
-                    }
-                })
-        } else {
-            let newUser = new User({
-                civilite: data.civilite,
-                firstname: data.firstname,
-                lastname: data.lastname,
-                indicatif: data.indicatif,
-                phone: data.phone,
-                email: data?.email,
-                email_perso: data?.email,
-                /*password: bcrypt.hashSync(data.password, 8),*/
-                role: data.role || "user",
-                service_id: data?.service_id || null,
-                type: data.type,
-                mention: data.mention,
-                entreprise: data.entreprise,
-                pays_adresse: data.pays_adresse,
-                ville_adresse: data.ville_adresse,
-                rue_adresse: data.rue_adresse,
-                numero_adresse: data.numero_adresse,
-                postal_adresse: data.postal_adresse,
-                date_creation: new Date()
-            })
-            newUser.save().then((userFromDb) => {
-                res.status(200).send(userFromDb);
-                let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte IMS a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
-                let mailOptions = {
-                    from: 'ims@intedgroup.com',
-                    to: data.email,
-                    subject: '[IMS] - Création de compte',
-                    html: htmlmail,
-                    attachments: [{
-                        filename: 'signature.png',
-                        path: 'assets/signature.png',
-                        cid: 'red' //same cid value as in the html img src
-                    }]
-                };
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-            }).catch((error) => {
-                console.error(error)
-                res.status(400).send(error);
-            })
-        }
-    })
+      );
+    } else {
+      let newUser = new User({
+        civilite: data.civilite,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        indicatif: data.indicatif,
+        phone: data.phone,
+        email: data?.email,
+        email_perso: data?.email,
+        /*password: bcrypt.hashSync(data.password, 8),*/
+        role: data.role || "user",
+        service_id: data?.service_id || null,
+        type: data.type,
+        mention: data.mention,
+        entreprise: data.entreprise,
+        pays_adresse: data.pays_adresse,
+        ville_adresse: data.ville_adresse,
+        rue_adresse: data.rue_adresse,
+        numero_adresse: data.numero_adresse,
+        postal_adresse: data.postal_adresse,
+        date_creation: new Date(),
+      });
+      newUser
+        .save()
+        .then((userFromDb) => {
+          res.status(200).send(userFromDb);
+          let gender = userFromDb.civilite == "Monsieur" ? "M. " : "Mme ";
+          let htmlmail =
+            "<p>Bonjour " +
+            gender +
+            userFromDb.lastname +
+            " " +
+            userFromDb.firstname +
+            ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte IMS a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+          let mailOptions = {
+            from: "ims@intedgroup.com",
+            to: data.email,
+            subject: "[IMS] - Création de compte",
+            html: htmlmail,
+            attachments: [
+              {
+                filename: "signature.png",
+                path: "assets/signature.png",
+                cid: "red", //same cid value as in the html img src
+              },
+            ],
+          };
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.error(error);
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+          res.status(400).send(error);
+        });
+    }
+  });
 });
 
 //Connexion d'un user
 app.post("/login", (req, res) => {
-    let data = req.body;
-    User.findOne({
-        email_perso: data.email,
-    }).then((userFromDb) => {
-        if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
-            res.status(404).send({ message: "Email ou Mot de passe incorrect" });
+  let data = req.body;
+  User.findOne({
+    email_perso: data.email,
+  })
+    .then((userFromDb) => {
+      if (
+        !userFromDb ||
+        !bcrypt.compareSync(data.password, userFromDb.password)
+      ) {
+        res.status(404).send({ message: "Email ou Mot de passe incorrect" });
+      } else {
+        if (userFromDb.verifedEmail) {
+          let token = jwt.sign(
+            {
+              id: userFromDb._id,
+              role: userFromDb.role,
+              service_id: userFromDb.service_id,
+              type: userFromDb.type,
+            },
+            "126c43168ab170ee503b686cd857032d",
+            { expiresIn: "7d" }
+          );
+          res.status(200).send({ token });
+        } else {
+          res.status(304).send({ message: "Compte pas activé", data });
         }
-        else {
-            if (userFromDb.verifedEmail) {
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id, type: userFromDb.type }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
-                res.status(200).send({ token });
-            }
-            else { res.status(304).send({ message: "Compte pas activé", data }); }
+      }
+      Etudiant.findOne({ user_id: userFromDb._id }).then((etudiant) => {
+        if (
+          etudiant &&
+          etudiant.annee_scolaire.includes("2022-2023") == false
+        ) {
+          etudiant.annee_scolaire.push("2022-2023");
+          Etudiant.findByIdAndUpdate(etudiant._id, {
+            annee_scolaire: etudiant.annee_scolaire,
+          });
         }
-    }).catch((error) => {
-        console.log(error)
-        res.status(404).send(error);
+      });
     })
+    .catch((error) => {
+      console.log(error);
+      res.status(404).send(error);
+    });
 });
 
 //Récupération d'un user via ID
 app.get("/getById/:id", (req, res) => {
-    let id = req.params.id;
-    User.findOne({ _id: id }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
-        res.status(200).send({ userToken });
-    }).catch((error) => {
-        console.error(error)
-        res.status(404).send(error);
+  let id = req.params.id;
+  User.findOne({ _id: id })
+    .then((userFromDb) => {
+      let userToken = jwt.sign(
+        { userFromDb },
+        "126c43168ab170ee503b686cd857032d",
+        { expiresIn: "7d" }
+      );
+      res.status(200).send({ userToken });
     })
+    .catch((error) => {
+      console.error(error);
+      res.status(404).send(error);
+    });
 });
-
-
-
 
 //Recuperation des infos user
 app.get("/getInfoById/:id", (req, res, next) => {
-    User.findOne({ _id: req.params.id })
-        .then((userfromDb) => { res.status(200).send(userfromDb); })
-        .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
+  User.findOne({ _id: req.params.id })
+    .then((userfromDb) => {
+      res.status(200).send(userfromDb);
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .send("Impossible de recuperer ce utilisateur: " + error.message);
+    });
 });
 
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
-    User.findOne({ _id: req.params.id }).populate("service_id")
-        ?.then((userfromDb) => { res.status(200).send(userfromDb); })
-        .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
+  User.findOne({ _id: req.params.id })
+    .populate("service_id")
+    ?.then((userfromDb) => {
+      res.status(200).send(userfromDb);
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .send("Impossible de recuperer ce utilisateur: " + error.message);
+    });
 });
-
 
 //Recuperation de la liste des users pour la cv theque
 app.get("/get-all-for-cv", (_, res) => {
-    User.find({ $or: [{ type: 'Etudiant' }, { type: 'Initial' }, { type: 'Prospect' }, { type: 'Alternant' }, { type: 'Formateur' }, { type: 'Externe' }, { type: 'Externe-InProgress' }], lastname: { $ne: null }, firstname: { $ne: null } })
-        .then((usersFromDb) => { res.status(200).send(usersFromDb); })
-        .catch((error) => { res.status(400).send(error.message); });
+  User.find({
+    $or: [
+      { type: "Etudiant" },
+      { type: "Initial" },
+      { type: "Prospect" },
+      { type: "Alternant" },
+      { type: "Formateur" },
+      { type: "Externe" },
+      { type: "Externe-InProgress" },
+    ],
+    lastname: { $ne: null },
+    firstname: { $ne: null },
+  })
+    .then((usersFromDb) => {
+      res.status(200).send(usersFromDb);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
 });
-
 
 //Recuperation de la liste des users pour la partie project
 app.get("/get-all-salarie", (_, res) => {
-    User.find({ $or: [{ type: 'Salarié' }, { role: 'Admin' }, { role: 'Agent' }, { role: 'Responsable' }] })
-        .then((usersFromDb) => { res.status(200).send(usersFromDb); })
-        .catch((error) => { res.status(400).send(error.message); });
+  User.find({
+    $or: [
+      { type: "Salarié" },
+      { role: "Admin" },
+      { role: "Agent" },
+      { role: "Responsable" },
+    ],
+  })
+    .then((usersFromDb) => {
+      res.status(200).send(usersFromDb);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
 });
-
 
 //Recuperation de la liste des users populate sur les services
 app.get("/getAllPopulate", (_, res) => {
-    User.find().populate("service_id")
-        ?.then((usersFromDb) => { res.status(200).send(usersFromDb); })
-        .catch((error) => { res.status(400).send(error.message); });
+  User.find()
+    .populate("service_id")
+    ?.then((usersFromDb) => {
+      res.status(200).send(usersFromDb);
+    })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
 });
-
 
 //Récupération de tous les users
 app.get("/getAll", (req, res) => {
-    User.find()
-        .then(result => {
-            res.send(result.length > 0 ? result : []);
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(404).send(err);
-        })
+  User.find()
+    .then((result) => {
+      res.send(result.length > 0 ? result : []);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(404).send(err);
+    });
 });
 
 //Récupération de tous les users
 app.get("/getNBUser", (req, res) => {
-    User.find()
-        .then(result => {
-            res.send({ r: result.length });
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(404).send(err);
-        })
+  User.find()
+    .then((result) => {
+      res.send({ r: result.length });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(404).send(err);
+    });
 });
 
 //Mise à jour d'un user
 app.post("/updateById/:id", (req, res) => {
-    let user = { ...req.body.user }
-    if (user.password_clear) {
-        user['password'] = bcrypt.hashSync(user.password_clear, 8)
+  let user = { ...req.body.user };
+  if (user.password_clear) {
+    user["password"] = bcrypt.hashSync(user.password_clear, 8);
+  }
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    user,
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.error(err);
+        res.send(err);
+      } else {
+        res.send(user);
+      }
     }
-    User.findOneAndUpdate({ _id: req.params.id },
-        user, { new: true }, (err, user) => {
-            if (err) {
-                console.error(err);
-                res.send(err)
-            } else {
-                res.send(user)
-            }
-        })
-})
+  );
+});
 
 //Mise à jour des infos users, utilisé depuis la page de gestion des utilisateurs
 app.patch("/patchById", (req, res) => {
-    const user = new User({ ...req.body });
+  const user = new User({ ...req.body });
 
-    User.updateOne({ _id: user._id }, { ...req.body })
-        .then((response) => { res.status(201).send(response); })
-        .catch((error) => { res.status(400).json({ msg: error.message }); });
+  User.updateOne({ _id: user._id }, { ...req.body })
+    .then((response) => {
+      res.status(201).send(response);
+    })
+    .catch((error) => {
+      res.status(400).json({ msg: error.message });
+    });
 });
 
 //Mise à jour d'un user
 app.post("/updateByIdForPrivate/:id", (req, res) => {
-    User.findByIdAndUpdate(req.params.id,
-        {
-            firstname: req.body.user.firstname,
-            lastname: req.body.user.lastname,
-            email: req.body.user.email,
-            email_perso: req.body.user.email_perso,
-
-        }, { new: true }, (err, user) => {
-            if (err) {
-                console.error(err);
-                res.send(err)
-            } else {
-                res.send(user)
-            }
-        })
-})
-
+  User.findByIdAndUpdate(
+    req.params.id,
+    {
+      firstname: req.body.user.firstname,
+      lastname: req.body.user.lastname,
+      email: req.body.user.email,
+      email_perso: req.body.user.email_perso,
+    },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.error(err);
+        res.send(err);
+      } else {
+        res.send(user);
+      }
+    }
+  );
+});
 
 app.post("/ValidateEmail/:email", (req, res) => {
-
-    User.findOneAndUpdate({ email: req.params.email },
-        {
-            verifedEmail: true,
-
-        }, { new: true }, (err, user) => {
-            if (err) {
-                console.error(err);
-                res.send(err)
-            } else {
-                res.status(200).send(user)
-            }
-        })
-})
-
+  User.findOneAndUpdate(
+    { email: req.params.email },
+    {
+      verifedEmail: true,
+    },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.error(err);
+        res.send(err);
+      } else {
+        res.status(200).send(user);
+      }
+    }
+  );
+});
 
 //Mise à jour d'un user
 app.post("/updatePreInscrit/:id", (req, res) => {
-    User.findOneAndUpdate({ _id: req.params.id },
-        {
-            civilite: req.body.user.civilite,
-            firstname: req.body.user.firstname,
-            lastname: req.body.user.lastname,
-            indicatif: req.body.user.indicatif,
-            phone: req.body.user,
-            role: req.body.user.role,
-            service_id: req.body?.user.service_id,
-            entreprise: req.body.user.entreprise,
-            type: req.body.user.type,
-            pays_adresse: req.body.user.pays_adresse,
-            ville_adresse: req.body.user.ville_adresse,
-            rue_adresse: req.body.user.rue_adresse,
-            numero_adresse: req.body.user.numero_adresse,
-            postal_adresse: req.body.user.postal_adresse
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      civilite: req.body.user.civilite,
+      firstname: req.body.user.firstname,
+      lastname: req.body.user.lastname,
+      indicatif: req.body.user.indicatif,
+      phone: req.body.user,
+      role: req.body.user.role,
+      service_id: req.body?.user.service_id,
+      entreprise: req.body.user.entreprise,
+      type: req.body.user.type,
+      pays_adresse: req.body.user.pays_adresse,
+      ville_adresse: req.body.user.ville_adresse,
+      rue_adresse: req.body.user.rue_adresse,
+      numero_adresse: req.body.user.numero_adresse,
+      postal_adresse: req.body.user.postal_adresse,
+    },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        console.error(err);
+        res.send(err);
+      } else {
+        Inscription.findById(user._id, (err2, inscription) => {
+          if (inscription) {
+            //findOneAndUpdate
+            Inscription.findOneAndUpdate(
+              { user_id: user._id },
+              {
+                classe: req.body.inscription.classe,
+                statut: req.body.inscription.statut,
+                diplome: req.body.inscription.diplome,
+                nationalite: req.body.inscription.nationalite,
+                date_naissance: req.body.inscription.date_naissance,
+              },
+              (err3, InscriptionUpdate) => {
+                if (errInscription) {
+                  console.error(errInscription);
+                  res.send(errInscription);
+                } else {
+                  res.send(InscriptionUpdate);
+                }
+              }
+            );
+          } else {
+            //new Inscription()
+            let inscrit = new Inscription({
+              user_id: user._id,
+              classe: req.body.inscription.classe,
+              statut: req.body.inscription.statut,
+              diplome: req.body.inscription.diplome,
+              nationalite: req.body.inscription.nationalite,
+              date_naissance: req.body.inscription.date_naissance,
+            });
 
-        }, { new: true }, (err, user) => {
-            if (err) {
-                console.error(err);
-                res.send(err)
-            } else {
-                Inscription.findById(user._id, (err2, inscription) => {
-                    if (inscription) {
-                        //findOneAndUpdate
-                        Inscription.findOneAndUpdate({ user_id: user._id },
-                            {
-                                classe: req.body.inscription.classe,
-                                statut: req.body.inscription.statut,
-                                diplome: req.body.inscription.diplome,
-                                nationalite: req.body.inscription.nationalite,
-                                date_naissance: req.body.inscription.date_naissance
-                            }, (err3, InscriptionUpdate) => {
-                                if (errInscription) {
-                                    console.error(errInscription)
-                                    res.send(errInscription)
-                                }
-                                else {
-                                    res.send(InscriptionUpdate)
-                                }
-                            });
-                    } else {
-                        //new Inscription()
-                        let inscrit = new Inscription({
-                            user_id: user._id,
-                            classe: req.body.inscription.classe,
-                            statut: req.body.inscription.statut,
-                            diplome: req.body.inscription.diplome,
-                            nationalite: req.body.inscription.nationalite,
-                            date_naissance: req.body.inscription.date_naissance
-                        });
-
-                        inscrit.save()
-                            .then(() => res.status(200).send(user))
-                            .catch(errSave => res.status(400).send(errSave));
-
-                    }
-                })
-            }
-        })
-})
+            inscrit
+              .save()
+              .then(() => res.status(200).send(user))
+              .catch((errSave) => res.status(400).send(errSave));
+          }
+        });
+      }
+    }
+  );
+});
 
 //Mise à jour d'un étudiant
 app.post("/updateEtudiant/:id", (req, res) => {
-    User.findOneAndUpdate({ _id: req.params.id },
-        {
-            civilite: req.body.user.civilite,
-            firstname: req.body.user.firstname,
-            lastname: req.body.user.lastname,
-            indicatif: req.body.user.indicatif,
-            phone: req.body.user.phone,
-            role: req.body.user.role,
-            service_id: req.body?.user.service_id,
-            entreprise: req.body.user.entreprise,
-            isAlternant: req.body.user.type,
-            pays_adresse: req.body.user.pays_adresse,
-            ville_adresse: req.body.user.ville_adresse,
-            rue_adresse: req.body.user.rue_adresse,
-            numero_adresse: req.body.user.numero_adresse,
-            postal_adresse: req.body.user.postal_adresse,
-            statut: req.body.user.statut,
-            type: req.body.user.type,
-            // diplome : req.body.user.diplome
-
-        }, { new: true }, (err, user) => {
-            if (err || !user) {
-                console.error(err);
-                res.send(err)
-            } else {
-                let etudiantData = req.body.newEtudiant;
-                if (etudiantData._id) {
-                    Etudiant.findByIdAndUpdate(etudiantData._id, {
-                        ...etudiantData
-                    }, { new: true }, (err, doc) => {
-                        if (!err && doc) {
-                            res.status(201).json(doc)
-                        } else {
-                            res.status(500).json(err)
-                        }
-                    })
-                } else {
-                    delete etudiantData._id
-                    let etudiant = new Etudiant(
-                        {
-                            ...etudiantData
-                        });
-                    etudiant.save()
-                        .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
-                        .catch((error) => { res.status(500).send(error) });
-                }
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      civilite: req.body.user.civilite,
+      firstname: req.body.user.firstname,
+      lastname: req.body.user.lastname,
+      indicatif: req.body.user.indicatif,
+      phone: req.body.user.phone,
+      role: req.body.user.role,
+      service_id: req.body?.user.service_id,
+      entreprise: req.body.user.entreprise,
+      isAlternant: req.body.user.type,
+      pays_adresse: req.body.user.pays_adresse,
+      ville_adresse: req.body.user.ville_adresse,
+      rue_adresse: req.body.user.rue_adresse,
+      numero_adresse: req.body.user.numero_adresse,
+      postal_adresse: req.body.user.postal_adresse,
+      statut: req.body.user.statut,
+      type: req.body.user.type,
+      // diplome : req.body.user.diplome
+    },
+    { new: true },
+    (err, user) => {
+      if (err || !user) {
+        console.error(err);
+        res.send(err);
+      } else {
+        let etudiantData = req.body.newEtudiant;
+        if (etudiantData._id) {
+          Etudiant.findByIdAndUpdate(
+            etudiantData._id,
+            {
+              ...etudiantData,
+            },
+            { new: true },
+            (err, doc) => {
+              if (!err && doc) {
+                res.status(201).json(doc);
+              } else {
+                res.status(500).json(err);
+              }
             }
-        })
-})
+          );
+        } else {
+          delete etudiantData._id;
+          let etudiant = new Etudiant({
+            ...etudiantData,
+          });
+          etudiant
+            .save()
+            .then((etudiantCreated) => {
+              res.status(201).json({ success: "Etudiant crée" });
+            })
+            .catch((error) => {
+              res.status(500).send(error);
+            });
+        }
+      }
+    }
+  );
+});
 
 //Récupérer tous les users via Service ID
 app.get("/getAllbyService/:id", (req, res) => {
-    User.find({ service: req.params.id })
-        .then(result => {
-            res.send(result.length > 0 ? result : []);
-        })
-        .catch(err => {
-            res.status(404).send(error);
-            console.error(err);
-        })
+  User.find({ service: req.params.id })
+    .then((result) => {
+      res.send(result.length > 0 ? result : []);
+    })
+    .catch((err) => {
+      res.status(404).send(error);
+      console.error(err);
+    });
 });
 app.get("/getAllCommercial/", (req, res) => {
-    User.find({ type: "Commercial" })
-        .then(result => {
-            res.send(result.length > 0 ? result : []);
-        })
-        .catch(err => {
-            res.status(404).send(error);
-            console.error(err);
-        })
+  User.find({ type: "Commercial" })
+    .then((result) => {
+      res.send(result.length > 0 ? result : []);
+    })
+    .catch((err) => {
+      res.status(404).send(error);
+      console.error(err);
+    });
 });
 
 app.get("/getAllbyEmailPerso/:id", (req, res) => {
-
-    let emailperso = req.params.id;
-    User.findOne({ email_perso: emailperso }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
-        res.status(200).send(userToken);
-    }).catch(err => {
-        res.status(404).send(error);
-        console.error(err);
+  let emailperso = req.params.id;
+  User.findOne({ email_perso: emailperso })
+    .then((userFromDb) => {
+      let userToken = jwt.sign(
+        { userFromDb },
+        "126c43168ab170ee503b686cd857032d",
+        { expiresIn: "7d" }
+      );
+      res.status(200).send(userToken);
     })
+    .catch((err) => {
+      res.status(404).send(error);
+      console.error(err);
+    });
 });
 app.get("/getByEmail/:email", (req, res) => {
-
-    User.findOne({ email_perso: req.params.email }).then((dataInscription) => {
-        if (dataInscription) {
-            res.status(200).send(true);
-        } else {
-            res.status(200).send(false);
-        }
+  User.findOne({ email_perso: req.params.email })
+    .then((dataInscription) => {
+      if (dataInscription) {
+        res.status(200).send(true);
+      } else {
+        res.status(200).send(false);
+      }
     })
-        .catch(err => {
-            res.status(404).send(err);
-            console.error(err);
-        })
-})
+    .catch((err) => {
+      res.status(404).send(err);
+      console.error(err);
+    });
+});
 
 //Récupérer tous les non-users
 app.get("/getAllAgent/", (req, res) => {
-    User.find({ role: ["Responsable", "Agent", "Admin"] })
+  User.find({ role: ["Responsable", "Agent", "Admin"] })
 
-        .then(result => {
-            res.send(result.length > 0 ? result : []);
-        })
-        .catch(err => {
-            res.status(404).send(error);
-            console.error(err);
-        })
-})
+    .then((result) => {
+      res.send(result.length > 0 ? result : []);
+    })
+    .catch((err) => {
+      res.status(404).send(error);
+      console.error(err);
+    });
+});
 
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id", (req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        let comparer = bcrypt.compareSync(req.body.actualpassword, user.password)
-        if (comparer) {
-            User.findOneAndUpdate({ _id: req.params.id }, {
-                password: bcrypt.hashSync(req.body.password, 8)
-            }, { new: true }, (errfind, userUpdated) => {
-                if (errfind) {
-                    console.error(errfind);
-                    res.send(errfind)
-                } else {
-                    res.send(userUpdated)
-                }
-            })
-        } else {
-            res.send({ error: "Pas le bon mot de passe actuel" })
+  User.findById(req.params.id, (err, user) => {
+    let comparer = bcrypt.compareSync(req.body.actualpassword, user.password);
+    if (comparer) {
+      User.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          password: bcrypt.hashSync(req.body.password, 8),
+        },
+        { new: true },
+        (errfind, userUpdated) => {
+          if (errfind) {
+            console.error(errfind);
+            res.send(errfind);
+          } else {
+            res.send(userUpdated);
+          }
         }
-    })
-
-})
+      );
+    } else {
+      res.send({ error: "Pas le bon mot de passe actuel" });
+    }
+  });
+});
 
 //Sauvegarde de la photo de profile
 const storage = multer.diskStorage({
-    destination: (req, file, callBack) => {
-        let id_photo = req.body.id
-        if (!fs.existsSync('storage/profile/' + id_photo + '/')) {
-            fs.mkdirSync('storage/profile/' + id_photo + '/', { recursive: true })
-        }
-        callBack(null, 'storage/profile/' + id_photo + '/')
-    },
-    filename: (req, file, callBack) => {
-        callBack(null, `${file.originalname}`)
+  destination: (req, file, callBack) => {
+    let id_photo = req.body.id;
+    if (!fs.existsSync("storage/profile/" + id_photo + "/")) {
+      fs.mkdirSync("storage/profile/" + id_photo + "/", { recursive: true });
     }
-})
+    callBack(null, "storage/profile/" + id_photo + "/");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  },
+});
 
-const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
 //Sauvegarde de la photo de profile
-app.post('/file', upload.single('file'), (req, res, next) => {
-    const file = req.file;
-    console.log(file)
-    if (!file) {
-        const error = new Error('No File')
-        error.httpStatusCode = 400
-        return next(error)
+app.post("/file", upload.single("file"), (req, res, next) => {
+  const file = req.file;
+  console.log(file);
+  if (!file) {
+    const error = new Error("No File");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  User.findById(req.body.id, (err, photo) => {
+    try {
+      if (
+        fs.existsSync(
+          "storage/profile/" + req.body.id + "/" + photo.pathImageProfil
+        )
+      )
+        fs.unlinkSync(
+          "storage/profile/" + req.body.id + "/" + photo.pathImageProfil
+        );
+      //file removed
+    } catch (err2) {
+      console.error("Un fichier n'existait pas avant");
+      console.error(err2, photo);
     }
-    User.findById(req.body.id, (err, photo) => {
+  });
 
-        try {
-            if (fs.existsSync('storage/profile/' + req.body.id + '/' + photo.pathImageProfil))
-                fs.unlinkSync('storage/profile/' + req.body.id + '/' + photo.pathImageProfil)
-            //file removed
-        } catch (err2) {
-            console.error("Un fichier n'existait pas avant")
-            console.error(err2, photo)
-        }
-    })
-
-    User.findOneAndUpdate({ _id: req.body.id }, {
-        pathImageProfil: file.filename,
-        typeImageProfil: file.mimetype
-    }, (errUser, user) => {
-        console.error(errUser)
-        //Renvoie de la photo de profile au Front pour pouvoir l'afficher
-        res.send({ message: "Photo mise à jour" });
-
-    })
-})
+  User.findOneAndUpdate(
+    { _id: req.body.id },
+    {
+      pathImageProfil: file.filename,
+      typeImageProfil: file.mimetype,
+    },
+    (errUser, user) => {
+      console.error(errUser);
+      //Renvoie de la photo de profile au Front pour pouvoir l'afficher
+      res.send({ message: "Photo mise à jour" });
+    }
+  );
+});
 
 //Envoie de la photo de profile
-app.get('/getProfilePicture/:id', (req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if (user && user.pathImageProfil) {
-            try {
-                let file = fs.readFileSync("storage/profile/" + user.id + '/' + user.pathImageProfil, { encoding: 'base64' }, (err2) => {
-                    if (err2) {
-                        return console.error(err2);
-                    }
-                });
-                res.send({ file: file, documentType: user.typeImageProfil })
-            } catch (e) {
-                res.send({ error: e })
+app.get("/getProfilePicture/:id", (req, res) => {
+  User.findById(req.params.id, (err, user) => {
+    if (user && user.pathImageProfil) {
+      try {
+        let file = fs.readFileSync(
+          "storage/profile/" + user.id + "/" + user.pathImageProfil,
+          { encoding: "base64" },
+          (err2) => {
+            if (err2) {
+              return console.error(err2);
             }
-        } else {
-            res.send({ error: "Image non défini" })
-        }
-
-    })
-})
+          }
+        );
+        res.send({ file: file, documentType: user.typeImageProfil });
+      } catch (e) {
+        res.send({ error: e });
+      }
+    } else {
+      res.send({ error: "Image non défini" });
+    }
+  });
+});
 
 //Methode pour envoyer la photo de profil d'un utilisateur methode Idrissa Sall
 app.get("/loadProfilePicture/:id", (req, res) => {
-    User.findOne({ _id: req.params.id })
-        .then((user) => {
-            if (user.pathImageProfil) {
-                let imgPath = path.join('storage', 'profile', user._id.toString(), user.pathImageProfil.toString());
-                let imgExtention = user.pathImageProfil.toString().slice(((user.pathImageProfil.toString().lastIndexOf(".") - 1) + 2));
+  User.findOne({ _id: req.params.id })
+    .then((user) => {
+      if (user.pathImageProfil) {
+        let imgPath = path.join(
+          "storage",
+          "profile",
+          user._id.toString(),
+          user.pathImageProfil.toString()
+        );
+        let imgExtention = user.pathImageProfil
+          .toString()
+          .slice(user.pathImageProfil.toString().lastIndexOf(".") - 1 + 2);
 
-                try {
-                    let img = fs.readFileSync(imgPath, { encoding: 'base64' }, (error) => {
-                        if (error) {
-                            res.status(400).json({ error: error });
-                        }
-                    });
-                    res.status(200).json({ image: img, imgExtension: imgExtention });
-                } catch (e) {
-                    res.status(200).json({ error: e })
-                }
+        try {
+          let img = fs.readFileSync(
+            imgPath,
+            { encoding: "base64" },
+            (error) => {
+              if (error) {
+                res.status(400).json({ error: error });
+              }
             }
-            else {
-                res.status(200).json({ error: 'Image non definis' });
-            }
-        })
-        .catch((error) => { res.status(400).send(error.message); })
+          );
+          res.status(200).json({ image: img, imgExtension: imgExtention });
+        } catch (e) {
+          res.status(200).json({ error: e });
+        }
+      } else {
+        res.status(200).json({ error: "Image non definis" });
+      }
+    })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
 });
 
-
-app.post('/AuthMicrosoft', (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (user) {
-
-            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
-            if (!user.civilite) {
-                res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
-            } else {
-                res.status(200).send({ token });
-            }
-        } else {
-            let lastname = req.body.name.substring(req.body.name.indexOf(" ") + 1); //Morgan HUE
-            let firstname = req.body.name.replace(" " + lastname, '')
-            let newUser = new User({
-                firstname: firstname,
-                lastname: lastname,
-                email: req.body.email,
-                role: "user",
-                service_id: null
-            })
-            newUser.save().then((userFromDb) => {
-
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
-                res.status(200).send({ token, message: "Nouveau compte crée" });
-            }, (err2) => {
-                console.error(err2)
-            })
+app.post("/AuthMicrosoft", (req, res) => {
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (user) {
+      let token = jwt.sign(
+        {
+          id: user._id,
+          role: user.role,
+          service_id: user.service_id,
+          type: user.type,
+        },
+        "126c43168ab170ee503b686cd857032d",
+        { expiresIn: "7d" }
+      );
+      if (!user.civilite) {
+        res
+          .status(200)
+          .send({ token, message: "Nouveau compte crée via Ticket" });
+      } else {
+        res.status(200).send({ token });
+      }
+    } else {
+      let lastname = req.body.name.substring(req.body.name.indexOf(" ") + 1); //Morgan HUE
+      let firstname = req.body.name.replace(" " + lastname, "");
+      let newUser = new User({
+        firstname: firstname,
+        lastname: lastname,
+        email: req.body.email,
+        role: "user",
+        service_id: null,
+      });
+      newUser.save().then(
+        (userFromDb) => {
+          let token = jwt.sign(
+            {
+              id: userFromDb._id,
+              role: userFromDb.role,
+              service_id: userFromDb.service_id,
+            },
+            "126c43168ab170ee503b686cd857032d",
+            { expiresIn: "7d" }
+          );
+          res.status(200).send({ token, message: "Nouveau compte crée" });
+        },
+        (err2) => {
+          console.error(err2);
         }
-    })
-})
+      );
+    }
+  });
+});
 
 app.get("/WhatTheRole/:id", (req, res) => {
-    let id = new mongoose.mongo.ObjectId(req.params.id)
-    Formateur.findOne({ user_id: id }).then(f => {
-        if (f && f.length != 0) {
-            res.status(200).send({ data: f, type: "Formateur" })
+  let id = new mongoose.mongo.ObjectId(req.params.id);
+  Formateur.findOne({ user_id: id }).then((f) => {
+    if (f && f.length != 0) {
+      res.status(200).send({ data: f, type: "Formateur" });
+    } else {
+      Etudiant.findOne({ user_id: id }).then((a) => {
+        if (a && a.length != 0) {
+          res.status(200).send({ data: a, type: a.type });
         } else {
-            Etudiant.findOne({ user_id: id }).then(a => {
-                if (a && a.length != 0) {
-                    res.status(200).send({ data: a, type: a.type })
+          Etudiant.findOne({ user_id: id }).then((e) => {
+            if (e && e.length != 0) {
+              res.status(200).send({ data: e, type: "Etudiant" });
+            } else {
+              CommercialPartenaire.findOne({ user_id: id }).then((p) => {
+                if (p && p.length != 0) {
+                  res.status(200).send({ data: p, type: "Commercial" });
                 } else {
-                    Etudiant.findOne({ user_id: id }).then(e => {
-                        if (e && e.length != 0) {
-                            res.status(200).send({ data: e, type: "Etudiant" })
-                        }
-                        else {
-                            CommercialPartenaire.findOne({ user_id: id }).then(p => {
-                                if (p && p.length != 0) {
-                                    res.status(200).send({ data: p, type: "Commercial" })
-                                }
-
-                                else {
-                                    Prospect.findOne({ user_id: id }).then(p => {
-                                        if (p && p.length != 0) {
-                                            let Ptoken = jwt.sign({ p }, '126c43168ab170ee503b686cd857032d', { expiresIn: '7d' })
-                                            res.status(200).send({ data: p, type: "Prospect", Ptoken })
-                                        }
-
-                                        else {
-                                            res.status(200).send({ data: null });
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    })
+                  Prospect.findOne({ user_id: id }).then((p) => {
+                    if (p && p.length != 0) {
+                      let Ptoken = jwt.sign(
+                        { p },
+                        "126c43168ab170ee503b686cd857032d",
+                        { expiresIn: "7d" }
+                      );
+                      res
+                        .status(200)
+                        .send({ data: p, type: "Prospect", Ptoken });
+                    } else {
+                      res.status(200).send({ data: null });
+                    }
+                  });
                 }
-            })
+              });
+            }
+          });
         }
-    })
-})
+      });
+    }
+  });
+});
 
 app.post("/verifyUserPassword", (req, res) => {
-    let passwordToVerif = req.body.password;
-    let id = req.body.id;
+  let passwordToVerif = req.body.password;
+  let id = req.body.id;
 
-    console.log(passwordToVerif, ' ', id)
-    User.findOne({ _id: id })
-        .then((userFromDb) => {
-
-            bcrypt.compare(passwordToVerif, userFromDb.password)
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
-                    }
-                    res.status(200).json({ success: 'OK' });
-                })
-                .catch((error) => console.error(error));
-
+  console.log(passwordToVerif, " ", id);
+  User.findOne({ _id: id })
+    .then((userFromDb) => {
+      bcrypt
+        .compare(passwordToVerif, userFromDb.password)
+        .then((valid) => {
+          if (!valid) {
+            return res.status(401).json({ error: "Mot de passe incorrect !" });
+          }
+          res.status(200).json({ success: "OK" });
         })
-        .catch((error) => { console.log(error) })
+        .catch((error) => console.error(error));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 app.post("/updatePwd/:id", (req, res) => {
+  let pwd = req.body.pwd;
+  console.log(req.body);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      password: bcrypt.hashSync(pwd, 8),
+    }
+  )
+    .then((userFromDb) => {
+      console.log(userFromDb);
+      let token = {
+        id: userFromDb._id,
+        role: userFromDb.role,
+        service_id: userFromDb.service_id,
+      };
 
-    let pwd = req.body.pwd;
-    console.log(req.body)
-    User.findOneAndUpdate({ _id: req.params.id },
-        {
-            password: bcrypt.hashSync(pwd, 8),
-        })
-        .then((userFromDb) => {
-            console.log(userFromDb)
-            let token = { "id": userFromDb._id, "role": userFromDb.role, "service_id": userFromDb.service_id };
-
-            console.log(token)
-            res.status(200).send(token);
-        })
-        .catch((error) => { console.log(error) });
+      console.log(token);
+      res.status(200).send(token);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 app.post("/pwdToken/:email", (req, res) => {
+  console.log(req.params.email);
+  //  let pwd_token = { 'email': req.params.email, 'date_creation': new Date() };
 
-    console.log(req.params.email)
-    //  let pwd_token = { 'email': req.params.email, 'date_creation': new Date() };
+  let PwdToken = new pwdToken({
+    email: req.params.email,
+    date_creation: new Date(),
+  });
 
-    let PwdToken = new pwdToken({
-        email: req.params.email,
-        date_creation: new Date(),
+  PwdToken.save()
+    .then((pwdTokFromDb) => {
+      let Intedtransporter = nodemailer.createTransport({
+        host: "smtp.office365.com",
+        port: 587,
+        secure: false, // true for 587, false for other ports
+        requireTLS: true,
+        auth: {
+          user: "noreply@intedgroup.com",
+          pass: "@iNTEDgROUPE",
+        },
+      });
+      console.log(pwdTokFromDb);
+      let htmlmail =
+        '<p>Bonjour , </p><p style="color:black">Nous avons reçu une demande de modification de mot de passe pour votre compte IMS. Si vous souhaitez poursuivre la réinitialisation de votre mot de passe, cliquez sur le lien ci-dessous ou copiez-le directement dans la barre d\'adresse de votre navigateur : </p><p style="color:black"> <a href="' +
+        origin +
+        "/#/mot_de_passe_reinit/" +
+        pwdTokFromDb._id +
+        '"> Je réinitialise mon mot de passe </a> </span>  </p><p style="color:black">Si vous n\'êtes pas l\'auteur de cette requête, ou si vous ne voulez pas réinitialiser votre mot de passe, merci de ne pas tenir compte de cet e-mail.</p><p style="color:black">En cas de questions ou de problèmes, ou si vous rencontrez des difficultés au cours de la réinitialisation de votre mot de passe, contactez nous par email sur l\'adresse email suivante : contact@intedgroup.com</p><p style="color:black">Cordialement.</p><footer> <img  src="footer_signature"/></footer>';
+      let mailOptions = {
+        from: "noreply@intedgroup.com",
+        to: PwdToken.email,
+        subject: "[IMS] Mot de passe oublié",
+        html: htmlmail,
+        attachments: [
+          {
+            filename: "logoIMS.png",
+            path: "assets/logoIMS.png",
+            cid: "footer_signature", //same cid value as in the html img src
+          },
+        ],
+      };
+      Intedtransporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.error(error);
+        }
+      });
+
+      res.status(200).send(pwdTokFromDb);
     })
-
-    PwdToken.save().then((pwdTokFromDb) => {
-
-        let Intedtransporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
-            port: 587,
-            secure: false, // true for 587, false for other ports
-            requireTLS: true,
-            auth: {
-                user: 'noreply@intedgroup.com',
-                pass: '@iNTEDgROUPE',
-            },
-        });
-        console.log(pwdTokFromDb)
-        let htmlmail = '<p>Bonjour , </p><p style="color:black">Nous avons reçu une demande de modification de mot de passe pour votre compte IMS. Si vous souhaitez poursuivre la réinitialisation de votre mot de passe, cliquez sur le lien ci-dessous ou copiez-le directement dans la barre d\'adresse de votre navigateur : </p><p style="color:black"> <a href="' + origin + '/#/mot_de_passe_reinit/' + pwdTokFromDb._id + '"> Je réinitialise mon mot de passe </a> </span>  </p><p style="color:black">Si vous n\'êtes pas l\'auteur de cette requête, ou si vous ne voulez pas réinitialiser votre mot de passe, merci de ne pas tenir compte de cet e-mail.</p><p style="color:black">En cas de questions ou de problèmes, ou si vous rencontrez des difficultés au cours de la réinitialisation de votre mot de passe, contactez nous par email sur l\'adresse email suivante : contact@intedgroup.com</p><p style="color:black">Cordialement.</p><footer> <img  src="footer_signature"/></footer>';
-        let mailOptions = {
-            from: 'noreply@intedgroup.com',
-            to: PwdToken.email,
-            subject: '[IMS] Mot de passe oublié',
-            html: htmlmail,
-            attachments: [{
-                filename: 'logoIMS.png',
-                path: 'assets/logoIMS.png',
-                cid: 'footer_signature' //same cid value as in the html img src
-            }]
-        };
-        Intedtransporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.error(error);
-            }
-        });
-
-        res.status(200).send(pwdTokFromDb);
-
-    }).catch((error) => {
-        console.error(error)
-        res.status(400).send(error);
-    })
+    .catch((error) => {
+      console.error(error);
+      res.status(400).send(error);
+    });
 });
 app.post("/reinitPwd/:pwdTokenID", (req, res) => {
+  pwdToken.findOne({ _id: req.params.pwdTokenID }).then((TokenData) => {
+    console.log((new Date() - TokenData.date_creation) / 1000 / 3600);
+    if ((new Date() - TokenData.date_creation) / 1000 / 3600 < 0.25) {
+      console.log("password Updated");
 
-    pwdToken.findOne({ _id: req.params.pwdTokenID }).then((TokenData) => {
-
-        console.log(((new Date() - TokenData.date_creation) / 1000) / 3600)
-        if ((((new Date() - TokenData.date_creation) / 1000) / 3600) < 0.25) {
-
-            console.log("password Updated")
-
-            User.findOneAndUpdate({ email: TokenData.email }, { password: bcrypt.hashSync(req.body.pwd, 8), }, { new: true }, (err, userModified) => {
-                if (err) {
-                    console.error(err)
-                } else {
-                    res.send(userModified)
-                }
-            })
+      User.findOneAndUpdate(
+        { email: TokenData.email },
+        { password: bcrypt.hashSync(req.body.pwd, 8) },
+        { new: true },
+        (err, userModified) => {
+          if (err) {
+            console.error(err);
+          } else {
+            res.send(userModified);
+          }
         }
-        else {
-            console.log("Token expired")
-            res.send("Token expired")
-        }
-
-    })
-
-})
+      );
+    } else {
+      console.log("Token expired");
+      res.send("Token expired");
+    }
+  });
+});
 /*app.get('/TESTMAIL', (req, res) => {
     let origin = "http://localhost:4200"
     if (process.argv[2]) {
@@ -808,7 +986,6 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
     });
 });*/
 
-
 /*app.get("/SecretPathForAbsoluteNoReason", (req, res) => {
     //Convertir l'ancienDB vers la nouvelle
     //Supprimer phone pour que tout le monde repasse par first_connection
@@ -819,232 +996,320 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
 })*/
 
 app.get("/HowIsIt/:id", (req, res) => {
-    jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (err, decoded) {
-        if (decoded == undefined) {
-            res.status(201).send(err)
-        } else {
-            User.findById(req.params.id).then((userFromDb) => {
-                if (!userFromDb) {
-                    res.status(201).send({ name: "Cette utilisateur n'existe pas", type: userFromDb.type })
-                } else if (userFromDb.civilite == null) {
-                    res.status(201).send({ name: "Profil incomplet", type: userFromDb.type })
-                } else {
-                    res.status(201).send({ name: "Profil complet", type: userFromDb.type });
-                }
-            }).catch((error) => {
-                console.error(error)
-                res.status(201).send(error);
-            })
-        }
-    });
+  jwt.verify(
+    req.header("token"),
+    "126c43168ab170ee503b686cd857032d",
+    function (err, decoded) {
+      if (decoded == undefined) {
+        res.status(201).send(err);
+      } else {
+        User.findById(req.params.id)
+          .then((userFromDb) => {
+            if (!userFromDb) {
+              res.status(201).send({
+                name: "Cette utilisateur n'existe pas",
+                type: userFromDb.type,
+              });
+            } else if (userFromDb.civilite == null) {
+              res
+                .status(201)
+                .send({ name: "Profil incomplet", type: userFromDb.type });
+            } else {
+              res
+                .status(201)
+                .send({ name: "Profil complet", type: userFromDb.type });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            res.status(201).send(error);
+          });
+      }
+    }
+  );
 });
 
-app.get('/getAllCommercialFromTeam/:id', (req, res) => {
-    Service.findOne({ label: /ommercial/i }).then(s => {
-        User.find({ role: "Agent", service_id: s._id }).then(u => {
-            res.status(201).send(u)
-        })
-    })
-})
+app.get("/getAllCommercialFromTeam/:id", (req, res) => {
+  Service.findOne({ label: /ommercial/i }).then((s) => {
+    User.find({ role: "Agent", service_id: s._id }).then((u) => {
+      res.status(201).send(u);
+    });
+  });
+});
 
 app.get("/getAllCommercialV2", (req, res) => {
-    Service.findOne({ label: /ommercial/i }).then(s => {
-        if (s)
-            User.find({ role: { $ne: 'user' }, service_id: s._id }).then(u => {
-                res.status(201).send(u)
-            })
-        else
-            res.status(500).send("Le service de commercial n'existe pas")
-    })
+  Service.findOne({ label: /ommercial/i }).then((s) => {
+    if (s)
+      User.find({ role: { $ne: "user" }, service_id: s._id }).then((u) => {
+        res.status(201).send(u);
+      });
+    else res.status(500).send("Le service de commercial n'existe pas");
+  });
 });
-app.get('/findDuplicateIMS', async (req, res) => {
-    /*
+app.get("/findDuplicateIMS", async (req, res) => {
+  /*
     db.collection.aggregate([
     {"$group" : { "_id": "$name", "count": { "$sum": 1 } } },
     {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }, 
     {"$project": {"name" : "$_id", "_id" : 0} }
     ]);
     */
-    let r = []
-    User.updateMany({ email: ' ' }, { email: '' }, { new: true }, (err, doc) => {
-        User.updateMany({ email: '' }, { email: null }, (err, doc) => {
-            console.log('email:"" et email:" " convertir en null')
-        })
-    })
-    let agg = await User.aggregate([
-        { "$group": { "_id": "$email", "count": { "$sum": 1 } } },
-        { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
-        { "$project": { "email": "$_id", "_id": 0 } }
-    ])
-    for (const doc of agg) {
-        await User.find({ email: doc.email }).then(users => {
-            if (users[0])
-                r.push({ '_id': users[0]._id, data: users })
-        })
-    }
-    res.status(201).send(r)
-})
+  let r = [];
+  User.updateMany({ email: " " }, { email: "" }, { new: true }, (err, doc) => {
+    User.updateMany({ email: "" }, { email: null }, (err, doc) => {
+      console.log('email:"" et email:" " convertir en null');
+    });
+  });
+  let agg = await User.aggregate([
+    { $group: { _id: "$email", count: { $sum: 1 } } },
+    { $match: { _id: { $ne: null }, count: { $gt: 1 } } },
+    { $project: { email: "$_id", _id: 0 } },
+  ]);
+  for (const doc of agg) {
+    await User.find({ email: doc.email }).then((users) => {
+      if (users[0]) r.push({ _id: users[0]._id, data: users });
+    });
+  }
+  res.status(201).send(r);
+});
 
-app.get('/findDuplicatePerso', async (req, res) => {
-    let r = []
-    User.updateMany({ email_perso: ' ' }, { email_perso: '' }, { new: true }, (err, doc) => {
-        User.updateMany({ email_perso: '' }, { email_perso: null }, (err, doc) => {
-            console.log('email_perso:"" et email_perso:" " convertir en null')
-        })
-    })
-    let agg = await User.aggregate([
-        { "$group": { "_id": "$email_perso", "count": { "$sum": 1 } } },
-        { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
-        { "$project": { "email_perso": "$_id", "_id": 0 } }
-    ])
-    for (const doc of agg) {
-        await User.find({ email_perso: doc.email_perso }).then(users => {
-            if (users[0])
-                r.push({ '_id': users[0]._id, data: users })
-        })
-    }
-    res.status(201).send(r)
-})
-
-app.get('/delete/:user_id', (req, res) => {
-    let token = jwt.decode(req.header("token"))
-    if (token.role == 'Admin')
-        User.findByIdAndRemove(req.params.user_id).then(r => {
-            res.send(r)
-        })
-    //Chercher dans les autres tables si son ID ne traine pas dans les Models Formateur, Etudiant, Prospects, Commercial etc
-    else
-        res.status(403).send('Vous n\'avez pas l\'accès necessaire.')
-})
-
-app.get('/toAdmin', (req, res) => {
-    //Attribuer ceux sans classe_id et !statut : {$in:'Dossier Complet'} en valided_by_admin : false
-    Etudiant.updateMany({ classe_id: null, statut_dossier: { $nin: 'Dossier Complet' } }, { valided_by_admin: false }, { new: true }, (err, doc) => {
-        if (!err) {
-            res.send(doc)
-        } else {
-            res.status(500).send(err)
+app.get("/findDuplicatePerso", async (req, res) => {
+  let r = [];
+  User.updateMany(
+    { email_perso: " " },
+    { email_perso: "" },
+    { new: true },
+    (err, doc) => {
+      User.updateMany(
+        { email_perso: "" },
+        { email_perso: null },
+        (err, doc) => {
+          console.log('email_perso:"" et email_perso:" " convertir en null');
         }
-
-    })
-})
-app.get('/toPedagogie', (req, res) => {
-    //Attribuer ceux sans classe_id et statut : {$in:'Dossier Complet'} en valided_by_admin : true
-    Etudiant.updateMany({ classe_id: null, statut_dossier: { $in: 'Dossier Complet' } }, { valided_by_admin: true }, { new: true }, (err, doc) => {
-        if (!err) {
-            res.send(doc)
-        } else {
-            res.status(500).send(err)
-        }
-
-    })
-})
-
-app.get('/toSupport', (req, res) => {
-    //Attribuer ceux en valided_by_admin:true et sans email_ims en valided_by_support : false
-    Etudiant.find({ valided_by_admin: true }).populate('user_id').then(r => {
-        let users = []
-        r.forEach(user => {
-            if (user.user_id)
-                if (user.user_id.email == null || user.user_id.email == '' || user.user_id.email == ' ')
-                    users.push(user.user_id._id)
-        })
-        Etudiant.updateMany({ user_id: { $in: users } }, { valided_by_support: false }, { new: true }, (err, doc) => {
-            res.send(doc)
-        })
-    }, err => {
-        res.status(500).send(err)
-    })
-})
-
-
-app.get('/cleanModel', (req, res) => {
-    //Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc
-    Etudiant.find().populate('user_id').then(r => {
-        r.forEach(user => {
-            if (!user.user_id)
-                Etudiant.findByIdAndRemove(user._id).exec()
-        })
-    })
-    Formateur.find().populate('user_id').then(r => {
-        r.forEach(user => {
-            if (!user.user_id)
-                Formateur.findByIdAndRemove(user._id).exec()
-        })
-    })
-    CommercialPartenaire.find().populate('user_id').then(r => {
-        r.forEach(user => {
-            if (!user.user_id)
-                CommercialPartenaire.findByIdAndRemove(user._id).exec()
-        })
-    })
-    Prospect.find().populate('user_id').then(r => {
-        r.forEach(user => {
-            if (!user.user_id)
-                Prospect.findByIdAndRemove(user._id).exec()
-        })
-    })
-
-    res.status(200).send({})
-})
-
-app.get('/deleteDuplicateProspect', async (req, res) => {
-    //Supprimer les doublons de prospects
-    let agg = await User.aggregate([
-        { "$group": { "_id": "$email_perso", "count": { "$sum": 1 } } },
-        { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
-        { "$project": { "email_perso": "$_id", "_id": 0 } }
-    ])
-    let r = []
-    for (const doc of agg) {
-        if (doc.email_perso != '' && doc.email_perso != ' ' && doc.email_perso != null)
-            await User.findOneAndRemove({ email_perso: doc.email_perso, $or: [{ 'type': 'Prospect' }, { 'type': null }] }, { new: true }, (err, doc) => {
-                r.push(doc)
-            })
+      );
     }
-    res.status(201).send(r)
-})
+  );
+  let agg = await User.aggregate([
+    { $group: { _id: "$email_perso", count: { $sum: 1 } } },
+    { $match: { _id: { $ne: null }, count: { $gt: 1 } } },
+    { $project: { email_perso: "$_id", _id: 0 } },
+  ]);
+  for (const doc of agg) {
+    await User.find({ email_perso: doc.email_perso }).then((users) => {
+      if (users[0]) r.push({ _id: users[0]._id, data: users });
+    });
+  }
+  res.status(201).send(r);
+});
 
-app.get('/getAllWithSameEmail', (req, res) => {
-    User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
-        res.status(201).send(r)
-    })
-})
+app.get("/delete/:user_id", (req, res) => {
+  let token = jwt.decode(req.header("token"));
+  if (token.role == "Admin")
+    User.findByIdAndRemove(req.params.user_id).then((r) => {
+      res.send(r);
+    });
+  //Chercher dans les autres tables si son ID ne traine pas dans les Models Formateur, Etudiant, Prospects, Commercial etc
+  else res.status(403).send("Vous n'avez pas l'accès necessaire.");
+});
 
-app.get('/cleanAllWithSameEmail', (req, res) => {
-    User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
-        r.forEach(user => {
-            let email = user.email.toLowerCase()
-            if (email.indexOf('@gmail.com') != -1 || email.indexOf('@yahoo.fr') != -1 || email.indexOf('@outlook.fr') != -1)
-                User.findByIdAndUpdate(user._id, { email: null }, { new: true }, (err, doc) => {
-                    console.log(doc)
-                })
-            else if (email.indexOf('@estya.com') != -1 || email.indexOf('@elitech.education') != -1 || email.indexOf('@intedgroup.com') || email.indexOf('@eduhorizons.com'))
-                User.findByIdAndUpdate(user._id, { email_perso: null }, { new: true }, (err, doc) => {
-                    console.log(doc)
-                })
-        })
-    })
-    res.status(200).send({})
-})
+app.get("/toAdmin", (req, res) => {
+  //Attribuer ceux sans classe_id et !statut : {$in:'Dossier Complet'} en valided_by_admin : false
+  Etudiant.updateMany(
+    { classe_id: null, statut_dossier: { $nin: "Dossier Complet" } },
+    { valided_by_admin: false },
+    { new: true },
+    (err, doc) => {
+      if (!err) {
+        res.send(doc);
+      } else {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
+app.get("/toPedagogie", (req, res) => {
+  //Attribuer ceux sans classe_id et statut : {$in:'Dossier Complet'} en valided_by_admin : true
+  Etudiant.updateMany(
+    { classe_id: null, statut_dossier: { $in: "Dossier Complet" } },
+    { valided_by_admin: true },
+    { new: true },
+    (err, doc) => {
+      if (!err) {
+        res.send(doc);
+      } else {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
 
-app.get('/deleteEmail/:user_id/:type', (req, res) => {
-    if (req.params.type == 'IMS')
-        User.findByIdAndUpdate(req.params.user_id, { email: null }, { new: true }, (err, doc) => {
-            if (err) {
-                res.status(500).send(err)
-            } else {
-                res.status(200).send(doc)
+app.get("/toSupport", (req, res) => {
+  //Attribuer ceux en valided_by_admin:true et sans email_ims en valided_by_support : false
+  Etudiant.find({ valided_by_admin: true })
+    .populate("user_id")
+    .then(
+      (r) => {
+        let users = [];
+        r.forEach((user) => {
+          if (user.user_id)
+            if (
+              user.user_id.email == null ||
+              user.user_id.email == "" ||
+              user.user_id.email == " "
+            )
+              users.push(user.user_id._id);
+        });
+        Etudiant.updateMany(
+          { user_id: { $in: users } },
+          { valided_by_support: false },
+          { new: true },
+          (err, doc) => {
+            res.send(doc);
+          }
+        );
+      },
+      (err) => {
+        res.status(500).send(err);
+      }
+    );
+});
+
+app.get("/cleanModel", (req, res) => {
+  //Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc
+  Etudiant.find()
+    .populate("user_id")
+    .then((r) => {
+      r.forEach((user) => {
+        if (!user.user_id) Etudiant.findByIdAndRemove(user._id).exec();
+      });
+    });
+  Formateur.find()
+    .populate("user_id")
+    .then((r) => {
+      r.forEach((user) => {
+        if (!user.user_id) Formateur.findByIdAndRemove(user._id).exec();
+      });
+    });
+  CommercialPartenaire.find()
+    .populate("user_id")
+    .then((r) => {
+      r.forEach((user) => {
+        if (!user.user_id)
+          CommercialPartenaire.findByIdAndRemove(user._id).exec();
+      });
+    });
+  Prospect.find()
+    .populate("user_id")
+    .then((r) => {
+      r.forEach((user) => {
+        if (!user.user_id) Prospect.findByIdAndRemove(user._id).exec();
+      });
+    });
+
+  res.status(200).send({});
+});
+
+app.get("/deleteDuplicateProspect", async (req, res) => {
+  //Supprimer les doublons de prospects
+  let agg = await User.aggregate([
+    { $group: { _id: "$email_perso", count: { $sum: 1 } } },
+    { $match: { _id: { $ne: null }, count: { $gt: 1 } } },
+    { $project: { email_perso: "$_id", _id: 0 } },
+  ]);
+  let r = [];
+  for (const doc of agg) {
+    if (
+      doc.email_perso != "" &&
+      doc.email_perso != " " &&
+      doc.email_perso != null
+    )
+      await User.findOneAndRemove(
+        {
+          email_perso: doc.email_perso,
+          $or: [{ type: "Prospect" }, { type: null }],
+        },
+        { new: true },
+        (err, doc) => {
+          r.push(doc);
+        }
+      );
+  }
+  res.status(201).send(r);
+});
+
+app.get("/getAllWithSameEmail", (req, res) => {
+  User.find({ email: { $ne: null } })
+    .$where("this.email==this.email_perso")
+    .then((r) => {
+      res.status(201).send(r);
+    });
+});
+
+app.get("/cleanAllWithSameEmail", (req, res) => {
+  User.find({ email: { $ne: null } })
+    .$where("this.email==this.email_perso")
+    .then((r) => {
+      r.forEach((user) => {
+        let email = user.email.toLowerCase();
+        if (
+          email.indexOf("@gmail.com") != -1 ||
+          email.indexOf("@yahoo.fr") != -1 ||
+          email.indexOf("@outlook.fr") != -1
+        )
+          User.findByIdAndUpdate(
+            user._id,
+            { email: null },
+            { new: true },
+            (err, doc) => {
+              console.log(doc);
             }
-        })
-    else
-        User.findByIdAndUpdate(req.params.user_id, { email_perso: null }, { new: true }, (err, doc) => {
-            if (err) {
-                res.status(500).send(err)
-            } else {
-                res.status(200).send(doc)
+          );
+        else if (
+          email.indexOf("@estya.com") != -1 ||
+          email.indexOf("@elitech.education") != -1 ||
+          email.indexOf("@intedgroup.com") ||
+          email.indexOf("@eduhorizons.com")
+        )
+          User.findByIdAndUpdate(
+            user._id,
+            { email_perso: null },
+            { new: true },
+            (err, doc) => {
+              console.log(doc);
             }
-        })
-})
+          );
+      });
+    });
+  res.status(200).send({});
+});
+
+app.get("/deleteEmail/:user_id/:type", (req, res) => {
+  if (req.params.type == "IMS")
+    User.findByIdAndUpdate(
+      req.params.user_id,
+      { email: null },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.status(200).send(doc);
+        }
+      }
+    );
+  else
+    User.findByIdAndUpdate(
+      req.params.user_id,
+      { email_perso: null },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.status(200).send(doc);
+        }
+      }
+    );
+});
 
 module.exports = app;

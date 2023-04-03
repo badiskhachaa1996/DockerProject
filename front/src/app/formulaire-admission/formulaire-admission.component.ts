@@ -744,8 +744,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campusChoix1() { return this.RegisterForm.get('campusChoix1'); }
   get campusChoix2() { return this.RegisterForm.get('campusChoix2'); }
   get campusChoix3() { return this.RegisterForm.get('campusChoix3'); }
-  get programme() { return this.RegisterForm.get('programme').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value.value; }
+  get programme() { return this.RegisterForm.get('programme').value; }
+  get formation() { return this.RegisterForm.get('formation').value; }
   get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
@@ -825,7 +825,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     let campusChoix2 = this.RegisterForm.get('campusChoix2').value.value;
     let campusChoix3 = this.RegisterForm.get('campusChoix3').value.value;
     let programme = this.RegisterForm.get('programme').value.value;
-    let formation = this.RegisterForm.get('formation').value.value;
+    let formation = this.RegisterForm.get('formation').value;
     let rentree_scolaire = this.RegisterForm.value.rentree_scolaire
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
     // if (rythme_formation == "Alternance") {
