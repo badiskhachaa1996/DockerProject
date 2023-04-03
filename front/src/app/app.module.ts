@@ -262,11 +262,8 @@ import { ProspectsAlternablesComponent } from './commercial/prospects-alternable
 import { AddProspectComponent } from './admission/add-prospect/add-prospect.component';
 import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-formateur/questionnaire-formateur.component';
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
-<<<<<<< HEAD
 import { StageComponent } from './commercial/stage/stage.component';
-=======
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
->>>>>>> features_idriss
 
 
 @NgModule({
@@ -539,11 +536,8 @@ import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-c
     AddProspectComponent,
     QuestionnaireFormateurComponent,
     ResultatQfComponent,
-<<<<<<< HEAD
-    StageComponent
-=======
+    StageComponent,
     AjoutCollaborateurComponent
->>>>>>> features_idriss
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

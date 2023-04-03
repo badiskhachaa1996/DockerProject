@@ -167,5 +167,36 @@ app.post("/upload-convention", uploadConvention.single('file'), (req, res) => {
 });
 
 /* partie upload de l'avenant */
+const uploadAvenantStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/stages/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        const filename = 'avenant_stage';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadAvenant = multer({storage: uploadAvenantStorage});
+
+app.post("/upload-avenant", uploadAvenant.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        Stage.updateOne({_id: id}, {avenant: `avenant_stage.${file.mimetype.split('/')[1]}`})
+        .then((response) => {res.status(201).json({successMsg: 'Avenant téléversé, contrat de stage mis à jour'});})
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat de stage'); });
+    }
+});
 
 module.exports = app;

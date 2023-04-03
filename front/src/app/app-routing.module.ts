@@ -159,6 +159,7 @@ import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-forma
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
+import { StageComponent } from './commercial/stage/stage.component';
 
 const routes: Routes = [
     {
@@ -273,6 +274,7 @@ const routes: Routes = [
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */
