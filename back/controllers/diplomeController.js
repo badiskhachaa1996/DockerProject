@@ -140,36 +140,4 @@ app.get('/getFile/:id/:name', (req, res) => {
     })
 });
 
-// upload du calendrier de la formation
-const calendarUpload = multer.diskStorage({
-    destination: (req, file, callBack) => {
-        const id = req.body.id;
-        const link = `storage/diplome/${id}/calendrier`;
-        if(!fs.existsSync(link))
-        {
-            fs.mkdirSync(link, {recursive: true});
-        }
-        callBack(null, link);
-    },
-    filename: (req, file, callBack) => {
-        callBack(null, `calendrier.${file.mimetype.split('/')[1]}`);
-    }
-});
-
-const uploadCalendar = multer({storage: calendarUpload});
-
-app.post("/upload-calendar", uploadCalendar.single('file'), (req, res) => {
-    const file = req.file;
-
-    if(!file)
-    {
-        res.status(400).send('Aucun fichier sélectionnée');
-    } else {
-        Diplome.findOneAndUpdate({ _id: req.body.id }, { calendrier: 'calendrier.pdf' })
-        .then((response) => { res.status(201).json({successMsg: 'Calendrier Téléversé, diplôme mis à jour'}); })
-        .catch((error) => { res.status(400).send('Impossible de mettre à jour le diplôme'); });
-    }
-    
-});
-
 module.exports = app;

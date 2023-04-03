@@ -98,10 +98,6 @@ export class ListDiplomeComponent implements OnInit {
 
   isCommercial: boolean = false;
 
-  // partie ajout du calendrier de la formation
-  showFormAddCalendar: boolean = false;
-  calendarFile: any;
-
   constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
     private formateurService: FormateurService, private AuthService: AuthService, private CommercialService: CommercialPartenaireService) { }
@@ -395,27 +391,4 @@ export class ListDiplomeComponent implements OnInit {
   get isCertified() { return this.formUpdateDiplome.get('isCertified'); }
   get code_diplome() { return this.formUpdateDiplome.get('code_diplome'); }
 
-  // upload du calendrier
-  onSelectFile(event: any): void
-  {
-    if(event.target.files.length > 0)
-    {
-      this.calendarFile = event.target.files[0];
-    }
-  }
-
-  onAddCalendar(): void
-  {
-    let formData = new FormData();
-    formData.append('id', this.idDiplomeToUpdate);
-    formData.append('file', this.calendarFile);
-    // envoi du calendrier de la formation
-    this.diplomeService.uploadCalendar(formData)
-    .then((response) => { 
-      this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); 
-      this.showFormAddCalendar = false;
-      
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.error}); } )
-  }
 }

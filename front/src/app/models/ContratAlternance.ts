@@ -32,6 +32,9 @@ export class ContratAlternance {
         public convention_formation?: string, //* file
         public resiliation_contrat?: string, //* file
         public accord_prise_charge?: string, //* file
+        public relance?: string, //* file
+        public last_status_change_date?: Date,
+        public remarque?: string, // remarque faite de la part de l'entreprise
     ) { }
 
 }

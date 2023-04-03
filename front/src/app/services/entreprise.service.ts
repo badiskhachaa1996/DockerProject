@@ -16,7 +16,7 @@ export class EntrepriseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  //Methode de recuperation de la liste des entreprises
+  //Méthode de recuperation de la liste des entreprises
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<Entreprise[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -229,16 +229,16 @@ export class EntrepriseService {
     });
   }
 
-  // méthode de téléchargement du calendrier de la formation
-  getCalendar(idFormation: string): Promise<any>
+  // méthode d'upload de la relance pour les contrats
+  uploadRelance(formData: FormData): Promise<any>
   {
-    const url = `${this.apiUrl}download-calendar/${idFormation}`;
+    const url = `${this.apiUrl}upload-relance`;
 
     return new Promise<any>((resolve, reject) => {
-      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
-        next: (response) => { resolve(response) },
-        error: (error) => { reject(error) },
-        complete: () => { console.log('Calendrier de la formation téléchargé') }
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log('Relance envoyé'); }
       });
     });
   }
@@ -295,6 +295,34 @@ export class EntrepriseService {
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Résiliation téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement de la relance
+  getRelance(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-relance/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Relance téléchargé') }
+      });
+    });
+  }
+
+  // méthode de modification d'une remarque faite sur un contrat
+  patchRemarque(idContrat: string, remarque: string): Promise<any>
+  {
+    const url = `${this.apiUrl}patch-remarque`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch<any>(url, {idContrat: idContrat, remarque: remarque}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response) },
+        error: (error: any) => { reject(error) },
+        complete: () => { console.log('Remarque mis à jour') }
       });
     });
   }

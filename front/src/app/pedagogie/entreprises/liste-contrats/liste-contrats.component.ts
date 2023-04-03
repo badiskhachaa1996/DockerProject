@@ -16,6 +16,7 @@ import { User } from 'src/app/models/User';
 import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { saveAs } from 'file-saver';
+import { ClasseService } from 'src/app/services/classe.service';
 
 
 @Component({
@@ -142,6 +143,7 @@ export class ListeContratsComponent implements OnInit {
   showFormAddConvention: boolean = false;
   showFormAddResiliation: boolean = false;
   showFormAddAccordPriseEnCharge: boolean = false;
+  showFormAddRelance: boolean = false;
   doc: any;
 
   // partie dédié à la gestion de l'affichage par filtre par commercial
@@ -156,7 +158,7 @@ export class ListeContratsComponent implements OnInit {
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
-    private authService: AuthService, private tuteurService: TuteurService,
+    private authService: AuthService, private tuteurService: TuteurService, public classeService: ClasseService,
     private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService,
     private campusService: CampusService) { }
 
@@ -242,7 +244,6 @@ export class ListeContratsComponent implements OnInit {
       if (this.token.role == "Admin" || this.token.role == "Agent") {
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
           this.ListeContrats = Allcontrats;
-          console.log(this.ListeContrats[0])
           this.InitAgentFilter()
           Allcontrats.forEach(cont => {
             if (cont.tuteur_id && cont.tuteur_id?.entreprise_id)
@@ -463,7 +464,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -487,7 +488,7 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge, this.contratToUpdate.relance, this.contratToUpdate.last_status_change_date, this.contratToUpdate.remarque)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -669,11 +670,28 @@ export class ListeContratsComponent implements OnInit {
     .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
   }
 
+  // méthode d'ajout du la relance du contrat
+  onAddRelance(): void
+  {    
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du document dans la base de données
+    this.entrepriseService.uploadRelance(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddRelance = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
 
   // méthode de téléchargement du calendrier de la formation
   onDownloadCalendar(id: string): void
   {
-    this.entrepriseService.getCalendar(id)
+    this.classeService.downloadCalendar(id)
     .then((response: Blob) => {
       let downloadUrl = window.URL.createObjectURL(response);
       saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
@@ -728,6 +746,18 @@ export class ListeContratsComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  // méthode de téléchargement de la rélance
+  onDownloadRelance(id: string): void
+  {
+    this.entrepriseService.getRelance(id)
+    .then((response: Blob) => {
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `relance.${response.type.split('/')[1]}`);
+      this.messageService.add({ severity: "success", summary: "Relance", detail: `Téléchargement réussi` });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Relance", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthodes pour compter le nombre de contrats filtrés par commercial
