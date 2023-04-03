@@ -322,6 +322,8 @@ export class DashboardComponent implements OnInit {
             this.CommercialExterne = cData
             this.PartenaireService.getById(cData.partenaire_id).subscribe(pData => {
               this.PartenaireInfo = pData
+              this.dashboard = null
+              this.loadPP(this.PartenaireInfo)
             })
           })
         }
@@ -655,15 +657,16 @@ export class DashboardComponent implements OnInit {
   FileUploadPC(event) {
     if (event && event.length > 0 && this.PartenaireInfo != null) {
       const formData = new FormData();
+
       formData.append('id', this.PartenaireInfo._id)
       formData.append('file', event[0])
-      /*this.AuthService.uploadimageprofile(formData).subscribe(() => {
+      console.log(formData)
+      this.CService.uploadimageprofile(formData).subscribe(() => {
         this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de la photo de profil avec succès' });
-        this.AuthService.reloadImage(this.uploadUser.user_id)
-        this.uploadUser = null
+        this.loadPP(this.PartenaireInfo)
       }, (error) => {
         console.error(error)
-      })*/
+      })
     }
   }
   imageToShow: any = "../assets/images/avatar.PNG"
@@ -673,23 +676,24 @@ export class DashboardComponent implements OnInit {
   }]
   loadPP(rowData) {
     this.imageToShow = "../assets/images/avatar.PNG"
-    /*this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
-  if (data.error) {
-    this.imageToShow = "../assets/images/avatar.PNG"
-  } else {
-    const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-    let blob: Blob = new Blob([byteArray], { type: data.documentType })
-    let reader: FileReader = new FileReader();
-    reader.addEventListener("load", () => {
-      this.imageToShow = reader.result;
-    }, false);
-    if (blob) {
-      this.imageToShow = "../assets/images/avatar.PNG"
-      reader.readAsDataURL(blob);
-    }
-  }
+    console.log(rowData)
+    this.CService.getProfilePicture(rowData._id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
 
-})*/
+    })
   }
   editInfoCommercial = false
   editInfoCommercialForm: FormGroup = new FormGroup({
@@ -719,7 +723,15 @@ export class DashboardComponent implements OnInit {
   }
 
   saveEditCommercialInfo() {
-    this.editInfoCommercial = false
+
+    let data = { ...this.editInfoCommercialForm.value }
+    data._id = this.PartenaireInfo._id
+    data.Pays = data.Pays.join(',')
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      this.PartenaireInfo = partenaire
+      this.messageService.add({ severity: 'success', summary: 'Informations Partenaires', detail: 'Mise à jour des informations avec succès' });
+      this.editInfoCommercial = false
+    })
   }
 
   //Méthode de test pour LW

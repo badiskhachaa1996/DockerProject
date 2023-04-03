@@ -47,6 +47,11 @@ export class PartenaireService {
   updatePartenaire(partenaire: Partenaire) {
     let registreUrl = this.apiUrl + "updatePartenaire";
     return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  newUpdate(partenaire: Partenaire) {
+    let registreUrl = this.apiUrl + "newUpdate";
+    return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
     

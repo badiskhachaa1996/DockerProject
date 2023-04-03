@@ -592,7 +592,7 @@ export class AppMenuComponent implements OnInit {
                     ];
                 }
                 // menu service pédagogique
-                else if (response.role === 'Agent' && service_id.label === 'Pédagogie') {
+                else if (response.role === 'Agent' && service_id?.label === 'Pédagogie') {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -803,7 +803,7 @@ export class AppMenuComponent implements OnInit {
                     ]    
                 }
                 // menu service admission
-                else if (response.role === 'Agent' && service_id.label === 'Admission') {
+                else if (response.role === 'Agent' && service_id?.label === 'Admission') {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -887,7 +887,7 @@ export class AppMenuComponent implements OnInit {
                     ]    
                 }
                 // menu service administration
-                else if (response.role === 'Agent' && service_id.label === 'Administration') {
+                else if (response.role === 'Agent' && service_id?.label === 'Administration') {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -1054,7 +1054,7 @@ export class AppMenuComponent implements OnInit {
                     ]    
                 }
                 // menu service commerciale
-                else if (response.role === 'Agent' && service_id.label === 'Commercial') {
+                else if (response.role === 'Agent' && response.type === 'Commercial') {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -1166,7 +1166,7 @@ export class AppMenuComponent implements OnInit {
                     ]    
                 }
                 // menu service RH
-                else if (response.role === 'Agent' && service_id.label === 'Ressources Humaines') {
+                else if (response.role === 'Agent' && service_id?.label === 'Ressources Humaines') {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -1220,7 +1220,7 @@ export class AppMenuComponent implements OnInit {
                     ]    
                 }
                 // menu service support informatique
-                else if (response.role === 'Agent' && service_id.label === 'Support Informatique' ) {
+                else if (response.role === 'Agent' && service_id?.label === 'Support Informatique' ) {
                     this.items = [
                         {
                             label: 'Tableau de bord',
@@ -1875,7 +1875,7 @@ export class AppMenuComponent implements OnInit {
                     
                 }
                 // menu alternant service pédagogique DONE
-                else if (response.role === 'Agent' && service_id.label == 'Pédagogie' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label == 'Pédagogie' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
                         next: (dataEtu: Etudiant) => {
                             this.items = [
@@ -2102,7 +2102,7 @@ export class AppMenuComponent implements OnInit {
                       
                 }
                 // menu service admission 
-                else if (response.role === 'Agent' && service_id.label === 'Admission' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label === 'Admission' && response.type === 'Alternant') {
                         this.ETUService.getByUser_id(this.token.id).subscribe({
                             next: (dataEtu: Etudiant) => {
                                 this.items = [
@@ -2203,7 +2203,7 @@ export class AppMenuComponent implements OnInit {
 
                 }
                 // menu service administration 
-                else if (response.role === 'Agent' && service_id.label === 'Administration' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label === 'Administration' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
                         next: (dataEtu: Etudiant) => {                    
                             this.items = [
@@ -2386,7 +2386,7 @@ export class AppMenuComponent implements OnInit {
         
                 }
                 // menu service commerciale
-                else if (response.role === 'Agent' && service_id.label === 'Commercial' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label === 'Commercial' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
                         next: (dataEtu: Etudiant) => {
                             this.items = [
@@ -2504,7 +2504,7 @@ export class AppMenuComponent implements OnInit {
                     });           
                 }
                 // menu service RH
-                else if (response.role === 'Agent' && service_id.label === 'Ressources Humaines' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label === 'Ressources Humaines' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
                         next: (dataEtu: Etudiant) => {
                             this.items = [
@@ -2564,7 +2564,7 @@ export class AppMenuComponent implements OnInit {
                     });        
                 }
                 // menu service support informatique
-                else if (response.role === 'Agent' && service_id.label === 'Support Informatique' && response.type === 'Alternant') {
+                else if (response.role === 'Agent' && service_id?.label === 'Support Informatique' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
                         next: (dataEtu: Etudiant) => {
                             this.items = [

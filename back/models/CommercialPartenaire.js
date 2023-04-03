@@ -9,7 +9,7 @@ const commercialPartenaireSchema = mongoose.Schema({
     statut: { type: String, required: false },
     isAdmin: { type: Boolean, default: false },
     pays: { type: String },
-    whatsapp: { type: String },
+    whatsapp: { type: String }
 });
 
 //Création de la table puis exportation du modele partenaire
