@@ -211,7 +211,7 @@ export class AddEtudiantComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       date_naissance: [null, Validators.required],
       pays_origine: [this.paysList[0], Validators.required],
-      nationalite: [this.nationList[0].value, Validators.required],
+      nationalite: [this.nationList[0], Validators.required],
       indicatif: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       email: ['', [Validators.email, Validators.required]],
@@ -299,7 +299,7 @@ export class AddEtudiantComponent implements OnInit {
     let year = dn.getUTCFullYear().toString().slice(-2)
     let lengUser = this.users.length
     while (lengUser > 1000)
-      lengUser - 1000
+      lengUser = lengUser - 1000
     let nb = (lengUser).toString()
     if (lengUser < 10)
       nb = "00" + nb
@@ -363,7 +363,6 @@ export class AddEtudiantComponent implements OnInit {
     let adresse_mail_tuteur = this.formAddEtudiant.get("adresse_mail_tuteur")?.value;
     let phone_tuteur = this.formAddEtudiant.get("phone_tuteur")?.value;
     let remarque_stage = this.formAddEtudiant.get("remarque_stage")?.value;
-
     let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
     let valided_by_support = (email_ims != null && email_ims != '' && email_ims.length > 1)
     if (!valided_by_support)
@@ -458,7 +457,6 @@ export class AddEtudiantComponent implements OnInit {
       phone_tuteur,
       remarque_stage
     );
-
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         console.log(response.data)

@@ -432,31 +432,28 @@ app.post("/createContratAlternance", (req, res, next) => {
                                             .then((user) => {
                                                 // création du mail à envoyer
                                                 res.status(200).send(NewContData);
-                                                if (user && !argProd.includes('dev') && !argProd.includes('prod')) {
-                                                    let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
+                                                let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
 
-                                                    let Ceo_mailOptions =
-                                                    {
-                                                        from: "ims@intedgroup.com",
-                                                        to: user.email_perso,
-                                                        subject: 'Nouveau contrat [IMS]',
-                                                        html: Ceo_htmlmail,
-                                                        // attachments: [{
-                                                        //     filename: 'Image1.png',
-                                                        //     path: 'assets/Image1.png',
-                                                        //     cid: 'Image1' //same cid value as in the html img src
-                                                        // }]
-                                                    };
+                                                let Ceo_mailOptions =
+                                                {
+                                                    from: "ims@intedgroup.com",
+                                                    to: user.email_perso,
+                                                    subject: 'Nouveau contrat [IMS]',
+                                                    html: Ceo_htmlmail,
+                                                    // attachments: [{
+                                                    //     filename: 'Image1.png',
+                                                    //     path: 'assets/Image1.png',
+                                                    //     cid: 'Image1' //same cid value as in the html img src
+                                                    // }]
+                                                };
 
 
-                                                    // envoi du mail
-                                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                                        if (error) {
-                                                            console.error(error);
-                                                        }
-                                                    });
-                                                }
-
+                                                // envoi du mail
+                                                transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                    if (error) {
+                                                        console.error(error);
+                                                    }
+                                                });
                                             })
                                             .catch((error) => { console.log(error); res.status(400).send(error) })
 
@@ -590,14 +587,14 @@ app.post("/send-creation-link", (req, res) => {
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "classe_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((CAFromDb) => {
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
             console.log(error);
             res.status(500).json({
-                error: "Impossible de recuperer la liste des contrats " + error.message
+                error: "Impossible de récupérer la liste des contrats " + error.message
             });
         });
 });
@@ -612,7 +609,7 @@ app.get("/get-entreprises-by-id-ceo/:idCEO", (req, res, next) => {
 
 
 app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
-    CAlternance.find({ entreprise_id: req.params.entreprise_id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
+    CAlternance.find({ entreprise_id: req.params.entreprise_id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "classe_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((CAFromDb) => {
             res.status(200).send(CAFromDb);
         })
@@ -625,7 +622,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 });
 
 app.get("/getAllContrats/", (req, res, next) => {
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "campus" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation')?.populate('code_commercial')?.populate('directeur_id')?.populate('ecole')?.populate('entreprise_id')
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "classe_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((CAFromDb) => {
             res.status(200).send(CAFromDb);
         })
@@ -639,7 +636,7 @@ app.get("/getAllContrats/", (req, res, next) => {
 
 // recuperation de la liste des contrats d'un ceo
 app.get("/contrats-by-ceo/:id", (req, res) => {
-    CAlternance.find({ directeur_id: req.params.id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "campus" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation')?.populate('code_commercial')?.populate('directeur_id')?.populate('ecole')?.populate('entreprise_id')
+    CAlternance.find({ directeur_id: req.params.id }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'alternant_id', populate: { path: "classe_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((response) => { res.status(200).json({ success: 'Liste des contrats récuperé', contrats: response }); })
         .catch((error) => { console.log(error); res.status(400).json({ error: error, errorMsg: 'Impossible de récuperer la liste des contrats' }); });
 });
@@ -683,15 +680,16 @@ app.get("/getByEtudiantIdPopolate/:id", (req, res, next) => {
 app.patch("/update-status", (req, res) => {
     const contract_id = req.body._id;
     const status = req.body.statut;
+    const today = new Date();
 
-    CAlternance.findOneAndUpdate({ _id: contract_id }, { statut: status })
+    CAlternance.findOneAndUpdate({ _id: contract_id }, { statut: status, last_status_change_date: today })
         .then((response) => {
             // récupération du commercial référent
             User.findOne({ _id: response.code_commercial })
             .then((commercial) => {
                 // création du mail à envoyer
                 let htmlMail = "<p>Bonjour, le contrat numéro <span style=\"color: red\">" + response._id +"</span> vient d'être modifié.</p>" +
-                               "<p>Nouveau statut du contrat: <span style=\"color: red\">" + response.statut +"</span>.</p>" +
+                               "<p>Nouveau statut du contrat: <span style=\"color: red\">" + status +"</span>.</p>" +
                                "<p>Pour retrouver le contrat veuillez saisir le numéro du contrat dans le filtre sur la page des contrats.</p>" +
                                "<p>Cordialement.</p>";
 
@@ -699,6 +697,7 @@ app.patch("/update-status", (req, res) => {
                 {
                     from: "ims@intedgroup.com",
                     to: commercial.email,
+                    cc: 'igal@intedgroup.com',
                     subject: 'Statut de contrat mis à jour [IMS]',
                     html: htmlMail,
                     // attachments: [{
@@ -902,14 +901,38 @@ app.post("/upload-resiliation", uploadResiliation.single('file'), (req, res) => 
     
 });
 
-// méthode de téléchargement du calendrier de la formation pour un contrat d'alternance
-app.get("/download-calendar/:idFormation", (req, res) => {
-    res.download(`./storage/diplome/${req.params.idFormation}/calendrier/calendrier.pdf`, function(err){
-        if(err)
+// upload du document de relance de contrat pour le contrat d'alternance
+const uploadRelanceStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/contrat/${id}`;
+        if(!fs.existsSync(destination))
         {
-            res.status(400).send(err);
+            fs.mkdirSync(destination, {recursive: true});
         }
-    });
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let filename = 'relance';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadRelance = multer({storage: uploadRelanceStorage});
+
+app.post("/upload-relance", uploadRelance.single('file'), (req, res) => {
+    const file = req.file;
+    const id = req.body.id;
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        CAlternance.findOneAndUpdate({_id: id}, {relance: 'relance.pdf'})
+        .then((response) => { res.status(201).json({successMsg: 'Document de relance téléversé, contrat mis à jour'}); })
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat'); });
+    }
+    
 });
 
 // méthode de téléchargement du cerfa pour un contrats d'alternance
@@ -942,7 +965,7 @@ app.get("/download-accord/:idContrat", (req, res) => {
     });
 });
 
-// méthode de téléchargement du cerfa pour un contrats d'alternance
+// méthode de téléchargement du document de resiliation pour un contrat d'alternance
 app.get("/download-resiliation/:idContrat", (req, res) => {
     res.download(`./storage/contrat/${req.params.idContrat}/resiliation.pdf`, function(err){
         if(err)
@@ -952,6 +975,25 @@ app.get("/download-resiliation/:idContrat", (req, res) => {
     });
 });
 
+// méthode de téléchargement du document de relance pour un contrat d'alternance
+app.get("/download-relance/:idContrat", (req, res) => {
+    res.download(`./storage/contrat/${req.params.idContrat}/relance.pdf`, function(err){
+        if(err)
+        {
+            res.status(400).send(err);
+        }
+    });
+});
+
+// méthode d'ajout ou de modification d'une remarque sur un contrat d'alternance
+app.patch("/patch-remarque", (req, res) => {
+    const idContrat = req.body.idContrat;
+    const remarque = req.body.remarque;
+
+    CAlternance.updateOne({_id: idContrat}, {remarque: remarque})
+    .then((response) => { res.status(201).send(response) })
+    .catch((error) => { res.status(400).send(error) });
+});
 
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

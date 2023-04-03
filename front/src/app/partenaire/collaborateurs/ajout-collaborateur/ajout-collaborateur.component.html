@@ -1,0 +1,60 @@
+<div class="grid">
+    <!-- Formulaire d'ajout d'un collaborateur -->
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter un collaborateur</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCommercial" (ngSubmit)="onAddCommercial()">
+                <div class="field col-12 md:col-2">
+                    <label>Civilité: <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label for="nom">Nom: <span style="color: red;"> * </span></label>
+                    <input pInputTextarea id="nom" rows="4" formControlName="lastname" />
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label for="prenom">Prénom: <span style="color: red;"> * </span></label>
+                    <input pInputText id="prenom" type="text" formControlName="firstname" />
+                </div>
+                <div class="field col-12">
+                    <label for="email">Email: <span style="color: red;"> * </span></label>
+                    <input pInputText id="email" type="email" formControlName="email" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="phone">Numéro de téléphone: <span style="color: red;"> * </span></label>
+                    <input pInputText id="phone" type="tel" formControlName="phone" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="phone">Numéro WhatsApp:</label>
+                    <input pInputText id="whatsapp" type="tel" formControlName="whatsapp" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="phone">Pays d'activité: <span style="color: red;"> * </span></label>
+                    <p-multiSelect formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
+                        optionValue="value" emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                        filter="true" optionDisabled="actif"></p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Role: <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="statutList" formControlName="statut"
+                        placeholder="Choissiez un niveau d'accès à ce collaborateur"></p-dropdown>
+                </div>
+
+
+                <div class="field col-12 md:col-6">
+                    <label for="password">Mot de passe: <span style="color: red;"> * </span></label>
+                    <input pInputText id="password" type="password" formControlName="password" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="password_confirmed">Confirmer le mot de passe: <span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="password_confirmed" type="password" formControlName="password_confirmed" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter ce commercial"
+                        [disabled]="formAddCommercial.invalid && formAddCommercial.value.password==formAddCommercial.value.password_confirmed"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
