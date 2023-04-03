@@ -17,6 +17,7 @@ import { EcoleService } from 'src/app/services/ecole.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { saveAs } from 'file-saver';
 import { ClasseService } from 'src/app/services/classe.service';
+import { error } from 'console';
 
 
 @Component({
@@ -144,6 +145,7 @@ export class ListeContratsComponent implements OnInit {
   showFormAddResiliation: boolean = false;
   showFormAddAccordPriseEnCharge: boolean = false;
   showFormAddRelance: boolean = false;
+  showFormAddLivret: boolean = false;
   doc: any;
 
   // partie dédié à la gestion de l'affichage par filtre par commercial
@@ -464,11 +466,11 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
-        this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
+        this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec succés" });
         this.formAddNewCA = false
         this.ngOnInit()
 
@@ -488,7 +490,7 @@ export class ListeContratsComponent implements OnInit {
     });
 
     let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge, this.contratToUpdate.relance, this.contratToUpdate.last_status_change_date, this.contratToUpdate.remarque)
+      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge, this.contratToUpdate.relance, this.contratToUpdate.last_status_change_date, this.contratToUpdate.remarque, this.contratToUpdate.livret_apprentissage)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -687,6 +689,23 @@ export class ListeContratsComponent implements OnInit {
     .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
   }
 
+  // méthode d'ajout du livret d'apprentissage du contrat
+  onAddLivret(): void
+  {
+    let formData = new FormData();
+    formData.append('id', this.contratToUpdate._id);
+    formData.append('file', this.doc);
+
+    // envoi du livret d'apprentissage dans la base de données
+    this.entrepriseService.uploadLivret(formData)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
+      this.showFormAddLivret = false;
+      this.ngOnInit();
+    })
+    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+  }
+
 
   // méthode de téléchargement du calendrier de la formation
   onDownloadCalendar(id: string): void
@@ -759,6 +778,31 @@ export class ListeContratsComponent implements OnInit {
     })
     .catch((error) => { this.messageService.add({ severity: "error", summary: "Relance", detail: `Impossible de télécharger le fichier` }); });
   }
+
+  // méthode de téléchargement du livret d'apprentissage
+  onDownloadLivret(id: string): void
+  {
+    this.entrepriseService.getLivret(id)
+    .then((response: Blob) => {
+
+      let filetype = '';
+      if(response.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+      {
+        filetype = 'docx';
+      } else if (response.type === "application/msword")
+      {
+        filetype = 'doc';
+      } else {
+        filetype = 'undefined';
+      }
+
+      let downloadUrl = window.URL.createObjectURL(response);
+      saveAs(downloadUrl, `livret.${filetype}`);
+      this.messageService.add({ severity: "success", summary: "Livret d'apprentissage", detail: "Téléchargement réussi" });
+    })
+    .catch((error) => { this.messageService.add({ severity: "error", summary: "Livret d'apprentissage", detail: "Impossible de télécharger le télécharger le fichier" }); });
+  }
+
 
   // méthodes pour compter le nombre de contrats filtrés par commercial
   onFilterByCommercial(event: any): void 

@@ -243,6 +243,20 @@ export class EntrepriseService {
     });
   }
 
+    // méthode d'upload de la relance pour les contrats
+    uploadLivret(formData: FormData): Promise<any>
+    {
+      const url = `${this.apiUrl}upload-livret`;
+  
+      return new Promise<any>((resolve, reject) => {
+        this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+          next: (response: any) => { resolve(response); },
+          error: (error) => { reject(error); },
+          complete: () => { console.log("Livret d'apprentissage envoyé"); }
+        });
+      });
+    }
+
   // méthode de téléchargement du cerfa
   getCerfa(idContrat: string): Promise<any>
   {
@@ -309,6 +323,20 @@ export class EntrepriseService {
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('Relance téléchargé') }
+      });
+    });
+  }
+
+  // méthode de téléchargement du livret d'apprentissage
+  getLivret(idContrat: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-livret/${idContrat}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log("Livret d'apprentissage téléchargé") }
       });
     });
   }
