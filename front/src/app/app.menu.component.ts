@@ -2497,6 +2497,15 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ]
                                 },
+                                {
+                                    label: 'Étudiant',
+                                    icon : 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]    
+                                }
                             ]
                         },
                         error: (error: any) => { console.log(error); },
@@ -2557,6 +2566,15 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                 },
+                                {
+                                    label: 'Étudiant',
+                                    icon : 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]    
+                                }
                             ]
                         },
                         error: (error: any) => { console.log(error); },
@@ -2677,6 +2695,15 @@ export class AppMenuComponent implements OnInit {
                                         
                                     ]
                                 },
+                                {
+                                    label: 'Étudiant',
+                                    icon : 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]    
+                                }
                             ]
                         },
                         error: (error: any) => { console.log(error); },
@@ -2745,6 +2772,15 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                         
+                                },
+                                {
+                                    label: 'Étudiant',
+                                    icon : 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]    
                                 }
                             ];
                         },

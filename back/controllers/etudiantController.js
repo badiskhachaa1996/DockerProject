@@ -190,7 +190,7 @@ app.post("/create", (req, res, next) => {
                         res.status(400).send({ error: 'Impossible de créer un nouvel user ' + error2.message })
                     } else {
                         etudiant.user_id = userCreated._id;
-                        console.log("Le user n'existe pas - enregistrement en cours")
+                        console.log("Le user n'existe pas - enregistrement en cours",)
                         etudiant.save((error, etudiantCreated) => {
                             if (error) {
                                 console.error(error);
