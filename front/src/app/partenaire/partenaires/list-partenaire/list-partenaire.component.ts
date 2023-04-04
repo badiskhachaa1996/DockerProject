@@ -58,12 +58,17 @@ export class ListPartenaireComponent implements OnInit {
   idPartenaireToUpdate: string;
   idUserOfPartenaireToUpdate: string;
   showFormModifPartenaire = false;
-  partenaireList: any ={};
+  partenaireList: any = {};
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
 
   canDelete = false
+
+  filterAnciennete = []
+
+  filterContribution = []
+  filterEtat = []
 
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
 
@@ -79,6 +84,21 @@ export class ListPartenaireComponent implements OnInit {
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
+      let tempList = []
+      let temp2List = []
+      let temp3List = []
+      data.forEach(d => {
+        let temp = { label: d.statut_anciennete, value: d.statut_anciennete }
+
+        let temp2 = { label: d.contribution, value: d.contribution }
+        let temp3 = { label: d.etat_contrat, value: d.etat_contrat }
+        if (!temp2List.includes(temp2) && d.contribution)
+          this.filterContribution.push(temp2); temp2List.push(temp2)
+        if (!tempList.includes(temp) && d.statut_anciennete)
+          this.filterAnciennete.push(temp); tempList.push(temp)
+        if (!temp3List.includes(temp3) && d.etat_contrat)
+          this.filterEtat.push(temp3); temp3List.push(temp3)
+      })
     })
     this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {

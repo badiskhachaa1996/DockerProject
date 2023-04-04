@@ -32,6 +32,7 @@ export class AddSeanceComponent implements OnInit {
   typeSeance = [
     { label: 'Matin', value: 'Matin' },
     { label: 'Après-Midi', value: 'Après-Midi' },
+    { label: '9H00-17H00', value: '9H00-17H00' },
     { label: 'Autre', value: 'Autre' }
   ]
   salleNames = []
@@ -540,11 +541,13 @@ export class AddSeanceComponent implements OnInit {
     if (this.seanceForm.value.periode_seance == 'Matin') {
       date_debut.setHours(9)
       date_fin.setHours(12, 30)
-    } else {
+    } else if (this.seanceForm.value.periode_seance == 'Après-Midi') {
       date_debut.setHours(13, 30)
       date_fin.setHours(17)
+    } else if (this.seanceForm.value.periode_seance == '9H00-17H00'){
+      date_debut.setHours(9)
+      date_fin.setHours(17)
     }
-    console.log({ date_debut, date_fin })
     this.seanceForm.patchValue({ date_debut, date_fin })
   }
 

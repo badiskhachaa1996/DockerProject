@@ -106,6 +106,7 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         commercialPartenaire.user_id = userCreated._id;
+                        console.log(userCreated._id, commercialPartenaire.user_id)
                         commercialPartenaire.save()
                             .then((commercialPartenaireCreated) => { res.status(201).json({ success: 'Commercial crée' }) })
                             .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce commercial' }); });
@@ -169,5 +170,76 @@ app.get('/delete/:id', (req, res) => {
         })
     })
 })
+const fs = require("fs");
+const multer = require("multer");
+const { Partenaire } = require('../models/partenaire');
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        let id_photo = req.body.id;
+        if (!fs.existsSync("storage/Partenaire/photo/" + id_photo + "/")) {
+            fs.mkdirSync("storage/Partenaire/photo/" + id_photo + "/", { recursive: true });
+        }
+        callBack(null, "storage/Partenaire/photo/" + id_photo + "/");
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`);
+    },
+});
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/file", upload.single("file"), (req, res, next) => {
+    const file = req.file;
+    console.log(file, req.body.id);
+    if (!file) {
+        const error = new Error("No File");
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+    Partenaire.findById(req.body.id, (err, cp) => {
+        try {
+            if (fs.existsSync("storage/Partenaire/photo/" + req.body.id + "/" + cp?.pathImageProfil))
+                fs.unlinkSync("storage/Partenaire/photo/" + req.body.id + "/" + cp?.pathImageProfil);
+            //file removed
+        } catch (err2) {
+            console.log(err2, "Pas de fichier existant")
+        }
+    });
+    Partenaire.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+            pathImageProfil: file.filename,
+            typeImageProfil: file.mimetype,
+        },
+        (errUser, user) => {
+            console.error(errUser);
+            console.log(user, "dab")
+            //Renvoie de la photo de profile au Front pour pouvoir l'afficher
+            res.send({ message: "Photo mise à jour" });
+        }
+    );
+})
 
+app.get("/getProfilePicture/:id", (req, res) => {
+    Partenaire.findById(req.params.id, (err, cp) => {
+    
+        if (cp && cp.pathImageProfil) {
+            try {
+                let file = fs.readFileSync(
+                    "storage/Partenaire/photo/" + cp.id + "/" + cp.pathImageProfil,
+                    { encoding: "base64" },
+                    (err2) => {
+                        if (err2) {
+                            return console.error(err2);
+                        }
+                    }
+                );
+                res.send({ file: file, documentType: cp.typeImageProfil });
+            } catch (e) {
+                res.send({ error: e });
+            }
+        } else {
+            res.send({ error: "Image non défini" });
+        }
+    });
+});
 module.exports = app;

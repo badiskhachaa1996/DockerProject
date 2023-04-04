@@ -167,18 +167,23 @@
             <h5>Liste des partenaires</h5>
             <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="10" [rowHover]="true"
                 [totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5" [expandedRowKeys]="expandedRows"
-                rowExpandMode="single" [globalFilterFields]="['libelle','email','site','ville','pays']"
+                rowExpandMode="single"
+                [globalFilterFields]="['nom','email','site','ville','Pays','etat_contrat','contribution','statut_anciennete','user_id.lastname','user_id.firstname']"
                 responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                    </div>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAnciennete" filter="true"
+                        (onChange)="dt1.filter($event.value, 'statut_anciennete', 'equals');"
+                        emptyFilterMessage="Pas de statut d'ancienneté trouvé"
+                        filterPlaceholder="Statut d'ancienneté"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterContribution" filter="true"
+                        (onChange)="dt1.filter($event.value, 'contribution', 'equals'); "
+                        emptyFilterMessage="Pas de contribution trouvé" filterPlaceholder="Contribution"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterEtat" filter="true"
+                        (onChange)="dt1.filter($event.value, 'etat_contrat', 'equals');"
+                        emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Etat de Contrat"></p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -216,8 +221,8 @@
                                 field="Pays">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut_ancienneté" style="text-align: center;">Ancienneté <p-sortIcon
-                                field="statut_ancienneté">
+                        <th pSortableColumn="statut_anciennete" style="text-align: center;">Ancienneté <p-sortIcon
+                                field="statut_anciennete">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="contribution" style="text-align: center;">Contribution <p-sortIcon
@@ -239,7 +244,7 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ rowData.date_creation | date:'medium' }}
+                            {{ rowData.date_creation | date:'mediumDate' }}
                         </td>
                         <td style="min-width: 12rem;">
                             {{ rowData.code_partenaire }}
@@ -248,7 +253,7 @@
                             {{ rowData.nom}}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ rowData.user_id}}
+                            {{ rowData?.user_id?.firstname | titlecase}}{{ rowData?.user_id?.lastname | uppercase}}
                         </td>
                         <td style="min-width: 14rem;">
                             {{ rowData.email}}

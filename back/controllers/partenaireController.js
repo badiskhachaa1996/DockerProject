@@ -124,23 +124,23 @@ app.post("/inscription", (req, res, next) => {
                         if (partenaireFromDb) {
                             res.status(400).json({ error: 'Ce partenaire existe déja' });
                         } else {
-
+                            partenaire['user_id'] = userFromDb._id
                             commercial.user_id = userFromDb._id;
                             partenaire.save()
                                 .then((partenaireSaved) => {
                                     Partenaire.findOne({ nom: partenaireSaved.nom, email: partenaireSaved.email, code_partenaire: partenaireSaved.code_partenaire }).then(nouveauPartenaire => {
                                         commercial.partenaire_id = nouveauPartenaire._id
-                                        console.log(newPartenaire,nouveauPartenaire, commercial.partenaire_id)
+                                        console.log(newPartenaire, nouveauPartenaire, commercial.partenaire_id)
                                         commercial.save().then((commercialsaved) => {
-        
+
                                             let htmlmail =
                                                 "<p>Bonjour,</p><p>Un nouveau partenaire a été enregistré avec succès, Voici les accès à utiliser sur <a href='https://ims.intedgroup.com/#/login'>ce lien</a> en se connectant via les identifiants </p><br>" +
                                                 `<p>Email:${userData.email_perso} | Mot de passe : <strong>${userData.password}</strong> </p>` +
                                                 "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
                                                 " <p>Bien cordialement.</p>" +
                                                 "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
-        
-        
+
+
                                             let mailOptions = {
                                                 from: "ims@intedgroup.com",
                                                 to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', ''],
@@ -155,12 +155,12 @@ app.post("/inscription", (req, res, next) => {
                                             transporterEH.sendMail(mailOptions, function (error, info) {
                                                 if (error) {
                                                     console.error(error);
-        
+
                                                 }
                                             });
-        
-        
-        
+
+
+
                                             res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: newPartenaire, commercial: commercialsaved })
                                         })
                                     })
@@ -174,7 +174,8 @@ app.post("/inscription", (req, res, next) => {
             else {
                 user.save()
                     .then((userCreated) => {
-                        commercial.user_id = userCreated._id;
+                        commercial['user_id'] = userCreated._id;
+                        partenaire['user_id'] = userCreated._id
                         partenaire.save().then(newPartenaire => {
                             Partenaire.findOne({ nom: newPartenaire.nom, email: newPartenaire.email, code_partenaire: newPartenaire.code_partenaire }).then(nouveauPartenaire => {
                                 commercial.partenaire_id = nouveauPartenaire._id
@@ -352,5 +353,26 @@ app.get('/delete/:id', (req, res) => {
         })
     })
 })
+
+app.put("/newUpdate", (req, res, next) => {
+
+    //Récupération des infos du partenaire
+    const partenaireData = req.body;
+    let id = partenaireData._id
+    delete partenaireData._id
+    //Mise à jour du partenaire
+    Partenaire.findByIdAndUpdate(id,
+        {
+            ...partenaireData
+        }, { new: true })
+        .then((partenaireFromDB) => {
+            console.log(partenaireFromDB)
+            res.status(200).send(partenaireFromDB);
+        })
+        .catch((error) => {
+            console.error(error)
+            res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' });
+        })
+});
 
 module.exports = app;

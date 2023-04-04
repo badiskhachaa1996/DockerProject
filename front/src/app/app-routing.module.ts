@@ -84,8 +84,6 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
-import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
-import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
@@ -159,6 +157,7 @@ import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-forma
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
+import { StageComponent } from './commercial/stage/stage.component';
 
 const routes: Routes = [
     {
@@ -273,6 +272,7 @@ const routes: Routes = [
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */
@@ -304,8 +304,6 @@ const routes: Routes = [
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
-    { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
-    { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
     { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
     { path: 'creer-mon-entreprise/:id', component: EntrepriseFormComponent },
 
