@@ -226,7 +226,7 @@ app.post("/inscription", (req, res, next) => {
 });
 
 app.get("/getAll", (req, res) => {
-    Partenaire.find()
+    Partenaire.find().populate('user_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -424,5 +424,16 @@ app.post("/file", upload.single("file"), (req, res, next) => {
         }
     );
 })
+
+app.get("/download-contrat/:id", (req, res) => {
+    Partenaire.findById(req.params.id, (err, cp) => {
+        res.download(`./storage/Partenaire/etat_contrat/${req.params.id}/${cp.pathEtatContrat}`, function (err) {
+            if (err) {
+              res.status(400).send(err);
+            }
+          });
+    });
+
+  });
 
 module.exports = app;

@@ -3,6 +3,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { saveAs } from "file-saver";
 
 import { MessageService as ToastService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -45,12 +46,29 @@ export class ListPartenaireComponent implements OnInit {
   showFormAddPartenaire = false
   statutList = environment.typeUser
   civiliteList = environment.civilite;
+  paysList = environment.pays;
   entreprisesList = []
   campusList = []
   formationList = []
   typeSoc = [{ value: "Professionel (Société)" }, { value: "Particulier (Personne)" }]
   formatJuridique = [{ value: "EIRL" }, { value: "EURL" }, { value: "SARL" }, { value: "SA" }, { value: "SAS" }, { value: "SNC" }, { value: "Etudiant IMS" }, { value: "Individuel" }]
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+
+  dropdownAnciennete = [
+    { label: "Nouveau", value: "Nouveau" },
+    { label: "Ancien", value: "Ancien" }
+  ]
+  dropdownContribution = [
+    { label: "Actif", value: "Actif" },
+    { label: "Inactif", value: "Inactif" },
+    { label: "Occasionel", value: "Occasionel" },
+  ]
+  dropdownEtatContrat = [
+    { label: "Non", value: "Non" },
+    { label: "En cours", value: "En cours" },
+    { label: "Signé", value: "Signé" },
+    { label: "Annulé", value: "Annulé" },
+  ]
 
   registerForm: FormGroup;
 
@@ -367,6 +385,7 @@ export class ListPartenaireComponent implements OnInit {
       this.editInfoCommercial = false
     })
   }
+
   ajoutCommission = new FormGroup({
     description: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required)
@@ -379,6 +398,46 @@ export class ListPartenaireComponent implements OnInit {
       this.ajoutCommission.reset()
     })
 
+  }
+
+  downloadContrat() {
+    this.PartenaireService.downloadContrat(this.idPartenaireToUpdate._id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, this.idPartenaireToUpdate.pathEtatContrat);
+        this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+  }
+  editInfoPartenariat = false
+  editInfoPartenariatForm: FormGroup = new FormGroup({
+    statut_anciennete: new FormControl('', Validators.required),
+    contribution: new FormControl('', Validators.required),
+  })
+  initEditPartenariatForm() {
+    this.editInfoPartenariat = true
+    this.editInfoPartenariatForm.setValue({
+      statut_anciennete: this.idPartenaireToUpdate.statut_anciennete,
+      contribution: this.idPartenaireToUpdate.contribution,
+    })
+  }
+
+  saveEditPartenariatForm() {
+    let data = { ...this.editInfoPartenariatForm.value }
+    data._id = this.idPartenaireToUpdate._id
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      this.idPartenaireToUpdate = partenaire
+      this.messageService.add({ severity: 'success', summary: 'Informations Partenaires', detail: 'Mise à jour des informations avec succès' });
+      this.editInfoPartenariat = false
+    })
+  }
+
+  updateEtatContrat() {
+    
+    let data = { _id: this.idPartenaireToUpdate._id, etat_contrat: this.idPartenaireToUpdate.etat_contrat }
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      console.log(partenaire)
+    })
   }
   /*getPartenaireList() 
   {

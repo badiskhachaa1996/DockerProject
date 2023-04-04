@@ -28,5 +28,7 @@ export class Partenaire {
         public pathImageProfil?: string,
         public typeImageProfil?: string,
         public commissions?: [],
+        public pathEtatContrat?: string,
+        public typeEtatContrat?: string,
     ) { }
 }

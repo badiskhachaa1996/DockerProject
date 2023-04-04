@@ -309,7 +309,7 @@
                         <div class="col-3"
                             *ngIf="semestreForGenerateBulletin=='Annuel' && rachatEtudiant[i]['isNew']==true">
                             <label>Semestre: </label>
-                            <p-dropdown [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
+                            <p-dropdown [options]="[{ libelle: 'Choisissez un semestre', value: 'Choisissez un semestre', actif: true },
                             { libelle: '1er', value: 'Semestre 1', actif: false },
                             { libelle: '2ème', value: 'Semestre 2', actif: false }]" optionLabel="libelle"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'semestre')"

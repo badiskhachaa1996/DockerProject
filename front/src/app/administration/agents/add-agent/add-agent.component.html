@@ -5,7 +5,7 @@
         Voici les informationns à savoir pour créer un nouveau Agent :
     </p>
     <ul>
-        <li><span style="color: red;">Service</span> : Choissisez le service correspondant à votre Agent. </li>
+        <li><span style="color: red;">Service</span> : Choisissez le service correspondant à votre Agent. </li>
         <li><span style="color: red;">Role</span> : Choisissez le Role de l'agent </li>
 
     </ul>
@@ -39,7 +39,7 @@
                 <div class="field col-12 md:col-4">
                     <label For="libelle">Civilité <span style="color:red"> *</span></label>
                     <p-dropdown formControlName="civilite" [options]="civiliteList"
-                        placeholder="Choissisez une civilite" optionDisabled="actif"></p-dropdown>
+                        placeholder="Choisissez une civilite" optionDisabled="actif"></p-dropdown>
                     <div *ngIf="civilite.invalid && (civilite.touched || civilite.dirty)">
                         <span style="color: red;" class="error" *ngIf="civilite.errors?.required" style="color: red;">*
                             La civilité est obligatoire </span>
@@ -145,7 +145,7 @@
                 <div class="field col-12 md:col-5">
                     <label For="phone">Mention<span style="color:red"> *</span></label>
                     <p-dropdown formControlName="mention" [options]="mentionList"
-                        placeholder="Choissisez une mention" optionDisabled="actif"></p-dropdown>
+                        placeholder="Choisissez une mention" optionDisabled="actif"></p-dropdown>
                     <div *ngIf="mention.invalid && (mention.touched || mention.dirty)">
                         <span style="color: red;" class="error" *ngIf="phone.errors?.required">* La mention est
                             obligatoire</span>
@@ -157,28 +157,28 @@
                 </div>-->
                 <!--<div class="field col-12 md:col-6">
                     <label For="campus">Campus</label>
-                    <p-dropdown [options]="campusList" optionLabel="label" placeholder="Choissisez un campus"
+                    <p-dropdown [options]="campusList" optionLabel="label" placeholder="Choisissez un campus"
                         formControlName="campus"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='Salarié'">
                     <label For="groupe">Groupe</label>
-                    <p-dropdown [options]="formationList" optionLabel="label" placeholder="Choissisez un groupe"
+                    <p-dropdown [options]="formationList" optionLabel="label" placeholder="Choisissez un groupe"
                         formControlName="formation"></p-dropdown>
                 </div>-->
                 <div class="field col-12 md:col-6">
                     <label For="role">Rôle <span style="color:red"> *</span></label>
-                    <p-dropdown [options]="roleList" optionLabel="value" placeholder="Choissisez un rôle"
+                    <p-dropdown [options]="roleList" optionLabel="value" placeholder="Choisissez un rôle"
                         formControlName="role"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="service">Service <span style="color:red"> *</span></label>
                     <!--liste à changer dans le ts-->
-                    <p-dropdown [options]="serviceList" optionLabel="label" placeholder="Choissisez un service"
+                    <p-dropdown [options]="serviceList" optionLabel="label" placeholder="Choisissez un service"
                         formControlName="service_id"></p-dropdown>
                 </div>
                 <!--<div class="field col-12 md:col-12" *ngIf="type=='Alternant/Stagiaire'">
                     <label For="entreprise">Entreprise</label>
-                    <p-dropdown [options]="entreprisesList" optionLabel="label" placeholder="Choissisez une entreprise"
+                    <p-dropdown [options]="entreprisesList" optionLabel="label" placeholder="Choisissez une entreprise"
                         formControlName="entreprise"></p-dropdown>
                 </div>-->
                 <div class="field col-12 md:col-12"
@@ -188,7 +188,7 @@
                     {value:'Informatique',label:'Informatique'},
                     {value:'Commerce',label:'Commerce'},
                     {value:'Construction',label:'Construction'},
-                    {value:'Tertiaire',label:'Tertiaire'}]" optionLabel="label" placeholder="Choissisez un département"
+                    {value:'Tertiaire',label:'Tertiaire'}]" optionLabel="label" placeholder="Choisissez un département"
                         formControlName="departement"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">

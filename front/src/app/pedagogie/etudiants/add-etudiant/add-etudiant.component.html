@@ -37,7 +37,7 @@
                 <div class="field col-5 md:col-4">
                     <label For="civilite">Civilité <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="civiliteList" formControlName="civilite"
-                        placeholder="Choissisez une civilité"></p-dropdown>
+                        placeholder="Choisissez une civilité"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-4">
@@ -164,7 +164,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="ville">Pays</label>
                     <p-dropdown [options]="paysList" optionLabel="value" optionDisabled="actif"
-                        placeholder="Choissisez le pays de l'adresse" formControlName="pays_adresse" filter="true">
+                        placeholder="Choisissez le pays de l'adresse" formControlName="pays_adresse" filter="true">
                     </p-dropdown>
                     <!-- <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                                 <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
@@ -195,7 +195,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="campus">Campus<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus"
+                    <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                         formControlName="campus_id" emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
                         filter="true">
                     </p-dropdown>
@@ -204,7 +204,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="campus">Filière<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownFiliere" placeholder="Choissisez une filière"
+                    <p-dropdown [options]="dropdownFiliere" placeholder="Choisissez une filière"
                         formControlName="filiere" emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Filière"
                         filter="true">
                     </p-dropdown>
@@ -212,7 +212,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="groupe">Groupe<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownClasse" placeholder="Choissisez un groupe"
+                    <p-dropdown [options]="dropdownClasse" placeholder="Choisissez un groupe"
                         formControlName="classe_id" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
                         filter="true">
                     </p-dropdown>
@@ -221,7 +221,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="annee_scolaire">Année Scolaire<span style="color: red;"> * </span></label>
                     <p-multiSelect [options]="dropdownAnneeScolaire"
-                        placeholder="Choissisez les années scolaires où cette étudiant à étudié"
+                        placeholder="Choisissez les années scolaires où cette étudiant à étudié"
                         formControlName="annee_scolaire"></p-multiSelect>
                 </div>
 
@@ -240,7 +240,7 @@
 
                 <div class="field col-6">
                     <label For="statut">Rythme<span style="color: red;"> * </span></label>
-                    <!--<p-dropdown [options]="statutList" placeholder="Choissisez un rythme d'étude"
+                    <!--<p-dropdown [options]="statutList" placeholder="Choisissez un rythme d'étude"
                                 formControlName="statut"></p-dropdown>-->
                     <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                         formControlName="isAlternant"></p-selectButton>
@@ -249,7 +249,7 @@
                 <div class="field col-6">
                     <label>Ecole/CFA <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownEcole" formControlName="ecole"
-                        placeholder="Choissisez le CFA"></p-dropdown>
+                        placeholder="Choisissez le CFA"></p-dropdown>
                 </div>
 
                 <div class="field col-12" *ngIf="!formAddEtudiant.value.isAlternant">
@@ -260,7 +260,7 @@
 
                 <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isAlternant">
                     <label For="statut">Etat de contract</label>
-                    <p-dropdown [options]="etatContract" placeholder="Choissisez un etat de contract"
+                    <p-dropdown [options]="etatContract" placeholder="Choisissez un etat de contract"
                         formControlName="etat_contract">
                     </p-dropdown>
                 </div>
@@ -310,14 +310,14 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Paiement</label>
-                    <p-dropdown [options]="dropdownPaiement" placeholder="Choissisez un etat de paiement"
+                    <p-dropdown [options]="dropdownPaiement" placeholder="Choisissez un etat de paiement"
                         formControlName="etat_paiement">
                     </p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Source Etudiant</label>
-                    <p-dropdown [options]="dropdownSrcEtudiant" placeholder="Choissisez une source de l'étudiant"
+                    <p-dropdown [options]="dropdownSrcEtudiant" placeholder="Choisissez une source de l'étudiant"
                         formControlName="source">
                     </p-dropdown>
                 </div>
@@ -334,7 +334,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="statut">Statut Dossier</label>
                     <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"
-                        placeholder="Choissisez des statuts dossiers"></p-multiSelect>
+                        placeholder="Choisissez des statuts dossiers"></p-multiSelect>
                 </div>
 
                 <!-- Parcous Etudiant-->

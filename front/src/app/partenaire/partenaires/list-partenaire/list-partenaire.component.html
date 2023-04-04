@@ -15,7 +15,8 @@
                         style="color: red;"> * </span> sont obligatoires</small>
             </div>
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="showFormModifPartenaire = false;" aria-hidden="true"></i>
+                (click)="showFormModifPartenaire = false;editInfoCommercial=false;editInfoPartenariat=false"
+                aria-hidden="true"></i>
 
             <div class="card">
                 <p-fieldset legend="Information Entreprise">
@@ -100,8 +101,27 @@
                     </div>
                 </p-fieldset><br>
                 <p-fieldset legend="Information du partenariat">
-                    <div class="grid" style="color: black;font-weight:normal">
-                        <div class="col-12 grid">
+                    <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoPartenariat">
+                        <form class="col-12 grid" [formGroup]="editInfoPartenariatForm">
+                            <div class="col-12 md:col-9 grid">
+                                <p class="col-12 md:col-6 text-center"><strong>Ancienneté:</strong><br>
+                                    <p-dropdown formControlName="statut_anciennete" [options]="dropdownAnciennete"
+                                        placeholder="Choisissez un statut d'anciennete"></p-dropdown>
+                                </p>
+                                <p class="col-12 md:col-6 text-center"><strong>Contribution:</strong><br>
+                                    <p-dropdown formControlName="contribution" [options]="dropdownContribution"
+                                        placeholder="Choisissez un statut de contribution"></p-dropdown>
+                                </p>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <p style="cursor: pointer;"><a (click)="saveEditPartenariatForm()">Sauvegarder les
+                                        informations</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoPartenariat">
+                        <div class="col-12 md:col-9 grid">
                             <p class="col-12 md:col-4 text-center"><strong>Ancienneté:</strong><br>
                                 {{idPartenaireToUpdate?.statut_anciennete}}</p>
                             <p class="col-12 md:col-4 text-center"><strong>Contribution:</strong><br>
@@ -110,16 +130,27 @@
                             <p class="col-12 md:col-4 text-center"><strong>Date d'ajout:</strong><br>
                                 {{idPartenaireToUpdate?.date_creation | date:'mediumDate'}}</p>
                         </div>
+                        <div class="col-12 md:col-3">
+                            <p style="cursor: pointer;"><a (click)="initEditPartenariatForm()">Modifier les
+                                    informations</a>
+                            </p>
+                        </div>
                     </div>
                 </p-fieldset><br>
                 <p-fieldset legend="Commissions" *ngIf="commissions">
                     <div class="grid">
                         <div class="col-6 text-center">
-                            <p><strong>Etat de Contrat:</strong><br>
+                            <p>
+                                <strong>Etat de Contrat:
+                                    <p-dropdown [options]="dropdownEtatContrat" (onChange)="updateEtatContrat()"
+                                        [(ngModel)]="idPartenaireToUpdate.etat_contrat"
+                                        placeholder="Choisissez un statut d'état de contrat"></p-dropdown>
+                                </strong><br>
                             </p>
-                            <button pButton label="Télécharger un etat de contrat" type="button"></button>
-                            <button pButton label="Ajouter un etat de contrat" (click)="clickFile2()"
-                                type="button"></button>
+                            <button pButton class="mr-2" label="Télécharger le contrat" type="button"
+                                [disabled]="!idPartenaireToUpdate?.pathEtatContrat"
+                                (click)="downloadContrat()"></button>
+                            <button pButton label="Ajouter le contrat" (click)="clickFile2()" type="button"></button>
                         </div>
                         <div class="col-6">
                             <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">

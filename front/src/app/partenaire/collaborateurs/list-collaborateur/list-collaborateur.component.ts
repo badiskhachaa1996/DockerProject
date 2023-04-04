@@ -276,7 +276,7 @@ export class ListCollaborateurComponent implements OnInit {
     let dataExcel = []
     //Clean the data
     this.commercialPartenaires.forEach(p => {
-      let user: User = this.users[p.user_id]
+      let user: any = p.user_id
       let partenaire: Partenaire = this.listPartenaire[p.partenaire_id]
       if (user && user.lastname && user.lastname && p.code_commercial_partenaire) {
         let t = {}

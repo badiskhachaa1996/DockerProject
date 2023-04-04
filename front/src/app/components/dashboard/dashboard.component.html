@@ -736,8 +736,8 @@
                     </div>
                 </div>
             </p-fieldset><br>
-            <p-fieldset legend="Commissions" *ngIf="commissions">
-                <p-table [value]="commissions">
+            <p-fieldset legend="Commissions" *ngIf="PartenaireInfo.commissions">
+                <p-table [value]="PartenaireInfo.commissions">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Description</th>

@@ -15,7 +15,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="contrat">Formateur<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="formateurList" filter="true" formControlName="formateur_id"
-                        (onChange)="calculMensuel()" placeholder="Choissisez un formateur">
+                        (onChange)="calculMensuel()" placeholder="Choisissez un formateur">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-3">
@@ -228,7 +228,7 @@
                         </p-dropdown>
                         <span>
                             <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt2,$event)"></p-calendar>
+                                placeholder="Choisissez un mois" (onSelect)="filterMonth(dt2,$event)"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt2.filter(null, 'mois', 'equals');dt2.filter(null, 'year', 'equals')"></i>
                         </span>
@@ -308,7 +308,7 @@
                         </p-dropdown>
                         <span>
                             <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                                placeholder="Choissisez un mois"
+                                placeholder="Choisissez un mois"
                                 (onSelect)="filterMonth(dt1,$event,'dt1')"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt1.filter(null, 'mois', 'equals');dt1.filter(null, 'year', 'equals')"></i>
