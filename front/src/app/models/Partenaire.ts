@@ -25,5 +25,8 @@ export class Partenaire {
         public statut_anciennete?: string,
         public contribution?: string,
         public etat_contrat?: string,
+        public pathImageProfil?: string,
+        public typeImageProfil?: string,
+        public commissions?: [],
     ) { }
 }

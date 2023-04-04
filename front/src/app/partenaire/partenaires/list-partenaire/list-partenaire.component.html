@@ -1,3 +1,11 @@
+<div class="col-12">
+    <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
+        accept=".jpg,.png,.jpeg" style="display: none;" pInputFile />
+</div>
+<div class="col-12">
+    <input type="file" (change)="FileUpload2($event.target.files)" id="selectedFile2" #selectedFile2
+        style="display: none;" pInputFile />
+</div>
 <div class="grid">
     <div class="col-12" *ngIf="showFormModifPartenaire">
         <div class="card">
@@ -7,155 +15,149 @@
                         style="color: red;"> * </span> sont obligatoires</small>
             </div>
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="showFormModifPartenaire = false; formModifPartenaire.reset()" aria-hidden="true"></i>
+                (click)="showFormModifPartenaire = false;" aria-hidden="true"></i>
 
-            <form class="p-fluid p-formgrid grid" [formGroup]="formModifPartenaire" (ngSubmit)="onModdifPartenaire();">
-                <div class="field col-12 md:col-12">
-                    <label For="societe">Nom de la société <span style="color: red;"> * </span></label>
-                    <input pInputText id="societe" type="text" formControlName="nomSoc" />
-                    <div *ngIf="nomSoc_m.invalid && (nomSoc_m.touched || nomSoc_m.dirty)">
-                        <span class="error" *ngIf="nomSoc_m.errors?.required">
-                            <span style="color: red;">* Le nom est obligatoire </span>
-                        </span>
+            <div class="card">
+                <p-fieldset legend="Information Entreprise">
+                    <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfoCommercial">
+                        <div class="col-12 md:col-3">
+                            <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                                style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
+                                    style="border-radius: 50px;" /></a>
+                        </div>
+                        <div class="col-12 md:col-6 grid">
+                            <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br>
+                                {{idPartenaireToUpdate?.indicatifPhone}} {{idPartenaireToUpdate?.phone}}</p>
+                            <p class="col-12 md:col-3 text-center"><strong>WhatsApp:</strong><br>
+                                {{idPartenaireToUpdate?.indicatifWhatsapp}} {{idPartenaireToUpdate?.WhatsApp}}
+                            </p>
+                            <p class="col-12 md:col-3 text-center"><strong>Site Web:</strong><br>
+                                {{idPartenaireToUpdate?.site_web}}</p>
+                            <p class="col-12 md:col-3 text-center"><strong>Facebook:</strong><br>
+                                {{idPartenaireToUpdate?.facebook}}
+                            </p>
+                            <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
+                                {{idPartenaireToUpdate?.Pays}}</p>
+                            <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
+                                {{idPartenaireToUpdate?.Services}}
+                            </p>
+
+                            <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
+                                {{idPartenaireToUpdate?.description}}
+                            </p>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <p style="cursor: pointer;"><a (click)="initEditCommercialForm()">Modifier les
+                                    informations</a>
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="field col-6 md:col-6">
-                    <label>Type</label>
-                    <p-dropdown [options]="typeSoc" optionLabel="value"
-                        filterPlaceholder="Choissisez le type de la societe" formControlName="type"
-                        optionDisabled="actif"></p-dropdown>
-                </div>
-                <div class="field col-6 md:col-6">
-                    <label>Format juridique</label>
-                    <p-dropdown [options]="formatJuridique" optionLabel="value" formControlName="format_juridique"
-                        optionDisabled="actif"></p-dropdown>
-                </div>
-                <div class="field col-4 md:col-2">
-                    <label For="Indicatif">Indicatif <span style="color: red;"> * </span></label>
-                    <input pInputText id="Indicatif" type="text" formControlName="indicatif" />
-                    <div *ngIf="indicatif_m.invalid && (indicatif_m.touched || indicatif_m.dirty)">
-                        <span style="color: red;" class="error" *ngIf="indicatif_m.errors?.required">*
-                            L'indicatif est obligatoire</span>
-                        <span style="color: red;" class="error" *ngIf="indicatif_m.errors?.pattern">* Seul les
-                            chiffres sont acceptés</span>
+                    <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfoCommercial">
+                        <form class="col-12 grid" [formGroup]="editInfoCommercialForm">
+                            <div class="col-12 md:col-3">
+                                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150"
+                                        height="150" style="border-radius: 50px;" /></a>
+                            </div>
+                            <div class="col-12 md:col-6 grid">
+                                <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
+                                    <input type="text" pInputText placeholder="+33"
+                                        formControlName="indicatifPhone" /><br>
+                                    <input type="text" pInputText placeholder="0612345678" formControlName="phone" />
+                                </p>
+                                <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
+                                    <input type="text" pInputText placeholder="+33"
+                                        formControlName="indicatifWhatsapp" /><br>
+                                    <input type="text" pInputText placeholder="0612345678" formControlName="WhatsApp" />
+                                </p>
+                                <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
+                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                        formControlName="site_web" />
+                                </p>
+                                <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
+                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                        formControlName="facebook" />
+                                </p>
+                                <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
+                                    <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
+                                        optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                        filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
+                                </p>
+                                <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
+                                    <input type="text" pInputText placeholder="https://www.example.com"
+                                        formControlName="Services" />
+                                </p>
+
+                                <p class="col-12 md:col-12 text-center"><strong>Description:</strong><br>
+                                    <textarea pInputTextarea formControlName="description" placeholder=""></textarea>
+                                </p>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <p style="cursor: pointer;"><a (click)="saveEditCommercialInfo()">Enregistrer les
+                                        informations</a></p>
+                            </div>
+                        </form>
                     </div>
-                </div>
-
-                <div class="field col-8 md:col-10">
-                    <label For="tel">Téléphone <span style="color: red;"> * </span></label>
-                    <input pInputText id="tel" type="tel" formControlName="phonePartenaire" />
-                    <div *ngIf="phonePartenaire_m.invalid && (phonePartenaire_m.touched || phonePartenaire_m.dirty)">
-                        <span class="error" *ngIf="phonePartenaire_m.errors?.required">
-                            <span style="color: red;">* Le téléphone est obligatoire.</span>
-                        </span>
-                        <span class="error" *ngIf="phonePartenaire_m.errors?.pattern">
-                            <span style="color: red;">* Le téléphone n'est pas dans le bon format.</span>
-                        </span>
+                </p-fieldset><br>
+                <p-fieldset legend="Information du partenariat">
+                    <div class="grid" style="color: black;font-weight:normal">
+                        <div class="col-12 grid">
+                            <p class="col-12 md:col-4 text-center"><strong>Ancienneté:</strong><br>
+                                {{idPartenaireToUpdate?.statut_anciennete}}</p>
+                            <p class="col-12 md:col-4 text-center"><strong>Contribution:</strong><br>
+                                {{idPartenaireToUpdate?.contribution}}
+                            </p>
+                            <p class="col-12 md:col-4 text-center"><strong>Date d'ajout:</strong><br>
+                                {{idPartenaireToUpdate?.date_creation | date:'mediumDate'}}</p>
+                        </div>
                     </div>
-                </div>
+                </p-fieldset><br>
+                <p-fieldset legend="Commissions" *ngIf="commissions">
+                    <div class="grid">
+                        <div class="col-6 text-center">
+                            <p><strong>Etat de Contrat:</strong><br>
+                            </p>
+                            <button pButton label="Télécharger un etat de contrat" type="button"></button>
+                            <button pButton label="Ajouter un etat de contrat" (click)="clickFile2()"
+                                type="button"></button>
+                        </div>
+                        <div class="col-6">
+                            <form class="grid" [formGroup]="ajoutCommission" (ngSubmit)="addCommission()">
+                                <div class="col-12 md:col-6 text-center">
+                                    <p><strong>Description:</strong><br>
+                                        <input type="text" pInputText placeholder="" formControlName="description" />
+                                    </p>
+                                </div>
+                                <div class="col-12 md:col-6 text-center">
+                                    <p><strong>Montant:</strong><br>
+                                        <input type="text" pInputText placeholder="50€" formControlName="montant" />
+                                    </p>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button pButton label="Ajouter une commission" [disabled]="ajoutCommission.invalid"
+                                        type="submit"></button>
+                                </div>
+                            </form>
+                        </div>
 
-                <div class="field col-4 md:col-2">
-                    <label For="Indicatif">Indicatif Whatsapp <span style="color: red;"> * </span></label>
-                    <input pInputText id="Indicatif" type="text" formControlName="indicatif_whatsapp" />
-                    <div
-                        *ngIf="indicatif_whatsapp_m.invalid && (indicatif_whatsapp_m.touched || indicatif_whatsapp_m.dirty)">
-                        <span style="color: red;" class="error" *ngIf="indicatif_whatsapp_m.errors?.required">*
-                            L'indicatif est obligatoire</span>
-                        <span style="color: red;" class="error" *ngIf="indicatif_whatsapp_m.errors?.pattern">* Seul les
-                            chiffres sont acceptés</span>
+                        <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-co>
+                                <tr>
+                                    <td>{{co.description}}</td>
+                                    <td>{{co.montant}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
                     </div>
-                </div>
-                <div class="field col-8 md:col-10">
-                    <label For="tel">Téléphone Whatsapp <span style="color: red;"> * </span></label>
-                    <input pInputText id="tel" type="tel" formControlName="WhatsApp" />
 
-                    <div *ngIf="WhatsApp_m.invalid && (WhatsApp_m.touched || WhatsApp_m.dirty)">
-                        <span class="error" *ngIf="WhatsApp_m.errors?.required">
-                            <span style="color: red;">* Le téléphone est obligatoire.</span>
-                        </span>
-                        <span class="error" *ngIf="WhatsApp_m.errors?.pattern">
-                            <span style="color: red;"> * Le téléphone n'est pas dans le bon format.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="email">Email <span style="color: red;"> * </span></label>
-                    <input pInputText id="email" type="email" formControlName="emailPartenaire" />
-                    <div *ngIf="emailPartenaire_m.invalid && (emailPartenaire_m.touched || emailPartenaire_m.dirty)">
-                        <span class="error" *ngIf="emailPartenaire_m.errors">
-                            <span style="color: red;">* L'email est obligatoire.</span>
-                        </span>
-                        <span style="color: red;" class="error" *ngIf="emailPartenaire_m.errors?.email"
-                            style="color: red;">* L'email n'est pas dans le bon format </span>
-                    </div>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="tva">TVA <span style="color: red;"> * </span></label>
-                    <input pInputText id="tva" type="text" formControlName="number_TVA" />
-                    <div *ngIf="number_TVA_m.invalid && (number_TVA_m.touched || number_TVA_m.dirty)">
-                        <span class="error" *ngIf="number_TVA_m.errors">
-                            <span style="color: red;">* Le numéro de TVA est obligatoire.</span>
-                        </span>
-                        <span class="error" *ngIf="number_TVA_m.errors?.pattern">
-                            <span style="color: red;">* Le numéro de TVA semble incorrect.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label For="siren">SIREN</label>
-                    <input pInputText id="siren" type="text" formControlName="SIREN" />
-                    <div *ngIf="SIREN_m.invalid && (SIREN_m.touched || SIREN_m.dirty)">
-                        <span class="error" *ngIf="SIREN_m.errors?.pattern">
-                            <span style="color: red;">* Le numéro de SIREN semble incorrect.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label For="siret">SIRET</label>
-                    <input pInputText id="siret" type="text" formControlName="SIRET" />
-                    <div *ngIf="SIRET_m.invalid && (SIRET_m.touched || SIRET_m.dirty)">
-                        <span class="error" *ngIf="SIRET_m.errors?.pattern">
-                            <span style="color: red;">* Le numéro de SIRET semble incorrect.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field col-12 md:col-4">
-                    <label For="ape">Code APE </label>
-                    <input pInputText id="ape" type="text" formControlName="APE" />
-                </div>
-
-                <div class="field col-12">
-                    <label For="service">Services proposés <span style="color: red;"> * </span></label>
-                    <textarea id="service" pInputTextarea placeholder="Services proposés" autoResize rows="3" cols="30"
-                        formControlName="Services"></textarea>
-                    <div *ngIf="Services_m.invalid && (Services_m.touched || Services_m.dirty)">
-                        <span class="error" *ngIf="Services_m.errors?.required">
-                            <span style="color: red;">* Les services proposés sont obligatoires.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field col-12">
-                    <label For="pays">Pays d'activité <span style="color: red;"> * </span></label>
-                    <textarea id="pays" pInputTextarea placeholder="Pays d'activité" autoResize rows="3" cols="30"
-                        formControlName="Pays"></textarea>
-                    <div *ngIf="Pays_m.invalid && (Pays_m.touched || Pays_m.dirty)">
-                        <span class="error" *ngIf="Pays_m.errors?.required">
-                            <span style="color: red;">* Les pays d'activités sont obligatoires.</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div style="justify-content: right;">
-                    <button pButton label="Modifier le partenaire" [disabled]="formModifPartenaire.invalid"></button>
-                </div>
-
-            </form>
+                </p-fieldset>
+            </div>
         </div>
     </div>
 
@@ -281,7 +283,7 @@
                                 (click)="seeRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>-->
                             <i pTooltip="Gestion de partenaire" tooltipPosition="bottom" class="pi pi-pencil"
                                 style="margin-left: 7px" aria-hidden="true"
-                                (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData._id; onGetbyId(rowData)"></i>
+                                (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData)"></i>
                             <i pTooltip="Afficher la liste des prospects" tooltipPosition="bottom"
                                 class="pi pi-envelope" (click)="seePreRecruted(rowData)" aria-hidden="true"
                                 style="margin-left: 7px"></i>

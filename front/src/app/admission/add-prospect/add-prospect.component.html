@@ -9,24 +9,24 @@
             <br>
             <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm()"
                 [formGroup]="RegisterForm">
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-12">
                     <label For="role">Ecole <span style="color:red"> *</span></label>
                     <p-dropdown [options]="ecoleList" placeholder="Choissisez l'école du prospect"
                         formControlName="ecole"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label For="role">Source <span style="color:red"> *</span></label>
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                    <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
                     <p-dropdown [options]="sourceList" placeholder="Choissisez la provenance du prospect"
                         formControlName="source"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label For="role">Commercial</label>
-                    <p-dropdown [options]="commercialList"
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->
+                    <label For="role">Commercial</label> 
+                    <p-dropdown [options]="commercialList" filter="true"
                         placeholder="Choissisez le commercial qui a ajouté le prospect"
                         formControlName="commercial"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid"></button>
+                    <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid || (isPartenaireExterne && RegisterForm.value.ecole)"></button>
                 </div>
             </form>
         </div>

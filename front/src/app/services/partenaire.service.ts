@@ -49,7 +49,7 @@ export class PartenaireService {
     return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  newUpdate(partenaire: Partenaire) {
+  newUpdate(partenaire: any) {
     let registreUrl = this.apiUrl + "newUpdate";
     return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
@@ -69,5 +69,10 @@ export class PartenaireService {
   getByCode(cc:string){
     let registreUrl = this.apiUrl + "verificationCode/" + cc;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  uploadEtatContrat(data: any) {
+    let url = this.apiUrl + "file";
+    return this.httpClient.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 }

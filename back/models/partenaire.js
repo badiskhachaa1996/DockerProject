@@ -25,9 +25,12 @@ const sch = mongoose.Schema({
     statut_anciennete: { type: String, default: "Ancien" },
     contribution: { type: String },
     etat_contrat: { type: String },
-    
+
     pathImageProfil: { type: String },
-    typeImageProfil: { type: String }
+    typeImageProfil: { type: String },
+    commissions: { type: [{ description: String, montant: String }], default: [] },
+    pathEtatContrat: { type: String },
+    typeEtatContrat: { type: String },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

@@ -361,6 +361,7 @@ app.put("/newUpdate", (req, res, next) => {
     let id = partenaireData._id
     delete partenaireData._id
     //Mise à jour du partenaire
+    console.log(partenaireData)
     Partenaire.findByIdAndUpdate(id,
         {
             ...partenaireData
@@ -374,5 +375,54 @@ app.put("/newUpdate", (req, res, next) => {
             res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' });
         })
 });
+
+const fs = require("fs");
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        let id = req.body.id;
+        if (!fs.existsSync("storage/Partenaire/etat_contrat/" + id + "/")) {
+            fs.mkdirSync("storage/Partenaire/etat_contrat/" + id + "/", { recursive: true });
+        }
+        callBack(null, "storage/Partenaire/etat_contrat/" + id + "/");
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`);
+    },
+});
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/file", upload.single("file"), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error("No File");
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+    Partenaire.findById(req.body.id, (err, cp) => {
+        try {
+            if (fs.existsSync("storage/Partenaire/etat_contrat/" + req.body.id + "/" + cp?.pathEtatContrat))
+                fs.unlinkSync("storage/Partenaire/etat_contrat/" + req.body.id + "/" + cp?.pathEtatContrat);
+            //file removed
+        } catch (err2) {
+            console.log(err2, "Pas de fichier existant")
+        }
+    });
+    Partenaire.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+            pathEtatContrat: file.filename,
+            typeEtatContrat: file.mimetype,
+        },
+        (errUser, user) => {
+            console.error(errUser);
+            //Renvoie de la photo de profile au Front pour pouvoir l'afficher
+            res.send({
+                pathEtatContrat: file.filename,
+                typeEtatContrat: file.mimetype,
+            });
+        }
+    );
+})
 
 module.exports = app;
