@@ -8,6 +8,10 @@ const stageSchema = mongoose.Schema({
     end_date:           { type: Date, required: false },
     schedules_per_week: { type: Number, required: false },
     commercial_id:      { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
+    mission_tasks:      { type: String, required: false },
+    gratification:      { type: Number, required: false },
+    payment_modality:   { type: String, required: false },
+    other_advantages:   { type: String, required: false },
     status:             { type: String, required: false },
     school_year:        { type: [String], required: false },
     convention:         { type: String, required: false }, // document lié au stage
