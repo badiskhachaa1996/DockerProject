@@ -164,6 +164,7 @@ export class DetailsEtudiantComponent implements OnInit {
         this.seanceService.getAllFinishedByClasseId(this.EtudiantDetail.classe_id, this.EtudiantDetail.user_id).subscribe((seanceData) => {
           this.ListeSeance = seanceData
           this.isNotEtudiant = userConnected.type != "Initial" && userConnected.type != "Alternant" && (userConnected.role == "Agent" || userConnected.role == "Admin" || userConnected.role == "Responsable")
+          console.log(userConnected.type != "Initial" && userConnected.type != "Alternant",this.isNotEtudiant)
           this.isNotEntreprise = userConnected.type != 'CEO Entreprise'
           let type = "Agent"
           if (userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'CEO Entreprise' && userConnected.role != "Agent" && userConnected.role != "Admin" && userConnected.role != "Responsable")
