@@ -92,4 +92,9 @@ export class FormateurService {
     return this.httpClient.get<[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }], remarque: RemarqueFormateur }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllVolume(id: string) {
+    let registreUrl = this.apiUrl + "getAllVolume/" + id;
+    return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

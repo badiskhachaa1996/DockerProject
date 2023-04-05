@@ -133,6 +133,8 @@
                 <div *ngIf="!hideForPDF">
                     <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" class="mr-2"
                         pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="mr-2"
+                        pTooltip="Exporter en Excel" tooltipPosition="bottom"></button>
                     <button type="button" pButton pRipple icon="pi pi-save" (click)="savePv()" class="mr-2"
                         pTooltip="Sauvegarder dans IMS" tooltipPosition="bottom"></button>
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"

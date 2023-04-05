@@ -383,5 +383,60 @@ app.get("/getPopulateByUserId/:id", (req, res, next) => {
     }
 })
 
+app.get('/getAllVolume/:user_id', (req, res) => {
+    let dic = { 'id': { matiere_nom: "", v_ini: 0, v_plan: 0, v_cons: 0, matiere_id: "" } }
+
+    Seance.find({ formateur_id: req.params.user_id, isPlanified: false }).populate('matiere_id').populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(seances => {
+        seances.forEach(seance => {
+
+            if (seance && seance.matiere_id) {
+                let m = seance?.matiere_id
+                let filiere = null
+                let nb = ""
+
+                if (Array.isArray(seance.classe_id)) {
+                    if (seance.classe_id[0] != undefined) {
+                        if (seance.classe_id[0].abbrv.indexOf('1') != -1)
+                            nb = "1"
+                        if (seance.classe_id[0].abbrv.indexOf('2') != -1)
+                            nb = "2"
+                        filiere = seance.classe_id[0].diplome_id;
+                    }
+                    else {
+                        filiere = { titre: seance.classe_id.abbrv }
+                    }
+
+                }
+                else {
+                    if (seance.classe_id.abbrv.indexOf('1') != -1)
+                    nb = "1"
+                if (seance.classe_id.abbrv.indexOf('2') != -1)
+                    nb = "2"
+                    filiere = seance.classe_id.diplome_id
+                }
+
+                let v = new Date(seance.date_fin).getHours() - new Date(seance.date_debut).getHours()
+                let isPlanified = new Date() < new Date(seance.date_debut)
+
+                if (dic[m._id]) {
+                    if (isPlanified)
+                        dic['v_plan'] = dic['v_plan'] + v
+                    else
+                        dic.v_cons = dic.v_cons + v
+                } else {
+                    if (isPlanified)
+                        dic[m._id] = { matiere_nom: `${m.nom} - ${filiere?.titre} ${nb}`, v_ini: m.volume_init, v_plan: v, v_cons: 0, matiere_id: m._id }
+                    else
+                        dic[m._id] = { matiere_nom: `${m.nom} - ${filiere?.titre} ${nb}`, v_ini: m.volume_init, v_plan: 0, v_cons: v, matiere_id: m._id }
+                }
+            }
+        })
+        let r = Object.keys(dic).map(function (key) {
+            return dic[key];
+        });
+        res.send(r)
+    })
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;
