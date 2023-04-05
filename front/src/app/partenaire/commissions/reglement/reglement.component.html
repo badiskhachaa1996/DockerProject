@@ -45,12 +45,10 @@
             <button pButton pRipple label="Ajouter une vente" class="mr-2 mb-2" style="float: right;"
                 (click)="showFormAddVente = true;"></button>
 
-            <h5>Liste des collaborateurs</h5>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single"
-                [value]="ventes" [paginator]="true" [pageLinks]="5"
-                [globalFilterFields]="['code_commercial_partenaire', 'statut']"
-                [totalRecords]="ventes.length" responsiveLayout="scroll"
-                styleClass="p-datatable-gridlines">
+            <h5>Liste des ventes</h5>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="ventes"
+                [paginator]="true" [pageLinks]="5" [globalFilterFields]="['code_commercial_partenaire', 'statut']"
+                [totalRecords]="ventes.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -64,19 +62,47 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="code" style="text-align: center;"> ID Commercial <p-sortIcon field="code">
+                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Prospect <p-sortIcon
+                                field="prospect_id.customid">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="nom_prenom" style="text-align: center;"> Prénom & Nom <p-sortIcon
-                                field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="prospect_id.user_id.lastname" style="text-align: center;"> Nom & Prénom
+                            <p-sortIcon field="prospect_id.user_id.lastname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
+                        <th pSortableColumn="montant_paye" style="text-align: center;"> Montant payé <p-sortIcon
+                                field="montant_paye">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="telephone" style="text-align: center;"> Téléphone <p-sortIcon
-                                field="telephone"></p-sortIcon>
+                        <th pSortableColumn="date_paiement" style="text-align: center;"> Date de paiement <p-sortIcon
+                                field="date_paiement"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut">
+                        <th pSortableColumn="modalite_paiement" style="text-align: center;"> Modalité de paiement
+                            <p-sortIcon field="modalite_paiement">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="produit" style="text-align: center;"> Produit
+                            <p-sortIcon field="produit">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant de la commission
+                            <p-sortIcon field="montant">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="tva" style="text-align: center;"> TVA
+                            <p-sortIcon field="tva">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de commission
+                            <p-sortIcon field="statutCommission">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date de réglement
+                            <p-sortIcon field="date_reglement">
                             </p-sortIcon>
                         </th>
 

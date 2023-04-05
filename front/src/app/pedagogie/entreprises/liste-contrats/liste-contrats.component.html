@@ -592,7 +592,7 @@
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreEcole"
-                            (onChange)="dt1.filter($event.value, 'alternant_id.ecole_id', 'equals')"
+                            (onChange)="dt1.filter($event.value, 'ecole._id', 'equals')"
                             filterPlaceholder="Choisissez une ecole"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreFormation"
