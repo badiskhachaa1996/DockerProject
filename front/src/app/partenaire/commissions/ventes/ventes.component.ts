@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ventes',
@@ -12,4 +13,22 @@ export class VentesComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showFormAddVente = false
+
+  ventes = []
+
+  formAddVente: FormGroup = new FormGroup({
+    montant: new FormControl('', Validators.required),
+    tva: new FormControl('', Validators.required),
+    statutCommission: new FormControl('', Validators.required),
+    date_reglement: new FormControl('', Validators.required),
+  })
+
+  onAddVente() {
+
+  }
+
+  initEditForm(vente) {
+
+  }
 }

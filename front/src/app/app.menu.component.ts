@@ -448,32 +448,38 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-share-alt',
                             items: [
                                 {
-                                    label: 'Gestions des partenaires', icon: 'pi pi-users',
-                                    items: [
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items:[
                                         {
-                                            label: 'Insérer un Partenaire',
-                                            icon: 'pi pi pi-user-plus',
-                                            routerLink: ['/partenaireInscription']
+                                            label:"Ventes",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label: 'Liste des partenaires',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/admin/partenaire']
-                                        },
-                                        {
-                                            label: 'Support Marketing',
-                                            icon: 'pi pi-briefcase'
-                                        },
-                                        {
-                                            label: 'Gestion des commissions',
-                                            icon: 'pi pi-credit-card'
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-chart-line'
-                                        },
+                                            label:"Réglement",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
                                     ]
-
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
                                 },
                             ]
                         },
@@ -1232,32 +1238,38 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-share-alt',
                             items: [
                                 {
-                                    label: 'Gestions des partenaires', icon: 'pi pi-users',
-                                    items: [
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items:[
                                         {
-                                            label: 'Insérer un Partenaire',
-                                            icon: 'pi pi pi-user-plus',
-                                            routerLink: ['/partenaireInscription']
+                                            label:"Ventes",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label: 'Liste des partenaires',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/admin/partenaire']
-                                        },
-                                        {
-                                            label: 'Support Marketing',
-                                            icon: 'pi pi-briefcase'
-                                        },
-                                        {
-                                            label: 'Gestion des commissions',
-                                            icon: 'pi pi-credit-card'
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-chart-line'
-                                        },
+                                            label:"Réglement",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
                                     ]
-
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
                                 },
                             ]
                         },
@@ -1867,32 +1879,38 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Gestions des partenaires', icon: 'pi pi-users',
-                                            items: [
+                                            label: 'Insérer un Partenaire',
+                                            icon: 'pi pi pi-user-plus',
+                                            routerLink: ['/partenaireInscription']
+                                        },
+                                        {
+                                            label: 'Liste des partenaires',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/admin/partenaire']
+                                        },
+                                        {
+                                            label: 'Support Marketing',
+                                            icon: 'pi pi-briefcase'
+                                        },
+                                        {
+                                            label: 'Gestion des commissions',
+                                            icon: 'pi pi-credit-card',
+                                            items:[
                                                 {
-                                                    label: 'Insérer un Partenaire',
-                                                    icon: 'pi pi pi-user-plus',
-                                                    routerLink: ['/partenaireInscription']
+                                                    label:"Ventes",
+                                                    icon:'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label: 'Liste des partenaires',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/admin/partenaire']
-                                                },
-                                                {
-                                                    label: 'Support Marketing',
-                                                    icon: 'pi pi-briefcase'
-                                                },
-                                                {
-                                                    label: 'Gestion des commissions',
-                                                    icon: 'pi pi-credit-card'
-                                                },
-                                                {
-                                                    label: 'Dashboard',
-                                                    icon: 'pi pi-chart-line'
-                                                },
+                                                    label:"Réglement",
+                                                    icon:'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/reglement']
+                                                }
                                             ]
-
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-chart-line'
                                         },
                                     ]
                                 },
@@ -2588,32 +2606,38 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Gestions des partenaires', icon: 'pi pi-users',
-                                            items: [
+                                            label: 'Insérer un Partenaire',
+                                            icon: 'pi pi pi-user-plus',
+                                            routerLink: ['/partenaireInscription']
+                                        },
+                                        {
+                                            label: 'Liste des partenaires',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/admin/partenaire']
+                                        },
+                                        {
+                                            label: 'Support Marketing',
+                                            icon: 'pi pi-briefcase'
+                                        },
+                                        {
+                                            label: 'Gestion des commissions',
+                                            icon: 'pi pi-credit-card',
+                                            items:[
                                                 {
-                                                    label: 'Insérer un Partenaire',
-                                                    icon: 'pi pi pi-user-plus',
-                                                    routerLink: ['/partenaireInscription']
+                                                    label:"Ventes",
+                                                    icon:'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label: 'Liste des partenaires',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/admin/partenaire']
-                                                },
-                                                {
-                                                    label: 'Support Marketing',
-                                                    icon: 'pi pi-briefcase'
-                                                },
-                                                {
-                                                    label: 'Gestion des commissions',
-                                                    icon: 'pi pi-credit-card'
-                                                },
-                                                {
-                                                    label: 'Dashboard',
-                                                    icon: 'pi pi-chart-line'
-                                                },
+                                                    label:"Réglement",
+                                                    icon:'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/reglement']
+                                                }
                                             ]
-
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-chart-line'
                                         },
                                     ]
                                 },

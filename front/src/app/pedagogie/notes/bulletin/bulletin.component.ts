@@ -259,6 +259,23 @@ export class BulletinComponent implements OnInit {
             }
             this.NOTES.push(t)
           })
+          if ((!this.APPRECIATION_GENERALE || this.APPRECIATION_GENERALE == "")) {
+            let note = this.calculMoyenne()
+            if (note < 10)
+              this.APPRECIATION_GENERALE = "Doit faire ses preuves"
+            else if ((note > 10 && note < 12) || note == 10)
+              this.APPRECIATION_GENERALE = "Passable"
+            else if ((note > 12 && note < 14) || note == 12)
+              this.APPRECIATION_GENERALE = "Assez Bien"
+            else if ((note > 14 && note < 16) || note == 14)
+              this.APPRECIATION_GENERALE = "Bien"
+            else if ((note > 16 && note < 18) || note == 16)
+              this.APPRECIATION_GENERALE = "Très Bien"
+            else if (note > 18 || note == 18)
+              this.APPRECIATION_GENERALE = "Excellent"
+            else
+              this.APPRECIATION_GENERALE = ""
+          }
         }
         this.calculMoy()
         console.log(this.NOTES)

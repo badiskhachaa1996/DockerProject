@@ -121,6 +121,8 @@ const EvenementsController = require('./controllers/evenementController')
 const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
 const MatchingController = require('./controllers/matchingController')
 const stageController = require('./controllers/stageController')
+const venteController = require('./controllers/venteCommissionController')
+const factureCommissionController = require('./controllers/factureCommissionController')
 const { User } = require("./models/user");
 
 
@@ -167,7 +169,7 @@ app.use('/', function (req, res, next) {
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel') || req.originalUrl == "/soc/demande-events/create"
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" || req.originalUrl == "/soc/classe/getAll" ||
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl == '/soc/qs/create' || req.originalUrl == '/soc/qs/createQFF' || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise')
-            || req.originalUrl.startsWith('/soc/user/reinitPwd') || req.originalUrl.startsWith('/soc/qs/create') || req.originalUrl.startsWith("/soc/user/getProfilePicture") || req.originalUrl == "/soc/user/file"|| req.originalUrl == "/soc/user/patchById")  {
+            || req.originalUrl.startsWith('/soc/user/reinitPwd') || req.originalUrl.startsWith('/soc/qs/create') || req.originalUrl.startsWith("/soc/user/getProfilePicture") || req.originalUrl == "/soc/user/file" || req.originalUrl == "/soc/user/patchById") {
             next()
         } else {
 
@@ -274,7 +276,8 @@ app.use('/soc/project', projectController);
 app.use('/soc/team', teamController);
 app.use('/soc/matching', MatchingController)
 app.use('/soc/stage', stageController)
-
+app.use('/soc/vente', venteController)
+app.use('/soc/factureCommission', factureCommissionController)
 
 
 io.on("connection", (socket) => {

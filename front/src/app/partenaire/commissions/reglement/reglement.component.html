@@ -1,20 +1,20 @@
 <p-toast></p-toast>
 <div class="grid">
     <!-- Formulaire d'ajout d'un collaborateur -->
-    <div class="col-12" *ngIf="showFormAddVente">
+    <div class="col-12" *ngIf="showFormAddFacture">
         <div class="card">
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showFormAddVente = false;">
             </i>
-            <h4 style="text-align: center;">Ajouter une vente</h4>
-            <form class="p-fluid p-formgrid grid" [formGroup]="formAddVente" (ngSubmit)="onAddVente()">
+            <h4 style="text-align: center;">Insérer une facture</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddFacture" (ngSubmit)="onAddFacture()">
                 <div class="field col-12 md:col-6">
-                    <label>Produit</label>
-                    <p-dropdown [options]="produitList" formControlName="produit"
-                        placeholder="Description du Produit"></p-dropdown>
+                    <label>Numéro de la facture</label>
+                    <p-inputNumber formControlName="numero">
+                    </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant</label>
+                    <label>Montant de la facture</label>
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
@@ -24,16 +24,22 @@
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Statut de la commission</label>
-                    <p-dropdown [options]="statutCommission" formControlName="statut_commission"
-                        placeholder="Statut de la commission"></p-dropdown>
+                    <label>Statut de la facture</label>
+                    <p-dropdown [options]="statutFacture" formControlName="statut"
+                        placeholder="Statut de la facture"></p-dropdown>
                 </div>
-                <div class="field col-12">
-                    <label>Date de règlement</label>
-                    <p-calendar formControlName="date_reglement"></p-calendar>
+                <div class="field col-12 md:col-6">
+                    <label>Nature du paiement</label>
+                    <p-dropdown [options]="natureList" formControlName="nature"
+                        placeholder="Nature du paiement"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date du paiement</label>
+                    <p-calendar formControlName="date_paiement"></p-calendar>
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton label="Ajouter cette vente" [disabled]="formAddVente.invalid"
+                    <button pButton label="Ajouter cette facture" [disabled]="formAddFacture.invalid"
                         type="submit"></button>
                 </div>
             </form>
@@ -42,12 +48,12 @@
 
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Ajouter une vente" class="mr-2 mb-2" style="float: right;"
-                (click)="showFormAddVente = true;"></button>
+            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;"
+                (click)="showFormAddFacture = true;"></button>
 
-            <h5>Liste des ventes</h5>
+            <h5>Liste des factures</h5>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="ventes"
-                [paginator]="true" [pageLinks]="5" [globalFilterFields]="['code_commercial_partenaire', 'statut']"
+                [paginator]="true" [pageLinks]="5" [globalFilterFields]="['produit', 'statutCommission']"
                 [totalRecords]="ventes.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -62,47 +68,29 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Prospect <p-sortIcon
-                                field="prospect_id.customid">
+                        <th pSortableColumn="numero" style="text-align: center;"> Numéro de la facture <p-sortIcon
+                                field="numero">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="prospect_id.user_id.lastname" style="text-align: center;"> Nom & Prénom
-                            <p-sortIcon field="prospect_id.user_id.lastname"></p-sortIcon>
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant de la facture
+                            <p-sortIcon field="montant"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="montant_paye" style="text-align: center;"> Montant payé <p-sortIcon
-                                field="montant_paye">
+                        <th pSortableColumn="tva" style="text-align: center;"> TVA <p-sortIcon field="tva">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="date_paiement" style="text-align: center;"> Date de paiement <p-sortIcon
-                                field="date_paiement"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="modalite_paiement" style="text-align: center;"> Modalité de paiement
-                            <p-sortIcon field="modalite_paiement">
+                        <th style="text-align: center;"> Montant Total </th>
+                        <th pSortableColumn="statut" style="text-align: center;"> Statut de la facture
+                            <p-sortIcon field="statut">
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="produit" style="text-align: center;"> Produit
-                            <p-sortIcon field="produit">
+                        <th pSortableColumn="nature" style="text-align: center;"> Nature du paiement
+                            <p-sortIcon field="nature">
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="montant" style="text-align: center;"> Montant de la commission
-                            <p-sortIcon field="montant">
-                            </p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="tva" style="text-align: center;"> TVA
-                            <p-sortIcon field="tva">
-                            </p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de commission
-                            <p-sortIcon field="statutCommission">
-                            </p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date de réglement
-                            <p-sortIcon field="date_reglement">
+                        <th pSortableColumn="date_paiement" style="text-align: center;"> Date du paiement
+                            <p-sortIcon field="date_paiement">
                             </p-sortIcon>
                         </th>
 
@@ -113,36 +101,39 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-commercial>
+                <ng-template pTemplate="body" let-facture>
                     <tr>
                         <td style="min-width: 14rem;">
-                            {{ commercial.code_commercial_partenaire }}
+                            {{ facture.numero }}
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ users[commercial.user_id]?.firstname | titlecase }}
-                            {{ users[commercial.user_id]?.lastname | uppercase}}
+                            {{ facture.montant }}
 
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ users[commercial.user_id]?.email }}
+                            {{ facture.tva }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ users[commercial.user_id]?.phone }}
+                            {{ facture.tva*facture.montant+facture.montant }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ commercial.statut }}
+                            {{ facture.statut }}
+                        </td>
+
+                        <td style="min-width: 14rem;">
+                            {{ facture.nature }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ facture.date_paiement| date:'mediumDate' }}
                         </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
-                                (click)="showFormUpdateCommercial = true; showFormAddCommercial = false; idCommercialToUpdate = commercial._id; idUserToUpdate = commercial.user_id; onGetById();"
-                                class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le commercial"></i>
-                            <i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
-                                (click)="seeRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
-                                (click)="seePreRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i pTooltip="Supprimer le collaborateur" tooltipPosition="bottom" class="pi pi-trash"
-                                (click)="delete(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i style="margin-left: 2%;" (click)="initEditForm(facture)" class="pi pi-pencil"
+                                aria-hidden="true" pTooltip="Modifier la facture"></i>
+                            <i *ngIf="facture.factureUploaded" style="margin-left: 2%;" (click)="download(facture)" class="pi pi-download"
+                                aria-hidden="true" pTooltip="Télécharger la facture"></i>
+                            <i style="margin-left: 2%;" (click)="upload(facture)" class="pi pi-cloud-upload"
+                                aria-hidden="true" pTooltip="Upload la facture"></i>
                         </td>
                     </tr>
                 </ng-template>

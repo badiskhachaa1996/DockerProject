@@ -816,4 +816,8 @@ export class ListeContratsComponent implements OnInit {
     });
     this.showFilterByCampus = true;
   }
+
+  onFilterByEcole(event){
+    
+  }
 }

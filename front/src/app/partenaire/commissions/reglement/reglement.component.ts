@@ -10,18 +10,24 @@ export class ReglementComponent implements OnInit {
 
   constructor() { }
 
-  showFormAddVente = false
+  showFormAddFacture = false
 
   ventes = []
 
-  formAddVente: FormGroup = new FormGroup({
+  formAddFacture: FormGroup = new FormGroup({
+    numero: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
-    statutCommission: new FormControl('', Validators.required),
-    date_reglement: new FormControl('', Validators.required),
+    statut: new FormControl('', Validators.required),
+    nature: new FormControl('', Validators.required),
+    date_paiement: new FormControl('', Validators.required),
   })
 
-  onAddVente() {
+  onAddFacture() {
+
+  }
+
+  initEditForm(facture) {
 
   }
 
