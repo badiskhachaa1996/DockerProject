@@ -264,6 +264,8 @@ import { QuestionnaireFormateurComponent } from './pedagogie/questionnaire-forma
 import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resultat-qf/resultat-qf.component';
 import { StageComponent } from './commercial/stage/stage.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
+import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
+import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
 
 
 @NgModule({
@@ -537,7 +539,9 @@ import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-c
     QuestionnaireFormateurComponent,
     ResultatQfComponent,
     StageComponent,
-    AjoutCollaborateurComponent
+    AjoutCollaborateurComponent,
+    VentesComponent,
+    ReglementComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

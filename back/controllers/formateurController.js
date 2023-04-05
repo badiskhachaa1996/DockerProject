@@ -384,7 +384,7 @@ app.get("/getPopulateByUserId/:id", (req, res, next) => {
 })
 
 app.get('/getAllVolume/:user_id', (req, res) => {
-    let dic = { 'id': { matiere_nom: "", v_ini: 0, v_plan: 0, v_cons: 0, matiere_id: "" } }
+    let dic = {} //{ 'id': { matiere_nom: "", v_ini: 0, v_plan: 0, v_cons: 0, matiere_id: "" } }
 
     Seance.find({ formateur_id: req.params.user_id, isPlanified: false }).populate('matiere_id').populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(seances => {
         seances.forEach(seance => {
@@ -409,9 +409,9 @@ app.get('/getAllVolume/:user_id', (req, res) => {
                 }
                 else {
                     if (seance.classe_id.abbrv.indexOf('1') != -1)
-                    nb = "1"
-                if (seance.classe_id.abbrv.indexOf('2') != -1)
-                    nb = "2"
+                        nb = "1"
+                    if (seance.classe_id.abbrv.indexOf('2') != -1)
+                        nb = "2"
                     filiere = seance.classe_id.diplome_id
                 }
 
