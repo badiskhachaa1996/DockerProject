@@ -111,14 +111,14 @@
                             {{ facture.numero }}
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ facture.montant }}
+                            {{ facture.montant }}€
 
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ facture.tva }}
+                            {{ facture.tva }}%
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ (facture.tva/100)*facture.montant+facture.montant }}
+                            {{ (facture.tva/100)*facture.montant+facture.montant }}€
                         </td>
                         <td style="min-width: 14rem;">
                             {{ facture.statut }}

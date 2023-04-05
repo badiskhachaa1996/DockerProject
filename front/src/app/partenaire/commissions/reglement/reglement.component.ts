@@ -31,7 +31,7 @@ export class ReglementComponent implements OnInit {
   factures = []
 
   formAddFacture: FormGroup = new FormGroup({
-    numero: new FormControl('', Validators.required),
+    numero: new FormControl(this.factures.length, Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
     statut: new FormControl('', Validators.required),
