@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
-                        <strong>Date de naissance:</strong> {{InfoUser.date_naissance | date:'dd/MM/yyyy'}}
+                        <strong>Date de naissance:</strong> {{InfoUser.date_naissance | date:'mediumDate'}}
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.nationalite">

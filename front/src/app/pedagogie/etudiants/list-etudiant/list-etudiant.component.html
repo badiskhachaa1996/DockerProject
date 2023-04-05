@@ -709,6 +709,7 @@
                         <th></th>
                         <th>Adresse </th>
                         <th>Date de naissance </th>
+                        <th>Date d'inscription </th>
                         <th>Téléphone </th>
                         <th>Dernier diplôme obtenu </th>
                         <th>Email d'urgence </th>
@@ -732,7 +733,11 @@
                             {{ etudiant.user_id.pays_adresse }}
                         </td>
                         <td>
-                            {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                            {{ etudiant.date_naissance | date:'mediumDate' }}
+                        </td>
+
+                        <td>
+                            {{ etudiant.date_inscription | date:'mediumDate' }}
                         </td>
                         <td *ngIf="etudiant.user_id">
                             {{ etudiant.user_id?.phone }}

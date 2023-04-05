@@ -140,7 +140,7 @@
                         {{ etudiant.user_id.pays_adresse }}
                     </td>
                     <td>
-                        {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                        {{ etudiant.date_naissance | date:'mediumDate' }}
                     </td>
                     <td *ngIf="etudiant.user_id">
                         {{ etudiant.user_id?.phone }}

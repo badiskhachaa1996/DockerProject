@@ -81,7 +81,7 @@ export class ListeContratsComponent implements OnInit {
   ];
 
   filtreFormation = [
-    { value: null, label: "Toutes les formations"}
+    { value: null, label: "Toutes les formations" }
   ];
 
   filtreStatus = [
@@ -108,6 +108,10 @@ export class ListeContratsComponent implements OnInit {
     { label: 'Fournis à l\'étudiant', value: 'Fournis à l\'étudiant' },
   ];
 
+  filtreEcole = [
+    { label: 'Choissisez une école', value: null }
+  ]
+
   advantageStatusList: any[] = [
     { label: 'Non', value: 'Non' },
     { label: 'En cours', value: 'En cours' },
@@ -115,7 +119,7 @@ export class ListeContratsComponent implements OnInit {
     { label: 'Facturé à l\’opco', value: 'Facturé à l\’opco' },
     { label: 'Fournis à l\'étudiant', value: 'Fournis à l\'étudiant' },
   ];
-  
+
   // pour afficher le champs de saisie du prix de la mobilité
   showCout: boolean = false;
   // pour afficher le champs de saisie du prix du matériel pédagogique
@@ -238,6 +242,7 @@ export class ListeContratsComponent implements OnInit {
       this.EcoleService.getAll().subscribe(data => {
         data.forEach(e => {
           this.dropdownCFA.push({ value: e._id, label: e.libelle })
+          this.filtreEcole.push({ value: e._id, label: e.libelle })
         })
       })
 
@@ -540,10 +545,8 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // méthode d'affichage du cout
-  onShowCout(event: any): void 
-  {
-    if(event.value == 'Accordé')
-    {
+  onShowCout(event: any): void {
+    if (event.value == 'Accordé') {
       this.showCout = true;
     } else {
       this.showCout = false;
@@ -551,10 +554,8 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // méthode d'affichage du champs de saisie du montant coût pédagogique
-  onShowMatPedPrice(event: any): void
-  {
-    if(event.value == 'Accordé')
-    {
+  onShowMatPedPrice(event: any): void {
+    if (event.value == 'Accordé') {
       this.showMatPedPrice = true;
     } else {
       this.showMatPedPrice = false;
@@ -562,10 +563,8 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // méthode d'affichage du champs de saisie du montant d'aide au permis
-  onShowDLPrice(event: any): void
-  {
-    if(event.value == 'Accordé')
-    {
+  onShowDLPrice(event: any): void {
+    if (event.value == 'Accordé') {
       this.showDLHelpPrice = true;
     } else {
       this.showDLHelpPrice = false;
@@ -596,225 +595,206 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // méthode de selection du fichier
-  onSelectFile(event: any)
-  {
-    if(event.target.files.length > 0)
-    {
+  onSelectFile(event: any) {
+    if (event.target.files.length > 0) {
       this.doc = event.target.files[0];
     }
   }
 
   // méthode d'ajout du cerfa
-  onAddCerfa(): void
-  {    
+  onAddCerfa(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du document dans la base de données
     this.entrepriseService.uploadCerfa(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddCerfa = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddCerfa = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la convention
-  onAddConvention(): void
-  {    
+  onAddConvention(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du document dans la base de données
     this.entrepriseService.uploadConvention(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddConvention = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddConvention = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout de l'accord de prise en charge
-  onAddAccordPriseEnCharge(): void 
-  {
+  onAddAccordPriseEnCharge(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du document dans la base de données
     this.entrepriseService.uploadAccordPriseEnCharge(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddAccordPriseEnCharge = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddAccordPriseEnCharge = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la résiliation du contrat
-  onAddResiliation(): void
-  {    
+  onAddResiliation(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du document dans la base de données
     this.entrepriseService.uploadResiliation(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddResiliation = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddResiliation = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la relance du contrat
-  onAddRelance(): void
-  {    
+  onAddRelance(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du document dans la base de données
     this.entrepriseService.uploadRelance(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddRelance = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddRelance = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du livret d'apprentissage du contrat
-  onAddLivret(): void
-  {
+  onAddLivret(): void {
     let formData = new FormData();
     formData.append('id', this.contratToUpdate._id);
     formData.append('file', this.doc);
 
     // envoi du livret d'apprentissage dans la base de données
     this.entrepriseService.uploadLivret(formData)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Document', detail: response.successMsg});
-      this.showFormAddLivret = false;
-      this.ngOnInit();
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Document', detail: error.error}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+        this.showFormAddLivret = false;
+        this.ngOnInit();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
 
   // méthode de téléchargement du calendrier de la formation
-  onDownloadCalendar(id: string): void
-  {
+  onDownloadCalendar(id: string): void {
     this.classeService.downloadCalendar(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement du cerfa
-  onDownloadCerfa(id: string): void
-  {
+  onDownloadCerfa(id: string): void {
     this.entrepriseService.getCerfa(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `cerfa.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Cerfa", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Cerfa", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `cerfa.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Cerfa", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Cerfa", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement de la convention
-  onDownloadConvention(id: string): void
-  {
+  onDownloadConvention(id: string): void {
     this.entrepriseService.getConvention(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `convention.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Convention", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `convention.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Convention", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Convention", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // methode de téléchargement de l'accord de prise en charge
-  onDownloadAccordPriseEnCharge(id: string): void
-  {
+  onDownloadAccordPriseEnCharge(id: string): void {
     this.entrepriseService.getAccord(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `accord_prise_charge.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Accord de prise en charge", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Accord de prise en charge", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `accord_prise_charge.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Accord de prise en charge", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Accord de prise en charge", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement de la résiliation
-  onDownloadResiliation(id: string): void
-  {
+  onDownloadResiliation(id: string): void {
     this.entrepriseService.getResiliation(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `resiliation.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `resiliation.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Resiliation", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Resiliation", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement de la rélance
-  onDownloadRelance(id: string): void
-  {
+  onDownloadRelance(id: string): void {
     this.entrepriseService.getRelance(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `relance.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Relance", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Relance", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `relance.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Relance", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Relance", detail: `Impossible de télécharger le fichier` }); });
   }
 
   // méthode de téléchargement du livret d'apprentissage
-  onDownloadLivret(id: string): void
-  {
+  onDownloadLivret(id: string): void {
     this.entrepriseService.getLivret(id)
-    .then((response: Blob) => {
+      .then((response: Blob) => {
 
-      let filetype = '';
-      if(response.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-      {
-        filetype = 'docx';
-      } else if (response.type === "application/msword")
-      {
-        filetype = 'doc';
-      } else {
-        filetype = 'undefined';
-      }
+        let filetype = '';
+        if (response.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+          filetype = 'docx';
+        } else if (response.type === "application/msword") {
+          filetype = 'doc';
+        } else {
+          filetype = 'undefined';
+        }
 
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `livret.${filetype}`);
-      this.messageService.add({ severity: "success", summary: "Livret d'apprentissage", detail: "Téléchargement réussi" });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Livret d'apprentissage", detail: "Impossible de télécharger le télécharger le fichier" }); });
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `livret.${filetype}`);
+        this.messageService.add({ severity: "success", summary: "Livret d'apprentissage", detail: "Téléchargement réussi" });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Livret d'apprentissage", detail: "Impossible de télécharger le télécharger le fichier" }); });
   }
 
 
   // méthodes pour compter le nombre de contrats filtrés par commercial
-  onFilterByCommercial(event: any): void 
-  {
+  onFilterByCommercial(event: any): void {
     // on vide le tableau avant de le remplir
     this.listeContratsFilteredByCommercial = [];
     // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
     this.ListeContrats.forEach((contrat) => {
-      let {code_commercial}: any = contrat; 
+      let { code_commercial }: any = contrat;
       this.commercialFiltered = code_commercial;
-      if(code_commercial._id == event.value)
-      {
+      if (code_commercial._id == event.value) {
         this.listeContratsFilteredByCommercial.push(contrat);
       }
     });
@@ -822,17 +802,15 @@ export class ListeContratsComponent implements OnInit {
   }
 
   // méthodes pour compter le nombre de contrats filtrés par commercial
-  onFilterByCampus(event: any): void 
-  {
+  onFilterByCampus(event: any): void {
     console.log(event)
     // on vide le tableau avant de le remplir
     this.listeContratsFilteredByCampus = [];
     // Parcourt la liste des contrats pour récupérer les contrats avec l'id du commercial filtré
     this.ListeContrats.forEach((contrat) => {
-      let {code_commercial}: any = contrat; 
+      let { code_commercial }: any = contrat;
       this.campusFiltered = code_commercial;
-      if(code_commercial._id == event.value)
-      {
+      if (code_commercial._id == event.value) {
         this.listeContratsFilteredByCampus.push(contrat);
       }
     });
