@@ -470,7 +470,7 @@ export class ListFormateursComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Erreur avec les emplois du temps', detail: "Contacté un Admin" })
     })
   }
-
+  volumes = []
   expandFc(rowData: any) {
     this.formateurService.getFiles(rowData?._id).subscribe(
       (data) => {
@@ -478,9 +478,9 @@ export class ListFormateursComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.formateurService.getAllVolume(rowData.user_id._id).subscribe(volumes=>{
-      console.log(volumes)
-    },err=>{
+    this.formateurService.getAllVolume(rowData.user_id._id).subscribe(volumes => {
+      this.volumes = volumes
+    }, err => {
       console.error(err)
     })
   }

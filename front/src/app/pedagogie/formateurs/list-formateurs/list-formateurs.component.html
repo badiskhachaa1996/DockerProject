@@ -499,18 +499,22 @@
 						<th>Modules</th>
 						<th>Volume initiale</th>
 						<th>Volume consommé</th>
+						<th>Volume Planifié</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
-					<tr *ngFor="let fvh of formateur.volume_h |keyvalue">
-						<td *ngIf="matiereDic[fvh.key]">
-							{{matiereDic[fvh.key].nom}}
+					<tr *ngFor="let v of volumes">
+						<td *ngIf="v">
+							{{v.matiere_nom}}
 						</td>
-						<td>
-							{{fvh.value}}
+						<td *ngIf="v">
+							{{v.v_ini}}
 						</td>
-						<td>
-							{{formateur?.volume_h_consomme[fvh?.key]}}
+						<td *ngIf="v">
+							{{v.v_cons}}
+						</td>
+						<td *ngIf="v">
+							{{v.v_plan}}
 						</td>
 					</tr>
 				</ng-template>
