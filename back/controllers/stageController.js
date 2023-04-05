@@ -99,7 +99,7 @@ app.put("/put-stage", (req, res) => {
 });
 
 // modification du status d'un stage
-app.patch("/patch-stage-status", (req, res) => {
+app.patch("/patch-status", (req, res) => {
     const idStage = req.body.idStage;
     const commercialEmail = req.body.commercialEmail;
     const status = req.body.status;
@@ -107,8 +107,43 @@ app.patch("/patch-stage-status", (req, res) => {
     Stage.updateOne({_id: idStage}, {status: status})
     .then((response) => {
         // création du mail à envoyer au commercial referent
-        const htmlMail = "<p>Bonjour, le stage numéro <span style=\"color: red\">" + response._id +"</span> vient d'être modifié.</p>" +
-                         "<p>Nouveau statut du stage: <span style=\"color: red\">" + response.status +"</span>.</p>" +
+        const htmlMail = "<p>Bonjour, le stage numéro <span style=\"color: red\">" + idStage +"</span> vient d'être modifié.</p>" +
+                         "<p>Nouveau statut du stage: <span style=\"color: red\">" + status +"</span>.</p>" +
+                         "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
+                         "<p>Cordialement.</p>";
+
+        const mailOptions = 
+        {
+            from: "ims@intedgroup.com",
+            to: commercialEmail,
+            subject: "Modification du status d'un contrat de stage [IMS]",
+            html: htmlMail,
+        }
+
+        // envoi du mail
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error){
+                res.status(400).json({errorMsg: "Impossible d'envoyer le mail de notification"});
+            }
+        });
+
+        // envoi de la réponse du serveur
+        res.status(200).json({error: error, successMsg: 'Status du stage mis à jour'}); 
+    })
+    .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de mettre à jour le status de cet stage'}); });
+});
+
+// mis à jour des missions d'un stagiaire
+app.patch("/patch-mission-tasks", (req, res) => {
+    const idStage = req.body.idStage;
+    const commercialEmail = req.body.commercialEmail;
+    const missions = req.body.missions;
+
+    Stage.updateOne({_id: idStage}, {mission_tasks: missions})
+    .then((response) => {
+        // création du mail à envoyer au commercial referent
+        const htmlMail = "<p>Bonjour, le stage numéro <span style=\"color: red\">" + idStage +"</span> vient d'être modifié.</p>" +
+                         "<p>La mission du stagiaire a été mis à jour: <span style=\"color: red\">" + missions +"</span>.</p>" +
                          "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
                          "<p>Cordialement.</p>";
 
@@ -137,7 +172,7 @@ app.patch("/patch-stage-status", (req, res) => {
 const uploadConventionStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
         const id = req.body.id;
-        const destination = `storage/stage/${id}`;
+        const destination = `storage/stages/${id}`;
         if(!fs.existsSync(destination))
         {
             fs.mkdirSync(destination, {recursive: true});
@@ -197,6 +232,87 @@ app.post("/upload-avenant", uploadAvenant.single('file'), (req, res) => {
         .then((response) => {res.status(201).json({successMsg: 'Avenant téléversé, contrat de stage mis à jour'});})
         .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat de stage'); });
     }
+});
+
+/* Partie upload de l'attestation */
+const uploadAttestationStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const id = req.body.id;
+        const destination = `storage/stages/${id}`;
+        if(!fs.existsSync(destination))
+        {
+            fs.mkdirSync(destination, {recursive: true});
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        const filename = 'Attestation_de_stage';
+        callBack(null, `${filename}.${file.mimetype.split('/')[1]}`);
+    }
+});
+
+const uploadAttestation = multer({storage: uploadAttestationStorage});
+
+app.post("/upload-attestation", uploadAttestation.single('file'), (req, res) => {
+    const file = req.files;
+    const id = req.body.id;
+
+    if(!file)
+    {
+        res.status(400).send('Aucun fichier sélectionnée');
+    } else {
+        Stage.updateOne({_id: id}, {attestation: `Attestation_de_stage.${file.mimetype.split('/')[1]}`})
+        .then((response) => {res.status(201).json({successMsg: 'Attestation téléversé, contrat de stage mis à jour'});})
+        .catch((error) => { res.status(400).send('Impossible de mettre à jour le contrat de stage'); });
+    } 
+});
+
+// download convention
+app.get("/download-convention/:idStage", (req, res) => {
+    Stage.findOne({_id: req.params.idStage})
+    .then((response) => {
+        res.download(
+            `./storage/stages/${req.params.idStage}/${response.convention}`,
+            function (err) {
+                if (err) {
+                    res.status(400).send(err);
+                }
+            }
+        );
+    })
+    .catch((error) => {res.status(400).send(error);});
+});
+
+// download avenant
+app.get("/download-avenant/:idStage", (req, res) => {
+    Stage.findOne({_id: req.params.idStage})
+    .then((response) => {
+        res.download(
+            `./storage/stages/${req.params.idStage}/${response.avenant}`,
+            function (err) {
+                if (err) {
+                    res.status(400).send(err);
+                }
+            }
+        );
+    })
+    .catch((error) => {res.status(400).send(error);});
+});
+
+// download attestation
+app.get("/download-attestation/:idStage", (req, res) => {
+    Stage.findOne({_id: req.params.idStage})
+    .then((response) => {
+        res.download(
+            `./storage/stages/${req.params.idStage}/${response.attestation}`,
+            function (err) {
+                if (err) {
+                    res.status(400).send(err);
+                }
+            }
+        );
+    })
+    .catch((error) => {res.status(400).send(error);});
 });
 
 module.exports = app;

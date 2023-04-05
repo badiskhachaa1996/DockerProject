@@ -97,15 +97,113 @@ export class StageService {
   }
 
   // modification du status d'un stage
-  patchStageStatus(idStage: string, commercialEmail: string, status: string): Promise<any>
+  patchStatus(idStage: string, commercialEmail: string, status: string): Promise<any>
   {
-    const url = `${this.apiUrl}/patch-stage-status`;
+    const url = `${this.apiUrl}/patch-status`;
 
     return new Promise<any>((resolve, reject) => {
       this.httpClient.patch<any>(url, {idStage: idStage, commercialEmail: commercialEmail, status: status}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response: any) => {resolve(response)},
         error: (error: any) => {reject(error)},
         complete: () => {console.log("Modification du status du stage réussie")}
+      });
+    });
+  }
+
+  // mis à jour des missions d'un stagiaire
+  patchMissionTasks(idStage: string, commercialEmail: string, missions: string): Promise<any>
+  {
+    const url = `${this.apiUrl}/patch-mission-tasks`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.patch<any>(url, {idStage: idStage, commercialEmail: commercialEmail, missions: missions}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => {resolve(response)},
+        error: (error: any) => {reject(error)},
+        complete: () => {console.log("Modification de la mission du stage réussie")}
+      });
+    });
+  }
+
+  // upload de la convention de stage
+  uploadConvention(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}/upload-convention`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+          error: (error) => { reject(error); },
+          complete: () => { console.log("Convention de stage envoyé"); }
+      });
+    });
+  }
+
+  // upload de l'avenant de stage
+  uploadAvenant(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}/upload-avenant`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+          error: (error) => { reject(error); },
+          complete: () => { console.log("Avenant de stage envoyé"); }
+      });
+    });
+  }
+
+  // upload de l'avenant de stage
+  uploadAttestation(formData: FormData): Promise<any>
+  {
+    const url = `${this.apiUrl}/upload-attestation`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+          error: (error) => { reject(error); },
+          complete: () => { console.log("Attestation de stage envoyé"); }
+      });
+    });
+  }
+
+  // download de la convention de stage
+  downloadConvention(idStage: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-convention/${idStage}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log("Convention téléchargé") }
+      });
+    });
+  }
+
+  // download de l'avenant de stage
+  downloadAvenant(idStage: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-avenant/${idStage}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log("Avenant téléchargé") }
+      });
+    });
+  }
+
+  // download de l'attestation de stage
+  downloadAttestation(idStage: string): Promise<any>
+  {
+    const url = `${this.apiUrl}download-attestation/${idStage}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log("Attestation téléchargé") }
       });
     });
   }
