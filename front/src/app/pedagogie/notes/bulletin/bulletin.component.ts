@@ -278,7 +278,6 @@ export class BulletinComponent implements OnInit {
           }
         }
         this.calculMoy()
-        console.log(this.NOTES)
       })
     }
   }

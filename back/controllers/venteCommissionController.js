@@ -16,13 +16,13 @@ app.post("/create", (req, res) => {
 })
 
 app.get("/getAll", (req, res, next) => {
-    Vente.find().populate('partenaire_id').populate('prospect_id')
+    Vente.find().populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllByPartenaireID/:partenaire_id", (req, res, next) => {
-    Vente.find({ partenaire_id: req.params.partenaire_id }).populate('partenaire_id').populate('prospect_id')
+    Vente.find({ partenaire_id: req.params.partenaire_id }).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });

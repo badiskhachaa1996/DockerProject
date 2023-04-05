@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { saveAs } from "file-saver";
+import { FactureCommission } from 'src/app/models/FactureCommission';
+import { FactureCommissionService } from 'src/app/services/facture-commission.service';
 
 @Component({
   selector: 'app-reglement',
@@ -8,11 +12,23 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ReglementComponent implements OnInit {
 
-  constructor() { }
+  constructor(private FCService: FactureCommissionService, private MessageService: MessageService) { }
 
   showFormAddFacture = false
 
-  ventes = []
+  statutFacture = [
+    { label: "Payé", value: "Payé" },
+    { label: "En Attente", value: "En Attente" },
+  ]
+
+  natureList = [
+    { label: "Espèce", value: "Espèce" },
+    { label: "A la source", value: "A la source" },
+    { label: "Compensation", value: "Compensation" },
+    { label: "Virement", value: "Virement" },
+  ]
+
+  factures = []
 
   formAddFacture: FormGroup = new FormGroup({
     numero: new FormControl('', Validators.required),
@@ -24,7 +40,12 @@ export class ReglementComponent implements OnInit {
   })
 
   onAddFacture() {
-
+    this.FCService.create({ ...this.formAddFacture.value }).subscribe(data => {
+      this.factures.push(data)
+      this.showFormAddFacture = false
+      this.formAddFacture.reset()
+      this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès" })
+    })
   }
 
   initEditForm(facture) {
@@ -32,6 +53,45 @@ export class ReglementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.FCService.getAll().subscribe(data => {
+      this.factures = data
+    })
+  }
+
+  download(facture: FactureCommission) {
+    this.FCService.downloadFile(facture._id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
+    }, (error) => {
+      console.error(error)
+      this.MessageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+
+  factureSelected: FactureCommission = null
+
+  clickFile() {
+    document.getElementById('selectedFile').click();
+  }
+
+  FileUpload(event) {
+    if (event && event.length > 0 && this.factureSelected != null) {
+      const formData = new FormData();
+
+      formData.append('_id', this.factureSelected._id)
+      formData.append('file', event[0])
+      this.FCService.uploadFile(formData, this.factureSelected._id).subscribe(() => {
+        this.MessageService.add({ severity: 'success', summary: 'Facture uploadé', detail: 'Mise à jour du fichier de la facture avec succès' });
+        this.factures[this.factures.indexOf(this.factureSelected)].factureUploaded = true
+      }, (error) => {
+        console.error(error)
+      })
+    }
+  }
+
+  uploadFile(facture: FactureCommission) {
+    this.factureSelected = facture
+    this.clickFile()
   }
 
 }

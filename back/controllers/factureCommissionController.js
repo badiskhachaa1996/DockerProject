@@ -49,13 +49,14 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
-
-        res.status(201).json({ dossier: "Facture uploadé" });
+        FactureCommission.findByIdAndUpdate(req.params.id, { factureUploaded: true }, { new: true }, (err, doc) => {
+            res.status(201).json(doc);
+        })
     }
 
 }, (error) => { res.status(500).send(error); })
 
-app.get("/download/:facture_id", (req, res) => {
+app.get("/downloadFile/:facture_id", (req, res) => {
     let pathFile = "storage/facture/commission/" + req.params.facture_id
     fs.readdir(pathFile, (err, files) => {
         if (err) {

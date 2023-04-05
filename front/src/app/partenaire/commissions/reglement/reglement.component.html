@@ -1,4 +1,8 @@
 <p-toast></p-toast>
+<div class="col-12">
+    <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
+        style="display: none;" pInputFile />
+</div>
 <div class="grid">
     <!-- Formulaire d'ajout d'un collaborateur -->
     <div class="col-12" *ngIf="showFormAddFacture">
@@ -52,9 +56,9 @@
                 (click)="showFormAddFacture = true;"></button>
 
             <h5>Liste des factures</h5>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="ventes"
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="factures"
                 [paginator]="true" [pageLinks]="5" [globalFilterFields]="['produit', 'statutCommission']"
-                [totalRecords]="ventes.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                [totalRecords]="factures.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -114,7 +118,7 @@
                             {{ facture.tva }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ facture.tva*facture.montant+facture.montant }}
+                            {{ (facture.tva/100)*facture.montant+facture.montant }}
                         </td>
                         <td style="min-width: 14rem;">
                             {{ facture.statut }}
@@ -132,7 +136,7 @@
                                 aria-hidden="true" pTooltip="Modifier la facture"></i>
                             <i *ngIf="facture.factureUploaded" style="margin-left: 2%;" (click)="download(facture)" class="pi pi-download"
                                 aria-hidden="true" pTooltip="Télécharger la facture"></i>
-                            <i style="margin-left: 2%;" (click)="upload(facture)" class="pi pi-cloud-upload"
+                            <i style="margin-left: 2%;" (click)="uploadFile(facture)" class="pi pi-cloud-upload"
                                 aria-hidden="true" pTooltip="Upload la facture"></i>
                         </td>
                     </tr>

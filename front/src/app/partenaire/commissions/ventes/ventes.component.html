@@ -25,12 +25,17 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Statut de la commission</label>
-                    <p-dropdown [options]="statutCommission" formControlName="statut_commission"
+                    <p-dropdown [options]="statutCommission" formControlName="statutCommission"
                         placeholder="Statut de la commission"></p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-12 md:col-6">
                     <label>Date de règlement</label>
                     <p-calendar formControlName="date_reglement"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Prospect</label>
+                    <p-dropdown [options]="listProspect" formControlName="prospect_id"
+                        placeholder="Choissisez le prospect"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette vente" [disabled]="formAddVente.invalid"
@@ -116,11 +121,11 @@
                 <ng-template pTemplate="body" let-vente>
                     <tr>
                         <td style="min-width: 14rem;">
-                            {{ vente.prospect_id.customid }}
+                            {{ vente?.prospect_id?.customid }}
                         </td>
                         <td style="min-width: 12rem;">
-                            {{ vente.prospect_id.user_id.lastname | uppercase }}
-                            {{ vente.prospect_id.user_id.firstname | titlecase}}
+                            {{ vente?.prospect_id?.user_id?.lastname | uppercase }}
+                            {{ vente?.prospect_id?.user_id?.firstname | titlecase}}
 
                         </td>
                         <td style="min-width: 12rem;">
