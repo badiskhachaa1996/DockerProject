@@ -11,39 +11,92 @@
                 (click)="showFormAddVente = false;">
             </i>
             <h4 style="text-align: center;">Insérer une facture</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddFacture" (ngSubmit)="onAddFacture()">
                 <div class="field col-12 md:col-6">
-                    <label>Numéro de la facture</label>
+                    <label>Numéro de la facture<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="numero">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Montant de la facture</label>
+                    <label>Montant de la facture<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="prenom">TVA</label>
+                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="tva" suffix="%">
                     </p-inputNumber>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Statut de la facture</label>
+                    <label>Statut de la facture<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutFacture" formControlName="statut"
                         placeholder="Statut de la facture"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Nature du paiement</label>
+                    <label>Nature du paiement<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="natureList" formControlName="nature"
                         placeholder="Nature du paiement"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Date du paiement</label>
+                    <label>Date du paiement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_paiement"></p-calendar>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette facture" [disabled]="formAddFacture.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showFormEditFacture">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showFormEditFacture = false;">
+            </i>
+            <h4 style="text-align: center;">Mettre à jour une facture</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formEditFacture" (ngSubmit)="onUpdateFacture()">
+                <div class="field col-12 md:col-6">
+                    <label>Numéro de la facture<span style="color: red;"> * </span></label>
+                    <p-inputNumber formControlName="numero">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Montant de la facture<span style="color: red;"> * </span></label>
+                    <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
+                    <p-inputNumber formControlName="tva" suffix="%">
+                    </p-inputNumber>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Statut de la facture<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="statutFacture" formControlName="statut"
+                        placeholder="Statut de la facture"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Nature du paiement<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="natureList" formControlName="nature"
+                        placeholder="Nature du paiement"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date du paiement<span style="color: red;"> * </span></label>
+                    <p-calendar formControlName="date_paiement"></p-calendar>
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Mettre à jour cette facture" [disabled]="formEditFacture.invalid"
                         type="submit"></button>
                 </div>
             </form>

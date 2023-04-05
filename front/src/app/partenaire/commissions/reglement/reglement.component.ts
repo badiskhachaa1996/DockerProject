@@ -49,7 +49,14 @@ export class ReglementComponent implements OnInit {
   }
 
   initEditForm(facture) {
-
+    this.factureSelected = facture
+    this.formEditFacture.patchValue({
+      ...facture
+    })
+    this.formEditFacture.patchValue({
+      date_paiement: facture.date_paiement
+    })
+    this.showFormEditFacture = true
   }
 
   ngOnInit(): void {
@@ -92,6 +99,37 @@ export class ReglementComponent implements OnInit {
   uploadFile(facture: FactureCommission) {
     this.factureSelected = facture
     this.clickFile()
+  }
+
+  showFormEditFacture = false
+
+  formEditFacture: FormGroup = new FormGroup({
+    numero: new FormControl(this.factures.length, Validators.required),
+    montant: new FormControl('', Validators.required),
+    tva: new FormControl('', Validators.required),
+    statut: new FormControl('', Validators.required),
+    nature: new FormControl('', Validators.required),
+    date_paiement: new FormControl('', Validators.required),
+  })
+
+  onUpdateFacture() {
+    this.FCService.update({ ...this.formEditFacture.value, _id: this.factureSelected._id }).subscribe(data => {
+      this.factures[this.factures.indexOf(this.factureSelected)] = data
+      this.showFormEditFacture = false
+      this.formEditFacture.reset()
+      this.MessageService.add({ severity: 'success', summary: "Mise à jour de la facture avec succès" })
+    })
+  }
+
+  convertTime(v) {
+    let date = new Date(v)
+    let day = date.getUTCDate() + 1
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    if (year != 1970)
+      return `${day}-${month}-${year}`
+    else
+      return ""
   }
 
 }

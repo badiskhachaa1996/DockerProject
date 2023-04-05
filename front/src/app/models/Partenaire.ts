@@ -27,7 +27,7 @@ export class Partenaire {
         public etat_contrat?: string,
         public pathImageProfil?: string,
         public typeImageProfil?: string,
-        public commissions?: [],
+        public commissions?: [{ description: string, montant: number }],
         public pathEtatContrat?: string,
         public typeEtatContrat?: string,
     ) { }
