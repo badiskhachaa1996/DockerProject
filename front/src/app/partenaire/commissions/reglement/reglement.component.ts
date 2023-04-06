@@ -106,9 +106,10 @@ export class ReglementComponent implements OnInit {
   }
   updateStats(data: Vente[]) {
     this.stats = {
-      tt_vente: 0,
+      tt_vente: Math.trunc(data.reduce((total, next) => total + next?.prospect_id?.montant_paye, 0)),
       tt_commission: Math.trunc(data.reduce((total, next) => total + next?.montant, 0)),
-      tt_paye: Math.trunc(data.reduce((total, next) => total + next?.prospect_id?.montant_paye, 0)),
+      tt_paye: Math.trunc(data.reduce((total, next) => total + (next?.statutCommission == 'Facture payé' || next?.statutCommission == 'A la source' || next?.statutCommission == 'Compensation' ? next?.montant : 0), 0)), // Somme ((Statut de commission équal à Facturé payé ou A la source ou Compensation) *Montant de la commission)  
+
       reste_paye: 0
     }
     if (Number.isNaN(this.stats.tt_commission))
