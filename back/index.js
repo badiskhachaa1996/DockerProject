@@ -7,46 +7,57 @@ const jwt = require("jsonwebtoken");
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
 
-app.use(bodyParser.json({ limit: '20mb', extended: true }))
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-let dblog = 'mongodb://127.0.0.1:27017/learningNode' //Production:5c74a988f3a038777f875347ea98d165@
-let origin = ["http://localhost:4200"]
+app.use(bodyParser.json({ limit: "20mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
+let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
+let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
-    let argProd = process.argv[2]
-    console.log(argProd)
-    if (!argProd.includes('dev') && !argProd.includes('prod')) {
-        dblog = 'mongodb://localhost:27017/' + argProd
-    } else if (argProd.includes('dev')) {
-        origin = ["https://141.94.71.25"]
-    } else (
-        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.adgeducation.com", "https://ims.intedgroup.com", "https://t.dev.estya.com"]
-    )
+  let argProd = process.argv[2];
+  console.log(argProd);
+  if (!argProd.includes("dev") && !argProd.includes("prod")) {
+    dblog = "mongodb://localhost:27017/" + argProd;
+  } else if (argProd.includes("dev")) {
+    origin = ["https://141.94.71.25"];
+  } else
+    origin = [
+      "https://ims.estya.com",
+      "https://ticket.estya.com",
+      "https://estya.com",
+      "https://adgeducations.com",
+      "https://eduhorizons.com",
+      "https://espic.com",
+      "https://partenaire.eduhorizons.com",
+      "https://login.eduhorizons.com",
+      "https://ims.adgeducation.com",
+      "https://ims.intedgroup.com",
+      "https://t.dev.estya.com",
+    ];
 }
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
 const options = {
-    cors: {
-        origin: origin,
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
-        credentials: true
-    }, allowEIO3: true
+  cors: {
+    origin: origin,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
+  allowEIO3: true,
 };
 const io = require("socket.io")(httpServer, options);
 
 mongoose
-    .connect(dblog, {
-        useCreateIndex: true,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    })
-    .then(() => {
+  .connect(dblog, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log("L'api s'est connecté à MongoDB.\nL'origin est: " + origin);
 
-        console.log("L'api s'est connecté à MongoDB.\nL'origin est: " + origin);
-
-        /* 
+    /* 
         //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
         
                 var CronJob = require('cron').CronJob;
@@ -60,130 +71,169 @@ mongoose
             'local'
         );
         */
+  })
+  .catch((err) => {
+    console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
+    process.exit();
+  });
 
-    })
-    .catch(err => {
-        console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
-        process.exit();
-    });
-
-const UserController = require('./controllers/userController');
-const ServiceController = require('./controllers/serviceController');
-const SujetController = require('./controllers/sujetController');
-const messageController = require('./controllers/messageController');
-const ticketController = require('./controllers/ticketController');
-const notifController = require('./controllers/notificationController');
-const classeController = require('./controllers/classeController');
-const anneeScolaireController = require('./controllers/anneeScolaireController');
-const ecoleController = require('./controllers/ecoleController');
-const campusController = require('./controllers/campusController');
-const diplomeController = require('./controllers/diplomeController');
-const presenceController = require('./controllers/presenceController');
-const seanceController = require('./controllers/seanceController');
-const formateurController = require('./controllers/formateurController');
-const ressourceController = require('./controllers/ressourceController');
-const etudiantController = require('./controllers/etudiantController');
-const matiereController = require('./controllers/matiereController');
-const noteController = require('./controllers/noteController');
-const entrepriseController = require('./controllers/entrepriseController');
-const examenController = require('./controllers/examenController');
-const rbc = require('./controllers/rachatBulletinController');
-const contactController = require('./controllers/contactController');
-const prestataireController = require('./controllers/prestataireController');
-const historiqueController = require('./controllers/historiqueController');
-const prospectController = require('./controllers/prospectController');
-const dashboardController = require('./controllers/dashboardController');
-const partenaireController = require('./controllers/partenaireController');
-const commercialPartenaireController = require('./controllers/commercialPartenaireController');
-const appreciationController = require('./controllers/appreciationController');
-const historiqueEchangeController = require('./controllers/historiqueEchangeController');
-const forfeitFormController = require('./controllers/forfeitFormController');
-const tuteurController = require('./controllers/tuteurController');
-const demandeEventsController = require('./controllers/demandeEventsController');
-const paymentController = require('./controllers/paymentController');
-const teamCommercialController = require('./controllers/teamCommercialController');
-const logementController = require('./controllers/logementController');
-const inTimeController = require('./controllers/inTimeController');
-const cvTypeController = require('./controllers/cvTypeController');
-const DemandeConseillerController = require('./controllers/demandeConseillerController');
-const congeController = require('./controllers/congeController');
-const devoirController = require('./controllers/devoirController');
-const renduDevoirController = require('./controllers/renduDevoirController');
-const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
-const factureFormateurController = require('./controllers/factureFormateurController');
-const annonceController = require('./controllers/annonceController');
-const skillsController = require('./controllers/skillsController');
-const progressionPedaController = require('./controllers/progressionPedaController');
-const QSController = require('./controllers/questionnaireSatisfactionController');
-const projectController = require('./controllers/projectController');
-const teamController = require('./controllers/teamController');
-const EvenementsController = require('./controllers/evenementController')
-const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
-const MatchingController = require('./controllers/matchingController')
-const stageController = require('./controllers/stageController')
+const UserController = require("./controllers/userController");
+const ServiceController = require("./controllers/serviceController");
+const SujetController = require("./controllers/sujetController");
+const messageController = require("./controllers/messageController");
+const ticketController = require("./controllers/ticketController");
+const notifController = require("./controllers/notificationController");
+const classeController = require("./controllers/classeController");
+const anneeScolaireController = require("./controllers/anneeScolaireController");
+const ecoleController = require("./controllers/ecoleController");
+const campusController = require("./controllers/campusController");
+const diplomeController = require("./controllers/diplomeController");
+const presenceController = require("./controllers/presenceController");
+const seanceController = require("./controllers/seanceController");
+const formateurController = require("./controllers/formateurController");
+const ressourceController = require("./controllers/ressourceController");
+const etudiantController = require("./controllers/etudiantController");
+const matiereController = require("./controllers/matiereController");
+const noteController = require("./controllers/noteController");
+const entrepriseController = require("./controllers/entrepriseController");
+const examenController = require("./controllers/examenController");
+const rbc = require("./controllers/rachatBulletinController");
+const contactController = require("./controllers/contactController");
+const prestataireController = require("./controllers/prestataireController");
+const historiqueController = require("./controllers/historiqueController");
+const prospectController = require("./controllers/prospectController");
+const dashboardController = require("./controllers/dashboardController");
+const partenaireController = require("./controllers/partenaireController");
+const commercialPartenaireController = require("./controllers/commercialPartenaireController");
+const appreciationController = require("./controllers/appreciationController");
+const historiqueEchangeController = require("./controllers/historiqueEchangeController");
+const forfeitFormController = require("./controllers/forfeitFormController");
+const tuteurController = require("./controllers/tuteurController");
+const demandeEventsController = require("./controllers/demandeEventsController");
+const paymentController = require("./controllers/paymentController");
+const teamCommercialController = require("./controllers/teamCommercialController");
+const logementController = require("./controllers/logementController");
+const inTimeController = require("./controllers/inTimeController");
+const cvTypeController = require("./controllers/cvTypeController");
+const DemandeConseillerController = require("./controllers/demandeConseillerController");
+const congeController = require("./controllers/congeController");
+const devoirController = require("./controllers/devoirController");
+const renduDevoirController = require("./controllers/renduDevoirController");
+const abscenceCollaborateurController = require("./controllers/abscenceCollaborateurController");
+const factureFormateurController = require("./controllers/factureFormateurController");
+const annonceController = require("./controllers/annonceController");
+const skillsController = require("./controllers/skillsController");
+const progressionPedaController = require("./controllers/progressionPedaController");
+const QSController = require("./controllers/questionnaireSatisfactionController");
+const projectController = require("./controllers/projectController");
+const teamController = require("./controllers/teamController");
+const EvenementsController = require("./controllers/evenementController");
+const ExtSkillsnetController = require("./controllers/ExterneSkillsnetController");
+const MatchingController = require("./controllers/matchingController");
+const stageController = require("./controllers/stageController");
 const { User } = require("./models/user");
 
+app.use("/", function (req, res, next) {
+  let token = jwt.decode(req.header("token"));
+  if (token && token["prospectFromDb"]) {
+    token = token["prospectFromDb"];
+  }
 
-
-app.use('/', function (req, res, next) {
-    let token = jwt.decode(req.header("token"))
-    if (token && token['prospectFromDb']) {
-        token = token['prospectFromDb']
-    }
-
-    if (token && token.id && token.role) {
-        User.findOne({ _id: token.id, role: token.role }, (err, user) => {
-            if (err) {
-                console.error(err)
-                res.status(403).send("Accès non autorisé, Erreur", err)
-            }
-            else if (user) {
-                jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (errToken, decoded) {
-                    if (req.originalUrl.startsWith('/soc/user/HowIsIt')) {
-                        next()
-                    } else if (decoded == undefined) {
-                        if (errToken.name == "JsonWebTokenError") {
-                            //Token Incorrect
-                            res.status(403).send(errToken)
-                        } else if (errToken.name == "TokenExpiredError") {
-                            //Token Expired
-                            res.status(401).send(errToken)
-                        }
-                    } else {
-                        User.findByIdAndUpdate(user._id, { last_connection: new Date() }, {}, (err, user) => {
-                            if (err) {
-                                console.error(err)
-                            }
-                            next()
-                        })
-                    }
-                });
+  if (token && token.id && token.role) {
+    User.findOne({ _id: token.id, role: token.role }, (err, user) => {
+      if (err) {
+        console.error(err);
+        res.status(403).send("Accès non autorisé, Erreur", err);
+      } else if (user) {
+        jwt.verify(
+          req.header("token"),
+          "126c43168ab170ee503b686cd857032d",
+          function (errToken, decoded) {
+            if (req.originalUrl.startsWith("/soc/user/HowIsIt")) {
+              next();
+            } else if (decoded == undefined) {
+              if (errToken.name == "JsonWebTokenError") {
+                //Token Incorrect
+                res.status(403).send(errToken);
+              } else if (errToken.name == "TokenExpiredError") {
+                //Token Expired
+                res.status(401).send(errToken);
+              }
             } else {
-                console.error(user)
-                res.status(403).send("Accès non autorisé, User not found")
+              User.findByIdAndUpdate(
+                user._id,
+                { last_connection: new Date() },
+                {},
+                (err, user) => {
+                  if (err) {
+                    console.error(err);
+                  }
+                  next();
+                }
+              );
             }
-        })
+          }
+        );
+      } else {
+        console.error(user);
+        res.status(403).send("Accès non autorisé, User not found");
+      }
+    });
+  } else {
+    if (
+      req.originalUrl == "/soc/user/AuthMicrosoft" ||
+      req.originalUrl == "/soc/demande-events" ||
+      req.originalUrl == "/soc/partenaire/inscription" ||
+      req.originalUrl == "/soc/notification/create" ||
+      req.originalUrl.startsWith("/soc/prospect/") ||
+      req.originalUrl.startsWith("/soc/service/getByLabel") ||
+      req.originalUrl == "/soc/demande-events/create" ||
+      req.originalUrl == "/soc/user/login" ||
+      req.originalUrl.startsWith("/soc/user/getByEmail") ||
+      req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") ||
+      req.originalUrl == "/soc/etudiant/getAllAlternants" ||
+      req.originalUrl == "/soc/diplome/getAll" ||
+      req.originalUrl == "/soc/entreprise/createNewContrat" ||
+      req.originalUrl == "/soc/classe/getAll" ||
+      req.originalUrl.startsWith("/soc/forfeitForm") ||
+      req.originalUrl == "/soc/qs/create" ||
+      req.originalUrl == "/soc/qs/createQFF" ||
+      req.originalUrl.startsWith("/soc/user/HowIsIt") ||
+      req.originalUrl.startsWith("/soc/user/pwdToken") ||
+      req.originalUrl == "/soc/partenaire/getNBAll" ||
+      req.originalUrl.startsWith("/soc/entreprise/getAllContratsbyTuteur") ||
+      req.originalUrl.startsWith("/soc/entreprise/getAllContratsbyEntreprise" ) ||
+      req.originalUrl.startsWith("/soc/user/reinitPwd") ||
+      req.originalUrl.startsWith("/soc/qs/create") ||
+      req.originalUrl.startsWith("/soc/user/getProfilePicture") ||
+      req.originalUrl == "/soc/user/file" ||
+      req.originalUrl == "/soc/user/patchById" ||
+      req.originalUrl === "/soc/user/send-recovery-password-mail" ||
+      req.originalUrl === "/soc/user/recovery-password"
+    ) {
+      next();
     } else {
-        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel') || req.originalUrl == "/soc/demande-events/create"
-            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" || req.originalUrl == "/soc/classe/getAll" ||
-            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl == '/soc/qs/create' || req.originalUrl == '/soc/qs/createQFF' || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise')
-            || req.originalUrl.startsWith('/soc/user/reinitPwd') || req.originalUrl.startsWith('/soc/qs/create') || req.originalUrl.startsWith("/soc/user/getProfilePicture") || req.originalUrl == "/soc/user/file"|| req.originalUrl == "/soc/user/patchById")  {
-            next()
-        } else {
+      console.log(token);
+      res
+        .status(403)
+        .send("Accès non autorisé, Wrong Token\n" + req.originalUrl);
 
-            console.log(token)
-            res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
-
-            res.status(403).send("Accès non autorisé, Wrong Token " + token + " Vérifiez aussi que la méthode de request POST ou GET est respecté" + req.originalUrl)
-
-        }
+      res
+        .status(403)
+        .send(
+          "Accès non autorisé, Wrong Token " +
+            token +
+            " Vérifiez aussi que la méthode de request POST ou GET est respecté" +
+            req.originalUrl
+        );
     }
+  }
 });
-app.use('/soc/extSkillsnet', ExtSkillsnetController)
+app.use("/soc/extSkillsnet", ExtSkillsnetController);
 
-app.use('/soc/evenements', EvenementsController)
+app.use("/soc/evenements", EvenementsController);
 
-app.use('/soc/rachatBulletin', rbc)
+app.use("/soc/rachatBulletin", rbc);
 
 app.use("/soc/user", UserController);
 
@@ -195,176 +245,168 @@ app.use("/soc/sujet", SujetController);
 
 app.use("/soc/message", messageController);
 
-app.use('/soc/ticket', ticketController);
+app.use("/soc/ticket", ticketController);
 
-app.use('/soc/notification', notifController);
+app.use("/soc/notification", notifController);
 
-app.use('/soc/classe', classeController);
+app.use("/soc/classe", classeController);
 
-app.use('/soc/anneeScolaire', anneeScolaireController);
+app.use("/soc/anneeScolaire", anneeScolaireController);
 
-app.use('/soc/ecole', ecoleController);
+app.use("/soc/ecole", ecoleController);
 
-app.use('/soc/campus', campusController);
+app.use("/soc/campus", campusController);
 
-app.use('/soc/diplome', diplomeController);
+app.use("/soc/diplome", diplomeController);
 
-app.use('/soc/presence', presenceController);
+app.use("/soc/presence", presenceController);
 
-app.use('/soc/seance', seanceController);
+app.use("/soc/seance", seanceController);
 
-app.use('/soc/formateur', formateurController);
+app.use("/soc/formateur", formateurController);
 
-app.use('/soc/ressource', ressourceController);
+app.use("/soc/ressource", ressourceController);
 
-app.use('/soc/etudiant', etudiantController);
+app.use("/soc/etudiant", etudiantController);
 
-app.use('/soc/matiere', matiereController);
+app.use("/soc/matiere", matiereController);
 
-app.use('/soc/note', noteController);
+app.use("/soc/note", noteController);
 
-app.use('/soc/entreprise', entrepriseController);
+app.use("/soc/entreprise", entrepriseController);
 
-app.use('/soc/examen', examenController);
+app.use("/soc/examen", examenController);
 
-app.use('/soc/cv', cvTypeController);
+app.use("/soc/cv", cvTypeController);
 
-app.use('/soc/prestataire', prestataireController);
+app.use("/soc/prestataire", prestataireController);
 
-app.use('/soc/historique', historiqueController);
+app.use("/soc/historique", historiqueController);
 
-app.use('/soc/partenaire', partenaireController);
+app.use("/soc/partenaire", partenaireController);
 
-app.use('/soc/commercialPartenaire', commercialPartenaireController);
+app.use("/soc/commercialPartenaire", commercialPartenaireController);
 
-app.use('/soc/appreciation', appreciationController);
+app.use("/soc/appreciation", appreciationController);
 
-app.use('/soc/prospect', prospectController)
+app.use("/soc/prospect", prospectController);
 
-app.use('/soc/historiqueEchange', historiqueEchangeController)
+app.use("/soc/historiqueEchange", historiqueEchangeController);
 
-app.use('/soc/forfeitForm', forfeitFormController)
+app.use("/soc/forfeitForm", forfeitFormController);
 
-app.use('/soc/contact', contactController)
+app.use("/soc/contact", contactController);
 
 app.use("/soc/tuteur", tuteurController);
 
 app.use("/soc/lemon", paymentController);
 app.use("/soc/logement", logementController);
 
-app.use('/soc/dashboard', dashboardController);
+app.use("/soc/dashboard", dashboardController);
 
-app.use('/soc/intime', inTimeController);
-app.use('/soc/teamCommercial', teamCommercialController)
+app.use("/soc/intime", inTimeController);
+app.use("/soc/teamCommercial", teamCommercialController);
 
-app.use('/soc/demandeConseiller', DemandeConseillerController)
+app.use("/soc/demandeConseiller", DemandeConseillerController);
 
-app.use('/soc/conge', congeController);
+app.use("/soc/conge", congeController);
 
-app.use('/soc/factureFormateur', factureFormateurController)
-app.use('/soc/devoir', devoirController);
-app.use('/soc/renduDevoir', renduDevoirController);
-app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
-app.use('/soc/annonce', annonceController);
-app.use('/soc/skills', skillsController);
+app.use("/soc/factureFormateur", factureFormateurController);
+app.use("/soc/devoir", devoirController);
+app.use("/soc/renduDevoir", renduDevoirController);
+app.use("/soc/abscenceCollaborateur", abscenceCollaborateurController);
+app.use("/soc/annonce", annonceController);
+app.use("/soc/skills", skillsController);
 
-app.use('/soc/progressionPeda', progressionPedaController);
-app.use('/soc/qs', QSController)
-app.use('/soc/project', projectController);
-app.use('/soc/team', teamController);
-app.use('/soc/matching', MatchingController)
-app.use('/soc/stage', stageController)
-
-
+app.use("/soc/progressionPeda", progressionPedaController);
+app.use("/soc/qs", QSController);
+app.use("/soc/project", projectController);
+app.use("/soc/team", teamController);
+app.use("/soc/matching", MatchingController);
+app.use("/soc/stage", stageController);
 
 io.on("connection", (socket) => {
-    //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
-    socket.on('userLog', (user) => {
-        LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
-        socket.join(LISTTOJOIN)
-        console.log("User join: " + LISTTOJOIN)
-    })
+  //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
+  socket.on("userLog", (user) => {
+    LISTTOJOIN = [user._id, user.service_id ? user.service_id : user.role];
+    socket.join(LISTTOJOIN);
+    console.log("User join: " + LISTTOJOIN);
+  });
 
-    //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
-    socket.on('NewNotif', (data) => {
-        console.log(data)
-        if (data?.user_id) {
-            io.to(data?.user_id).emit('NewNotif', data)
-            io.emit(data, { NewNotif: data });
-        }
-        else {
-            io.to(data?.service_id).emit('NewNotif', data)
-            io.emit(data, { NewNotif: data });
-        }
+  //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
+  socket.on("NewNotif", (data) => {
+    console.log(data);
+    if (data?.user_id) {
+      io.to(data?.user_id).emit("NewNotif", data);
+      io.emit(data, { NewNotif: data });
+    } else {
+      io.to(data?.service_id).emit("NewNotif", data);
+      io.emit(data, { NewNotif: data });
+    }
+  });
 
-    })
+  socket.on("reloadNotif", (data) => {
+    io.to(data.id).emit("reloadNotif");
+  });
 
-    socket.on('reloadNotif', (data) => {
-        io.to(data.id).emit('reloadNotif')
-    })
+  socket.on("reloadImage", (data) => {
+    io.to(data).emit("reloadImage");
+  });
 
-    socket.on('reloadImage', (data) => {
-        io.to(data).emit('reloadImage')
-    })
+  //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
+  socket.on("AddNewTicket", (service_id) => {
+    io.to("Admin").to(service_id).emit("refreshQueue");
+  });
 
-    //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
-    socket.on('AddNewTicket', (service_id) => {
-        io.to("Admin").to(service_id).emit('refreshQueue')
-    })
+  //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
+  socket.on("NewMessageByAgent", (data) => {
+    //Refresh du message de l'user et des tickets (à cause du statut)
+    io.to(data.user_id).emit("refreshMessage");
+    //Refresh du 3ème tableau du service (à cause du Tableau)
+    io.to("Admin").to(data.service_id).emit("refresh3emeTableau");
+  });
 
-    //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
-    socket.on('NewMessageByAgent', (data) => {
-        //Refresh du message de l'user et des tickets (à cause du statut)
-        io.to(data.user_id).emit('refreshMessage')
-        //Refresh du 3ème tableau du service (à cause du Tableau)
-        io.to("Admin").to(data.service_id).emit('refresh3emeTableau')
-    })
+  //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
+  socket.on("NewMessageByUser", (agent_id) => {
+    io.to(agent_id).emit("refreshMessage");
+  });
 
-    //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
-    socket.on('NewMessageByUser', (agent_id) => {
-        io.to(agent_id).emit('refreshMessage')
-    })
+  //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents et du créateur
+  socket.on("refreshAll", (data) => {
+    //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents)
+    io.to("Admin").to(data.service_id).emit("refreshAllTickets");
+    //Refresh les tickets suivi de l'user
+    io.to(data.user_id).emit("refreshSuivi");
+  });
 
-    //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents et du créateur
-    socket.on('refreshAll', (data) => {
-        //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents)
-        io.to('Admin').to(data.service_id).emit('refreshAllTickets')
-        //Refresh les tickets suivi de l'user
-        io.to(data.user_id).emit('refreshSuivi')
-    })
+  socket.on("addPresence", () => {
+    io.emit("refreshPresences");
+  });
 
-    socket.on('addPresence', () => {
-        io.emit('refreshPresences')
-    })
+  socket.on("isAuth", (b) => {
+    io.emit("isAuth", b);
+  });
+  socket.on("TraitementProspect", (prospect) => {
+    prospect.enTraitement = true;
+    io.emit("TraitementProspect", prospect);
+    setTimeout(function () {
+      prospect.enTraitement = false;
+      io.emit("TraitementProspect", prospect);
+    }, 20000);
+  });
 
-    socket.on('isAuth', (b) => {
-        io.emit('isAuth', b)
-    })
-    socket.on('TraitementProspect', (prospect) => {
-        prospect.enTraitement = true;
-        io.emit('TraitementProspect', prospect)
-        setTimeout(function () {
-            prospect.enTraitement = false;
-            io.emit('TraitementProspect', prospect)
-        }, 20000);
-    })
+  socket.on("UpdatedProspect", (prospect) => {
+    prospect.enTraitement = false;
 
-    socket.on('UpdatedProspect', (prospect) => {
-        prospect.enTraitement = false;
+    io.emit("UpdatedProspect", prospect);
+  });
+  socket.on("CloseUpdProspect", (prospect) => {
+    prospect.enTraitement = false;
 
-        io.emit('UpdatedProspect', prospect)
-
-    })
-    socket.on('CloseUpdProspect', (prospect) => {
-        prospect.enTraitement = false;
-
-        io.emit('CloseUpdProspect', prospect)
-
-    })
-
-
+    io.emit("CloseUpdProspect", prospect);
+  });
 });
 
 httpServer.listen(3000, () => {
-    console.log("SERVEUR START")
+  console.log("SERVEUR START");
 });

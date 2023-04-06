@@ -66,8 +66,7 @@
 					ticket"</span> pour finaliser la création du ticket
 			</p>
 			<ng-template pTemplate="footer">
-				<button pButton icon="pi pi-check" (click)="display=false" label="Ok"
-					class="p-button-outlined"></button>
+				<button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
 			</ng-template>
 		</p-dialog>
 		<div class="grid">
@@ -82,8 +81,8 @@
 
 	<div class="col-12" *ngIf="showFormAdd">
 		<div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-				title="Fermer" (click)="showFormAdd = false; TicketFormAdd.reset(); showCard=true">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+				(click)="showFormAdd = false; TicketFormAdd.reset(); showCard=true">
 			</i>
 
 			<h4 style="text-align: center;">Ajouter un ticket pour un utilisateur</h4>
@@ -136,8 +135,8 @@
 	<!-- Formulaire de modification d'un ticket -->
 	<div class="col-12" *ngIf="isModify!=null">
 		<div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-				title="Fermer" (click)="isModify=null;">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+				(click)="isModify=null;">
 			</i>
 
 			<h4 style="text-align: center;">Modification d'un ticket</h4>
@@ -163,8 +162,8 @@
 	<!-- Formulaire d'ajout d'un commentaire -->
 	<div class="col-12" *ngIf="showFormAddComment">
 		<div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-				title="Fermer" (click)="toggleFormCancel();">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+				(click)="toggleFormCancel();">
 			</i>
 
 			<h4 style="text-align: center;">Envoyer un message</h4>
@@ -179,9 +178,9 @@
 						formControlName="description"></textarea>
 				</div>
 				<div class="field col-12 md:col-6">
-					<p-fileUpload #fubauto mode="basic" chooseLabel="Joindre un fichier" name="demo[]"
-						url="./upload.php" customUpload="true" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-						maxFileSize="20000000" fileLimit="1" (uploadHandler)="onFileChange($event)" [auto]="true">
+					<p-fileUpload #fubauto mode="basic" chooseLabel="Joindre un fichier" name="demo[]" url="./upload.php"
+						customUpload="true" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" fileLimit="1"
+						(uploadHandler)="onFileChange($event)" [auto]="true">
 					</p-fileUpload>
 				</div>
 				<div class="field col-12 md:col-12">
@@ -200,8 +199,8 @@
 	<!-- Formulaire de revert d'un ticket -->
 	<div class="col-12" *ngIf="showRevert!=null">
 		<div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-				title="Fermer" (click)="showRevert=null;">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+				(click)="showRevert=null;">
 			</i>
 
 			<h4 style="text-align: center;">Renvoyer un ticket à la queue d'entrée</h4>
@@ -209,8 +208,8 @@
 				(ngSubmit)="revert()">
 				<div class="field col-12">
 					<label For="description">Justificatif</label>
-					<textarea pInputTextarea placeholder="Expliquer la raison de votre renvoie" autoResize rows="3"
-						cols="30" formControlName="justificatif"></textarea>
+					<textarea pInputTextarea placeholder="Expliquer la raison de votre renvoie" autoResize rows="3" cols="30"
+						formControlName="justificatif"></textarea>
 				</div>
 
 				<div>
@@ -237,15 +236,15 @@
 			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList" dataKey="_id" [rows]="10" [rowHover]="true"
 				[paginator]="true" [pageLinks]="5" rowExpandMode="single"
 				[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
-				[value]="queueList" (sortFunction)="customSort($event)" [customSort]="true"
-				[expandedRowKeys]="expandedRows" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+				[value]="queueList" (sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedRows"
+				responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<div class="field">
 							<p-dropdown *ngIf="token['role']=='Admin'" filter="true" [options]="dropdownService"
-								(onChange)="dt1.filter($event.value, 'service_id', 'equals')"
-								emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
+								(onChange)="dt1.filter($event.value, 'service_id', 'equals')" emptyFilterMessage="Pas de service trouvé"
+								filterPlaceholder="Nom du service">
 							</p-dropdown>
 							<span style="margin-left: 2px;">
 								<p-multiSelect filter="true" [options]="listFiliere" placeholder="Toutes les filières"
@@ -255,8 +254,8 @@
 							</span>
 							<span style="margin-left: 2px;">
 								<p-dropdown filter="true" [options]="showSujetQ"
-									(onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"
-									emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
+									(onChange)="dt1.filter($event.value, 'sujet_id', 'equals')" emptyFilterMessage="Pas de sujet trouvé"
+									filterPlaceholder="Nom du sujet">
 								</p-dropdown>
 							</span>
 							<span style="margin-left: 2px;">
@@ -319,15 +318,14 @@
 						<td style="min-width: 10rem;">{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
 						<td style="min-width: 10rem;">{{showWaitingTime(rowData.date_ajout)}}</td>
 						<td>
-							<i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
-								class="pi pi-check" (click)="QueueToAccAff(rowData)" aria-hidden="true"></i>
+							<i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
+								(click)="QueueToAccAff(rowData)" aria-hidden="true"></i>
 
 							<i *ngIf="rowData.createur_id!=token.id" pTooltip="Modifier" tooltipPosition="bottom"
-								style="margin-left: 5%;" class="pi pi-pencil"
-								(click)="modify(rowData);showFormUpdate=true" aria-hidden="true"></i>
-							<i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
-								*ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"
+								style="margin-left: 5%;" class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"
 								aria-hidden="true"></i>
+							<i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;" *ngIf="isReponsable"
+								class="pi pi-user-plus" (click)="showDropdownUser(rowData)" aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -335,8 +333,7 @@
 					<tr>
 						<td colspan="6">
 							<div class="p-3">
-								<p-table class="p-datatable-gridlines" responsiveLayout="scroll"
-									styleClass="p-datatable-gridlines">
+								<p-table class="p-datatable-gridlines" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 					<tr>
 						<th>Numéro </th>
@@ -451,21 +448,21 @@
 				<div class="flex justify-content-between flex-column sm:flex-row">
 					<div class="field">
 						<p-dropdown *ngIf="token['role']=='Admin'" filter="true" [options]="dropdownService"
-							(onChange)="dt2.filter($event.value, 'service_id', 'equals')"
-							emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
+							(onChange)="dt2.filter($event.value, 'service_id', 'equals')" emptyFilterMessage="Pas de service trouvé"
+							filterPlaceholder="Nom du service">
 						</p-dropdown>
 
 						<span style="margin-left: 2px;">
 							<p-dropdown filter="true" [options]="showSujetAccAff"
-								(onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"
-								emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
+								(onChange)="dt2.filter($event.value, 'sujet_id', 'equals')" emptyFilterMessage="Pas de sujet trouvé"
+								filterPlaceholder="Nom du sujet">
 							</p-dropdown>
 						</span>
 
 						<span style="margin-left: 2px;">
 							<p-dropdown filter="true" [options]="showStatutTab2"
-								(onChange)="dt2.filter($event.value, 'statut', 'equals')"
-								emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="statut">
+								(onChange)="dt2.filter($event.value, 'statut', 'equals')" emptyFilterMessage="Pas de statut trouvé"
+								filterPlaceholder="statut">
 							</p-dropdown>
 						</span>
 
@@ -497,8 +494,8 @@
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-rowData let-expanded="expanded">
-				<tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-					*ngIf="sujetList[rowData.sujet_id]" [pSelectableRow]="rowData" pDroppable="QueueToAccAff">
+				<tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]"
+					[pSelectableRow]="rowData" pDroppable="QueueToAccAff">
 					<td>
 						<button type="button" pButton pRipple [pRowToggler]="rowData"
 							class="p-button-text p-button-rounded p-button-plain"
@@ -683,9 +680,8 @@
 							<td>
 								<span class="ui-g-6 ui-md-6">
 									<div class="ui-g-12 ui-md-12">
-										<i style="cursor: pointer;" *ngIf="message.document"
-											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)"></i><i class="fa fa-spinner fa-spin fa-fw"
+										<i style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+											id="charger2" (click)="downloadFile(message)"></i><i class="fa fa-spinner fa-spin fa-fw"
 											*ngIf="loadingMessage==message._id" aria-hidden="true"></i>
 										<span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
 									</div>
@@ -701,12 +697,10 @@
 							<td>
 								<span class="ui-g-6 ui-md-6" style="float: right;">
 									<div class="ui-g-12 ui-md-12">
-										<i style="cursor: pointer;" *ngIf="message.document"
-											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)">
+										<i style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+											id="charger2" (click)="downloadFile(message)">
 										</i>
-										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-											aria-hidden="true">
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id" aria-hidden="true">
 										</i>
 										<span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}
 										</span>
@@ -765,20 +759,19 @@
 
 					<div class="field">
 						<p-dropdown *ngIf="token['role']=='Admin'" filter="true" [options]="dropdownService"
-							(onChange)="dt3.filter($event.value, 'service_id', 'equals')"
-							emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
+							(onChange)="dt3.filter($event.value, 'service_id', 'equals')" emptyFilterMessage="Pas de service trouvé"
+							filterPlaceholder="Nom du service">
 						</p-dropdown>
 
 						<span style="margin-left: 2px;">
 							<p-dropdown filter="true" [options]="showSujetAll"
-								(onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"
-								emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet">
+								(onChange)="dt3.filter($event.value, 'sujet_id', 'equals')" emptyFilterMessage="Pas de sujet trouvé"
+								filterPlaceholder="Nom du sujet">
 							</p-dropdown>
 						</span>
 
 						<span style="margin-left: 2px;">
-							<p-dropdown filter="true" [options]="showStatut"
-								(onChange)="dt3.filter($event.value, 'statut', 'equals')"
+							<p-dropdown filter="true" [options]="showStatut" (onChange)="dt3.filter($event.value, 'statut', 'equals')"
 								emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="statut">
 							</p-dropdown>
 						</span>
@@ -786,9 +779,8 @@
 
 					<span class="p-input-icon-left mb-2">
 						<!--<i class="pi pi-search"></i>-->
-						<input pInputText type="text" #filter
-							(input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-							class="w-full" />
+						<input pInputText type="text" #filter (input)="dt3.filterGlobal($event.target.value, 'contains')"
+							placeholder="Recherche" class="w-full" />
 					</span>
 				</div>
 			</ng-template>
@@ -1019,11 +1011,9 @@
 							<td>
 								<span class="ui-g-6 ui-md-6">
 									<div class="ui-g-12 ui-md-12">
-										<i style="cursor: pointer;" *ngIf="message.document"
-											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)"></i>
-										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-											aria-hidden="true"></i>
+										<i style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+											id="charger2" (click)="downloadFile(message)"></i>
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id" aria-hidden="true"></i>
 										<span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
 									</div>
 									<span id="soustitre" class="ui-g-11 ui-md-11">
@@ -1038,12 +1028,10 @@
 							<td>
 								<span class="ui-g-6 ui-md-6" style="float: right;">
 									<div class="ui-g-12 ui-md-12">
-										<i style="cursor: pointer;" *ngIf="message.document"
-											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)">
+										<i style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+											id="charger2" (click)="downloadFile(message)">
 										</i>
-										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-											aria-hidden="true">
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id" aria-hidden="true">
 										</i>
 										<span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}
 										</span>

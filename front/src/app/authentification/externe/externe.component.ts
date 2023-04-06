@@ -9,6 +9,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
 import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { MpOublieComponent } from '../mp-oublie/mp-oublie.component';
 
 @Component({
   selector: 'app-externe',
@@ -119,6 +120,5 @@ export class ExterneComponent implements OnInit {
       scopes: ['user.read'],
     });
   }
-
 
 }

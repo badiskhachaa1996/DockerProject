@@ -243,7 +243,7 @@ export class EntrepriseService {
     });
   }
 
-    // méthode d'upload de la relance pour les contrats
+    // méthode d'upload du livret d'apprentissage
     uploadLivret(formData: FormData): Promise<any>
     {
       const url = `${this.apiUrl}upload-livret`;

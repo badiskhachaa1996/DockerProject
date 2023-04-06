@@ -158,6 +158,7 @@ import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resulta
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { StageComponent } from './commercial/stage/stage.component';
+import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 
 const routes: Routes = [
     {
@@ -236,7 +237,6 @@ const routes: Routes = [
             { path: 'liste-entreprises-ceo', component: ListEntrepriseCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
-
             /** Paths Lemon Way */
 
             { path: 'mon-compte-bancaire', component: MyAccountComponent },
@@ -319,7 +319,10 @@ const routes: Routes = [
     { path: 'code', redirectTo: '' },
     { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent },
     { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent },
-    { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent }
+    { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent },
+    { path: 'mp-oublie', component: MpOublieComponent },
+    { path: 'mp-oublie/:id', component: MpOublieComponent },
+
 ]
 
 

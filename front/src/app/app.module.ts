@@ -188,7 +188,6 @@ import { ReinscritComponent } from './administration/validation-prospects/reinsc
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
-import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
@@ -472,7 +471,6 @@ import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-c
     DetailsEtudiantComponent,
     NotificationComponent,
     MpOublieComponent,
-    ResetMpComponent,
     ContactComponent,
     InscriptionEntrepriseComponent,
     TuteurComponent,
