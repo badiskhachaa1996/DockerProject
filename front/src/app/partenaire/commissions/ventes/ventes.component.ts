@@ -7,6 +7,7 @@ import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-ventes',
   templateUrl: './ventes.component.html',
@@ -40,27 +41,47 @@ export class VentesComponent implements OnInit {
 
   listProspect = []
 
-  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService, private PartenaireService: PartenaireService) { }
+  isPovPartenaire = false
+
+  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService,
+    private route: ActivatedRoute, private PartenaireService: PartenaireService) { }
 
   ngOnInit(): void {
-    this.VenteService.getAll().subscribe(data => {
-      this.ventes = data
-    })
-    this.PartenaireService.getAll().subscribe(data => {
-      this.produitList = []
-      data.forEach(d => {
-        d.commissions.forEach(c => {
-          this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+    if (this.route.snapshot.paramMap.get('partenaire_id')) {
+      this.PartenaireSelected = this.route.snapshot.paramMap.get('partenaire_id')
+      this.isPovPartenaire = true
+      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.ventes = data
+      })
+      this.PartenaireService.getById(this.PartenaireSelected).subscribe(partenaire => {
+        this.ProspectService.getAllCodeCommercial(partenaire.code_partenaire).subscribe(data => {
+          data.forEach(d => {
+            let bypass: any = d.user_id
+            this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
+          })
         })
       })
-
-    })
-    this.ProspectService.getAll().subscribe(data => {
-      data.forEach(d => {
-        let bypass: any = d.user_id
-        this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
+    } else {
+      this.VenteService.getAll().subscribe(data => {
+        this.ventes = data
       })
-    })
+      this.PartenaireService.getAll().subscribe(data => {
+        this.produitList = []
+        this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
+        data.forEach(d => {
+          this.PartenaireList.push({ label: d.nom, value: d._id })
+          d.commissions.forEach(c => {
+            this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+          })
+        })
+      })
+      this.ProspectService.getAll().subscribe(data => {
+        data.forEach(d => {
+          let bypass: any = d.user_id
+          this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
+        })
+      })
+    }
   }
 
   showFormAddVente = false
@@ -132,7 +153,7 @@ export class VentesComponent implements OnInit {
   }
 
   PartenaireList = []
-  PartenaireSelected: Partenaire = null
+  PartenaireSelected: string = null
 
   selectPartenaire() {
     if (this.PartenaireSelected) {

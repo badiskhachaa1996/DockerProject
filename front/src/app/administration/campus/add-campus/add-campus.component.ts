@@ -46,7 +46,8 @@ export class AddCampusComponent implements OnInit {
   }
   token;
 
-  constructor(private ecoleService: EcoleService, private messageService: MessageService, private campusService: CampusService, private route: ActivatedRoute, private router: Router, private anneeScolaireService: AnneeScolaireService) { }
+  constructor(private ecoleService: EcoleService, private messageService: MessageService, private campusService: CampusService, 
+    private route: ActivatedRoute, private router: Router, private anneeScolaireService: AnneeScolaireService) { }
 
   ngOnInit(): void {
     try {

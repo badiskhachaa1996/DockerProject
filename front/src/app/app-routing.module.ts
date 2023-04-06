@@ -298,6 +298,8 @@ const routes: Routes = [
             /* Partenaire Haithem */
             { path: 'commissions/ventes', component: VentesComponent, canActivate: [AuthGuardService] },
             { path: 'commissions/reglement', component: ReglementComponent, canActivate: [AuthGuardService] },
+            { path: 'commissions/ventes/:partenaire_id', component: VentesComponent, canActivate: [AuthGuardService] },
+            { path: 'commissions/reglement/:partenaire_id', component: ReglementComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

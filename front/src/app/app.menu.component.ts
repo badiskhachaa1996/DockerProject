@@ -1071,7 +1071,22 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items:[
+                                        {
+                                            label:"Ventes",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes',cData.partenaire_id]
+                                        },
+                                        {
+                                            label:"Réglement",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement',cData.partenaire_id]
+                                        }
+                                    ]
+                                },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase' },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
@@ -1102,7 +1117,22 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items:[
+                                        {
+                                            label:"Ventes",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes',cData.partenaire_id]
+                                        },
+                                        {
+                                            label:"Réglement",
+                                            icon:'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement',cData.partenaire_id]
+                                        }
+                                    ]
+                                },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase' },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
