@@ -47,6 +47,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   infoCommercialExpand: CommercialPartenaire;
   ListPiped: String[] = []
   showPayement: Prospect
+  isPartenaireExterne = false
   DocTypes: any[] = [
     { value: null, label: "Choisissez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -260,6 +261,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     else if (this.STATUT && this.STATUT == 'traite')
       this.infoFiltered = "Traités"
     this.token = jwt_decode(localStorage.getItem("token"))
+    this.isPartenaireExterne = this.token.role === 'Agent' && this.token.type === 'Commercial' && !this.token.service_id
     this.commercialService.getByUserId(this.token.id).subscribe(data => {
       if (data && data.code_commercial_partenaire) {
         this.dataCommercial = data

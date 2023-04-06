@@ -6,6 +6,7 @@ import { Vente } from 'src/app/models/Vente';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-ventes',
   templateUrl: './ventes.component.html',
@@ -72,10 +73,13 @@ export class VentesComponent implements OnInit {
     tva: new FormControl('', Validators.required),
     statutCommission: new FormControl('', Validators.required),
     date_reglement: new FormControl('', Validators.required),
-    prospect_id: new FormControl('', Validators.required)
+    prospect_id: new FormControl('', Validators.required),
+    partenaire_id: new FormControl('', Validators.required)
   })
 
   onAddVente() {
+    if (this.PartenaireSelected)
+      this.formAddVente.patchValue({ partenaire_id: this.PartenaireSelected })
     this.VenteService.create({ ...this.formAddVente.value }).subscribe(data => {
       this.ventes.push(data)
       this.showFormAddVente = false
@@ -125,5 +129,21 @@ export class VentesComponent implements OnInit {
       return `${day}-${month}-${year}`
     else
       return ""
+  }
+
+  PartenaireList = []
+  PartenaireSelected: Partenaire = null
+
+  selectPartenaire() {
+    if (this.PartenaireSelected) {
+      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.ventes = data
+      })
+    } else {
+      this.VenteService.getAll().subscribe(data => {
+        this.ventes = data
+      })
+    }
+
   }
 }

@@ -111,6 +111,7 @@ export class UserProfilComponent implements OnInit {
   presences: InTime[] = [];
   from: string;
   to: string;
+  hideCRAEtc = false
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -319,6 +320,7 @@ export class UserProfilComponent implements OnInit {
       this.retour = true;
     }
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
+    this.hideCRAEtc = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
     this.userupdate = decodeToken;
     this.CommercialService.getByUserId(decodeToken.id).subscribe(data => {
       if (data) {
