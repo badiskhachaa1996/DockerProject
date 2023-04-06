@@ -15,14 +15,14 @@
                 <div class="field col-12 md:col-6">
                     <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
 
-                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='updateLibelle();filterModule()'  formControlName="classe_id" placeholder="Choissisez un groupe">
+                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='updateLibelle();filterModule()'  formControlName="classe_id" placeholder="Choisissez un groupe">
                     </p-multiSelect>
 
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Module<span style="color:red">*</span>:</label><br>
-                    <p-multiSelect [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle();filterFormateur()'  formControlName="matiere_id" placeholder="Choissisez un module">
+                    <p-multiSelect [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle();filterFormateur()'  formControlName="matiere_id" placeholder="Choisissez un module">
                     </p-multiSelect>
                 </div>
 
@@ -70,7 +70,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Niveau de l'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownNiveau" formControlName="niveau" placeholder="Choissisez le niveau de l'évaluation" (onChange)='updateLibelle()'>
+                        <p-dropdown [options]="dropdownNiveau" formControlName="niveau" placeholder="Choisissez le niveau de l'évaluation" (onChange)='updateLibelle()'>
                         </p-dropdown>
                     </span>
                 </div>
@@ -78,7 +78,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Type d'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownType" formControlName="type" placeholder="Choissisez le type de l'évaluation">
+                        <p-dropdown [options]="dropdownType" formControlName="type" placeholder="Choisissez le type de l'évaluation">
                         </p-dropdown>
                     </span>
                 </div>

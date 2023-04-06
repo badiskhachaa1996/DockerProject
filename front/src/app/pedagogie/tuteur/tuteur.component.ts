@@ -109,7 +109,7 @@ export class TuteurComponent implements OnInit {
             //Liste des entreprises
             this.entrepriseService.getAll().subscribe(
               (data) => {
-                this.dropdownEntreprise = [{ libelle: 'Choissisez une entreprise', value: null }];
+                this.dropdownEntreprise = [{ libelle: 'Choisissez une entreprise', value: null }];
                 data.forEach(entreprise => {
                   this.entreprises[entreprise._id] = entreprise;
                   this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });

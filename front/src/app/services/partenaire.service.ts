@@ -9,6 +9,7 @@ import { CommercialPartenaire } from '../models/CommercialPartenaire';
   providedIn: 'root'
 })
 export class PartenaireService {
+
   apiUrl = environment.origin + "partenaire/"
 
   httpOptions1 = { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) };
@@ -49,25 +50,42 @@ export class PartenaireService {
     return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  newUpdate(partenaire: Partenaire) {
+  newUpdate(partenaire: any) {
     let registreUrl = this.apiUrl + "newUpdate";
     return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
-    
-  delete(id:string){
+
+  delete(id: string) {
     let registreUrl = this.apiUrl + "delete/" + id;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 
-  getByNameOrEmail(name:string,email:string){
+  getByNameOrEmail(name: string, email: string) {
     let registreUrl = this.apiUrl + "getByNameOrEmail";
-    return this.httpClient.post<Partenaire>(registreUrl,{name,email}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<Partenaire>(registreUrl, { name, email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getByCode(cc:string){
+  getByCode(cc: string) {
     let registreUrl = this.apiUrl + "verificationCode/" + cc;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  uploadEtatContrat(data: any) {
+    let url = this.apiUrl + "file";
+    return this.httpClient.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
+  downloadContrat(_id: string) {
+    const url = `${this.apiUrl}download-contrat/${_id}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Contrat téléchargé') }
+      });
+    });
   }
 }

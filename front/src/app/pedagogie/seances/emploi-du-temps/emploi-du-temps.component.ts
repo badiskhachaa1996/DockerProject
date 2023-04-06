@@ -133,7 +133,7 @@ export class EmploiDuTempsComponent implements OnInit {
 
   dropdownFormateur: any[] = [{ nom: '', value: '' }];
   dropdownMatiere: any[] = [{ nom: '', value: '' }];
-  dropdownCampus: any[] = [{ libelle: 'Choissisez un campus', value: null }]
+  dropdownCampus: any[] = [{ libelle: 'Choisissez un campus', value: null }]
   dropdownClasse: any[] = [];
   dicCampus: any = {}
 
@@ -167,7 +167,7 @@ export class EmploiDuTempsComponent implements OnInit {
 
     this.CampusService.getAll().subscribe(
       data => {
-        this.dropdownCampus = [{ libelle: 'Choissisez un campus', value: null }]
+        this.dropdownCampus = [{ libelle: 'Choisissez un campus', value: null }]
         this.dicCampus = []
         data.forEach(item => {
           this.dropdownCampus.push({ libelle: item.libelle, value: item._id });

@@ -77,60 +77,62 @@ mongoose
     process.exit();
   });
 
-const UserController = require("./controllers/userController");
-const ServiceController = require("./controllers/serviceController");
-const SujetController = require("./controllers/sujetController");
-const messageController = require("./controllers/messageController");
-const ticketController = require("./controllers/ticketController");
-const notifController = require("./controllers/notificationController");
-const classeController = require("./controllers/classeController");
-const anneeScolaireController = require("./controllers/anneeScolaireController");
-const ecoleController = require("./controllers/ecoleController");
-const campusController = require("./controllers/campusController");
-const diplomeController = require("./controllers/diplomeController");
-const presenceController = require("./controllers/presenceController");
-const seanceController = require("./controllers/seanceController");
-const formateurController = require("./controllers/formateurController");
-const ressourceController = require("./controllers/ressourceController");
-const etudiantController = require("./controllers/etudiantController");
-const matiereController = require("./controllers/matiereController");
-const noteController = require("./controllers/noteController");
-const entrepriseController = require("./controllers/entrepriseController");
-const examenController = require("./controllers/examenController");
-const rbc = require("./controllers/rachatBulletinController");
-const contactController = require("./controllers/contactController");
-const prestataireController = require("./controllers/prestataireController");
-const historiqueController = require("./controllers/historiqueController");
-const prospectController = require("./controllers/prospectController");
-const dashboardController = require("./controllers/dashboardController");
-const partenaireController = require("./controllers/partenaireController");
-const commercialPartenaireController = require("./controllers/commercialPartenaireController");
-const appreciationController = require("./controllers/appreciationController");
-const historiqueEchangeController = require("./controllers/historiqueEchangeController");
-const forfeitFormController = require("./controllers/forfeitFormController");
-const tuteurController = require("./controllers/tuteurController");
-const demandeEventsController = require("./controllers/demandeEventsController");
-const paymentController = require("./controllers/paymentController");
-const teamCommercialController = require("./controllers/teamCommercialController");
-const logementController = require("./controllers/logementController");
-const inTimeController = require("./controllers/inTimeController");
-const cvTypeController = require("./controllers/cvTypeController");
-const DemandeConseillerController = require("./controllers/demandeConseillerController");
-const congeController = require("./controllers/congeController");
-const devoirController = require("./controllers/devoirController");
-const renduDevoirController = require("./controllers/renduDevoirController");
-const abscenceCollaborateurController = require("./controllers/abscenceCollaborateurController");
-const factureFormateurController = require("./controllers/factureFormateurController");
-const annonceController = require("./controllers/annonceController");
-const skillsController = require("./controllers/skillsController");
-const progressionPedaController = require("./controllers/progressionPedaController");
-const QSController = require("./controllers/questionnaireSatisfactionController");
-const projectController = require("./controllers/projectController");
-const teamController = require("./controllers/teamController");
-const EvenementsController = require("./controllers/evenementController");
-const ExtSkillsnetController = require("./controllers/ExterneSkillsnetController");
-const MatchingController = require("./controllers/matchingController");
-const stageController = require("./controllers/stageController");
+const UserController = require('./controllers/userController');
+const ServiceController = require('./controllers/serviceController');
+const SujetController = require('./controllers/sujetController');
+const messageController = require('./controllers/messageController');
+const ticketController = require('./controllers/ticketController');
+const notifController = require('./controllers/notificationController');
+const classeController = require('./controllers/classeController');
+const anneeScolaireController = require('./controllers/anneeScolaireController');
+const ecoleController = require('./controllers/ecoleController');
+const campusController = require('./controllers/campusController');
+const diplomeController = require('./controllers/diplomeController');
+const presenceController = require('./controllers/presenceController');
+const seanceController = require('./controllers/seanceController');
+const formateurController = require('./controllers/formateurController');
+const ressourceController = require('./controllers/ressourceController');
+const etudiantController = require('./controllers/etudiantController');
+const matiereController = require('./controllers/matiereController');
+const noteController = require('./controllers/noteController');
+const entrepriseController = require('./controllers/entrepriseController');
+const examenController = require('./controllers/examenController');
+const rbc = require('./controllers/rachatBulletinController');
+const contactController = require('./controllers/contactController');
+const prestataireController = require('./controllers/prestataireController');
+const historiqueController = require('./controllers/historiqueController');
+const prospectController = require('./controllers/prospectController');
+const dashboardController = require('./controllers/dashboardController');
+const partenaireController = require('./controllers/partenaireController');
+const commercialPartenaireController = require('./controllers/commercialPartenaireController');
+const appreciationController = require('./controllers/appreciationController');
+const historiqueEchangeController = require('./controllers/historiqueEchangeController');
+const forfeitFormController = require('./controllers/forfeitFormController');
+const tuteurController = require('./controllers/tuteurController');
+const demandeEventsController = require('./controllers/demandeEventsController');
+const paymentController = require('./controllers/paymentController');
+const teamCommercialController = require('./controllers/teamCommercialController');
+const logementController = require('./controllers/logementController');
+const inTimeController = require('./controllers/inTimeController');
+const cvTypeController = require('./controllers/cvTypeController');
+const DemandeConseillerController = require('./controllers/demandeConseillerController');
+const congeController = require('./controllers/congeController');
+const devoirController = require('./controllers/devoirController');
+const renduDevoirController = require('./controllers/renduDevoirController');
+const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
+const factureFormateurController = require('./controllers/factureFormateurController');
+const annonceController = require('./controllers/annonceController');
+const skillsController = require('./controllers/skillsController');
+const progressionPedaController = require('./controllers/progressionPedaController');
+const QSController = require('./controllers/questionnaireSatisfactionController');
+const projectController = require('./controllers/projectController');
+const teamController = require('./controllers/teamController');
+const EvenementsController = require('./controllers/evenementController')
+const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
+const MatchingController = require('./controllers/matchingController')
+const stageController = require('./controllers/stageController')
+const venteController = require('./controllers/venteCommissionController')
+const factureCommissionController = require('./controllers/factureCommissionController')
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -213,10 +215,6 @@ app.use("/", function (req, res, next) {
     ) {
       next();
     } else {
-      console.log(token);
-      res
-        .status(403)
-        .send("Accès non autorisé, Wrong Token\n" + req.originalUrl);
 
       res
         .status(403)
@@ -309,14 +307,23 @@ app.use("/soc/teamCommercial", teamCommercialController);
 
 app.use("/soc/demandeConseiller", DemandeConseillerController);
 
-app.use("/soc/conge", congeController);
+app.use('/soc/conge', congeController);
 
-app.use("/soc/factureFormateur", factureFormateurController);
-app.use("/soc/devoir", devoirController);
-app.use("/soc/renduDevoir", renduDevoirController);
-app.use("/soc/abscenceCollaborateur", abscenceCollaborateurController);
-app.use("/soc/annonce", annonceController);
-app.use("/soc/skills", skillsController);
+app.use('/soc/factureFormateur', factureFormateurController)
+app.use('/soc/devoir', devoirController);
+app.use('/soc/renduDevoir', renduDevoirController);
+app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
+app.use('/soc/annonce', annonceController);
+app.use('/soc/skills', skillsController);
+
+app.use('/soc/progressionPeda', progressionPedaController);
+app.use('/soc/qs', QSController)
+app.use('/soc/project', projectController);
+app.use('/soc/team', teamController);
+app.use('/soc/matching', MatchingController)
+app.use('/soc/stage', stageController)
+app.use('/soc/vente', venteController)
+app.use('/soc/factureCommission', factureCommissionController)
 
 app.use("/soc/progressionPeda", progressionPedaController);
 app.use("/soc/qs", QSController);

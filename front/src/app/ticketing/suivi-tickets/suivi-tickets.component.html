@@ -71,8 +71,8 @@
                 Voici les informationns à savoir pour créer un nouveau ticket :
             </p>
             <ul>
-                <li><span style="color: red;">Service</span> : Choissisez le service correspondant à votre besoin. </li>
-                <li><span style="color: red;">Sujet</span> : Choissisez le sujet du service sélectionner correspondant à
+                <li><span style="color: red;">Service</span> : Choisissez le service correspondant à votre besoin. </li>
+                <li><span style="color: red;">Sujet</span> : Choisissez le sujet du service sélectionner correspondant à
                     votre besoin. </li>
                 <li><span style="color: red;">Description</span> : Décrivez en détail votre besoin. </li>
             </ul>
@@ -101,12 +101,12 @@
                     <div class="field col-12 md:col-6">
                         <label For="service">Service <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="filterService" formControlName="service" optionLabel="label"
-                            placeholder="Choissisez un service" (change)="onChange()"></p-dropdown>
+                            placeholder="Choisissez un service" (change)="onChange()"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="sujet">Sujet <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="listSujets[TicketForm.value.service._id]" formControlName="sujet"
-                            optionLabel="label" placeholder="Choissisez un sujet"></p-dropdown>
+                            optionLabel="label" placeholder="Choisissez un sujet"></p-dropdown>
                     </div>
                     <div class="field col-12">
                         <label For="description">Description du ticket <span style="color: red;"> * </span></label>

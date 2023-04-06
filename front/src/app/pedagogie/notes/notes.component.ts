@@ -63,7 +63,7 @@ export class NotesComponent implements OnInit {
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
-    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
+    { libelle: 'Choisissez un semestre', value: 'Choisissez un semestre', actif: true },
     { libelle: '1er', value: 'Semestre 1', actif: false },
     { libelle: '2ème', value: 'Semestre 2', actif: false },
     { libelle: 'Annuel', value: 'Annuel', actif: false }

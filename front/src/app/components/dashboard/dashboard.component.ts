@@ -670,10 +670,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   imageToShow: any = "../assets/images/avatar.PNG"
-  commissions: any[] = [{
-    description: "PLACEHOLDER",
-    montant: "20"
-  }]
+  commissions: any[] = []
   loadPP(rowData) {
     this.imageToShow = "../assets/images/avatar.PNG"
     console.log(rowData)

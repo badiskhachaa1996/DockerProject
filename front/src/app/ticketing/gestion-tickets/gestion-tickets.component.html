@@ -53,9 +53,9 @@
 				Voici les informationns à savoir pour créer un ticket pour un utilisateur :
 			</p>
 			<ul>
-				<li><span style="color: red;">Service</span> : Choissisez le service correspondant au besoin de
+				<li><span style="color: red;">Service</span> : Choisissez le service correspondant au besoin de
 					l'utilisateur. </li>
-				<li><span style="color: red;">Sujet</span> : Choissisez le sujet du service sélectionner correspondant
+				<li><span style="color: red;">Sujet</span> : Choisissez le sujet du service sélectionner correspondant
 					au besoin de l'utilisateur. </li>
 				<li><span style="color: red;">Description</span> : Décrivez en détail le besoin de l'utilisateur. </li>
 				<li><span style="color: red;">Adresse e-mail de l'utilisateur</span> : Entrez l'adresse e-mail de
@@ -90,13 +90,13 @@
 				<div class="field col-12 md:col-6">
 					<label For="service">Service <span style="color: red;"> * </span></label>
 					<p-dropdown [options]="listServices" optionLabel="label" formControlName="service"
-						placeholder="Choissisez un service" (change)="onChangeAdd()"></p-dropdown>
+						placeholder="Choisissez un service" (change)="onChangeAdd()"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-6">
 					<!-- Liste à changer dans le ts-->
 					<label For="sujet">Sujet <span style="color: red;"> * </span></label>
 					<p-dropdown [options]="listSujetSelected[TicketFormAdd.value.service._id]" optionLabel="label"
-						placeholder="Choissisez un sujet" formControlName="sujet"></p-dropdown>
+						placeholder="Choisissez un sujet" formControlName="sujet"></p-dropdown>
 				</div>
 				<div class="field col-12">
 					<label For="description">Description <span style="color: red;"> * </span></label>
@@ -221,7 +221,7 @@
 
 	<p-dialog header="Affectation à quel Agent" [modal]="true" [(visible)]="showDropDown" [style]="{height: '50vw'}">
 		<div class="p-5 mb-5">
-			<p-dropdown [options]="userList" (onChange)="Affected($event)" placeholder="Choissisez un agent">
+			<p-dropdown [options]="userList" (onChange)="Affected($event)" placeholder="Choisissez un agent">
 			</p-dropdown>
 		</div>
 	</p-dialog>

@@ -29,7 +29,7 @@
         <div class="field col-12 md:col-6">
             <label>Type d'événement<span style="color:red">*</span>:</label><br>
             <p-dropdown [options]="typeList" filter="true" formControlName="type"
-                placeholder="Choissisez un type d'événement">
+                placeholder="Choisissez un type d'événement">
             </p-dropdown>
         </div>
         <div class="field col-12" *ngIf="formAddEvent.value.type=='Autre'">
@@ -74,7 +74,7 @@
         <div class="field col-12 md:col-6">
             <label>Type d'événement<span style="color:red">*</span>:</label><br>
             <p-dropdown [options]="typeList" filter="true" formControlName="type"
-                placeholder="Choissisez un type d'événement">
+                placeholder="Choisissez un type d'événement">
             </p-dropdown>
         </div>
         <div class="field col-12" *ngIf="formUpdateEvent.value.type=='Autre'">
@@ -98,7 +98,7 @@
         <div class="field col-12">
             <label>Liste des inscrits<span style="color:red">*</span>:</label><br>
             <p-multiSelect [options]="dropdownInscrit" filter="true" formControlName="liste_inscrit"
-                placeholder="Choissisez un type d'événement">
+                placeholder="Choisissez un type d'événement">
             </p-multiSelect>
         </div>
         <div>

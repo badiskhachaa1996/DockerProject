@@ -15,7 +15,7 @@
                     (onChange)="dt1.filter($event.value, 'isAlternant', 'equals'); onFilterByType($event)"
                     emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type"></p-dropdown>
 
-                <!--<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
+                <!--<p-multiSelect [options]="searchClass" placeholder="Choisissez les groupes"
                     (onChange)="dt1.filter($event.value, 'classe_id._id','in');" [style]="{'margin':'5px'}">
                 </p-multiSelect>-->
                 <p-dropdown [options]="searchClass" placeholder="Choisir un groupe" filter="true"
@@ -140,7 +140,7 @@
                         {{ etudiant.user_id.pays_adresse }}
                     </td>
                     <td>
-                        {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                        {{ etudiant.date_naissance | date:'mediumDate' }}
                     </td>
                     <td *ngIf="etudiant.user_id">
                         {{ etudiant.user_id?.phone }}

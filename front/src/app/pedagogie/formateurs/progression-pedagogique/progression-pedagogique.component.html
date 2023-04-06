@@ -9,10 +9,10 @@
                         pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
                     <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownModule"
                         (onChange)="dt1.filter($event.value, 'formation', 'equals');"
-                        filterPlaceholder="Choissisez un module" filter="true"></p-dropdown>
+                        filterPlaceholder="Choisissez un module" filter="true"></p-dropdown>
                     <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownSemestre"
                         (onChange)="dt1.filter($event.value, 'formation', 'equals');"
-                        filterPlaceholder="Choissisez un semestre" filter="true"></p-dropdown>
+                        filterPlaceholder="Choisissez un semestre" filter="true"></p-dropdown>
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"

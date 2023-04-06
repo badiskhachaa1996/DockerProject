@@ -159,6 +159,8 @@ import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/re
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { StageComponent } from './commercial/stage/stage.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
+import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
+import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
 
 const routes: Routes = [
     {
@@ -293,6 +295,9 @@ const routes: Routes = [
             { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService] },
             { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'formulaire-formateur', component: QuestionnaireFormateurComponent, canActivate: [AuthGuardService] },
+            /* Partenaire Haithem */
+            { path: 'commissions/ventes', component: VentesComponent, canActivate: [AuthGuardService] },
+            { path: 'commissions/reglement', component: ReglementComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
