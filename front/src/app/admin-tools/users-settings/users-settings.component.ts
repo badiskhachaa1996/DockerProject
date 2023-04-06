@@ -242,6 +242,8 @@ export class UsersSettingsComponent implements OnInit {
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
+    console.log(this.formUpdate.value);
+    
     this.userService.patchById(user)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });

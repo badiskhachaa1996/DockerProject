@@ -157,35 +157,29 @@ export class AddEntrepriseComponent implements OnInit {
     let indicatif_rep = this.formAddEntreprise.get('indicatif_rep').value;
     let phone_rep = this.formAddEntreprise.get('phone_rep').value;
 
-    let entreprise = new Entreprise(
-      null, 
-      r_sociale, 
-      null, 
-      activite, 
-      null, 
-      categorie, 
-      isInterne, 
-      crc, 
-      nb_salarie, 
-      convention, 
-      idcc, 
-      indicatif_ent, 
-      phone_ent, 
-      adresse_ent, 
-      code_postale_ent, 
-      ville_ent, 
-      adresse_ec, 
-      postal_ec, 
-      ville_ec, 
-      siret, 
-      code_ape_naf, 
-      null, 
-      null, 
-      opco, 
-      null, 
-      null,
-      commercial_id,
-    );
+    let entreprise = new Entreprise()
+
+    entreprise.r_sociale = r_sociale;
+    entreprise.activite = activite;
+    entreprise.categorie = categorie;
+    entreprise.isInterne = isInterne;
+    entreprise.crc = crc;
+    entreprise.nb_salarie = nb_salarie;
+    entreprise.convention = convention;
+    entreprise.idcc = idcc;
+    entreprise.indicatif_ent = indicatif_ent;
+    entreprise.phone_ent = phone_ent;
+    entreprise.adresse_ent = adresse_ent;
+    entreprise.code_postale_ent = code_postale_ent;
+    entreprise.ville_ent = ville_ent;
+    entreprise.adresse_ec = adresse_ec;
+    entreprise.postal_ec = postal_ec;
+    entreprise.ville_ec = ville_ec;
+    entreprise.siret = siret;
+    entreprise.code_ape_naf = code_ape_naf;
+    entreprise.OPCO = opco;
+    entreprise.commercial_id = commercial_id;
+    
     console.log(entreprise);
 
     let representant = new User(
