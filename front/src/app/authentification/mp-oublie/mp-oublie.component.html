@@ -1,42 +1,63 @@
 <p-toast></p-toast>
-<div class="layout-topbar">
-    <div class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
-        <h5>Réinitiliser votre mot de passe Inted Management System</h5>
-    </div>
-</div>
-<div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
-    <div class="grid justify-content-center p-2 lg:p-0" style="min-width:10%">
-        <div class="col-12 xl:col-12"
-            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
-            <form [formGroup]="form_mpoublie" class="h-full w-full m-0 py-7 px-4"
-                style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
-                <div class="w-full md:w-10 mx-auto">
-                    <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-                        <img src="\assets\images\logo_eh_sfb.png" alt="logo eduhorizons" style="width: 40%;">
-                    </div>
-                </div>
-                <div>
-                    <div class="col-12" *ngIf="!buttonRetour">
-                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Email :</label>
-                        <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email"
-                            pInputText class="w-full mb-3" style="padding:1rem;">
-                    </div>
-                    <div class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container" *ngIf="buttonRetour">
-                        <p>
-                            Rendez vous sur le mail reçu pour continuer
-                        </p>
-                    </div>
+<div class="grid">
+  <div class="col-12">
+    <div class="card" style="margin: 10%">
+      <div style="text-align: center">
+        <img [src]="logo" alt="IntedGroup" style="width: 20%; height: 20%;">
+      </div>
+      <hr>
 
-                    <button *ngIf="!buttonRetour" pButton pRipple label="Réinitiliser mot de passe" icon="pi pi-key"
-                        (click)="submitForm()" [disabled]="!form_mpoublie.valid"
-                        class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
-                    <button *ngIf="buttonRetour" pButton pRipple label="Retour" icon="pi pi-arrow-left"
-                        (click)="router.navigate(['/'])"
-                        class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
-                </div>
-            </form>
+      <div style="margin: 0 auto;" class="flex align-items-center justify-content-center">
+        <!-- Partie 1 lorsqu'il n'y a pas de paramètre dans l'url -->
+        <div *ngIf="userIdParams == undefined">
+          <!-- Formulaire de saisie d'adresse email -->
+          <form class="p-fluid" [formGroup]="formSendLink" (ngSubmit)="onSendEmail();" *ngIf="!showSuccessMessage">
+            <h5 style="text-align: center; font-weight: bolder; color: red;">Mot de passe oublié ?</h5>
+            <small style="display: none;">Si vous avez un compte IMS, vous recevrez un mail pour réinitialisez votre mot
+              de passe</small>
+            <div class="field">
+              <label for="email">Veuillez saisir votre adresse email</label>
+              <input pInputText type="email" placeholder="xxx@xxx.com" id="email" formControlName="email">
+            </div>
+            <div class="field">
+              <button pButton label="Envoyer" type="submit"></button>
+            </div>
+          </form>
 
-
+          <!-- Texte de validation du mail envoyé -->
+          <div *ngIf="showSuccessMessage">
+            <h5 style="text-align: center; color: red;">Un email de recuperation vous a été envoyé
+              par mail, veuillez consulter votre boite mail <span style="font-weight: bolder;">{{userEmail}}</span></h5>
+          </div>
         </div>
+
+        <!-- Partie 2 lorsqu'il y a le paramètre id dans l'url -->
+        <div *ngIf="userIdParams != undefined">
+          <form class="p-fluid" [formGroup]="formUpdatePwd" (ngSubmit)="onUpdatePassword();" *ngIf="!isPasswordUpdated">
+            <div class="field">
+              <label for="password">Veuillez saisir un mot de passe</label>
+              <input pInputText type="password" placeholder="Mot de passe" id="email" formControlName="password">
+              <!-- erreurs sur le password -->
+              <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                <span *ngIf="password.errors.minlength" style="font-weight: bolder; color: red;">Minimum 8 caractères</span>
+                <span *ngIf="password.errors.required" style="font-weight: bolder; color: red;">Ce champs est obligatoire</span>
+              </div>
+            
+            </div>
+            <div class="field">
+              <label for="cfmPassword">Veuillez confirmer le mot de passe</label>
+              <input pInputText type="password" placeholder="Confirmer le mot de passe" id="email" formControlName="cfmPassword">
+            </div>
+            <div class="field">
+              <button pButton label="Envoyer" type="submit" [disabled]="formUpdatePwd.invalid"></button>
+            </div>
+          </form>
+
+          <div *ngIf="isPasswordUpdated">
+            Votre mot de passe a bien été mis à jour, merci de vous authentifier <a routerLink="/login">en cliquant ici</a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
