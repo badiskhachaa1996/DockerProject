@@ -173,7 +173,7 @@
 
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;"
+            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;" 
                 (click)="showFormAddFacture = true;"></button>
 
             <h5>Liste des factures</h5>
@@ -196,7 +196,7 @@
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true" *ngIf="!isPovPartenaire"
                             [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
@@ -264,7 +264,7 @@
                         </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" (click)="initEditForm(facture)" class="pi pi-pencil"
+                            <i style="margin-left: 2%;" (click)="initEditForm(facture)" class="pi pi-pencil" *ngIf="!isPovPartenaire"
                                 aria-hidden="true" pTooltip="Modifier la facture"></i>
                             <i *ngIf="facture.factureUploaded" style="margin-left: 2%;" (click)="download(facture)"
                                 class="pi pi-download" aria-hidden="true" pTooltip="Télécharger la facture"></i>

@@ -8,6 +8,7 @@ import { VenteService } from 'src/app/services/vente.service';
 import { Vente } from 'src/app/models/Vente';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-reglement',
@@ -16,7 +17,9 @@ import { Partenaire } from 'src/app/models/Partenaire';
 })
 export class ReglementComponent implements OnInit {
 
-  constructor(private FCService: FactureCommissionService, private MessageService: MessageService, private VenteService: VenteService, private PartenaireService: PartenaireService) { }
+  constructor(private FCService: FactureCommissionService, private route: ActivatedRoute,
+    private MessageService: MessageService, private VenteService: VenteService,
+    private PartenaireService: PartenaireService) { }
 
   showFormAddFacture = false
 
@@ -56,7 +59,9 @@ export class ReglementComponent implements OnInit {
   }
 
   PartenaireList = []
-  PartenaireSelected: Partenaire = null
+  PartenaireSelected: string = null
+
+  isPovPartenaire = false
 
   formAddFacture: FormGroup = new FormGroup({
     numero: new FormControl(this.factures.length, Validators.required),
@@ -91,18 +96,29 @@ export class ReglementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.FCService.getAll().subscribe(data => {
-      this.factures = data
-    })
-    this.VenteService.getAll().subscribe(data => {
-      this.updateStats(data)
-    })
-    this.PartenaireService.getAll().subscribe(data => {
-      this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
-      data.forEach(p => {
-        this.PartenaireList.push({ label: p.nom, value: p._id })
+    if (this.route.snapshot.paramMap.get('partenaire_id')) {
+      this.PartenaireSelected = this.route.snapshot.paramMap.get('partenaire_id')
+      this.isPovPartenaire = true
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.factures = data
       })
-    })
+      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.updateStats(data)
+      })
+    } else {
+      this.FCService.getAll().subscribe(data => {
+        this.factures = data
+      })
+      this.VenteService.getAll().subscribe(data => {
+        this.updateStats(data)
+      })
+      this.PartenaireService.getAll().subscribe(data => {
+        this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
+        data.forEach(p => {
+          this.PartenaireList.push({ label: p.nom, value: p._id })
+        })
+      })
+    }
   }
   updateStats(data: Vente[]) {
     this.stats = {
@@ -112,8 +128,8 @@ export class ReglementComponent implements OnInit {
 
       reste_paye: 0
     }
-    if (Number.isNaN(this.stats.tt_commission))
-      this.stats.tt_commission = 0
+    if (Number.isNaN(this.stats.tt_vente))
+      this.stats.tt_vente = 0
     if (Number.isNaN(this.stats.tt_paye))
       this.stats.tt_paye = 0
     this.stats.reste_paye = this.stats.tt_commission - this.stats.tt_paye
