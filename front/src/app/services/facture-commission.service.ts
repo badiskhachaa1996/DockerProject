@@ -26,7 +26,7 @@ export class FactureCommissionService {
   }
 
   getAllByPartenaireID(partenaire_id) {
-    let registreUrl = this.apiUrl + "getAll/" + partenaire_id;
+    let registreUrl = this.apiUrl + "getAllByPartenaireID/" + partenaire_id;
     return this.httpClient.get<FactureCommission[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 

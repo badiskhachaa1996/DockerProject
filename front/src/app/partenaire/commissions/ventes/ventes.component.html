@@ -38,8 +38,12 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Prospect<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="listProspect"  [virtualScroll]="true" [itemSize]="31" formControlName="prospect_id" filter="true"
-                        placeholder="Choissisez le prospect"></p-dropdown>
+                    <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
+                        formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
+                </div>
+                <div class="field col-12" *ngIf="!PartenaireSelected">
+                    <label>Partenaire<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette vente" [disabled]="formAddVente.invalid"
@@ -118,6 +122,11 @@
                             (onChange)="dt1.filter($event.value, 'produit', 'equals'); "
                             emptyFilterMessage="Pas de produit trouvé"
                             filterPlaceholder="Choisissez le produit"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
+                            [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
+                            emptyFilterMessage="Pas de statut trouvé"
+                            filterPlaceholder="Choisissez le statut"></p-dropdown>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">

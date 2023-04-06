@@ -4,6 +4,10 @@ import { MessageService } from 'primeng/api';
 import { saveAs } from "file-saver";
 import { FactureCommission } from 'src/app/models/FactureCommission';
 import { FactureCommissionService } from 'src/app/services/facture-commission.service';
+import { VenteService } from 'src/app/services/vente.service';
+import { Vente } from 'src/app/models/Vente';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 
 @Component({
   selector: 'app-reglement',
@@ -12,11 +16,17 @@ import { FactureCommissionService } from 'src/app/services/facture-commission.se
 })
 export class ReglementComponent implements OnInit {
 
-  constructor(private FCService: FactureCommissionService, private MessageService: MessageService) { }
+  constructor(private FCService: FactureCommissionService, private MessageService: MessageService, private VenteService: VenteService, private PartenaireService: PartenaireService) { }
 
   showFormAddFacture = false
 
   statutFacture = [
+    { label: "Payé", value: "Payé" },
+    { label: "En Attente", value: "En Attente" },
+  ]
+
+  filterStatutFacture = [
+    { label: "Tous les statuts de facture", value: null },
     { label: "Payé", value: "Payé" },
     { label: "En Attente", value: "En Attente" },
   ]
@@ -28,7 +38,25 @@ export class ReglementComponent implements OnInit {
     { label: "Virement", value: "Virement" },
   ]
 
+  filterNaturePaiement = [
+    { label: "Tous les natures de paiement", value: null },
+    { label: "Espèce", value: "Espèce" },
+    { label: "A la source", value: "A la source" },
+    { label: "Compensation", value: "Compensation" },
+    { label: "Virement", value: "Virement" },
+  ]
+
   factures = []
+
+  stats = {
+    tt_vente: 0,
+    tt_commission: 0,
+    tt_paye: 0,
+    reste_paye: 0
+  }
+
+  PartenaireList = []
+  PartenaireSelected: Partenaire = null
 
   formAddFacture: FormGroup = new FormGroup({
     numero: new FormControl(this.factures.length, Validators.required),
@@ -37,9 +65,12 @@ export class ReglementComponent implements OnInit {
     statut: new FormControl('', Validators.required),
     nature: new FormControl('', Validators.required),
     date_paiement: new FormControl('', Validators.required),
+    partenaire_id: new FormControl('')
   })
 
   onAddFacture() {
+    if (this.PartenaireSelected)
+      this.formAddFacture.patchValue({ partenaire_id: this.PartenaireSelected })
     this.FCService.create({ ...this.formAddFacture.value }).subscribe(data => {
       this.factures.push(data)
       this.showFormAddFacture = false
@@ -63,6 +94,29 @@ export class ReglementComponent implements OnInit {
     this.FCService.getAll().subscribe(data => {
       this.factures = data
     })
+    this.VenteService.getAll().subscribe(data => {
+      this.updateStats(data)
+    })
+    this.PartenaireService.getAll().subscribe(data => {
+      this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
+      data.forEach(p => {
+        this.PartenaireList.push({ label: p.nom, value: p._id })
+      })
+    })
+  }
+  updateStats(data: Vente[]) {
+    this.stats = {
+      tt_vente: 0,
+      tt_commission: Math.trunc(data.reduce((total, next) => total + next?.montant, 0)),
+      tt_paye: Math.trunc(data.reduce((total, next) => total + next?.prospect_id?.montant_paye, 0)),
+      reste_paye: 0
+    }
+    if (Number.isNaN(this.stats.tt_commission))
+      this.stats.tt_commission = 0
+    if (Number.isNaN(this.stats.tt_paye))
+      this.stats.tt_paye = 0
+    this.stats.reste_paye = this.stats.tt_commission - this.stats.tt_paye
+
   }
 
   download(facture: FactureCommission) {
@@ -130,6 +184,25 @@ export class ReglementComponent implements OnInit {
       return `${day}-${month}-${year}`
     else
       return ""
+  }
+
+  selectPartenaire() {
+    if (this.PartenaireSelected) {
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.factures = data
+      })
+      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.updateStats(data)
+      })
+    } else {
+      this.FCService.getAll().subscribe(data => {
+        this.factures = data
+      })
+      this.VenteService.getAll().subscribe(data => {
+        this.updateStats(data)
+      })
+    }
+
   }
 
 }

@@ -6,6 +6,32 @@
             style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
     </div>
 
+    <!-- Formulaire de modification du mot de passe -->
+    <div class="col-12" *ngIf="toggleUpdatepwd">
+        <div class="card">
+            <h3 style="text-align: center;">Formulaire de modification du mot de passe</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+                <div class="field col-12">
+                    <label For="pwd_actu">Mot de passe actuel</label>
+                    <input pInputText id="pwd_actu" type="password" formControlName="passwordactual" />
+                </div>
+                <div class="field col-12">
+                    <label For="n_pwd">Nouveau mot de passe</label>
+                    <input pInputText id="n_pwd" type="password" formControlName="password" />
+                </div>
+                <div class="field col-12">
+                    <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
+                    <input pInputText id="confirm_n_pwd" type="password" formControlName="verifypassword">
+                </div>
+                <small style="color: red;">{{pwdmsgerr}}</small>
+                <div class="col-4 md:col-2">
+                    <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid"
+                        class="mr-2 mb-2"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="col-12">
         <div class="card">
             <div style="float: right; padding-top: 3%;">
@@ -22,12 +48,13 @@
                 <figure>
                     <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
                     <figcaption>
-                        {{(userco.civilite=="Monsieur")?'M.':'Mme'}} {{userco.firstname}} <strong>{{userco.lastname}}</strong>
+                        {{(userco.civilite=="Monsieur")?'M.':'Mme'}} {{userco.firstname}}
+                        <strong>{{userco.lastname}}</strong>
                         <br>
                         <span *ngIf="userco.role!=='user'">
                             <strong style="color: red;">{{userco.role}}</strong>
                         </span><br>
-                            <span>{{userco.mention}}</span>
+                        <span>{{userco.mention}}</span>
                     </figcaption>
                 </figure>
             </div>
@@ -85,7 +112,8 @@
                         <strong>ID Commercial:</strong> {{infoCommercial.code_commercial_partenaire}}
                     </div>
 
-                    <div class="col-12" *ngIf="demandeConseiller && demandeConseiller.conseiller_id && demandeConseiller.activated">
+                    <div class="col-12"
+                        *ngIf="demandeConseiller && demandeConseiller.conseiller_id && demandeConseiller.activated">
                         <strong>Conseiller:</strong> {{demandeConseiller.conseiller_id.firstname | titlecase }}
                         {{demandeConseiller.conseiller_id.lastname | uppercase}}
                     </div>
@@ -117,34 +145,47 @@
             </div>
 
             <!-- Partie dedié à la demande de congés -->
-            <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button  *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Responsable'" pButton pRipple type="button" icon="pi pi-briefcase" style="float: right;" (click)="onGetCongesForMyService(); showCongeListForService = true; showFormNewDemande = false; showCongeList = false;" label="Les demandes de mon service" class="p-button-outlined mr-2 mb-2"></button>
-                <button pButton pRipple type="button" icon="pi pi-plus" style="float: right;" (click)="showFormNewDemande = true; showCongeList = false; showCongeListForService = false" label="Nouvelle demande" class="p-button-outlined mr-2 mb-2"></button>
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" (click)="onGetConges(); showCongeList = true; showFormNewDemande = false; showCongeListForService = false" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
+            <div class="card"
+                *ngIf="(userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable') && !hideCRAEtc">
+                <button *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Responsable'" pButton
+                    pRipple type="button" icon="pi pi-briefcase" style="float: right;"
+                    (click)="onGetCongesForMyService(); showCongeListForService = true; showFormNewDemande = false; showCongeList = false;"
+                    label="Les demandes de mon service" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-plus" style="float: right;"
+                    (click)="showFormNewDemande = true; showCongeList = false; showCongeListForService = false"
+                    label="Nouvelle demande" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;"
+                    (click)="onGetConges(); showCongeList = true; showFormNewDemande = false; showCongeListForService = false"
+                    label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
                 <h3>Congés</h3>
 
 
                 <!-- Pour fermer les tables -->
                 <i class="pi pi-times-circle" *ngIf="showCongeList || showFormNewDemande || showCongeListForService"
-                    style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showCongeList = false; showFormNewDemande = false; formNewDemande.reset(); showCongeListForService = false;" aria-hidden="true">
+                    style="float:right; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+                    (click)="showCongeList = false; showFormNewDemande = false; formNewDemande.reset(); showCongeListForService = false;"
+                    aria-hidden="true">
                 </i>
 
-                
+
                 <!-- Formulaire de demande de congés -->
-                <form style="margin-top: 5px" class="p-fluid" [formGroup]="formNewDemande" (ngSubmit)="onNewConges()" *ngIf="showFormNewDemande">
+                <form style="margin-top: 5px" class="p-fluid" [formGroup]="formNewDemande" (ngSubmit)="onNewConges()"
+                    *ngIf="showFormNewDemande">
                     <div class="p-formgrid grid">
                         <div class="field col-6">
                             <label>Début</label>
-                            <p-calendar formControlName="date_debut" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
+                            <p-calendar formControlName="date_debut" [showIcon]="true" [showButtonBar]="true"
+                                placeholder="Début"></p-calendar>
                         </div>
                         <div class="field col-6">
                             <label>Fin</label>
-                            <p-calendar formControlName="date_fin" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
+                            <p-calendar formControlName="date_fin" [showIcon]="true" [showButtonBar]="true"
+                                placeholder="Fin"></p-calendar>
                         </div>
                         <div class="field col-12">
                             <label htmlFor="motif">Motif du congé</label>
-                            <p-dropdown formControlName="motif" id="motif" [options]="motifList" optionLabel="label" placeholder="Selectionner un motif"></p-dropdown>
+                            <p-dropdown formControlName="motif" id="motif" [options]="motifList" optionLabel="label"
+                                placeholder="Selectionner un motif"></p-dropdown>
                         </div>
 
                         <div class="field col-4">
@@ -156,12 +197,16 @@
 
                 <!-- Table d'affichage des demandes de congés de l'utilisateur connecté -->
                 <div style="margin-top: 50px" *ngIf="showCongeList"></div>
-                <p-table #dt4 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['type_conge','statut']" responsiveLayout="scroll" *ngIf="showCongeList">
+                <p-table #dt4 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+                    [paginator]="true" [globalFilterFields]="['type_conge','statut']" responsiveLayout="scroll"
+                    *ngIf="showCongeList">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="dt4.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+                                <input pInputText type="text" #filter
+                                    (input)="dt4.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
                             </span>
                         </div>
                     </ng-template>
@@ -197,7 +242,8 @@
                     <ng-template pTemplate="body" let-conge>
                         <tr>
                             <td style="min-width: 12rem;">
-                                {{ conge.referent_id.lastname | uppercase }} {{ conge.referent_id.firstname | titlecase }}
+                                {{ conge.referent_id.lastname | uppercase }} {{ conge.referent_id.firstname | titlecase
+                                }}
                             </td>
                             <td style="min-width: 12rem;">
                                 {{ conge.type_conge }}
@@ -228,12 +274,17 @@
 
                 <!-- Table d'affichage des demandes de congés des membres de service de l'utilisateur connecté -->
                 <div style="margin-top: 50px" *ngIf="showCongeListForService"></div>
-                <p-table #dt5 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['type_conge','statut', 'user_id.firstname', 'user_id.email', 'user_id.lastname']" responsiveLayout="scroll" *ngIf="showCongeListForService">
+                <p-table #dt5 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+                    [paginator]="true"
+                    [globalFilterFields]="['type_conge','statut', 'user_id.firstname', 'user_id.email', 'user_id.lastname']"
+                    responsiveLayout="scroll" *ngIf="showCongeListForService">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between flex-column sm:flex-row">
                             <span class="p-input-icon-left mb-2">
                                 <i class="pi pi-search"></i>
-                                <input pInputText type="text" #filter (input)="dt5.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+                                <input pInputText type="text" #filter
+                                    (input)="dt5.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
                             </span>
                         </div>
                     </ng-template>
@@ -297,8 +348,12 @@
                                 {{ conge.statut }}
                             </td>
                             <td style="min-width: 10rem;" *ngIf="conge.statut == 'En attente'">
-                                <i class="pi pi-check" (click)="onValidateConge(conge._id);" style="background-color: green; cursor: pointer; font-size: 15px;" title="Valider la demande de congés"></i>
-                                <i class="pi pi-times" (click)="onRefuseConge(conge._id);" style="background-color: red; cursor: pointer; font-size: 15px;" title="Réfuser la demande de congés"></i>
+                                <i class="pi pi-check" (click)="onValidateConge(conge._id);"
+                                    style="background-color: green; cursor: pointer; font-size: 15px;"
+                                    title="Valider la demande de congés"></i>
+                                <i class="pi pi-times" (click)="onRefuseConge(conge._id);"
+                                    style="background-color: red; cursor: pointer; font-size: 15px;"
+                                    title="Réfuser la demande de congés"></i>
                             </td>
                             <td style="min-width: 10rem;" *ngIf="conge.statut == 'Validé'">
                                 <span style="font-weight: bold; color: green;">Congé validé</span>
@@ -324,59 +379,69 @@
 
 
             <!-- justification d'absence -->
-            <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Justifier une absence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
-                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir mes CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
+            <div class="card"
+                *ngIf="(userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable') && !hideCRAEtc">
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;"
+                    label="Justifier une absence" class="p-button-outlined mr-2 mb-2"
+                    (click)="showFormjustification=true"></button>
+                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir mes CRA"
+                    class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
                 <h3>CRA</h3>
 
                 <i class="pi pi-times-circle" *ngIf="showFormjustification"
-                    style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
+                    style="float:right; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+                    (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
                 </i>
 
                 <!-- Formulaire de justification d'absence -->
-                <form style="margin-top: 5px" class="p-fluid" [formGroup]="justificationForm" (ngSubmit)="onNewabsence()" *ngIf="showFormjustification">
+                <form style="margin-top: 5px" class="p-fluid" [formGroup]="justificationForm"
+                    (ngSubmit)="onNewabsence()" *ngIf="showFormjustification">
                     <div class="p-formgrid grid">
                         <div class="field col-12">
                             <label>Date</label>
-                            <p-calendar formControlName="date_of_absence" [showIcon]="true" [showButtonBar]="true" placeholder="Jour de l'absence"></p-calendar>
+                            <p-calendar formControlName="date_of_absence" [showIcon]="true" [showButtonBar]="true"
+                                placeholder="Jour de l'absence"></p-calendar>
                         </div>
                         <div class="field col-12">
                             <label>Motif</label>
-                            <textarea pInputTextarea formControlName="motif" rows="4" placeholder="Veuillez décrire la raison de votre absence"></textarea>
+                            <textarea pInputTextarea formControlName="motif" rows="4"
+                                placeholder="Veuillez décrire la raison de votre absence"></textarea>
                         </div>
                         <div class="field col-12">
                             <label htmlFor="motif">Précision</label>
-                            <p-dropdown formControlName="periode" id="motif" [options]="periodList" optionLabel="label"></p-dropdown>
+                            <p-dropdown formControlName="periode" id="motif" [options]="periodList"
+                                optionLabel="label"></p-dropdown>
                         </div>
                         <div class="field col-12">
-                            <input multiple type="file" accept="*" maxFileSize="10000000" (change)="onUpload($event)" chooseLabel="Browse"/>
+                            <input multiple type="file" accept="*" maxFileSize="10000000" (change)="onUpload($event)"
+                                chooseLabel="Browse" />
                         </div>
 
                         <div class="field col-4">
-                            <button pButton type="submit" label="Soumettre" [disabled]="justificationForm.invalid"></button>
+                            <button pButton type="submit" label="Soumettre"
+                                [disabled]="justificationForm.invalid"></button>
                         </div>
                     </div>
                 </form>
 
                 <!-- Table d'affichage du compte rendu d'activité -->
                 <div *ngIf="showPresenceList">
-                    
-                    <i class="pi pi-times-circle"
-                        style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                        pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
+
+                    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                        pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;"
+                        aria-hidden="true">
                     </i>
 
                     <h5>Compte rendu d'activités</h5>
-                    
-                    <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll"
-                             rowExpandMode="single" [rows]="10" [rowHover]="true" [totalRecords]="presences.length"
-                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'date_of_the_day']">
-                    
-                            <ng-template pTemplate="caption">
-                                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                                    placeholder="Recherche" />
-                            </ng-template>
+
+                    <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll" rowExpandMode="single"
+                        [rows]="10" [rowHover]="true" [totalRecords]="presences.length" [paginator]="true" #dt1
+                        [globalFilterFields]="['statut', 'principale_activity_details', 'date_of_the_day']">
+
+                        <ng-template pTemplate="caption">
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="width: 3rem"></th>
@@ -391,7 +456,9 @@
                         <ng-template pTemplate="body" let-presence let-expanded="expanded">
                             <tr>
                                 <td>
-                                    <button type="button" pButton pRipple [pRowToggler]="presence" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                    <button type="button" pButton pRipple [pRowToggler]="presence"
+                                        class="p-button-text p-button-rounded p-button-plain"
+                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
                                 <td style="min-width: 8rem;">{{ userco.lastname | uppercase }}</td>
                                 <td style="min-width: 8rem;">{{ userco.firstname | titlecase }}</td>
@@ -407,160 +474,139 @@
                                     <div class="p-3">
                                         <p-table responsiveLayout="scroll">
                                             <ng-template pTemplate="header">
-                                                <tr>
-                                                    <th>Téléphone</th>
-                                                    <th>Heure d'arrivée</th>
-                                                    <th>Heure de depart</th>
-                                                    <th>Tâches</th>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="body" let-presence>
-                                                <tr>
-                                                    <td colspan="7">Aucune données supplémentaires.</td>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="emptymessage">
-                                                <tr>
-                                                    <td>{{ userco.indicatif }}{{userco.phone }}</td>
-                                                    <td>{{ presence.in_date | date: 'H:mm' }}</td>
-                                                    <td>{{ presence.out_date | date: 'H:mm' }}</td>
-                                                    <td>
-                                                        <ul>
-                                                            <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}</li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            </ng-template>
-                                        </p-table>
-                                    </div>
+                            <tr>
+                                <th>Téléphone</th>
+                                <th>Heure d'arrivée</th>
+                                <th>Heure de depart</th>
+                                <th>Tâches</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-presence>
+                            <tr>
+                                <td colspan="7">Aucune données supplémentaires.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ userco.indicatif }}{{userco.phone }}</td>
+                                <td>{{ presence.in_date | date: 'H:mm' }}</td>
+                                <td>{{ presence.out_date | date: 'H:mm' }}</td>
+                                <td>
+                                    <ul>
+                                        <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}
+                                        </li>
+                                    </ul>
                                 </td>
                             </tr>
                         </ng-template>
                     </p-table>
                 </div>
-
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
             </div>
 
-            <div class="card" *ngIf="demandeConseiller==null || userConnectedNow.type == 'Etudiant'  || userConnectedNow.type == 'Alternant' || userConnectedNow.role == 'Admin'">
-                <h3>Faire une demande de Conseiller</h3>
-                <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="saveDemande()">
-                    <div class="field col-12">
-                        <p-dropdown formControlName="conseiller_id" [options]="listConseiller" placeholder="Choisissez un conseiller">
-                        </p-dropdown>
-                    </div>
-                    <div class="col-12">
-                        <button pButton pRipple label="Envoyer la demande de conseiller" class="mr-2 mb-2" [disabled]="demandeConseillerForm.invalid"
-                            type="submit"></button>
-                    </div>
-                </form>
-            </div>
+        </div>
+
+        <div class="card"
+            *ngIf="(demandeConseiller==null || userConnectedNow.type == 'Etudiant'  || userConnectedNow.type == 'Alternant' || userConnectedNow.role == 'Admin') && !hideCRAEtc">
+            <h3>Faire une demande de Conseiller</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="saveDemande()">
+                <div class="field col-12">
+                    <p-dropdown formControlName="conseiller_id" [options]="listConseiller"
+                        placeholder="Choisissez un conseiller">
+                    </p-dropdown>
+                </div>
+                <div class="col-12">
+                    <button pButton pRipple label="Envoyer la demande de conseiller" class="mr-2 mb-2"
+                        [disabled]="demandeConseillerForm.invalid" type="submit"></button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- Formulaire de modification des infos -->
-    <div class="col-12" *ngIf="toggleUpdate">
-        <div class="card">
-            <h3 style="text-align: center;">Formulaire de modification des informations</h3>
-            <form class="p-fluid p-formgrid grid" [formGroup]="RegisterForm" (ngSubmit)="UpdateUser()">
-                <div class="field col-4 md:col-2">
-                    <label For="civilite">Civilité</label>
-                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-5">
-                    <label For="lastname">Nom</label>
-                    <input pInputText id="lastname" formControlName="lastname" type="text" />
-                </div>
-                <div class="field col-12 md:col-5">
-                    <label For="firstname">Prénom</label>
-                    <input pInputText id="firstname" formControlName="firstname" type="text" />
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label For="code_postal">Numéro de la rue</label>
-                    <input pInputText id="code_postal" type="number" formControlName="numero_adresse" />
-                </div>
-                <div class="field col-12 md:col-9">
-                    <label For="rue">Nom de la rue</label>
-                    <input pInputText id="rue" type="text" formControlName="rue_adresse" />
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label For="code_postal">Code postal</label>
-                    <input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
-                </div>
-                <div class="field col-6 md:col-6">
-                    <label For="ville">Ville</label>
-                    <input pInputText id="ville" type="text" formControlName="ville_adresse" />
-                </div>
-                <div class="field col-6 md:col-3">
-                    <label For="pays">Pays</label>
-                    <input pInputText id="pays" type="text" formControlName="pays_adresse" />
-                </div>
-                <div class="field col-4 md:col-3">
-                    <label For="ind">Indicatif</label>
-                    <input pInputText id="ind" type="text" formControlName="indicatif" />
-                </div>
-                <div class="field col-8 md:col-9">
-                    <label For="tel">Téléphone</label>
-                    <input pInputText id="tel" type="text" formControlName="phone" />
-                </div>
-                <div class="field col-8 md:col-12" *ngIf="infoUser">
-                    <label For="nationnalite">Nationnalité</label>
-                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
-                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-12" *ngIf="infoUser">
-                    <label For="date">Date de naissance</label>
-                    <!--<p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
+<!-- Formulaire de modification des infos -->
+<div class="col-12" *ngIf="toggleUpdate">
+    <div class="card">
+        <h3 style="text-align: center;">Formulaire de modification des informations</h3>
+        <form class="p-fluid p-formgrid grid" [formGroup]="RegisterForm" (ngSubmit)="UpdateUser()">
+            <div class="field col-4 md:col-2">
+                <label For="civilite">Civilité</label>
+                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-5">
+                <label For="lastname">Nom</label>
+                <input pInputText id="lastname" formControlName="lastname" type="text" />
+            </div>
+            <div class="field col-12 md:col-5">
+                <label For="firstname">Prénom</label>
+                <input pInputText id="firstname" formControlName="firstname" type="text" />
+            </div>
+            <div class="field col-12 md:col-3">
+                <label For="code_postal">Numéro de la rue</label>
+                <input pInputText id="code_postal" type="number" formControlName="numero_adresse" />
+            </div>
+            <div class="field col-12 md:col-9">
+                <label For="rue">Nom de la rue</label>
+                <input pInputText id="rue" type="text" formControlName="rue_adresse" />
+            </div>
+            <div class="field col-12 md:col-3">
+                <label For="code_postal">Code postal</label>
+                <input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
+            </div>
+            <div class="field col-6 md:col-6">
+                <label For="ville">Ville</label>
+                <input pInputText id="ville" type="text" formControlName="ville_adresse" />
+            </div>
+            <div class="field col-6 md:col-3">
+                <label For="pays">Pays</label>
+                <input pInputText id="pays" type="text" formControlName="pays_adresse" />
+            </div>
+            <div class="field col-4 md:col-3">
+                <label For="ind">Indicatif</label>
+                <input pInputText id="ind" type="text" formControlName="indicatif" />
+            </div>
+            <div class="field col-8 md:col-9">
+                <label For="tel">Téléphone</label>
+                <input pInputText id="tel" type="text" formControlName="phone" />
+            </div>
+            <div class="field col-8 md:col-12" *ngIf="infoUser">
+                <label For="nationnalite">Nationnalité</label>
+                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-12" *ngIf="infoUser">
+                <label For="date">Date de naissance</label>
+                <!--<p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear">
                     </p-calendar>-->
-                    <input type="date" formControlName="date_naissance" class="form-control col-12"
-                        placeholder="21/12/2012" pInputText>
-                </div>
-                <div class="field col-12 md:col-6" *ngIf="IsAdmin">
-                    <label For="role">Rôle</label>
-                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6" *ngIf="IsAdmin">
-                    <label For="service">Service</label>
-                    <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
-                    </p-dropdown>
-                </div>
+                <input type="date" formControlName="date_naissance" class="form-control col-12" placeholder="21/12/2012"
+                    pInputText>
+            </div>
+            <div class="field col-12 md:col-6" *ngIf="IsAdmin">
+                <label For="role">Rôle</label>
+                <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6" *ngIf="IsAdmin">
+                <label For="service">Service</label>
+                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
+                </p-dropdown>
+            </div>
 
-                <div class="col-4 md:col-2">
-                    <button pButton pRipple label="Modifier" class="mr-2 mb-2" [disabled]="RegisterForm.invalid"
-                        type="submit"></button>
-                </div>
+            <div class="col-4 md:col-2">
+                <button pButton pRipple label="Modifier" class="mr-2 mb-2" [disabled]="RegisterForm.invalid"
+                    type="submit"></button>
+            </div>
 
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 
-    <!-- Formulaire de modification du mot de passe -->
-    <div class="col-12" *ngIf="toggleUpdatepwd">
-        <div class="card">
-            <h3 style="text-align: center;">Formulaire de modification du mot de passe</h3>
-            <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
-                <div class="field col-12">
-                    <label For="pwd_actu">Mot de passe actuel</label>
-                    <input pInputText id="pwd_actu" type="password" formControlName="passwordactual" />
-                </div>
-                <div class="field col-12">
-                    <label For="n_pwd">Nouveau mot de passe</label>
-                    <input pInputText id="n_pwd" type="password" formControlName="password" />
-                </div>
-                <div class="field col-12">
-                    <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
-                    <input pInputText id="confirm_n_pwd" type="password" formControlName="verifypassword">
-                </div>
-                <small style="color: red;">{{pwdmsgerr}}</small>
-                <div class="col-4 md:col-2">
-                    <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid"
-                        class="mr-2 mb-2"></button>
-                </div>
-            </form>
-        </div>
-    </div>
+
 </div>
