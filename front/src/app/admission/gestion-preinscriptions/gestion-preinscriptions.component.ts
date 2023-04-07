@@ -335,22 +335,25 @@ export class GestionPreinscriptionsComponent implements OnInit {
           this.users[user._id] = user;
         });
         if (this.code) {
-          //Si il y a un code de Commercial
-          if (this.code.length > 20) {
-            //Si il est considéré comme Admin dans son Partenaire
-            console.log("Admin Commercial")
-            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
-              ((responseAdmission) => this.afterProspectload(responseAdmission)),
-              ((error) => { console.error(error); })
-            );
-          } else {
-            console.log("Agent Commercial")
-            //Si il n'est pas considéré Admin dans son partenaire
-            this.admissionService.getAllCodeCommercial(this.code).subscribe(
-              ((responseAdmission) => this.afterProspectload(responseAdmission)),
-              ((error) => { console.error(error); })
-            );
-          }
+          this.commercialService.getCommercialDataFromCommercialCode(this.code).subscribe(commercial => {
+            //Si il y a un code de Commercial
+            if (commercial.statut == "Admin") {
+              //Si il est considéré comme Admin dans son Partenaire
+              console.log("Admin Commercial")
+              this.admissionService.getAllByCodeAdmin(this.code).subscribe(
+                ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                ((error) => { console.error(error); })
+              );
+            } else {
+              console.log("Agent Commercial")
+              //Si il n'est pas considéré Admin dans son partenaire
+              this.admissionService.getAllCodeCommercial(this.code).subscribe(
+                ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                ((error) => { console.error(error); })
+              );
+            }
+          })
+
 
         } else {
           if (this.STATUT)

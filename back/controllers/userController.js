@@ -171,17 +171,6 @@ app.post("/login", (req, res) => {
           res.status(304).send({ message: "Compte pas activé", data });
         }
       }
-      Etudiant.findOne({ user_id: userFromDb._id }).then((etudiant) => {
-        if (
-          etudiant &&
-          etudiant.annee_scolaire.includes("2022-2023") == false
-        ) {
-          etudiant.annee_scolaire.push("2022-2023");
-          Etudiant.findByIdAndUpdate(etudiant._id, {
-            annee_scolaire: etudiant.annee_scolaire,
-          });
-        }
-      });
     })
     .catch((error) => {
       console.log(error);

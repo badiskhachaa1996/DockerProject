@@ -60,6 +60,10 @@ export class VentesComponent implements OnInit {
             this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
           })
         })
+        this.produitList = []
+        partenaire.commissions.forEach(c => {
+          this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+        })
       })
     } else {
       this.VenteService.getAll().subscribe(data => {
@@ -70,9 +74,6 @@ export class VentesComponent implements OnInit {
         this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
         data.forEach(d => {
           this.PartenaireList.push({ label: d.nom, value: d._id })
-          d.commissions.forEach(c => {
-            this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
-          })
         })
       })
       this.ProspectService.getAll().subscribe(data => {
@@ -99,8 +100,6 @@ export class VentesComponent implements OnInit {
   })
 
   onAddVente() {
-    if (this.PartenaireSelected)
-      this.formAddVente.patchValue({ partenaire_id: this.PartenaireSelected })
     this.VenteService.create({ ...this.formAddVente.value }).subscribe(data => {
       this.ventes.push(data)
       this.showFormAddVente = false
@@ -155,14 +154,42 @@ export class VentesComponent implements OnInit {
   PartenaireList = []
   PartenaireSelected: string = null
 
+  onPartenaireSelect() {
+    this.PartenaireSelected = this.formAddVente.value.partenaire_id
+    this.selectPartenaire()
+    if (this.PartenaireSelected)
+      this.PartenaireService.getById(this.PartenaireSelected).subscribe(data => {
+        this.produitList = []
+        data.commissions.forEach(c => {
+          this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+        })
+      })
+  }
+
   selectPartenaire() {
+    if (!this.formAddVente.value.partenaire_id)
+      this.formAddVente.patchValue({ partenaire_id: this.PartenaireSelected })
     if (this.PartenaireSelected) {
       this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
         this.ventes = data
       })
+      this.ProspectService.getAllByCodeAdmin(this.PartenaireSelected).subscribe(data => {
+        this.listProspect = []
+        data.forEach(d => {
+          let bypass: any = d.user_id
+          this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
+        })
+      })
     } else {
       this.VenteService.getAll().subscribe(data => {
         this.ventes = data
+      })
+      this.ProspectService.getAll().subscribe(data => {
+        this.listProspect = []
+        data.forEach(d => {
+          let bypass: any = d.user_id
+          this.listProspect.push({ label: `${bypass?.lastname} ${bypass?.firstname}`, value: d._id, custom_id: d.customid })
+        })
       })
     }
 

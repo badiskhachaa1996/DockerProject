@@ -539,14 +539,14 @@ export class AddSeanceComponent implements OnInit {
     let date_debut = new Date(value)
     let date_fin = new Date(value)
     if (this.seanceForm.value.periode_seance == 'Matin') {
-      date_debut.setHours(9)
+      date_debut.setHours(9,0)
       date_fin.setHours(12, 30)
     } else if (this.seanceForm.value.periode_seance == 'Après-Midi') {
       date_debut.setHours(13, 30)
-      date_fin.setHours(17)
+      date_fin.setHours(17,0)
     } else if (this.seanceForm.value.periode_seance == '9H00-17H00'){
-      date_debut.setHours(9)
-      date_fin.setHours(17)
+      date_debut.setHours(9,0)
+      date_fin.setHours(17,0)
     }
     this.seanceForm.patchValue({ date_debut, date_fin })
   }

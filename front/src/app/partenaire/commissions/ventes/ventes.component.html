@@ -41,9 +41,9 @@
                     <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
                         formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
                 </div>
-                <div class="field col-12" *ngIf="!PartenaireSelected">
+                <div class="field col-12">
                     <label>Partenaire<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"></p-dropdown>
+                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id" (onChange)="onPartenaireSelect()"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette vente" [disabled]="formAddVente.invalid"

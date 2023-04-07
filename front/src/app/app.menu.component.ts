@@ -148,6 +148,22 @@ export class AppMenuComponent implements OnInit {
 
                                 },
                                 {
+                                    label: 'Gestions des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
+                                        },
+                                    ]
+                                },
+                                {
                                     label: 'Gestions des séances',
                                     icon: 'pi pi-video',
                                     items: [
@@ -301,22 +317,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                 },
-                                {
-                                    label: 'Gestions des groupes',
-                                    icon: 'pi pi-users',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un groupe',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-groupe']
-                                        },
-                                        {
-                                            label: 'Liste des groupes',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/groupes']
-                                        },
-                                    ]
-                                },
+
                                 {
                                     label: 'Gestions des agents',
                                     icon: 'pi pi-users',
@@ -987,22 +988,6 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Gestions des groupes',
-                                    icon: 'pi pi-users',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un groupe',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-groupe']
-                                        },
-                                        {
-                                            label: 'Liste des groupes',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/groupes']
-                                        },
-                                    ]
-                                },
-                                {
                                     label: 'Gestions des agents',
                                     icon: 'pi pi-users',
                                     items: [
@@ -1037,6 +1022,22 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Liste des étudiants',
                                             icon: 'pi pi-sort-alpha-down',
                                             routerLink: ['etudiants']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
                                         },
                                     ]
                                 },
@@ -1608,6 +1609,22 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
+                                                },
+                                            ]
+                                        },
+                                        {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
                                             routerLink: ['/matieres'],
@@ -1767,22 +1784,7 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                             ]
                                         },
-                                        {
-                                            label: 'Gestions des groupes',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un groupe',
-                                                    icon: 'pi pi-plus-circle',
-                                                    routerLink: ['/ajout-groupe']
-                                                },
-                                                {
-                                                    label: 'Liste des groupes',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/groupes']
-                                                },
-                                            ]
-                                        },
+
                                         {
                                             label: 'Gestions des agents',
                                             icon: 'pi pi-users',
@@ -2102,6 +2104,22 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
+                                        {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
+                                                },
+                                            ]
+                                        },
                                         {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
@@ -2497,22 +2515,6 @@ export class AppMenuComponent implements OnInit {
                                             ]
                                         },
                                         {
-                                            label: 'Gestions des groupes',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un groupe',
-                                                    icon: 'pi pi-plus-circle',
-                                                    routerLink: ['/ajout-groupe']
-                                                },
-                                                {
-                                                    label: 'Liste des groupes',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/groupes']
-                                                },
-                                            ]
-                                        },
-                                        {
                                             label: 'Gestions des agents',
                                             icon: 'pi pi-users',
                                             items: [
@@ -2547,6 +2549,22 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
                                                     routerLink: ['etudiants']
+                                                },
+                                            ]
+                                        },
+                                        {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
                                                 },
                                             ]
                                         },
