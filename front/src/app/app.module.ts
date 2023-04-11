@@ -265,6 +265,7 @@ import { StageComponent } from './commercial/stage/stage.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
+import { SourcingComponent } from './admission/international/sourcing/sourcing.component';
 
 
 @NgModule({
@@ -539,7 +540,8 @@ import { ReglementComponent } from './partenaire/commissions/reglement/reglement
     StageComponent,
     AjoutCollaborateurComponent,
     VentesComponent,
-    ReglementComponent
+    ReglementComponent,
+    SourcingComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

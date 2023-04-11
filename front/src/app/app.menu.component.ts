@@ -465,15 +465,15 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
-                                    items:[
+                                    items: [
                                         {
-                                            label:"Ventes",
-                                            icon:'pi pi-shopping-cart',
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
                                             routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label:"Réglement",
-                                            icon:'pi pi-shopping-cart',
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
                                             routerLink: ['/commissions/reglement']
                                         }
                                     ]
@@ -579,6 +579,75 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['resultat-qff']
                                 },
                             ]
+                        },
+                        {
+                            label: 'International',
+                            icon: 'pi pi-globe',
+                            items: [
+                                {
+                                    label: 'Insérer un prospect',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/ajout-prospect']
+                                },
+                                {
+                                    label: 'Source',
+                                    icon: 'pi pi-send',
+                                    routerLink:['/international/sourcing']
+                                },
+                                {
+                                    label: 'Orientation Prospects',
+                                    icon: 'pi pi-globe',
+                                },
+                                {
+                                    label: 'Admission Prospects',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement']
+                                },
+                                {
+                                    label: 'Paiement',
+                                    icon: 'pi pi-money-bill',
+                                },
+                                {
+                                    label: 'Accompagenement Consulaire',
+                                    icon: 'pi pi-whatsapp',
+                                },
+                                {
+                                    label: 'Gestion de l\'équipe',
+                                    icon: 'pi pi-briefcase',
+                                    items: [
+                                        {
+                                            label: 'Gestion des membres',
+                                            icon: 'pi pi-user'
+                                        },
+                                        {
+                                            label: 'Gestion de l\'équipe',
+                                            icon: 'pi pi-users'
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion de l\'année scolaire',
+                                    icon: 'pi pi-calendar',
+                                    items: [
+                                        {
+                                            label: 'Formations disponibles',
+                                            icon: 'pi pi-briefcase'
+                                        },
+                                        {
+                                            label: 'Ecoles',
+                                            icon: 'pi pi-building'
+                                        },
+                                        {
+                                            label: 'Rentrées Scolaire',
+                                            icon: 'pi pi-calendar'
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-home'
+                                        },
+                                    ]
+                                },
+                            ],
                         },
                     ];
                 }
@@ -792,6 +861,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         },
+
                     ]
                 }
                 // menu service admission
@@ -876,6 +946,7 @@ export class AppMenuComponent implements OnInit {
                                 }
                             ],
                         },
+
                     ]
                 }
                 // menu service administration
@@ -1075,16 +1146,16 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
-                                    items:[
+                                    items: [
                                         {
-                                            label:"Ventes",
-                                            icon:'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/ventes',cData.partenaire_id]
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
                                         },
                                         {
-                                            label:"Réglement",
-                                            icon:'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/reglement',cData.partenaire_id]
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
                                         }
                                     ]
                                 },
@@ -1121,16 +1192,16 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
-                                    items:[
+                                    items: [
                                         {
-                                            label:"Ventes",
-                                            icon:'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/ventes',cData.partenaire_id]
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
                                         },
                                         {
-                                            label:"Réglement",
-                                            icon:'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/reglement',cData.partenaire_id]
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
                                         }
                                     ]
                                 },
@@ -1285,15 +1356,15 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
-                                    items:[
+                                    items: [
                                         {
-                                            label:"Ventes",
-                                            icon:'pi pi-shopping-cart',
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
                                             routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label:"Réglement",
-                                            icon:'pi pi-shopping-cart',
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
                                             routerLink: ['/commissions/reglement']
                                         }
                                     ]
@@ -1927,15 +1998,15 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des commissions',
                                             icon: 'pi pi-credit-card',
-                                            items:[
+                                            items: [
                                                 {
-                                                    label:"Ventes",
-                                                    icon:'pi pi-shopping-cart',
+                                                    label: "Ventes",
+                                                    icon: 'pi pi-shopping-cart',
                                                     routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label:"Réglement",
-                                                    icon:'pi pi-shopping-cart',
+                                                    label: "Réglement",
+                                                    icon: 'pi pi-shopping-cart',
                                                     routerLink: ['/commissions/reglement']
                                                 }
                                             ]
@@ -2670,15 +2741,15 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestion des commissions',
                                             icon: 'pi pi-credit-card',
-                                            items:[
+                                            items: [
                                                 {
-                                                    label:"Ventes",
-                                                    icon:'pi pi-shopping-cart',
+                                                    label: "Ventes",
+                                                    icon: 'pi pi-shopping-cart',
                                                     routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label:"Réglement",
-                                                    icon:'pi pi-shopping-cart',
+                                                    label: "Réglement",
+                                                    icon: 'pi pi-shopping-cart',
                                                     routerLink: ['/commissions/reglement']
                                                 }
                                             ]
@@ -2727,12 +2798,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -2796,12 +2867,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -2925,12 +2996,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -3000,16 +3071,16 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/matching-externe/' + this.token.id]
                                         },
                                     ]
-                                        
+
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ];
                         },

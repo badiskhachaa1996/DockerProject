@@ -278,7 +278,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   defaultDropdown = this.programeFrDropdown
 
   typeFormationDropdown = [
-    { value: "Intiale" },
+    { value: "Initiale" },
     { value: "Alternance" }
   ];
 

@@ -161,6 +161,7 @@ import { StageComponent } from './commercial/stage/stage.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
+import { SourcingComponent } from './admission/international/sourcing/sourcing.component';
 
 const routes: Routes = [
     {
@@ -300,6 +301,8 @@ const routes: Routes = [
             { path: 'commissions/reglement', component: ReglementComponent, canActivate: [AuthGuardService] },
             { path: 'commissions/ventes/:partenaire_id', component: VentesComponent, canActivate: [AuthGuardService] },
             { path: 'commissions/reglement/:partenaire_id', component: ReglementComponent, canActivate: [AuthGuardService] },
+            /* International Haithem */
+            { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
