@@ -158,6 +158,14 @@ export class SourcingComponent implements OnInit {
     { value: "Manque orientation", label: "Manque orientation" }
   ]
 
+  filterVisa = [
+    { value: null, label: "Toutes les status" },
+    { label: "Oui", value: "Oui" },
+    { label: "Non concerné", value: "Non concerné" },
+    { label: "Non", value: "Non" },
+    { label: "Pas de retour", value: "Pas de retour" },
+  ]
+
   constructor(private messageService: MessageService, private admissionService: AdmissionService) { }
 
   prospects: Prospect[];

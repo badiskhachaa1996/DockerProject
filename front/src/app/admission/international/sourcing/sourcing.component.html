@@ -331,9 +331,8 @@
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Visa" [options]="[{label:'Tous les status de Visa',value:null},
-                    {label:'Accepté',value:true},{label:'Refusé',value:false}
-                    ]" (onChange)="dt1.filter($event.value, 'statut_dossier','equals')"
+                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
