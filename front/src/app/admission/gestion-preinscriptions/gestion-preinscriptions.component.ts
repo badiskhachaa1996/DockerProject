@@ -120,18 +120,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Payée" },
     { value: "A signé les documents" },
   ]
-  dropdownDecision = [
-    { value: null, label: "Toutes les décisions" },
-    { value: "Accepté", label: "Accepté" },
-    { value: "Accepté sur réserve", label: "Accepté sur réserve" },
-    { value: "Suspendu", label: "Suspendu" },
-    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
-    { value: "Non Retenu", label: "Non Retenu" },
-    { value: "Refusé", label: "Refusé" },
-    { value: "En attente de traitement", label: "En attente de traitement" },
-    { value: "Payée", label: "Payée" },
-    { value: "A signé les documents", label: "A signé les documents" },
-  ]
+
 
   filterTraitement = [
     { value: null, label: "Tous les états" },

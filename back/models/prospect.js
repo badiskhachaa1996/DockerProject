@@ -90,12 +90,12 @@ const prospect_schema = new mongoose.Schema({
     decision_admission: {
         type: String,
         required: false,
-        default: "Aucun"
+        default: "En attente de traitement"
     },
     statut_payement: {
         type: String,
         required: false,
-        default: "Aucun"
+        default: "Non"
     },
     phase_complementaire: {
         type: String,
@@ -120,7 +120,7 @@ const prospect_schema = new mongoose.Schema({
         default: []
     },
     avancement_visa: {
-        type: Boolean
+        type: String
     },
     enTraitement: {
         type: Boolean,
@@ -201,7 +201,34 @@ const prospect_schema = new mongoose.Schema({
     },
     indicatif_telegram: {
         type: String
-    }
+    },
+    decision_orientation: {
+        type: String,
+        required: false,
+        default: "En attente de contact"
+    },
+    phase_candidature: {
+        type: String,
+        required: false,
+        default: "En attente d'affectation"
+    },
+    agent_sourcing_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        default: null
+    },
+    date_sourcing: {
+        type: Date
+    },
+    a_besoin_visa: {
+        type: String,
+    },
+    finance: {
+        type: String,
+    },
+    logement: {
+        type: String,
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);
