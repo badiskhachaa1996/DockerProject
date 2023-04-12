@@ -1,0 +1,101 @@
+<div class="grid">
+    <div class="col-12 grid" *ngIf="selectedFormation">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Modifier la formation </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="selectedFormation = null; updateForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+
+                <div class="field md:col-6 col-12">
+                    <label>Titre <span style="color: red;"> * </span></label>
+                    <input pInputText formControlName="title" />
+                </div>
+                <div class="field md:col-6 col-12">
+                    <label>Lien Linkedin </label>
+                    <input pInputText formControlName="linkedin" />
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="showCreateForm">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'une formation </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showCreateForm = false; createForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
+
+                <div class="field md:col-6 col-12">
+                    <label>Titre <span style="color: red;"> * </span></label>
+                    <input pInputText formControlName="title" />
+                </div>
+                <div class="field md:col-6 col-12">
+                    <label>Lien Linkedin </label>
+                    <input pInputText formControlName="linkedin" />
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle formation"
+                    (click)="initCreate()"></button>
+            </div>
+            <h5>Liste des formations INTUNS</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="formations" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['title','linkedin']" [rows]="5" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="formations.length" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="title">Titre<p-sortIcon field="title">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="linkedin">Lien Linkedin <p-sortIcon field="linkedin">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-formation>
+                    <tr>
+                        <td>{{formation.title}}</td>
+                        <td>{{formation.linkedin }}</td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-pencil"
+                                (click)="initUpdate(formation);scrollToTop()" pTooltip="Modifier la formation"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -153,7 +153,7 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Décision orientation</label>
-                            <p-dropdown [options]="orientationList" formControlName="decision_orientation"></p-dropdown>
+                            <p-multiSelect [options]="orientationList" formControlName="decision_orientation"></p-multiSelect>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                         <div class="field md:col-6 col-12">
@@ -261,16 +261,14 @@
         </div>
     </div>
 
-
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
             <h5>Liste des prospects</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
-                [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single"
-                (onRowSelect)="expandRow($event.data)"
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
@@ -367,6 +365,9 @@
                         <th pSortableColumn="formation" scope="col" style="text-align: center;">
                             Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
                             Initial/Alternant <p-sortIcon field="rythme_formation"></p-sortIcon>
                         </th>
@@ -397,13 +398,13 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                    <tr [pRowToggler]="prospect" [pSelectableRow]="prospect"
-                        [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+                <ng-template pTemplate="body" let-prospect>
+                    <tr>
 
                         <td>
                             <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                [icon]="selectedProspect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="expand(prospect)"></button>
                         </td>
 
                         <td>
@@ -435,6 +436,9 @@
                         </td>
                         <td>
                             {{ prospect.formation | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
                             {{ prospect.rythme_formation }}
@@ -704,3 +708,17 @@
         </p-table>
     </div>
 </div>
+<!-- Expand SideBar -->
+<p-sidebar [visible]="selectedProspect!=null" styleClass="w-30rem" position="right">
+    <p *ngFor="let item of selectedProspect | keyvalue">
+        <ng-container *ngIf="item.key!='user_id' && item.key!='__v' && item.key!='_id'">
+            {{item.key | titlecase}}:{{item.value}}
+        </ng-container>
+        <ng-container *ngIf="item.key=='user_id'">
+            <ng-container *ngFor="let user_id of item.value | keyvalue">
+                <p *ngIf="user_id.key!='_id' && user_id.key!='__v'">{{user_id.key | titlecase}}:{{user_id.value}}</p>
+            </ng-container>
+        </ng-container>
+        
+    </p>
+</p-sidebar>

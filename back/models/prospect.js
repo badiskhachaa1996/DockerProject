@@ -203,9 +203,8 @@ const prospect_schema = new mongoose.Schema({
         type: String
     },
     decision_orientation: {
-        type: String,
-        required: false,
-        default: "En attente de contact"
+        type: [String],
+        default: ["En attente de contact"]
     },
     phase_candidature: {
         type: String,

@@ -133,6 +133,8 @@ const MatchingController = require('./controllers/matchingController')
 const stageController = require('./controllers/stageController')
 const venteController = require('./controllers/venteCommissionController')
 const factureCommissionController = require('./controllers/factureCommissionController')
+const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
+const teamsIntController = require('./controllers/teamsIntController')
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -204,7 +206,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/user/pwdToken") ||
       req.originalUrl == "/soc/partenaire/getNBAll" ||
       req.originalUrl.startsWith("/soc/entreprise/getAllContratsbyTuteur") ||
-      req.originalUrl.startsWith("/soc/entreprise/getAllContratsbyEntreprise" ) ||
+      req.originalUrl.startsWith("/soc/entreprise/getAllContratsbyEntreprise") ||
       req.originalUrl.startsWith("/soc/user/reinitPwd") ||
       req.originalUrl.startsWith("/soc/qs/create") ||
       req.originalUrl.startsWith("/soc/user/getProfilePicture") ||
@@ -220,9 +222,9 @@ app.use("/", function (req, res, next) {
         .status(403)
         .send(
           "Accès non autorisé, Wrong Token " +
-            token +
-            " Vérifiez aussi que la méthode de request POST ou GET est respecté" +
-            req.originalUrl
+          token +
+          " Vérifiez aussi que la méthode de request POST ou GET est respecté" +
+          req.originalUrl
         );
     }
   }
@@ -331,6 +333,8 @@ app.use("/soc/project", projectController);
 app.use("/soc/team", teamController);
 app.use("/soc/matching", MatchingController);
 app.use("/soc/stage", stageController);
+app.use('/soc/intuns', intunsEtudiantsController)
+app.use('/soc/teamsInt', teamsIntController)
 
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
