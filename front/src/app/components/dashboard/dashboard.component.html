@@ -705,8 +705,9 @@
                             </p>
                             <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
                                 <p-multiSelect formControlName="Pays" [options]="paysList" placeholder="Pays"
-                                optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
-                                filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect></p>
+                                    optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                    filterPlaceholder="Pays" filter="true" optionDisabled="actif"></p-multiSelect>
+                            </p>
                             <p class="col-12 md:col-12 text-center"><strong>Services:</strong><br>
                                 <input type="text" pInputText placeholder="https://www.example.com"
                                     formControlName="Services" />
@@ -787,6 +788,44 @@
         <p>Merci de votre patience!</p>
     </div>
 </div>
+
+<div>
+    <h2 *ngIf="user" style="text-align: center;">
+        Bonjour {{user.firstname | titlecase}} {{user.lastname | uppercase}}, Bienvenue sur IMS
+    </h2>
+
+    <div class="card grid">
+        <div class="col-3 flex flex-column align-items-center justify-content-center">
+            <a href="https://www.lms.intuns.com/login/index.php">
+                <img src="assets\images\livre_intuns.jpg" style="max-height: 200px;" />
+            </a>
+            <a href="https://www.lms.intuns.com/login/index.php">
+                Supports de cours
+            </a>
+        </div>
+        <p-divider class="col-1" layout="vertical">
+        </p-divider>
+        <div class="col-4 flex  flex-column align-items-center justify-content-center">
+            <a href="{{dataIntuns?.formation_id?.linkedin}}">
+                <img src="assets\images\livre_intuns.jpg" style="max-height: 200px;" />
+            </a>
+            <a href="{{dataIntuns?.formation_id?.linkedin}}">
+                Linked Learning
+            </a>
+        </div>
+        <p-divider class="col-1" layout="vertical">
+        </p-divider>
+        <div class="col-3 flex  flex-column align-items-center justify-content-center">
+            <a (click)="navigateToEmployabilite()">
+                <img src="assets\images\livre_intuns.jpg" style="max-height: 200px;" />
+            </a>
+            <a (click)="navigateToEmployabilite()">
+                Employabilité et Alternance
+            </a>
+        </div>
+    </div>
+</div>
+
 
 
 

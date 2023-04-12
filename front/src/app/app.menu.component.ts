@@ -592,7 +592,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Source',
                                     icon: 'pi pi-send',
-                                    routerLink:['/international/sourcing']
+                                    routerLink: ['/international/sourcing']
                                 },
                                 {
                                     label: 'Orientation Prospects',
@@ -649,6 +649,22 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
+                        {
+                            label: "Intuns",
+                            icon: 'pi pi-building',
+                            items: [
+                                {
+                                    label: "Liste des étudiants INTUNS",
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/intuns/etudiants']
+                                },
+                                {
+                                    label: "Liste des formations INTUNS",
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: ['/intuns/formations']
+                                }
+                            ]
+                        }
                     ];
                 }
                 // menu service pédagogique

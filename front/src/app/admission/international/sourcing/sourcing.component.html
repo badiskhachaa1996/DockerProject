@@ -367,6 +367,9 @@
                         <th pSortableColumn="formation" scope="col" style="text-align: center;">
                             Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
                             Initial/Alternant <p-sortIcon field="rythme_formation"></p-sortIcon>
                         </th>
@@ -435,6 +438,9 @@
                         </td>
                         <td>
                             {{ prospect.formation | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
                             {{ prospect.rythme_formation }}

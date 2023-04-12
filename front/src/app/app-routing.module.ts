@@ -162,6 +162,9 @@ import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.compon
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
 import { SourcingComponent } from './admission/international/sourcing/sourcing.component';
+import { EmployabiliteComponent } from './intuns/employabilite/employabilite.component';
+import { FormationsIntunsComponent } from './intuns/formations-intuns/formations-intuns.component';
+import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
 
 const routes: Routes = [
     {
@@ -303,6 +306,10 @@ const routes: Routes = [
             { path: 'commissions/reglement/:partenaire_id', component: ReglementComponent, canActivate: [AuthGuardService] },
             /* International Haithem */
             { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
+            /* Intuns */
+            { path: 'intuns/employabilite/:id', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
+            { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
+            { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
