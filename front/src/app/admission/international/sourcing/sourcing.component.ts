@@ -170,6 +170,8 @@ export class SourcingComponent implements OnInit {
 
   prospects: Prospect[];
 
+  selectedProspect: Prospect = null
+
   scrollToTop() {
     var scrollDuration = 250;
     var scrollStep = -window.scrollY / (scrollDuration / 15);
@@ -295,8 +297,8 @@ export class SourcingComponent implements OnInit {
       //Orientation
       decision_orientation: this.detailsForm.value.decision_orientation,
       decision_admission: this.detailsForm.value.decision_admission,
-      a_besoin_visa:this.detailsForm.value.a_besoin_visa,
-      validated_cf:this.detailsForm.value.validated_cf,
+      a_besoin_visa: this.detailsForm.value.a_besoin_visa,
+      validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
       avancement_visa: this.detailsForm.value.avancement_visa,
@@ -324,14 +326,14 @@ export class SourcingComponent implements OnInit {
     { label: "Entretien Validé", value: "Entretien Validé" },
   ]
 
-  logementList=[
+  logementList = [
     { label: "Choisissez", value: null },
     { label: "Attestation de logement sans blocage", value: "Attestation de logement sans blocage" },
     { label: "Attestation de logement avec blocage", value: "Attestation de logement avec blocage" },
     { label: "Contrat de baille", value: "Contrat de baille" },
   ]
 
-  visaList=[
+  visaList = [
     { label: "Choisissez", value: null },
     { label: "Oui", value: "Oui" },
     { label: "Non concerné", value: "Non concerné" },
@@ -390,6 +392,10 @@ export class SourcingComponent implements OnInit {
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
     }
+  }
+
+  expand(prospect: Prospect) {
+    this.selectedProspect = prospect
   }
 
 

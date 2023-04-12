@@ -269,6 +269,8 @@ import { SourcingComponent } from './admission/international/sourcing/sourcing.c
 import { EmployabiliteComponent } from './intuns/employabilite/employabilite.component';
 import { FormationsIntunsComponent } from './intuns/formations-intuns/formations-intuns.component';
 import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
+import { TeamsIntComponent } from './international/teams-int/teams-int.component';
+import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
 
 
 @NgModule({
@@ -547,7 +549,9 @@ import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-in
     SourcingComponent,
     EmployabiliteComponent,
     FormationsIntunsComponent,
-    EtudiantsIntunsComponent
+    EtudiantsIntunsComponent,
+    TeamsIntComponent,
+    MemberIntComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

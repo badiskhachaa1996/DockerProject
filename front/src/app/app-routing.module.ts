@@ -165,6 +165,8 @@ import { SourcingComponent } from './admission/international/sourcing/sourcing.c
 import { EmployabiliteComponent } from './intuns/employabilite/employabilite.component';
 import { FormationsIntunsComponent } from './intuns/formations-intuns/formations-intuns.component';
 import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
+import { TeamsIntComponent } from './international/teams-int/teams-int.component';
+import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
 
 const routes: Routes = [
     {
@@ -306,6 +308,8 @@ const routes: Routes = [
             { path: 'commissions/reglement/:partenaire_id', component: ReglementComponent, canActivate: [AuthGuardService] },
             /* International Haithem */
             { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
+            { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite/:id', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

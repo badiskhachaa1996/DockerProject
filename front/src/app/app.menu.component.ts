@@ -617,11 +617,13 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         {
                                             label: 'Gestion des membres',
-                                            icon: 'pi pi-user'
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/international/member']
                                         },
                                         {
                                             label: 'Gestion de l\'équipe',
-                                            icon: 'pi pi-users'
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/international/teams']
                                         },
                                     ]
                                 },

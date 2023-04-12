@@ -27,7 +27,8 @@ export class AddProspectComponent implements OnInit {
     { label: "Studinfo", value: "studinfo" },
     { label: "INTUNS", value: "intuns" },
     { label: "Intunivesity", value: "intunivesity" },
-    { label: "ICBS Malte", value: "icbsmalte" }
+    { label: "ICBS Malte", value: "icbsmalte" },
+    { label: "INT Education", value: "inteducation" }
   ]
 
   sourceList = [

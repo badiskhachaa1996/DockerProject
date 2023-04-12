@@ -1,0 +1,73 @@
+const express = require("express");
+const app = express(); //à travers ça je peux faire la creation des services
+app.disable("x-powered-by");
+const multer = require('multer');
+const fs = require("fs")
+var mime = require('mime-types')
+const path = require('path');
+const { TeamsInt } = require("../models/teamsInt");
+const { MemberInt } = require("../models/memberInt");
+
+app.post("/TI/create", (req, res) => {
+    delete req.body._id
+    let f = new TeamsInt({ ...req.body })
+    f.save()
+        .then((FFSaved) => { res.status(201).send(FFSaved) })
+        .catch((error) => { res.status(400).send(error); });
+})
+
+
+
+app.get("/TI/getByID/:id", (req, res) => {
+    TeamsInt.findById(req.params.id)
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+})
+
+
+app.get("/TI/getAll", (req, res, next) => {
+    TeamsInt.find()
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.put("/TI/update", (req, res) => {
+    TeamsInt.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
+        res.send(doc)
+    })
+})
+
+
+
+
+app.post("/MI/create", (req, res) => {
+    delete req.body._id
+    let f = new MemberInt({ ...req.body })
+    f.save()
+        .then((FFSaved) => {
+            MemberInt.findById(FFSaved._id).populate('user_id').populate('team_id')
+                .then((formFromDb) => { res.status(200).send(formFromDb); })
+                .catch((error) => { res.status(500).send(error.message); });
+        })
+        .catch((error) => { res.status(400).send(error); });
+})
+app.put("/MI/update", (req, res) => {
+    MemberInt.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
+        MemberInt.findById(req.body._id).populate('user_id').populate('team_id')
+            .then((formFromDb) => { res.status(200).send(formFromDb); })
+            .catch((error) => { res.status(500).send(error.message); });
+    })
+})
+
+app.get("/MI/getAll", (req, res, next) => {
+    MemberInt.find().populate('user_id').populate('team_id')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/MI/getByUSERID/:id", (req, res) => {
+    MemberInt.findOne({ user_id: req.params.id }).populate('user_id').populate('team_id')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+})
+module.exports = app;
