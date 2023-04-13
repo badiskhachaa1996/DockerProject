@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MemberInt } from '../models/memberInt';
-import { TeamsInt } from '../models/teamsInt';
+import { TeamsInt } from '../models/TeamsInt';
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +52,17 @@ export class TeamsIntService {
   MIgetAll() {
     let registerUrl = this.apiUrl + 'MI/getAll';
     return this.http.get<MemberInt[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
+
+  MIdelete(user_id: string) {
+    let registerUrl = this.apiUrl + 'MI/delete/' + user_id;
+    return this.http.delete<MemberInt>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+
+  }
+
+  TIdelete(user_id: string) {
+    let registerUrl = this.apiUrl + 'TI/delete/' + user_id;
+    return this.http.delete<TeamsInt>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 }

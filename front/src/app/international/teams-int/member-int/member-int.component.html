@@ -1,1 +1,182 @@
-<p>member-int works!</p>
+<div class="grid">
+    <div class="col-12 grid" *ngIf="selectedMember">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Modifier les informations de {{selectedMember.user_id.lastname | uppercase}}
+                {{selectedMember.user_id.firstname | titlecase}} </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="selectedMember = null; updateForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+
+                <div class="field col-6">
+                    <label>Equipe <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="team_id" [options]="teamsList" placeholder="Choisissez une équipe"
+                        emptyFilterMessage="Pas de equipe trouvé" filterPlaceholder="Equipe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Numéro WhatsApp <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="+33 0612345678" formControlName="numero_whatapp" />
+                </div>
+                <div class="field col-6">
+                    <label>Localisation <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="localisation" [options]="localisationList"
+                        placeholder="Choisissez une localisation" emptyFilterMessage="Pas de localisation trouvé"
+                        filterPlaceholder="Localisation" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Role <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="role" [options]="roleList" placeholder="Choisissez un role"
+                        emptyFilterMessage="Pas de role trouvé" filterPlaceholder="Equipe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-12 grid" *ngIf="newMember">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'un nouveau membre </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="newMember = null; createForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
+
+                <div class="field col-12">
+                    <label>Prénom & Nom <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="user_id" [options]="userList" placeholder="Choisissez une personne"
+                        [virtualScroll]="true" itemSize="30" emptyFilterMessage="Personne n'a été trouvé" (onChange)="generateID()"
+                        filterPlaceholder="Nom & Prénom" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Numéro WhatsApp <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="+33 0612345678" formControlName="numero_whatapp" />
+                </div>
+
+                <div class="field col-6">
+                    <label>Equipe <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="team_id" [options]="teamsList" placeholder="Choisissez une équipe" (onChange)="generateID()"
+                        emptyFilterMessage="Pas de equipe trouvé" filterPlaceholder="Equipe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Localisation <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="localisation" [options]="localisationList"
+                        placeholder="Choisissez une localisation" emptyFilterMessage="Pas de localisation trouvé"
+                        filterPlaceholder="Localisation" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Role <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="role" [options]="roleList" placeholder="Choisissez un role"
+                        emptyFilterMessage="Pas de role trouvé" filterPlaceholder="Equipe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- Listing des membres -->
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Crée un membre"
+                    (click)="initCreate()"></button>
+            </div>
+            <h5>Liste des membres des équipes international</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="members" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['user_id', 'user_id.lastname','user_id.firstname','team_id.nom','team_id.description','user_id.email']"
+                [rows]="5" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="members.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="custom_id">ID<p-sortIcon field="custom_id">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id?.email">Adresse mail <p-sortIcon field="user_id?.email">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id?.phone">Numéro de téléphone <p-sortIcon
+                                field="user_id?.phone"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero_whatapp">Numéro WhatsApp<p-sortIcon
+                                field="numero_whatapp"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="team_id.nom">Equipe<p-sortIcon field="team_id.nom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="team_id.localisation">Localisation<p-sortIcon
+                                field="team_id.localisation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="team_id.role">Role<p-sortIcon field="team_id.role"></p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-member>
+                    <tr>
+                        <td>
+                            {{ member.custom_id }}
+                        </td>
+                        <td>
+                            {{ member.user_id.firstname }} {{ member.user_id.lastname | uppercase }}
+                        </td>
+                        <td>
+                            {{ member.user_id.email }}
+                        </td>
+                        <td>
+                            {{ member.user_id.phone }}
+                        </td>
+                        <td>
+                            {{ member.numero_whatapp }}
+                        </td>
+                        <td>
+                            {{ member?.team_id?.nom }}
+                        </td>
+                        <td>
+                            {{ member?.localisation }}
+                        </td>
+                        <td>
+                            {{ member?.role }}
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(member);scrollToTop()"
+                                pTooltip="Modifier le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(member);"
+                                pTooltip="Supprimer le membre" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

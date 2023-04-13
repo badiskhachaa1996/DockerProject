@@ -7,15 +7,14 @@ const schema = new mongoose.Schema({
     },
     team_id: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'teamInt'
+        ref: 'teamsInt'
     },
     localisation: {
         type: String,
         default: "France - Paris"
     },
     role: {
-        type: String,
-        default: "Agent"
+        type: String
     },
     custom_id: {
         type: String
@@ -23,6 +22,9 @@ const schema = new mongoose.Schema({
     date_creation: {
         type: Date,
         required: true
+    },
+    numero_whatapp: {
+        type: String
     },
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
