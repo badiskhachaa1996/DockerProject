@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MemberInt } from '../models/memberInt';
-import { TeamsInt } from '../models/teamsInt';
+import { TeamsInt } from '../models/TeamsInt';
 
 @Injectable({
   providedIn: 'root'

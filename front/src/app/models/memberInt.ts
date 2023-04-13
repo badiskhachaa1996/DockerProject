@@ -1,4 +1,4 @@
-import { TeamsInt } from "./teamsInt";
+import { TeamsInt } from "./TeamsInt";
 import { User } from "./User";
 
 export class MemberInt {

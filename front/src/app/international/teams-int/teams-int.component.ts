@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MemberInt } from 'src/app/models/memberInt';
-import { TeamsInt } from 'src/app/models/teamsInt';
+import { TeamsInt } from 'src/app/models/TeamsInt';
 import { AuthService } from 'src/app/services/auth.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 
