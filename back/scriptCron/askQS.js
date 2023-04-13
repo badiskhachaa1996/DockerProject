@@ -15,7 +15,7 @@ let transporter = nodemailer.createTransport({
         pass: 'InTeDGROUP@@0908',
     },
 });
-//30 16 20 */3 * node askQS.js >/dev/null 2>&1
+//00 04 * */3 * node /home/ubuntu/ems3/back/scriptCron/askQS.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-askQS.log 2>&1
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,

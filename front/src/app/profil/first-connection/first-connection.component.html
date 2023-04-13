@@ -78,8 +78,7 @@
                         formControlName="entreprise" [options]="dropdownEntreprise" optionLabel="libelle"
                         emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
                         filter="true"> -->
-                    <input type="text" placeholder="Ex: Microsoft" formControlName="entreprise"
-                        pInputText>
+                    <input type="text" placeholder="Ex: Microsoft" formControlName="entreprise" pInputText>
                     <!-- </p-dropdown> -->
                 </div>
 
@@ -164,7 +163,27 @@
                             sont acceptés.</span>
                     </div>
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-4 flex flex-wrap gap-3">
+                    <label>Êtes-vous un étudiant de Intuns ?</label>
+                    <div class="flex align-items-center">
+                        <p-radioButton name="intuns" value='true' formControlName="intuns"
+                            inputId="ingredient1"></p-radioButton>
+                        <label for="ingredient1" class="ml-2">Oui</label>
+                    </div>
+
+                    <div class="flex align-items-center">
+                        <p-radioButton name="intuns" value='false' formControlName="intuns"
+                            inputId="ingredient2"></p-radioButton>
+                        <label for="ingredient2" class="ml-2">Non</label>
+                    </div>
+                </div>
+                <div class="field col-12" *ngIf="RegisterForm.value.intuns=='true'">
+                    <label>Formation <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="formation_intuns" [options]="formationIntunsList"
+                        placeholder="Choisissez une formation INTUNS" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12">
                     <button pButton type="submit" [disabled]="RegisterForm.invalid || nationalite.value==null"
                         label="Enregistrer"></button>
                 </div>

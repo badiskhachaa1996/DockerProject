@@ -10,13 +10,18 @@
         </h3>
         <form class="p-fluid p-formgrid grid" [formGroup]="affectationForm">
             <div class="field col-6">
-                <label>Affecté à:</label>
-                <p-dropdown [options]="agentSourcingList" formControlName="agent_sourcing_id"></p-dropdown>
+                <label>Affecté à un membre:</label>
+                <p-dropdown [options]="agentSourcingList" formControlName="agent_sourcing_id"
+                    placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
             </div>
             <div class="field col-6">
+                <label>Affecté à une équipe:</label>
+                <p-dropdown [options]="equipeSourcingList" placeholder="Choisissez une équipe"
+                    formControlName="team_sourcing_id" filter="true"></p-dropdown>
+            </div>
+            <div class="field col-12">
                 <label>Affecté le:</label>
                 <p>{{affectationForm.value.date_sourcing | date:'mediumDate'}}</p>
-
             </div>
             <div class="col-12">
                 <button pButton label="Changer l'affectation" (click)="saveAffectation()"></button>
@@ -89,7 +94,7 @@
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{this.showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -124,8 +129,8 @@
                                 <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
                                     <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
                                         pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(prospect._id,i)"></i>
-                                    <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
+                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
+                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
                                         pTooltip=" Visualiser dans un nouvel onglet">
                                         {{ ListPiped[i] }}
                                     </em>
@@ -133,12 +138,12 @@
                                 <div class="field col-1">
                                     <i class="pi pi-download" pTooltip="Télécharger le fichier"
                                         style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(prospect._id,i)"></i>
+                                        (click)="downloadFile(showDetails._id,i)"></i>
                                 </div>
                                 <div class="field col-1">
                                     <i class="pi pi-times"
                                         style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
+                                        pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(showDetails._id,i)"
                                         aria-hidden="true"> </i>
                                 </div>
 
@@ -153,7 +158,8 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Décision orientation</label>
-                            <p-multiSelect [options]="orientationList" formControlName="decision_orientation"></p-multiSelect>
+                            <p-multiSelect [options]="orientationList"
+                                formControlName="decision_orientation"></p-multiSelect>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                         <div class="field md:col-6 col-12">
@@ -225,10 +231,13 @@
                     </div>
                 </p-tabPanel>
             </p-tabView>
-            <div class="col-6">
+            <div class="col-4">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
             </div>
-            <div class="col-6">
+            <div class="col-4">
+                <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
+            </div>
+            <div class="col-4">
                 <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
                     (click)="saveDetails()"></button>
             </div>
@@ -331,7 +340,12 @@
                     </p-dropdown>
                     <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
                         (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                 </ng-template>
@@ -469,7 +483,7 @@
                             {{ prospect.phase_candidature }}
                         </td>
                         <td>
-                            <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search"
+                            <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search mr-2"
                                 (click)="initAffectation(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect)" aria-hidden="true"></i>
@@ -719,6 +733,6 @@
                 <p *ngIf="user_id.key!='_id' && user_id.key!='__v'">{{user_id.key | titlecase}}:{{user_id.value}}</p>
             </ng-container>
         </ng-container>
-        
+
     </p>
 </p-sidebar>

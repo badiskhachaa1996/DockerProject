@@ -9,16 +9,11 @@ import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns
   styleUrls: ['./employabilite.component.scss']
 })
 export class EmployabiliteComponent implements OnInit {
-  ID = this.route.snapshot.paramMap.get('id');
-  dataIntuns: EtudiantIntuns
-  constructor(private route: ActivatedRoute, private EtudiantIntunsService: EtudiantsIntunsService) { }
+
+  constructor() { }
 
   ngOnInit(): void {
-    if (this.ID) {
-      this.EtudiantIntunsService.EIgetByID(this.ID).subscribe(r => {
-        this.dataIntuns = r
-      })
-    }
+
   }
 
 }

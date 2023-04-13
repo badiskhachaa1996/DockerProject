@@ -8,6 +8,7 @@ var d = new Date().toLocaleDateString('fr-FR')
 const mongoose = require("mongoose");
 var fs = require('fs');
 var XLSX = require("xlsx");
+//50 23 * * * node /home/ubuntu/ems3/back/scriptCron/exportDBEtudiants.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-exceldump.log 2>&1
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -47,7 +48,7 @@ mongoose
                             "Remarque": etudiant?.remarque,
                             "ENIC NARIC": etudiant?.enic_naric,
                             "Année Scolaire": etudiant?.annee_scolaire,
-                            "Livret": etudiant?.lien_livret.read,
+                            "Livret": etudiant?.lien_livret?.read,
                             "Dossier Professionel": etudiant?.lien_dossier_professionel,
                             "Tableau Synthèse": etudiant?.lien_tableau_synthese,
                             "Bulletins": etudiant?.lien_bulletin,
@@ -83,10 +84,10 @@ mongoose
                             "ID DIPLOME": etudiant?.filiere?.id,
                             "ID CAMPUS": etudiant?.campus?.id,
                             "ID ECOLE": etudiant?.ecole_id?.id,
-                            "ID ETUDIANT": etudiant.id
+                            "ID ETUDIANT": etudiant?.id
 
                         }
-                        let classe_name = etudiant.classe_id.abbrv
+                        let classe_name = etudiant?.classe_id?.abbrv
                         classe_name = classe_name.replace('- ESTYA', '')
                         classe_name = classe_name.replace('Montpellier', 'MTP')
                         classe_name = classe_name.replace('  ', ' ')

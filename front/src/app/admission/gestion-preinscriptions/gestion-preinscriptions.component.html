@@ -784,7 +784,7 @@
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Rentrée Scolaire"
-                        [options]="[{value:null,label:'Toutes les rentrées scolaires'},{value:'Janvier 2023',label:'Janvier 2023'},{value:'Septembre 2023',label:'Septembre 2023'}]"
+                        [options]="rentreeScolaireList"
                         (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
                         emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Rentrée Scolaire"
                         [style]="{'margin':'5px'}">

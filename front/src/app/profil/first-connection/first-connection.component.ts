@@ -16,6 +16,8 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { Diplome } from 'src/app/models/Diplome';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns.service';
+import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
 
 @Component({
   selector: 'app-first-connection',
@@ -25,7 +27,8 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class FirstConnectionComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
-    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService, private NotifService: NotificationService) { }
+    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService, private NotifService: NotificationService,
+    private formationIntunsService: EtudiantsIntunsService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
@@ -46,13 +49,14 @@ export class FirstConnectionComponent implements OnInit {
 
   statutList = [
     { value: "Initial", actif: false },
-    { value: "Alternant", actif: false },]
+    { value: "Alternant", actif: false },
+  ]
 
   classes: Classe[] = [];
   entreprises: Entreprise[] = [];
   RegisterForm: FormGroup;
   diplomes: Diplome[] = [];
-
+  formationIntunsList = []
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
       civilite: new FormControl(environment.civilite[0], [Validators.required]),
@@ -72,6 +76,8 @@ export class FirstConnectionComponent implements OnInit {
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
       diplome: new FormControl(this.programReinscrit[0]),
+      formation_intuns: new FormControl(),
+      intuns: new FormControl('false')
     });
   }
   dataEtudiant: Etudiant
@@ -79,7 +85,11 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-
+    this.formationIntunsService.FIgetAll().subscribe(data => {
+      data.forEach(element => {
+        this.formationIntunsList.push({ label: element.title, value: element._id })
+      })
+    })
     this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
       if (data) {
         this.userConnected = data.user_id
@@ -94,6 +104,8 @@ export class FirstConnectionComponent implements OnInit {
           phone: this.userConnected?.phone,
           date_naissance: new Date(data?.date_naissance)
         })
+        if (this.userConnected.email.includes('intuns'))
+          this.RegisterForm.patchValue({ intuns: 'true' })
       } else {
         this.AuthService.getById(token['id']).subscribe(dataU => {
           this.userConnected = jwt_decode(dataU.userToken)['userFromDb']
@@ -189,120 +201,158 @@ export class FirstConnectionComponent implements OnInit {
 
 
   saveUser() {
+    console.log(this.RegisterForm.value.intuns)
+    if (this.RegisterForm.value.intuns == 'false') {
+      let user = new User(this.userConnected._id,
+        this.RegisterForm.value.firstname,
+        this.RegisterForm.value.lastname,
+        this.RegisterForm.value.indicatif,
+        this.RegisterForm.value.phone,
+        null,
+        null,
+        null,
+        'user',//role
+        null,//etat
+        null,//service_id
+        this.RegisterForm.value.civilite.value,
+        null,
+        null,
+        this.RegisterForm.value.type.value,
+        this.RegisterForm.value.entreprise_id?.value,
+        this.RegisterForm.value.pays_adresse.value,
+        this.RegisterForm.value.ville_adresse,
+        this.RegisterForm.value.rue_adresse,
+        this.RegisterForm.value.numero_adresse,
+        this.RegisterForm.value.postal_adresse,
+        this.RegisterForm.value.nationalite.value,
+      )
+      /* SAVE PREINSCRIT
+      let inscription = new Inscription(null, this.userConnected._id,
+        this.RegisterForm.get('classe_id')?.value.value,
+        this.RegisterForm.value.type.value,
+      )
+      this.AuthService.update(user, inscription).subscribe((data: any) => {
+        this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du Utilisateur réussie' });
+      }, (error) => {
+        if (error.status == 500) {
+          //Bad Request (Champ non fourni)
+          this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
+        } else {
+          console.error(error)
+          this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
+        }
+  
+      });*/
 
-    let user = new User(this.userConnected._id,
-      this.RegisterForm.value.firstname,
-      this.RegisterForm.value.lastname,
-      this.RegisterForm.value.indicatif,
-      this.RegisterForm.value.phone,
-      null,
-      null,
-      null,
-      'user',//role
-      null,//etat
-      null,//service_id
-      this.RegisterForm.value.civilite.value,
-      null,
-      null,
-      this.RegisterForm.value.type.value,
-      this.RegisterForm.value.entreprise_id?.value,
-      this.RegisterForm.value.pays_adresse.value,
-      this.RegisterForm.value.ville_adresse,
-      this.RegisterForm.value.rue_adresse,
-      this.RegisterForm.value.numero_adresse,
-      this.RegisterForm.value.postal_adresse,
-      this.RegisterForm.value.nationalite.value,
-    )
-    /* SAVE PREINSCRIT
-    let inscription = new Inscription(null, this.userConnected._id,
-      this.RegisterForm.get('classe_id')?.value.value,
-      this.RegisterForm.value.type.value,
-    )
-    this.AuthService.update(user, inscription).subscribe((data: any) => {
-      this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du Utilisateur réussie' });
-    }, (error) => {
-      if (error.status == 500) {
-        //Bad Request (Champ non fourni)
+      //Save Etudiant
+      if (this.RegisterForm.value.nationalite.value == "" || this.RegisterForm.value.date_naissance == "") {
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
       } else {
-        console.error(error)
-        this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
-      }
+        let date = new Date(this.RegisterForm.value.date_naissance)
 
-    });*/
+        let calc = -(date.getUTCFullYear() - new Date().getUTCFullYear())
+        if (15 < calc && calc < 61) {
+          if (this.dataEtudiant) {
+            this.dataEtudiant.statut = "Etudiant"
+            this.dataEtudiant.nationalite = this.RegisterForm.value.nationalite.value
+            this.dataEtudiant.date_naissance = this.RegisterForm.value.date_naissance
+            if (this.dataEtudiant.custom_id == null)
+              this.dataEtudiant.custom_id = this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance)
 
-    //Save Etudiant
-    if (this.RegisterForm.value.nationalite.value == "" || this.RegisterForm.value.date_naissance == "") {
-      this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
-    } else {
-      let date = new Date(this.RegisterForm.value.date_naissance)
+            this.dataEtudiant.isAlternant = this.RegisterForm.value.type.value !== "Initial"
+          } else {
+            this.dataEtudiant = new Etudiant(
+              null,
+              this.userConnected._id,
+              null,
+              "Initial", //statut
+              this.RegisterForm.value.nationalite.value,
+              this.RegisterForm.value.date_naissance,
+              null,
+              null,
+              null,
+              null,
+              this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              this.RegisterForm.value.type.value !== "Initial",
+              null, null,
+              this.RegisterForm.value.diplome.value,
+            )
+          }
+          this.AuthService.updateEtudiant(user, this.dataEtudiant).subscribe((data: any) => {
+            localStorage.removeItem('modify')
+            this.NotifService.newEtudiantIMS({ firstname: this.RegisterForm.value.firstname, lastname: this.RegisterForm.value.lastname }).subscribe(d => {
 
-      let calc = -(date.getUTCFullYear() - new Date().getUTCFullYear())
-      if (15 < calc && calc < 61) {
-        if (this.dataEtudiant) {
-          this.dataEtudiant.statut = "Etudiant"
-          this.dataEtudiant.nationalite = this.RegisterForm.value.nationalite.value
-          this.dataEtudiant.date_naissance = this.RegisterForm.value.date_naissance
-          if (this.dataEtudiant.custom_id == null)
-            this.dataEtudiant.custom_id = this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance)
+            }, err => {
+              console.error(err);
 
-          this.dataEtudiant.isAlternant = this.RegisterForm.value.type.value !== "Initial"
+            })
+            this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
+
+
+
+
+          }, (error) => {
+            if (error.status == 500) {
+              //Bad Request (Champ non fourni)
+              console.error(error)
+              this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
+            } else {
+              console.error(error)
+              this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
+            }
+          });
         } else {
-          this.dataEtudiant = new Etudiant(
-            null,
-            this.userConnected._id,
-            null,
-            "Initial", //statut
-            this.RegisterForm.value.nationalite.value,
-            this.RegisterForm.value.date_naissance,
-            null,
-            null,
-            null,
-            null,
-            this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            this.RegisterForm.value.type.value !== "Initial",
-            null, null,
-            this.RegisterForm.value.diplome.value,
-          )
+          this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'La date de naissance est trop récente ou trop vieille' });
         }
-        this.AuthService.updateEtudiant(user, this.dataEtudiant).subscribe((data: any) => {
-          localStorage.removeItem('modify')
-          this.NotifService.newEtudiantIMS({ firstname: this.RegisterForm.value.firstname, lastname: this.RegisterForm.value.lastname }).subscribe(d => {
 
-          }, err => {
-            console.error(err);
+      }
+    } else {
+      let user = new User(this.userConnected._id,
+        this.RegisterForm.value.firstname,
+        this.RegisterForm.value.lastname,
+        this.RegisterForm.value.indicatif,
+        this.RegisterForm.value.phone,
+        this.userConnected.email,
+        this.userConnected.email_perso,
+        null,
+        'user',//role
+        null,//etat
+        null,//service_id
+        this.RegisterForm.value.civilite.value,
+        null,
+        null,
+        "EtudiantsIntuns",
+        this.RegisterForm.value.entreprise_id?.value,
+        this.RegisterForm.value.pays_adresse.value,
+        this.RegisterForm.value.ville_adresse,
+        this.RegisterForm.value.rue_adresse,
+        this.RegisterForm.value.numero_adresse,
+        this.RegisterForm.value.postal_adresse,
+        this.RegisterForm.value.nationalite.value,
+      )
+      this.AuthService.update(user).subscribe(data => {
+        let newEi: any = {
+          user_id: this.userConnected._id,
+          formation_id: this.RegisterForm.value.formation_intuns
+        }
+        this.formationIntunsService.EIcreate(newEi).subscribe(eiData => {
 
-          })
-          this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.ss.connected()
             this.router.navigate(["/"]);
           });
-
-        }, (error) => {
-          if (error.status == 500) {
-            //Bad Request (Champ non fourni)
-            console.error(error)
-            this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
-          } else {
-            console.error(error)
-            this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
-          }
-        });
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'La date de naissance est trop récente ou trop vieille' });
-      }
-
+        })
+      })
     }
   }
 

@@ -6,6 +6,7 @@ import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
+import { TeamsIntService } from 'src/app/services/teams-int.service';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -165,8 +166,13 @@ export class SourcingComponent implements OnInit {
     { label: "Non", value: "Non" },
     { label: "Pas de retour", value: "Pas de retour" },
   ]
+  filterRentreeScolaire = [
+    { value: null, label: 'Toutes les rentrées scolaires' },
+    { value: 'Janvier 2023', label: 'Janvier 2023' },
+    { value: 'Septembre 2023', label: 'Septembre 2023' }
+  ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService) { }
 
   prospects: Prospect[];
 
@@ -189,21 +195,51 @@ export class SourcingComponent implements OnInit {
     this.admissionService.getAllSourcing().subscribe(data => {
       this.prospects = data
     })
+    this.TeamsIntService.MIgetAll().subscribe(data => {
+      let dic = {}
+      let listTeam = []
+      data.forEach(element => {
+        if (!dic[element.team_id.nom]) {
+          dic[element.team_id.nom] = [element]
+          listTeam.push(element.team_id.nom)
+        }
+        else
+          dic[element.team_id.nom].push(element)
+      })
+      listTeam.forEach(team => {
+        let items = []
+        dic[team].forEach(element => {
+          items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+        })
+        this.agentSourcingList.push({
+          label: team,
+          items
+        })
+      })
+    })
+    this.TeamsIntService.TIgetAll().subscribe(data => {
+      data.forEach(element => {
+        this.equipeSourcingList.push({ label: element.nom, value: element._id })
+      })
+    })
   }
 
   //Partie Affectation
 
   showAffectation: Prospect = null
 
-  agentSourcingList = []
+  agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
+  equipeSourcingList = [{ label: "Aucune", value: null }]
 
   affectationForm: FormGroup = new FormGroup({
-    agent_sourcing_id: new FormControl('', Validators.required),
+    agent_sourcing_id: new FormControl(''),
+    team_sourcing_id: new FormControl(''),
     date_sourcing: new FormControl(new Date())
   })
 
   initAffectation(prospect: Prospect) {
     this.showAffectation = prospect
+    this.affectationForm.patchValue({ ...prospect })
     this.scrollToTop()
   }
 
@@ -215,6 +251,7 @@ export class SourcingComponent implements OnInit {
     this.admissionService.updateV2(data).subscribe(newProspect => {
       this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
+      this.messageService.add({ severity: "success", summary: "Affectation du prospect avec succès" })
     })
   }
 

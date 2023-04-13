@@ -311,7 +311,7 @@ const routes: Routes = [
             { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */
-            { path: 'intuns/employabilite/:id', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
+            { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
         ],

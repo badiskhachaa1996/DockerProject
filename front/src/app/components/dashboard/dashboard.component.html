@@ -789,11 +789,7 @@
     </div>
 </div>
 
-<div>
-    <h2 *ngIf="user" style="text-align: center;">
-        Bonjour {{user.firstname | titlecase}} {{user.lastname | uppercase}}, Bienvenue sur IMS
-    </h2>
-
+<div *ngIf="isIntuns">
     <div class="card grid">
         <div class="col-3 flex flex-column align-items-center justify-content-center">
             <a href="https://www.lms.intuns.com/login/index.php">
@@ -807,7 +803,7 @@
         </p-divider>
         <div class="col-4 flex  flex-column align-items-center justify-content-center">
             <a href="{{dataIntuns?.formation_id?.linkedin}}">
-                <img src="assets\images\livre_intuns.jpg" style="max-height: 200px;" />
+                <img src="assets\images\linkedin-logo.png" style="max-height: 200px;" />
             </a>
             <a href="{{dataIntuns?.formation_id?.linkedin}}">
                 Linked Learning
@@ -817,7 +813,7 @@
         </p-divider>
         <div class="col-3 flex  flex-column align-items-center justify-content-center">
             <a (click)="navigateToEmployabilite()">
-                <img src="assets\images\livre_intuns.jpg" style="max-height: 200px;" />
+                <img src="assets\images\emploi.jpg" style="max-height: 200px;" />
             </a>
             <a (click)="navigateToEmployabilite()">
                 Employabilité et Alternance

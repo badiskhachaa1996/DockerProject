@@ -213,7 +213,7 @@ const prospect_schema = new mongoose.Schema({
     },
     agent_sourcing_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "memberInt",
         default: null
     },
     date_sourcing: {
@@ -227,6 +227,11 @@ const prospect_schema = new mongoose.Schema({
     },
     logement: {
         type: String,
+    },
+    team_sourcing_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "teamsInt",
+        default: null
     },
 });
 
