@@ -199,6 +199,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
+  rentreeScolaireList = [{ value: null, label: 'Toutes les rentrées scolaires' }, { value: 'Janvier 2023', label: 'Janvier 2023' }, { value: 'Septembre 2023', label: 'Septembre 2023' }]
+
 
   onAddPayement() {
     if (this.payementList == null) {

@@ -71,6 +71,7 @@ export class MemberIntComponent implements OnInit {
     this.TeamsIntService.MIupdate({ ...this.updateForm.value }).subscribe(data => {
       this.members.splice(this.members.indexOf(this.selectedMember), 1, data)
       this.selectedMember = null
+      this.updateForm.reset()
       this.MessageService.add({ severity: "success", summary: `Mis à jour du membre ${data.user_id.lastname} ${data.user_id.firstname} avec succès` })
     })
   }
@@ -96,6 +97,7 @@ export class MemberIntComponent implements OnInit {
     this.TeamsIntService.MIcreate({ ...this.createForm.value }).subscribe(data => {
       this.members.push(data)
       this.newMember = null
+      this.createForm.reset()
       this.MessageService.add({ severity: "success", summary: `Ajout d'un nouveau membre avec succès` })
     })
   }

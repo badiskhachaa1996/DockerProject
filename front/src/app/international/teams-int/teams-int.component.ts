@@ -37,6 +37,7 @@ export class TeamsIntComponent implements OnInit {
     this.TeamsIntService.TIupdate({ ...this.updateForm.value }).subscribe(data => {
       this.teams.splice(this.teams.indexOf(this.selectedTeam), 1, data)
       this.selectedTeam = null
+      this.updateForm.reset()
       this.MessageService.add({ severity: "success", summary: `Mis à jour de l'équipe ${data.nom} avec succès` })
     })
   }
@@ -57,6 +58,7 @@ export class TeamsIntComponent implements OnInit {
     this.TeamsIntService.TIcreate({ ...this.createForm.value, custom_id: this.generateID({ ...this.createForm.value }) }).subscribe(data => {
       this.teams.push(data)
       this.newTeam = null
+      this.createForm.reset()
       this.MessageService.add({ severity: "success", summary: `Ajout d'une nouvelle équipe avec succès` })
     })
   }

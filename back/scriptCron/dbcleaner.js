@@ -1,5 +1,5 @@
 //Nettoyer les Objets du type Etudiant ou Formateur qui n'ont plus l'objet user
-
+//
 const { User } = require("../models/user");
 const { Etudiant } = require('../models/etudiant')
 const { Prospect } = require('../models/prospect')

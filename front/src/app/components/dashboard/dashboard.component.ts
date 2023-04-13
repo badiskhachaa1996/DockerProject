@@ -50,7 +50,7 @@ import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns
 @Component({
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
+export class  DashboardComponent implements OnInit {
   paysList = environment.pays;
   user: User;
   classe: Classe[] = [];
@@ -281,7 +281,7 @@ export class DashboardComponent implements OnInit {
         this.isCommercial = dataUser.type == "Commercial"
         this.isCEO = dataUser.type == "CEO Entreprise";
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
-        this.isIntuns = dataUser.type == "Etudiants Intuns"
+        this.isIntuns = dataUser.type == "EtudiantsIntuns"
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
@@ -730,7 +730,7 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToEmployabilite() {
-    this.router.navigate(['/intuns/employabilite', this.dataIntuns._id])
+    this.router.navigate(['/intuns/employabilite'])
   }
 
   saveEditCommercialInfo() {

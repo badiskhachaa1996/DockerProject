@@ -59,7 +59,15 @@ export class Prospect {
         public languages_en?: string,
         public numero_telegram?: string,
         public indicatif_telegram?: string,
-        public montant_paye?: number
+        public montant_paye?: number,
+        public decision_orientation?: string[],
+        public phase_candidature?: string,
+        public agent_sourcing_id?: string,
+        public date_sourcing?: Date,
+        public a_besoin_visa?: string,
+        public finance?: string,
+        public logement?: string,
+        public team_sourcing_id?: string,
     ) { }
 
 }
