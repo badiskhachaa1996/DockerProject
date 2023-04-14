@@ -37,7 +37,7 @@
             showDetails?.user_id?.lastname | uppercase }}
         </h3>
         <form class="grid" [formGroup]="detailsForm">
-            <p-tabView>
+            <p-tabView class="col-12">
                 <p-tabPanel header="Informations Personnelles">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12">
@@ -439,8 +439,11 @@
                         <td *ngIf="prospect.user_id">
                             {{ prospect?.user_id?.pays_adresse }}
                         </td>
-                        <td *ngIf="prospect.user_id">
+                        <td *ngIf="prospect.user_id.email_perso">
                             {{ prospect?.user_id?.email_perso }}
+                        </td>
+                        <td *ngIf="!prospect.user_id.email_perso">
+                            {{ prospect?.user_id?.email }}
                         </td>
                         <td *ngIf="prospect.user_id">
                             {{ prospect?.user_id?.indicatif }} {{ prospect?.user_id?.phone }}
@@ -490,280 +493,56 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="rowexpansion" let-prospect>
-                    <tr>
-                        <td colspan="19">
-                            <div class="p-3">
-                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                                    <ng-template pTemplate="header">
-                    <tr>
-                        <th>Civilité</th>
-                        <th>Date de naissance</th>
-                        <th>Nationnalité</th>
-                        <th>Pays de résidence</th>
-                        <th>Statut Pro</th>
-                        <th>Téléphone</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
 
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{prospect.user_id.civilite}}</td>
-                        <td>{{ prospect.date_naissance | date: 'mediumDate'}}</td>
-                        <td>{{prospect.user_id.nationnalite}}</td>
-                        <td>{{prospect.user_id.pays_adresse}}</td>
-                        <td>{{prospect.statut_actuel}}</td>
-                        <td>
-                            {{ prospect.user_id.indicatif }}
-                            {{ prospect.user_id.phone }}
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <br>
-
-            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Numéro whatsapp</th>
-                        <th>Programme choisi</th>
-                        <th>Niveau Académique</th>
-                        <th>Statut actuel</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{ prospect.indicatif_whatsapp }} {{ prospect.numero_whatsapp }}</td>
-                        <td>{{ prospect.programme }}</td>
-                        <td>{{ prospect.validated_academic_level }}</td>
-                        <td>{{ prospect.statut_actuel }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-
-            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Formation</th>
-                        <th>Rentrée scolaire</th>
-                        <th>Campus Choix 1</th>
-                        <th>Campus Choix 2</th>
-                        <th>Campus Choix 3</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{ prospect.formation}}</td>
-                        <td>{{ prospect.rentree_scolaire}}</td>
-                        <td>{{ prospect.campus_choix_1 }}</td>
-                        <td>{{ prospect.campus_choix_2 }}</td>
-                        <td>{{ prospect.campus_choix_3 }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <h5 style="text-align: center; color: red;">Commercial</h5>
-
-            <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>ID Commercial</th>
-                        <th>Commercial</th>
-                        <th>Email Commercial</th>
-                        <th>Agence</th>
-                        <th>Date de la demande</th>
-
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{ prospect.code_commercial }}</td>
-                        <td
-                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
-                            {{ users[infoCommercialExpand.user_id].civilite }}
-                            {{ users[infoCommercialExpand.user_id].lastname | titlecase }}
-                            {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
-                        </td>
-                        <td *ngIf="!infoCommercialExpand"></td>
-                        <td *ngIf="!infoCommercialExpand"></td>
-                        <td
-                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
-                            {{ users[infoCommercialExpand.user_id].email_perso }} {{
-                            users[infoCommercialExpand.user_id].email }}
-                        </td>
-                        <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
-                        <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
-                        <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
-
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
-
-            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Date du dernier traitement</th>
-                        <th>Niveau de Langue</th>
-                        <th>Dossier traité par</th>
-                        <th>Décision Admission</th>
-                        <th>Phase complémentaire</th>
-                        <th>Statut Paiement</th>
-                        <th>Attestation traité par</th>
-                        <th>Commentaire</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
-                        <td>{{ prospect.tcf }}</td>
-                        <td>
-                            {{ prospect.dossier_traited_by }}
-                        </td>
-                        <td>{{prospect.decision_admission}}</td>
-                        <td>{{prospect.phase_complementaire}}</td>
-                        <td>{{prospect.statut_payement}}</td>
-                        <td>{{prospect.traited_by}}</td>
-                        <td>{{prospect.remarque}}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <h5 style="color: red; text-align: center;">Documents</h5>
-            <ul>
-                <li *ngFor="let file of ListDocuments; index as i">
-                    <div class="grid">
-
-                        <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                            <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                pTooltip="Visualiser dans un nouvel onglet"
-                                (click)="VisualiserFichier(prospect._id,i)"></i>
-                            <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
-                                pTooltip=" Visualiser dans un nouvel onglet">
-                                {{ ListPiped[i] }}
-                            </em>
-                        </div>
-                        <div class="field col-1">
-                            <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                (click)="downloadFile(prospect._id,i)"></i>
-                        </div>
-                        <div class="field col-1">
-                            <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
-                                aria-hidden="true"> </i>
-                        </div>
-
-                    </div>
-                </li>
-            </ul>
-
-            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Document Manquants</th>
-                        <th>Document Vérifié</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td>{{ prospect.document_manquant | arrToStr }}</td>
-                        <td>{{ prospect.document_present | arrToStr }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
-
-            <h5 style="color: red; text-align: center;">Paiements</h5>
-            <p-table responsiveLayout="scroll" *ngIf="prospect.payement" styleClass="p-datatable-gridlines">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Type du Paiement</th>
-                        <th>Montant du Paiement</th>
-                        <th>Date du Paiement</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr *ngFor="let payement of prospect.payement;">
-                        <td>{{ payement.type }}</td>
-                        <td>{{ payement.montant }}</td>
-                        <td>{{ payement.date | date:'dd/MM/yyyy'}}</td>
-                    </tr>
-                </ng-template>
             </p-table>
         </div>
-        </td>
-        </tr>
-        </ng-template>
-        </p-table>
     </div>
+    <!-- Expand SideBar -->
+    <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
+        <div *ngIf="selectedProspect">
+            <h5>Informations Prospect</h5>
+            <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
+            <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
+                selectedProspect?.user_id?.lastname |
+                uppercase }}</p>
+            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
+            <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
+            <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
+            <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
+            <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}
+            </p>
+            <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
+            <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
+
+            <h5>Compétences et expériences</h5>
+            <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
+            <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
+            <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
+            <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
+
+            <h5>Choix académique</h5>
+            <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
+            <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
+            <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
+            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
+            <p>Formation : {{ selectedProspect?.formation }}</p>
+            <p>Programme : {{ selectedProspect?.programme }}</p>
+            <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
+
+            <h5>Source </h5>
+            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
+                {{infoCommercial?.user_id?.firstname}}
+            </p>
+            <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
+
+            <h5>Démarches </h5>
+            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
+            <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
+            <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
+            <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
+            <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
+        </div>
+
+    </p-sidebar>
 </div>
-<!-- Expand SideBar -->
-<p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-    <div *ngIf="selectedProspect">
-        <h5>Informations Prospect</h5>
-        <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
-        <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{ selectedProspect?.user_id?.lastname |
-            uppercase }}</p>
-        <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
-        <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
-        <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
-        <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
-        <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}</p>
-        <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
-        <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
-
-        <h5>Compétences et expériences</h5>
-        <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
-        <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
-        <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
-        <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
-
-        <h5>Choix académique</h5>
-        <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
-        <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
-        <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
-        <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
-        <p>Formation : {{ selectedProspect?.formation }}</p>
-        <p>Programme : {{ selectedProspect?.programme }}</p>
-        <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
-
-        <h5>Source </h5>
-        <p>Source de prospect: {{ selectedProspect?.source }}</p>
-        <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}} {{infoCommercial?.user_id?.firstname}}
-        </p>
-        <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
-
-        <h5>Démarches </h5>
-        <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
-        <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
-        <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
-        <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
-        <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
-    </div>
-
-</p-sidebar>

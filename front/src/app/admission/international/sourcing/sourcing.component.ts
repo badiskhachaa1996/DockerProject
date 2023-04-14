@@ -237,7 +237,7 @@ export class SourcingComponent implements OnInit {
     agent_sourcing_id: new FormControl(''),
     team_sourcing_id: new FormControl(''),
     date_sourcing: new FormControl(new Date()),
-    phase_candidature: new FormControl("En phase d'orientation scolaire")
+    phase_candidature: new FormControl("")
   })
 
   initAffectation(prospect: Prospect) {
@@ -251,6 +251,8 @@ export class SourcingComponent implements OnInit {
       _id: this.showAffectation._id,
       ...this.affectationForm.value
     }
+    if (data.agent_sourcing_id || data.team_sourcing_id)
+      data.phase_candidature = "En phase d'orientation scolaire"
     this.admissionService.updateV2(data).subscribe(newProspect => {
       this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
