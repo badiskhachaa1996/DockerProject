@@ -450,7 +450,7 @@ app.put("/update", (req, res, next) => {
                         .then((prospectsFromDb) => {
                             res.status(201).send(prospectsFromDb)
                         })
-                        .catch((error) => { console.error(error);res.status(500).send(error.message); });
+                        .catch((error) => { console.error(error); res.status(500).send(error.message); });
                 })
                 .catch((error) => { console.error(error); res.status(400).send(error); });
         })
@@ -870,6 +870,14 @@ app.post("/send-creation-link", (req, res) => {
 
     res.status(200).json({ successMsg: 'Email envoyé' });
 });
+
+app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
+    Prospect.find({ $or: [{ agent_sourcing_id: req.params.agent_id }, { team_sourcing_id: req.params.team_id }] }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+})
 
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user

@@ -257,5 +257,12 @@ export class AdmissionService {
     return this.httpClient.put<Prospect>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllAffected(team_id = "buffer", agent_id = "buffer") {
+    //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
+    let registreUrl = this.apiUrl + 'getAllAffected/' + agent_id + "/" + team_id;
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 
 }
