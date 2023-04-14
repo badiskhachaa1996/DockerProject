@@ -247,25 +247,83 @@
             aria-hidden="true"> </i>
         <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
             showTraitement?.user_id?.firstname }} {{
-                showTraitement?.user_id?.lastname | uppercase }}
+            showTraitement?.user_id?.lastname | uppercase }}
         </h3>
         <form class="grid" [formGroup]="traitementForm">
-            <p-tabView>
+            <p-tabView class="col-12">
                 <p-tabPanel header="Orientation Scolaire">
-                
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field md:col-6 col-12">
+                            <label>Contacté le :</label>
+                            <p-calendar formControlName="contact_date" ></p-calendar>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Contacté par :</label>
+                            <p-dropdown [options]="agentSourcingList" formControlName="contact_orientation"
+                                placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field md:col-6 col-12">
+                            <label>Avancement avec le prospect :</label>
+                            <p-dropdown [options]="avancementList" formControlName="avancement_orientation"
+                                placeholder="Choisissez un état" filter="true"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Note :</label>
+                            <textarea pInputTextarea formControlName="note_avancement"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field md:col-6 col-12">
+                            <label>Decision orientation :</label>
+                            <p-multiSelect  [options]="orientationList" formControlName="decision_orientation"
+                                placeholder="Choisissez un état" filter="true"></p-multiSelect >
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Note :</label>
+                            <textarea pInputTextarea formControlName="note_decision"></textarea>
+                        </div>
+                    </div>
                 </p-tabPanel>
                 <p-tabPanel header="Dossier scolaire">
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field md:col-6 col-12">
+                            <label>Etat du dossier :</label>
+                            <p-dropdown [options]="etatList" formControlName="statut_dossier"
+                                placeholder="Choisissez un état" filter="true"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Note :</label>
+                            <textarea pInputTextarea formControlName="note_dossier"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field md:col-6 col-12">
+                            <label>Procédure complémentaire:</label>
+                            <p-dropdown [options]="phaseList" formControlName="phase_complementaire"
+                                placeholder="Choisissez un état" filter="true"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Note :</label>
+                            <textarea pInputTextarea formControlName="note_phase"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid grid card">
+                        <div class="field col-12">
+                            <label>Niveau de langue:</label>
+                            <p-dropdown [options]="langueList" formControlName="niveau_langue"
+                                placeholder="Choisissez un état" filter="true"></p-dropdown>
+                        </div>
+                    </div>
                 </p-tabPanel>
             </p-tabView>
-            <div class="col-4">
+            <div class="col-6">
                 <button pButton label="Sauvegardez les modifications" (click)="saveTraitement()"></button>
             </div>
-            <div class="col-4">
-
-            </div>
-            <div class="col-4">
+            <div class="col-6">
                 <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
+                (click)="saveTraitement(true)"></button>
             </div>
         </form>
     </div>
@@ -273,7 +331,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects</h5>
+            <h5>Liste des prospects en attente d'orientation</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -371,11 +429,11 @@
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="type_form" scope="col" style="text-align: center;">
+                            Ecole <p-sortIcon field="type_form"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="formation" scope="col" style="text-align: center;">
                             Formation <p-sortIcon field="formation"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
-                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
                         <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
                             Initial/Alternant <p-sortIcon field="rythme_formation"></p-sortIcon>
@@ -383,24 +441,21 @@
                         <th pSortableColumn="programme" scope="col" style="text-align: center;">
                             Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
-                            Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
+                        <th pSortableColumn="document_present" scope="col" style="text-align: center;">
+                            Documents d'inscription<p-sortIcon field="document_present"></p-sortIcon>
                         </th>
+
                         <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
                             Decision Orientation<p-sortIcon field="decision_orientation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
-                            Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
-                            Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="avancement_visa" scope="col" style="text-align: center;">
-                            Visa <p-sortIcon field="avancement_visa"></p-sortIcon>
+                        <th pSortableColumn="avancement_orientation" scope="col" style="text-align: center;">
+                            Avancement avec le Prospect<p-sortIcon field="avancement_orientation"></p-sortIcon>
                         </th>
                         <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
@@ -444,10 +499,10 @@
                             {{ prospect.campus_choix_1 }}
                         </td>
                         <td>
-                            {{ prospect.formation | titlecase }}
+                            {{ prospect.type_form|titlecase }}
                         </td>
                         <td>
-                            {{ prospect.rentree_scolaire }}
+                            {{ prospect.formation | titlecase }}
                         </td>
                         <td>
                             {{ prospect.rythme_formation }}
@@ -456,31 +511,25 @@
                             {{ prospect.programme }}
                         </td>
                         <td>
-                            {{ prospect.statut_dossier }}
+                            {{ prospect.document_present|json }}
                         </td>
 
                         <td>
                             {{ prospect.decision_orientation }}
                         </td>
                         <td>
-                            {{ prospect.decision_admission }}
-                        </td>
-                        <td>
-                            {{ prospect.statut_payement }}
-                        </td>
-                        <td *ngIf="prospect.avancement_visa">
-                            Oui
-                        </td>
-                        <td *ngIf="!prospect.avancement_visa">
-                            Non
+                            {{ prospect.avancement_orientation }}
                         </td>
                         <td>
                             {{ prospect.phase_candidature }}
                         </td>
                         <td>
+                            {{ prospect.rentree_scolaire }}
+                        </td>
+                        <td>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect)" aria-hidden="true"></i>
-                            <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-user-edit"
+                            <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-cog"
                                 (click)="initTraitement(prospect)" aria-hidden="true"></i>
                         </td>
                     </tr>
@@ -719,15 +768,46 @@
 </div>
 <!-- Expand SideBar -->
 <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-    <p *ngFor="let item of selectedProspect | keyvalue">
-        <ng-container *ngIf="item.key!='user_id' && item.key!='__v' && item.key!='_id'">
-            {{item.key | titlecase}}:{{item.value}}
-        </ng-container>
-        <ng-container *ngIf="item.key=='user_id'">
-            <ng-container *ngFor="let user_id of item.value | keyvalue">
-                <p *ngIf="user_id.key!='_id' && user_id.key!='__v'">{{user_id.key | titlecase}}:{{user_id.value}}</p>
-            </ng-container>
-        </ng-container>
+    <div *ngIf="selectedProspect">
+        <h5>Informations Prospect</h5>
+        <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
+        <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{ selectedProspect?.user_id?.lastname |
+            uppercase }}</p>
+        <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
+        <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
+        <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
+        <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
+        <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}</p>
+        <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
+        <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
+    
+        <h5>Compétences et expériences</h5>
+        <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
+        <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
+        <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
+        <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
+    
+        <h5>Choix académique</h5>
+        <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
+        <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
+        <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
+        <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
+        <p>Formation : {{ selectedProspect?.formation }}</p>
+        <p>Programme : {{ selectedProspect?.programme }}</p>
+        <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
+    
+        <h5>Source </h5>
+        <p>Source de prospect: {{ selectedProspect?.source }}</p>
+        <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}} {{infoCommercial?.user_id?.firstname}}
+        </p>
+        <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
+    
+        <h5>Démarches </h5>
+        <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
+        <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
+        <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
+        <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
+        <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
+    </div>
 
-    </p>
 </p-sidebar>

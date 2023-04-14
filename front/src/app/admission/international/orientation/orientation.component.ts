@@ -8,6 +8,8 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-orientation',
@@ -175,7 +177,7 @@ export class OrientationComponent implements OnInit {
     { value: 'Septembre 2023', label: 'Septembre 2023' }
   ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -199,8 +201,35 @@ export class OrientationComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
-      this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
-        this.prospects = data
+      if (member)
+        this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
+          this.prospects = data
+        })
+      else
+        this.admissionService.getAllOrientation().subscribe(data => {
+          this.prospects = data
+        })
+    })
+    this.TeamsIntService.MIgetAll().subscribe(data => {
+      let dic = {}
+      let listTeam = []
+      data.forEach(element => {
+        if (!dic[element.team_id.nom]) {
+          dic[element.team_id.nom] = [element]
+          listTeam.push(element.team_id.nom)
+        }
+        else
+          dic[element.team_id.nom].push(element)
+      })
+      listTeam.forEach(team => {
+        let items = []
+        dic[team].forEach(element => {
+          items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+        })
+        this.agentSourcingList.push({
+          label: team,
+          items
+        })
       })
     })
 
@@ -208,12 +237,61 @@ export class OrientationComponent implements OnInit {
 
   //Partie Traitement
   showTraitement: Prospect = null
+  agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
+  avancementList = [
+    { label: "En attente", value: "En attente" },
+    { label: "Joignable", value: "Joignable" },
+    { label: "Rappel demandé", value: "Rappel demandé" },
+    { label: "Non Joignable  &  Mail envoyé", value: "Non Joignable  &  Mail envoyé" },
+    { label: "Pas de numéro & Mail envoyé", value: "Pas de numéro & Mail envoyé" },
+  ]
+  etatList = [
+    { label: "Complet", value: "Complet" },
+    { label: "Manquant", value: "Manquant" },
+    { label: "Pas de dossier", value: "Pas de dossier" },
+  ]
+  phaseList = [
+    { label: "Mail documents admission", value: "Mail documents admission" },
+    { label: "Mail document manquant", value: "Mail document manquant" },
+    { label: "Orienté à ILTS", value: "Orienté à ILTS" },
+    { label: "Sous dossier", value: "Sous dossier" },
+  ]
+  langueList = [
+    { label: "Pas de TCF - Pays non francophone", value: "Pas de TCF - Pays non francophone" },
+    { label: "Niveau B2 ( TCF DALF DELF )", value: "Niveau B2 ( TCF DALF DELF )" },
+    { label: "Niveau C1  ( TCF DALF DELF )", value: "Niveau C1  ( TCF DALF DELF )" },
+    { label: "Niveau C2 ( TCF DALF DELF )", value: "Niveau C2 ( TCF DALF DELF )" },
+    { label: "Non concerné", value: "Non concerné" },
+    { label: "Niveau inf B2", value: "Niveau inf B2" },
+  ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
+    this.traitementForm.patchValue({ ...prospect })
+  }
+  saveTraitement(willClose = false) {
+    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
+      if (willClose) {
+        this.showTraitement = null
+        this.traitementForm.reset()
+      }
+    })
   }
 
   traitementForm: FormGroup = new FormGroup({
-
+    _id: new FormControl(),
+    contact_date: new FormControl(new Date),
+    contact_orientation: new FormControl(''),
+    avancement_orientation: new FormControl(),
+    note_avancement: new FormControl(""),
+    decision_orientation: new FormControl(""),
+    note_decision: new FormControl(""),
+    statut_dossier: new FormControl(""),
+    note_dossier: new FormControl(""),
+    phase_complementaire: new FormControl(""),
+    note_phase: new FormControl(""),
+    niveau_langue: new FormControl("")
   })
 
   //Partie Details
@@ -392,9 +470,15 @@ export class OrientationComponent implements OnInit {
     }
   }
   showSideBar = false
+  infoCommercial: CommercialPartenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
+    this.infoCommercial = null
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
+        this.infoCommercial = data
+      })
   }
 
 

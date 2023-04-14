@@ -597,6 +597,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Orientation Prospects',
                                     icon: 'pi pi-globe',
+                                    routerLink: ['/international/orientation']
                                 },
                                 {
                                     label: 'Admission Prospects',

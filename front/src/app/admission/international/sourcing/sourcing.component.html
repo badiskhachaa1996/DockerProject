@@ -273,7 +273,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects</h5>
+            <h5>Liste des prospects Sourcing</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -724,15 +724,46 @@
 </div>
 <!-- Expand SideBar -->
 <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
-    <p *ngFor="let item of selectedProspect | keyvalue">
-        <ng-container *ngIf="item.key!='user_id' && item.key!='__v' && item.key!='_id'">
-            {{item.key | titlecase}}:{{item.value}}
-        </ng-container>
-        <ng-container *ngIf="item.key=='user_id'">
-            <ng-container *ngFor="let user_id of item.value | keyvalue">
-                <p *ngIf="user_id.key!='_id' && user_id.key!='__v'">{{user_id.key | titlecase}}:{{user_id.value}}</p>
-            </ng-container>
-        </ng-container>
+    <div *ngIf="selectedProspect">
+        <h5>Informations Prospect</h5>
+        <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
+        <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{ selectedProspect?.user_id?.lastname |
+            uppercase }}</p>
+        <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
+        <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
+        <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
+        <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
+        <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}</p>
+        <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
+        <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
 
-    </p>
+        <h5>Compétences et expériences</h5>
+        <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
+        <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
+        <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
+        <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
+
+        <h5>Choix académique</h5>
+        <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
+        <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
+        <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
+        <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
+        <p>Formation : {{ selectedProspect?.formation }}</p>
+        <p>Programme : {{ selectedProspect?.programme }}</p>
+        <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
+
+        <h5>Source </h5>
+        <p>Source de prospect: {{ selectedProspect?.source }}</p>
+        <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}} {{infoCommercial?.user_id?.firstname}}
+        </p>
+        <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
+
+        <h5>Démarches </h5>
+        <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
+        <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
+        <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
+        <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
+        <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
+    </div>
+
 </p-sidebar>
