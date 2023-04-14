@@ -377,6 +377,7 @@ export class OrientationComponent implements OnInit {
       validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
+      payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
       _id: this.showDetails._id
 

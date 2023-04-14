@@ -168,6 +168,7 @@ import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-in
 import { TeamsIntComponent } from './international/teams-int/teams-int.component';
 import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
 import { OrientationComponent } from './admission/international/orientation/orientation.component';
+import { AdmissionIntComponent } from './admission/international/admission-int/admission-int.component';
 
 const routes: Routes = [
     {
@@ -310,6 +311,7 @@ const routes: Routes = [
             /* International Haithem */
             { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
             { path: 'international/orientation', component: OrientationComponent, canActivate: [AuthGuardService] },
+            { path: 'international/admission', component: AdmissionIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */

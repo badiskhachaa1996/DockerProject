@@ -392,6 +392,16 @@ app.get("/getAllOrientation", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Admission
+app.get("/getAllAdmission", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ decision_orientation: "Validé" }, { decision_orientation: "Changement de campus" }, { decision_orientation: "Changement de formation" }, { decision_orientation: "Changement de destination" }] }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 app.get("/getAllByStatut/:statut", (req, res, next) => {
     //statut = "En attente de traitement"
     if (req.params.statut == "En attente de traitement")
