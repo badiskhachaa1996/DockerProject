@@ -68,6 +68,13 @@ export class Prospect {
         public finance?: string,
         public logement?: string,
         public team_sourcing_id?: string,
+        public contact_date?: Date,
+        public contact_orientation?: string,
+        public avancement_orientation?: string,
+        public note_avancement?: string,
+        public note_decision?: string,
+        public note_dossier?: string,
+        public note_phase?: string,
     ) { }
 
 }
