@@ -1,33 +1,5 @@
 <p-toast></p-toast>
 <div class="grid">
-    <!-- partie affectation de l'agent-->
-    <div class="col-12 card" *ngIf="showAffectation">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showAffectation = null"
-            aria-hidden="true"> </i>
-        <h3 *ngIf="showAffectation?.user_id" class="text-center" style="font-weight: bold;"> Affecter le prospect : {{
-            showAffectation?.user_id?.firstname }} {{
-            showAffectation?.user_id?.lastname | uppercase }}
-        </h3>
-        <form class="p-fluid p-formgrid grid" [formGroup]="affectationForm">
-            <div class="field col-6">
-                <label>Affecté à un membre:</label>
-                <p-dropdown [options]="agentSourcingList" formControlName="agent_sourcing_id"
-                    placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
-            </div>
-            <div class="field col-6">
-                <label>Affecté à une équipe:</label>
-                <p-dropdown [options]="equipeSourcingList" placeholder="Choisissez une équipe"
-                    formControlName="team_sourcing_id" filter="true"></p-dropdown>
-            </div>
-            <div class="field col-12">
-                <label>Affecté le:</label>
-                <p>{{affectationForm.value.date_sourcing | date:'mediumDate'}}</p>
-            </div>
-            <div class="col-12">
-                <button pButton label="Changer l'affectation" (click)="saveAffectation()"></button>
-            </div>
-        </form>
-    </div>
     <!-- partie Modification des informations du prospect -->
     <div class="col-12 card" *ngIf="showDetails">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDetails = null"
@@ -269,6 +241,34 @@
             </form>
         </div>
     </div>
+    <!-- Formulaire Traitement -->
+    <div class="col-12 card" *ngIf="showTraitement">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showTraitement = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+            showTraitement?.user_id?.firstname }} {{
+                showTraitement?.user_id?.lastname | uppercase }}
+        </h3>
+        <form class="grid" [formGroup]="traitementForm">
+            <p-tabView>
+                <p-tabPanel header="Orientation Scolaire">
+                
+                </p-tabPanel>
+                <p-tabPanel header="Dossier scolaire">
+                </p-tabPanel>
+            </p-tabView>
+            <div class="col-4">
+                <button pButton label="Sauvegardez les modifications" (click)="saveTraitement()"></button>
+            </div>
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
+                    (click)="saveDetails(true)"></button>
+            </div>
+        </form>
+    </div>
 
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
@@ -299,11 +299,6 @@
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-
-                    <!--<p-dropdown filter="true" placeholder="Ecole" [options]="ecoleList"
-                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
-                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole" [style]="{'margin':'5px'}">
-                    </p-dropdown>-->
 
                     <p-dropdown filter="true" placeholder="Paiement"
                         [options]="[
@@ -483,10 +478,10 @@
                             {{ prospect.phase_candidature }}
                         </td>
                         <td>
-                            <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search mr-2"
-                                (click)="initAffectation(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect)" aria-hidden="true"></i>
+                            <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-user-edit"
+                                (click)="initTraitement(prospect)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

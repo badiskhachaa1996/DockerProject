@@ -271,6 +271,7 @@ import { FormationsIntunsComponent } from './intuns/formations-intuns/formations
 import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
 import { TeamsIntComponent } from './international/teams-int/teams-int.component';
 import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
+import { OrientationComponent } from './admission/international/orientation/orientation.component';
 
 
 @NgModule({
@@ -551,7 +552,8 @@ import { MemberIntComponent } from './international/teams-int/member-int/member-
     FormationsIntunsComponent,
     EtudiantsIntunsComponent,
     TeamsIntComponent,
-    MemberIntComponent
+    MemberIntComponent,
+    OrientationComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

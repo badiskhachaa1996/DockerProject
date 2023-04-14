@@ -2492,6 +2492,61 @@ export class AppMenuComponent implements OnInit {
 
 
                 }
+                else if (response.role === 'Agent' && service_id?.label === 'Event') {
+                    this.ETUService.getByUser_id(this.token.id).subscribe({
+                        next: (dataEtu: Etudiant) => {
+                            this.items = [
+                                {
+                                    label: 'Tableau de bord',
+                                    icon: 'pi pi-fw pi-home',
+                                    routerLink: ['/'],
+                                },
+                                {
+                                    label: 'Ticketing',
+                                    icon: 'pi pi-fw pi-ticket',
+                                    items: [
+                                        {
+                                            label: 'Gestion des tickets',
+                                            icon: 'pi pi-fw pi-folder-open',
+                                            routerLink: ['/gestion-tickets'],
+                                        },
+                                        {
+                                            label: 'Suivi des tickets',
+                                            icon: 'pi pi-fw pi-check-circle',
+                                            routerLink: ['/suivi-ticket'],
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Admission',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Gestion des participantes pour les événements',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/list-events']
+                                        }
+                                    ],
+                                }
+                            ]
+                            if (dataEtu)
+                                this.items.push({
+                                    label: 'Étudiant',
+                                    icon: 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]
+                                })
+
+                        },
+                        error: (error: any) => { console.log(error); },
+                        complete: () => { console.log(" Informations de l'étudiant récupérer avec succès !"); },
+                    });
+
+
+                }
                 // menu service administration 
                 else if (response.role === 'Agent' && service_id?.label === 'Administration' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
