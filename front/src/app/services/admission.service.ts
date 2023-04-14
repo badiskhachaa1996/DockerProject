@@ -269,5 +269,11 @@ export class AdmissionService {
 
   }
 
+  getAllAdmission() {
+    //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
+    let registreUrl = this.apiUrl + 'getAllAdmission';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 
 }

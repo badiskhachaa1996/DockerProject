@@ -2,19 +2,21 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
-import { environment } from 'src/environments/environment';
-import { saveAs } from "file-saver";
-import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
-import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { environment } from 'src/environments/environment';
+import jwt_decode from "jwt-decode";
+import { saveAs } from "file-saver";
+
 @Component({
-  selector: 'app-sourcing',
-  templateUrl: './sourcing.component.html',
-  styleUrls: ['./sourcing.component.scss']
+  selector: 'app-admission-int',
+  templateUrl: './admission-int.component.html',
+  styleUrls: ['./admission-int.component.scss']
 })
-export class SourcingComponent implements OnInit {
+export class AdmissionIntComponent implements OnInit {
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
   DocTypes: any[] = [
@@ -180,6 +182,8 @@ export class SourcingComponent implements OnInit {
 
   selectedProspect: Prospect = null
 
+  token;
+
   scrollToTop() {
     var scrollDuration = 250;
     var scrollStep = -window.scrollY / (scrollDuration / 15);
@@ -194,7 +198,8 @@ export class SourcingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.admissionService.getAllSourcing().subscribe(data => {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.admissionService.getAllAdmission().subscribe(data => {
       this.prospects = data
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -219,46 +224,67 @@ export class SourcingComponent implements OnInit {
         })
       })
     })
-    this.TeamsIntService.TIgetAll().subscribe(data => {
-      data.forEach(element => {
-        this.equipeSourcingList.push({ label: element.nom, value: element._id })
-      })
-    })
+
   }
 
-  //Partie Affectation
-
-  showAffectation: Prospect = null
-
+  //Partie Traitement
+  showTraitement: Prospect = null
   agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
-  equipeSourcingList = [{ label: "Aucune", value: null }]
-
-  affectationForm: FormGroup = new FormGroup({
-    agent_sourcing_id: new FormControl(''),
-    team_sourcing_id: new FormControl(''),
-    date_sourcing: new FormControl(new Date()),
-    phase_candidature: new FormControl("")
-  })
-
-  initAffectation(prospect: Prospect) {
-    this.showAffectation = prospect
-    this.affectationForm.patchValue({ ...prospect })
-    this.scrollToTop()
+  avancementList = [
+    { label: "En attente", value: "En attente" },
+    { label: "Joignable", value: "Joignable" },
+    { label: "Rappel demandé", value: "Rappel demandé" },
+    { label: "Non Joignable  &  Mail envoyé", value: "Non Joignable  &  Mail envoyé" },
+    { label: "Pas de numéro & Mail envoyé", value: "Pas de numéro & Mail envoyé" },
+  ]
+  etatList = [
+    { label: "Complet", value: "Complet" },
+    { label: "Manquant", value: "Manquant" },
+    { label: "Pas de dossier", value: "Pas de dossier" },
+  ]
+  phaseList = [
+    { label: "Mail documents admission", value: "Mail documents admission" },
+    { label: "Mail document manquant", value: "Mail document manquant" },
+    { label: "Orienté à ILTS", value: "Orienté à ILTS" },
+    { label: "Sous dossier", value: "Sous dossier" },
+  ]
+  langueList = [
+    { label: "Pas de TCF - Pays non francophone", value: "Pas de TCF - Pays non francophone" },
+    { label: "Niveau B2 ( TCF DALF DELF )", value: "Niveau B2 ( TCF DALF DELF )" },
+    { label: "Niveau C1  ( TCF DALF DELF )", value: "Niveau C1  ( TCF DALF DELF )" },
+    { label: "Niveau C2 ( TCF DALF DELF )", value: "Niveau C2 ( TCF DALF DELF )" },
+    { label: "Non concerné", value: "Non concerné" },
+    { label: "Niveau inf B2", value: "Niveau inf B2" },
+  ]
+  initTraitement(prospect: Prospect) {
+    this.showTraitement = prospect
+    this.traitementForm.patchValue({ ...prospect })
   }
-
-  saveAffectation() {
-    let data = {
-      _id: this.showAffectation._id,
-      ...this.affectationForm.value
-    }
-    if (data.agent_sourcing_id || data.team_sourcing_id)
-      data.phase_candidature = "En phase d'orientation scolaire"
-    this.admissionService.updateV2(data).subscribe(newProspect => {
-      this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
-      this.showAffectation = null
-      this.messageService.add({ severity: "success", summary: "Affectation du prospect avec succès" })
+  saveTraitement(willClose = false) {
+    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
+      if (willClose) {
+        this.showTraitement = null
+        this.traitementForm.reset()
+      }
     })
   }
+
+  traitementForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
+    contact_date: new FormControl(new Date),
+    contact_orientation: new FormControl(''),
+    avancement_orientation: new FormControl(),
+    note_avancement: new FormControl(""),
+    decision_orientation: new FormControl(""),
+    note_decision: new FormControl(""),
+    statut_dossier: new FormControl(""),
+    note_dossier: new FormControl(""),
+    phase_complementaire: new FormControl(""),
+    note_phase: new FormControl(""),
+    niveau_langue: new FormControl("")
+  })
 
   //Partie Details
   showDetails: Prospect = null
@@ -343,8 +369,8 @@ export class SourcingComponent implements OnInit {
       validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
-      payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
+      payement: this.payementList,
       _id: this.showDetails._id
 
     }
@@ -448,6 +474,33 @@ export class SourcingComponent implements OnInit {
       })
   }
 
+  showPaiement = null
+  initPaiement(prospect) {
+    this.showPaiement = prospect
+    this.payementList = prospect?.payement
+  }
+  savePaiement() {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
+      this.showPaiement = null
+    })
+  }
 
+  showDocuments = null
+  initDocument(prospect) {
+    this.showDocuments = prospect
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+        this.ListPiped = []
+        data.forEach(doc => {
+          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+        })
+      },
+      (error) => { console.error(error) }
+    );
+  }
 
 }

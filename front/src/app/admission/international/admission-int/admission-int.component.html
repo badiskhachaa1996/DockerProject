@@ -93,39 +93,6 @@
                         </div>
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="Dossier d'admission">
-                    <ul>
-                        <li *ngFor="let file of ListDocuments; index as i">
-                            <div class="grid">
-
-                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                        pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
-                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
-                                        pTooltip=" Visualiser dans un nouvel onglet">
-                                        {{ ListPiped[i] }}
-                                    </em>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(showDetails._id,i)"></i>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-times"
-                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier"
-                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
-                        Aucun document n'a été chargé !
-                    </p>
-                </p-tabPanel>
                 <p-tabPanel header="Orientation">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
@@ -137,67 +104,6 @@
                         <div class="field md:col-6 col-12">
                             <label For="formation">Décision admission</label>
                             <p-dropdown [options]="admissionList" formControlName="decision_admission"></p-dropdown>
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
-                        </div>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Paiements">
-                    <div class="grid">
-                        <label>Montant Payé</label>
-                        <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                            <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
-                            <div class="field col-12 md:col-3">
-                                <label>Type de paiement:</label><br>
-                                <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                                    [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
-                            </div>
-                            <div class="field col-12 md:col-3">
-                                <label>Montant:</label><br>
-                                <input type="number" (change)="changeMontant(i,$event,'montant')"
-                                    [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-5">
-                                <label>Date du paiement:</label><br>
-                                <input type="date" (change)="changeMontant(i,$event,'date')"
-                                    [(value)]="payementList[i]['date']" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-1">
-                                <label>&nbsp;</label><br>
-                                <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
-                                    styleClass="p-button-danger"></button>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <button type="button" (click)="onAddPayement()" pButton
-                                label="Ajouter un paiement"></button>
-                        </div>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Avancement consulaire">
-                    <div class="p-fluid p-formgrid grid">
-                        <div class="field md:col-6 col-12">
-                            <label For="formation">A besoin d'un visa ?</label>
-                            <p-dropdown [options]="abesoinvisaList" formControlName="a_besoin_visa"></p-dropdown>
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="formation">Avancement Campus France</label>
-                            <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="formation">Logement</label>
-                            <p-dropdown [options]="logementList" formControlName="logement"></p-dropdown>
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="formation">Finance</label>
-                            <input pInputText formControlName="finance" />
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
-                        </div>
-                        <div class="field col-12">
-                            <label For="formation">Visa</label>
-                            <p-dropdown [options]="visaList" formControlName="avancement_visa"></p-dropdown>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                     </div>
@@ -239,6 +145,90 @@
                 </div>
 
             </form>
+        </div>
+    </div>
+    <div class="col-12 card" *ngIf="showPaiement">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+            showPaiement?.user_id?.firstname }} {{
+                showPaiement?.user_id?.lastname | uppercase }}
+        </h3>
+        <div class="grid">
+            <label>Montant Payé</label>
+            <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+                <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
+                <div class="field col-12 md:col-3">
+                    <label>Type de paiement:</label><br>
+                    <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                        [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Montant:</label><br>
+                    <input type="number" (change)="changeMontant(i,$event,'montant')"
+                        [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label>Date du paiement:</label><br>
+                    <input type="date" (change)="changeMontant(i,$event,'date')" [(value)]="payementList[i]['date']"
+                        pInputText>
+                </div>
+                <div class="field col-12 md:col-1">
+                    <label>&nbsp;</label><br>
+                    <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
+                        styleClass="p-button-danger"></button>
+                </div>
+            </div>
+            <div class="col-4">
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
+            </div>
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+                <button pButton label="Sauvegardez les modifications" (click)="savePaiement()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 card" *ngIf="showDocuments">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDocuments = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Documents de : {{
+            showDocuments?.user_id?.firstname }} {{
+                showDocuments?.user_id?.lastname | uppercase }}
+        </h3>
+        <ul>
+            <li *ngFor="let file of ListDocuments; index as i">
+                <div class="grid">
+
+                    <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                        <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                            pTooltip="Visualiser dans un nouvel onglet"
+                            (click)="VisualiserFichier(showDocuments._id,i)"></i>
+                        <em (click)="VisualiserFichier(showDocuments._id,i)" [id]="i" style="cursor: pointer;"
+                            pTooltip=" Visualiser dans un nouvel onglet">
+                            {{ ListPiped[i] }}
+                        </em>
+                    </div>
+                    <div class="field col-1">
+                        <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                            (click)="downloadFile(showDocuments._id,i)"></i>
+                    </div>
+                    <div class="field col-1">
+                        <i class="pi pi-times"
+                            style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                            pTooltip="Supprimer le fichier du dossier"
+                            (click)="deleteFile(showDocuments._id,i)" aria-hidden="true"> </i>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+        <p *ngIf="ListDocuments==null || ListDocuments.length==0">
+            Aucun document n'a été chargé !
+        </p>
+        <div class="col-12">
+            <button pButton label="Ajouter un document" (click)="showUploadFile=showDocuments;scrollToTop()"></button>
         </div>
     </div>
     <!-- Formulaire Traitement -->
@@ -331,7 +321,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects en attente d'orientation</h5>
+            <h5>Liste des prospects admission</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -420,12 +410,6 @@
                         <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
                             Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
-                            Adresse Email <p-sortIcon field="user_id.email_perso"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.phone" scope="col" style="text-align: center;">
-                            Numéro de téléphone <p-sortIcon field="user_id.phone"></p-sortIcon>
-                        </th>
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
@@ -448,8 +432,14 @@
                         <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
                             Decision Orientation<p-sortIcon field="decision_orientation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="avancement_orientation" scope="col" style="text-align: center;">
-                            Avancement avec le Prospect<p-sortIcon field="avancement_orientation"></p-sortIcon>
+                        <th pSortableColumn="decision_admission" scope="col" style="text-align: center;">
+                            Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
+                            Paiement<p-sortIcon field="statut_payement"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="validated_cf" scope="col" style="text-align: center;">
+                            Confirmation CF<p-sortIcon field="validated_cf"></p-sortIcon>
                         </th>
                         <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
@@ -489,15 +479,7 @@
                         <td *ngIf="prospect.user_id">
                             {{ prospect?.user_id?.pays_adresse }}
                         </td>
-                        <td *ngIf="prospect.user_id.email_perso">
-                            {{ prospect?.user_id?.email_perso }}
-                        </td>
-                        <td *ngIf="!prospect.user_id.email_perso">
-                            {{ prospect?.user_id?.email }}
-                        </td>
-                        <td *ngIf="prospect.user_id">
-                            {{ prospect?.user_id?.indicatif }} {{ prospect?.user_id?.phone }}
-                        </td>
+
                         <td>
                             {{ prospect.campus_choix_1 }}
                         </td>
@@ -521,7 +503,13 @@
                             {{ prospect.decision_orientation }}
                         </td>
                         <td>
-                            {{ prospect.avancement_orientation }}
+                            {{ prospect.decision_admission }}
+                        </td>
+                        <td>
+                            {{ prospect.statut_payement }}
+                        </td>
+                        <td>
+                            {{ prospect.validated_cf }}
                         </td>
                         <td>
                             {{ prospect.phase_candidature }}
@@ -530,10 +518,15 @@
                             {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
-                            <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit  mr-2"
-                                (click)="initDetails(prospect)" aria-hidden="true"></i>
-                            <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-cog"
+                            <i pTooltip="Traiter le dossier" tooltipPosition="bottom" class="pi pi-cog mr-2"
                                 (click)="initTraitement(prospect)" aria-hidden="true"></i>
+                            <i pTooltip="Paiement" tooltipPosition="bottom" class="pi pi-credit-card mr-2"
+                                (click)="initPaiement(prospect)" aria-hidden="true"></i>
+                            <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
+                                (click)="initDocument(prospect)" aria-hidden="true"></i>
+                            <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
+                                (click)="initDetails(prospect)" aria-hidden="true"></i>
+
                         </td>
                     </tr>
                 </ng-template>

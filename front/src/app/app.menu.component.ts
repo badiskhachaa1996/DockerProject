@@ -602,7 +602,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Admission Prospects',
                                     icon: 'pi pi-users',
-                                    routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement']
+                                    routerLink: ['/international/admission']
                                 },
                                 {
                                     label: 'Paiement',
