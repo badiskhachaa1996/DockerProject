@@ -233,6 +233,32 @@ const prospect_schema = new mongoose.Schema({
         ref: "teamsInt",
         default: null
     },
+    contact_date: {
+        type: Date,
+    },
+    contact_orientation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
+        default: null
+    },
+    avancement_orientation: {
+        type: String,
+    },
+    note_avancement: {
+        type: String,
+    },
+    note_decision: {
+        type: String,
+    },
+    note_dossier: {
+        type: String,
+    },
+    note_phase: {
+        type: String,
+    },
+    niveau_langue: {
+        type: String,
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

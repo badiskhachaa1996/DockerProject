@@ -234,7 +234,8 @@ export class SourcingComponent implements OnInit {
   affectationForm: FormGroup = new FormGroup({
     agent_sourcing_id: new FormControl(''),
     team_sourcing_id: new FormControl(''),
-    date_sourcing: new FormControl(new Date())
+    date_sourcing: new FormControl(new Date()),
+    phase_candidature: new FormControl("En phase d'orientation scolaire")
   })
 
   initAffectation(prospect: Prospect) {

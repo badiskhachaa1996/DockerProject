@@ -382,6 +382,16 @@ app.get("/getAllSourcing", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Orientation
+app.get("/getAllOrientation", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: "En phase d'orientation scolaire" }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 app.get("/getAllByStatut/:statut", (req, res, next) => {
     //statut = "En attente de traitement"
     if (req.params.statut == "En attente de traitement")
