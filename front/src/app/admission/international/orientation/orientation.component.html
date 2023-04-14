@@ -798,8 +798,9 @@
     
         <h5>Source </h5>
         <p>Source de prospect: {{ selectedProspect?.source }}</p>
-        <p>Nom de la commerciale ou partenaire: WIP</p>
-        <p>Adresse électronique commerciale: WIP</p>
+        <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}} {{infoCommercial?.user_id?.firstname}}
+        </p>
+        <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
     
         <h5>Démarches </h5>
         <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>

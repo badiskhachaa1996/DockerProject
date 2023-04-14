@@ -8,6 +8,8 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-orientation',
@@ -175,7 +177,7 @@ export class OrientationComponent implements OnInit {
     { value: 'Septembre 2023', label: 'Septembre 2023' }
   ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -468,9 +470,15 @@ export class OrientationComponent implements OnInit {
     }
   }
   showSideBar = false
+  infoCommercial: CommercialPartenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
+    this.infoCommercial = null
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
+        this.infoCommercial = data
+      })
   }
 
 

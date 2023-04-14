@@ -736,13 +736,13 @@
         <p>Numéro de téléphone: {{ selectedProspect?.user_id?.indicatif }} {{ selectedProspect?.user_id?.phone }}</p>
         <p>Numéro WhatsApp: {{ selectedProspect?.numero_whatsapp }}</p>
         <p>Statut actuel : {{ selectedProspect?.statut_actuel }}</p>
-    
+
         <h5>Compétences et expériences</h5>
         <p>Niveau en Français: {{ selectedProspect?.languages_fr }}</p>
         <p>Niveau en Anglais: {{ selectedProspect?.languages_en }}</p>
         <p>Expériences professionnelles: {{ selectedProspect.professional_experience?'Oui':'Non' }}</p>
         <p>Description de l’expérience: {{ selectedProspect?.professional_experience }}</p>
-    
+
         <h5>Choix académique</h5>
         <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
         <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
@@ -751,12 +751,13 @@
         <p>Formation : {{ selectedProspect?.formation }}</p>
         <p>Programme : {{ selectedProspect?.programme }}</p>
         <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
-    
+
         <h5>Source </h5>
         <p>Source de prospect: {{ selectedProspect?.source }}</p>
-        <p>Nom de la commerciale ou partenaire: WIP</p>
-        <p>Adresse électronique commerciale: WIP</p>
-    
+        <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}} {{infoCommercial?.user_id?.firstname}}
+        </p>
+        <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
+
         <h5>Démarches </h5>
         <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
         <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>

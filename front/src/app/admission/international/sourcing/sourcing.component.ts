@@ -7,6 +7,8 @@ import { AdmissionService } from 'src/app/services/admission.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -172,7 +174,7 @@ export class SourcingComponent implements OnInit {
     { value: 'Septembre 2023', label: 'Septembre 2023' }
   ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -432,9 +434,15 @@ export class SourcingComponent implements OnInit {
     }
   }
   showSideBar = false
+  infoCommercial: CommercialPartenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
+    this.infoCommercial = null
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
+        this.infoCommercial = data
+      })
   }
 
 
