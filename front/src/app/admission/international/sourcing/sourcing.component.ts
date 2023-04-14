@@ -430,9 +430,10 @@ export class SourcingComponent implements OnInit {
       this.payementList.splice(i, 1)
     }
   }
-
+  showSideBar = false
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
+    this.showSideBar = true
   }
 
 

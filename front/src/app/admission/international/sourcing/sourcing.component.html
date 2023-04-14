@@ -417,7 +417,7 @@
 
                         <td>
                             <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="selectedProspect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                [icon]="selectedProspect==prospect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)="expand(prospect)"></button>
                         </td>
 
@@ -723,7 +723,7 @@
     </div>
 </div>
 <!-- Expand SideBar -->
-<p-sidebar [visible]="selectedProspect!=null" styleClass="w-30rem" position="right">
+<p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
     <p *ngFor="let item of selectedProspect | keyvalue">
         <ng-container *ngIf="item.key!='user_id' && item.key!='__v' && item.key!='_id'">
             {{item.key | titlecase}}:{{item.value}}
