@@ -256,34 +256,46 @@ export class AdmissionIntComponent implements OnInit {
     { label: "Non concerné", value: "Non concerné" },
     { label: "Niveau inf B2", value: "Niveau inf B2" },
   ]
+  ppList = [
+    { label: "Sous dossier", value: "Sous dossier" },
+    { label: "En attente de validation BIM", value: "En attente de validation BIM" },
+    { label: "Entretien de motivation", value: "Entretien de motivation" },
+    { label: "Quiz Informatique", value: "Quiz Informatique" },
+  ]
+
+  stat_cf = [
+    { label: "Oui", value: true },
+    { label: "Non", value: false }
+  ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
+    if (prospect.dossier_traited_by == null)
+      this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(data => {
+        if (data)
+          this.traitementForm.patchValue({ dossier_traited_by: data._id })
+      })
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
-      if (willClose) {
-        this.showTraitement = null
-        this.traitementForm.reset()
-      }
+      this.showTraitement = null
+      this.traitementForm.reset()
     })
   }
 
   traitementForm: FormGroup = new FormGroup({
     _id: new FormControl(),
-    contact_date: new FormControl(new Date),
-    contact_orientation: new FormControl(''),
-    avancement_orientation: new FormControl(),
-    note_avancement: new FormControl(""),
-    decision_orientation: new FormControl(""),
+    dossier_traited_by: new FormControl(),
+    dossier_traited_date: new FormControl(new Date()),
+    statut_dossier: new FormControl(),
+    procedure_peda: new FormControl(""),
+    decision_admission: new FormControl(""),
     note_decision: new FormControl(""),
-    statut_dossier: new FormControl(""),
-    note_dossier: new FormControl(""),
-    phase_complementaire: new FormControl(""),
-    note_phase: new FormControl(""),
-    niveau_langue: new FormControl("")
+    statut_payement: new FormControl(""),
+    numero_dossier_campus_france: new FormControl(""),
+    validated_cf: new FormControl(""),
   })
 
   //Partie Details
@@ -474,13 +486,14 @@ export class AdmissionIntComponent implements OnInit {
       })
   }
 
-  showPaiement = null
+  showPaiement: Prospect = null
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
   }
   savePaiement() {
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList }).subscribe(data => {
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
       this.showPaiement = null

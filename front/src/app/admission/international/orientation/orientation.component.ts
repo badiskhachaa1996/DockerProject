@@ -281,7 +281,7 @@ export class OrientationComponent implements OnInit {
 
   traitementForm: FormGroup = new FormGroup({
     _id: new FormControl(),
-    contact_date: new FormControl(new Date),
+    contact_date: new FormControl(new Date()),
     contact_orientation: new FormControl(''),
     avancement_orientation: new FormControl(),
     note_avancement: new FormControl(""),

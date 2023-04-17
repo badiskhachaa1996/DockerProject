@@ -47,7 +47,7 @@ const prospect_schema = new mongoose.Schema({
     },
     rythme_formation: {
         type: String,
-        required: false,
+        default:"Initiale"
     },
     servicesEh: {
         type: [Boolean],
@@ -89,12 +89,10 @@ const prospect_schema = new mongoose.Schema({
     },
     decision_admission: {
         type: String,
-        required: false,
         default: "En attente de traitement"
     },
     statut_payement: {
         type: String,
-        required: false,
         default: "Non"
     },
     phase_complementaire: {
@@ -164,8 +162,8 @@ const prospect_schema = new mongoose.Schema({
         default: ""
     },
     dossier_traited_by: {
-        type: String,
-        default: ""
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
     },
     haveDoc: {
         type: Boolean,
@@ -259,6 +257,15 @@ const prospect_schema = new mongoose.Schema({
     niveau_langue: {
         type: String,
     },
+    dossier_traited_date: {
+        type: Date
+    },
+    procedure_peda: {
+        type: String
+    },
+    numero_dossier_campus_france: {
+        type: String
+    }
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);
