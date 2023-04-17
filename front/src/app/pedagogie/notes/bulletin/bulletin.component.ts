@@ -284,6 +284,10 @@ export class BulletinComponent implements OnInit {
   hideForPDF = false
   exportToPDF(id) {
     var element = document.getElementById(id);
+    this.EtuService.downloadBulletin(this.ETUDIANT._id).subscribe(doc => {
+    }, err => {
+      console.error(err)
+    })
     var opt = {
       margin: 0,
       filename: 'BULLETIN_' + this.SEMESTRE + '_' + this.ETUDIANT.user_id.lastname + "_" + this.ETUDIANT.user_id.firstname + '.pdf',

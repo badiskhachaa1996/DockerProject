@@ -727,13 +727,18 @@
             <p-fieldset legend="Information du partenariat">
                 <div class="grid" style="color: black;font-weight:normal">
                     <div class="col-12 grid">
-                        <p class="col-12 md:col-4 text-center"><strong>Ancienneté:</strong><br>
+                        <p class="col-12 md:col-6 text-center"><strong>Ancienneté:</strong><br>
                             {{PartenaireInfo?.statut_anciennete}}</p>
                         <p class="col-12 md:col-4 text-center"><strong>Contribution:</strong><br>
                             {{PartenaireInfo?.contribution}}
                         </p>
-                        <p class="col-12 md:col-4 text-center"><strong>Etat de contrat:</strong><br>
+                        <p class="col-12 md:col-6 text-center"><strong>Etat de contrat:</strong><br>
                             {{PartenaireInfo?.etat_contrat}}</p>
+                        <div class="col-12 md:col-6 text-center">
+                            <button pButton class="mr-2" label="Télécharger le contrat" type="button"
+                                [disabled]="!PartenaireInfo?.pathEtatContrat"
+                                (click)="downloadContrat()"></button>
+                        </div>
                     </div>
                 </div>
             </p-fieldset><br>

@@ -12,10 +12,20 @@
                     obligatoires</small><br>
             </div>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddVente" (ngSubmit)="onAddVente()">
+                <div class="field col-12">
+                    <label>Partenaire<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"
+                        (onChange)="onPartenaireSelect()"></p-dropdown>
+                </div>
                 <div class="field col-12 md:col-6">
                     <label>Produit<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="produitList" formControlName="produit"
                         placeholder="Description du Produit"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Prospect<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
+                        formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="nom">Montant<span style="color: red;"> * </span></label>
@@ -36,15 +46,6 @@
                     <label>Date de règlement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_reglement"></p-calendar>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label>Prospect<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
-                        formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
-                </div>
-                <div class="field col-12">
-                    <label>Partenaire<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id" (onChange)="onPartenaireSelect()"></p-dropdown>
-                </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette vente" [disabled]="formAddVente.invalid"
                         type="submit"></button>
@@ -58,16 +59,26 @@
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showFormEditVente = false;">
             </i>
-            <h4 style="text-align: center;">Modifier une vente</h4>
+            <h4 style="text-align: center;">Modifier une vente de {{venteSelected?.partenaire_id?.nom}} pour
+                {{venteSelected?.prospect_id?.user_id?.lastname | uppercase}}
+                {{venteSelected?.prospect_id?.user_id?.firstname | titlecase}}</h4>
             <div style="text-align: center;">
                 <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
                     obligatoires</small><br>
             </div>
-            <form class="p-fluid p-formgrid grid" [formGroup]="formEditVente" (ngSubmit)="onUpdateVente()">
+            <form class="p-fluid p-formgrid grid mt-2" [formGroup]="formEditVente" (ngSubmit)="onUpdateVente()">
+                <div class="field col-12 md:col-6">
+                    <label>Partenaire:</label>
+                    <p> {{venteSelected?.partenaire_id?.nom}}</p>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="nom">Prospect:</label>
+                    <p> {{venteSelected?.prospect_id?.user_id?.lastname | uppercase}}
+                        {{venteSelected?.prospect_id?.user_id?.firstname | titlecase}}</p>
+                </div>
                 <div class="field col-12 md:col-6">
                     <label>Produit<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="produitList" formControlName="produit"
-                        placeholder="Description du Produit"></p-dropdown>
+                    <textarea pInputTextarea formControlName="produit" ></textarea>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="nom">Montant<span style="color: red;"> * </span></label>
@@ -99,8 +110,8 @@
 
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Ajouter une vente" class="mr-2 mb-2" style="float: right;" *ngIf="!isPovPartenaire"
-                (click)="showFormAddVente = true;"></button>
+            <button pButton pRipple label="Ajouter une vente" class="mr-2 mb-2" style="float: right;"
+                *ngIf="!isPovPartenaire" (click)="showFormAddVente = true;"></button>
 
             <h5>Liste des ventes</h5>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="ventes"
@@ -123,8 +134,8 @@
                             emptyFilterMessage="Pas de produit trouvé"
                             filterPlaceholder="Choisissez le produit"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true" *ngIf="!isPovPartenaire"
-                            [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
+                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
                     </div>
@@ -150,7 +161,13 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="produit" style="text-align: center;"> Produit
+
+                        <th pSortableColumn="partenaire_id" style="text-align: center;"> Partenaire
+                            <p-sortIcon field="partenaire_id">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="produit" style="text-align: center;"> Type de commission
                             <p-sortIcon field="produit">
                             </p-sortIcon>
                         </th>
@@ -201,12 +218,15 @@
                         <td style="min-width: 14rem;">
                             {{ vente?.prospect_id?.modalite_paiement }}
                         </td>
+                        <td style="min-width: 14rem;">
+                            {{ vente?.partenaire_id?.nom }}
+                        </td>
 
                         <td style="min-width: 14rem;">
-                            {{ vente.produit }}
+                            {{ getProduit(vente.produit) }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente.montant }}€
+                            {{ getMontant(vente.produit) }}€
                         </td>
                         <td style="min-width: 14rem;">
                             {{ vente.tva }}%
@@ -219,8 +239,8 @@
                         </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil" *ngIf="!isPovPartenaire"
-                                aria-hidden="true" pTooltip="Modifier la vente"></i>
+                            <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la vente"></i>
                         </td>
                     </tr>
                 </ng-template>

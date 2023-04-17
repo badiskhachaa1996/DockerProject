@@ -64,7 +64,7 @@
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showFormEditFacture = false;">
             </i>
-            <h4 style="text-align: center;">Mettre à jour une facture</h4>
+            <h4 style="text-align: center;">Mettre à jour une facture de {{factureSelected.partenaire_id?.nom}}</h4>
             <div style="text-align: center;">
                 <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
                     obligatoires</small><br>
@@ -173,7 +173,7 @@
 
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;" 
+            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;"
                 (click)="showFormAddFacture = true;"></button>
 
             <h5>Liste des factures</h5>
@@ -196,8 +196,8 @@
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true" *ngIf="!isPovPartenaire"
-                            [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
+                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
                     </div>
@@ -229,7 +229,11 @@
                             <p-sortIcon field="date_paiement">
                             </p-sortIcon>
                         </th>
-
+                        <th pSortableColumn="partenaire_id" style="text-align: center;">
+                            Partenaire
+                            <p-sortIcon field="partenaire_id">
+                            </p-sortIcon>
+                        </th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
                                 Action
@@ -262,10 +266,13 @@
                         <td style="min-width: 14rem;">
                             {{ facture.date_paiement| date:'mediumDate' }}
                         </td>
+                        <td>
+                            {{facture.partenaire_id?.nom}}
+                        </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" (click)="initEditForm(facture)" class="pi pi-pencil" *ngIf="!isPovPartenaire"
-                                aria-hidden="true" pTooltip="Modifier la facture"></i>
+                            <i style="margin-left: 2%;" (click)="initEditForm(facture)" class="pi pi-pencil"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la facture"></i>
                             <i *ngIf="facture.factureUploaded" style="margin-left: 2%;" (click)="download(facture)"
                                 class="pi pi-download" aria-hidden="true" pTooltip="Télécharger la facture"></i>
                             <i style="margin-left: 2%;" (click)="uploadFile(facture)" class="pi pi-cloud-upload"

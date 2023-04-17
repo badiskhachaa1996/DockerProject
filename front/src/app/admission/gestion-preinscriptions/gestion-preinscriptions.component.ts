@@ -331,7 +331,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
             if (commercial.statut == "Admin") {
               //Si il est considéré comme Admin dans son Partenaire
               console.log("Admin Commercial")
-              this.admissionService.getAllByCodeAdmin(this.code).subscribe(
+              this.admissionService.getAllByCodeAdmin(commercial.partenaire_id).subscribe(
                 ((responseAdmission) => this.afterProspectload(responseAdmission)),
                 ((error) => { console.error(error); })
               );
@@ -661,7 +661,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   onGetProspectAlternance() {
     this.admissionService.getByAllAlternance().subscribe(
-      ((response) => { this.alternants = response; console.log(response) }),
+      ((response) => { this.alternants = response; }),
       ((error) => { console.error(error); })
     )
   }
