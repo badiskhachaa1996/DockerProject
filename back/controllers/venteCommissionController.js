@@ -28,9 +28,13 @@ app.get("/getAllByPartenaireID/:partenaire_id", (req, res, next) => {
 });
 
 app.put("/update", (req, res) => {
-    Vente.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
-        res.send(doc)
-    })
+    console.log(req.body)
+    Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
+        console.log(err,doc)
+        Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
+            .then((formFromDb) => { res.status(200).send(formFromDb); })
+            .catch((error) => { console.error(error);res.status(500).send(error); });
+    }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
 module.exports = app;

@@ -205,7 +205,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
             if (req.params.source == "PV" && examens)
                 examens.forEach(ex => {
                     ex.matiere_id.forEach(mid => {
-                        if (notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
+                        if (notes.length!=0 && notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: ex.formateur_id.user_id.lastname.toUpperCase() + " " + ex.formateur_id.user_id.firstname, coeff: mid.coeff })

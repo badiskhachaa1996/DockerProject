@@ -32,7 +32,7 @@
     </h5>
 
 
-    <div *ngIf="codeCommercial" style="text-align: left;"><button pButton (click)="comeBack()"> <i
+    <div style="text-align: left;"><button pButton (click)="comeBack()"> <i
                 class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
     </div>
 
@@ -446,6 +446,25 @@
 
                     </form>
                 </p-fieldset>
+
+                <h5 style="color: red; text-align: center;">Documents</h5>
+                <ul>
+                    <li *ngFor="let file of ListDocuments; index as i">
+                        <div class="grid">
+    
+                            <div class="field col-12" style="border-style: 2;border: 2em;border-bottom: red;">
+                                <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                    pTooltip="Visualiser dans un nouvel onglet"
+                                    (click)="VisualiserFichier(ProspectConnected._id,i)"></i>
+                                <em (click)="VisualiserFichier(ProspectConnected._id,i)" [id]="i" style="cursor: pointer;"
+                                    pTooltip=" Visualiser dans un nouvel onglet">
+                                    {{ ListPiped[i] }}
+                                </em>
+                            </div>
+    
+                        </div>
+                    </li>
+                </ul>
 
                 <!--TODO Demande de rendez-vous-->
 

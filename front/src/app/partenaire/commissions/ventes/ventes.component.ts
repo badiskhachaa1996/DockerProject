@@ -62,7 +62,7 @@ export class VentesComponent implements OnInit {
         })
         this.produitList = []
         partenaire.commissions.forEach(c => {
-          this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+          this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
         })
       })
     } else {
@@ -71,7 +71,7 @@ export class VentesComponent implements OnInit {
       })
       this.PartenaireService.getAll().subscribe(data => {
         this.produitList = []
-        this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
+        this.PartenaireList = [{ label: "Tous les Partenaires", value: null, }]
         data.forEach(d => {
           this.PartenaireList.push({ label: d.nom, value: d._id })
         })
@@ -113,10 +113,12 @@ export class VentesComponent implements OnInit {
     this.formEditVente.patchValue({
       ...vente
     })
-    this.formEditVente.patchValue({
+    /*this.formEditVente.patchValue({
       date_reglement: this.convertTime(vente.date_reglement)
-    })
+      
+    })*/
     this.showFormEditVente = true
+    //TODO produit problème
   }
 
   venteSelected = null
@@ -124,6 +126,7 @@ export class VentesComponent implements OnInit {
   showFormEditVente = false
 
   formEditVente: FormGroup = new FormGroup({
+    _id: new FormControl('', Validators.required),
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
@@ -132,7 +135,7 @@ export class VentesComponent implements OnInit {
   })
 
   onUpdateVente() {
-    this.VenteService.update({ ...this.formEditVente.value, _id: this.venteSelected._id }).subscribe(data => {
+    this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
       this.formEditVente.reset()
@@ -146,9 +149,15 @@ export class VentesComponent implements OnInit {
     let month = date.getMonth() + 1
     let year = date.getFullYear()
     if (year != 1970)
-      return `${day}-${month}-${year}`
+      return `${this.pad(day)}-${this.pad(month)}-${year}`
     else
       return ""
+  }
+  pad(number: number) {
+    let r = number.toString()
+    while (r.length < 2)
+      r = "0" + r
+    return r
   }
 
   PartenaireList = []
@@ -161,7 +170,7 @@ export class VentesComponent implements OnInit {
       this.PartenaireService.getById(this.PartenaireSelected).subscribe(data => {
         this.produitList = []
         data.commissions.forEach(c => {
-          this.produitList.push({ label: c.description, value: `${c.description}\nMontant:${c.montant}€` })
+          this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
         })
       })
   }
@@ -193,5 +202,15 @@ export class VentesComponent implements OnInit {
       })
     }
 
+  }
+
+  getProduit(str: string) {
+    if (str)
+      return str.substring(0, str.lastIndexOf('\n'))
+  }
+
+  getMontant(str: string) {
+    if (str)
+      return str.substring(str.lastIndexOf(':') + 1, str.lastIndexOf('€'))
   }
 }

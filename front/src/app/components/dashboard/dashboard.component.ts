@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { GalleriaModule } from 'primeng/galleria';
-
+import { saveAs as importedSaveAs } from "file-saver";
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
 import { Seance } from 'src/app/models/Seance';
@@ -731,6 +731,16 @@ export class  DashboardComponent implements OnInit {
 
   navigateToEmployabilite() {
     this.router.navigate(['/intuns/employabilite'])
+  }
+
+  downloadContrat() {
+    this.PartenaireService.downloadContrat(this.PartenaireInfo._id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        importedSaveAs(downloadUrl, this.PartenaireInfo.pathEtatContrat);
+        this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
   saveEditCommercialInfo() {
