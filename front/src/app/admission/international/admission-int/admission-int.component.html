@@ -152,7 +152,7 @@
             aria-hidden="true"> </i>
         <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
             showPaiement?.user_id?.firstname }} {{
-                showPaiement?.user_id?.lastname | uppercase }}
+            showPaiement?.user_id?.lastname | uppercase }}
         </h3>
         <div class="grid">
             <label>Montant Payé</label>
@@ -179,9 +179,21 @@
                         styleClass="p-button-danger"></button>
                 </div>
             </div>
+            <div class="col-6">
+                <label>Reste à Payé</label>
+                <p>En cours de développement</p>
+            </div>
+            <!--<div class="col-6">
+                <label>Statut de paiement</label>
+                <p-dropdown [options]="[{label:'Oui'},{label:'Non'}]" optionValue="label" optionLabel="label"
+                    formControlName="statut_payement" placeholder="Choisissez une procèdure"></p-dropdown>
+            </div>-->
+
+
             <div class="col-4">
                 <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
             </div>
+
             <div class="col-4">
             </div>
             <div class="col-4">
@@ -194,7 +206,7 @@
             aria-hidden="true"> </i>
         <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Documents de : {{
             showDocuments?.user_id?.firstname }} {{
-                showDocuments?.user_id?.lastname | uppercase }}
+            showDocuments?.user_id?.lastname | uppercase }}
         </h3>
         <ul>
             <li *ngFor="let file of ListDocuments; index as i">
@@ -215,10 +227,9 @@
                             (click)="downloadFile(showDocuments._id,i)"></i>
                     </div>
                     <div class="field col-1">
-                        <i class="pi pi-times"
-                            style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                            pTooltip="Supprimer le fichier du dossier"
-                            (click)="deleteFile(showDocuments._id,i)" aria-hidden="true"> </i>
+                        <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                            pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(showDocuments._id,i)"
+                            aria-hidden="true"> </i>
                     </div>
 
                 </div>
@@ -239,81 +250,52 @@
             showTraitement?.user_id?.firstname }} {{
             showTraitement?.user_id?.lastname | uppercase }}
         </h3>
-        <form class="grid" [formGroup]="traitementForm">
-            <p-tabView class="col-12">
-                <p-tabPanel header="Orientation Scolaire">
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field md:col-6 col-12">
-                            <label>Contacté le :</label>
-                            <p-calendar formControlName="contact_date"></p-calendar>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label>Contacté par :</label>
-                            <p-dropdown [options]="agentSourcingList" formControlName="contact_orientation"
-                                placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
-                        </div>
-                    </div>
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field md:col-6 col-12">
-                            <label>Avancement avec le prospect :</label>
-                            <p-dropdown [options]="avancementList" formControlName="avancement_orientation"
-                                placeholder="Choisissez un état" filter="true"></p-dropdown>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label>Note :</label>
-                            <textarea pInputTextarea formControlName="note_avancement"></textarea>
-                        </div>
-                    </div>
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field md:col-6 col-12">
-                            <label>Decision orientation :</label>
-                            <p-multiSelect [options]="orientationList" formControlName="decision_orientation"
-                                placeholder="Choisissez un état" filter="true"></p-multiSelect>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label>Note :</label>
-                            <textarea pInputTextarea formControlName="note_decision"></textarea>
-                        </div>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Dossier scolaire">
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field md:col-6 col-12">
-                            <label>Etat du dossier :</label>
-                            <p-dropdown [options]="etatList" formControlName="statut_dossier"
-                                placeholder="Choisissez un état" filter="true"></p-dropdown>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label>Note :</label>
-                            <textarea pInputTextarea formControlName="note_dossier"></textarea>
-                        </div>
-                    </div>
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field md:col-6 col-12">
-                            <label>Procédure complémentaire:</label>
-                            <p-dropdown [options]="phaseList" formControlName="phase_complementaire"
-                                placeholder="Choisissez un état" filter="true"></p-dropdown>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label>Note :</label>
-                            <textarea pInputTextarea formControlName="note_phase"></textarea>
-                        </div>
-                    </div>
-                    <div class="p-fluid p-formgrid grid card">
-                        <div class="field col-12">
-                            <label>Niveau de langue:</label>
-                            <p-dropdown [options]="langueList" formControlName="niveau_langue"
-                                placeholder="Choisissez un état" filter="true"></p-dropdown>
-                        </div>
-                    </div>
-                </p-tabPanel>
-            </p-tabView>
-            <div class="col-6">
-                <button pButton label="Sauvegardez les modifications" (click)="saveTraitement()"></button>
+        <form class="p-fluid p-formgrid grid card" [formGroup]="traitementForm">
+            <div class="field md:col-6 col-12">
+                <label>Traité le :</label>
+                <p-calendar formControlName="dossier_traited_date"></p-calendar>
             </div>
-            <div class="col-6">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveTraitement(true)"></button>
+            <div class="field md:col-6 col-12">
+                <label>Traité par :</label>
+                <p-dropdown [options]="agentSourcingList" formControlName="dossier_traited_by"
+                    placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>Etat du dossier :</label>
+                <p-dropdown [options]="etatList" formControlName="statut_dossier" placeholder="Choisissez un état"
+                    filter="true"></p-dropdown>
+            </div>
+
+            <div class="field col-12">
+                <label>Procèdure pédagogique</label>
+                <p-dropdown [options]="ppList" formControlName="procedure_peda"
+                    placeholder="Choisissez une procèdure"></p-dropdown>
+            </div>
+            <div class="field md:col-6 col-12">
+                <label For="formation">Décision admission</label>
+                <p-dropdown [options]="admissionList" formControlName="decision_admission"></p-dropdown>
+                <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+            </div>
+            <div class="field md:col-6 col-12">
+                <label>Note :</label>
+                <textarea pInputTextarea formControlName="note_decision"></textarea>
+            </div>
+            <div class="field col-12">
+                <label>Statut de paiement</label>
+                <p-dropdown [options]="[{label:'Oui'},{label:'Non'}]" optionValue="label" optionLabel="label"
+                    formControlName="statut_payement" placeholder="Choisissez une procèdure"></p-dropdown>
+            </div>
+            <div class="field md:col-6 col-12">
+                <label>Numéro de dossier Campus France :</label>
+                <input pInputText formControlName="numero_dossier_campus_france" />
+            </div>
+            <div class="field md:col-6 col-12">
+                <label>Confirmation Campus France :</label>
+                <p-selectButton [options]="stat_cf" formControlName="validated_cf">
+                </p-selectButton>
+            </div>
+            <div class="col-12">
+                <button pButton label="Sauvegardez les modifications" (click)="saveTraitement()"></button>
             </div>
         </form>
     </div>

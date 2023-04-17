@@ -167,7 +167,7 @@
                                 (click)="seeRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
                             <i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
                                 (click)="seePreRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i pTooltip="Supprimer le collaborateur" tooltipPosition="bottom" class="pi pi-trash"
+                            <i *ngIf="commercial.statut!='Admin'" pTooltip="Supprimer le collaborateur" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="delete(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
                         </td>
                     </tr>

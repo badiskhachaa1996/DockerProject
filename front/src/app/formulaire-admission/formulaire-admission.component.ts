@@ -53,6 +53,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
+  btnTextBack = "Se connecter"
 
   formSteps: any[] = [
     "Infos",
@@ -303,6 +304,9 @@ export class FormulaireAdmissionComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem("CommercialCode")) {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
+    }
+    if (localStorage.getItem('token')) {
+      this.btnTextBack = "Revenir à IMS"
     }
     if (this.form_origin == "eduhorizons") {
       //COMME ESTYA
@@ -924,6 +928,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   redirectLogin() {
     this.router.navigate(["/loginExterne"])
   }
+
 
   choixRentree() {
     if (this.RegisterForm.value.rentree_scolaire == "Mars 2023") {

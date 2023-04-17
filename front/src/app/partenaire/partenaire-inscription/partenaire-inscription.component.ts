@@ -97,12 +97,14 @@ export class PartenaireInscriptionComponent implements OnInit {
   get whatsApp() { return this.RegisterForm.get('whatsApp'); }
 
 
-
+  txtBtnBack = "Se connecter"
 
   ngOnInit(): void {
     this.PartenaireService.getNBAll().subscribe(data => {
       this.pL = data.nb
     })
+    if (localStorage.getItem('token'))
+      this.txtBtnBack = "Retourner à IMS"
   }
 
 
