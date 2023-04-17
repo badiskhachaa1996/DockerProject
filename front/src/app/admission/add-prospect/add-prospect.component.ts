@@ -52,15 +52,13 @@ export class AddProspectComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
       this.commercialService.getAllPopulate().subscribe(commercials => {
-        console.log(commercials)
         commercials.forEach(commercial => {
           let {user_id}: any = commercial
           if (user_id)
             this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
-          if (user_id._id == decodeToken.id)
+          if (user_id && user_id._id == decodeToken.id)
             this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
         })
-        console.log(this.commercialList)
       })
     }
 

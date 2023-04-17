@@ -326,25 +326,33 @@ export class GestionPreinscriptionsComponent implements OnInit {
           this.users[user._id] = user;
         });
         if (this.code) {
-          this.commercialService.getCommercialDataFromCommercialCode(this.code).subscribe(commercial => {
-            //Si il y a un code de Commercial
-            if (commercial.statut == "Admin") {
-              //Si il est considéré comme Admin dans son Partenaire
-              console.log("Admin Commercial")
-              this.admissionService.getAllByCodeAdmin(commercial.partenaire_id).subscribe(
-                ((responseAdmission) => this.afterProspectload(responseAdmission)),
-                ((error) => { console.error(error); })
-              );
-            } else {
-              console.log("Agent Commercial")
-              //Si il n'est pas considéré Admin dans son partenaire
-              this.admissionService.getAllCodeCommercial(this.code).subscribe(
-                ((responseAdmission) => this.afterProspectload(responseAdmission)),
-                ((error) => { console.error(error); })
-              );
-            }
-          })
-
+          if (this.code.length <= 9)
+            //C'est un Commercial
+            this.commercialService.getCommercialDataFromCommercialCode(this.code).subscribe(commercial => {
+              //Si il y a un code de Commercial
+              if (commercial.statut == "Admin") {
+                //Si il est considéré comme Admin dans son Partenaire
+                console.log("Admin Commercial")
+                this.admissionService.getAllByCodeAdmin(commercial.partenaire_id).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              } else {
+                console.log("Agent Commercial")
+                //Si il n'est pas considéré Admin dans son partenaire
+                this.admissionService.getAllCodeCommercial(this.code).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
+          else{
+            //C'est un Partenaire
+            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
+              ((responseAdmission) => this.afterProspectload(responseAdmission)),
+              ((error) => { console.error(error); })
+            );
+          }
 
         } else {
           if (this.STATUT)
