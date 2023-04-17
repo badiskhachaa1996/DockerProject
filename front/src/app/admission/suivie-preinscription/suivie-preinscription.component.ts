@@ -19,7 +19,41 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SuiviePreinscriptionComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
+  showUpdatePassword = false
+  passwordForm = new FormGroup({
+    passwordactual: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    verifypassword: new FormControl('', Validators.required),
+  });
+  onUpdatePassword() {
+    let passwordactual = this.passwordForm.get('passwordactual').value;
+    let password = this.passwordForm.get('password').value;
+    let verifypassword = this.passwordForm.get('verifypassword').value;
+    if (password = verifypassword) {
+      let bypass:any = this.ProspectConnected.user_id
+      this.UserService.verifPassword({ 'id': bypass._id, 'password': passwordactual }).subscribe(
+        ((responseV) => {
+          console.log(responseV);
 
+          this.UserService.updatePwd(bypass._id, verifypassword).subscribe((updatedPwd) => {
+
+            this.passwordForm.reset();
+            this.showUpdatePassword = false;
+            this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
+
+          }), ((error) => { console.log(error) })
+
+
+        }),
+      ), ((error) => {
+        console.log(error)
+      });
+    }
+    else {
+      this.messageService.add({ severity: 'error', summary: 'Mot de passe ', detail: 'Les mots de passe ne correspondent pas' });
+      this.passwordForm.get('verifypassword').dirty
+    }
+  }
   ecoleProspect: any;
   subscription: Subscription;
   ListDocuments: String[] = [];

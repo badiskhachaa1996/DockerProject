@@ -213,7 +213,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/user/file" ||
       req.originalUrl == "/soc/user/patchById" ||
       req.originalUrl === "/soc/user/send-recovery-password-mail" ||
-      req.originalUrl === "/soc/user/recovery-password"
+      req.originalUrl === "/soc/user/recovery-password" ||
+      req.originalUrl === "/soc/user/verifyUserPassword"
     ) {
       next();
     } else {

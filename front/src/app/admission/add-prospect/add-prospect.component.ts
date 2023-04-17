@@ -54,12 +54,13 @@ export class AddProspectComponent implements OnInit {
       this.commercialService.getAllPopulate().subscribe(commercials => {
         console.log(commercials)
         commercials.forEach(commercial => {
-          let bypass: any = commercial.user_id
-          if (bypass)
-            this.commercialList.push({ label: `${bypass.lastname} ${bypass.firstname}`, value: commercial.code_commercial_partenaire })
-          if (bypass._id == decodeToken.id)
+          let {user_id}: any = commercial
+          if (user_id)
+            this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+          if (user_id._id == decodeToken.id)
             this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
         })
+        console.log(this.commercialList)
       })
     }
 

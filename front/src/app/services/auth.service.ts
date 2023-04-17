@@ -198,7 +198,7 @@ export class AuthService {
 
   verifPassword(tbObj: any) {
     let url = this.apiUrl + "verifyUserPassword";
-    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })});
   }
 
   updatePwd(id: string, pwd) {

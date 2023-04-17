@@ -32,16 +32,43 @@
     </h5>
 
 
-    <div style="text-align: left;"><button pButton (click)="comeBack()"> <i
-                class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
+    <div style="text-align: left;"><button pButton (click)="comeBack()"> <i class="pi pi-sign-out"
+                pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
     </div>
 
     <div *ngIf="!activatedRoute.snapshot.params?.user_id" style="text-align: right;"><button pButton
             (click)="resetAuth()"> <i class="pi pi-sign-out" pTooltip="Se déconnecter"></i> Déconnexion</button>
     </div>
 
-    <div class="col-12 p-md-12 p-lg-12">
+    <!-- Formulaire de modification du mot de passe -->
+    <div class="col-12" *ngIf="showUpdatePassword">
+        <div class="card">
+            <h3 style="text-align: center;">Formulaire de modification du mot de passe</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+                <div class="field col-12">
+                    <label For="pwd_actu">Mot de passe actuel</label>
+                    <input pInputText id="pwd_actu" type="password" formControlName="passwordactual" />
+                </div>
+                <div class="field col-12">
+                    <label For="n_pwd">Nouveau mot de passe</label>
+                    <input pInputText id="n_pwd" type="password" formControlName="password" />
+                </div>
+                <div class="field col-12">
+                    <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
+                    <input pInputText id="confirm_n_pwd" type="password" formControlName="verifypassword">
+                </div>
+                <small style="color: red;">{{pwdmsgerr}}</small>
+                <div class="col-4 md:col-2">
+                    <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid"
+                        class="mr-2 mb-2"></button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <div class="col-12 p-md-12 p-lg-12">
+        <!--<i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
+            (click)="showUpdatePassword=true" style="font-size: 15px;" aria-hidden="true"></i>-->
         <p-panel header="Instructions et Détails du Cursus demandé" [toggleable]="false" [collapsed]="false"
             [style]="{'margin-bottom':'20px'}">
             <p-fieldset legend="Informations personelles">
@@ -66,10 +93,12 @@
                     </div>
                     <div class="col-12 md:col-3" *ngIf="!isCommercial">
                         <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier mes informations</a></p>
+                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a></p>
                     </div>
                     <div class="col-12 md:col-3" *ngIf="isCommercial">
                         <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier les informations
                                 personnelles</a></p>
+                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a></p>
                     </div>
                 </div>
                 <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
@@ -451,17 +480,17 @@
                 <ul>
                     <li *ngFor="let file of ListDocuments; index as i">
                         <div class="grid">
-    
+
                             <div class="field col-12" style="border-style: 2;border: 2em;border-bottom: red;">
                                 <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
                                     pTooltip="Visualiser dans un nouvel onglet"
                                     (click)="VisualiserFichier(ProspectConnected._id,i)"></i>
-                                <em (click)="VisualiserFichier(ProspectConnected._id,i)" [id]="i" style="cursor: pointer;"
-                                    pTooltip=" Visualiser dans un nouvel onglet">
+                                <em (click)="VisualiserFichier(ProspectConnected._id,i)" [id]="i"
+                                    style="cursor: pointer;" pTooltip=" Visualiser dans un nouvel onglet">
                                     {{ ListPiped[i] }}
                                 </em>
                             </div>
-    
+
                         </div>
                     </li>
                 </ul>
