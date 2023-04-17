@@ -99,19 +99,21 @@ export class ReglementComponent implements OnInit {
     if (this.route.snapshot.paramMap.get('partenaire_id')) {
       this.PartenaireSelected = this.route.snapshot.paramMap.get('partenaire_id')
       this.isPovPartenaire = true
-      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
-        this.factures = data
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(dataF => {
+        this.factures = dataF
+        this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+          this.updateStats(data, dataF)
+        })
       })
-      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
-        this.updateStats(data)
-      })
+
     } else {
-      this.FCService.getAll().subscribe(data => {
-        this.factures = data
+      this.FCService.getAll().subscribe(dataFacture => {
+        this.factures = dataFacture
+        this.VenteService.getAll().subscribe(dataVente => {
+          this.updateStats(dataVente, dataFacture)
+        })
       })
-      this.VenteService.getAll().subscribe(data => {
-        this.updateStats(data)
-      })
+
       this.PartenaireService.getAll().subscribe(data => {
         this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
         data.forEach(p => {
@@ -120,17 +122,17 @@ export class ReglementComponent implements OnInit {
       })
     }
   }
-  updateStats(data: Vente[]) {
+  updateStats(data: Vente[], dataFacture: FactureCommission[]) {
     this.stats = {
       tt_vente: Math.trunc(data.reduce((total, next) => total + next?.prospect_id?.montant_paye, 0)),
       tt_commission: 0,
-      tt_paye: Math.trunc(data.reduce((total, next) => total + (next?.statutCommission == 'Facture payé' || next?.statutCommission == 'A la source' || next?.statutCommission == 'Compensation' ? next?.montant : 0), 0)), // Somme ((Statut de commission équal à Facturé payé ou A la source ou Compensation) *Montant de la commission)  
-
+      tt_paye: Math.trunc(dataFacture.reduce((total, next) => total + (next?.statut == 'Payé' ? next?.montant : 0), 0)), // Somme ((Statut de commission équal à Facturé payé ou A la source ou Compensation) *Montant de la commission)  
+      //next?.statut == 'Facture payé' || next?.statut == 'A la source' || next?.statut == 'Compensation'
       reste_paye: 0
     }
     data.forEach(v => {
       if (v.produit) {
-        let nb = v.produit.substring(v.produit.lastIndexOf(':')+1, v.produit.lastIndexOf('€'))
+        let nb = v.produit.substring(v.produit.lastIndexOf(':') + 1, v.produit.lastIndexOf('€'))
         if (parseInt(nb) && !isNaN(parseInt(nb)))
           this.stats.tt_commission += parseInt(nb)
       }
@@ -213,18 +215,21 @@ export class ReglementComponent implements OnInit {
 
   selectPartenaire() {
     if (this.PartenaireSelected) {
-      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
-        this.factures = data
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(dataF => {
+        this.factures = dataF
+        this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+          this.updateStats(data,dataF)
+        })
       })
-      this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
-        this.updateStats(data)
-      })
+
     } else {
-      this.FCService.getAll().subscribe(data => {
-        this.factures = data
-      })
+
       this.VenteService.getAll().subscribe(data => {
-        this.updateStats(data)
+        this.FCService.getAll().subscribe(dataF => {
+          this.factures = dataF
+          this.updateStats(data, dataF)
+        })
+
       })
     }
 

@@ -5,7 +5,7 @@ import { User } from "./User";
 export class FactureCommission {
     constructor(
         public numero?: string,
-        public montant?: Number,
+        public montant?: number,
         public tva?: Number,
         public statut?: string,
         public nature?: string,
