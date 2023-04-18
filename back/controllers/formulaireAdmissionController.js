@@ -33,7 +33,7 @@ app.get("/RA/getAll", (req, res, next) => {
 app.put("/RA/update", (req, res) => {
     RentreeAdmission.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
         RentreeAdmission.findById(req.body._id).populate('ecoles')
-            .then((formFromDb) => { res.status(200).send(formFromDb); })
+            .then((formFromDb) => { console.log(formFromDb); res.status(200).send(formFromDb); })
             .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
