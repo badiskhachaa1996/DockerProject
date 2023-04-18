@@ -634,15 +634,18 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         {
                                             label: 'Formations disponibles',
-                                            icon: 'pi pi-briefcase'
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/admission/formations']
                                         },
                                         {
                                             label: 'Ecoles',
-                                            icon: 'pi pi-building'
+                                            icon: 'pi pi-building',
+                                            routerLink: ['/admission/ecoles']
                                         },
                                         {
                                             label: 'Rentrées Scolaire',
-                                            icon: 'pi pi-calendar'
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/admission/rentree']
                                         },
                                         {
                                             label: 'Dashboard',

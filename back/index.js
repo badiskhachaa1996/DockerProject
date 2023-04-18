@@ -135,6 +135,7 @@ const venteController = require('./controllers/venteCommissionController')
 const factureCommissionController = require('./controllers/factureCommissionController')
 const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
 const teamsIntController = require('./controllers/teamsIntController')
+const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -336,6 +337,7 @@ app.use("/soc/matching", MatchingController);
 app.use("/soc/stage", stageController);
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
+app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
