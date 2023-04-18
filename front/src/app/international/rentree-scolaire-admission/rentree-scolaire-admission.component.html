@@ -53,7 +53,7 @@
 
                 <div class="field col-12">
                     <label>Ecoles <span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="ecolesList"
+                    <p-multiSelect [options]="ecolesList" filter="true" optionLabel="titre" filterBy="titre"
                         formControlName="ecoles"></p-multiSelect>
                 </div>
                 <div>
