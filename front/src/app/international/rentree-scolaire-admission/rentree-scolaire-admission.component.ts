@@ -20,6 +20,11 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     this.FAService.RAgetAll().subscribe(data => {
       this.rentrees = data
     })
+    this.FAService.EAgetAll().subscribe(data => {
+      data.forEach(ec => {
+        this.ecolesList.push({ label: ec.titre, value: ec })
+      })
+    })
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -80,12 +85,14 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
   }
 
   affectedForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
     ecoles: new FormControl()
   })
 
   affectedEcole: RentreeAdmission = null
   initEcoles(rowData: RentreeAdmission) {
     this.affectedEcole = rowData
+    this.affectedForm.patchValue({...rowData})
   }
 
   onAffect() {
