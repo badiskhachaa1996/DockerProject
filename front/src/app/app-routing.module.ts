@@ -169,6 +169,9 @@ import { TeamsIntComponent } from './international/teams-int/teams-int.component
 import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
 import { OrientationComponent } from './admission/international/orientation/orientation.component';
 import { AdmissionIntComponent } from './admission/international/admission-int/admission-int.component';
+import { FormationAdmissionComponent } from './international/formation-admission/formation-admission.component';
+import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-admission.component';
+import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
 
 const routes: Routes = [
     {
@@ -318,6 +321,10 @@ const routes: Routes = [
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
+            /* Configuration Formulaire Admission */
+            { path: 'admission/formations', component: FormationAdmissionComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/ecoles', component: EcoleAdmissionComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

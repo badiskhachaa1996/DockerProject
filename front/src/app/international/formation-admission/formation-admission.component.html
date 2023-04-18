@@ -1,0 +1,226 @@
+<div class="grid">
+    <div class="col-12 grid" *ngIf="selectedFormation">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Modifier les informations de {{selectedFormation.nom}} </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="selectedFormation = null; updateForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+
+                <div class="field col-12">
+                    <label>Nom de la formation <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
+                        formControlName="nom" />
+                </div>
+                <div class="field col-6">
+                    <label>Niveau </label>
+                    <input pInputText type="text" placeholder="3" formControlName="niveau" />
+                </div>
+                <div class="field col-6">
+                    <label>RNCP</label>
+                    <input pInputText type="text" placeholder="Niveau 7" formControlName="rncp" />
+                </div>
+                <div class="field col-6">
+                    <label>Certificateur </label>
+                    <input pInputText type="text" placeholder="FEDE" formControlName="certificateur" />
+                </div>
+                <div class="field col-6">
+                    <label>Durée de la formation </label>
+                    <input pInputText type="text" placeholder="2 semaines" formControlName="duree" />
+                </div>
+                <div class="field col-12">
+                    <label>Description </label>
+                    <textarea pInputTextarea placeholder="Trop bien" formControlName="description"></textarea>
+                </div>
+                <div class="field col-6">
+                    <label>Critères d'admission </label>
+                    <input pInputText type="text" placeholder="être fort" formControlName="criteres" />
+                </div>
+                <div class="field col-6">
+                    <label>Tarif </label>
+                    <input pInputText type="text" placeholder="500€" formControlName="tarif" />
+                </div>
+                <div class="field col-6">
+                    <label>Langue</label>
+                    <input pInputText type="text" placeholder="Français" formControlName="langue" />
+                </div>
+                <div class="field col-6">
+                    <label>Déroulement </label>
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList"
+                        placeholder="Choisissez un deroulement">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-12 grid" *ngIf="addForm">
+        <div class="card col-12">
+
+            <h4 style="text-align: center;">Ajout d'une nouvelle formation </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="addForm = false; createForm.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
+                <div class="field col-12">
+                    <label>Nom de la formation <span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
+                        formControlName="nom" />
+                </div>
+                <div class="field col-6">
+                    <label>Niveau </label>
+                    <input pInputText type="text" placeholder="3" formControlName="niveau" />
+                </div>
+                <div class="field col-6">
+                    <label>RNCP</label>
+                    <input pInputText type="text" placeholder="Niveau 7" formControlName="rncp" />
+                </div>
+                <div class="field col-6">
+                    <label>Certificateur </label>
+                    <input pInputText type="text" placeholder="FEDE" formControlName="certificateur" />
+                </div>
+                <div class="field col-6">
+                    <label>Durée de la formation </label>
+                    <input pInputText type="text" placeholder="2 semaines" formControlName="duree" />
+                </div>
+                <div class="field col-12">
+                    <label>Description </label>
+                    <textarea pInputTextarea placeholder="Trop bien" formControlName="description"></textarea>
+                </div>
+                <div class="field col-6">
+                    <label>Critères d'admission </label>
+                    <input pInputText type="text" placeholder="être fort" formControlName="criteres" />
+                </div>
+                <div class="field col-6">
+                    <label>Tarif </label>
+                    <input pInputText type="text" placeholder="500€" formControlName="tarif" />
+                </div>
+                <div class="field col-6">
+                    <label>Langue</label>
+                    <input pInputText type="text" placeholder="Français" formControlName="langue" />
+                </div>
+                <div class="field col-6">
+                    <label>Déroulement </label>
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList"
+                        placeholder="Choisissez un deroulement">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- Listing des équipes -->
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Crée une école"
+                    (click)="initCreate()"></button>
+            </div>
+            <h5>Liste des formations</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="formations" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['nom', 'niveau', 'certificateur', 'description']" [rows]="5" [pageLinks]="5"
+                [paginator]="true" rowExpandMode="single" [totalRecords]="formations.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nom">Nom de formation<p-sortIcon field="nom">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="niveau">Niveau<p-sortIcon field="niveau">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rncp">Code RNCP<p-sortIcon field="rncp">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="certificateur">Certificateur<p-sortIcon field="certificateur">
+                            </p-sortIcon>
+                        <th pSortableColumn="duree">Durée de la formation<p-sortIcon field="duree">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="description">Description de la formation<p-sortIcon field="duree">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="criteres">Critères d'admission<p-sortIcon field="criteres">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="tarif">Tarif<p-sortIcon field="tarif">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="langue">langue<p-sortIcon field="langue">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="deroulement">Déroulement<p-sortIcon field="deroulement">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-formation>
+                    <tr>
+                        <td>
+                            {{ formation.nom }}
+                        </td>
+                        <td>
+                            {{ formation.niveau }}
+                        </td>
+                        <td>
+                            {{ formation.rncp }}
+                        </td>
+                        <td>
+                            {{ formation.certificateur }}
+                        </td>
+                        <td>
+                            {{ formation.duree }}
+                        </td>
+                        <td>
+                            {{ formation.description }}
+                        </td>
+                        <td>
+                            {{ formation.criteres }}
+                        </td>
+                        <td>
+                            {{ formation.tarif }}
+                        </td>
+                        <td>
+                            {{ formation.langue }}
+                        </td>
+                        <td>
+                            {{ formation.deroulement }}
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-pencil"
+                                (click)="initUpdate(formation);scrollToTop()" pTooltip="Modifier la formation"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(formation);"
+                                pTooltip="Supprimer la formation" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -820,7 +820,7 @@ app.post("/verifyUserPassword", (req, res) => {
         .compare(passwordToVerif, userFromDb.password)
         .then((valid) => {
           if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect !" });
+            res.status(401).json({ error: "Mot de passe incorrect !" });
           }
           res.status(200).json({ success: "OK" });
         })
