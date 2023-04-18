@@ -21,7 +21,14 @@ const transporter = nodemailer.createTransport({
 
 // recuperation de la liste des stages
 app.get("/get-stages", (req, res) => {
-    Stage.find()?.populate({path: 'student_id', populate: {path: 'user_id'}})?.populate('enterprise_id')?.populate({path: 'tutor_id', populate: {path: 'user_id'}})?.populate('commercial_id')
+    Stage.find()
+    ?.populate({path: 'student_id', populate: {path: 'user_id'}})
+    ?.populate({path: 'student_id', populate: {path: 'campus', populate: {path: 'ecole_id'}}})
+    ?.populate({path: 'student_id', populate: {path: 'classe_id', populate: {path: 'diplome_id'}}})
+    ?.populate({path: 'enterprise_id', populate: {path: 'directeur_id'}})
+    ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
+    ?.populate('director_id')
+    ?.populate('commercial_id')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(500).json({error: error, errorMsg: 'Impossible de récupérer la liste des stages'}) });
 });
@@ -29,7 +36,14 @@ app.get("/get-stages", (req, res) => {
 // recuperation du stage via son id
 app.get("/get-stage/:id", (req, res) => {
     const stageId = req.params.id;
-    Stage.findOne({_id: stageId})?.populate({path: 'student_id', populate: {path: 'user_id'}})?.populate('enterprise_id')?.populate({path: 'tutor_id', populate: {path: 'user_id'}})?.populate('commercial_id')
+    Stage.findOne({_id: stageId})
+    ?.populate({path: 'student_id', populate: {path: 'user_id'}})
+    ?.populate({path: 'student_id', populate: {path: 'campus', populate: {path: 'ecole_id'}}})
+    ?.populate({path: 'student_id', populate: {path: 'classe_id', populate: {path: 'diplome_id'}}})
+    ?.populate({path: 'enterprise_id', populate: {path: 'directeur_id'}})
+    ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
+    ?.populate('director_id')
+    ?.populate('commercial_id')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer le stage'}) });
 });
@@ -37,7 +51,14 @@ app.get("/get-stage/:id", (req, res) => {
 // recuperation des stages d'un utilisateur via son id étudiant
 app.get("/get-stage-by-student-id/:id", (req, res) => {
     const studentId = req.params.id;
-    Stage.find({student_id: studentId})?.populate({path: 'student_id', populate: {path: 'user_id'}})?.populate('enterprise_id')?.populate({path: 'tutor_id', populate: {path: 'user_id'}})?.populate('commercial_id')
+    Stage.find({student_id: studentId})
+    ?.populate({path: 'student_id', populate: {path: 'user_id'}})
+    ?.populate({path: 'student_id', populate: {path: 'campus', populate: {path: 'ecole_id'}}})
+    ?.populate({path: 'student_id', populate: {path: 'classe_id', populate: {path: 'diplome_id'}}})
+    ?.populate({path: 'enterprise_id', populate: {path: 'directeur_id'}})
+    ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
+    ?.populate('director_id')
+    ?.populate('commercial_id')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cet étudiant'}) });
 });
@@ -45,7 +66,14 @@ app.get("/get-stage-by-student-id/:id", (req, res) => {
 // recuperation des stages d'une entreprise via son id
 app.get("/get-stage-by-enterprise-id/:id", (req, res) => {
     const enterpriseId = req.params.id;
-    Stage.find({enterprise_id: enterpriseId})?.populate({path: 'student_id', populate: {path: 'user_id'}})?.populate('enterprise_id')?.populate({path: 'tutor_id', populate: {path: 'user_id'}})?.populate('commercial_id')
+    Stage.find({enterprise_id: enterpriseId})
+    ?.populate({path: 'student_id', populate: {path: 'user_id'}})
+    ?.populate({path: 'student_id', populate: {path: 'campus', populate: {path: 'ecole_id'}}})
+    ?.populate({path: 'student_id', populate: {path: 'classe_id', populate: {path: 'diplome_id'}}})
+    ?.populate({path: 'enterprise_id', populate: {path: 'directeur_id'}})
+    ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
+    ?.populate('director_id')
+    ?.populate('commercial_id')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cette entreprise'}) });
 });
@@ -53,7 +81,6 @@ app.get("/get-stage-by-enterprise-id/:id", (req, res) => {
 // création d'un nouveau stage
 app.post("/post-stage", (req, res) => {
     const stage = new Stage({...req.body});
-
     stage.save()
     .then((response) => {
         // requête de recuperation de l'entreprise via son id
@@ -88,7 +115,7 @@ app.post("/post-stage", (req, res) => {
         })
         .catch((error) => { res.status(400).json({error: error, errorMsg: "Impossible de récupérer l'entreprise liée au contrat"}); });
     })
-    .catch((error) => { res.status(400).json({error: error, errorMsg: "Impossible de créer un nouveau stage"}) });
+    .catch((error) => { console.log(error); res.status(400).json({error: error, errorMsg: "Impossible de créer un nouveau stage"}) });
 });
 
 // modification d'un stage
@@ -254,7 +281,7 @@ const uploadAttestationStorage = multer.diskStorage({
 const uploadAttestation = multer({storage: uploadAttestationStorage});
 
 app.post("/upload-attestation", uploadAttestation.single('file'), (req, res) => {
-    const file = req.files;
+    const file = req.file;
     const id = req.body.id;
 
     if(!file)
