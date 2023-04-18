@@ -169,7 +169,7 @@ export class StageService {
   // download de la convention de stage
   downloadConvention(idStage: string): Promise<any>
   {
-    const url = `${this.apiUrl}download-convention/${idStage}`;
+    const url = `${this.apiUrl}/download-convention/${idStage}`;
 
     return new Promise<any>((resolve, reject) => {
       this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -183,7 +183,7 @@ export class StageService {
   // download de l'avenant de stage
   downloadAvenant(idStage: string): Promise<any>
   {
-    const url = `${this.apiUrl}download-avenant/${idStage}`;
+    const url = `${this.apiUrl}/download-avenant/${idStage}`;
 
     return new Promise<any>((resolve, reject) => {
       this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -197,7 +197,7 @@ export class StageService {
   // download de l'attestation de stage
   downloadAttestation(idStage: string): Promise<any>
   {
-    const url = `${this.apiUrl}download-attestation/${idStage}`;
+    const url = `${this.apiUrl}/download-attestation/${idStage}`;
 
     return new Promise<any>((resolve, reject) => {
       this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
