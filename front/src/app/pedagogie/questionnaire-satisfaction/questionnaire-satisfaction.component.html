@@ -16,7 +16,7 @@
                         <label>Question 1 :</label><br>
                         <label>Dans quelle classe êtes-vous?</label>
                         <p-dropdown [options]="dropdownGroupe" formControlName="formation"
-                            placeholder="Choissisez votre groupe" [filter]="true"></p-dropdown>
+                            placeholder="Choisissez votre groupe" [filter]="true"></p-dropdown>
 
                     </div>
 
@@ -100,7 +100,7 @@
                         <label>Question 16 :</label><br>
                         <label>L’école répond-elle à vos attentes premières ?</label>
                         <p-dropdown [options]="dropdownAttentes" formControlName="ecole" (onChange)="changeAttente()"
-                            placeholder="Choissisez votre réponse"></p-dropdown>
+                            placeholder="Choisissez votre réponse"></p-dropdown>
                     </div>
                     <div class="field col-12" *ngIf="satisfactionsForm.value.ecole=='Pas tout à fait'">
                         <label>Question 16b :</label><br>

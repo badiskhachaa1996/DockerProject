@@ -93,8 +93,8 @@
         <p-toast></p-toast>
         <h4>Listes des présences</h4>
         <p-button
-            *ngIf="isNotEtudiant && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant)"
-            label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button>
+            *ngIf="isNotEtudiant"
+            label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button> <!-- && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant) -->
         <p
             *ngIf="!EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé') &&  !EtudiantDetail.isAlternant">
             Votre dossier n'est pas régularisé, nous ne pouvons donc pas générer une attestation d'assiduité.<br>

@@ -45,7 +45,7 @@
 
             <div class="field col-12 md:col-6">
                 <label For="campus">Campus</label>
-                <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus" formControlName="campus_id"
+                <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus" formControlName="campus_id"
                     emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
                 </p-dropdown>
             </div>
@@ -199,7 +199,7 @@
 
             <div class="field col-12 md:col-6">
                 <label For="campus">Campus</label>
-                <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus" formControlName="campus_id"
+                <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus" formControlName="campus_id"
                     emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
                 </p-dropdown>
             </div>
@@ -558,7 +558,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{ prospect.date_naissance | date: 'mediumDate'}}</td>
                     <td>{{prospect.user_id.nationnalite}}</td>
                     <td>{{prospect.user_id.pays_adresse}}</td>
                     <td>{{prospect.user_id.email}}</td>
@@ -869,7 +869,7 @@
                         etudiant.user_id.pays_adresse }}
                     </td>
                     <td>
-                        {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                        {{ etudiant.date_naissance | date:'mediumDate' }}
                     </td>
                     <td>
                         {{ etudiant.user_id?.phone }}

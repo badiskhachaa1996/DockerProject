@@ -31,7 +31,7 @@
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" class="w-full" />
                 </span>
-                <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
+                <p-multiSelect [options]="searchClass" placeholder="Choisissez les groupes"
                     (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)">
                 </p-multiSelect>
             </ng-template>

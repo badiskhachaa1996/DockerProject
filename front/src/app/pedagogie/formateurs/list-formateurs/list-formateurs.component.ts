@@ -224,7 +224,7 @@ export class ListFormateursComponent implements OnInit {
   }
 
   //Methode de recuperation du diplome à mettre à jour
-  onGetbyId(formateur: Formateur) {
+  onGetbyId(formateur: any) {
     //Recuperation du formateur à modifier
     this.formateurToUpdate = formateur
     this.formateurService.getById(formateur._id).subscribe(
@@ -308,6 +308,7 @@ export class ListFormateursComponent implements OnInit {
             this.volumeHList.push({ matiere_id: key, volume_init: parseInt(response.volume_h[key]), isNew: false })
           });
         }
+
       }),
       ((error) => { console.error(error); })
     );
@@ -469,14 +470,19 @@ export class ListFormateursComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Erreur avec les emplois du temps', detail: "Contacté un Admin" })
     })
   }
-
-  expandFc(rowData: Formateur) {
+  volumes = []
+  expandFc(rowData: any) {
     this.formateurService.getFiles(rowData?._id).subscribe(
       (data) => {
         this.ListDocuments = data
       },
       (error) => { console.error(error) }
     );
+    this.formateurService.getAllVolume(rowData.user_id._id).subscribe(volumes => {
+      this.volumes = volumes
+    }, err => {
+      console.error(err)
+    })
   }
 
   downloadFile(id, i) {

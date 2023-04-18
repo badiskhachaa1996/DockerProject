@@ -61,7 +61,7 @@
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
 				<div class="field col-12 md:col-6">
 					<label For="contrat">Type de contract<span style="color: red;"> * </span></label>
-					<p-dropdown [options]="typeContratList" placeholder="Choissisez un type de contrat" formControlName="type_contrat">
+					<p-dropdown [options]="typeContratList" placeholder="Choisissez un type de contrat" formControlName="type_contrat">
 					</p-dropdown>
 				</div>
 
@@ -69,7 +69,7 @@
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
-					<p-dropdown [options]="prestataireList" placeholder="Choissisez une entreprise" formControlName="prestataire_id" filter="true">
+					<p-dropdown [options]="prestataireList" placeholder="Choisissez une entreprise" formControlName="prestataire_id" filter="true">
 					</p-dropdown>
 				</div>
 
@@ -77,7 +77,7 @@
 					<label>Campus</label><br>
 					<p-multiSelect formControlName="campus" [options]="dropdownCampus"
 						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
-						placeholder="Choissisez un campus">
+						placeholder="Choisissez un campus">
 					</p-multiSelect>
 				</div>
 
@@ -267,7 +267,7 @@
 								<label>Diplome:</label><br>
 								<p-dropdown [options]="diplomesListe" optionLabel="titre"
 									(onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
-									placeholder="Choissisez un Diplome" class="form-control"></p-dropdown>
+									placeholder="Choisissez un Diplome" class="form-control"></p-dropdown>
 							</div>
 							<div class="col-12 md:col-6" *ngIf="jury_diplomesList[i]['isNew']==false">
 								<label>Diplome:</label><br>
@@ -329,12 +329,12 @@
 				<div class="field col-12 md:col-6">
 					<label For="appreciation">Semestre</label>
 					<p-dropdown [options]="dropdownSemestre" formControlName="semestre"
-						placeholder="Choissisez un semestre"></p-dropdown>
+						placeholder="Choisissez un semestre"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-6">
 					<label For="appreciation">Groupe</label>
 					<p-dropdown [options]="dropdownGroupe" formControlName="classe_id"
-						placeholder="Choissisez un groupe"></p-dropdown>
+						placeholder="Choisissez un groupe"></p-dropdown>
 				</div>
 				<div class="col-12">
 					<button pButton label="Voir la liste des appréciations" type="submit"
@@ -499,18 +499,22 @@
 						<th>Modules</th>
 						<th>Volume initiale</th>
 						<th>Volume consommé</th>
+						<th>Volume Planifié</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
-					<tr *ngFor="let fvh of formateur.volume_h |keyvalue">
-						<td *ngIf="matiereDic[fvh.key]">
-							{{matiereDic[fvh.key].nom}}
+					<tr *ngFor="let v of volumes">
+						<td *ngIf="v">
+							{{v.matiere_nom}}
 						</td>
-						<td>
-							{{fvh.value}}
+						<td *ngIf="v">
+							{{v.v_ini}}
 						</td>
-						<td *ngIf="formateur.volume_h_consomme && formateur.volume_h_consomme[fvh.key]">
-							{{formateur.volume_h_consomme[fvh.key]}}
+						<td *ngIf="v">
+							{{v.v_cons}}
+						</td>
+						<td *ngIf="v">
+							{{v.v_plan}}
 						</td>
 					</tr>
 				</ng-template>

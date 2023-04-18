@@ -189,7 +189,7 @@
                     <div class="field col-6">
                         <label>CFA <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown placeholder="Choississez le CFA" [options]="dropdownCFA" filter="true"
+                        <p-dropdown placeholder="Choisissez le CFA" [options]="dropdownCFA" filter="true"
                             formControlName="ecole">
                         </p-dropdown>
                     </div>
@@ -393,7 +393,7 @@
                     <div class="field col-6">
                         <label>CFA <span style="color: red;"> *
                             </span></label>
-                        <p-dropdown placeholder="Choississez le CFA" [options]="dropdownCFA" filter="true"
+                        <p-dropdown placeholder="Choisissez le CFA" [options]="dropdownCFA" filter="true"
                             formControlName="ecole">
                         </p-dropdown>
                     </div>
@@ -588,8 +588,12 @@
                             filterPlaceholder="Choisissez un commercial"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreCampus"
-                            (onChange)="dt1.filter($event.value, 'alternant_id.campus._id', 'equals'); onFilterByCampus($event)"
+                            (onChange)="dt1.filter($event.value, 'alternant_id.campus', 'equals'); onFilterByCampus($event)"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
+
+                        <p-dropdown [style]="{'margin':'1px'}" [options]="filtreEcole"
+                            (onChange)="dt1.filter($event.value, 'ecole._id', 'equals')"
+                            filterPlaceholder="Choisissez une ecole"></p-dropdown>
 
                         <p-dropdown [style]="{'margin':'1px'}" [options]="filtreFormation"
                             (onChange)="dt1.filter($event.value, 'formation._id', 'equals')"

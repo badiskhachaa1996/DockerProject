@@ -26,7 +26,7 @@ import { Ecole } from 'src/app/models/Ecole';
 export class AddDiplomeComponent implements OnInit {
 
   rythmeList = [
-    { value: "Choissisez le rythme de la formmation", actif: true },
+    { value: "Choisissez le rythme de la formmation", actif: true },
     { value: "Tous les jours", actif: false },
     { value: "2 jours par semaine", actif: false },
     { value: "1 semaine sur 3", actif: false },
@@ -34,7 +34,7 @@ export class AddDiplomeComponent implements OnInit {
   ]
 
   domaineEtude = [
-    { value: "Choissisez le type du diplôme", actif: true },
+    { value: "Choisissez le type du diplôme", actif: true },
     { value: "Informatique", actif: false },
     { value: "Commerce", actif: false },
     { value: "Construction", actif: false },
@@ -44,21 +44,21 @@ export class AddDiplomeComponent implements OnInit {
   ]
 
   typeDiplome = [
-    { value: "Choissisez le type du diplôme", actif: true },
+    { value: "Choisissez le type du diplôme", actif: true },
     { value: "BTS", actif: false },
     { value: "RNCP", actif: false },
     { value: "CAP", actif: false },
   ]
 
   typeEtude = [
-    { value: "Choissisez le type d'étude", actif: true },
+    { value: "Choisissez le type d'étude", actif: true },
     { value: "Initial", actif: false },
     { value: "Apprentissage", actif: false },
     { value: "Continu", actif: false }
   ]
 
   niveauEtude = [
-    { value: "Choissisez le type d'étude", actif: true },
+    { value: "Choisissez le type d'étude", actif: true },
     { value: "Niveau 3", actif: false },
     { value: "Niveau 4", actif: false },
     { value: "Niveau 5", actif: false },

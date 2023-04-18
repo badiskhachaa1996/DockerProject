@@ -72,7 +72,7 @@
                     <div class="field col-5 md:col-4">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
                         <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
-                            formControlName="civilite" placeholder="Choissisez une civilité">
+                            formControlName="civilite" placeholder="Choisissez une civilité">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -186,7 +186,7 @@
                         <label>Campus</label><br>
                         <p-multiSelect formControlName="campus" [options]="dropdownCampus"
                             emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
-                            placeholder="Choissisez un campus">
+                            placeholder="Choisissez un campus">
                         </p-multiSelect>
                     </div>
 
@@ -378,7 +378,7 @@
                                     <label>Diplome:</label><br>
                                     <p-dropdown [options]="diplomesListe" optionLabel="titre" filter="true"
                                         (onChange)="changeCout(i, $event,'titre')"
-                                        [(value)]="jury_diplomesList[i]['titre']" placeholder="Choissisez un Diplome"
+                                        [(value)]="jury_diplomesList[i]['titre']" placeholder="Choisissez un Diplome"
                                         class="form-control"></p-dropdown>
                                 </div>
                                 <div class="col-12 md:col-4">

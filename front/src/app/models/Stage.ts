@@ -4,6 +4,7 @@ export class Stage {
         public student_id? :            string,
         public enterprise_id? :         string,
         public tutor_id? :              string,
+        public director_id? :           string,
         public begin_date? :            Date,
         public end_date? :              Date,
         public schedules_per_week? :    number,

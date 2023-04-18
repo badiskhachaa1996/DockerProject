@@ -6,7 +6,8 @@ const tuteurSch = mongoose.Schema({
     entreprise_id: { type: mongoose.Schema.Types.ObjectId, ref: "entreprise" },
     fonction: { type: String },
     anciennete: { type: String },
-    niveau_formation: { type: String }
+    niveau_formation: { type: String },
+    date_naissance: { type: Date },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

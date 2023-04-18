@@ -9,7 +9,8 @@ import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-ch
 import { Observable } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { Table } from 'primeng/table';
-
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-pv-semestriel',
   templateUrl: './pv-semestriel.component.html',
@@ -133,5 +134,32 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
       r += col.coeff
     })
     return r
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    this.dataPV.forEach(data => {
+      let t = {}
+      t['ID Etudiant'] = data.custom_id
+      t['NOM'] = data.nom
+      t['Prenom'] = data.nom
+      t['Date de Naissance'] = data.date_naissance
+      t['Date Inscrit'] = data.date_inscrit
+      t['Email'] = data.email
+      this.cols.forEach(col => {
+        t[col.module] = data.notes[col.module]
+      })
+      t['Moyenne'] = this.calculMoyenne(data.notes)
+      t['Appréciations'] = data.appreciation
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, `pv_${this.SEMESTRE}_${this.classe.abbrv}_export_${new Date().toLocaleDateString("fr-FR")}.xlsx`);
+
   }
 }

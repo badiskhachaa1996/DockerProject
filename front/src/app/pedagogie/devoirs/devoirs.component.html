@@ -14,7 +14,7 @@
                     <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
 
                     <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='filterModule()'
-                        formControlName="classe_id" placeholder="Choissisez un groupe">
+                        formControlName="classe_id" placeholder="Choisissez un groupe">
                     </p-multiSelect>
 
                 </div>
@@ -22,7 +22,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module:</label><br>
                     <p-dropdown [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle();'
-                        formControlName="matiere" placeholder="Choissisez un module">
+                        formControlName="matiere" placeholder="Choisissez un module">
                     </p-dropdown>
                 </div>
 

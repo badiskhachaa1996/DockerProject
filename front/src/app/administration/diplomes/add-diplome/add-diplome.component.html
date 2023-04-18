@@ -61,7 +61,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus <span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="campusList" placeholder="Choissisez le campus"
+                    <p-multiSelect [options]="campusList" placeholder="Choisissez le campus"
                         formControlName="campus_id"></p-multiSelect>
                     <div *ngIf="campus_id.invalid && (campus_id.touched || campus_id.dirty)">
                         <span style="color: red;" class="error" *ngIf="campus_id.errors?.required" style="color: red;">*

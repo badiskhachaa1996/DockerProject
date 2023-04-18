@@ -18,12 +18,12 @@
                     le libelle de la séance.</li>
                 <li><span style="color: red;">Temps Max pour signer (en Min)</span> : Le temps maximum pendant lequels
                     les étudiants peuvent signer en début de séance.</li>
-                <li><span style="color: red;">Début / Fin </span> : Choissisez la date ainsi que l'heure de début et de
+                <li><span style="color: red;">Début / Fin </span> : Choisissez la date ainsi que l'heure de début et de
                     fin de la séance.</li>
                 <li><span style="color: red;">Campus</span> : Sélectionner le campus où se déroulera la séance.</li>
                 <li><span style="color: red;">Nom du formateur</span> : Sélectionner le formateur de la séance.</li>
                 <li><span style="color: red;">Numéro de séance</span> : Indiquez le numéro de la séance</li>
-                <li><span style="color: red;">Présentiel/Distanciel</span> : Choissisez si la séance est en présentiel
+                <li><span style="color: red;">Présentiel/Distanciel</span> : Choisissez si la séance est en présentiel
                     ou en distanciel. Si la séance est en présentiel, une liste de choix va apparaître. Elle vous
                     permettra de sélectionner la salle dans laquelle se déroulera la séance.</li>
                 <li><span style="color: red;">Planifiée/Validée</span> : Une séance planifiée est une séance qui est en
@@ -68,7 +68,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
                     <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
-                        (onChange)="loadNBSeance();" placeholder="Choissisez un module"
+                        (onChange)="loadNBSeance();" placeholder="Choisissez un module"
                         emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>
@@ -92,7 +92,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Période <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="periode_seance" [options]="typeSeance" (onChange)="changeDate()"
-                        placeholder="Choissisez une période">
+                        placeholder="Choisissez une période">
                     </p-dropdown>
                 </div>
                 <div class="field col-12"
@@ -114,7 +114,7 @@
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur' && seanceForm.value.seance_type=='Séance'">
                     <label>Nom du formateur <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
-                        placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
+                        placeholder="Choisissez un formateur" emptyFilterMessage="Pas de formateur trouvé"
                         filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>

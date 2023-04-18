@@ -17,6 +17,8 @@ export class AddProspectComponent implements OnInit {
     source: new FormControl('', Validators.required)
   })
 
+  isPartenaireExterne = false
+
   ecoleList = [
     { label: "Estya", value: "estya" },
     { label: "ESPIC", value: "espic" },
@@ -47,10 +49,11 @@ export class AddProspectComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
+      
       this.commercialService.getAllPopulate().subscribe(commercials => {
         commercials.forEach(commercial => {
           let bypass: any = commercial.user_id
-          console.log(bypass)
+          this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
           if (bypass)
             this.commercialList.push({ label: `${bypass.lastname} ${bypass.firstname}`, value: commercial.code_commercial_partenaire })
           if (bypass._id == decodeToken.id)

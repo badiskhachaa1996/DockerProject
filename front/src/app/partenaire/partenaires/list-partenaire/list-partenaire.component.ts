@@ -3,6 +3,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { saveAs } from "file-saver";
 
 import { MessageService as ToastService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -13,7 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -44,6 +46,7 @@ export class ListPartenaireComponent implements OnInit {
   showFormAddPartenaire = false
   statutList = environment.typeUser
   civiliteList = environment.civilite;
+  paysList = environment.pays;
   entreprisesList = []
   campusList = []
   formationList = []
@@ -51,21 +54,43 @@ export class ListPartenaireComponent implements OnInit {
   formatJuridique = [{ value: "EIRL" }, { value: "EURL" }, { value: "SARL" }, { value: "SA" }, { value: "SAS" }, { value: "SNC" }, { value: "Etudiant IMS" }, { value: "Individuel" }]
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
+  dropdownAnciennete = [
+    { label: "Nouveau", value: "Nouveau" },
+    { label: "Ancien", value: "Ancien" }
+  ]
+  dropdownContribution = [
+    { label: "Actif", value: "Actif" },
+    { label: "Inactif", value: "Inactif" },
+    { label: "Occasionel", value: "Occasionel" },
+  ]
+  dropdownEtatContrat = [
+    { label: "Non", value: "Non" },
+    { label: "En cours", value: "En cours" },
+    { label: "Signé", value: "Signé" },
+    { label: "Annulé", value: "Annulé" },
+  ]
+
   registerForm: FormGroup;
 
   formModifPartenaire: FormGroup;
   partenaireToUpdate: Partenaire;
-  idPartenaireToUpdate: string;
+  idPartenaireToUpdate: Partenaire;
   idUserOfPartenaireToUpdate: string;
   showFormModifPartenaire = false;
-  partenaireList: any ={};
+  partenaireList: any = {};
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
 
   canDelete = false
 
-  constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
+  filterAnciennete = []
+
+  filterContribution = []
+  filterEtat = []
+
+  constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
+    private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
@@ -79,6 +104,20 @@ export class ListPartenaireComponent implements OnInit {
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
+      let tempList = []
+      let temp2List = []
+      let temp3List = []
+      data.forEach(d => {
+        let temp = { label: d.statut_anciennete, value: d.statut_anciennete }
+        let temp2 = { label: d.contribution, value: d.contribution }
+        let temp3 = { label: d.etat_contrat, value: d.etat_contrat }
+        if (!temp2List.includes(temp2) && d.contribution)
+          this.filterContribution.push(temp2); temp2List.push(temp2)
+        if (!tempList.includes(temp) && d.statut_anciennete)
+          this.filterAnciennete.push(temp); tempList.push(temp)
+        if (!temp3List.includes(temp3) && d.etat_contrat)
+          this.filterEtat.push(temp3); temp3List.push(temp3)
+      })
     })
     this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {
@@ -135,11 +174,12 @@ export class ListPartenaireComponent implements OnInit {
       }
     }
 
-
-    this.idPartenaireToUpdate = rowData._id;
+    this.commissions = rowData.commissions
+    console.log(rowData.commissions)
+    this.idPartenaireToUpdate = rowData;
     this.formModifPartenaire.patchValue({
-      nomSoc: rowData.nom,
-      phonePartenaire: rowData.phone,
+      nom: rowData.nom,
+      phone: rowData.phone,
       emailPartenaire: rowData.email,
       number_TVA: rowData.number_TVA,
       SIREN: rowData.SIREN,
@@ -158,11 +198,11 @@ export class ListPartenaireComponent implements OnInit {
   //Méthode d'initialisation du formulaire de modification d'un partenaire
   onInitFormModifPartenaire() {
     this.formModifPartenaire = this.formBuilder.group({
-      nomSoc: ['', [Validators.required]],
+      nom: ['', [Validators.required]],
       type: ['', [Validators.required]],
       format_juridique: ['', [Validators.required]],
       indicatif: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
-      phonePartenaire: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       indicatif_whatsapp: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       WhatsApp: ['', [Validators.pattern('[- +()0-9]+')]],
       emailPartenaire: ['', [Validators.required, Validators.email]],
@@ -210,7 +250,7 @@ export class ListPartenaireComponent implements OnInit {
     let Services_m = this.formModifPartenaire.get('Services').value;
     let Pays_m = this.formModifPartenaire.get('Pays').value;
     this.partenaireToUpdate = new Partenaire(
-      this.idPartenaireToUpdate,
+      this.idPartenaireToUpdate._id,
       null,
       null,
       nomSoc_m,
@@ -250,6 +290,155 @@ export class ListPartenaireComponent implements OnInit {
     this.router.navigate(['partenaireInscription']);
   }
 
+  clickFile() {
+    document.getElementById('selectedFile').click();
+  }
+
+  FileUploadPC(event) {
+    if (event && event.length > 0 && this.idPartenaireToUpdate != null) {
+      const formData = new FormData();
+
+      formData.append('id', this.idPartenaireToUpdate._id)
+      formData.append('file', event[0])
+      this.CService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de la photo de profil avec succès' });
+        this.loadPP(this.idPartenaireToUpdate)
+      }, (error) => {
+        console.error(error)
+      })
+    }
+  }
+
+  clickFile2() {
+    document.getElementById('selectedFile2').click();
+  }
+
+  FileUpload2(event) {
+    if (event && event.length > 0 && this.idPartenaireToUpdate != null) {
+      const formData = new FormData();
+
+      formData.append('id', this.idPartenaireToUpdate._id)
+      formData.append('file', event[0])
+      this.PartenaireService.uploadEtatContrat(formData).subscribe(data => {
+        this.messageService.add({ severity: 'success', summary: 'Etat de Contract', detail: 'Nouvelle etat de contrat enregistré' })
+      })
+    }
+  }
+  imageToShow: any = "../assets/images/avatar.PNG"
+  commissions: any[] = []
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    console.log(rowData)
+    this.CService.getProfilePicture(rowData._id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+  }
+  editInfoCommercial = false
+  editInfoCommercialForm: FormGroup = new FormGroup({
+    indicatifPhone: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    indicatifWhatsapp: new FormControl(''),
+    WhatsApp: new FormControl(''),
+    site_web: new FormControl(''),
+    facebook: new FormControl(''),
+    Pays: new FormControl([], Validators.required),
+    Services: new FormControl('', Validators.required),
+    description: new FormControl('', Validators.required),
+  })
+  initEditCommercialForm() {
+    this.editInfoCommercial = true
+    this.editInfoCommercialForm.setValue({
+      indicatifPhone: this.idPartenaireToUpdate.indicatifPhone,
+      phone: this.idPartenaireToUpdate.phone,
+      indicatifWhatsapp: this.idPartenaireToUpdate.indicatifWhatsapp,
+      WhatsApp: this.idPartenaireToUpdate.WhatsApp,
+      site_web: this.idPartenaireToUpdate.site_web,
+      facebook: this.idPartenaireToUpdate.facebook,
+      Pays: this.idPartenaireToUpdate.Pays.split(','),
+      Services: this.idPartenaireToUpdate.Services,
+      description: this.idPartenaireToUpdate.description,
+    })
+  }
+
+  saveEditCommercialInfo() {
+
+    let data = { ...this.editInfoCommercialForm.value }
+    data._id = this.idPartenaireToUpdate._id
+    data.Pays = data.Pays.join(',')
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      this.idPartenaireToUpdate = partenaire
+      this.messageService.add({ severity: 'success', summary: 'Informations Partenaires', detail: 'Mise à jour des informations avec succès' });
+      this.editInfoCommercial = false
+    })
+  }
+
+  ajoutCommission = new FormGroup({
+    description: new FormControl('', Validators.required),
+    montant: new FormControl('', Validators.required)
+  })
+  addCommission() {
+    this.commissions.push({ ...this.ajoutCommission.value })
+    //Update sur le server
+    this.PartenaireService.newUpdate({ _id: this.idPartenaireToUpdate._id, commissions: this.commissions }).subscribe(data => {
+
+      this.ajoutCommission.reset()
+    })
+
+  }
+
+  downloadContrat() {
+    this.PartenaireService.downloadContrat(this.idPartenaireToUpdate._id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, this.idPartenaireToUpdate.pathEtatContrat);
+        this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+  }
+  editInfoPartenariat = false
+  editInfoPartenariatForm: FormGroup = new FormGroup({
+    statut_anciennete: new FormControl('', Validators.required),
+    contribution: new FormControl('', Validators.required),
+  })
+  initEditPartenariatForm() {
+    this.editInfoPartenariat = true
+    this.editInfoPartenariatForm.setValue({
+      statut_anciennete: this.idPartenaireToUpdate.statut_anciennete,
+      contribution: this.idPartenaireToUpdate.contribution,
+    })
+  }
+
+  saveEditPartenariatForm() {
+    let data = { ...this.editInfoPartenariatForm.value }
+    data._id = this.idPartenaireToUpdate._id
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      this.idPartenaireToUpdate = partenaire
+      this.messageService.add({ severity: 'success', summary: 'Informations Partenaires', detail: 'Mise à jour des informations avec succès' });
+      this.editInfoPartenariat = false
+    })
+  }
+
+  updateEtatContrat() {
+    
+    let data = { _id: this.idPartenaireToUpdate._id, etat_contrat: this.idPartenaireToUpdate.etat_contrat }
+    this.PartenaireService.newUpdate(data).subscribe(partenaire => {
+      console.log(partenaire)
+    })
+  }
   /*getPartenaireList() 
   {
     this.partenaireService.getAll().subscribe((data) =>{

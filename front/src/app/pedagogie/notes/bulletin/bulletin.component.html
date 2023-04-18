@@ -7,20 +7,20 @@
                 <label For="classe">Groupe</label>
                 <p-dropdown formControlName="classe" [options]="dropdownClasse" (onChange)="updateDropdownPV()"
                     emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du Groupe" filter="true"
-                    placeholder='Choissisez le groupe'>
+                    placeholder='Choisissez le groupe'>
                 </p-dropdown>
             </div>
             <div class="field col-12 md:col-6">
                 <label For="semestre">Semestre</label>
                 <p-dropdown formControlName="semestre" [options]="dropdownSemestre" (onChange)="updateDropdownPV()"
                     emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif"
-                    placeholder='Choissisez le semestre' filter="true">
+                    placeholder='Choisissez le semestre' filter="true">
                 </p-dropdown>
             </div>
 
             <div class="field col-12" *ngIf="dropdownPV">
                 <label>Chargé un PV enregistré:</label>
-                <p-dropdown formControlName="pv" [options]="dropdownPV" placeholder='Choissisez un PV'>
+                <p-dropdown formControlName="pv" [options]="dropdownPV" placeholder='Choisissez un PV'>
                 </p-dropdown>
             </div>
 

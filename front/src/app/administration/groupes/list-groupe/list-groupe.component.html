@@ -42,7 +42,7 @@
 				<div class="field col-12">
 					<label for="campus">Campus</label>
 					<p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
-						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Choissisez un campus"
+						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Choisissez un campus"
 						filter="true"></p-dropdown>
 				</div>
 
@@ -75,7 +75,7 @@
 				<div class="field col-12">
 					<label for="campus">Semestre</label>
 					<p-dropdown [options]="semestreList" formControlName="semestre"
-						placeholder="Choissisez un semestre"></p-dropdown>
+						placeholder="Choisissez un semestre"></p-dropdown>
 				</div>
 				<div style="justify-content: right;" class="col-6">
 					<button pButton label="PV Note" type="button" [disabled]="formPV.invalid"
@@ -139,7 +139,7 @@
 				[rowHover]="true" [totalRecords]="classes.length" [paginator]="true" [pageLinks]="5"
 				[globalFilterFields]="['abbrv']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-				<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
+				<p-multiSelect [options]="searchClass" placeholder="Choisissez les groupes"
 					(onChange)="dt1.filter($event.value, 'filiere','in');">
 				</p-multiSelect>
 

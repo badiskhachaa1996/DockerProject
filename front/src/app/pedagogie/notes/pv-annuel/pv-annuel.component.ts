@@ -9,6 +9,8 @@ import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-ch
 import { Observable, timeout } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { Table } from 'primeng/table';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-pv-annuel',
@@ -307,6 +309,29 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       }, 2000)
       this.messageService.add({ severity: 'success', summary: `Chargement du ${semestre} PV avec succès` })
     }
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    this.dataPVAnnuel.forEach(data => {
+      let t = {}
+      t['ID Etudiant'] = data.custom_id
+      t['NOM'] = data.nom
+      t['Prenom'] = data.nom
+      t['Date de Naissance'] = data.date_naissance
+      t['Date Inscrit'] = data.date_inscrit
+      t['Email'] = data.email
+      
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
   }
 
 }
