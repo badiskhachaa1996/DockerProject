@@ -611,6 +611,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Accompagenement Consulaire',
                                     icon: 'pi pi-whatsapp',
+                                    routerLink: ['/international/consulaire']
                                 },
                                 {
                                     label: 'Gestion de l\'équipe',
