@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
@@ -21,9 +22,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
       this.rentrees = data
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(ec => {
-        this.ecolesList.push({ label: ec.titre, value: ec })
-      })
+      this.ecolesList = data
     })
   }
 
@@ -104,7 +103,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     })
   }
 
-  ecolesList = []
+  ecolesList: EcoleAdmission[] = []
 
 
 }
