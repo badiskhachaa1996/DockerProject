@@ -402,6 +402,16 @@ app.get("/getAllAdmission", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Sourcing
+app.get("/getAllConsulaire", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ phase_candidature: "En phase d'orientation consulaire", statut_payement: "Oui" }] }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 app.get("/getAllByStatut/:statut", (req, res, next) => {
     //statut = "En attente de traitement"
     if (req.params.statut == "En attente de traitement")

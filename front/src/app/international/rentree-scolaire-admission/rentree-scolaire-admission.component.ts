@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
@@ -78,6 +78,26 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
       }
     }, 15);
   }
+
+  affectedForm: FormGroup = new FormGroup({
+    ecoles: new FormControl()
+  })
+
+  affectedEcole: RentreeAdmission = null
+  initEcoles(rowData: RentreeAdmission) {
+    this.affectedEcole = rowData
+  }
+
+  onAffect() {
+    this.FAService.RAupdate({ ...this.affectedForm.value }).subscribe(data => {
+      this.rentrees.splice(this.rentrees.indexOf(this.affectedEcole), 1, data)
+      this.affectedEcole = null
+      this.affectedForm.reset()
+      this.MessageService.add({ severity: "success", summary: `Mis à jour des écoles de la rentrée scolaire ${data.nom} avec succès` })
+    })
+  }
+
+  ecolesList = []
 
 
 }

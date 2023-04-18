@@ -47,7 +47,7 @@ const prospect_schema = new mongoose.Schema({
     },
     rythme_formation: {
         type: String,
-        default:"Initiale"
+        default: "Initiale"
     },
     servicesEh: {
         type: [Boolean],
@@ -118,7 +118,8 @@ const prospect_schema = new mongoose.Schema({
         default: []
     },
     avancement_visa: {
-        type: String
+        type: String,
+        default: "Pas de retour"
     },
     enTraitement: {
         type: Boolean,
@@ -264,6 +265,19 @@ const prospect_schema = new mongoose.Schema({
         type: String
     },
     numero_dossier_campus_france: {
+        type: String
+    },
+    consulaire_traited_by: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
+    },
+    consulaire_date: {
+        type: Date,
+    },
+    note_dossier_cf: {
+        type: String
+    },
+    note_consulaire: {
         type: String
     }
 });
