@@ -345,11 +345,19 @@ export class OrientationComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    this.lengthPaiement = prospect?.payement?.length
     this.scrollToTop()
   }
 
+  lengthPaiement = 0
+
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
+
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    let phase_candidature = "En phase d'orientation consulaire"
+    if (this.lengthPaiement >= this.payementList.length)
+      statut_payement = this.showDetails.statut_payement; phase_candidature = this.showDetails.phase_candidature;
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
@@ -379,6 +387,8 @@ export class OrientationComponent implements OnInit {
       finance: this.detailsForm.value.finance,
       payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
+      statut_payement,
+      phase_candidature,
       _id: this.showDetails._id
 
     }
