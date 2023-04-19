@@ -496,8 +496,11 @@ export class AdmissionIntComponent implements OnInit {
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
     let phase_candidature = "En phase d'orientation consulaire"
-    if (this.lengthPaiement >= this.payementList.length)
-      statut_payement = this.showPaiement.statut_payement; phase_candidature = this.showPaiement.phase_candidature;
+    if (this.lengthPaiement >= this.payementList.length) {
+      statut_payement = this.showPaiement.statut_payement;
+      phase_candidature = this.showPaiement.phase_candidature;
+    }
+
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)

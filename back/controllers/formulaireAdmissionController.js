@@ -23,6 +23,11 @@ app.get("/RA/getByID/:id", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.get("/RA/getByEcoleID/:id", (req, res) => {
+    RentreeAdmission.find({ ecoles: { $in: [req.params.id] } }).populate('ecoles')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+})
 
 app.get("/RA/getAll", (req, res, next) => {
     RentreeAdmission.find().populate('ecoles')

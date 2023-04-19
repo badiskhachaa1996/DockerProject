@@ -356,8 +356,10 @@ export class OrientationComponent implements OnInit {
 
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
     let phase_candidature = "En phase d'orientation consulaire"
-    if (this.lengthPaiement >= this.payementList.length)
-      statut_payement = this.showDetails.statut_payement; phase_candidature = this.showDetails.phase_candidature;
+    if (this.lengthPaiement >= this.payementList.length) {
+      statut_payement = this.showDetails.statut_payement;
+      phase_candidature = this.showDetails.phase_candidature;
+    }
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
