@@ -385,7 +385,7 @@ app.get("/getAllSourcing", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Orientation
 app.get("/getAllOrientation", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: "En phase d'orientation scolaire" }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ team_sourcing_id: { $ne: null } },{ agent_sourcing_id: { $ne: null } }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -405,7 +405,7 @@ app.get("/getAllAdmission", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllConsulaire", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ phase_candidature: "En phase d'orientation consulaire", statut_payement: "Oui" }] }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ statut_payement: "Oui" }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })

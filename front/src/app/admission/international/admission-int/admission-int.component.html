@@ -150,7 +150,7 @@
     <div class="col-12 card" *ngIf="showPaiement">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement de : {{
             showPaiement?.user_id?.firstname }} {{
             showPaiement?.user_id?.lastname | uppercase }}
         </h3>
@@ -246,7 +246,7 @@
     <div class="col-12 card" *ngIf="showTraitement">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showTraitement = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+        <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Dossier de : {{
             showTraitement?.user_id?.firstname }} {{
             showTraitement?.user_id?.lastname | uppercase }}
         </h3>
@@ -444,14 +444,14 @@
                         </td>
 
                         <td>
-                            {{prospect.date_creation | date :'mediumDate' }}
+                            {{prospect?.date_creation | date :'mediumDate' }}
                         </td>
                         <td>
-                            {{ prospect.customid }}
+                            {{ prospect?.customid }}
                         </td>
 
                         <td>
-                            {{ prospect.source }}
+                            {{ prospect?.source }}
                         </td>
 
                         <td *ngIf="prospect.user_id">
@@ -478,7 +478,7 @@
                             {{ prospect.programme }}
                         </td>
                         <td>
-                            {{ prospect.document_present.length }}
+                            {{ prospect?.document_present?.length }}
                         </td>
 
                         <td>
