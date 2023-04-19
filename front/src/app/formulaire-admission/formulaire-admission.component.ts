@@ -835,7 +835,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     let campusChoix1 = this.RegisterForm.get('campusChoix1').value.value;
     let campusChoix2 = this.RegisterForm.get('campusChoix2').value.value;
     let campusChoix3 = this.RegisterForm.get('campusChoix3').value.value;
-    let programme = this.RegisterForm.get('programme').value;
+    let programme = this.RegisterForm.get('programme').value.value;
     let formation = this.RegisterForm.get('formation').value;
     let rentree_scolaire = this.RegisterForm.value.rentree_scolaire
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
