@@ -24,7 +24,7 @@ app.get("/RA/getByID/:id", (req, res) => {
 })
 
 app.get("/RA/getByEcoleID/:id", (req, res) => {
-    RentreeAdmission.find({ ecoles: { $in: [req.params.id] } }).populate('ecoles')
+    RentreeAdmission.find({ ecoles: { $in: [req.params.id] }, date_debut_inscription: { $lt: new Date() }, date_fin_inscription: { $gte: new Date() } }).populate('ecoles')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })

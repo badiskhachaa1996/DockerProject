@@ -31,4 +31,36 @@
             </form>
         </div>
     </div>
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter un nouveau prospect avec le nouveau formulaire</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <br>
+            <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm2()"
+                [formGroup]="RegisterForm2">
+                <div class="field col-12 md:col-12">
+                    <label For="role">Ecole <span style="color:red"> *</span></label>
+                    <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du prospect"
+                        formControlName="ecole"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                    <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du prospect"
+                        formControlName="source"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->
+                    <label For="role">Commercial</label> 
+                    <p-dropdown [options]="commercialList" filter="true"
+                        placeholder="Choisissez le commercial qui a ajouté le prospect"
+                        formControlName="commercial"></p-dropdown>
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton type="submit" label="Ajouter" [disabled]="(RegisterForm2.invalid && !isPartenaireExterne) || (!RegisterForm2.value.ecole)"></button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

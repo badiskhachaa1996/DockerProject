@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, MenuItem } from 'primeng/api';
 import { map } from 'rxjs';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { Notification } from 'src/app/models/notification';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { Prospect } from 'src/app/models/Prospect';
+import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 import { User } from 'src/app/models/User';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -63,8 +65,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   ];
 
   rentreeList = [
-    { label: "Mars 2023", value: "Mars 2023" },
-    { label: "Septembre 2023", value: "Septembre 2023" }
+
   ]
 
   academicList =
@@ -143,13 +144,28 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       this.programeFrDropdown = this.defaultDropdown
   }
 
-
+  hideCC = false
+  ECOLE: EcoleAdmission
+  RENTREE: RentreeAdmission[]
   ngOnInit(): void {
-    this.FAService.RAgetByParams(this.form_origin).subscribe(data => {
+    this.FAService.EAgetByParams(this.form_origin).subscribe(data => {
       if (!data)
         this.router.navigate(['/'])
-      else
-        console.log(data)
+      this.ECOLE = data
+      this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
+        this.RENTREE = dataEcoles
+        data.formations.forEach(f => {
+          if (f.langue.includes('Programme Français'))
+            this.programeFrDropdown.push({ label: f.nom, value: f.nom })
+          if (f.langue.includes('Programme Anglais'))
+            this.programEnDropdown.push({ label: f.nom, value: f.nom })
+        })
+        dataEcoles.forEach(rentre => {
+          this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
+        })
+        console.log(this.RENTREE, this.ECOLE, this.programEnDropdown, this.programeFrDropdown)
+
+      })
     })
 
     this.defaultDropdown = this.programeFrDropdown
@@ -161,6 +177,10 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
     if (localStorage.getItem('token'))
       this.btnTextBack = "Revenir à IMS"
+
+    if (this.route.snapshot.paramMap.get('code_commercial')) {
+      this.hideCC = true
+    }
   }
 
 
@@ -487,30 +507,6 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   redirectLogin() {
     this.router.navigate(["/loginExterne"])
-  }
-
-
-  choixRentree() {
-    if (this.RegisterForm.value.rentree_scolaire == "Mars 2023") {
-      if (this.form_origin == "estya" || this.form_origin == "eduhorizons" || this.form_origin == "intunivesity" || this.form_origin == "espic")
-        this.programeFrDropdown = [
-          {
-            label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
-            value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
-          },
-          {
-            label: "Mastère 1 : MDO : Manager des organisations",
-            value: "Mastère 1 : MDO : Manager des organisations"
-          },
-
-          {
-            label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
-            value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
-          }
-        ]
-    } else {
-      this.programeFrDropdown = this.defaultDropdown
-    }
   }
 
   generateCode(nation, firstname, lastname, date_naissance) {

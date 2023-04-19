@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-add-prospect',
@@ -12,6 +13,12 @@ import { CommercialPartenaireService } from 'src/app/services/commercial-partena
 export class AddProspectComponent implements OnInit {
 
   RegisterForm: FormGroup = new FormGroup({
+    ecole: new FormControl('', [Validators.required]),
+    commercial: new FormControl('',),
+    source: new FormControl('', Validators.required)
+  })
+
+  RegisterForm2: FormGroup = new FormGroup({
     ecole: new FormControl('', [Validators.required]),
     commercial: new FormControl('',),
     source: new FormControl('', Validators.required)
@@ -45,7 +52,9 @@ export class AddProspectComponent implements OnInit {
 
   commercialList = []
 
-  constructor(private commercialService: CommercialPartenaireService, private router: Router) { }
+  EcoleListRework = []
+
+  constructor(private commercialService: CommercialPartenaireService, private router: Router, private FAService: FormulaireAdmissionService) { }
 
   ngOnInit(): void {
     if (localStorage.getItem("token") != null) {
@@ -53,11 +62,16 @@ export class AddProspectComponent implements OnInit {
       this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
       this.commercialService.getAllPopulate().subscribe(commercials => {
         commercials.forEach(commercial => {
-          let {user_id}: any = commercial
+          let { user_id }: any = commercial
           if (user_id)
             this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
           if (user_id && user_id._id == decodeToken.id)
             this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
+        })
+      })
+      this.FAService.EAgetAll().subscribe(data => {
+        data.forEach(e => {
+          this.EcoleListRework.push({ label: e.titre, value: e.url_form })
         })
       })
     }
@@ -70,6 +84,14 @@ export class AddProspectComponent implements OnInit {
       this.router.navigate(['formulaire-admission', this.RegisterForm.value.ecole])
     else
       this.router.navigate(['formulaire-admission', this.RegisterForm.value.ecole, code])
+  }
+
+  redirectToForm2() {
+    let code = this.RegisterForm2.value.commercial
+    if (!code)
+      this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole])
+    else
+      this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole, code])
   }
 
 }
