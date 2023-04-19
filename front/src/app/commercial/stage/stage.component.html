@@ -82,7 +82,85 @@
         </div>
 
         <!-- formulaire de mise à jour d'un stage -->
+        <div class="card" *ngIf="showFormUpdate">
+            <i class="pi pi-times-circle close-forme-icon" (click)="showFormUpdate = false;"></i>
+            <div class="clear-float"></div>
+            <div class="en-tete">
+                <h2>Modifier le contrat de stage de {{ stageToUpdate.student_id?.user_id?.firstname | titlecase }} {{ stageToUpdate.student_id?.user_id?.lastname | uppercase }}</h2>
+            </div>
+            <small class="sub-form-small">*Pour modifier le contrat, vous devez re-sélectionner <strong>l'entreprise</strong>, <strong>le tuteur</strong> et <strong>les dates du contrats</strong></small>
 
+            <form [formGroup]="formUpdate" (ngSubmit)="onUpdate()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label for="student_id">Étudiant</label>
+                        <p-dropdown formControlName="student_id" id="student_id" [options]="students" optionLabel="label" filter="true"></p-dropdown>
+                    </div>
+
+                    <div class="field md:col-6 col-12">
+                        <label for="enterprise_id">Entreprise</label>
+                        <p-dropdown formControlName="enterprise_id" id="enterprise_id" [options]="enterprises" filter="true" (onChange)="onLoadTutors($event)"></p-dropdown>
+                    </div>
+
+                    <div class="field md:col-6 col-12">
+                        <label for="tutor_id">Tuteur</label>
+                        <p-dropdown formControlName="tutor_id" id="tutor_id" [options]="tuteurs" filter="true"></p-dropdown>
+                    </div>
+
+                    <div class="field md:col-6 col-12">
+                        <label for="begin_date">Date de debut</label>
+                        <input pInputText formControlName="begin_date" id="begin_date" type="date">
+                    </div>
+
+                    <div class="field md:col-6 col-12">
+                        <label for="end_date">Date de fin</label>
+                        <input pInputText formControlName="end_date" id="begin_date" type="date">
+                    </div>
+
+                    <div class="field md:col-3 col-12">
+                        <label for="schedules_per_week">Horaires/ semaines</label>
+                        <input pInputText formControlName="schedules_per_week" id="schedules_per_week" type="number">
+                    </div>
+
+                    <div class="field md:col-9 col-12">
+                        <label for="commercial_id">Commercial referent</label>
+                        <p-dropdown formControlName="commercial_id" id="commercial_id" [options]="commercialFilters" filter="true"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label for="mission_tasks">Tâche de la mission</label>
+                        <textarea pInputTextarea formControlName="mission_tasks" id="mission_tasks" type="text"></textarea>
+                    </div>
+
+                    <div class="field md:col-5 col-12">
+                        <label for="gratification">Gratification</label>
+                        <input pInputText formControlName="gratification" id="gratification" type="number">
+                    </div>
+
+                    <div class="field md:col-7 col-12">
+                        <label for="payment_modality">Modalités de paiements</label>
+                        <input pInputText formControlName="payment_modality" id="payment_modality" type="text">
+                    </div>
+
+                    <div class="field col-12">
+                        <label for="other_advantages">Autres avantages</label>
+                        <textarea pInputTextarea formControlName="other_advantages" id="other_advantages" type="text"></textarea>
+                    </div>
+
+                    <div class="field col-12">
+                        <label for="school_year"></label>
+                        <p-multiSelect class="p-dropdown-clearable"
+                            [options]="anneeScolaires" filter="true"
+                            formControlName="school_year" id="school_year">
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="field">
+                        <button pButton type="submit" label="Modifier" icon="pi pi-plus" [disabled]="formUpdate.invalid"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
         <!-- formulaire d'ajout ou de modification d'un fichier -->
         <div class="card" *ngIf="showFormAddDoc">
@@ -108,6 +186,22 @@
             </form>
 
         </div>
+
+        <!-- formulaire de modification du status -->
+        <p-dialog header="Mise à jour du statut du contrat de stage" [(visible)]="showFormUpdateStatus" [modal]="true" [draggable]="false" [style]="{ width: '50vw', height: '500px' }">
+            <form [formGroup]="formUpdateStatus" (ngSubmit)="onUpdateStatus()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label for="status">Nouveau statut du contrat de stage</label>
+                        <p-dropdown [options]="statusList" id="status" formControlName="status"></p-dropdown>
+                    </div>
+                    <div class="field">
+                        <button pButton label="mettre à jour" type="submit" [disabled]="formUpdateStatus.invalid"></button>
+                    </div>
+                </div>
+            </form>
+        </p-dialog>
+        
 
         <!-- Table d'affichage de la liste des stages -->
         <div class="card">
@@ -192,10 +286,11 @@
                         <td>{{stage.student_id?.classe_id?.diplome_id?.titre}}</td>
                         <td>{{stage.enterprise_id?.r_sociale}}</td>
                         <td>{{stage.student_id?.campus?.ecole_id?.libelle}}</td>
-                        <td>{{stage.begin_date | date: 'dd MM YYYY'}} - {{stage.end_date | date: 'dd MM YYYY'}}</td>
+                        <td>{{stage.begin_date | date: 'dd MMMM YYYY'}} - {{stage.end_date | date: 'dd MMMM YYYY'}}</td>
                         <td>
-                            <i class="pi pi-pencil" pTooltip="Modifier le contrat" aria-hidden="true" (click)="onPatchFormUpdate(stage._id);"></i>
+                            <i class="pi pi-pencil" pTooltip="Modifier le contrat" aria-hidden="true" (click)="onPatchFormUpdate(stage);"></i>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true" (click)="showPresence(stage.student_id._id)"></i>
+                            <i class="pi pi-bookmark" pTooltip="Mettre le status à jour" aria-hidden="true" (click)="stageToUpdate = stage; onShowFormUpdateStatus()"></i>
                             <!-- icônes de téléchargement des fichiers liés au stage -->
                             <i class="pi pi-file td-file-icone" pTooltip="Ajouter ou modifier un fichier" (click)="stageToUpdate = stage; showFormAddDoc = true"></i>
                         </td>
