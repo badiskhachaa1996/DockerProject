@@ -174,6 +174,7 @@ import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-a
 import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
 import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
+import { PaiementsComponent } from './admission/international/paiements/paiements.component';
 
 const routes: Routes = [
     {
@@ -318,6 +319,7 @@ const routes: Routes = [
             { path: 'international/orientation', component: OrientationComponent, canActivate: [AuthGuardService] },
             { path: 'international/admission', component: AdmissionIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/consulaire', component: ConsulaireComponent, canActivate: [AuthGuardService] },
+            { path: 'international/paiement', component: PaiementsComponent, canActivate: [AuthGuardService] },
             { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */

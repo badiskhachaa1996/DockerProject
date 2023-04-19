@@ -607,6 +607,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Paiement',
                                     icon: 'pi pi-money-bill',
+                                    routerLink: ['/international/paiement']
                                 },
                                 {
                                     label: 'Accompagenement Consulaire',

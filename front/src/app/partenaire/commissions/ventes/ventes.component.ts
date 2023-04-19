@@ -23,7 +23,7 @@ export class VentesComponent implements OnInit {
     { label: "Facturé non payé", value: "Facturé non payé" }
   ]
   filterStatutCommission = [
-    { label: "Tous les status de commission", value: null },
+    { label: "Tous les statuts de commission", value: null },
     { label: "Non payé", value: "Non payé" },
     { label: "Facturé payé", value: "Facturé payé" },
     { label: "A la source", value: "A la source" },
