@@ -131,11 +131,11 @@ export class PvAppreciationComponent implements OnInit {
         })
         pv.pv_annuel_data[index] = d
       })
+      
       this.PVID = pv._id
       this.cols = pv.pv_annuel_cols
       this.dataPV = pv.pv_annuel_data
       this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
-      console.log(this.dataPV)
     }
   }
 

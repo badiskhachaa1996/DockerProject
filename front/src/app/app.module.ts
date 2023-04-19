@@ -188,7 +188,6 @@ import { ReinscritComponent } from './administration/validation-prospects/reinsc
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
-import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
@@ -266,6 +265,17 @@ import { StageComponent } from './commercial/stage/stage.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
+import { SourcingComponent } from './admission/international/sourcing/sourcing.component';
+import { EmployabiliteComponent } from './intuns/employabilite/employabilite.component';
+import { FormationsIntunsComponent } from './intuns/formations-intuns/formations-intuns.component';
+import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
+import { TeamsIntComponent } from './international/teams-int/teams-int.component';
+import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
+import { OrientationComponent } from './admission/international/orientation/orientation.component';
+import { AdmissionIntComponent } from './admission/international/admission-int/admission-int.component';
+import { FormationAdmissionComponent } from './international/formation-admission/formation-admission.component';
+import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-admission.component';
+import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
 
 
 @NgModule({
@@ -474,7 +484,6 @@ import { ReglementComponent } from './partenaire/commissions/reglement/reglement
     DetailsEtudiantComponent,
     NotificationComponent,
     MpOublieComponent,
-    ResetMpComponent,
     ContactComponent,
     InscriptionEntrepriseComponent,
     TuteurComponent,
@@ -541,7 +550,18 @@ import { ReglementComponent } from './partenaire/commissions/reglement/reglement
     StageComponent,
     AjoutCollaborateurComponent,
     VentesComponent,
-    ReglementComponent
+    ReglementComponent,
+    SourcingComponent,
+    EmployabiliteComponent,
+    FormationsIntunsComponent,
+    EtudiantsIntunsComponent,
+    TeamsIntComponent,
+    MemberIntComponent,
+    OrientationComponent,
+    AdmissionIntComponent,
+    FormationAdmissionComponent,
+    EcoleAdmissionComponent,
+    RentreeScolaireAdmissionComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

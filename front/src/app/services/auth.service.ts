@@ -198,7 +198,7 @@ export class AuthService {
 
   verifPassword(tbObj: any) {
     let url = this.apiUrl + "verifyUserPassword";
-    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })});
   }
 
   updatePwd(id: string, pwd) {
@@ -303,6 +303,33 @@ export class AuthService {
 
   }
 
+  // méthode d'envoi de mail pour la recuperation du mot de passe externe
+  sendRecoveryPasswordEmail(email: string): Promise<any>
+  {
+    const url = `${this.apiUrl}send-recovery-password-mail`;
 
+    return new Promise<any>((resolve, reject) => {
+      this.http.post<any>(url, {email: email}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
+        next: (response: any) => {resolve(response);},
+        error: (error: any) => {reject(error)},
+        complete: () => {console.log('Email envoyé')}
+      });
+    });
+  }
+
+
+  // méthode de recuperation du mot de passe (modification)
+  recoveryPassword(userId: string, password: string): Promise<any>
+  {
+    const url = `${this.apiUrl}recovery-password`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.http.patch<any>(url, {userId: userId, password: password}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+        next: (response: any) => {resolve(response);},
+        error: (err: any) => {reject(err)},
+        complete: () => {console.log('Mot de passe modifié')}
+      });
+    });
+  }
 
 }

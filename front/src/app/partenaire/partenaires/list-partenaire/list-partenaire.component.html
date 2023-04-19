@@ -27,14 +27,14 @@
                                     style="border-radius: 50px;" /></a>
                         </div>
                         <div class="col-12 md:col-6 grid">
-                            <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br>
+                            <p class="col-12 md:col-6 text-center"><strong>Téléphone:</strong><br>
                                 {{idPartenaireToUpdate?.indicatifPhone}} {{idPartenaireToUpdate?.phone}}</p>
-                            <p class="col-12 md:col-3 text-center"><strong>WhatsApp:</strong><br>
+                            <p class="col-12 md:col-6 text-center"><strong>WhatsApp:</strong><br>
                                 {{idPartenaireToUpdate?.indicatifWhatsapp}} {{idPartenaireToUpdate?.WhatsApp}}
                             </p>
-                            <p class="col-12 md:col-3 text-center"><strong>Site Web:</strong><br>
+                            <p class="col-12 md:col-6 text-center"><strong>Site Web:</strong><br>
                                 {{idPartenaireToUpdate?.site_web}}</p>
-                            <p class="col-12 md:col-3 text-center"><strong>Facebook:</strong><br>
+                            <p class="col-12 md:col-6 text-center"><strong>Facebook:</strong><br>
                                 {{idPartenaireToUpdate?.facebook}}
                             </p>
                             <p class="col-12 md:col-12 text-center"><strong>Pays:</strong><br>
@@ -321,9 +321,9 @@
                             <i pTooltip="Afficher la liste des collaborateurs" tooltipPosition="bottom"
                                 style="margin-left: 7px" class="pi pi-sitemap" (click)="seeUnderPartenaire(rowData)"
                                 aria-hidden="true"></i>
-                            <!--<i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
+                            <i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"
-                                *ngIf="canDelete"></i>-->
+                                *ngIf="canDelete"></i>
                         </td>
                     </tr>
                 </ng-template>

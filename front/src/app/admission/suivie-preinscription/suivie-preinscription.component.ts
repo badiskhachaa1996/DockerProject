@@ -19,7 +19,41 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SuiviePreinscriptionComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
+  showUpdatePassword = false
+  passwordForm = new FormGroup({
+    passwordactual: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    verifypassword: new FormControl('', Validators.required),
+  });
+  onUpdatePassword() {
+    let passwordactual = this.passwordForm.get('passwordactual').value;
+    let password = this.passwordForm.get('password').value;
+    let verifypassword = this.passwordForm.get('verifypassword').value;
+    if (password = verifypassword) {
+      let bypass:any = this.ProspectConnected.user_id
+      this.UserService.verifPassword({ 'id': bypass._id, 'password': passwordactual }).subscribe(
+        ((responseV) => {
+          console.log(responseV);
 
+          this.UserService.updatePwd(bypass._id, verifypassword).subscribe((updatedPwd) => {
+
+            this.passwordForm.reset();
+            this.showUpdatePassword = false;
+            this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
+
+          }), ((error) => { console.log(error) })
+
+
+        }),
+      ), ((error) => {
+        console.log(error)
+      });
+    }
+    else {
+      this.messageService.add({ severity: 'error', summary: 'Mot de passe ', detail: 'Les mots de passe ne correspondent pas' });
+      this.passwordForm.get('verifypassword').dirty
+    }
+  }
   ecoleProspect: any;
   subscription: Subscription;
   ListDocuments: String[] = [];
@@ -74,37 +108,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
         let { _id }: any = this.ProspectConnected.user_id
         this.ecoleProspect = this.ProspectConnected.type_form
         this.boolVisa = (this.ProspectConnected.avancement_visa) ? 'true' : 'false'
-        this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
-          (data) => {
-            this.ListDocuments = data
-            for (let doc of this.ListDocuments) {
-              let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
-              this.ListPiped.push(docname)
-              if (doc.includes('diplome/')) {
-                this.diplomeTest = true;
-              }
-              if (doc.includes('piece_identite/')) {
-                this.piece_identiteTest = true;
-              }
-              if (doc.includes('CV/')) {
-                this.CVTest = true;
-              }
-              if (doc.includes('LM/')) {
-                this.LMTest = true;
-              }
-              if (doc.includes('releve_notes1/')) {
-                this.RdNTest = true;
-              }
-              if (doc.includes('releve_notes2/')) {
-                this.RdNTest2 = true;
-              }
-              if (doc.includes('TCF/')) {
-                this.TCFTest = true;
-              }
-            }
-          },
-          (error) => { console.error(error) }
-        );
+        this.getFiles()
         this.UserService.getProfilePicture(_id).subscribe((data) => {
           if (data.error) {
             this.imageToShow = "../assets/images/avatar.PNG"
@@ -121,9 +125,45 @@ export class SuiviePreinscriptionComponent implements OnInit {
       })
     } else {
       this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
+      this.getFiles()
       this.isCommercial = false
     }
 
+  }
+
+  getFiles() {
+    this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
+      (data) => {
+        this.ListPiped = []
+        this.ListDocuments = data
+        for (let doc of this.ListDocuments) {
+          let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+          if (doc.includes('diplome/')) {
+            this.diplomeTest = true;
+          }
+          if (doc.includes('piece_identite/')) {
+            this.piece_identiteTest = true;
+          }
+          if (doc.includes('CV/')) {
+            this.CVTest = true;
+          }
+          if (doc.includes('LM/')) {
+            this.LMTest = true;
+          }
+          if (doc.includes('releve_notes1/')) {
+            this.RdNTest = true;
+          }
+          if (doc.includes('releve_notes2/')) {
+            this.RdNTest2 = true;
+          }
+          if (doc.includes('TCF/')) {
+            this.TCFTest = true;
+          }
+        }
+      },
+      (error) => { console.error(error) }
+    );
   }
 
   resetAuth() {
@@ -147,27 +187,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
     formData.append('file', event.files[0]);
     this.admissionService.uploadFile(formData, this.ProspectConnected._id, 'ProspectConected').subscribe(res => {
       this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
-      if (doc.includes('diplome')) {
-        this.diplomeTest = true;
-      }
-      else if (doc.includes('piece_identite')) {
-        this.piece_identiteTest = true;
-      }
-      else if (doc.includes('CV')) {
-        this.CVTest = true;
-      }
-      else if (doc.includes('LM')) {
-        this.LMTest = true;
-      }
-      else if (doc.includes('releve_notes1')) {
-        this.RdNTest = true;
-      }
-      else if (doc.includes('releve_notes2')) {
-        this.RdNTest2 = true;
-      }
-      else if (doc.includes('TCF')) {
-        this.TCFTest = true;
-      }
+      this.getFiles()
       if (this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest) {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
@@ -279,5 +299,17 @@ export class SuiviePreinscriptionComponent implements OnInit {
     this.resteAPayer = toPay - total
     if (this.resteAPayer < 0)
       this.resteAPayer = 0
+  }
+
+  VisualiserFichier(id, i) {
+    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      console.error(error)
+    })
+
   }
 }

@@ -27,7 +27,8 @@ export class AddProspectComponent implements OnInit {
     { label: "Studinfo", value: "studinfo" },
     { label: "INTUNS", value: "intuns" },
     { label: "Intunivesity", value: "intunivesity" },
-    { label: "ICBS Malte", value: "icbsmalte" }
+    { label: "ICBS Malte", value: "icbsmalte" },
+    { label: "INT Education", value: "inteducation" }
   ]
 
   sourceList = [
@@ -49,15 +50,14 @@ export class AddProspectComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
-      
+      this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
       this.commercialService.getAllPopulate().subscribe(commercials => {
         commercials.forEach(commercial => {
-          let bypass: any = commercial.user_id
-          this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
-          if (bypass)
-            this.commercialList.push({ label: `${bypass.lastname} ${bypass.firstname}`, value: commercial.code_commercial_partenaire })
-          if (bypass._id == decodeToken.id)
-            this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire })
+          let {user_id}: any = commercial
+          if (user_id)
+            this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+          if (user_id && user_id._id == decodeToken.id)
+            this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
         })
       })
     }

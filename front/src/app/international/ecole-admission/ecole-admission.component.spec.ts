@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResetMpComponent } from './reset-mp.component';
+import { EcoleAdmissionComponent } from './ecole-admission.component';
 
-describe('ResetMpComponent', () => {
-  let component: ResetMpComponent;
-  let fixture: ComponentFixture<ResetMpComponent>;
+describe('EcoleAdmissionComponent', () => {
+  let component: EcoleAdmissionComponent;
+  let fixture: ComponentFixture<EcoleAdmissionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResetMpComponent ]
+      declarations: [ EcoleAdmissionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResetMpComponent);
+    fixture = TestBed.createComponent(EcoleAdmissionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

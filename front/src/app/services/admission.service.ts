@@ -25,7 +25,7 @@ export class AdmissionService {
   }
 
   //Modification d'un prospect
-  update(tbObj: any) {
+  update(tbObj: { prospect: any, user: any }) {
     let registreUrl = this.apiUrl + 'update';
     return this.httpClient.put<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
@@ -56,6 +56,16 @@ export class AdmissionService {
   //recuperation de la liste des admissions
   getAll() {
     let registreUrl = this.apiUrl + 'getAll';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllSourcing() {
+    let registreUrl = this.apiUrl + 'getAllSourcing';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllOrientation() {
+    let registreUrl = this.apiUrl + 'getAllOrientation';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -247,5 +257,23 @@ export class AdmissionService {
     return this.httpClient.post<any>(url, { mail, prospect: prospect._id });
   }
 
+  updateV2(data) {
+    let url = this.apiUrl + "updateV2";
+    return this.httpClient.put<Prospect>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllAffected(team_id = "buffer", agent_id = "buffer") {
+    //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
+    let registreUrl = this.apiUrl + 'getAllAffected/' + agent_id + "/" + team_id;
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  getAllAdmission() {
+    //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
+    let registreUrl = this.apiUrl + 'getAllAdmission';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 
 }

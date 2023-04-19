@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { CommercialPartenaire } from '../models/CommercialPartenaire';
+import { Prospect } from '../models/Prospect';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class CommercialPartenaireService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  
+
   uploadimageprofile(data: any) {
     let url = this.apiurl + "file";
     return this.httpClient.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
@@ -74,5 +75,10 @@ export class CommercialPartenaireService {
   getProfilePicture(id) {
     let url = this.apiurl + "getProfilePicture/" + id;
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+  getByCode(code: string) {
+    let url = this.apiurl + "getByCode/" + code;
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+
   }
 }

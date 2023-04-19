@@ -148,6 +148,22 @@ export class AppMenuComponent implements OnInit {
 
                                 },
                                 {
+                                    label: 'Gestions des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
+                                        },
+                                    ]
+                                },
+                                {
                                     label: 'Gestions des séances',
                                     icon: 'pi pi-video',
                                     items: [
@@ -301,22 +317,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                 },
-                                {
-                                    label: 'Gestions des groupes',
-                                    icon: 'pi pi-users',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un groupe',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-groupe']
-                                        },
-                                        {
-                                            label: 'Liste des groupes',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/groupes']
-                                        },
-                                    ]
-                                },
+
                                 {
                                     label: 'Gestions des agents',
                                     icon: 'pi pi-users',
@@ -448,32 +449,38 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-share-alt',
                             items: [
                                 {
-                                    label: 'Gestions des partenaires', icon: 'pi pi-users',
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
                                     items: [
                                         {
-                                            label: 'Insérer un Partenaire',
-                                            icon: 'pi pi pi-user-plus',
-                                            routerLink: ['/partenaireInscription']
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label: 'Liste des partenaires',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/admin/partenaire']
-                                        },
-                                        {
-                                            label: 'Support Marketing',
-                                            icon: 'pi pi-briefcase'
-                                        },
-                                        {
-                                            label: 'Gestion des commissions',
-                                            icon: 'pi pi-credit-card'
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-chart-line'
-                                        },
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
                                     ]
-
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
                                 },
                             ]
                         },
@@ -573,6 +580,97 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         },
+                        {
+                            label: 'International',
+                            icon: 'pi pi-globe',
+                            items: [
+                                {
+                                    label: 'Insérer un prospect',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/ajout-prospect']
+                                },
+                                {
+                                    label: 'Source',
+                                    icon: 'pi pi-send',
+                                    routerLink: ['/international/sourcing']
+                                },
+                                {
+                                    label: 'Orientation Prospects',
+                                    icon: 'pi pi-globe',
+                                    routerLink: ['/international/orientation']
+                                },
+                                {
+                                    label: 'Admission Prospects',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/international/admission']
+                                },
+                                {
+                                    label: 'Paiement',
+                                    icon: 'pi pi-money-bill',
+                                },
+                                {
+                                    label: 'Accompagenement Consulaire',
+                                    icon: 'pi pi-whatsapp',
+                                },
+                                {
+                                    label: 'Gestion de l\'équipe',
+                                    icon: 'pi pi-briefcase',
+                                    items: [
+                                        {
+                                            label: 'Gestion des membres',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/international/member']
+                                        },
+                                        {
+                                            label: 'Gestion de l\'équipe',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/international/teams']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion de l\'année scolaire',
+                                    icon: 'pi pi-calendar',
+                                    items: [
+                                        {
+                                            label: 'Formations disponibles',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/admission/formations']
+                                        },
+                                        {
+                                            label: 'Ecoles',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['/admission/ecoles']
+                                        },
+                                        {
+                                            label: 'Rentrées Scolaire',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/admission/rentree']
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-home'
+                                        },
+                                    ]
+                                },
+                            ],
+                        },
+                        {
+                            label: "Intuns",
+                            icon: 'pi pi-building',
+                            items: [
+                                {
+                                    label: "Liste des étudiants INTUNS",
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/intuns/etudiants']
+                                },
+                                {
+                                    label: "Liste des formations INTUNS",
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: ['/intuns/formations']
+                                }
+                            ]
+                        }
                     ];
                 }
                 // menu service pédagogique
@@ -785,6 +883,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         },
+
                     ]
                 }
                 // menu service admission
@@ -869,6 +968,7 @@ export class AppMenuComponent implements OnInit {
                                 }
                             ],
                         },
+
                     ]
                 }
                 // menu service administration
@@ -981,22 +1081,6 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Gestions des groupes',
-                                    icon: 'pi pi-users',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un groupe',
-                                            icon: 'pi pi-plus-circle',
-                                            routerLink: ['/ajout-groupe']
-                                        },
-                                        {
-                                            label: 'Liste des groupes',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/groupes']
-                                        },
-                                    ]
-                                },
-                                {
                                     label: 'Gestions des agents',
                                     icon: 'pi pi-users',
                                     items: [
@@ -1034,6 +1118,22 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                 },
+                                {
+                                    label: 'Gestions des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
+                                        },
+                                    ]
+                                },
                             ]
                         },
                     ]
@@ -1065,7 +1165,22 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items: [
+                                        {
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
+                                        },
+                                        {
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
+                                        }
+                                    ]
+                                },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase' },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
@@ -1096,7 +1211,22 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                { label: 'Gestion des commissions', icon: 'pi pi-credit-card' },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items: [
+                                        {
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
+                                        },
+                                        {
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
+                                        }
+                                    ]
+                                },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase' },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
@@ -1232,32 +1362,38 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-share-alt',
                             items: [
                                 {
-                                    label: 'Gestions des partenaires', icon: 'pi pi-users',
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
                                     items: [
                                         {
-                                            label: 'Insérer un Partenaire',
-                                            icon: 'pi pi pi-user-plus',
-                                            routerLink: ['/partenaireInscription']
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
                                         },
                                         {
-                                            label: 'Liste des partenaires',
-                                            icon: 'pi pi-sort-alpha-down',
-                                            routerLink: ['/admin/partenaire']
-                                        },
-                                        {
-                                            label: 'Support Marketing',
-                                            icon: 'pi pi-briefcase'
-                                        },
-                                        {
-                                            label: 'Gestion des commissions',
-                                            icon: 'pi pi-credit-card'
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-chart-line'
-                                        },
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
                                     ]
-
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
                                 },
                             ]
                         },
@@ -1566,6 +1702,22 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
+                                                },
+                                            ]
+                                        },
+                                        {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
                                             routerLink: ['/matieres'],
@@ -1725,22 +1877,7 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                             ]
                                         },
-                                        {
-                                            label: 'Gestions des groupes',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un groupe',
-                                                    icon: 'pi pi-plus-circle',
-                                                    routerLink: ['/ajout-groupe']
-                                                },
-                                                {
-                                                    label: 'Liste des groupes',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/groupes']
-                                                },
-                                            ]
-                                        },
+
                                         {
                                             label: 'Gestions des agents',
                                             icon: 'pi pi-users',
@@ -1867,32 +2004,38 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Gestions des partenaires', icon: 'pi pi-users',
+                                            label: 'Insérer un Partenaire',
+                                            icon: 'pi pi pi-user-plus',
+                                            routerLink: ['/partenaireInscription']
+                                        },
+                                        {
+                                            label: 'Liste des partenaires',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/admin/partenaire']
+                                        },
+                                        {
+                                            label: 'Support Marketing',
+                                            icon: 'pi pi-briefcase'
+                                        },
+                                        {
+                                            label: 'Gestion des commissions',
+                                            icon: 'pi pi-credit-card',
                                             items: [
                                                 {
-                                                    label: 'Insérer un Partenaire',
-                                                    icon: 'pi pi pi-user-plus',
-                                                    routerLink: ['/partenaireInscription']
+                                                    label: "Ventes",
+                                                    icon: 'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label: 'Liste des partenaires',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/admin/partenaire']
-                                                },
-                                                {
-                                                    label: 'Support Marketing',
-                                                    icon: 'pi pi-briefcase'
-                                                },
-                                                {
-                                                    label: 'Gestion des commissions',
-                                                    icon: 'pi pi-credit-card'
-                                                },
-                                                {
-                                                    label: 'Dashboard',
-                                                    icon: 'pi pi-chart-line'
-                                                },
+                                                    label: "Réglement",
+                                                    icon: 'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/reglement']
+                                                }
                                             ]
-
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-chart-line'
                                         },
                                     ]
                                 },
@@ -2054,6 +2197,22 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
+                                        {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
+                                                },
+                                            ]
+                                        },
                                         {
                                             label: 'Gestion des modules',
                                             icon: 'pi pi-fw pi-tags',
@@ -2337,6 +2496,61 @@ export class AppMenuComponent implements OnInit {
 
 
                 }
+                else if (response.role === 'Agent' && service_id?.label === 'Event') {
+                    this.ETUService.getByUser_id(this.token.id).subscribe({
+                        next: (dataEtu: Etudiant) => {
+                            this.items = [
+                                {
+                                    label: 'Tableau de bord',
+                                    icon: 'pi pi-fw pi-home',
+                                    routerLink: ['/'],
+                                },
+                                {
+                                    label: 'Ticketing',
+                                    icon: 'pi pi-fw pi-ticket',
+                                    items: [
+                                        {
+                                            label: 'Gestion des tickets',
+                                            icon: 'pi pi-fw pi-folder-open',
+                                            routerLink: ['/gestion-tickets'],
+                                        },
+                                        {
+                                            label: 'Suivi des tickets',
+                                            icon: 'pi pi-fw pi-check-circle',
+                                            routerLink: ['/suivi-ticket'],
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Admission',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Gestion des participantes pour les événements',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/list-events']
+                                        }
+                                    ],
+                                }
+                            ]
+                            if (dataEtu)
+                                this.items.push({
+                                    label: 'Étudiant',
+                                    icon: 'pi pi-chart-pie',
+                                    items: [
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                        { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
+                                    ]
+                                })
+
+                        },
+                        error: (error: any) => { console.log(error); },
+                        complete: () => { console.log(" Informations de l'étudiant récupérer avec succès !"); },
+                    });
+
+
+                }
                 // menu service administration 
                 else if (response.role === 'Agent' && service_id?.label === 'Administration' && response.type === 'Alternant') {
                     this.ETUService.getByUser_id(this.token.id).subscribe({
@@ -2449,22 +2663,6 @@ export class AppMenuComponent implements OnInit {
                                             ]
                                         },
                                         {
-                                            label: 'Gestions des groupes',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un groupe',
-                                                    icon: 'pi pi-plus-circle',
-                                                    routerLink: ['/ajout-groupe']
-                                                },
-                                                {
-                                                    label: 'Liste des groupes',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/groupes']
-                                                },
-                                            ]
-                                        },
-                                        {
                                             label: 'Gestions des agents',
                                             icon: 'pi pi-users',
                                             items: [
@@ -2499,6 +2697,22 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Liste des étudiants',
                                                     icon: 'pi pi-sort-alpha-down',
                                                     routerLink: ['etudiants']
+                                                },
+                                            ]
+                                        },
+                                        {
+                                            label: 'Gestions des groupes',
+                                            icon: 'pi pi-users',
+                                            items: [
+                                                {
+                                                    label: 'Ajouter un groupe',
+                                                    icon: 'pi pi-plus-circle',
+                                                    routerLink: ['/ajout-groupe']
+                                                },
+                                                {
+                                                    label: 'Liste des groupes',
+                                                    icon: 'pi pi-sort-alpha-down',
+                                                    routerLink: ['/groupes']
                                                 },
                                             ]
                                         },
@@ -2588,32 +2802,38 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-share-alt',
                                     items: [
                                         {
-                                            label: 'Gestions des partenaires', icon: 'pi pi-users',
+                                            label: 'Insérer un Partenaire',
+                                            icon: 'pi pi pi-user-plus',
+                                            routerLink: ['/partenaireInscription']
+                                        },
+                                        {
+                                            label: 'Liste des partenaires',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/admin/partenaire']
+                                        },
+                                        {
+                                            label: 'Support Marketing',
+                                            icon: 'pi pi-briefcase'
+                                        },
+                                        {
+                                            label: 'Gestion des commissions',
+                                            icon: 'pi pi-credit-card',
                                             items: [
                                                 {
-                                                    label: 'Insérer un Partenaire',
-                                                    icon: 'pi pi pi-user-plus',
-                                                    routerLink: ['/partenaireInscription']
+                                                    label: "Ventes",
+                                                    icon: 'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/ventes']
                                                 },
                                                 {
-                                                    label: 'Liste des partenaires',
-                                                    icon: 'pi pi-sort-alpha-down',
-                                                    routerLink: ['/admin/partenaire']
-                                                },
-                                                {
-                                                    label: 'Support Marketing',
-                                                    icon: 'pi pi-briefcase'
-                                                },
-                                                {
-                                                    label: 'Gestion des commissions',
-                                                    icon: 'pi pi-credit-card'
-                                                },
-                                                {
-                                                    label: 'Dashboard',
-                                                    icon: 'pi pi-chart-line'
-                                                },
+                                                    label: "Réglement",
+                                                    icon: 'pi pi-shopping-cart',
+                                                    routerLink: ['/commissions/reglement']
+                                                }
                                             ]
-
+                                        },
+                                        {
+                                            label: 'Dashboard',
+                                            icon: 'pi pi-chart-line'
                                         },
                                     ]
                                 },
@@ -2655,12 +2875,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -2724,12 +2944,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -2853,12 +3073,12 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ]
                         },
@@ -2928,16 +3148,16 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/matching-externe/' + this.token.id]
                                         },
                                     ]
-                                        
+
                                 },
                                 {
                                     label: 'Étudiant',
-                                    icon : 'pi pi-chart-pie',
+                                    icon: 'pi pi-chart-pie',
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                         { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                         { label: "Assiduité", icon: 'pi pi-check-square', routerLink: 'details/' + dataEtu._id }
-                                    ]    
+                                    ]
                                 }
                             ];
                         },

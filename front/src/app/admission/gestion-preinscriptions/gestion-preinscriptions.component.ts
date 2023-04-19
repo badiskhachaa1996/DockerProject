@@ -47,6 +47,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   infoCommercialExpand: CommercialPartenaire;
   ListPiped: String[] = []
   showPayement: Prospect
+  isPartenaireExterne = false
   DocTypes: any[] = [
     { value: null, label: "Choisissez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -119,18 +120,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Payée" },
     { value: "A signé les documents" },
   ]
-  dropdownDecision = [
-    { value: null, label: "Toutes les décisions" },
-    { value: "Accepté", label: "Accepté" },
-    { value: "Accepté sur réserve", label: "Accepté sur réserve" },
-    { value: "Suspendu", label: "Suspendu" },
-    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
-    { value: "Non Retenu", label: "Non Retenu" },
-    { value: "Refusé", label: "Refusé" },
-    { value: "En attente de traitement", label: "En attente de traitement" },
-    { value: "Payée", label: "Payée" },
-    { value: "A signé les documents", label: "A signé les documents" },
-  ]
+
 
   filterTraitement = [
     { value: null, label: "Tous les états" },
@@ -209,6 +199,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
+  rentreeScolaireList = [{ value: null, label: 'Toutes les rentrées scolaires' }, { value: 'Janvier 2023', label: 'Janvier 2023' }, { value: 'Septembre 2023', label: 'Septembre 2023' }]
+
 
   onAddPayement() {
     if (this.payementList == null) {
@@ -260,6 +252,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     else if (this.STATUT && this.STATUT == 'traite')
       this.infoFiltered = "Traités"
     this.token = jwt_decode(localStorage.getItem("token"))
+    this.isPartenaireExterne = this.token.role === 'Agent' && this.token.type === 'Commercial' && !this.token.service_id
     this.commercialService.getByUserId(this.token.id).subscribe(data => {
       if (data && data.code_commercial_partenaire) {
         this.dataCommercial = data
@@ -333,18 +326,29 @@ export class GestionPreinscriptionsComponent implements OnInit {
           this.users[user._id] = user;
         });
         if (this.code) {
-          //Si il y a un code de Commercial
-          if (this.code.length > 20) {
-            //Si il est considéré comme Admin dans son Partenaire
-            console.log("Admin Commercial")
+          if (this.code.length <= 9)
+            //C'est un Commercial
+            this.commercialService.getCommercialDataFromCommercialCode(this.code).subscribe(commercial => {
+              //Si il y a un code de Commercial
+              if (commercial.statut == "Admin") {
+                //Si il est considéré comme Admin dans son Partenaire
+                console.log("Admin Commercial")
+                this.admissionService.getAllByCodeAdmin(commercial.partenaire_id).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              } else {
+                console.log("Agent Commercial")
+                //Si il n'est pas considéré Admin dans son partenaire
+                this.admissionService.getAllCodeCommercial(this.code).subscribe(
+                  ((responseAdmission) => this.afterProspectload(responseAdmission)),
+                  ((error) => { console.error(error); })
+                );
+              }
+            })
+          else{
+            //C'est un Partenaire
             this.admissionService.getAllByCodeAdmin(this.code).subscribe(
-              ((responseAdmission) => this.afterProspectload(responseAdmission)),
-              ((error) => { console.error(error); })
-            );
-          } else {
-            console.log("Agent Commercial")
-            //Si il n'est pas considéré Admin dans son partenaire
-            this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => this.afterProspectload(responseAdmission)),
               ((error) => { console.error(error); })
             );
@@ -665,7 +669,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   onGetProspectAlternance() {
     this.admissionService.getByAllAlternance().subscribe(
-      ((response) => { this.alternants = response; console.log(response) }),
+      ((response) => { this.alternants = response; }),
       ((error) => { console.error(error); })
     )
   }

@@ -7,7 +7,11 @@ const tuteurSch = mongoose.Schema({
     montant: { type: Number },
     tva: { type: Number },
     statutCommission: { type: String },
-    date_reglement: { type: Date }
+    date_reglement: { type: Date },
+    montant_paye: { type: Number },
+    date_paiement: { type: Date },
+    modalite_paiement: { type: String },
+    partenaire_id: { type: mongoose.Schema.Types.ObjectId, ref: "partenaire" },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

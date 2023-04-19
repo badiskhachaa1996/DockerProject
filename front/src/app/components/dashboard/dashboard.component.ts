@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { GalleriaModule } from 'primeng/galleria';
-
+import { saveAs as importedSaveAs } from "file-saver";
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
 import { Seance } from 'src/app/models/Seance';
@@ -43,12 +43,14 @@ import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
+import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns.service';
 
 
 @Component({
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
+export class  DashboardComponent implements OnInit {
   paysList = environment.pays;
   user: User;
   classe: Classe[] = [];
@@ -74,10 +76,12 @@ export class DashboardComponent implements OnInit {
   isReinscrit = false
   isUnknow = false;
   isVisitor = false;
+  isIntuns = false
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
   dataFormateur: Formateur = null
+  dataIntuns: EtudiantIntuns;
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
@@ -251,7 +255,8 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService, private http: HttpClient,
     private inTimeService: IntimeService, private messageService: MessageService,
     private formBuilder: FormBuilder, private projectService: ProjectService,
-    private CService: CommercialPartenaireService, private PartenaireService: PartenaireService
+    private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
+    private EIService: EtudiantsIntunsService
   ) { }
 
 
@@ -276,6 +281,7 @@ export class DashboardComponent implements OnInit {
         this.isCommercial = dataUser.type == "Commercial"
         this.isCEO = dataUser.type == "CEO Entreprise";
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
+        this.isIntuns = dataUser.type == "EtudiantsIntuns"
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
@@ -316,7 +322,7 @@ export class DashboardComponent implements OnInit {
             this.dataFormateur = data
           })
         }
-        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO || this.isVisitor);
+        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO || this.isVisitor || this.isIntuns);
         if (this.isCommercial) {
           this.CService.getByUserId(this.token.id).subscribe(cData => {
             this.CommercialExterne = cData
@@ -327,6 +333,10 @@ export class DashboardComponent implements OnInit {
             })
           })
         }
+        if (this.isIntuns)
+          this.EIService.EIgetByUSERID(this.token.id).subscribe(data => {
+            this.dataIntuns = data
+          })
       }
     })
 
@@ -717,6 +727,20 @@ export class DashboardComponent implements OnInit {
       Services: this.PartenaireInfo.Services,
       description: this.PartenaireInfo.description,
     })
+  }
+
+  navigateToEmployabilite() {
+    this.router.navigate(['/intuns/employabilite'])
+  }
+
+  downloadContrat() {
+    this.PartenaireService.downloadContrat(this.PartenaireInfo._id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        importedSaveAs(downloadUrl, this.PartenaireInfo.pathEtatContrat);
+        this.messageService.add({ severity: "success", summary: "Contrat", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
 
   saveEditCommercialInfo() {

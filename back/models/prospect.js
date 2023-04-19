@@ -47,7 +47,7 @@ const prospect_schema = new mongoose.Schema({
     },
     rythme_formation: {
         type: String,
-        required: false,
+        default:"Initiale"
     },
     servicesEh: {
         type: [Boolean],
@@ -89,13 +89,11 @@ const prospect_schema = new mongoose.Schema({
     },
     decision_admission: {
         type: String,
-        required: false,
-        default: "Aucun"
+        default: "En attente de traitement"
     },
     statut_payement: {
         type: String,
-        required: false,
-        default: "Aucun"
+        default: "Non"
     },
     phase_complementaire: {
         type: String,
@@ -120,7 +118,7 @@ const prospect_schema = new mongoose.Schema({
         default: []
     },
     avancement_visa: {
-        type: Boolean
+        type: String
     },
     enTraitement: {
         type: Boolean,
@@ -164,8 +162,8 @@ const prospect_schema = new mongoose.Schema({
         default: ""
     },
     dossier_traited_by: {
-        type: String,
-        default: ""
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
     },
     haveDoc: {
         type: Boolean,
@@ -200,6 +198,72 @@ const prospect_schema = new mongoose.Schema({
         type: String
     },
     indicatif_telegram: {
+        type: String
+    },
+    decision_orientation: {
+        type: [String],
+        default: ["En attente de contact"]
+    },
+    phase_candidature: {
+        type: String,
+        required: false,
+        default: "En attente d'affectation"
+    },
+    agent_sourcing_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
+        default: null
+    },
+    date_sourcing: {
+        type: Date
+    },
+    a_besoin_visa: {
+        type: String,
+    },
+    finance: {
+        type: String,
+    },
+    logement: {
+        type: String,
+    },
+    team_sourcing_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "teamsInt",
+        default: null
+    },
+    contact_date: {
+        type: Date,
+    },
+    contact_orientation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "memberInt",
+        default: null
+    },
+    avancement_orientation: {
+        type: String,
+    },
+    note_avancement: {
+        type: String,
+    },
+    note_decision: {
+        type: String,
+    },
+    note_dossier: {
+        type: String,
+    },
+    note_phase: {
+        type: String,
+    },
+    niveau_langue: {
+        type: String,
+    },
+    dossier_traited_date: {
+        type: Date
+    },
+    procedure_peda: {
+        type: String
+    },
+    numero_dossier_campus_france: {
         type: String
     }
 });

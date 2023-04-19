@@ -84,8 +84,6 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { ContactComponent } from './footer/contact/contact.component';
 import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
-import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
-import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
@@ -160,8 +158,20 @@ import { ResultatQfComponent } from './pedagogie/questionnaire-formateur/resulta
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { AjoutCollaborateurComponent } from './partenaire/collaborateurs/ajout-collaborateur/ajout-collaborateur.component';
 import { StageComponent } from './commercial/stage/stage.component';
+import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { VentesComponent } from './partenaire/commissions/ventes/ventes.component';
 import { ReglementComponent } from './partenaire/commissions/reglement/reglement.component';
+import { SourcingComponent } from './admission/international/sourcing/sourcing.component';
+import { EmployabiliteComponent } from './intuns/employabilite/employabilite.component';
+import { FormationsIntunsComponent } from './intuns/formations-intuns/formations-intuns.component';
+import { EtudiantsIntunsComponent } from './intuns/etudiants-intuns/etudiants-intuns.component';
+import { TeamsIntComponent } from './international/teams-int/teams-int.component';
+import { MemberIntComponent } from './international/teams-int/member-int/member-int.component';
+import { OrientationComponent } from './admission/international/orientation/orientation.component';
+import { AdmissionIntComponent } from './admission/international/admission-int/admission-int.component';
+import { FormationAdmissionComponent } from './international/formation-admission/formation-admission.component';
+import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-admission.component';
+import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
 
 const routes: Routes = [
     {
@@ -240,7 +250,6 @@ const routes: Routes = [
             { path: 'liste-entreprises-ceo', component: ListEntrepriseCeoComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
-
             /** Paths Lemon Way */
 
             { path: 'mon-compte-bancaire', component: MyAccountComponent },
@@ -300,6 +309,22 @@ const routes: Routes = [
             /* Partenaire Haithem */
             { path: 'commissions/ventes', component: VentesComponent, canActivate: [AuthGuardService] },
             { path: 'commissions/reglement', component: ReglementComponent, canActivate: [AuthGuardService] },
+            { path: 'commissions/ventes/:partenaire_id', component: VentesComponent, canActivate: [AuthGuardService] },
+            { path: 'commissions/reglement/:partenaire_id', component: ReglementComponent, canActivate: [AuthGuardService] },
+            /* International Haithem */
+            { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
+            { path: 'international/orientation', component: OrientationComponent, canActivate: [AuthGuardService] },
+            { path: 'international/admission', component: AdmissionIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
+            /* Intuns */
+            { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
+            { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
+            { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
+            /* Configuration Formulaire Admission */
+            { path: 'admission/formations', component: FormationAdmissionComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/ecoles', component: EcoleAdmissionComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
@@ -311,8 +336,6 @@ const routes: Routes = [
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
-    { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
-    { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
     { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
     { path: 'creer-mon-entreprise/:id', component: EntrepriseFormComponent },
 
@@ -328,7 +351,10 @@ const routes: Routes = [
     { path: 'code', redirectTo: '' },
     { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent },
     { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent },
-    { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent }
+    { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent },
+    { path: 'mp-oublie', component: MpOublieComponent },
+    { path: 'mp-oublie/:id', component: MpOublieComponent },
+
 ]
 
 

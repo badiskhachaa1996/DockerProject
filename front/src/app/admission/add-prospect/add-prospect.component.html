@@ -26,7 +26,7 @@
                         formControlName="commercial"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid || (isPartenaireExterne && RegisterForm.value.ecole)"></button>
+                    <button pButton type="submit" label="Ajouter" [disabled]="(RegisterForm.invalid && !isPartenaireExterne) || (!RegisterForm.value.ecole)"></button>
                 </div>
             </form>
         </div>

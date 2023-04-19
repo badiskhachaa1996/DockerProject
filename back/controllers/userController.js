@@ -171,17 +171,6 @@ app.post("/login", (req, res) => {
           res.status(304).send({ message: "Compte pas activé", data });
         }
       }
-      Etudiant.findOne({ user_id: userFromDb._id }).then((etudiant) => {
-        if (
-          etudiant &&
-          etudiant.annee_scolaire.includes("2022-2023") == false
-        ) {
-          etudiant.annee_scolaire.push("2022-2023");
-          Etudiant.findByIdAndUpdate(etudiant._id, {
-            annee_scolaire: etudiant.annee_scolaire,
-          });
-        }
-      });
     })
     .catch((error) => {
       console.log(error);
@@ -831,7 +820,7 @@ app.post("/verifyUserPassword", (req, res) => {
         .compare(passwordToVerif, userFromDb.password)
         .then((valid) => {
           if (!valid) {
-            return res.status(401).json({ error: "Mot de passe incorrect !" });
+            res.status(401).json({ error: "Mot de passe incorrect !" });
           }
           res.status(200).json({ success: "OK" });
         })
@@ -1310,6 +1299,56 @@ app.get("/deleteEmail/:user_id/:type", (req, res) => {
         }
       }
     );
+});
+
+// méthode d'envoi de mail pour la recuperation du mot de passe externe
+app.post("/send-recovery-password-mail", (req, res) => {
+  const email = req.body.email;
+
+  User.findOne({ email_perso: email })
+    .then((response) => {
+      //  création du model de mail
+      const htmlMail =
+        "<p>Bonjour vous avez demander la reinitialisation de votre mot de passe, veuillez cliquer sur le lien suivant: <a href=\"https://ims.intedgroup.com/#/mp-oublie/"+response._id+"\">Modifier mon mot de passe</a></p>" +
+        "<p>Si vous n'êtes pas à l'origine de cette demande, veuillez ne pas en tenir compte.</p>" +
+        "<p>Cordialement</p>";
+
+      // mise en place des options
+      const mailOptions = {
+        from: "ims@intedgroup.com",
+        to: email,
+        subject: "Mot de passe [IMS]",
+        html: htmlMail,
+      };
+
+      // envoi du mail
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          res.status(400).json({errMsg:"Impossible d'effectuer un envoi de mail, veuillez contacter un administrateur",});
+        }
+      });
+
+      res.status(200).json({ successMsg: "Un email vous a été envoyé" });
+    })
+    .catch((error) => {
+      res.status(400).json({ error: error, errMsg: "Adresse mail introuvable" });
+    });
+});
+
+// methode de recuperation du mot de passe (modification)
+app.patch("/recovery-password", (req, res) => {
+  const userId = req.body.userId;
+  const password = req.body.password;
+
+  const passwordHashed = bcrypt.hashSync(password, 8);
+
+  User.updateOne({ _id: userId }, { password: passwordHashed })
+    .then((response) => {
+      res.status(201).json({ successMsg: "Votre mot de passe à bien été modifié" });
+    })
+    .catch((error) => {
+      res.status(500).json({errMsg:"Impossible de mettre à jour votre mot de passe, veuillez contacter un administrateur",});
+    });
 });
 
 module.exports = app;

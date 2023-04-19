@@ -34,6 +34,8 @@ export class StageComponent implements OnInit {
   showFormUpdate: boolean;
   formAddDoc: FormGroup;
   showFormAddDoc: boolean;
+  formUpdateStatus: FormGroup;
+  showFormUpdateStatus: boolean;
 
   // liste des status du stage
   statusList: any[];
@@ -58,11 +60,12 @@ export class StageComponent implements OnInit {
 
   ngOnInit(): void {
     this.messageService.add({severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages'});
-    this.stages         = [];
-    this.students       = [];
-    this.showFormAdd    = false;
-    this.showFormUpdate = false;
-    this.showFormAddDoc = false;
+    this.stages               = [];
+    this.students             = [];
+    this.showFormAdd          = false;
+    this.showFormUpdate       = false;
+    this.showFormAddDoc       = false;
+    this.showFormUpdateStatus = false;
 
     // initialisation des années scolaires
     this.anneeScolaires = [
@@ -141,6 +144,11 @@ export class StageComponent implements OnInit {
     this.formAddDoc = this.formBuilder.group({
       fileType: ['', Validators.required],
     });
+
+    // initialisation du formulaire de mise à jour du status
+    this.formUpdateStatus = this.formBuilder.group({
+      status: ['', Validators.required],
+    });
   }
 
 
@@ -218,6 +226,7 @@ export class StageComponent implements OnInit {
     });
   }
 
+
   // méthode de chargement de la liste des tuteurs d'une entreprise
   onLoadTutors(event: any): void
   {
@@ -285,13 +294,70 @@ export class StageComponent implements OnInit {
 
 
   // méthode de remplissage du formulaire de mise à jour d'un stage
-  onPatchFormUpdate(id: string): void
-  {}
+  onPatchFormUpdate(stage: Stage): void
+  {
+    this.stageToUpdate = stage;
+    let {student_id}: any = stage;
+    let {enterprise_id}: any = stage;
+    let {tutor_id}: any = stage;
+    let {commercial_id}: any = stage;
+    
+    this.formUpdate.patchValue({
+      student_id: {label: `${student_id.user_id?.firstname} ${student_id.user_id?.lastname}`, value: student_id._id},
+      // enterprise_id: { label: enterprise_id.r_sociale, value: enterprise_id._id },
+      // tutor_id: { label: `${tutor_id.user_id?.firstname} ${tutor_id.user_id?.lastname}`, value: tutor_id._id },
+      // begin_date: stage.begin_date,
+      // end_date: stage.end_date,
+      schedules_per_week: stage.schedules_per_week,
+      commercial_id: {label: `${commercial_id?.firstname} ${commercial_id?.lastname}`, value: commercial_id?._id},
+      mission_tasks: stage.mission_tasks,
+      gratification: stage.gratification,
+      payment_modality: stage.payment_modality,
+      other_advantages: stage.other_advantages,
+      school_year: stage.school_year,
+    });
+
+    this.showFormUpdate = true;
+  }
 
 
   //  méthode de mise à jour d'un stage
   onUpdate(): void
-  {}
+  {
+    const formValue = this.formUpdate.value;
+    const stage = new Stage();
+
+    stage._id                 = this.stageToUpdate._id;
+    stage.student_id          = formValue.student_id;
+    stage.enterprise_id       = formValue.enterprise_id;
+    if(this.actualDirectorId == formValue.tutor_id)
+    {
+      stage.tutor_id    = null;
+      stage.director_id = formValue.tutor_id;
+    } else {
+      stage.director_id = null;
+      stage.tutor_id    = formValue.tutor_id;
+    }
+    stage.begin_date          = formValue.begin_date;
+    stage.end_date            = formValue.end_date;
+    stage.schedules_per_week  = formValue.schedules_per_week;
+    formValue.commercial_id == '' ? stage.commercial_id = null : stage.commercial_id = formValue.commercial_id;
+    stage.mission_tasks       = formValue.mission_tasks;
+    stage.gratification       = formValue.gratification;
+    stage.payment_modality    = formValue.payment_modality;
+    stage.other_advantages    = formValue.other_advantages;
+    stage.status              = this.stageToUpdate.status;
+    stage.school_year         = formValue.school_year;
+
+    this.stageService.putStage(stage)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Stage', detail: response.successMsg});
+      this.onGetAllDatas();
+      this.formUpdate.reset();
+      this.showFormUpdate = false;
+    })
+    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Stage', detail: error.error.errorMsg}); });
+  }
 
 
   // méthode de selection du fichier
@@ -382,8 +448,33 @@ export class StageComponent implements OnInit {
     }
   }
 
+
+  // méthode d'affichage du formulaire de mise à jour du status
+  onShowFormUpdateStatus(): void
+  {
+    this.showFormUpdateStatus = true;
+  }
+
+
+  // méthode de modification du statut d'un stage
+  onUpdateStatus(): void
+  {
+    const status = this.formUpdateStatus.value.status;
+    let {commercial_id}: any = this.stageToUpdate;
+    
+    this.stageService.patchStatus(this.stageToUpdate._id, commercial_id?.email, status)
+    .then((response) => {
+      this.messageService.add({severity: 'success', summary: 'Statut', detail: response.successMsg});
+      this.showFormUpdateStatus = false;
+      this.onGetAllDatas();
+    })
+    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Statut', detail: error.error.errorMsg}); })
+  }
+
+
   // méthode de redirection vers la page des assiduités
-  showPresence(id: string) {
+  showPresence(id: string): void
+  {
     this.router.navigate(["details/" + id]);
   }
 

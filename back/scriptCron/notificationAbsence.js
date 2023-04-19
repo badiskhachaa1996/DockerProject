@@ -8,7 +8,8 @@ const { Matiere } = require('../models/matiere')
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
 let date = new Date()
-
+// 50 13 * * 1-5 node /home/ubuntu/ems3/back/scriptCron/notificationAbsence.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-notifAbsence.log 2>&1
+// 20 09 * * 1-5 node /home/ubuntu/ems3/back/scriptCron/notificationAbsence.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-notifAbsence.log 2>&1
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,

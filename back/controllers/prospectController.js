@@ -362,10 +362,40 @@ app.get('/getAllEtudiant', (req, res, next) => {
 
 })
 
-//Recuperation de la liste des prospect
+//Recuperation de la liste des prospect pour le tableau Gestions préinscriptions
 app.get("/getAll", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Recuperation de la liste des prospect pour le tableau Sourcing
+app.get("/getAllSourcing", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Recuperation de la liste des prospect pour le tableau Orientation
+app.get("/getAllOrientation", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, phase_candidature: "En phase d'orientation scolaire" }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Recuperation de la liste des prospect pour le tableau Admission
+app.get("/getAllAdmission", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ decision_orientation: "Validé" }, { decision_orientation: "Changement de campus" }, { decision_orientation: "Changement de formation" }, { decision_orientation: "Changement de destination" }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -422,53 +452,54 @@ app.get("/getTokenByUserId/:user_id", (req, res, next) => {
     })
 });
 
-//Mise à jour d'un prospect
+//Mise à jour d'un prospect + user
 app.put("/update", (req, res, next) => {
     prospectData = req.body.prospect;
     userData = req.body.user;
-    Prospect.findOneAndUpdate({ _id: prospectData._id },
+    Prospect.findByIdAndUpdate(prospectData._id,
         {
             ...prospectData
         })
         .then((prospectUpdated) => {
-            User.findOneAndUpdate({ _id: userData._id },
+            User.findByIdAndUpdate(userData._id,
                 {
-                    civilite: userData.civilite,
-                    firstname: userData.firstname,
-                    lastname: userData.lastname,
-                    phone: userData.phone,
-                    email: userData.email,
-                    password: bcrypt.hashSync(prospectUpdated.password, 8),
-                    role: userData.role,
-                    service_id: null,
-                    type: userData.type,
-                    entreprise: userData.entreprise,
-                    pays_adresse: userData.pays_adresse,
-                    ville_adresse: userData.ville_adresse,
-                    rue_adresse: userData.rue_adresse,
-                    numero_adresse: userData.numero_adresse,
-                    postal_adresse: userData.postal_adresse,
-                    nationalite: userData.nationalite,
-
+                    ...userData
                 })
-                .then((userUpdated) => { res.status(200).send(userUpdated) })
-                .catch((error) => { res.status(400).send(error); });
+                .then((userUpdated) => {
+                    Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
+                        .then((prospectsFromDb) => {
+                            res.status(201).send(prospectsFromDb)
+                        })
+                        .catch((error) => { console.error(error); res.status(500).send(error.message); });
+                })
+                .catch((error) => { console.error(error); res.status(400).send(error); });
+        })
+        .catch((error) => {
+            console.error(error)
+            res.status(400).send(error.message);
+        })
+});
+
+app
+
+
+//Mise à jour d'un prospect seulement
+app.put("/updateV2", (req, res, next) => {
+    console.log({ ...req.body })
+    Prospect.findByIdAndUpdate(req.body._id,
+        {
+            ...req.body
+        })
+        .then((prospectUpdated) => {
+            Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
+                .then((prospectsFromDb) => {
+                    console.log(prospectsFromDb.phase_candidature)
+                    res.status(201).send(prospectsFromDb)
+                })
+                .catch((error) => { res.status(500).send(error.message); });
         })
         .catch((error) => { res.status(400).send(error.message); })
 });
-
-
-// //Mise à jour d'un prospect via un id user à voir si utile decommenter
-// app.put("/updateByIdUser", (req, res, next) => {
-//     //recuperation des données reçu du formulaire
-
-//     Prospect.findOneAndUpdate({ user_id: req.params.id },
-//             {
-
-//             })
-//             .then((prospectUpdated) => { res.status(200).send(prospectUpdated)})
-//             .catch((error) => { res.status(400).send(error.message); })
-// });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()
     Prospect.findByIdAndUpdate(req.params.id, {
@@ -861,6 +892,14 @@ app.post("/send-creation-link", (req, res) => {
 
     res.status(200).json({ successMsg: 'Email envoyé' });
 });
+
+app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
+    Prospect.find({ $or: [{ agent_sourcing_id: req.params.agent_id }, { team_sourcing_id: req.params.team_id }] }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+})
 
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user

@@ -40,6 +40,13 @@ app.get("/getCommercialDataFromCommercialCode/:code", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); })
 });
 
+//Recuperation d'un commercial partenaire via son code
+app.get("/getByCode/:code", (req, res, next) => {
+    CommercialPartenaire.findOne({ code_commercial_partenaire: req.params.code }).populate('user_id')
+        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
+        .catch((error) => { console.error(error); res.status(500).send(error); })
+});
+
 //Recuperation d'un commercial via son id user
 app.get("/getByUserId/:id", (req, res, next) => {
     CommercialPartenaire.findOne({ user_id: req.params.id })
@@ -221,7 +228,7 @@ app.post("/file", upload.single("file"), (req, res, next) => {
 
 app.get("/getProfilePicture/:id", (req, res) => {
     Partenaire.findById(req.params.id, (err, cp) => {
-    
+
         if (cp && cp.pathImageProfil) {
             try {
                 let file = fs.readFileSync(

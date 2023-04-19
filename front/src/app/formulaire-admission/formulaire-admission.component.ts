@@ -53,6 +53,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
+  btnTextBack = "Se connecter"
 
   formSteps: any[] = [
     "Infos",
@@ -278,7 +279,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   defaultDropdown = this.programeFrDropdown
 
   typeFormationDropdown = [
-    { value: "Intiale" },
+    { value: "Initiale" },
     { value: "Alternance" }
   ];
 
@@ -303,6 +304,9 @@ export class FormulaireAdmissionComponent implements OnInit {
   ngOnInit(): void {
     if (localStorage.getItem("CommercialCode")) {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
+    }
+    if (localStorage.getItem('token')) {
+      this.btnTextBack = "Revenir à IMS"
     }
     if (this.form_origin == "eduhorizons") {
       //COMME ESTYA
@@ -852,7 +856,12 @@ export class FormulaireAdmissionComponent implements OnInit {
     let nomAgence = this.RegisterForm.get('nomAgence').value;
     let numeroAgence = this.RegisterForm.get('numeroAgence').value
     let donneePerso = this.RegisterForm.get('donneePerso').value;
-
+    let customid = ""
+    try {
+      customid = this.generateCode(nationalite, firstname, lastname, date_naissance)
+    } catch (error) {
+      customid = ""
+    }
     let source = (code_commercial != "" || hors_Admission) ? "Partenaire" : "Interne";
 
     //Création du nouvel user
@@ -861,7 +870,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     //Creation du nouveau prospect
 
     let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages_fr + ", " + languages_en, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
-      "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
+      "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, customid, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
       hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire, null, numeroAgence, languages_fr, languages_en, numero_telegram, indicatif_telegram);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
@@ -920,6 +929,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.router.navigate(["/loginExterne"])
   }
 
+
   choixRentree() {
     if (this.RegisterForm.value.rentree_scolaire == "Mars 2023") {
       if (this.form_origin == "estya" || this.form_origin == "eduhorizons" || this.form_origin == "intunivesity" || this.form_origin == "espic")
@@ -941,6 +951,31 @@ export class FormulaireAdmissionComponent implements OnInit {
     } else {
       this.programeFrDropdown = this.defaultDropdown
     }
+  }
+
+  generateCode(nation, firstname, lastname, date_naissance) {
+    let code_pays = nation.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nation] && code[nation] != undefined) {
+        code_pays = code[nation]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = new Date().getMilliseconds().toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
   }
 
 
