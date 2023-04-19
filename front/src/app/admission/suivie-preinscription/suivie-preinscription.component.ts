@@ -30,7 +30,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
     let password = this.passwordForm.get('password').value;
     let verifypassword = this.passwordForm.get('verifypassword').value;
     if (password = verifypassword) {
-      let bypass:any = this.ProspectConnected.user_id
+      let bypass: any = this.ProspectConnected.user_id
       this.UserService.verifPassword({ 'id': bypass._id, 'password': passwordactual }).subscribe(
         ((responseV) => {
           console.log(responseV);
@@ -58,7 +58,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   subscription: Subscription;
   ListDocuments: String[] = [];
   ListPiped: String[] = [];
-  boolVisa = 'false'
+  boolVisa = ''
   ProspectConnected: Prospect = {}
 
   diplomeTest: boolean = false;
@@ -90,7 +90,14 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
+  isCommercialv2 = false
+  cfList = [
+    { label: "Pas d'avancement" },
+    { label: "Compte Campus France crée" },
+    { label: "En attente de l'entretien" },
+    { label: "Entretien Validé" },
 
+  ]
 
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
@@ -102,14 +109,17 @@ export class SuiviePreinscriptionComponent implements OnInit {
       this.imageToShow = this.reader.result;
     }, false);
     this.codeCommercial = localStorage.getItem("CommercialCode")
+    if (localStorage.getItem('token'))
+      this.isCommercialv2 = true
     if (this.activatedRoute.snapshot.params?.user_id) {
       this.admissionService.getPopulateByUserid(this.activatedRoute.snapshot.params?.user_id).subscribe(doc => {
         this.ProspectConnected = doc
         let { _id }: any = this.ProspectConnected.user_id
         this.ecoleProspect = this.ProspectConnected.type_form
-        this.boolVisa = (this.ProspectConnected.avancement_visa) ? 'true' : 'false'
+        this.boolVisa = this.ProspectConnected.avancement_visa
         this.getFiles()
         this.UserService.getProfilePicture(_id).subscribe((data) => {
+          console.log(data)
           if (data.error) {
             this.imageToShow = "../assets/images/avatar.PNG"
           } else {
@@ -127,6 +137,25 @@ export class SuiviePreinscriptionComponent implements OnInit {
       this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
       this.getFiles()
       this.isCommercial = false
+
+      let { _id }: any = this.ProspectConnected.user_id
+      this.UserService.getProfilePicture(_id).subscribe((data) => {
+        console.log(data)
+        if (data.error) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+        } else {
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([byteArray], { type: data.documentType })
+          if (blob) {
+            this.imageToShow = "../assets/images/avatar.PNG"
+            this.reader.readAsDataURL(blob);
+          }
+        }
+      })
+      this.admissionService.getPopulateByUserid(_id).subscribe(data => {
+        this.ProspectConnected = data
+        console.log(data)
+      })
     }
 
   }
@@ -311,5 +340,14 @@ export class SuiviePreinscriptionComponent implements OnInit {
       console.error(error)
     })
 
+  }
+
+  updateValue(label, value) {
+    let dic = { _id: this.ProspectConnected._id }
+    dic[label] = value
+    console.log(this.ProspectConnected[label])
+    this.admissionService.updateV2(dic).subscribe(data => {
+      console.log(data, data[label])
+    })
   }
 }

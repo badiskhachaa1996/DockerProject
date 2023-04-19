@@ -35,9 +35,9 @@ export class Prospect {
         public phase_complementaire?: string,
         public customid?: string,
         public traited_by?: string,
-        public validated_cf?: boolean,
+        public validated_cf?: string,
         public payement?: any[],
-        public avancement_visa?: boolean,
+        public avancement_visa?: string,
         public enTraitement?: boolean,
         public etat_traitement?: string,
         public nir?: string,
@@ -75,6 +75,14 @@ export class Prospect {
         public note_decision?: string,
         public note_dossier?: string,
         public note_phase?: string,
+        public niveau_langue?: string,
+        public dossier_traited_date?: Date,
+        public procedure_peda?: string,
+        public numero_dossier_campus_france?: string,
+        public consulaire_traited_by?: string,
+        public consulaire_date?: Date,
+        public note_dossier_cf?: string,
+        public note_consulaire?: string,
     ) { }
 
 }

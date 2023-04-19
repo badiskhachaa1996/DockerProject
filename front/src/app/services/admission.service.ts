@@ -154,7 +154,7 @@ export class AdmissionService {
 
   getPopulateByUserid(user_id) {
     let url = this.apiUrl + "getPopulateByUserid/" + user_id
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' })})
   }
 
   updateDossier(id, statut_dossier) {
@@ -269,7 +269,7 @@ export class AdmissionService {
 
   updateV2(data) {
     let url = this.apiUrl + "updateV2";
-    return this.httpClient.put<Prospect>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.put<Prospect>(url, data);
   }
 
   getAllAffected(team_id = "buffer", agent_id = "buffer") {
