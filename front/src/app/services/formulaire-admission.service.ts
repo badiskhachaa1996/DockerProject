@@ -31,11 +31,7 @@ export class FormulaireAdmissionService {
 
   RAgetByEcoleID(id: string) {
     let registerUrl = this.apiUrl + 'RA/getByEcoleID/' + id;
-    return this.http.get<RentreeAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
-  }
-  RAgetByParams(params: string) {
-    let registerUrl = this.apiUrl + 'RA/getByParams/' + params;
-    return this.http.get<RentreeAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+    return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   RAgetAll() {
@@ -82,6 +78,11 @@ export class FormulaireAdmissionService {
   EAgetByID(id: string) {
     let registerUrl = this.apiUrl + 'EA/getByID/' + id;
     return this.http.get<EcoleAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
+  EAgetByParams(params: string) {
+    let registerUrl = this.apiUrl + 'EA/getByParams/' + params;
+    return this.http.get<EcoleAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
 
   EAgetAll() {
