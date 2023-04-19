@@ -173,6 +173,7 @@ import { FormationAdmissionComponent } from './international/formation-admission
 import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-admission.component';
 import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
 import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
+import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 
 const routes: Routes = [
     {
@@ -333,6 +334,8 @@ const routes: Routes = [
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },

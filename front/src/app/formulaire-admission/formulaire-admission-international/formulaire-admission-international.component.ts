@@ -1,42 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { MegaMenuItem, MenuItem } from 'primeng/api';
-import { User } from 'src/app/models/User';
-import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
-import jwt_decode from "jwt-decode";
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageModule } from 'primeng/message';
-import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
+import { MessageService, MenuItem } from 'primeng/api';
+import { map } from 'rxjs';
+import { Notification } from 'src/app/models/notification';
+import { Partenaire } from 'src/app/models/Partenaire';
+import { Prospect } from 'src/app/models/Prospect';
+import { User } from 'src/app/models/User';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
-import { Inscription } from 'src/app/models/Inscription';
-import { MessageService } from 'primeng/api';
-import { Diplome } from 'src/app/models/Diplome';
-import { Prospect } from 'src/app/models/Prospect';
-import { AdmissionService } from 'src/app/services/admission.service';
-import { Notification } from 'src/app/models/notification';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { PartenaireService } from 'src/app/services/partenaire.service';
 import { ServService } from 'src/app/services/service.service';
-import { map } from 'rxjs';
-import { PartenaireService } from '../services/partenaire.service';
-import { Partenaire } from '../models/Partenaire';
-
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-formulaire-admission',
-  templateUrl: './formulaire-admission.component.html',
-  styleUrls: ['./formulaire-admission.component.scss'],
-
+  selector: 'app-formulaire-admission-international',
+  templateUrl: './formulaire-admission-international.component.html',
+  styleUrls: ['./formulaire-admission-international.component.scss']
 })
-export class FormulaireAdmissionComponent implements OnInit {
+export class FormulaireAdmissionInternationalComponent implements OnInit {
   emailExist: boolean;
 
   constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router,
     private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService,
-    private NotifService: NotificationService, private PartenaireService: PartenaireService) { }
+    private NotifService: NotificationService, private PartenaireService: PartenaireService, private FAService: FormulaireAdmissionService) { }
 
-  routeItems: MenuItem[];
+  routeItems: MenuItem[] = [
+    { label: 'Infos' },
+    { label: 'Parcours' },
+    { label: 'Programme' },
+    { label: 'Partenaires' },
+    { label: 'Dernière étape' },
+  ];;
   cookieCodeCommercial = ""
   nationList = environment.nationalites;
   calendar: any;
@@ -117,165 +116,9 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
       { value: "Programme Anglais" },
     ];
-  programeFrDropdown =
-    [
-      {
-        label: "1ere année BTS MCO - Management Commercial Operationnel",
-        value: "1ere année BTS MCO - Management Commercial Operationnel"
-      },
-      {
-        label: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client",
-        value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client"
-      },
-      {
-        label: "1ere année BTS CI - Commerce International",
-        value: "1ere année BTS CI - Commerce International"
-      },
-      {
-        label: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
-        value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
-      },
-      {
-        label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial ",
-        value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial"
-      },
-      {
-        label: "Mastère 1 : IA - Ingénieur d'Affaires",
-        value: "Mastère 1 : IA - Ingénieur d'Affaires"
-      },
-      {
-        label: "1ere année BTS SIO - Services Informatiques aux Organisations",
-        value: "1ere année BTS SIO - Services Informatiques aux Organisations"
-      },
-      {
-        label: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
-        value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
-      },
-      {
-        label: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
-        value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
-      },
-      {
-        label: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)",
-        value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)"
-      },
-      {
-        label: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)",
-        value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)"
-      },
-      {
-        label: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées",
-        value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées"
-      },
-      {
-        label: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications",
-        value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications"
-      },
-      {
-        label: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ ",
-        value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ"
-      },
-      {
-        label: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA ",
-        value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA "
-      },
-      {
-        label: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)",
-        value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)"
-      },
-      {
-        label: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise",
-        value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise"
-      },
-      {
-        label: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines",
-        value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines"
-      },
-      {
-        label: "Mastère 1 : Manager en ressources humaines",
-        value: "Mastère 1 : Manager en ressources humaines"
-      },
-      {
-        label: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines",
-        value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines"
-      },
-      {
-        label: "Mastère 1 : Manager des organisations - Management et stratégies financières ",
-        value: "Mastère 1 : Manager des organisations - Management et stratégies financièresl"
-      },
-      {
-        label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
-        value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
-      },
-      {
-        label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
-        value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
-      },
-      {
-        label: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social",
-        value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social"
-      },
-      //Septembre 2023 || Mars 2023 && Programme Français
-      {
-        label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
-        value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
-      },
-      {
-        label: "Mastère 1 : MDO : Manager des organisations",
-        value: "Mastère 1 : MDO : Manager des organisations"
-      },
+  programeFrDropdown = []
 
-      {
-        label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
-        value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
-      }
-
-    ];
-
-  programEnDropdown =
-    [
-      {
-        label: "Level 4 : Business Management ",
-        value: "Level 4 : Business Management "
-      },
-      {
-        label: "Level 4 : Information Technology ",
-        value: "Level 4 : Information Technology "
-      },
-      {
-        label: "Level 7 : Project Management ",
-        value: "Level 7 : Project Management "
-      },
-      {
-        label: "Level 4 : Tourism and Hospitality Management ",
-        value: "Level 4 : Tourism and Hospitality Management "
-      },
-      {
-        label: "Level 7 : Tourism and Hospitality Management ",
-        value: "Level 7 : Tourism and Hospitality Management "
-      },
-      {
-        label: "Level 5 : Business Management ",
-        value: "Level 5 : Business Management "
-      },
-      {
-        label: "Level 6 : Business Management ",
-        value: "Level 6 : Business Management "
-      },
-      {
-        label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
-        value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
-      },
-      {
-        label: "Level 5 : Information Technology ",
-        value: "Level 5 : Information Technology"
-      },
-      {
-        label: "Level 6 : Information Technology ",
-        value: "Level 6 : Information Technology"
-      }
-
-    ];
+  programEnDropdown = []
   defaultDropdown = this.programeFrDropdown
 
   typeFormationDropdown = [
@@ -302,311 +145,25 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (localStorage.getItem("CommercialCode")) {
-      this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
-    }
-    if (localStorage.getItem('token')) {
-      this.btnTextBack = "Revenir à IMS"
-    }
-    if (this.form_origin == "eduhorizons") {
-      //COMME ESTYA
-    } else if (this.form_origin == "estya") {
-      //DROPDOWN PAR DEFAUT
-    } else if (this.form_origin == "adg") {
-      //Septembre 2023 || Mars 2023 & Programme Français
-      this.programeFrDropdown.push(
-        {
-          label: "Assistant maternel - Garde d’enfants - samedi ",
-          value: "Assistant maternel - Garde d’enfants - samedi"
-        },
-        {
-          label: "Gouvernant d’enfants",
-          value: "Gouvernant d’enfants"
-        },
-        {
-          label: "CAP AEPE - Accompagnant éducatif petite enfance",
-          value: "CAP AEPE - Accompagnant éducatif petite enfance"
-        },
-        {
-          label: "Année 3 : Bachelor  Chargé de gestion commerciale - Spécialité Tourisme ",
-          value: "Année 3 : Bachelor  Chargé de gestion commerciale - Spécialité Tourisme "
-        },
-        {
-          label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité hôtellerie restauration",
-          value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité hôtellerie restauration"
-        },
-        {
-          label: "EH - Employé d'étage ",
-          value: "EH - Employé d'étage "
-        },
-        {
-          label: "TP GH Gouvernant en Hôtellerie ",
-          value: "TP GH Gouvernant en Hôtellerie "
-        }
-      )
-      this.programEnDropdown =
-        [
-          {
-            label: "Level 4 : Business Management ",
-            value: "Level 4 : Business Management "
-          },
-          {
-            label: "Level 4 : Information Technology ",
-            value: "Level 4 : Information Technology "
-          },
-          {
-            label: "Level 7 : Project Management ",
-            value: "Level 7 : Project Management "
-          },
-          {
-            label: "Level 4 : Tourism and Hospitality Management ",
-            value: "Level 4 : Tourism and Hospitality Management "
-          },
-          {
-            label: "Level 7 : Tourism and Hospitality Management ",
-            value: "Level 7 : Tourism and Hospitality Management "
-          },
-          {
-            label: "Level 5 : Business Management ",
-            value: "Level 5 : Business Management "
-          },
-          {
-            label: "Level 6 : Business Management ",
-            value: "Level 6 : Business Management "
-          },
-          {
-            label: "ENP - Diploma in Tourism and Hospitality Management",
-            value: "ENP - Diploma in Tourism and Hospitality Management"
-          },
-          {
-            label: "Level 5 : Information Technology ",
-            value: "Level 5 : Information Technology"
-          },
-          {
-            label: "Level 6 : Information Technology ",
-            value: "Level 6 : Information Technology"
-          }
+    this.FAService.RAgetByParams(this.form_origin).subscribe(data => {
+      if (!data)
+        this.router.navigate(['/'])
+      else
+        console.log(data)
+    })
 
-        ];
-    } else if (this.form_origin == "espic") {
-      this.programeFrDropdown =
-        [
-          {
-            label: "1ere année BTS MCO - Management Commercial Operationnel",
-            value: "1ere année BTS MCO - Management Commercial Operationnel"
-          },
-          {
-            label: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client",
-            value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client"
-          },
-          {
-            label: "1ere année BTS CI - Commerce International",
-            value: "1ere année BTS CI - Commerce International"
-          },
-          {
-            label: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
-            value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
-          },
-          {
-            label: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial ",
-            value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial"
-          },
-          {
-            label: "Mastère 1 : IA - Ingénieur d'Affaires",
-            value: "Mastère 1 : IA - Ingénieur d'Affaires"
-          },
-          {
-            label: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)",
-            value: "Année 1 TP ARH : Assistant Ressources Humaines (Titre Professionnel)"
-          },
-          {
-            label: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise",
-            value: "Année 3 : Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise"
-          },
-          {
-            label: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines",
-            value: "Année 3 : Bachelor Chargé de Gestion et Management - Management & Ressources humaines"
-          },
-          {
-            label: "Mastère 1 : Manager en ressources humaines",
-            value: "Mastère 1 : Manager en ressources humaines"
-          },
-          {
-            label: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines",
-            value: "Mastère 1 MRH - Mastère européen - Management des Ressources Humaines"
-          },
-          {
-            label: "Mastère 1 : Manager des organisations - Management et stratégies financières ",
-            value: "Mastère 1 : Manager des organisations - Management et stratégies financièresl"
-          },
-          {
-            label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
-            value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
-          },
-          {
-            label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
-            value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
-          },
-          {
-            label: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social",
-            value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social"
-          },
-          //Septembre 2023 || Mars 2023 && Programme Français
-          {
-            label: "Année 3 : Bachelor Chargé de développement  marketing et commercial",
-            value: "Année 3 : Bachelor Chargé de développement  marketing et commercial"
-          },
-          {
-            label: "Mastère 1 : MDO : Manager des organisations",
-            value: "Mastère 1 : MDO : Manager des organisations"
-          },
-
-          {
-            label: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)",
-            value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)"
-          }
-        ];
-      this.programEnDropdown =
-        [
-          {
-            label: "Level 4 : Business Management ",
-            value: "Level 4 : Business Management "
-          },
-          {
-            label: "Level 4 : Information Technology ",
-            value: "Level 4 : Information Technology "
-          },
-          {
-            label: "Level 7 : Project Management ",
-            value: "Level 7 : Project Management "
-          },
-          {
-            label: "Level 4 : Tourism and Hospitality Management ",
-            value: "Level 4 : Tourism and Hospitality Management "
-          },
-          {
-            label: "Level 7 : Tourism and Hospitality Management ",
-            value: "Level 7 : Tourism and Hospitality Management "
-          },
-          {
-            label: "Level 5 : Business Management ",
-            value: "Level 5 : Business Management "
-          },
-          {
-            label: "Level 6 : Business Management ",
-            value: "Level 6 : Business Management "
-          },
-          {
-            label: "Level 5 : Information Technology ",
-            value: "Level 5 : Information Technology"
-          },
-          {
-            label: "Level 6 : Information Technology ",
-            value: "Level 6 : Information Technology"
-          }
-
-        ];
-    } else if (this.form_origin == "studinfo") {
-      this.programeFrDropdown =
-        [
-          {
-            label: "1ere année BTS SIO - Services Informatiques aux Organisations",
-            value: "1ere année BTS SIO - Services Informatiques aux Organisations"
-          },
-          {
-            label: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
-            value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
-          },
-          {
-            label: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)",
-            value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)"
-          },
-          {
-            label: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)",
-            value: "Année 1 : DWWM  - Développeur Web et Web Mobile (Titre professionnel)"
-          },
-          {
-            label: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)",
-            value: "Année 2 : DWWM - Développeur Web et Web Mobile (Titre professionnel)"
-          },
-          {
-            label: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées",
-            value: "Année 3 : Bachelor AIS - Administrateur d’Infrastructures Sécurisées"
-          },
-          {
-            label: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications",
-            value: "Année 3 : Bachelor CDA - Concepteur Développeur d’Applications"
-          },
-          {
-            label: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ ",
-            value: "Mastère 1 : EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ"
-          },
-          {
-            label: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA ",
-            value: "Mastère 1 : EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA "
-          },
-          {
-            label: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)",
-            value: "Année 1 TP BIM Modeleur du Bâtiment (Titre Professionnel)"
-          },
-          {
-            label: "Année 3 : Bachelor Coordinateur BIM du Bâtiment",
-            value: "Année 3 : Bachelor Coordinateur BIM du Bâtiment"
-          }
-        ];
-      this.programEnDropdown =
-        [
-          {
-            label: "Level 4 : Information Technology ",
-            value: "Level 4 : Information Technology "
-          },
-          {
-            label: "Level 5 : Information Technology ",
-            value: "Level 5 : Information Technology"
-          },
-          {
-            label: "Level 6 : Information Technology ",
-            value: "Level 6 : Information Technology"
-          }
-        ]
-
-    } else if (this.form_origin == "estya-dubai") {
-      this.programeFrDropdown = [
-        { label: 'Project Management', value: 'Project Management' },
-        { label: 'Information Technology', value: 'Information Technology' },
-        { label: 'Business Management', value: 'Business Management' },
-        { label: 'Master Manager en ressources humaine', value: 'Master Manager en ressources humaine' },
-        { label: 'Master Ingénieur d\'affaire', value: 'Master Ingénieur d\'affaire' },
-        { label: 'Chargé de gestion commerciale', value: 'Chargé de gestion commerciale' },
-        { label: 'English Foundation Year', value: 'English Foundation Year' },
-      ]
-    } else if (this.form_origin == "intuns") {
-      this.programeFrDropdown = [
-        { label: 'Niveau 6 : Chargé de Gestion et Management', value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
-        { label: 'Niveau 6 : Chargé de Gestion Commerciale', value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
-        { label: 'Niveau 7 : Manager en Ressources Humaines', value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
-        { label: 'Titre : Ingénieur d’affaire', value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
-        { label: 'ENGLISH PROGRAM L7 Project Management', value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
-      ]
-    } else if (this.form_origin == "intunivesity") {
-      //PAREIL QUE ESTYA
-    }
     this.defaultDropdown = this.programeFrDropdown
 
     this.onInitRegisterForm();
 
-    this.routeItems = [
-      { label: 'Infos' },
-      { label: 'Parcours' },
-      { label: 'Programme' },
-      { label: 'Partenaires' },
-      { label: 'Dernière étape' },
-    ];
-    console.log(this.route.snapshot.paramMap.get('code_commercial'))
-    if (this.route.snapshot.paramMap.get('code_commercial'))
-      this.hideCC = true
-    console.log(this.hideCC)
+    if (localStorage.getItem("CommercialCode"))
+      this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
+
+    if (localStorage.getItem('token'))
+      this.btnTextBack = "Revenir à IMS"
   }
+
+
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
 
@@ -670,9 +227,8 @@ export class FormulaireAdmissionComponent implements OnInit {
     if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
       this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
     }
-
   };
-  hideCC = false
+
   nextPage() {
     this.ActiveIndex++
     if (this.ActiveIndex == 3) {
@@ -742,7 +298,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get validated_academic_level() { return this.RegisterForm.get('validated_academic_level'); }
   get statut_actuel() { return this.RegisterForm.get('statut_actuel').value; }
   get other() { return this.RegisterForm.get('other'); }
-
+  get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
   get languages_fr() { return this.RegisterForm.get('languages_fr'); }
   get languages_en() { return this.RegisterForm.get('languages_en'); }
   get is_professional_experience() { return this.RegisterForm.get('is_professional_experience'); }
@@ -752,7 +308,9 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campusChoix1() { return this.RegisterForm.get('campusChoix1'); }
   get campusChoix2() { return this.RegisterForm.get('campusChoix2'); }
   get campusChoix3() { return this.RegisterForm.get('campusChoix3'); }
-
+  get programme() { return this.RegisterForm.get('programme').value; }
+  get formation() { return this.RegisterForm.get('formation').value; }
+  get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
   get sportif_hn() { return this.RegisterForm.get('sportif_hn'); }
@@ -776,11 +334,6 @@ export class FormulaireAdmissionComponent implements OnInit {
   get statut() { return this.RegisterForm.get('statut'); }
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
-
-  get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
-  get programme() { return this.RegisterForm.get('programme').value; }
-  get formation() { return this.RegisterForm.get('formation'); }
-  get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
 
 
   loadDiplome() {
@@ -835,7 +388,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     let campusChoix1 = this.RegisterForm.get('campusChoix1').value.value;
     let campusChoix2 = this.RegisterForm.get('campusChoix2').value.value;
     let campusChoix3 = this.RegisterForm.get('campusChoix3').value.value;
-    let programme = this.RegisterForm.get('programme').value;
+    let programme = this.RegisterForm.get('programme').value.value;
     let formation = this.RegisterForm.get('formation').value;
     let rentree_scolaire = this.RegisterForm.value.rentree_scolaire
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
@@ -984,6 +537,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     return r
 
   }
+
 
 
 }

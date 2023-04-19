@@ -29,6 +29,15 @@ export class FormulaireAdmissionService {
     return this.http.get<RentreeAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
+  RAgetByEcoleID(id: string) {
+    let registerUrl = this.apiUrl + 'RA/getByEcoleID/' + id;
+    return this.http.get<RentreeAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+  RAgetByParams(params: string) {
+    let registerUrl = this.apiUrl + 'RA/getByParams/' + params;
+    return this.http.get<RentreeAdmission>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+  }
+
   RAgetAll() {
     let registerUrl = this.apiUrl + 'RA/getAll';
     return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
@@ -60,7 +69,7 @@ export class FormulaireAdmissionService {
     return this.http.delete<TeamsInt>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
-  
+
   EAcreate(data: EcoleAdmission) {
     let registerUrl = this.apiUrl + 'EA/create';
     return this.http.post<EcoleAdmission>(registerUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })

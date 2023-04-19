@@ -215,7 +215,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/user/patchById" ||
       req.originalUrl === "/soc/user/send-recovery-password-mail" ||
       req.originalUrl === "/soc/user/recovery-password" ||
-      req.originalUrl === "/soc/user/verifyUserPassword"
+      req.originalUrl === "/soc/user/verifyUserPassword" ||
+      req.originalUrl.startsWith("/soc/formulaireAdmission/")
     ) {
       next();
     } else {
