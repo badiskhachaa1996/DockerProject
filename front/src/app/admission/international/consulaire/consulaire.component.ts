@@ -2,21 +2,21 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
-import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
-import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
-  selector: 'app-orientation',
-  templateUrl: './orientation.component.html',
-  styleUrls: ['./orientation.component.scss']
+  selector: 'app-consulaire',
+  templateUrl: './consulaire.component.html',
+  styleUrls: ['./consulaire.component.scss']
 })
-export class OrientationComponent implements OnInit {
+export class ConsulaireComponent implements OnInit {
 
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
@@ -200,15 +200,8 @@ export class OrientationComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
-      if (member)
-        this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
-          this.prospects = data
-        })
-      else
-        this.admissionService.getAllOrientation().subscribe(data => {
-          this.prospects = data
-        })
+    this.admissionService.getAllConsulaire().subscribe(data => {
+      this.prospects = data
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -264,34 +257,46 @@ export class OrientationComponent implements OnInit {
     { label: "Non concerné", value: "Non concerné" },
     { label: "Niveau inf B2", value: "Niveau inf B2" },
   ]
+  ppList = [
+    { label: "Sous dossier", value: "Sous dossier" },
+    { label: "En attente de validation BIM", value: "En attente de validation BIM" },
+    { label: "Entretien de motivation", value: "Entretien de motivation" },
+    { label: "Quiz Informatique", value: "Quiz Informatique" },
+  ]
+
+  stat_cf = [
+    { label: "Oui", value: true },
+    { label: "Non", value: false }
+  ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
+    if (prospect.dossier_traited_by == null)
+      this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(data => {
+        if (data)
+          this.traitementForm.patchValue({ dossier_traited_by: data._id })
+      })
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
-      if (willClose) {
-        this.showTraitement = null
-        this.traitementForm.reset()
-      }
+      this.showTraitement = null
+      this.traitementForm.reset()
     })
   }
 
   traitementForm: FormGroup = new FormGroup({
     _id: new FormControl(),
-    contact_date: new FormControl(new Date()),
-    contact_orientation: new FormControl(''),
-    avancement_orientation: new FormControl(),
-    note_avancement: new FormControl(""),
-    decision_orientation: new FormControl(""),
-    note_decision: new FormControl(""),
-    statut_dossier: new FormControl(""),
-    note_dossier: new FormControl(""),
-    phase_complementaire: new FormControl(""),
-    note_phase: new FormControl(""),
-    niveau_langue: new FormControl("")
+    consulaire_date: new FormControl(''),
+    a_besoin_visa: new FormControl(''),
+    note_decision: new FormControl(),
+    note_dossier_cf: new FormControl(""),
+    logement: new FormControl(""),
+    finance: new FormControl(""),
+    avancement_visa: new FormControl(""),
+    note_consulaire: new FormControl(""),
+    consulaire_traited_by: new FormControl(null)
   })
 
   //Partie Details
@@ -345,21 +350,11 @@ export class OrientationComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
-    this.lengthPaiement = prospect?.payement?.length
     this.scrollToTop()
   }
 
-  lengthPaiement = 0
-
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
-
-    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
-    let phase_candidature = "En phase d'orientation consulaire"
-    if (this.lengthPaiement >= this.payementList.length) {
-      statut_payement = this.showDetails.statut_payement;
-      phase_candidature = this.showDetails.phase_candidature;
-    }
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
@@ -387,10 +382,8 @@ export class OrientationComponent implements OnInit {
       validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
-      payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
-      statut_payement,
-      phase_candidature,
+      payement: this.payementList,
       _id: this.showDetails._id
 
     }
@@ -405,6 +398,7 @@ export class OrientationComponent implements OnInit {
     { label: "Choisissez", value: null },
     { label: "Oui", value: "Oui" },
     { label: "Non concerné", value: "Non concerné" },
+    { label: "Pas de retour", value: "Pas de retour" },
   ]
 
   cflist = [
@@ -494,5 +488,33 @@ export class OrientationComponent implements OnInit {
       })
   }
 
+  showPaiement: Prospect = null
+  initPaiement(prospect) {
+    this.showPaiement = prospect
+    this.payementList = prospect?.payement
+  }
+  savePaiement() {
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
+      this.showPaiement = null
+    })
+  }
 
+  showDocuments = null
+  initDocument(prospect) {
+    this.showDocuments = prospect
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+        this.ListPiped = []
+        data.forEach(doc => {
+          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+        })
+      },
+      (error) => { console.error(error) }
+    );
+  }
 }

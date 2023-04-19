@@ -19,6 +19,9 @@ export class EcoleAdmissionComponent implements OnInit {
     this.FAService.EAgetAll().subscribe(data => {
       this.ecoles = data
     })
+    this.FAService.FAgetAll().subscribe(data=>{
+      this.formationsList = data
+    })
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -80,6 +83,27 @@ export class EcoleAdmissionComponent implements OnInit {
     }, 15);
   }
 
-  initFormations(rowData: EcoleAdmission){}
+  affectedForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
+    formations: new FormControl()
+  })
+
+  affectedFormations: EcoleAdmission = null
+
+  initFormations(rowData: EcoleAdmission) {
+    this.affectedFormations = rowData
+    this.affectedForm.patchValue({ ...rowData })
+  }
+
+  onAffect() {
+    this.FAService.EAupdate({ ...this.affectedForm.value }).subscribe(data => {
+      this.ecoles.splice(this.ecoles.indexOf(this.affectedFormations), 1, data)
+      this.affectedFormations = null
+      this.affectedForm.reset()
+      this.MessageService.add({ severity: "success", summary: `Mis à jour des formations de l'école ${data.titre} avec succès` })
+    })
+  }
+
+  formationsList = []
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, Form } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
@@ -20,6 +21,11 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     this.FAService.RAgetAll().subscribe(data => {
       this.rentrees = data
     })
+    this.FAService.EAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.ecolesList.push({ label: d.titre, value: d._id })
+      })
+    })
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -32,6 +38,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
 
   initUpdate(rowData: RentreeAdmission) {
     this.selectedRentree = rowData
+
     this.updateForm.patchValue({ ...rowData })
   }
 
@@ -78,6 +85,32 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
       }
     }, 15);
   }
+
+  affectedForm: FormGroup = new FormGroup({
+    _id: new FormControl(),
+    ecoles: new FormControl([])
+  })
+
+  affectedEcole: RentreeAdmission = null
+  initEcoles(rowData: RentreeAdmission) {
+    this.affectedEcole = rowData
+    let listEcole = []
+    rowData.ecoles.forEach(e => {
+      listEcole.push(e._id)
+    })
+    this.affectedForm.patchValue({ _id: rowData._id, ecoles: listEcole })
+  }
+
+  onAffect() {
+    this.FAService.RAupdate({ ...this.affectedForm.value }).subscribe(data => {
+      this.rentrees.splice(this.rentrees.indexOf(this.affectedEcole), 1, data)
+      this.affectedEcole = null
+      this.affectedForm.reset()
+      this.MessageService.add({ severity: "success", summary: `Mis à jour des écoles de la rentrée scolaire ${data.nom} avec succès` })
+    })
+  }
+
+  ecolesList: any[] = []
 
 
 }

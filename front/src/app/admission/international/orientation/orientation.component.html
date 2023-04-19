@@ -9,7 +9,7 @@
             showDetails?.user_id?.lastname | uppercase }}
         </h3>
         <form class="grid" [formGroup]="detailsForm">
-            <p-tabView>
+            <p-tabView class="col-12">
                 <p-tabPanel header="Informations Personnelles">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12">
@@ -514,7 +514,7 @@
                             {{ prospect.programme }}
                         </td>
                         <td>
-                            {{ prospect.document_present.length }}
+                            {{ prospect.document_present?.length }}
                         </td>
 
                         <td>

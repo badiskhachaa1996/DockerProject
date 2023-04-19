@@ -602,7 +602,10 @@ export class FormulaireAdmissionComponent implements OnInit {
       { label: 'Partenaires' },
       { label: 'Dernière étape' },
     ];
-
+    console.log(this.route.snapshot.paramMap.get('code_commercial'))
+    if (this.route.snapshot.paramMap.get('code_commercial'))
+      this.hideCC = true
+    console.log(this.hideCC)
   }
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
@@ -667,8 +670,9 @@ export class FormulaireAdmissionComponent implements OnInit {
     if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
       this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
     }
-  };
 
+  };
+  hideCC = false
   nextPage() {
     this.ActiveIndex++
     if (this.ActiveIndex == 3) {
@@ -738,7 +742,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get validated_academic_level() { return this.RegisterForm.get('validated_academic_level'); }
   get statut_actuel() { return this.RegisterForm.get('statut_actuel').value; }
   get other() { return this.RegisterForm.get('other'); }
-  get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
+
   get languages_fr() { return this.RegisterForm.get('languages_fr'); }
   get languages_en() { return this.RegisterForm.get('languages_en'); }
   get is_professional_experience() { return this.RegisterForm.get('is_professional_experience'); }
@@ -748,9 +752,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campusChoix1() { return this.RegisterForm.get('campusChoix1'); }
   get campusChoix2() { return this.RegisterForm.get('campusChoix2'); }
   get campusChoix3() { return this.RegisterForm.get('campusChoix3'); }
-  get programme() { return this.RegisterForm.get('programme').value; }
-  get formation() { return this.RegisterForm.get('formation').value; }
-  get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
+
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
   get sportif_hn() { return this.RegisterForm.get('sportif_hn'); }
@@ -774,6 +776,11 @@ export class FormulaireAdmissionComponent implements OnInit {
   get statut() { return this.RegisterForm.get('statut'); }
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
+
+  get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
+  get programme() { return this.RegisterForm.get('programme').value; }
+  get formation() { return this.RegisterForm.get('formation'); }
+  get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
 
 
   loadDiplome() {

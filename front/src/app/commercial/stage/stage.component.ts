@@ -88,7 +88,7 @@ export class StageComponent implements OnInit {
 
     // initialisation des données de filtres sur les status
     this.statusFilters = [
-      { label: 'Tous les status', value: null },
+      { label: 'Tous les statuts', value: null },
       { label: '0- Crée', value: 'Crée' },
       { label: '1- Conclu', value: 'Conclu' },
       { label: '2- Champs requis', value: 'Champs requis' },

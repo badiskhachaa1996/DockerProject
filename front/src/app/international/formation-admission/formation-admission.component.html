@@ -47,8 +47,9 @@
                     <input pInputText type="text" placeholder="500€" formControlName="tarif" />
                 </div>
                 <div class="field col-6">
-                    <label>Langue</label>
-                    <input pInputText type="text" placeholder="Français" formControlName="langue" />
+                    <label>Langue<span style="color: red;"> * </span></label>
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" formControlName="langue">
+                    </p-multiSelect>
                 </div>
                 <div class="field col-6">
                     <label>Déroulement </label>
@@ -111,8 +112,9 @@
                     <input pInputText type="text" placeholder="500€" formControlName="tarif" />
                 </div>
                 <div class="field col-6">
-                    <label>Langue</label>
-                    <input pInputText type="text" placeholder="Français" formControlName="langue" />
+                    <label>Langue<span style="color: red;"> * </span></label>
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" formControlName="langue">
+                    </p-multiSelect>
                 </div>
                 <div class="field col-6">
                     <label>Déroulement </label>
@@ -131,7 +133,7 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Crée une école"
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Crée une formation"
                     (click)="initCreate()"></button>
             </div>
             <h5>Liste des formations</h5>
@@ -170,7 +172,7 @@
                         <th pSortableColumn="tarif">Tarif<p-sortIcon field="tarif">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="langue">langue<p-sortIcon field="langue">
+                        <th pSortableColumn="langue">Langues<p-sortIcon field="langue">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="deroulement">Déroulement<p-sortIcon field="deroulement">

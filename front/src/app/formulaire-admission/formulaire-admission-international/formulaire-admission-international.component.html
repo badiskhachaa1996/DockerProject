@@ -356,9 +356,9 @@
                     <div>
                         <!--ormulaireAdmissionComponent_div_27_Template (formulaire-admission.component.html:353:29)-->
                         <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
-                        </button><!-- || programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid  -->
+                        </button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="VerifCampus() "
+                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
@@ -498,7 +498,7 @@
                             </div>
                             <div class="field col-12 md:col-12" *ngIf="!hideCC">
                                 <label For="code_commercial">Code Commercial<span style="color: red;"> * </span></label>
-                                <input [disabled]="hideCC" pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
+                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
                                     (blur)="verificationCode()" formControlName="code_commercial" />
                             </div>
                             <div class="ui-g-12 ui-md-12">

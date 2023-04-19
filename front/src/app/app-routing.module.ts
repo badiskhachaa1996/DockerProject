@@ -172,6 +172,9 @@ import { AdmissionIntComponent } from './admission/international/admission-int/a
 import { FormationAdmissionComponent } from './international/formation-admission/formation-admission.component';
 import { EcoleAdmissionComponent } from './international/ecole-admission/ecole-admission.component';
 import { RentreeScolaireAdmissionComponent } from './international/rentree-scolaire-admission/rentree-scolaire-admission.component';
+import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
+import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
+import { PaiementsComponent } from './admission/international/paiements/paiements.component';
 
 const routes: Routes = [
     {
@@ -315,6 +318,8 @@ const routes: Routes = [
             { path: 'international/sourcing', component: SourcingComponent, canActivate: [AuthGuardService] },
             { path: 'international/orientation', component: OrientationComponent, canActivate: [AuthGuardService] },
             { path: 'international/admission', component: AdmissionIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/consulaire', component: ConsulaireComponent, canActivate: [AuthGuardService] },
+            { path: 'international/paiement', component: PaiementsComponent, canActivate: [AuthGuardService] },
             { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */
@@ -331,6 +336,8 @@ const routes: Routes = [
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },

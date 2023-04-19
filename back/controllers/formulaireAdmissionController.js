@@ -23,6 +23,11 @@ app.get("/RA/getByID/:id", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.get("/RA/getByEcoleID/:id", (req, res) => {
+    RentreeAdmission.find({ ecoles: { $in: [req.params.id] }, date_debut_inscription: { $lt: new Date() }, date_fin_inscription: { $gte: new Date() } }).populate('ecoles')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+})
 
 app.get("/RA/getAll", (req, res, next) => {
     RentreeAdmission.find().populate('ecoles')
@@ -31,9 +36,9 @@ app.get("/RA/getAll", (req, res, next) => {
 });
 
 app.put("/RA/update", (req, res) => {
-    RentreeAdmission.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
+    RentreeAdmission.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }).then(doc => {
         RentreeAdmission.findById(req.body._id).populate('ecoles')
-            .then((formFromDb) => { res.status(200).send(formFromDb); })
+            .then((formFromDb) => { console.log(formFromDb); res.status(200).send(formFromDb); })
             .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
@@ -94,6 +99,11 @@ app.get("/EA/getByID/:id", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.get("/EA/getByParams/:params", (req, res) => {
+    EcoleAdmission.findOne({ url_form: req.params.params }).populate('formations')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+})
 
 app.get("/EA/getAll", (req, res, next) => {
     EcoleAdmission.find().populate('formations')
