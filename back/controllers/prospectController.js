@@ -513,7 +513,6 @@ app.put("/updateV2", (req, res, next) => {
         .then((prospectUpdated) => {
             Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                 .then((prospectsFromDb) => {
-                    console.log(prospectsFromDb.phase_candidature)
                     res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error.message); });
