@@ -22,7 +22,9 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
       this.rentrees = data
     })
     this.FAService.EAgetAll().subscribe(data => {
-      this.ecolesList = data
+      data.forEach(d => {
+        this.ecolesList.push({ label: d.titre, value: d._id })
+      })
     })
   }
 
@@ -36,6 +38,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
 
   initUpdate(rowData: RentreeAdmission) {
     this.selectedRentree = rowData
+
     this.updateForm.patchValue({ ...rowData })
   }
 
@@ -85,13 +88,17 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
 
   affectedForm: FormGroup = new FormGroup({
     _id: new FormControl(),
-    ecoles: new FormControl()
+    ecoles: new FormControl([])
   })
 
   affectedEcole: RentreeAdmission = null
   initEcoles(rowData: RentreeAdmission) {
     this.affectedEcole = rowData
-    this.affectedForm.patchValue({...rowData})
+    let listEcole = []
+    rowData.ecoles.forEach(e => {
+      listEcole.push(e._id)
+    })
+    this.affectedForm.patchValue({ _id: rowData._id, ecoles: listEcole })
   }
 
   onAffect() {
@@ -103,7 +110,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     })
   }
 
-  ecolesList: EcoleAdmission[] = []
+  ecolesList: any[] = []
 
 
 }
