@@ -382,10 +382,20 @@ app.get("/getAllSourcing", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Paiement
+app.get("/getAllPaiement", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, "payement.0": { $exists: true } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 //Recuperation de la liste des prospect pour le tableau Orientation
 app.get("/getAllOrientation", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ team_sourcing_id: { $ne: null } },{ agent_sourcing_id: { $ne: null } }] }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ team_sourcing_id: { $ne: null } }, { agent_sourcing_id: { $ne: null } }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
