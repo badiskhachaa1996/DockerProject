@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     description: { type: String, },
     criteres: { type: String, },
     tarif: { type: String, },
-    langue: { type: String, },
+    langue: { type: [String], default: [] },
     deroulement: { type: String, },
 });
 

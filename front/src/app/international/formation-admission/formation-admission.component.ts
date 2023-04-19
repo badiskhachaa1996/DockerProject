@@ -32,7 +32,7 @@ export class FormationAdmissionComponent implements OnInit {
     description: new FormControl(''),
     criteres: new FormControl(''),
     tarif: new FormControl(''),
-    langue: new FormControl(''),
+    langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
   })
 
@@ -59,7 +59,7 @@ export class FormationAdmissionComponent implements OnInit {
     description: new FormControl(''),
     criteres: new FormControl(''),
     tarif: new FormControl(''),
-    langue: new FormControl(''),
+    langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
   })
 
@@ -103,6 +103,10 @@ export class FormationAdmissionComponent implements OnInit {
     { label: "En ligne", value: "En ligne" },
     { label: "Présentiel", value: "Présentiel" },
     { label: "Hybride", value: "Hybride" },
+  ]
 
+  languesList = [
+    { label: "Français", value: "Programme Français" },
+    { label: "Anglais", value: "Programme Anglais" },
   ]
 }
