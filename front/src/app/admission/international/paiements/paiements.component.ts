@@ -33,6 +33,13 @@ export class PaiementsComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
+  uploadAdminFileForm: FormGroup = new FormGroup({
+    //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("", Validators.required),
+    note: new FormControl(""),
+    traited_by: new FormControl("", Validators.required),
+  })
 
   @ViewChild('fileInput') fileInput: FileUpload;
   FileUpload(event) {
@@ -60,6 +67,43 @@ export class PaiementsComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+  FileUploadAdmin(event: { files: [File], target: EventTarget }) {
+
+    if (this.uploadAdminFileForm.valid && event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+
+      formData.append('id', this.showUploadFile._id)
+      formData.append('date', this.uploadAdminFileForm.value.date)
+      formData.append('note', this.uploadAdminFileForm.value.note)
+      formData.append('nom', this.uploadAdminFileForm.value.nom)
+      formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        if (res.documents_administrative)
+          this.prospects[this.prospects.indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
+        event.target = null;
+        this.showUploadFile = null;
+
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+  downloadAdminFile(path) {
+    this.admissionService.downloadFileAdmin(this.showDocuments._id, path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(blob, path)
+    }, (error) => {
+      console.error(error)
+    })
+
   }
 
   downloadFile(id, i) {
@@ -592,5 +636,15 @@ export class PaiementsComponent implements OnInit {
       val += paiement.montant
     })
     return val
+  }
+
+  convertTime(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
 }

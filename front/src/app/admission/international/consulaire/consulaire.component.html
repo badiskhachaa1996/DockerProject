@@ -181,7 +181,7 @@
     </div>
 
     <!-- partie ajout de document -->
-    <div class="col-12" *ngIf="showUploadFile!=null">
+    <div class="col-12" *ngIf="showUploadFile!=null && showDetails">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showUploadFile = null" aria-hidden="true"> </i>
@@ -198,6 +198,44 @@
                 <div class="field col-12">
                     <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
                         customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="showUploadFile!=null && showDocuments">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadFile = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                showUploadFile.user_id?.firstname }} {{
+                showUploadFile.user_id?.lastname | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                <div class="field col-6">
+                    <label>Date de délivrance</label>
+                    <input type="date" formControlName="date" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Nom du Fichier</label>
+                    <input type="text" formControlName="nom" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Note :</label>
+                    <textarea pInputTextarea formControlName="note"></textarea>
+                </div>
+                <div class="field col-6">
+                    <label>Traité par :</label>
+                    <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
+                        optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
                         maxFileSize="10000000" [auto]="true" #fileInput>
                     </p-fileUpload>
                 </div>
@@ -266,34 +304,55 @@
             showDocuments?.user_id?.firstname }} {{
             showDocuments?.user_id?.lastname | uppercase }}
         </h3>
-        <ul>
-            <li *ngFor="let file of ListDocuments; index as i">
-                <div class="grid">
-
-                    <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                        <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                            pTooltip="Visualiser dans un nouvel onglet"
-                            (click)="VisualiserFichier(showDocuments._id,i)"></i>
-                        <em (click)="VisualiserFichier(showDocuments._id,i)" [id]="i" style="cursor: pointer;"
-                            pTooltip=" Visualiser dans un nouvel onglet">
-                            {{ ListPiped[i] }}
-                        </em>
-                    </div>
-                    <div class="field col-1">
-                        <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                            (click)="downloadFile(showDocuments._id,i)"></i>
-                    </div>
-                    <div class="field col-1">
-                        <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                            pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(showDocuments._id,i)"
-                            aria-hidden="true"> </i>
-                    </div>
-
-                </div>
-            </li>
-        </ul>
-        <p *ngIf="ListDocuments==null || ListDocuments.length==0">
+        <div class="col-12 grid">
+            <div class="col-12">
+                <strong>Mes attestations disponibles:</strong>
+            </div>
+            <div class="col-12">
+                <p-table styleClass="p-datatable-gridlines" [value]="showDocuments.documents_administrative"
+                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>
+                                Date de délivrance
+                            </th>
+                            <th>
+                                Nom du document
+                            </th>
+                            <th>
+                                Traité par
+                            </th>
+                            <th>
+                                Lien de téléchargement
+                            </th>
+                            <th>
+                                Note
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{rowData.date | date:'mediumDate'}}
+                            </td>
+                            <td>
+                                {{rowData.nom}}
+                            </td>
+                            <td>
+                                {{rowData.traited_by}}
+                            </td>
+                            <td>
+                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                            </td>
+                            <td>
+                                {{rowData.note}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <p *ngIf="showDocuments.documents_administrative==null || showDocuments.documents_administrative.length==0">
             Aucun document n'a été chargé !
         </p>
         <div class="col-12">
@@ -561,7 +620,7 @@
                         </td>
                         <td>
                             <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-cog mr-2"
-                                (click)="initTraitement(prospect)" aria-hidden="true"></i>
+                                (click)="initTraitement(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
                                 (click)="initDocument(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"

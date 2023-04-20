@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FileUpload } from 'primeng/fileupload';
-
+import { saveAs } from "file-saver";
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -361,4 +361,16 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { header: "Nom du document" },
     { header: "Lien de téléchargement" },
   ]
+
+  downloadAdminFile(path) {
+    this.admissionService.downloadFileAdmin(this.ProspectConnected._id, path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(blob, path)
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
 }

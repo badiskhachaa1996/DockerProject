@@ -511,9 +511,9 @@
                         </td>
                         <td>
                             <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search mr-2"
-                                (click)="initAffectation(prospect)" aria-hidden="true"></i>
+                                (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
-                                (click)="initDetails(prospect)" aria-hidden="true"></i>
+                                (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

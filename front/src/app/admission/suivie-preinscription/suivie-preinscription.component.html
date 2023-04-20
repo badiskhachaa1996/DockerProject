@@ -597,7 +597,7 @@
                                                 {{rowData.nom}}
                                             </td>
                                             <td>
-                                                {{rowData.path}}
+                                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
                                             </td>
                                         </tr>
                                     </ng-template>

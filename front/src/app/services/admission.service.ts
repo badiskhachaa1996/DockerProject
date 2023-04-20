@@ -107,6 +107,11 @@ export class AdmissionService {
     let url = this.apiUrl + "downloadFile/" + id + "/" + filename
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  downloadFileAdmin(id, path) {
+    let url = this.apiUrl + "downloadFileAdmin/" + id + "/" + path
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
 
   deleteFile(id, filename) {
     let url = this.apiUrl + "deleteFile/" + id + "/" + filename
@@ -115,6 +120,11 @@ export class AdmissionService {
 
   uploadFile(formData, id, token = 'token') {
     let url = this.apiUrl + "uploadFile/" + id
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
+  }
+
+  uploadAdminFile(formData, id, token = 'token') {
+    let url = this.apiUrl + "uploadAdminFile/" + id
     return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
   }
 
@@ -154,7 +164,7 @@ export class AdmissionService {
 
   getPopulateByUserid(user_id) {
     let url = this.apiUrl + "getPopulateByUserid/" + user_id
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' })})
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
   }
 
   updateDossier(id, statut_dossier) {

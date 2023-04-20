@@ -532,10 +532,10 @@
                             Non
                         <td>
                         <td>
-                            {{ prospect.decision_orientation }}
+                            {{ prospect.decision_orientation }} do
                         </td>
                         <td>
-                            {{ prospect.avancement_orientation }}
+                            {{ prospect.avancement_orientation }} ao
                         </td>
                         <td>
                             {{ prospect.phase_candidature }}
@@ -545,9 +545,9 @@
                         </td>
                         <td>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit  mr-2"
-                                (click)="initDetails(prospect)" aria-hidden="true"></i>
+                                (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-cog"
-                                (click)="initTraitement(prospect)" aria-hidden="true"></i>
+                                (click)="initTraitement(prospect);scrollToTop()" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
