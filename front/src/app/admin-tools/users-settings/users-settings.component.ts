@@ -202,7 +202,7 @@ export class UsersSettingsComponent implements OnInit {
       service: this.userToUpdate?.service_id?._id,
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
-      pays_adresse: { value: this.userToUpdate.pays_adresse, viewValue: this.userToUpdate.pays_adresse, actif: false },
+      pays_adresse: { value: this.userToUpdate.pays_adresse, label: this.userToUpdate.pays_adresse, actif: false },
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,

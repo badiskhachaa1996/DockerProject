@@ -10,6 +10,7 @@ import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-orientation',
@@ -120,9 +121,37 @@ export class OrientationComponent implements OnInit {
   //Filter Tableau
   filterCampus = [
     { value: null, label: "Tous les campus" },
+    { value: "Paris - France", label: "Paris - France" },
+    { value: "Montpellier - France", label: "Montpellier - France" },
+    { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+    { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+    { value: "La Valette - Malte", label: "La Valette - Malte" },
+    { value: "UAE - Dubai", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
+  ]
+  dropdownCampus = [
+    { value: "Paris - France", label: "Paris - France" },
+    { value: "Montpellier - France", label: "Montpellier - France" },
+    { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+    { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+    { value: "La Valette - Malte", label: "La Valette - Malte" },
+    { value: "UAE - Dubai", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
+  ]
+  filterSource = [
+    { value: null, label: 'Tous les sources' }, { label: "Partenaire", value: "Partenaire" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Site web ESTYA", value: "Site web ESTYA" },
+    { label: "Site web Ecole", value: "Site web" },
+    { label: "Equipe communication", value: "Equipe communication" },
+    { label: "Bureau Congo", value: "Bureau Congo" },
+    { label: "Bureau Maroc", value: "Bureau Maroc" },
+    { label: "Collaborateur interne", value: "Collaborateur interne" },
+    { label: "Report", value: "Report" },
+    { label: "IGE", value: "IGE" }
   ]
   dropdownDecisionAdmission = [
-    { value: null, label: "Toutes les décisions" },
+    { value: null, label: "Décisions Admission" },
     { value: "Accepté", label: "Accepté" },
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Suspendu", label: "Suspendu" },
@@ -134,7 +163,7 @@ export class OrientationComponent implements OnInit {
     { value: "A signé les documents", label: "A signé les documents" },
   ]
   dropdownDecisionOrientation = [
-    { value: null, label: "Toutes les décisions" },
+    { value: null, label: "Décisions Orientation" },
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
     { label: "Changement de campus", value: "Changement de campus" },
@@ -148,20 +177,35 @@ export class OrientationComponent implements OnInit {
   filterFormation = [
     { value: null, label: "Toutes les formations" }
   ]
+  filterProgramme = [
+    { value: null, label: "Toutes les langues" },
+    { value: "Programme Français", label: "Programme Français", },
+    { value: "Programme Anglais", label: "Programme Anglais", }
+  ];
   filterRythmeFormation = [
     { value: null, label: "Toutes les rythmes de formations" },
     { value: "Alternance", label: "Alternance" },
     { value: "Initiale", label: "Initiale" },
   ]
   filterPhase = [
-    { value: null, label: "Toutes les phases de candidature" }
+    { value: null, label: "Toutes les phases de candidature" },
+    { value: 'Non affecté', label: "Non affecté" },
+    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
+    { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+    { value: "Recours", label: "Recours" },
   ]
   filterStatut: any[] = [
-    { value: null, label: "Toutes les status" },
-    { value: "Manquants", label: "Manquants" },
-    { value: "Passable", label: "Passable" },
-    { value: "Complet", label: "Complet" },
-    { value: "Manque orientation", label: "Manque orientation" }
+    { value: null, label: "Toutes les statuts de dossier" },
+    { value: true, label: "Oui" },
+    { value: false, label: "Non" }
+  ]
+
+  filterPaiement: any[] = [
+    { value: null, label: "Toutes les statuts de paiements" },
+    { value: "Oui", label: "Oui" },
+    { value: "Non", label: "Non" }
   ]
 
   filterVisa = [
@@ -173,11 +217,10 @@ export class OrientationComponent implements OnInit {
   ]
   filterRentreeScolaire = [
     { value: null, label: 'Toutes les rentrées scolaires' },
-    { value: 'Janvier 2023', label: 'Janvier 2023' },
-    { value: 'Septembre 2023', label: 'Septembre 2023' }
   ]
+  filterEcole = []
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -200,6 +243,7 @@ export class OrientationComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.filterPays = this.filterPays.concat(environment.pays)
     this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
       if (member)
         this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
@@ -232,12 +276,28 @@ export class OrientationComponent implements OnInit {
         })
       })
     })
-
+    this.FAService.RAgetAll().subscribe(data => {
+      data.forEach(d => this.filterRentreeScolaire.push({ label: d.nom, value: d.nom }))
+    })
+    this.FAService.FAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.filterFormation.push({ label: d.nom, value: d.nom })
+        this.dropdownFormation.push({ label: d.nom, value: d.nom })
+      })
+    })
+    this.FAService.EAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+        this.filterEcole.push({ label: d.titre, value: d.url_form })
+      })
+    })
   }
 
   //Partie Traitement
   showTraitement: Prospect = null
+  dropdownEcole = []
   agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
+  dropdownFormation = []
   avancementList = [
     { label: "En attente", value: "En attente" },
     { label: "Joignable", value: "Joignable" },
@@ -267,6 +327,7 @@ export class OrientationComponent implements OnInit {
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
+    this.traitementForm.patchValue({ contact_date: this.convertTime(prospect.contact_date) })
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
@@ -324,6 +385,7 @@ export class OrientationComponent implements OnInit {
     validated_cf: new FormControl(''),
     logement: new FormControl(''),
     finance: new FormControl(''),
+    type_form: new FormControl('', Validators.required),
     avancement_visa: new FormControl(''),
 
 
@@ -353,13 +415,19 @@ export class OrientationComponent implements OnInit {
 
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
-
-    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    let phase_candidature = this.showDetails.phase_candidature;
+    let statut_payement = "Oui"
+    if (this.lengthPaiement >= this.payementList.length) {
+      statut_payement = this.showDetails.statut_payement;
+    }
+    /*let statut_payement = "Oui" 
     let phase_candidature = "En phase d'orientation consulaire"
     if (this.lengthPaiement >= this.payementList.length) {
       statut_payement = this.showDetails.statut_payement;
       phase_candidature = this.showDetails.phase_candidature;
-    }
+    }*/
+    if (this.detailsForm.value.decision_orientation == "Validé")
+      phase_candidature = "En phase d'admission"
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
@@ -374,7 +442,6 @@ export class OrientationComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
-
     let prospect = {
       formation: this.detailsForm.value.formation,
       campus_choix_1: this.detailsForm.value.campus_choix_1,
@@ -387,6 +454,7 @@ export class OrientationComponent implements OnInit {
       validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
+      type_form: this.detailsForm.value.type_form,
       payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
       statut_payement,
@@ -459,6 +527,28 @@ export class OrientationComponent implements OnInit {
 
   paysList = environment.pays;
 
+  typePaiement = [
+    { value: null, label: "Aucun Suite a un renouvelement" },
+    { value: "Chèque Montpellier", label: "Chèque Montpellier" },
+    { value: "Chèque Paris", label: "Chèque Paris" },
+    { value: "Chèque Tunis", label: "Chèque Tunis" },
+    { value: "Compensation", label: "Compensation" },
+    { value: "Espèce chèque Autre", label: "Espèce chèque Autre" },
+    { value: "Espèce chèque Montpellier", label: "Espèce chèque Montpellier" },
+    { value: "Espèce chèque Paris", label: "Espèce chèque Paris" },
+    { value: "Espèce Congo", label: "Espèce Congo" },
+    { value: "Espèce Maroc", label: "Espèce Maroc" },
+    { value: "Espèce Montpellier", label: "Espèce Montpellier" },
+    { value: "Espèce Paris", label: "Espèce Paris" },
+    { value: "Espèce Tunis", label: "Espèce Tunis" },
+    { value: "Lien de paiement", label: "Lien de paiement" },
+    { value: "PayPal", label: "PayPal" },
+    { value: "Virement", label: "Virement" },
+    { value: "Virement chèque Autre", label: "Virement chèque Autre" },
+    { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
+    { value: "Virement chèque Paris", label: "Virement chèque Paris" },
+  ]
+
   //Gestions de l'ARGENT
 
   payementList = []
@@ -469,7 +559,9 @@ export class OrientationComponent implements OnInit {
     this.payementList.push({ type: "", montant: 0, date: "" })
   }
   changeMontant(i, event, type) {
-    if (type == "montant") {
+    if (type == "type") {
+      this.payementList[i][type] = event.value;
+    } else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
     } else {
       this.payementList[i][type] = event.target.value;
@@ -492,6 +584,16 @@ export class OrientationComponent implements OnInit {
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
       })
+  }
+
+  convertTime(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
 
 

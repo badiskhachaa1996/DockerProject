@@ -96,7 +96,13 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { label: "Compte Campus France crée" },
     { label: "En attente de l'entretien" },
     { label: "Entretien Validé" },
+  ]
 
+  visaList = [
+    { label: "Oui", value: "Oui" },
+    { label: "Non concerné", value: "Non concerné" },
+    { label: "Non", value: "Non" },
+    { label: "Pas de retour", value: "Pas de retour" },
   ]
 
   uploadFileForm: FormGroup = new FormGroup({
@@ -342,12 +348,17 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   }
 
-  updateValue(label, value) {
+  updateValue(label) {
     let dic = { _id: this.ProspectConnected._id }
-    dic[label] = value
-    console.log(this.ProspectConnected[label])
+    dic[label] = this.ProspectConnected[label]
     this.admissionService.updateV2(dic).subscribe(data => {
-      console.log(data, data[label])
+      console.log(data, data[label], "Succès")
     })
   }
+
+  cols = [
+    { header: "Date de délivrance" },
+    { header: "Nom du document" },
+    { header: "Lien de téléchargement" },
+  ]
 }

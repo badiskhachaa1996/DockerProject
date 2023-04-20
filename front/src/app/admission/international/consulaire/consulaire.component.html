@@ -10,6 +10,7 @@
         </h3>
         <form class="grid" [formGroup]="detailsForm">
             <p-tabView class="col-12">
+
                 <p-tabPanel header="Informations Personnelles">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12">
@@ -41,8 +42,7 @@
                         </div>
                         <div class="field col-12 md:col-7">
                             <label For="pays">Pays</label>
-                            <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
-                                optionLabel="value"></p-dropdown>
+                            <p-dropdown [options]="paysList" formControlName="pays_adresse"></p-dropdown>
                         </div>
                         <div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
@@ -74,22 +74,31 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Formation</label>
-                            <input pInputText formControlName="formation" />
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            <p-dropdown [options]="dropdownFormation" placeholder="Choisissez une formation"
+                                formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_1">Campus 1er choix</label>
-                            <input pInputText formControlName="campus_choix_1" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_1"></p-dropdown>
 
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_2">Campus 2ème choix</label>
-                            <input pInputText formControlName="campus_choix_2" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_2"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_3">Campus 3ème choix</label>
-                            <input pInputText formControlName="campus_choix_3" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_3"></p-dropdown>
+                            <!--<input pInputText formControlName="campus_choix_3" />-->
 
+                        </div>
+                        <div class="field col-12">
+                            <label For="formation">Ecole</label>
+                            <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
+                                formControlName="type_form"></p-dropdown>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -126,50 +135,49 @@
                         Aucun document n'a été chargé !
                     </p>
                 </p-tabPanel>
-                <p-tabPanel header="Paiements">
-                    <div class="grid">
-                        <label>Montant Payé</label>
-                        <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                            <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
-                            <div class="field col-12 md:col-3">
-                                <label>Type de paiement:</label><br>
-                                <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                                    [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
-                            </div>
-                            <div class="field col-12 md:col-3">
-                                <label>Montant:</label><br>
-                                <input type="number" (change)="changeMontant(i,$event,'montant')"
-                                    [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-5">
-                                <label>Date du paiement:</label><br>
-                                <input type="date" (change)="changeMontant(i,$event,'date')"
-                                    [(value)]="payementList[i]['date']" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-1">
-                                <label>&nbsp;</label><br>
-                                <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
-                                    styleClass="p-button-danger"></button>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <button type="button" (click)="onAddPayement()" pButton
-                                label="Ajouter un paiement"></button>
-                        </div>
-                    </div>
-                </p-tabPanel>
             </p-tabView>
-            <div class="col-4">
-                <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
-            </div>
-            <div class="col-4">
-                <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
-            </div>
-            <div class="col-4">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
-            </div>
         </form>
+        <p-fieldset legend="Paiements">
+            <div class="grid">
+                <label>Montant Payé</label>
+                <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+                    <div class="field col-12 md:col-5">
+                        <label>Type de paiement:</label><br>
+                        <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
+                            placeholder="Choisissez la méthode de paiement"
+                            (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label>Montant:</label><br>
+                        <input type="number" (change)="changeMontant(i,$event,'montant')"
+                            [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label>Date du paiement:</label><br>
+                        <input type="date" (change)="changeMontant(i,$event,'date')" [(value)]="payementList[i]['date']"
+                            pInputText>
+                    </div>
+                    <div class="field col-12 md:col-1">
+                        <label>&nbsp;</label><br>
+                        <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
+                            styleClass="p-button-danger"></button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
+                </div>
+            </div>
+        </p-fieldset>
+        <div class="col-4">
+            <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
+        </div>
+        <div class="col-4">
+            <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
+        </div>
+        <div class="col-4">
+            <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
+                (click)="saveDetails(true)"></button>
+        </div>
     </div>
 
     <!-- partie ajout de document -->
@@ -200,7 +208,7 @@
     <div class="col-12 card" *ngIf="showPaiement">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+        <h3 *ngIf="showPaiement?.user_id" class="text-center" style="font-weight: bold;"> Paiement de : {{
             showPaiement?.user_id?.firstname }} {{
             showPaiement?.user_id?.lastname | uppercase }}
         </h3>
@@ -296,14 +304,15 @@
     <div class="col-12 card" *ngIf="showTraitement">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showTraitement = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Détails de : {{
+        <h3 *ngIf="showTraitement?.user_id" class="text-center" style="font-weight: bold;"> Traitement de : {{
             showTraitement?.user_id?.firstname }} {{
             showTraitement?.user_id?.lastname | uppercase }}
         </h3>
         <form class="p-fluid p-formgrid grid card" [formGroup]="traitementForm">
             <div class="field md:col-6 col-12">
                 <label>Contacté le :</label>
-                <p-calendar formControlName="consulaire_date"></p-calendar>
+                <!--<p-calendar formControlName="consulaire_date"></p-calendar>-->
+                <input type="date" formControlName="consulaire_date" pInputText />
             </div>
             <div class="field md:col-6 col-12">
                 <label>Contacté par :</label>
@@ -315,7 +324,10 @@
                 <p-dropdown [options]="abesoinvisaList" formControlName="a_besoin_visa"></p-dropdown>
                 <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
             </div>
-            <h5 class="col-12">Avancement Campus France</h5>
+            <div class="field col-12">
+                <label>Avancement Campus France :</label>
+                <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
+            </div>
             <div class="field md:col-6 col-12">
                 <label>Note :</label>
                 <textarea pInputTextarea formControlName="note_decision"></textarea>
@@ -323,7 +335,7 @@
 
             <div class="field md:col-6 col-12">
                 <label>Numéro de dossier Campus France :</label>
-                <input pInputText formControlName="note_dossier_cf" />
+                <input pInputText formControlName="numero_dossier_campus_france" />
             </div>
             <h5 class="col-12">Dossier consulaire</h5>
             <div class="field md:col-6 col-12">
@@ -369,59 +381,61 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <p-dropdown filter="true" placeholder="Source"
-                        [options]="[{value:null,label:'Tous les sources'},{value:'Interne',label:'Interne'},{value:'Partenaire',label:'Partenaire'},{value:'Eduhorizons',label:'Eduhorizons'}]"
-                        (onChange)="dt1.filter($event.value, 'source','equals')"
-                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
                         (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                        (onChange)="dt1.filter($event.value, 'formation','equals')"
+                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals')"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                        (onChange)="dt1.filter($event.value, 'programme','equals')"
+                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                        (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                        (onChange)="dt1.filter($event.value, 'source','startsWith')"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    </p-dropdown>
 
-                    <p-dropdown filter="true" placeholder="Paiement"
-                        [options]="[
-                    {value:null,label:'Tous les paiements'},
-                    { value: 'Aucun',label:'Aucun' },
-                    { value: 'Pré-inscription',label:'Pré-inscription' }, { value: 'Inscription',label:'Inscription' }, { value: 'Inscription définitive',label:'Inscription définitive' }, ]"
-                        (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
-                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Decision Orientation" [options]="dropdownDecisionOrientation"
-                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
                     <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"
                         (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
-                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
+
+                    <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+
+
+                    <p-dropdown filter="true" placeholder="Decision Orientation" [options]="dropdownDecisionOrientation"
+                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                        [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                     <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
                         (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
-                        (onChange)="dt1.filter($event.value, 'statut_dossier','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                 </ng-template>
@@ -458,8 +472,8 @@
                         <th pSortableColumn="programme" scope="col" style="text-align: center;">
                             Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="document_present" scope="col" style="text-align: center;">
-                            Documents d'inscription<p-sortIcon field="document_present"></p-sortIcon>
+                        <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
+                            Documents d'inscription<p-sortIcon field="haveDoc"></p-sortIcon>
                         </th>
 
                         <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
@@ -525,15 +539,16 @@
                         <td>
                             {{ prospect.programme }}
                         </td>
-                        <td>
-                            {{ prospect?.document_present?.length }}
+                        <td *ngIf="prospect.haveDoc">
+                            Oui
                         </td>
-
+                        <td *ngIf="!prospect.haveDoc">
+                            Non
                         <td>
                             {{ prospect.decision_orientation }}
                         </td>
                         <td>
-                            {{ prospect.decision_admission }}
+                            {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de traitement" }}
                         </td>
                         <td>
                             {{ prospect.statut_payement }}

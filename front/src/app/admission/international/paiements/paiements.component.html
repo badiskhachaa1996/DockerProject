@@ -74,55 +74,73 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Formation</label>
-                            <input pInputText formControlName="formation" />
-                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            <p-dropdown [options]="dropdownFormation" placeholder="Choisissez une formation"
+                                formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_1">Campus 1er choix</label>
-                            <input pInputText formControlName="campus_choix_1" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_1"></p-dropdown>
 
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_2">Campus 2ème choix</label>
-                            <input pInputText formControlName="campus_choix_2" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_2"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_3">Campus 3ème choix</label>
-                            <input pInputText formControlName="campus_choix_3" />
+                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
+                                formControlName="campus_choix_3"></p-dropdown>
+                            <!--<input pInputText formControlName="campus_choix_3" />-->
 
+                        </div>
+                        <div class="field col-12">
+                            <label For="formation">Ecole</label>
+                            <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
+                                formControlName="type_form"></p-dropdown>
                         </div>
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="Dossier d'admission">
-                    <ul>
-                        <li *ngFor="let file of ListDocuments; index as i">
-                            <div class="grid">
-
-                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                        pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
-                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
-                                        pTooltip=" Visualiser dans un nouvel onglet">
-                                        {{ ListPiped[i] }}
-                                    </em>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(showDetails._id,i)"></i>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-times"
-                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier"
-                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
+                <p-tabPanel header="Documents">
+                    <div class="col-12 grid">
+                        <div class="col-12">
+                            <strong>Mes attestations disponibles:</strong>
+                        </div>
+                        <div class="col-12">
+                            <p-table styleClass="p-datatable-gridlines"
+                                [value]="ProspectConnected.documents_administrative" responsiveLayout="scroll"
+                                responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th>
+                                            Date de délivrance
+                                        </th>
+                                        <th>
+                                            Nom du document
+                                        </th>
+                                        <th>
+                                            Lien de téléchargement
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData>
+                                    <tr>
+                                        <td>
+                                            {{rowData.date | date:'mediumDate'}}
+                                        </td>
+                                        <td>
+                                            {{rowData.nom}}
+                                        </td>
+                                        <td>
+                                            {{rowData.path}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                    <p *ngIf="ProspectConnected.documents_administrative==null || ProspectConnected.documents_administrative.length==0">
                         Aucun document n'a été chargé !
                     </p>
                 </p-tabPanel>
@@ -210,8 +228,9 @@
                 <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-3">
                     <label>Type de paiement:</label><br>
-                    <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                        [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                    <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
+                        placeholder="Choisissez la méthode de paiement"
+                        (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-3">
                     <label>Montant:</label><br>
@@ -311,59 +330,41 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <p-dropdown filter="true" placeholder="Source"
-                        [options]="[{value:null,label:'Tous les sources'},{value:'Interne',label:'Interne'},{value:'Partenaire',label:'Partenaire'},{value:'Eduhorizons',label:'Eduhorizons'}]"
-                        (onChange)="dt1.filter($event.value, 'source','equals')"
-                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
                         (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                        (onChange)="dt1.filter($event.value, 'formation','equals')"
+                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                        (onChange)="dt1.filter($event.value, 'programme','equals')"
+                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
 
-                    <p-dropdown filter="true" placeholder="Paiement"
-                        [options]="[
-                    {value:null,label:'Tous les paiements'},
-                    { value: 'Aucun',label:'Aucun' },
-                    { value: 'Pré-inscription',label:'Pré-inscription' }, { value: 'Inscription',label:'Inscription' }, { value: 'Inscription définitive',label:'Inscription définitive' }, ]"
-                        (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
-                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                    <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Decision Orientation" [options]="dropdownDecisionOrientation"
-                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
-                        [style]="{'margin-right':'5px'}">
+
+                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                        (onChange)="dt1.filter($event.value, 'source','startsWith')"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                        [style]="{'margin-left':'5px','margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"
-                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
-                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
-                    </p-dropdown>
+
                     <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
                         (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
-                        (onChange)="dt1.filter($event.value, 'statut_dossier','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
-                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                 </ng-template>

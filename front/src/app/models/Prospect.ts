@@ -83,6 +83,7 @@ export class Prospect {
         public consulaire_date?: Date,
         public note_dossier_cf?: string,
         public note_consulaire?: string,
+        public documents_administrative?: [{ date: Date, nom: String, path: String }]
     ) { }
 
 }
