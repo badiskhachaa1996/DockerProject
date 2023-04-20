@@ -520,26 +520,41 @@
                             <p class="col-12"><strong>Avez-vous besoin de visa d'étude :</strong> <p-selectButton
                                     [options]="[{label:'Oui',value:'Oui'},{label:'Non concerné',value:'Non concerné'}]"
                                     [(ngModel)]="ProspectConnected.a_besoin_visa"
-                                    (onChange)="updateValue('a_besoin_visa',$event.value)"></p-selectButton>
+                                    (onChange)="updateValue('a_besoin_visa')"></p-selectButton>
                             </p>
                             <p class="col-6"><strong>Avancement Campus France :</strong>
                                 <br>
                                 <p-dropdown optionValue="value" optionlabel="value" [options]="cfList"
                                     [(ngModel)]="ProspectConnected.validated_cf" placeholder="Choisissez un état"
-                                    (onChange)="updateValue('validated_cf',$event.value)"></p-dropdown>
+                                    (onChange)="updateValue('validated_cf')"></p-dropdown>
                             </p>
-                            <p class="col-6"><strong>Numéro de dossier Campus France :</strong>
-                                {{ProspectConnected.numero_dossier_campus_france}}</p>
-                            <p class="col-12"><strong>Statut Visa :</strong>
-                                {{ProspectConnected.avancement_visa}}</p>
+                            <p class="col-6"><strong>Numéro de dossier Campus France :</strong><br>
+                                <input pInputText type="text" placeholder="1A2B3C"
+                                    (blur)="updateValue('numero_dossier_campus_france')"
+                                    [(ngModel)]="ProspectConnected.numero_dossier_campus_france" />
+                            </p>
+                            <p class="col-12"><strong>Statut Visa :</strong><br>
+                                <p-dropdown [options]="visaList" [(ngModel)]="ProspectConnected.avancement_visa"
+                                    placeholder="Choisissez un état"
+                                    (onChange)="updateValue('avancement_visa')"></p-dropdown>
+                            </p>
 
                         </div>
                     </div>
                 </p-fieldset>
                 <br>
-                <p-fieldset legend="Paiement et documents administratives">
+                <p-fieldset legend="Paiement et documents administratives" *ngIf="!isCommercialv2">
 
                     <div class="grid">
+                        <div class="col-12 grid">
+                            <div class="col-6">
+                                <strong>Effectuer un paiement:</strong>
+                            </div>
+
+                            <p class="col-6"><a
+                                    href="https://elitechgroupe-my.sharepoint.com/:w:/g/personal/h_elkadhi_intedgroup_com/EYxI2p3lWoBMmXcePJ3cYIMB9Y0-S8ej4gvAlEpUvo8jZQ?e=EL4GsT">Lien
+                                    en cours de dévéloppement</a></p>
+                        </div>
                         <div class="col-12 grid">
                             <div class="col-6">
                                 <strong>Montant payé:</strong>
@@ -553,16 +568,41 @@
                             <p class="col-6"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
                         </div>
                         <div class="col-12 grid">
-                            <p class="col-12"><strong>Mes attestations disponibles:</strong> <br> <p-button
-                                    label="Télécharger" icon="pi pi-download" iconPos="left"
-                                    (click)="downloadAttestation()"></p-button></p>
-                        </div>
-                        <div class="col-12 grid">
-                            <p class="col-12"><strong>Statut visa : <p-selectButton
-                                        [options]="[{label:'En attente',value:'false'},{label:'Reçu',value:'true'}]"
-                                        class="col-6" [(ngModel)]="boolVisa" (onChange)="changementVisa($event.value)">
-                                    </p-selectButton></strong></p>
-
+                            <div class="col-12">
+                                <strong>Mes attestations disponibles:</strong>
+                            </div>
+                            <div class="col-12">
+                                <p-table styleClass="p-datatable-gridlines"
+                                    [value]="ProspectConnected.documents_administrative" responsiveLayout="scroll"
+                                    responsiveLayout="scroll">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Date de délivrance
+                                            </th>
+                                            <th>
+                                                Nom du document
+                                            </th>
+                                            <th>
+                                                Lien de téléchargement
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData>
+                                        <tr>
+                                            <td>
+                                                {{rowData.date | date:'mediumDate'}}
+                                            </td>
+                                            <td>
+                                                {{rowData.nom}}
+                                            </td>
+                                            <td>
+                                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
                         </div>
 
                     </div>

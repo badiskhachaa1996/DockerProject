@@ -368,7 +368,7 @@
                             {{ prospect.statut_dossier }}
                         </td>
                         <td>
-                            {{ prospect.decision_admission }}
+                            {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de traitement" }}
                         </td>
                         <td>
                             {{ prospect.statut_payement }}

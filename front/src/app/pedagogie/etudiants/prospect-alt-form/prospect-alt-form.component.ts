@@ -121,7 +121,7 @@ export class ProspectAltFormComponent implements OnInit {
     user.phone      = formValue.phone;
     user.email_perso = formValue.email;
     user.role = 'user';
-    user.civilite = formValue.civility.viewValue;
+    user.civilite = formValue.civility.label;
     user.type = 'Prospect alt';
     user.pays_adresse = formValue.country.value;
     user.ville_adresse = formValue.city;

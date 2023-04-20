@@ -83,7 +83,7 @@
         <div class="field col-12 md:col-6">
             <label for="pays_adresse">Pays <span style="color: red;"> * </span></label>
             <!-- <input type="text" formControlName="pays_adresse" placeholder="France" pInputText> -->
-            <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue" optionValue="value"
+            <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="label" optionValue="value"
                 emptyFilterMessage="Pas de pays trouvé" placeholder="Choisissez un pays" filterPlaceholder="France"
                 filter="true"></p-dropdown>
             <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">

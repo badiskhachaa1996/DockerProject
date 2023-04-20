@@ -40,8 +40,9 @@ export class AddProspectComponent implements OnInit {
 
   sourceList = [
     { label: "Partenaire", value: "Partenaire" },
-    { label: "IGWI", value: "IGWI" },
-    { label: "Site web", value: "Site web" },
+    { label: "Equipe commerciale", value: "Equipe commerciale" },
+    { label: "Site web ESTYA", value: "Site web ESTYA" },
+    { label: "Site web Ecole", value: "Site web Ecole" },
     { label: "Equipe communication", value: "Equipe communication" },
     { label: "Bureau Congo", value: "Bureau Congo" },
     { label: "Bureau Maroc", value: "Bureau Maroc" },
@@ -80,6 +81,9 @@ export class AddProspectComponent implements OnInit {
 
   redirectToForm() {
     let code = this.RegisterForm.value.commercial
+    let source = this.RegisterForm.value.source
+    source = source.replace('ECOLE', this.RegisterForm.value.ecole)
+    localStorage.setItem("sourceProspect", source)
     if (!code)
       this.router.navigate(['formulaire-admission', this.RegisterForm.value.ecole])
     else
@@ -88,6 +92,9 @@ export class AddProspectComponent implements OnInit {
 
   redirectToForm2() {
     let code = this.RegisterForm2.value.commercial
+    let source = this.RegisterForm2.value.source
+    source = source.replace('ECOLE', this.RegisterForm.value.ecole)
+    localStorage.setItem("sourceProspect", source)
     if (!code)
       this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole])
     else
