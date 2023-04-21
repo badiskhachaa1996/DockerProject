@@ -136,6 +136,7 @@ const factureCommissionController = require('./controllers/factureCommissionCont
 const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
 const teamsIntController = require('./controllers/teamsIntController')
 const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
+const PAC = require('./controllers/alternantsPartenaireController')
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -339,6 +340,7 @@ app.use("/soc/stage", stageController);
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
+app.use('/soc/alternantsPartenaire', PAC)
 
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

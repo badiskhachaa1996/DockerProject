@@ -176,6 +176,8 @@ import { ConsulaireComponent } from './admission/international/consulaire/consul
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 import { PaiementsComponent } from './admission/international/paiements/paiements.component';
 import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
+import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
+import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
 
 const routes: Routes = [
     {
@@ -323,6 +325,9 @@ const routes: Routes = [
             { path: 'international/paiement', component: PaiementsComponent, canActivate: [AuthGuardService] },
             { path: 'international/teams', component: TeamsIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/member', component: MemberIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/alternants', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
+            { path: 'international/partenaire/ajout-alternant/:code_commercial', component: AjoutAlternantPartenaireComponent, canActivate: [AuthGuardService] },
+            { path: 'international/partenaire/alternants/:id', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/:id', component: PovPartenaireListProspectsComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
