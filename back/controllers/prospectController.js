@@ -16,6 +16,7 @@ const bcrypt = require("bcryptjs");
 const { Etudiant } = require('../models/etudiant');
 const { ProspectIntuns } = require('../models/ProspectIntuns');
 const { ProspectAlternable } = require('../models/ProspectAlternable');
+const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -380,6 +381,41 @@ app.get("/getAllSourcing", (req, res, next) => {
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Recuperation de la liste des prospect pour le tableau Prospects du Partenaire
+app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
+    CommercialPartenaire.findOne({ user_id: req.params.id }).populate('partenaire_id').then(commercial => {
+        if (commercial && commercial.statut == 'Admin')
+            if (commercial.partenaire_id)
+                Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: { $regex: "^" + commercial.partenaire_id.code_partenaire } }).populate("user_id").populate('agent_id')
+                    .then((prospectsFromDb) => {
+                        res.status(201).send(prospectsFromDb)
+                    })
+                    .catch((error) => { res.status(500).send(error.message); });
+            else {
+                let code = commercial.code_commercial_partenaire.substring(0, -3)
+                Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: { $regex: "^" + code } }).populate("user_id").populate('agent_id')
+                    .then((prospectsFromDb) => {
+                        res.status(201).send(prospectsFromDb)
+                    })
+                    .catch((error) => { res.status(500).send(error.message); });
+            }
+        else if (commercial)
+            Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: commercial.code_commercial_partenaire }).populate("user_id").populate('agent_id')
+                .then((prospectsFromDb) => {
+                    res.status(201).send(prospectsFromDb)
+                })
+                .catch((error) => { res.status(500).send(error.message); });
+        else
+            res.status(500).send("Commercial non trouvé")
+
+    })
+    /*Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });*/
 });
 
 //Recuperation de la liste des prospect pour le tableau Paiement

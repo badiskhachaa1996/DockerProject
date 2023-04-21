@@ -74,46 +74,108 @@
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Formation</label>
-                            <p-dropdown [options]="dropdownFormation" placeholder="Choisissez une formation"
-                                formControlName="formation"></p-dropdown>
+                            <p>{{showDetails.formation}}</p>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_1">Campus 1er choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_1"></p-dropdown>
+                            <p>{{showDetails.campus_choix_1}}</p>
 
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_2">Campus 2ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_2"></p-dropdown>
+                            <p>{{showDetails.campus_choix_2}}</p>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="campus_choix_3">Campus 3ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_3"></p-dropdown>
+                            <p>{{showDetails.campus_choix_3}}</p>
                             <!--<input pInputText formControlName="campus_choix_3" />-->
 
                         </div>
                         <div class="field col-12">
                             <label For="formation">Ecole</label>
-                            <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
-                                formControlName="type_form"></p-dropdown>
+                            <p>{{showDetails.type_form |titlecase}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="Orientation">
+                <p-tabPanel header="Dossier d'admission">
+                    <ul>
+                        <li *ngFor="let file of ListDocuments; index as i">
+                            <div class="grid">
+
+                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                        pTooltip="Visualiser dans un nouvel onglet"
+                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
+                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
+                                        pTooltip=" Visualiser dans un nouvel onglet">
+                                        {{ ListPiped[i] }}
+                                    </em>
+                                </div>
+                                <div class="field col-1">
+                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                        (click)="downloadFile(showDetails._id,i)"></i>
+                                </div>
+                                <div class="field col-1">
+                                    <i class="pi pi-times"
+                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                                        pTooltip="Supprimer le fichier du dossier"
+                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
+                        Aucun document n'a été chargé !
+                    </p>
+                </p-tabPanel>
+                <p-tabPanel header="Phase consulaire">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
-                            <label For="formation">Décision orientation</label>
-                            <p-multiSelect [options]="orientationList"
-                                formControlName="decision_orientation"></p-multiSelect>
+                            <label For="formation">A besoin d'un visa ?</label>
+                            <p-dropdown [options]="abesoinvisaList" formControlName="a_besoin_visa"></p-dropdown>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
                         </div>
                         <div class="field md:col-6 col-12">
-                            <label For="formation">Décision admission</label>
-                            <p-dropdown [options]="admissionList" formControlName="decision_admission"></p-dropdown>
+                            <label For="formation">Avancement Campus France</label>
+                            <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
                             <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Visa</label>
+                            <p-dropdown [options]="visaList" formControlName="avancement_visa"></p-dropdown>
+                            <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label>Numéro de dossier Campus France :</label>
+                            <input pInputText formControlName="numero_dossier_campus_france" />
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Paiements">
+                    <div class="grid">
+                        <label>Montant Payé</label>
+                        <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+
+                            <div class="field col-12 md:col-3">
+                                <label>Type de paiement:</label><br>
+                                <p>{{payementList[i]['type']}}</p>
+                                <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                                    [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label>Montant:</label><br>
+                                <p>{{payementList[i]['montant']}}</p>
+                                <!--<input type="number" (change)="changeMontant(i,$event,'montant')"
+                                    [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>-->
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label>Date du paiement:</label><br>
+                                <p>{{payementList[i]['date']|date:'mediumDate'}}</p>
+                                <!--<input type="date" (change)="changeMontant(i,$event,'date')"
+                                    [(value)]="payementList[i]['date']" pInputText>-->
+                            </div>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -214,44 +276,7 @@
             </form>
         </div>
     </div>
-    <div class="col-12" *ngIf="showUploadFile!=null && showDocuments">
-        <div class="card">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                (click)="showUploadFile = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
-                showUploadFile.user_id?.firstname }} {{
-                showUploadFile.user_id?.lastname | uppercase }}
-            </h3>
 
-            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
-                <div class="field col-6">
-                    <label>Date de délivrance</label>
-                    <input type="date" formControlName="date" pInputText />
-                </div>
-                <div class="field col-6">
-                    <label>Nom du Fichier</label>
-                    <input type="text" formControlName="nom" pInputText />
-                </div>
-                <div class="field col-6">
-                    <label>Note :</label>
-                    <textarea pInputTextarea formControlName="note"></textarea>
-                </div>
-                <div class="field col-6">
-                    <label>Traité par :</label>
-                    <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
-                        optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
-                </div>
-                <div class="field col-12">
-                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
-                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
-                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
-                        maxFileSize="10000000" [auto]="true" #fileInput>
-                    </p-fileUpload>
-                </div>
-
-            </form>
-        </div>
-    </div>
     <div class="col-12 card" *ngIf="showDocuments">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDocuments = null"
             aria-hidden="true"> </i>
@@ -310,9 +335,6 @@
         <p *ngIf="showDocuments.documents_administrative==null || showDocuments.documents_administrative.length==0">
             Aucun document n'a été chargé !
         </p>
-        <div class="col-12">
-            <button pButton label="Ajouter un document" (click)="showUploadFile=showDocuments;scrollToTop()"></button>
-        </div>
     </div>
     <!-- Formulaire Traitement -->
     <div class="col-12 card" *ngIf="showTraitement">
@@ -448,6 +470,12 @@
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+
+                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -456,10 +484,7 @@
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="source" scope="col" style="text-align: center;">
-                            Source <p-sortIcon field="source"></p-sortIcon>
+                            ID <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon>
@@ -504,6 +529,9 @@
                         <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                             Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="avancement_visa" scope="col" style="text-align: center;">
+                            Visa <p-sortIcon field="avancement_visa"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
                         </th>
@@ -523,10 +551,6 @@
                         </td>
                         <td>
                             {{ prospect?.customid }}
-                        </td>
-
-                        <td>
-                            {{ prospect?.source }}
                         </td>
 
                         <td *ngIf="prospect.user_id">
@@ -576,11 +600,13 @@
                         <td>
                             {{ prospect.rentree_scolaire }}
                         </td>
+                        <td *ngIf="prospect.avancement_visa">
+                            Oui
+                        </td>
+                        <td *ngIf="!prospect.avancement_visa">
+                            Non
+                        </td>
                         <td>
-                            <i pTooltip="Traiter le dossier" tooltipPosition="bottom" class="pi pi-cog mr-2"
-                                (click)="initTraitement(prospect);scrollToTop()" aria-hidden="true"></i>
-                            <i pTooltip="Paiement" tooltipPosition="bottom" class="pi pi-credit-card mr-2"
-                                (click)="initPaiement(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
                                 (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
