@@ -1,0 +1,566 @@
+<p-toast></p-toast>
+<div class="grid">
+    <!-- Partie Mis à jour d'un Alternant -->
+    <div class="card col-12" *ngIf="updateAlternant">
+        <h4 style="text-align: center;">Mis à jour de {{updateAlternant.prenom|titlecase}}
+            {{updateAlternant.nom|uppercase}}</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+
+        <form [formGroup]="updateForm" (ngSubmit)="onUpdateAlternant()">
+            <div *ngIf="ActiveIndex==0">
+                <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label For="nom">Nom <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Smith" formControlName="nom" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Ex: John"
+                                    formControlName="prenom" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="civiliteList" placeholder="Choisissez une civilite"
+                                    formControlName="civilite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                                    </span></label>
+                                <input type="date" formControlName="date_naissance" pInputText />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                                    optionValue="label" emptyFilterMessage="Pas de nationalité trouvé"
+                                    placeholder="Choisissez une nationalité" filterPlaceholder="Nationalité"
+                                    filter="true"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Adresse électronique :<span style="color:red"> *</span></label>
+                                <input type="email" formControlName="email" placeholder="Ex: john.smith@email.com"
+                                    pInputText>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                                <input pInputText id="indicatif" type="text" placeholder="Ex: +33"
+                                    formControlName="indicatif" />
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
+                                <input pInputText id="telephone" type="number" placeholder="Ex:0612345678"
+                                    formControlName="telephone" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="indicatif">Indicatif WhatsApp</label>
+                                <input pInputText id="indicatif" type="text" placeholder="Ex: +33"
+                                    formControlName="indicatif_whatsapp" />
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label For="telephone">Numéro WhatsApp </label>
+                                <input pInputText id="telephone" type="text" placeholder="Ex:0612345678"
+                                    formControlName="whatsapp" />
+                            </div>
+                            <div class="field col-12">
+                                <label For="mobilite_reduite">Etes vous une personne à mobilité réduite ?</label>
+
+                                <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                    formControlName="isPMR">
+                                </p-selectButton>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Suivant" style="float: right;" [disabled]="!canNext1()"
+                            (click)="nextPage();"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==1">
+                <p-fieldset legend="Adresse" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-2">
+                                <label For="prenom">Numéro<span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Ex: 20"
+                                    formControlName="numero" />
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label For="nom">Nom de la rue <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Place de la République"
+                                    formControlName="rue" />
+                            </div>
+
+                            <div class="field col-12 md:col-5">
+                                <label For="date_naissance">Code Postal <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: 75001"
+                                    formControlName="postal" />
+                            </div>
+                            <div class="field col-6">
+                                <label For="nationalite">Ville <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Paris"
+                                    formControlName="ville" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                                <p-dropdown formControlName="pays" [options]="paysList" placeholder="Choisissez un pays"
+                                    optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                    filterPlaceholder="Pays" filter="true"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="!canNext2()" style="float: right;"
+                            (click)="nextPage()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==2">
+                <p-fieldset legend="Formation et Ecole/CFA" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label>Ecole/CFA <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école"
+                                    formControlName="ecole"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Campus <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="campusList" formControlName="campus"
+                                    placeholder="Choisissez un campus">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12">
+                                <label For="autre">Rentrée Scolaire <span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                                    placeholder="Choisissez une rentrée scolaire">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="!canNext3()" style="float: right;"
+                            (click)="nextPage()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==3">
+                <p-fieldset class="col-12" legend="Informations du Contrat"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+
+                            <div class="field col-12 md:col-6">
+                                <label>Etat du contrat <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="etatList" formControlName="etat_contrat"
+                                    placeholder="Choisissez l'état du contrat">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Date du contrat <span style="color: red;"> *
+                                    </span></label>
+                                <input type="date" formControlName="date_contrat" pInputText />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Nom de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <input type="text" formControlName="entreprise" placeholder="Ex: Google" pInputText />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Adresse de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pInputTextarea type="text" placeholder="Ex: 10 Place de la République 75001"
+                                    formControlName="adresse_entreprise"></textarea>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Numéro de Téléphone de l'Entreprise <span style="color: red;">
+                                        *
+                                    </span></label>
+                                <input type="text" formControlName="telephone_entreprise"
+                                    placeholder="Ex: +33 0612345678" pInputText />
+                            </div>
+
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Email de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <input type="text" formControlName="mail_entreprise" placeholder="Ex: +33 0612345678"
+                                    pInputText />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <!--ormulaireAdmissionComponent_div_27_Template (formulaire-admission.component.html:353:29)-->
+                        <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
+                        </button>
+                        <button pButton type="button" label="Validez le formulaire" [disabled]="updateForm.invalid"
+                            type="submit" style="float: right;"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+
+
+            <div *ngIf="ActiveIndex==4">
+                <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
+                    Votre candidature a été envoyé !</h2>
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+                </div>
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <p>Vos identifiants viennent de vous être envoyés par mail, merci de bien lire les
+                        étapes indiquées afin de mener à bien votre inscription.<br>
+                        <br>
+                        En cas de question sur vos identifiants, vous pouvez envoyer un mail à l'adresse
+                        mail suivante :
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='estya' || form_origin=='estya-dubai'">admission@estya.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='adg'">admission@adgeducation.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='eduhorizons'">contact@eduhorizons.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='espic'">admission@espic.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='studinfo'">admission@studinfo.com</span>
+                        <span style="color:red; font-weight: bold;" *ngIf="form_origin=='icbsmalte'"></span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='intuns'">admission@intuns.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='intunivesity'">admission@intuniversity.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='inteducation'">contact@int-edu.com</span>
+
+                        <br><br>
+                        Bon courage pour la suite !
+                    </p>
+                </div>
+                <div class="col-12">
+                    <button pButton type="button" label="{{btnTextBack}}" (click)="redirectAgent()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12" *ngIf="showUploadRequisFile">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadRequisFile = false" aria-hidden="true"> </i>
+            <h3 class="text-center" style="font-weight: bold;">Ajouter un document à :
+                {{ showDocuments?.prenom }} {{ showDocuments?.nom | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadRequisFileForm">
+
+                <div class="field col-12">
+                    <label>Nom du Fichier</label>
+                    <p-dropdown [options]="fichierRequisList" placeholder="Choisissez un type de fichier"
+                        formControlName="nom"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload (uploadHandler)="FileUploadRequis($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadRequisFileForm.invalid"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="showUploadOptionnelFile">
+        <div class="card ">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadOptionnelFile = false" aria-hidden="true"> </i>
+            <h3 class="text-center" style="font-weight: bold;">Ajouter un document à :
+                {{ showDocuments?.prenom }} {{ showDocuments?.nom | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadOptionnelFileForm">
+
+                <div class="field col-12">
+                    <label>Nom du Fichier</label>
+                    <input type="text" formControlName="nom" pInputText />
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload (uploadHandler)="FileUploadOptionnel($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadOptionnelFileForm.invalid"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-12 card" *ngIf="showDocuments">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDocuments = null"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;"> Documents de :
+            {{ showDocuments?.prenom }} {{ showDocuments?.nom | uppercase }}
+        </h3>
+        <div class="col-12 grid">
+            <div class="col-12">
+                <strong>Documents requis:</strong>
+            </div>
+            <div class="col-12">
+                <p-table styleClass="p-datatable-gridlines" [value]="showDocuments.documents_requis"
+                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>
+                                Nom du document
+                            </th>
+                            <th>
+                                Lien de téléchargement
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{rowData.nom}}
+                            </td>
+                            <td>
+                                <a *ngIf="rowData.path" (click)="downloadRequis(rowData.path)">Télécharger le
+                                    fichier</a>
+                                <a *ngIf="!rowData.path" (click)="initUploadRequis(rowData.nom)">Uploader</a>
+                            </td>
+                            <td>
+                                <i pTooltip="Uploader" tooltipPosition="bottom" class="pi pi-cloud-upload"
+                                    (click)="initUploadRequis(rowData.path)"></i>
+                                <i *ngIf="rowData.path" pTooltip="Télécharger le fichier" tooltipPosition="bottom"
+                                    class="pi pi-file-download" (click)="downloadRequis(rowData.path)"></i>
+                                <i *ngIf="rowData.path" pTooltip="Supprimer le fichier" tooltipPosition="bottom"
+                                    class="pi pi-trash" (click)="deleteRequis(rowData.path)"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="col-12 grid">
+            <div class="col-12">
+                <strong>Documents optionnels:</strong>
+            </div>
+            <div class="col-12">
+                <p-table styleClass="p-datatable-gridlines" [value]="showDocuments.documents_optionnel"
+                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>
+                                Nom du document
+                            </th>
+                            <th>
+                                Lien de téléchargement
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{rowData.nom}}
+                            </td>
+                            <td>
+                                <a (click)="downloadOptionnel(rowData.path)">Télécharger</a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="col-12">
+                <button pButton label="Ajouter un document"
+                    (click)="showUploadOptionnelFile=true;scrollToTop()"></button>
+            </div>
+        </div>
+
+    </div>
+    <!-- Table d'affichage de la liste des preinscription -->
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des alternants</h5>
+
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="alternants"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <!-- <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                        (onChange)="dt1.filter($event.value, 'formation','equals')"
+                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown placeholder="Initiale/Alternance" [options]="filterRythmeFormation"
+                        (onChange)="dt1.filter($event.value, 'rythme_formation','equals')"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                        (onChange)="dt1.filter($event.value, 'programme','equals')"
+                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                        (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                        (onChange)="dt1.filter($event.value, 'source','startsWith')"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                        [style]="{'margin-left':'5px','margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+
+
+                    <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+
+
+                    <p-dropdown filter="true" placeholder="Decision Orientation" [options]="dropdownDecisionOrientation"
+                        (onChange)="dt1.filter($event.value, 'decision_orientation','equals')"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Orientation"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
+                        emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown filter="true" placeholder="Visa" [options]="filterVisa"
+                        (onChange)="dt1.filter($event.value, 'avancement_visa','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du visa"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>-->
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                            Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="custom_id" scope="col" style="text-align: center;">
+                            ID <p-sortIcon field="custom_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prenom" scope="col" style="text-align: center;">
+                            Prénom & Nom <p-sortIcon field="prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="pays" scope="col" style="text-align: center;">
+                            Pays de résidence <p-sortIcon field="pays"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="campus" scope="col" style="text-align: center;">
+                            Campus <p-sortIcon field="campus"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="ecole" scope="col" style="text-align: center;">
+                            Ecole CFA <p-sortIcon field="ecole"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation" scope="col" style="text-align: center;">
+                            Formation <p-sortIcon field="formation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="etat_contrat" scope="col" style="text-align: center;">
+                            Etat du contrat <p-sortIcon field="etat_contrat"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="inscription" scope="col" style="text-align: center;">
+                            Inscription définitive <p-sortIcon field="inscription"></p-sortIcon>
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-alternant>
+                    <tr>
+
+                        <td>
+                            {{alternant?.date_creation | date :'mediumDate' }}
+                        </td>
+                        <td>
+                            {{ alternant?.custom_id }}
+                        </td>
+
+                        <td>
+                            {{ alternant.prenom | titlecase }}
+                            {{ alternant.nom | uppercase }}
+                        </td>
+                        <td>
+                            {{ alternant.pays }}
+                        </td>
+
+                        <td>
+                            {{ alternant.campus }}
+                        </td>
+                        <td>
+                            {{ alternant.ecole }}
+                        </td>
+                        <td>
+                            {{ alternant.formation }}
+                        </td>
+                        <td>
+                            {{ alternant.rentree_scolaire }}
+                        </td>
+                        <td>
+                            {{ alternant.etat_contrat }}
+                        </td>
+                        <td>
+                            {{ alternant.inscription }}
+                        </td>
+
+                        <td>
+                            <i pTooltip="Dossier" tooltipPosition="bottom" class="pi pi-file mr-2"
+                                (click)="initDocument(alternant);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-user-edit"
+                                (click)="initUpdate(alternant);scrollToTop()" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+</div>

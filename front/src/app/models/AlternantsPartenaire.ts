@@ -1,0 +1,40 @@
+export class AlternantsPartenaire {
+    constructor(
+        public _id?: string,
+        public custom_id?:string,
+        public date_creation?:Date,
+        public prenom?:string,
+        public nom?:string,
+        public email?:string,
+        public pays?:string,
+        public campus?:string,
+        public ecole?:string,
+        public formation?:string,
+        public rentree_scolaire?:string,
+        public etat_contrat?:string,
+        public inscription?:string,
+        public documents_optionnel?:[{ nom: string, path: string }],
+        public documents_requis?:[{ nom: string, path: string }],
+        public code_commercial?:string,
+        public civilite?:string,
+        public date_naissance?:Date,
+        public nationalite?:string,
+        public telephone?:string,
+        public indicatif?:string,
+        public whatsapp?:string,
+        public indicatif_whatsapp?:string,
+        public isPMR?:boolean,
+        public rue?:string,
+        public numero?:string,
+        public postal?:string,
+        public ville?:string,
+        public date_contrat?:Date,
+        public entreprise?:string,
+        public adresse_entreprise?:string,
+        public telephone_entreprise?:string,
+        public mail_entrepris?:string,
+        )
+        {}
+
+ }
+   

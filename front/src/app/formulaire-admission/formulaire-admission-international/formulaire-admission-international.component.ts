@@ -88,13 +88,13 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   campusDropdown =
     [
-      { value: "Paris - France" },
-      { value: "Montpellier - France" },
-      { value: "Brazzaville - Congo" },
-      { value: "Rabat - Maroc" },
-      { value: "La Valette - Malte" },
-      { value: "UAE - Dubai" },
-      { value: "En ligne" },
+    { value: "Paris - France", label: "Paris - France" },
+    { value: "Montpellier - France", label: "Montpellier - France" },
+    { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+    { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+    { value: "La Valette - Malte", label: "La Valette - Malte" },
+    { value: "UAE - Dubai", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
     ];
 
   niveauFR =
