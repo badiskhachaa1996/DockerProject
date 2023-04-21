@@ -1156,7 +1156,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
                                     ]
                                 },
                                 {
@@ -1202,7 +1202,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
                                     ]
                                 },
                                 {
