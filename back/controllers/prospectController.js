@@ -90,7 +90,7 @@ app.post("/create", (req, res, next) => {
 
     //Suppression du _id venant du frontend
     delete prospectData._id;
-
+    prospectData['decision_admission'] = "En attente de traitement"
     //Création du nouvel objet prospect et du nouvel objet user
     const prospect = new Prospect({
         ...prospectData,
