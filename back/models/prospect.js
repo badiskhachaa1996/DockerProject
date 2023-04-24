@@ -89,8 +89,7 @@ const prospect_schema = new mongoose.Schema({
     },
     decision_admission: {
         type: String,
-        default: "En attente de traitement",
-        required: true
+        default: "En attente de traitement"
     },
     statut_payement: {
         type: String,
