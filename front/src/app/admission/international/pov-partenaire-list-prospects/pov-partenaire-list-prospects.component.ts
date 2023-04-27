@@ -2,22 +2,23 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
-import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
-import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
-import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-orientation',
-  templateUrl: './orientation.component.html',
-  styleUrls: ['./orientation.component.scss']
+  selector: 'app-pov-partenaire-list-prospects',
+  templateUrl: './pov-partenaire-list-prospects.component.html',
+  styleUrls: ['./pov-partenaire-list-prospects.component.scss']
 })
-export class OrientationComponent implements OnInit {
+export class PovPartenaireListProspectsComponent implements OnInit {
 
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
@@ -33,8 +34,14 @@ export class OrientationComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-
-  @ViewChild('fileInput') fileInput: FileUpload;
+  uploadAdminFileForm: FormGroup = new FormGroup({
+    //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
+    date: new FormControl(this.convertTime(new Date), Validators.required),
+    nom: new FormControl("", Validators.required),
+    note: new FormControl(""),
+    traited_by: new FormControl("", Validators.required),
+  })
+  ID = this.route.snapshot.paramMap.get('id');
   FileUpload(event) {
     if (this.uploadFileForm.value.typeDoc != null && event.files != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
@@ -60,6 +67,46 @@ export class OrientationComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+  @ViewChild('fileInput') fileInput: FileUpload;
+  FileUploadAdmin(event: { files: [File], target: EventTarget }) {
+
+    if (this.uploadAdminFileForm.valid && event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+
+      formData.append('id', this.showUploadFile._id)
+      formData.append('date', this.uploadAdminFileForm.value.date)
+      formData.append('note', this.uploadAdminFileForm.value.note)
+      formData.append('nom', this.uploadAdminFileForm.value.nom)
+      formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        console.log(res)
+        if (res.documents_administrative)
+          this.prospects[this.prospects.indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
+        event.target = null;
+        this.showUploadFile = null;
+
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
+  downloadAdminFile(path) {
+    this.admissionService.downloadFileAdmin(this.showDocuments._id, path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(blob, path)
+    }, (error) => {
+      console.error(error)
+    })
+
   }
 
   downloadFile(id, i) {
@@ -201,26 +248,25 @@ export class OrientationComponent implements OnInit {
     { value: true, label: "Oui" },
     { value: false, label: "Non" }
   ]
-
   filterPaiement: any[] = [
     { value: null, label: "Toutes les statuts de paiements" },
     { value: "Oui", label: "Oui" },
     { value: "Non", label: "Non" }
   ]
-
   filterVisa = [
-    { value: null, label: "Toutes les status" },
+    { value: null, label: "Toutes les statuts de Visa" },
     { label: "Oui", value: "Oui" },
     { label: "Non concerné", value: "Non concerné" },
     { label: "Non", value: "Non" },
     { label: "Pas de retour", value: "Pas de retour" },
   ]
   filterRentreeScolaire = [
-    { value: null, label: 'Toutes les rentrées scolaires' },
+    { value: null, label: 'Toutes les rentrées scolaires' }
   ]
   filterEcole = []
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
 
   prospects: Prospect[];
 
@@ -242,17 +288,10 @@ export class OrientationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.token = jwt_decode(localStorage.getItem('token'));
     this.filterPays = this.filterPays.concat(environment.pays)
-    this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
-      if (member)
-        this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
-          this.prospects = data
-        })
-      else
-        this.admissionService.getAllOrientation().subscribe(data => {
-          this.prospects = data
-        })
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.admissionService.getAllByCommercialUserID(this.ID).subscribe(data => {
+      this.prospects = data
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -295,9 +334,7 @@ export class OrientationComponent implements OnInit {
 
   //Partie Traitement
   showTraitement: Prospect = null
-  dropdownEcole = []
   agentSourcingList = [{ label: "Aucun", items: [{ label: "Aucun", value: null }] }]
-  dropdownFormation = []
   avancementList = [
     { label: "En attente", value: "En attente" },
     { label: "Joignable", value: "Joignable" },
@@ -324,35 +361,49 @@ export class OrientationComponent implements OnInit {
     { label: "Non concerné", value: "Non concerné" },
     { label: "Niveau inf B2", value: "Niveau inf B2" },
   ]
+  ppList = [
+    { label: "Sous dossier", value: "Sous dossier" },
+    { label: "En attente de validation BIM", value: "En attente de validation BIM" },
+    { label: "Entretien de motivation", value: "Entretien de motivation" },
+    { label: "Quiz Informatique", value: "Quiz Informatique" },
+  ]
+
+  dropdownFormation = []
+  dropdownEcole = []
+
+  stat_cf = [
+    { label: "Oui", value: true },
+    { label: "Non", value: false }
+  ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
-    this.traitementForm.patchValue({ contact_date: this.convertTime(prospect.contact_date) })
+    if (prospect.dossier_traited_by == null)
+      this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(data => {
+        if (data)
+          this.traitementForm.patchValue({ dossier_traited_by: data._id })
+      })
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
-      if (willClose) {
-        this.showTraitement = null
-        this.traitementForm.reset()
-      }
+      this.showTraitement = null
+      this.traitementForm.reset()
     })
   }
 
   traitementForm: FormGroup = new FormGroup({
     _id: new FormControl(),
-    contact_date: new FormControl(new Date()),
-    contact_orientation: new FormControl(''),
-    avancement_orientation: new FormControl(),
-    note_avancement: new FormControl(""),
-    decision_orientation: new FormControl(""),
+    dossier_traited_by: new FormControl(),
+    dossier_traited_date: new FormControl(new Date()),
+    statut_dossier: new FormControl(),
+    procedure_peda: new FormControl(""),
+    decision_admission: new FormControl(""),
     note_decision: new FormControl(""),
-    statut_dossier: new FormControl(""),
-    note_dossier: new FormControl(""),
-    phase_complementaire: new FormControl(""),
-    note_phase: new FormControl(""),
-    niveau_langue: new FormControl("")
+    statut_payement: new FormControl(""),
+    numero_dossier_campus_france: new FormControl(""),
+    validated_cf: new FormControl(""),
   })
 
   //Partie Details
@@ -384,7 +435,7 @@ export class OrientationComponent implements OnInit {
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),
     logement: new FormControl(''),
-    finance: new FormControl(''),
+    numero_dossier_campus_france: new FormControl(''),
     type_form: new FormControl('', Validators.required),
     avancement_visa: new FormControl(''),
 
@@ -393,6 +444,7 @@ export class OrientationComponent implements OnInit {
 
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
+    this.payementList = prospect?.payement
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -407,27 +459,11 @@ export class OrientationComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
-    this.lengthPaiement = prospect?.payement?.length
     this.scrollToTop()
   }
 
-  lengthPaiement = 0
-
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
-    let phase_candidature = this.showDetails.phase_candidature;
-    let statut_payement = "Oui"
-    if (this.lengthPaiement >= this.payementList.length) {
-      statut_payement = this.showDetails.statut_payement;
-    }
-    /*let statut_payement = "Oui" 
-    let phase_candidature = "En phase d'orientation consulaire"
-    if (this.lengthPaiement >= this.payementList.length) {
-      statut_payement = this.showDetails.statut_payement;
-      phase_candidature = this.showDetails.phase_candidature;
-    }*/
-    if (this.detailsForm.value.decision_orientation == "Validé")
-      phase_candidature = "En phase d'admission"
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
@@ -442,6 +478,7 @@ export class OrientationComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
+
     let prospect = {
       formation: this.detailsForm.value.formation,
       campus_choix_1: this.detailsForm.value.campus_choix_1,
@@ -453,12 +490,10 @@ export class OrientationComponent implements OnInit {
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
       logement: this.detailsForm.value.logement,
-      finance: this.detailsForm.value.finance,
-      type_form: this.detailsForm.value.type_form,
-      payement: this.payementList,
+      numero_dossier_campus_france: this.detailsForm.value.numero_dossier_campus_france,
       avancement_visa: this.detailsForm.value.avancement_visa,
-      statut_payement,
-      phase_candidature,
+      payement: this.payementList,
+      type_form: this.detailsForm.value.type_form,
       _id: this.showDetails._id
 
     }
@@ -524,9 +559,6 @@ export class OrientationComponent implements OnInit {
     { value: "A signé les documents", label: "A signé les documents" },
   ]
 
-
-  paysList = environment.pays;
-
   typePaiement = [
     { value: null, label: "Aucun Suite a un renouvelement" },
     { value: "Chèque Montpellier", label: "Chèque Montpellier" },
@@ -548,6 +580,8 @@ export class OrientationComponent implements OnInit {
     { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
+
+  paysList = environment.pays;
 
   //Gestions de l'ARGENT
 
@@ -586,6 +620,43 @@ export class OrientationComponent implements OnInit {
       })
   }
 
+  showPaiement: Prospect = null
+  lengthPaiement = 0
+  initPaiement(prospect) {
+    this.showPaiement = prospect
+    this.payementList = prospect?.payement
+    this.lengthPaiement = prospect?.payement?.length
+  }
+  savePaiement() {
+    let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
+    let phase_candidature = "En phase d'orientation consulaire"
+    if (this.lengthPaiement >= this.payementList.length) {
+      statut_payement = this.showPaiement.statut_payement;
+      phase_candidature = this.showPaiement.phase_candidature;
+    }
+
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
+      this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
+      this.showPaiement = null
+    })
+  }
+
+  showDocuments = null
+  initDocument(prospect) {
+    this.showDocuments = prospect
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+        this.ListPiped = []
+        data.forEach(doc => {
+          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+        })
+      },
+      (error) => { console.error(error) }
+    );
+  }
   convertTime(date) {
     const d = new Date(date);
     let month = '' + (d.getMonth() + 1);
@@ -595,6 +666,4 @@ export class OrientationComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
-
-
 }

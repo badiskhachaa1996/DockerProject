@@ -309,7 +309,7 @@ export class ListCollaborateurComponent implements OnInit {
 
 
   seePreRecruted(rowData: CommercialPartenaire) {
-    this.router.navigate(["/gestion-preinscriptions/" + rowData.code_commercial_partenaire])
+    this.router.navigate(["/international/partenaire/" + rowData.user_id])
   }
 
   seeRecruted(rowData: CommercialPartenaire) {

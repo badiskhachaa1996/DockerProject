@@ -24,16 +24,16 @@
     </div>
 
 
-    <h2 style="text-align: center; color: black;font-weight: bold;" *ngIf="isCommercial">Poursuivre la demande
-        d'admission </h2><br>
-    <h2 style="text-align: center; color: black;font-weight: bold;" *ngIf="!isCommercial">Poursuivre ma demande
-        d'admission </h2><br>
-    <h5 style="text-align: center;" *ngIf="!isCommercial">Vous serez contacté prochainement par notre call center !
+    <h2 style="text-align: center; color: black;font-weight: bold;">Merci pour votre Inscription
+        {{ProspectConnected?.user_id?.firstname|titlecase}} {{ProspectConnected?.user_id?.lastname|uppercase}} Prospect.
+    </h2><br>
+    <h5 style="text-align: center;">Vous serez contactés prochainement par l’équipe orientation,<br> pour plus
+        d’information contactez-nous sur : orientation@intedgroup.com.
     </h5>
 
 
-    <div style="text-align: left;"><button pButton (click)="comeBack()"> <i class="pi pi-sign-out"
-                pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
+    <div style="text-align: left;" *ngIf="isCommercialv2"><button pButton (click)="comeBack()"> <i
+                class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
     </div>
 
     <div *ngIf="!activatedRoute.snapshot.params?.user_id" style="text-align: right;"><button pButton
@@ -93,12 +93,14 @@
                     </div>
                     <div class="col-12 md:col-3" *ngIf="!isCommercial">
                         <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier mes informations</a></p>
-                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a></p>
+                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a>
+                        </p>
                     </div>
                     <div class="col-12 md:col-3" *ngIf="isCommercial">
                         <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier les informations
                                 personnelles</a></p>
-                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a></p>
+                        <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a>
+                        </p>
                     </div>
                 </div>
                 <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
@@ -133,6 +135,14 @@
                         </p>
                         <p class="col-3"><strong>Campus (3ème choix):</strong><br> {{ProspectConnected.campus_choix_3}}
                         </p>
+                    </div>
+                </div>
+            </p-fieldset>
+            <p-fieldset legend="Décision">
+                <div class="grid" style="color: black;font-weight:normal">
+                    <div class="col-12 grid">
+                        <p class="col-12"><strong>Equipe orientation :</strong><br>
+                            {{ProspectConnected.decision_orientation}}</p>
                     </div>
                 </div>
             </p-fieldset>
@@ -494,29 +504,58 @@
                         </div>
                     </li>
                 </ul>
-
-                <!--TODO Demande de rendez-vous-->
-
-                <p-fieldset legend="Demandez un rendez vous avec un Consultant">
-
-                    <form class="p-fluid p-formgrid grid" [formGroup]="demandeConsultant" (onSubmit)="sendDemande()">
-
-                        <div class="col-12 field">
-                            <label>Motif de la demande</label>
-                            <textarea formControlName="mail" pInputTextarea></textarea>
-                        </div>
-                        <p-button label="Envoyer" [disabled]="demandeConsultant.invalid"></p-button>
-
-                    </form>
-                </p-fieldset>
                 <br>
-                <p-fieldset legend="Examiner ma demande d'admission">
+                <p-fieldset legend="Suivre ma candidature">
 
                     <div class="grid">
                         <div class="col-12 grid">
-                            <p class="col-6"><strong>Etat du dossier :</strong> {{ProspectConnected.etat_dossier}}</p>
+                            <p class="col-6"><strong>Phase de candidature :</strong>
+                                {{ProspectConnected.phase_candidature}}</p>
                             <p class="col-6"><strong>Décision admission :</strong>
                                 {{ProspectConnected.decision_admission}}</p>
+                            <p class="col-12"><strong>Paiement :</strong>
+                                {{ProspectConnected.statut_payement}}</p>
+
+
+                            <p class="col-12"><strong>Avez-vous besoin de visa d'étude :</strong> <p-selectButton
+                                    [options]="[{label:'Oui',value:'Oui'},{label:'Non concerné',value:'Non concerné'}]"
+                                    [(ngModel)]="ProspectConnected.a_besoin_visa"
+                                    (onChange)="updateValue('a_besoin_visa')"></p-selectButton>
+                            </p>
+                            <p class="col-6"><strong>Avancement Campus France :</strong>
+                                <br>
+                                <p-dropdown optionValue="value" optionlabel="value" [options]="cfList"
+                                    [(ngModel)]="ProspectConnected.validated_cf" placeholder="Choisissez un état"
+                                    (onChange)="updateValue('validated_cf')"></p-dropdown>
+                            </p>
+                            <p class="col-6"><strong>Numéro de dossier Campus France :</strong><br>
+                                <input pInputText type="text" placeholder="1A2B3C"
+                                    (blur)="updateValue('numero_dossier_campus_france')"
+                                    [(ngModel)]="ProspectConnected.numero_dossier_campus_france" />
+                            </p>
+                            <p class="col-12"><strong>Statut Visa :</strong><br>
+                                <p-dropdown [options]="visaList" [(ngModel)]="ProspectConnected.avancement_visa"
+                                    placeholder="Choisissez un état"
+                                    (onChange)="updateValue('avancement_visa')"></p-dropdown>
+                            </p>
+
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Paiement et documents administratives" *ngIf="!isCommercialv2">
+
+                    <div class="grid">
+                        <div class="col-12 grid">
+                            <div class="col-6">
+                                <strong>Effectuer un paiement:</strong>
+                            </div>
+
+                            <p class="col-6"><a
+                                    href="https://elitechgroupe-my.sharepoint.com/:w:/g/personal/h_elkadhi_intedgroup_com/EYxI2p3lWoBMmXcePJ3cYIMB9Y0-S8ej4gvAlEpUvo8jZQ?e=EL4GsT">Lien
+                                    en cours de dévéloppement</a></p>
+                        </div>
+                        <div class="col-12 grid">
                             <div class="col-6">
                                 <strong>Montant payé:</strong>
                                 <ul>
@@ -529,16 +568,41 @@
                             <p class="col-6"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
                         </div>
                         <div class="col-12 grid">
-                            <p class="col-12"><strong>Mes attestations disponibles:</strong> <br> <p-button
-                                    label="Télécharger" icon="pi pi-download" iconPos="left"
-                                    (click)="downloadAttestation()"></p-button></p>
-                        </div>
-                        <div class="col-12 grid">
-                            <p class="col-12"><strong>Mon visa : <p-selectButton
-                                        [options]="[{label:'En attente',value:'false'},{label:'Reçu',value:'true'}]"
-                                        class="col-6" [(ngModel)]="boolVisa" (onChange)="changementVisa($event.value)">
-                                    </p-selectButton></strong></p>
-
+                            <div class="col-12">
+                                <strong>Mes attestations disponibles:</strong>
+                            </div>
+                            <div class="col-12">
+                                <p-table styleClass="p-datatable-gridlines"
+                                    [value]="ProspectConnected.documents_administrative" responsiveLayout="scroll"
+                                    responsiveLayout="scroll">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Date de délivrance
+                                            </th>
+                                            <th>
+                                                Nom du document
+                                            </th>
+                                            <th>
+                                                Lien de téléchargement
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData>
+                                        <tr>
+                                            <td>
+                                                {{rowData.date | date:'mediumDate'}}
+                                            </td>
+                                            <td>
+                                                {{rowData.nom}}
+                                            </td>
+                                            <td>
+                                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
                         </div>
 
                     </div>

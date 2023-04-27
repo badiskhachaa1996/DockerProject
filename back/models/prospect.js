@@ -110,7 +110,7 @@ const prospect_schema = new mongoose.Schema({
     },
 
     validated_cf: {
-        type: Boolean,
+        type: String,
         default: false
     },
     payement: {
@@ -207,7 +207,6 @@ const prospect_schema = new mongoose.Schema({
     },
     phase_candidature: {
         type: String,
-        required: false,
         default: "En attente d'affectation"
     },
     agent_sourcing_id: {
@@ -279,6 +278,10 @@ const prospect_schema = new mongoose.Schema({
     },
     note_consulaire: {
         type: String
+    },
+    documents_administrative: {
+        type: [{ date: Date, nom: String, path: String, traited_by: String, note: String }],
+        default: []
     }
 });
 

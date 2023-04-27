@@ -148,7 +148,7 @@ export class UserProfilComponent implements OnInit {
           rue_adresse: this.userco.rue_adresse,
           numero_adresse: this.userco.numero_adresse,
           postal_adresse: this.userco.postal_adresse,
-          nationalite: { value: this.InfoUser.nationalite, viewValue: this.InfoUser.nationalite }
+          nationalite: { value: this.InfoUser.nationalite, label: this.InfoUser.nationalite }
         })
       }
     })
@@ -337,7 +337,7 @@ export class UserProfilComponent implements OnInit {
         let date = new Date(this.InfoUser?.date_naissance)
         if (this.InfoUser) {
           this.RegisterForm.patchValue({
-            nationalite: { value: this.InfoUser.nationalite, viewValue: this.InfoUser.nationalite },
+            nationalite: { value: this.InfoUser.nationalite, label: this.InfoUser.nationalite },
             date_naissance: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getUTCFullYear()
           })
         }

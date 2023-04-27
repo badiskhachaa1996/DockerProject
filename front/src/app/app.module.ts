@@ -280,6 +280,9 @@ import { ConsulaireComponent } from './admission/international/consulaire/consul
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 import { PaiementsComponent } from './admission/international/paiements/paiements.component';
 import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
+import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
+import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
+import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
 
 
 @NgModule({
@@ -569,7 +572,10 @@ import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
     ConsulaireComponent,
     FormulaireAdmissionInternationalComponent,
     PaiementsComponent,
-    StageCeoComponent
+    StageCeoComponent,
+    PovPartenaireListProspectsComponent,
+    PovPartenaireAlternantsComponent,
+    AjoutAlternantPartenaireComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

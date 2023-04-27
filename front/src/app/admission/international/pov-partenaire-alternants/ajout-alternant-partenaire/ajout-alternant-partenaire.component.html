@@ -1,0 +1,264 @@
+<p-toast></p-toast>
+<div class="col-12 md:col-10 md:col-offset-1 flex justify-content-center flex-wrap card-container">
+    <div class="card">
+        <h4 style="text-align: center;">Formulaire d'ajout Alternant</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+
+        <p-timeline [value]="formSteps" layout="horizontal">
+            <ng-template pTemplate="content" let-event>
+                {{event}}
+            </ng-template>
+        </p-timeline>
+
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddAlternant()">
+            <div *ngIf="ActiveIndex==0">
+                <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label For="nom">Nom <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Smith" formControlName="nom" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Ex: John"
+                                    formControlName="prenom" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="civiliteList" placeholder="Choisissez une civilite"
+                                    formControlName="civilite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                                    </span></label>
+                                <input type="date" formControlName="date_naissance" pInputText />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                                    optionValue="label" emptyFilterMessage="Pas de nationalité trouvé" placeholder="Choisissez une nationalité"
+                                    filterPlaceholder="Nationalité" filter="true"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Adresse électronique :<span style="color:red"> *</span></label>
+                                <input type="email" formControlName="email" placeholder="Ex: john.smith@email.com"
+                                    pInputText>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                                <input pInputText id="indicatif" type="text" placeholder="Ex: +33"
+                                    formControlName="indicatif" />
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
+                                <input pInputText id="telephone" type="number" placeholder="Ex:0612345678"
+                                    formControlName="telephone" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="indicatif">Indicatif WhatsApp</label>
+                                <input pInputText id="indicatif" type="text" placeholder="Ex: +33"
+                                    formControlName="indicatif_whatsapp" />
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label For="telephone">Numéro WhatsApp </label>
+                                <input pInputText id="telephone" type="text" placeholder="Ex:0612345678"
+                                    formControlName="whatsapp" />
+                            </div>
+                            <div class="field col-12">
+                                <label For="mobilite_reduite">Etes vous une personne à mobilité réduite ?</label>
+
+                                <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                    formControlName="isPMR">
+                                </p-selectButton>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Suivant" style="float: right;" [disabled]="!canNext1()"
+                            (click)="nextPage();"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==1">
+                <p-fieldset legend="Adresse" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-2">
+                                <label For="prenom">Numéro<span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Ex: 20"
+                                    formControlName="numero" />
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label For="nom">Nom de la rue <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Place de la République"
+                                    formControlName="rue" />
+                            </div>
+
+                            <div class="field col-12 md:col-5">
+                                <label For="date_naissance">Code Postal <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: 75001"
+                                    formControlName="postal" />
+                            </div>
+                            <div class="field col-6">
+                                <label For="nationalite">Ville <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Ex: Paris"
+                                    formControlName="ville" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                                <p-dropdown formControlName="pays" [options]="paysList" placeholder="Choisissez un pays"
+                                    optionLabel="value" optionValue="value" emptyFilterMessage="Pas de pays trouvé"
+                                    filterPlaceholder="Pays" filter="true"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="!canNext2()" style="float: right;"
+                            (click)="nextPage()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==2">
+                <p-fieldset legend="Formation et Ecole/CFA" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label>Ecole/CFA <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école"
+                                    formControlName="ecole"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Campus <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="campusList" formControlName="campus"
+                                    placeholder="Choisissez un campus">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12">
+                                <label For="autre">Rentrée Scolaire <span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                                    placeholder="Choisissez une rentrée scolaire">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="!canNext3()" style="float: right;"
+                            (click)="nextPage()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==3">
+                <p-fieldset class="col-12" legend="Informations du Contrat"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+
+                            <div class="field col-12 md:col-6">
+                                <label>Etat du contrat <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="etatList" formControlName="etat_contrat"
+                                    placeholder="Choisissez l'état du contrat">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Date du contrat <span style="color: red;"> *
+                                    </span></label>
+                                <input type="date" formControlName="date_contrat" pInputText />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Nom de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <input type="text" formControlName="entreprise" placeholder="Ex: Google" pInputText />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Adresse de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pInputTextarea type="text" placeholder="Ex: 10 Place de la République 75001"
+                                    formControlName="adresse_entreprise"></textarea>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Numéro de Téléphone de l'Entreprise <span style="color: red;">
+                                        *
+                                    </span></label>
+                                <input type="text" formControlName="telephone_entreprise"
+                                    placeholder="Ex: +33 0612345678" pInputText />
+                            </div>
+
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_contrat">Email de l'Entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <input type="text" formControlName="mail_entreprise" placeholder="Ex: +33 0612345678"
+                                    pInputText />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <!--ormulaireAdmissionComponent_div_27_Template (formulaire-admission.component.html:353:29)-->
+                        <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
+                        </button>
+                        <button pButton type="button" label="Validez le formulaire" [disabled]="RegisterForm.invalid" type="submit"
+                            style="float: right;"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+
+
+            <div *ngIf="ActiveIndex==4">
+                <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
+                    Votre candidature a été envoyé !</h2>
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+                </div>
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <p>Vos identifiants viennent de vous être envoyés par mail, merci de bien lire les
+                        étapes indiquées afin de mener à bien votre inscription.<br>
+                        <br>
+                        En cas de question sur vos identifiants, vous pouvez envoyer un mail à l'adresse
+                        mail suivante :
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='estya' || form_origin=='estya-dubai'">admission@estya.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='adg'">admission@adgeducation.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='eduhorizons'">contact@eduhorizons.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='espic'">admission@espic.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='studinfo'">admission@studinfo.com</span>
+                        <span style="color:red; font-weight: bold;" *ngIf="form_origin=='icbsmalte'"></span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='intuns'">admission@intuns.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='intunivesity'">admission@intuniversity.com</span>
+                        <span style="color:red; font-weight: bold;"
+                            *ngIf="form_origin=='inteducation'">contact@int-edu.com</span>
+
+                        <br><br>
+                        Bon courage pour la suite !
+                    </p>
+                </div>
+                <div class="col-12">
+                    <button pButton type="button" label="{{btnTextBack}}" (click)="redirectAgent()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -16,6 +16,7 @@ const bcrypt = require("bcryptjs");
 const { Etudiant } = require('../models/etudiant');
 const { ProspectIntuns } = require('../models/ProspectIntuns');
 const { ProspectAlternable } = require('../models/ProspectAlternable');
+const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -89,7 +90,7 @@ app.post("/create", (req, res, next) => {
 
     //Suppression du _id venant du frontend
     delete prospectData._id;
-
+    prospectData['decision_admission'] = "En attente de traitement"
     //Création du nouvel objet prospect et du nouvel objet user
     const prospect = new Prospect({
         ...prospectData,
@@ -382,6 +383,41 @@ app.get("/getAllSourcing", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des prospect pour le tableau Prospects du Partenaire
+app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
+    CommercialPartenaire.findOne({ user_id: req.params.id }).populate('partenaire_id').then(commercial => {
+        if (commercial && commercial.statut == 'Admin')
+            if (commercial.partenaire_id)
+                Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: { $regex: "^" + commercial.partenaire_id.code_partenaire } }).populate("user_id").populate('agent_id')
+                    .then((prospectsFromDb) => {
+                        res.status(201).send(prospectsFromDb)
+                    })
+                    .catch((error) => { res.status(500).send(error.message); });
+            else {
+                let code = commercial.code_commercial_partenaire.substring(0, -3)
+                Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: { $regex: "^" + code } }).populate("user_id").populate('agent_id')
+                    .then((prospectsFromDb) => {
+                        res.status(201).send(prospectsFromDb)
+                    })
+                    .catch((error) => { res.status(500).send(error.message); });
+            }
+        else if (commercial)
+            Prospect.find({ archived: [false, null], user_id: { $ne: null }, code_commercial: commercial.code_commercial_partenaire }).populate("user_id").populate('agent_id')
+                .then((prospectsFromDb) => {
+                    res.status(201).send(prospectsFromDb)
+                })
+                .catch((error) => { res.status(500).send(error.message); });
+        else
+            res.status(500).send("Commercial non trouvé")
+
+    })
+    /*Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });*/
+});
+
 //Recuperation de la liste des prospect pour le tableau Paiement
 app.get("/getAllPaiement", (req, res, next) => {
 
@@ -513,7 +549,6 @@ app.put("/updateV2", (req, res, next) => {
         .then((prospectUpdated) => {
             Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                 .then((prospectsFromDb) => {
-                    console.log(prospectsFromDb.phase_candidature)
                     res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error.message); });
@@ -605,6 +640,18 @@ app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
 
 });
 
+app.get("/downloadFileAdmin/:id/:path", (req, res) => {
+    let pathFile = "storage/prospect/admin/" + req.params.id + "/" + req.params.path
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+
+});
+
 
 app.get("/deleteFile/:id/:directory/:filename", (req, res) => {
     let pathFile = "storage/prospect/" + req.params.id + "/" + req.params.directory + "/" + req.params.filename
@@ -649,6 +696,39 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
             }
         }))
         res.status(201).json({ dossier: "dossier mise à jour" });
+    }
+
+}, (error) => { res.status(500).send(error); })
+
+const storageAdmin = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        if (!fs.existsSync('storage/prospect/admin/' + req.body.id + '/')) {
+            fs.mkdirSync('storage/prospect/admin/' + req.body.id + '/', { recursive: true })
+        }
+        callBack(null, 'storage/prospect/admin/' + req.body.id + '/')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})
+
+const uploadAdmin = multer({ storage: storageAdmin, limits: { fileSize: 20000000 } })
+
+app.post('/uploadAdminFile/:id', uploadAdmin.single('file'), (req, res, next) => {
+
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+        Prospect.findById(req.body.id, ((err, newProspect) => {
+            newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note, traited_by: req.body.traited_by, path: req.body.path, nom: req.body.nom })
+            Prospect.findByIdAndUpdate(req.body.id, { documents_administrative: newProspect.documents_administrative }, { new: true }, (err, doc) => {
+                res.status(201).json({ dossier: "dossier mise à jour", documents_administrative: newProspect.documents_administrative });
+            })
+        }))
+
     }
 
 }, (error) => { res.status(500).send(error); })

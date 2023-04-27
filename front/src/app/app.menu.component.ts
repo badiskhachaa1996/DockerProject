@@ -1161,7 +1161,14 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                    ]
+                                },
+                                {
+                                    label: 'Alternants',
+                                    items: [
+                                        { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
                                     ]
                                 },
                                 {
@@ -1207,7 +1214,14 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                    ]
+                                },
+                                {
+                                    label: 'Alternants',
+                                    items: [
+                                        { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
                                     ]
                                 },
                                 {

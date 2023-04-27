@@ -88,13 +88,13 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   campusDropdown =
     [
-      { value: "Paris - France" },
-      { value: "Montpellier - France" },
-      { value: "Brazzaville - Congo" },
-      { value: "Rabat - Maroc" },
-      { value: "La Valette - Malte" },
-      { value: "UAE - Dubai" },
-      { value: "En ligne" },
+    { value: "Paris - France", label: "Paris - France" },
+    { value: "Montpellier - France", label: "Montpellier - France" },
+    { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+    { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+    { value: "La Valette - Malte", label: "La Valette - Malte" },
+    { value: "UAE - Dubai", label: "UAE - Dubai" },
+    { value: "En ligne", label: "En ligne" },
     ];
 
   niveauFR =
@@ -442,15 +442,22 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     } catch (error) {
       customid = ""
     }
-    let source = (code_commercial != "" || hors_Admission) ? "Partenaire" : "Interne";
+    let source = "Site Web";
+    if (code_commercial)
+      source = "Partenaire"
+    if (localStorage.getItem('sourceProspect'))
+      source = localStorage.getItem('sourceProspect')
 
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite, false, new Date());
 
     //Creation du nouveau prospect
 
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages_fr + ", " + languages_en, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
-      "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, customid, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages_fr + ", " + languages_en,
+      professional_experience, campusChoix1, campusChoix2, campusChoix3,
+      programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
+      "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, customid, null, null, null, null, false, null,
+      nir, mobilite_reduite, sportif_hn,
       hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire, null, numeroAgence, languages_fr, languages_en, numero_telegram, indicatif_telegram);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {

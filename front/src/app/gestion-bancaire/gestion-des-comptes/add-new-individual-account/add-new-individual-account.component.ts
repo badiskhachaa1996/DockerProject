@@ -11,9 +11,9 @@ import { environment } from 'src/environments/environment';
 })
 export class AddNewIndividualAccountComponent implements OnInit {
 
-  civiliteList: any = [{ viewValue: 'Monsieur', value: 'M' },
-                       { viewValue: 'Madame', value: 'F' },
-                       { viewValue: 'Autre', value: 'J' }
+  civiliteList: any = [{ label: 'Monsieur', value: 'M' },
+                       { label: 'Madame', value: 'F' },
+                       { label: 'Autre', value: 'J' }
                       ];
   paysList = environment.pays;
   paysIsoCodes = environment.isoCodes;
