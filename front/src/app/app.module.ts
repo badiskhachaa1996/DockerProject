@@ -279,6 +279,7 @@ import { RentreeScolaireAdmissionComponent } from './international/rentree-scola
 import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 import { PaiementsComponent } from './admission/international/paiements/paiements.component';
+import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
 
 
 @NgModule({
@@ -567,7 +568,8 @@ import { PaiementsComponent } from './admission/international/paiements/paiement
     RentreeScolaireAdmissionComponent,
     ConsulaireComponent,
     FormulaireAdmissionInternationalComponent,
-    PaiementsComponent
+    PaiementsComponent,
+    StageCeoComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

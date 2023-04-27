@@ -17,6 +17,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { StageService } from 'src/app/services/stage.service';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { saveAs } from 'file-saver';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-stage',
@@ -53,12 +54,15 @@ export class StageComponent implements OnInit {
   tuteurs: any[];
   anneeScolaires: any[];
   actualDirectorId: string; // représente à chaque fois l'id du directeur de l'entreprise sélectionné lors de l'ajout et de la modif de stage
-  doc: any; // représente le document à uploader
-  fileTypeList: any[]; // liste des fichiers pour l'upload de document
+  doc: any;                 // représente le document à uploader
+  fileTypeList: any[];      // liste des fichiers pour l'upload de document
 
   constructor(private router: Router, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private stageService: StageService, private messageService: MessageService, private etudiantService: EtudiantService, private userService: AuthService, private campusService: CampusService, private diplomeService: DiplomeService) { }
 
   ngOnInit(): void {
+    // décodage du token
+    this.token = jwt_decode(localStorage.getItem('token'));
+
     this.messageService.add({severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages'});
     this.stages               = [];
     this.students             = [];

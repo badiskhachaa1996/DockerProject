@@ -844,6 +844,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-list',
                                             routerLink: ['/liste-contrats']
                                         },
+                                        {
+                                            label: 'Stages',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/stages']
+                                        },
                                     ]
                                 },
                                 {
@@ -1980,6 +1985,11 @@ export class AppMenuComponent implements OnInit {
                                                     icon: 'pi pi-list',
                                                     routerLink: ['/liste-contrats']
                                                 },
+                                                {
+                                                    label: 'Stages',
+                                                    icon: 'pi pi-briefcase',
+                                                    routerLink: ['/stages']
+                                                },
                                             ]
                                         },
                                         {
@@ -2339,6 +2349,11 @@ export class AppMenuComponent implements OnInit {
                                                     label: 'Alternances',
                                                     icon: 'pi pi-list',
                                                     routerLink: ['/liste-contrats']
+                                                },
+                                                {
+                                                    label: 'Stages',
+                                                    icon: 'pi pi-briefcase',
+                                                    routerLink: ['/stages']
                                                 },
                                             ]
                                         },
@@ -3255,7 +3270,12 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tableau de bord',
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/']
-                                }
+                                },
+                                {
+                                    label: 'Tuteurs',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/tuteur-ceo']
+                                },
                             ]
                         },
                         {
@@ -3285,10 +3305,21 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-file-excel',
                                     routerLink: ['/liste-contrats-ceo/']
                                 },
+                            ]
+                        },
+                        {
+                            label: "Stage",
+                            icon: 'pi pi-briefcase',
+                            items: [
                                 {
-                                    label: 'Tuteurs',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/tuteur-ceo']
+                                    label: 'Stage par entreprises',
+                                    icon: 'pi pi-file',
+                                    routerLink: [`/stages/${this.token.id}`]
+                                },
+                                {
+                                    label: 'Stage sous ma tutelle',
+                                    icon: 'pi pi-file-excel',
+                                    // routerLink: ['/liste-contrats-ceo/']
                                 },
                             ]
                         },
