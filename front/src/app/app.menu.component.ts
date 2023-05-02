@@ -148,7 +148,7 @@ export class AppMenuComponent implements OnInit {
 
                                 },
                                 {
-                                    label: 'Gestions des groupes',
+                                    label: 'Gestion des groupes',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -164,7 +164,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Gestions des séances',
+                                    label: 'Gestion des séances',
                                     icon: 'pi pi-video',
                                     items: [
                                         {
@@ -736,6 +736,22 @@ export class AppMenuComponent implements OnInit {
 
                                 },
                                 {
+                                    label: 'Gestion des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
+                                        },
+                                    ]
+                                },
+                                {
                                     label: 'Gestions des séances',
                                     icon: 'pi pi-video',
                                     items: [
@@ -1136,7 +1152,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Gestions des groupes',
+                                    label: 'Gestion des groupes',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -1733,7 +1749,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
-                                            label: 'Gestions des groupes',
+                                            label: 'Gestion des groupes',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -2234,7 +2250,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
-                                            label: 'Gestions des groupes',
+                                            label: 'Gestion des groupes',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -2742,7 +2758,7 @@ export class AppMenuComponent implements OnInit {
                                             ]
                                         },
                                         {
-                                            label: 'Gestions des groupes',
+                                            label: 'Gestion des groupes',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -3339,11 +3355,6 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Stage par entreprises',
                                     icon: 'pi pi-file',
                                     routerLink: [`/stages/${this.token.id}`]
-                                },
-                                {
-                                    label: 'Stage sous ma tutelle',
-                                    icon: 'pi pi-file-excel',
-                                    // routerLink: ['/liste-contrats-ceo/']
                                 },
                             ]
                         },
