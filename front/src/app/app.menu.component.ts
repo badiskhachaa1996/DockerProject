@@ -649,10 +649,20 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-calendar',
                                             routerLink: ['/admission/rentree']
                                         },
+                                    ]
+                                }, {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    items: [
                                         {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-home'
+                                            label: 'Général',
+                                            icon: 'pi pi-chart-bar',
+                                            routerLink: ['/international/dashboard']
                                         },
+                                        {
+                                            label: 'Performance scolaire',
+                                            icon: 'pi pi-users'
+                                        }
                                     ]
                                 },
                             ],

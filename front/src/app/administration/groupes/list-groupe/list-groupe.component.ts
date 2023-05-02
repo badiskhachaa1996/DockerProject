@@ -312,44 +312,51 @@ export class ListGroupeComponent implements OnInit {
   }
 
   // upload du calendrier
-  onSelectFile(event: any): void
-  {
-    if(event.target.files.length > 0)
-    {
+  onSelectFile(event: any): void {
+    if (event.target.files.length > 0) {
       this.calendarFile = event.target.files[0];
     }
   }
 
-  onAddCalendar(): void
-  {
+  onAddCalendar(): void {
     let formData = new FormData();
     formData.append('id', this.idGroupeToUpdate);
     formData.append('file', this.calendarFile);
     // envoi du calendrier de la formation
     this.classeService.uploadCalendar(formData)
-    .then((response) => { 
-      this.messageService.add({severity: 'success', summary: 'Calendrier', detail: response.successMsg}); 
-      this.showFormAddCalendar = false;
-      // recuperation de la liste des classes
-      this.classeService.getAllPopulate().subscribe({
-        next: (response) => { this.classes = response; },
-        error: (error) => { console.log(error); },
-        complete: () => { console.log('Liste des classes récupérer'); }
-      });
-    })
-    .catch((error) => { console.log(error); this.messageService.add({severity: 'error', summary: 'Calendrier', detail: error.error}); } )
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Calendrier', detail: response.successMsg });
+        this.showFormAddCalendar = false;
+        // recuperation de la liste des classes
+        this.classeService.getAllPopulate().subscribe({
+          next: (response) => { this.classes = response; },
+          error: (error) => { console.log(error); },
+          complete: () => { console.log('Liste des classes récupérer'); }
+        });
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Calendrier', detail: error.error }); })
   }
 
   // méthode de téléchargement du calendrier
-  onDownloadCalendrier(id: string): void
-  {
+  onDownloadCalendrier(id: string): void {
     this.classeService.downloadCalendar(id)
-    .then((response: Blob) => {
-      let downloadUrl = window.URL.createObjectURL(response);
-      saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
-      this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
-    })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `calendrier.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Calendrier", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Calendrier", detail: `Impossible de télécharger le fichier` }); });
   }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
 
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
 }

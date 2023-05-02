@@ -283,6 +283,7 @@ import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
 import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
+import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
 
 
 @NgModule({
@@ -575,7 +576,8 @@ import { AjoutAlternantPartenaireComponent } from './admission/international/pov
     StageCeoComponent,
     PovPartenaireListProspectsComponent,
     PovPartenaireAlternantsComponent,
-    AjoutAlternantPartenaireComponent
+    AjoutAlternantPartenaireComponent,
+    DashboardIntComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
