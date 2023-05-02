@@ -1,9 +1,321 @@
 <div class="grid">
     <div class="col-12">
+        <!-- formulaire d'ajout ou de modification d'un fichier -->
+        <div class="card" *ngIf="showFormAddDoc">
+            <i class="pi pi-times-circle close-forme-icon" (click)="showFormAddDoc = false;"></i>
+            <div class="clear-float"></div>
+            <div class="en-tete">
+                <h2>Ajouter ou modifier un document sur ce stage</h2>
+            </div>
+
+            <form [formGroup]="formAddDoc" (ngSubmit)="onUploadDoc()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label for="fileType">Quelle type de fichier uploader ?</label>
+                        <p-dropdown id="fileType" [options]="fileTypeList" formControlName="fileType"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <input class="input-file" pInputFile type="file" accept="application/pdf" maxFileSize="1000000" (change)="onSelectFile($event)">
+                    </div>
+                    <div class="field">
+                        <button pButton label="Téléverser le fichier" icon="pi pi-file" type="submit" [disabled]="formAddDoc.invalid"></button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        
+        <!-- Table d'affichage de la liste des stages -->
+        <div class="card" *ngIf="showStagesForEnterprises">
+            <i class="pi pi-times-circle close-icon" (click)="showStagesForEnterprises = false;"></i>
+            <div class="clear-float"></div>
+            <div class="en-tete">
+                <h2>Gestion des stages</h2>
+            </div>
+
+            <p-table [value]="stages" dataKey="_id" #dt1 [rowHover]="true" [totalRecords]="stages.length" 
+                    [paginator]="true" [rows]="10" [pageLinks]="5" responsiveLayout="scroll"
+                    [globalFilterFields]="['student_id.user_id.lastname', 'student_id.user_id.firstname', 'enterprise_id.r_sociale', 'commercial_id.lastname', 'commercial_id.firstname', 'commercial_id.lastname', 'gratification', 'tutor_id.user_id.firstname', 'tutor_id.user_id.lastname']">
+
+				<ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="filter-data"/>
+                    </span>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem"></th>
+						<th>Prénom et NOM</th>
+						<th>Statut</th>
+						<th>Formation</th>
+						<th>Entreprise</th>
+						<th>École</th>
+						<th>Dates du stage</th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-stage let-expanded="expanded">
+					<tr>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="stage" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+						</td>
+						<td>{{stage.student_id?.user_id?.firstname | titlecase}} {{stage.student_id?.user_id?.lastname | uppercase}}</td>
+                        <td>
+                            <p-tag *ngIf="stage.status == null" icon="pi pi-times" severity="danger"
+                                [value]="'Aucun status définit'">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Crée'" icon="pi pi-exclamation-triangle" severity="warning"
+                                [value]="stage.status">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Conclu'" icon="pi pi-info" severity="info"
+                                [value]="stage.status">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Champs requis'" icon="pi pi-info-circle" severity="danger"
+                                [value]="stage.status">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Établie'" icon="pi pi-info" severity="info"
+                                [value]="stage.status">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Signé'" icon="pi pi-pencil" severity="success"
+                                [value]="stage.status">
+                            </p-tag>
+                            <p-tag *ngIf="stage.status == 'Fini'" icon="pi pi-check"
+                                severity="success" [value]="stage.status">
+                            </p-tag>
+                        </td>
+                        <td>{{stage.student_id?.classe_id?.diplome_id?.titre}}</td>
+                        <td>{{stage.enterprise_id?.r_sociale}}</td>
+                        <td>{{stage.student_id?.campus?.ecole_id?.libelle}}</td>
+                        <td>{{stage.begin_date | date: 'dd MMMM YYYY'}} - {{stage.end_date | date: 'dd MMMM YYYY'}}</td>
+                        <td>
+                            <!-- <i class="pi pi-pencil" pTooltip="Modifier le contrat" aria-hidden="true" (click)="onPatchFormUpdate(stage);"></i> -->
+                            <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true" (click)="showPresence(stage.student_id._id)"></i>
+                            <!-- <i class="pi pi-bookmark" pTooltip="Mettre le status à jour" aria-hidden="true" (click)="stageToUpdate = stage; onShowFormUpdateStatus()"></i> -->
+                            <!-- icônes de téléchargement des fichiers liés au stage -->
+                            <i class="pi pi-file td-file-icone" pTooltip="Ajouter ou modifier un fichier" (click)="stageToUpdate = stage; showFormAddDoc = true"></i>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="rowexpansion" let-stage>
+					<tr>
+						<td colspan="8">
+                            <!-- informations sur le tuteur -->
+							<div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Tuteur</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Prénom et NOM</th>
+                                            <th>Email</th>
+                                            <th>Téléphone</th>
+                                            <th>Fonction</th>
+                                            <th>Date de naissance</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body">
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{stage.tutor_id?.user_id?.firstname | titlecase}} {{ stage.tutor_id?.user_id?.lastname | uppercase }}</td>
+                                            <td>{{stage.tutor_id?.user_id?.email_perso}}</td>
+                                            <td>{{stage.tutor_id?.user_id?.phone}}</td>
+                                            <td>{{stage.tutor_id?.fonction}}</td>
+                                            <td>{{stage.tutor_id?.date_naissance}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <!-- informations sur l'entreprise -->
+                            <div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Entreprise</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Activité</th>
+                                            <th>Siret</th>
+                                            <th>Téléphone</th>
+                                            <th>Adresse</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body">
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{stage.enterprise_id?.activite }}</td>
+                                            <td>{{stage.enterprise_id?.siret }}</td>
+                                            <td>{{stage.enterprise_id?.indicatif_ent }} {{stage.enterprise_id?.phone_ent }}</td>
+                                            <td>
+                                                <address>
+                                                    {{stage.enterprise_id?.adresse_ent }}, <br>
+                                                    {{stage.enterprise_id?.code_postale_ent }},
+                                                    <strong>{{stage.enterprise_id?.ville_ent }}</strong>
+                                                </address>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <!-- informations sur le représentant -->
+                            <div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Représentant</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Prénom et NOM</th>
+                                            <th>Email</th>
+                                            <th>Téléphone</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body">
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>{{stage.enterprise_id?.directeur_id?.firstname | titlecase}} {{stage.enterprise_id?.directeur_id?.lastname | uppercase}}</td>
+                                            <td>{{stage.enterprise_id?.directeur_id?.email_perso }}</td>
+                                            <td>{{stage.enterprise_id?.directeur_id?.phone }}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <!-- Fichier liés au contrat -->
+                            <div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Fichier liés au contrat</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Convention</th>
+                                            <th>Avenant</th>
+                                            <th>Attestation</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body">
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td *ngIf="stage.convention != null">
+                                                <i class="pi pi-file td-file" (click)="onDownloadDoc('convention', stage._id)"></i>
+                                            </td>
+                                            <td *ngIf="stage.convention == null" class="no-file-td">-aucun fichier-</td>
+                                            
+                                            <td *ngIf="stage.avenant != null">
+                                                <i class="pi pi-file td-file" (click)="onDownloadDoc('avenant', stage._id)"></i>
+                                            </td>
+                                            <td *ngIf="stage.avenant == null" class="no-file-td">-aucun fichier-</td>
+                                            
+                                            <td *ngIf="stage.attestation != null">
+                                                <i class="pi pi-file td-file" (click)="onDownloadDoc('attestation', stage._id)"></i>
+                                            </td>
+                                            <td *ngIf="stage.attestation == null" class="no-file-td">-aucun fichier-</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <!-- liste des entreprises du CEO actuellement connecté -->
         <div class="card">
             <div class="en-tete">
-                <h2>Gestion des entreprises</h2>
+                <h2>Liste des entreprises</h2>
             </div>
+
+            <p-table #dt1 [value]="entreprises" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['r_sociale','fm_juridique','nb_salarie','ville_ent']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher une entreprise" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Raison sociale
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Forme juridique
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nombre de salarié
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Ville
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Commercial referent
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Alternants
+							</div>
+                        </th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-entreprise>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{entreprise?.r_sociale}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{entreprise?.fm_juridique}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{entreprise?.nb_salarie}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{entreprise?.ville_ent}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{entreprise?.commercial_id ? entreprise.commercial_id?.firstname + ' ' + entreprise.commercial_id?.lastname.toUpperCase() : '--' }}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+							<i class="pi pi-user" title="Voir les stages sur cette entreprise" style="cursor: pointer; color: blue;" (click)="onLoadContracts(entreprise);"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="5">Aucune entreprises trouvés.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="5">Chargement des données...</td>
+					</tr>
+				</ng-template>
+    		</p-table>
         </div>
     </div>
 </div>
