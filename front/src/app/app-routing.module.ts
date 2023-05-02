@@ -175,6 +175,7 @@ import { RentreeScolaireAdmissionComponent } from './international/rentree-scola
 import { ConsulaireComponent } from './admission/international/consulaire/consulaire.component';
 import { FormulaireAdmissionInternationalComponent } from './formulaire-admission/formulaire-admission-international/formulaire-admission-international.component';
 import { PaiementsComponent } from './admission/international/paiements/paiements.component';
+import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
 import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
@@ -292,6 +293,7 @@ const routes: Routes = [
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
+            { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */
