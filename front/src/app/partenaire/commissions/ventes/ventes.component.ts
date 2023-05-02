@@ -8,6 +8,8 @@ import { AdmissionService } from 'src/app/services/admission.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { ActivatedRoute } from '@angular/router';
+import { FactureCommission } from 'src/app/models/FactureCommission';
+import { FactureCommissionService } from 'src/app/services/facture-commission.service';
 @Component({
   selector: 'app-ventes',
   templateUrl: './ventes.component.html',
@@ -42,9 +44,10 @@ export class VentesComponent implements OnInit {
   listProspect = []
 
   isPovPartenaire = false
+  factures = 0
 
   constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService,
-    private route: ActivatedRoute, private PartenaireService: PartenaireService) { }
+    private route: ActivatedRoute, private PartenaireService: PartenaireService, private FCService: FactureCommissionService) { }
 
   ngOnInit(): void {
     if (this.route.snapshot.paramMap.get('partenaire_id')) {
@@ -83,6 +86,9 @@ export class VentesComponent implements OnInit {
         })
       })
     }
+    this.FCService.getAll().subscribe(data => {
+      this.factures = data.length
+    })
   }
 
   showFormAddVente = false
@@ -126,8 +132,18 @@ export class VentesComponent implements OnInit {
       this.selectPartenaire()
       this.showFormAddVente = false
       this.formAddVente.reset()
-      this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès" })
+      this.MessageService.add({ severity: 'success', summary: "Création de vente avec succès" })
     })
+    if (this.formAddVente.value.statutCommission == "Compensation" || this.formAddVente.value.statutCommission == "A la source") {
+      let montant = this.formAddVente.value.montant
+      if (this.formAddVente.value.statutCommission == "A la source")
+        montant = this.getMontant(this.formAddVente.value.produit)
+
+      let facture = new FactureCommission((this.factures + 1).toString(), montant, 0, "Payé", this.formAddVente.value.statutCommission, this.formAddVente.value.date_reglement, this.formAddVente.value.partenaire_id)
+      this.FCService.create(facture).subscribe(data => {
+        this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès car le statut est " + this.formAddVente.value.statutCommission })
+      })
+    }
   }
 
   initEditForm(vente: Vente) {

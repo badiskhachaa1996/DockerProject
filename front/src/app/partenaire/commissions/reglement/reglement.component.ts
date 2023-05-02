@@ -184,7 +184,7 @@ export class ReglementComponent implements OnInit {
   showFormEditFacture = false
 
   formEditFacture: FormGroup = new FormGroup({
-    numero: new FormControl(this.factures.length, Validators.required),
+    numero: new FormControl(this.factures.length + 1, Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
     statut: new FormControl('', Validators.required),
