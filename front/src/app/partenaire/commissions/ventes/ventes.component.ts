@@ -89,6 +89,27 @@ export class VentesComponent implements OnInit {
 
   ventes = []
 
+  modaliteList = [
+    { value: "Chèque Montpellier", label: "Chèque Montpellier" },
+    { value: "Chèque Paris", label: "Chèque Paris" },
+    { value: "Chèque Tunis", label: "Chèque Tunis" },
+    { value: "Compensation", label: "Compensation" },
+    { value: "Espèce chèque Autre", label: "Espèce chèque Autre" },
+    { value: "Espèce chèque Montpellier", label: "Espèce chèque Montpellier" },
+    { value: "Espèce chèque Paris", label: "Espèce chèque Paris" },
+    { value: "Espèce Congo", label: "Espèce Congo" },
+    { value: "Espèce Maroc", label: "Espèce Maroc" },
+    { value: "Espèce Montpellier", label: "Espèce Montpellier" },
+    { value: "Espèce Paris", label: "Espèce Paris" },
+    { value: "Espèce Tunis", label: "Espèce Tunis" },
+    { value: "Lien de paiement", label: "Lien de paiement" },
+    { value: "PayPal", label: "PayPal" },
+    { value: "Virement", label: "Virement" },
+    { value: "Virement chèque Autre", label: "Virement chèque Autre" },
+    { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
+    { value: "Virement chèque Paris", label: "Virement chèque Paris" },
+  ]
+
   formAddVente: FormGroup = new FormGroup({
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
@@ -96,12 +117,13 @@ export class VentesComponent implements OnInit {
     statutCommission: new FormControl('', Validators.required),
     date_reglement: new FormControl('', Validators.required),
     prospect_id: new FormControl('', Validators.required),
-    partenaire_id: new FormControl('', Validators.required)
+    partenaire_id: new FormControl('', Validators.required),
+    modalite_paiement: new FormControl('', Validators.required)
   })
 
   onAddVente() {
     this.VenteService.create({ ...this.formAddVente.value }).subscribe(data => {
-      this.ventes.push(data)
+      this.selectPartenaire()
       this.showFormAddVente = false
       this.formAddVente.reset()
       this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès" })
@@ -131,7 +153,8 @@ export class VentesComponent implements OnInit {
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
     statutCommission: new FormControl('', Validators.required),
-    date_reglement: new FormControl('', Validators.required)
+    date_reglement: new FormControl('', Validators.required),
+    modalite_paiement: new FormControl('', Validators.required)
   })
 
   onUpdateVente() {
@@ -205,12 +228,16 @@ export class VentesComponent implements OnInit {
   }
 
   getProduit(str: string) {
-    if (str)
+    if (str.includes("\n"))
       return str.substring(0, str.lastIndexOf('\n'))
+    else
+      return str.substring(0, str.lastIndexOf(' '))
   }
 
   getMontant(str: string) {
-    if (str)
-      return str.substring(str.lastIndexOf(':') + 1, str.lastIndexOf('€'))
+    if (str.includes("\n"))
+      return str.substring(str.lastIndexOf('Montant:') + 'Montant:'.length, str.lastIndexOf('€'))
+    else
+      return str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€'))
   }
 }

@@ -399,6 +399,30 @@ export class ListPartenaireComponent implements OnInit {
     })
 
   }
+  deleteCommission(co) {
+    this.commissions.splice(this.commissions.indexOf(co), 1)
+    //Update sur le server
+    this.PartenaireService.newUpdate({ _id: this.idPartenaireToUpdate._id, commissions: this.commissions }).subscribe(data => {
+    })
+  }
+  clonedCommissions: { [s: string]: { _id: string, description: string, montant: string }; } = {};
+  onRowEditInit(co: { _id: string, description: string, montant: string }) {
+    this.clonedCommissions[co._id] = { ...co };
+  }
+
+  onRowEditSave(product: { _id: string, description: string, montant: string }) {
+    delete this.clonedCommissions[product._id];
+
+    this.PartenaireService.newUpdate({ _id: this.idPartenaireToUpdate._id, commissions: this.commissions }).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Commission mis à jour' });
+    })
+  }
+
+  onRowEditCancel(product: { _id: string, description: string, montant: string }, index: number) {
+    //console.log(product, index, this.commissions[index], this.clonedCommissions[product._id])
+    this.commissions[index] = this.clonedCommissions[product._id];
+    delete this.clonedCommissions[product._id];
+  }
 
   downloadContrat() {
     this.PartenaireService.downloadContrat(this.idPartenaireToUpdate._id)
@@ -433,7 +457,7 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   updateEtatContrat() {
-    
+
     let data = { _id: this.idPartenaireToUpdate._id, etat_contrat: this.idPartenaireToUpdate.etat_contrat }
     this.PartenaireService.newUpdate(data).subscribe(partenaire => {
       console.log(partenaire)

@@ -1,1 +1,140 @@
-<p>dashboard-int works!</p>
+<div class="grid col-12 card">
+    <div class="grid col-12">
+        <div class="col-2">
+            <label>Source:</label><br>
+            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                (onChange)="source=$event.value;updateFilter()" emptyFilterMessage="Pas de source trouvé"
+                filterPlaceholder="Source">
+            </p-dropdown>
+        </div>
+        <div class="col-3">
+            <label>Rentrée scolaire:</label><br>
+            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentree"
+                (onChange)="rentree_scolaire=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Source">
+            </p-dropdown>
+        </div>
+        <div class="col-3">
+            <label>Formation:</label><br>
+            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                (onChange)="formation=$event.value;updateFilter()" emptyFilterMessage="Pas de formation trouvé"
+                filterPlaceholder="Formation">
+            </p-dropdown>
+        </div>
+        <div class="col-2">
+            <label>Ecole:</label><br>
+            <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+                (onChange)="ecole=$event.value;updateFilter()" emptyFilterMessage="Pas d'école trouvé"
+                filterPlaceholder="Ecole">
+            </p-dropdown>
+        </div>
+        <div class="col-2">
+            <label>Campus:</label><br>
+            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                (onChange)="campus=$event.value;updateFilter()" emptyFilterMessage="Pas de campus trouvé"
+                filterPlaceholder="Campus">
+            </p-dropdown>
+        </div>
+
+    </div>
+    <div class="col-12 grid">
+        <div class="col-4">
+            <label>Pays:</label><br>
+            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                (onChange)="pays=$event.value;updateFilter()" emptyFilterMessage="Pas de pays trouvé"
+                filterPlaceholder="Pays">
+            </p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Date:</label><br>
+            <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range"></p-calendar>
+        </div>
+        <div class="col-4">
+            <label>Campus:</label><br>
+            <p-dropdown filter="true" placeholder="Campus" [options]="filterPhase"
+                (onChange)="phase_candidature=$event.value;updateFilter()" emptyFilterMessage="Pas de phase trouvé"
+                filterPlaceholder="Phase">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="col-12 grid">
+        <div class="col-2">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Nombre total des prospects</span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_prospects }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-users text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3"> Nombre total des Admis
+                        </span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_admis }}</div>
+                    </div>
+
+                    <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-clock text-pink-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Nombre total des Paiements
+                        </span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_paiements }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-calendar text-cyan-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-2">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Nombre total des Visa
+                        </span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_visa }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-user text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3">Nombre total des étudiants
+                        </span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_etudiants }}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                        [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                        <i class="pi pi-user text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -179,6 +179,7 @@ import { StageCeoComponent } from './commercial/stage-ceo/stage-ceo.component';
 import { PovPartenaireListProspectsComponent } from './admission/international/pov-partenaire-list-prospects/pov-partenaire-list-prospects.component';
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
+import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
 
 const routes: Routes = [
     {
@@ -331,6 +332,7 @@ const routes: Routes = [
             { path: 'international/partenaire/ajout-alternant/:code_commercial', component: AjoutAlternantPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/alternants/:id', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/:id', component: PovPartenaireListProspectsComponent, canActivate: [AuthGuardService] },
+            { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

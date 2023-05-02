@@ -538,7 +538,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect>
-                    <tr>
+                    <tr *ngIf="prospect && prospect.user_id">
 
                         <td>
                             <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
@@ -553,11 +553,11 @@
                             {{ prospect?.customid }}
                         </td>
 
-                        <td *ngIf="prospect.user_id">
+                        <td>
                             {{ prospect?.user_id?.firstname | titlecase }}
                             {{ prospect?.user_id?.lastname | uppercase }}
                         </td>
-                        <td *ngIf="prospect.user_id">
+                        <td>
                             {{ prospect?.user_id?.pays_adresse }}
                         </td>
 

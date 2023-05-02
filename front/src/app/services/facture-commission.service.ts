@@ -35,6 +35,12 @@ export class FactureCommissionService {
     return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllByPartenaireIDs(listIds: string[]) {
+    let url = this.apiUrl + "getAllByPartenaireIDs"
+    return this.httpClient.post<any>(url, { partenaire_id: listIds }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 
   downloadFile(id) {
     let url = this.apiUrl + "downloadFile/" + id

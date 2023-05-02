@@ -261,7 +261,7 @@ export class ConsulaireComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  filterEcole = []
+  filterEcole = [{ value: null, label: 'Toutes les écoles"' },]
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
