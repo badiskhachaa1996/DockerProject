@@ -1221,7 +1221,7 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ]
                                 },
-                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
                             ];
@@ -1274,7 +1274,7 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ]
                                 },
-                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line' },
                             ];

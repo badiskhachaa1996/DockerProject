@@ -284,6 +284,7 @@ import { PovPartenaireListProspectsComponent } from './admission/international/p
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
 import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
+import { BrandsListComponent } from './international/support-marketing/brands-list/brands-list.component';
 
 
 @NgModule({
@@ -577,7 +578,8 @@ import { DashboardIntComponent } from './international/dashboard-int/dashboard-i
     PovPartenaireListProspectsComponent,
     PovPartenaireAlternantsComponent,
     AjoutAlternantPartenaireComponent,
-    DashboardIntComponent
+    DashboardIntComponent,
+    BrandsListComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
