@@ -180,6 +180,8 @@ import { PovPartenaireListProspectsComponent } from './admission/international/p
 import { PovPartenaireAlternantsComponent } from './admission/international/pov-partenaire-alternants/pov-partenaire-alternants.component';
 import { AjoutAlternantPartenaireComponent } from './admission/international/pov-partenaire-alternants/ajout-alternant-partenaire/ajout-alternant-partenaire.component';
 import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
+import { BrandsListComponent } from './international/support-marketing/brands-list/brands-list.component';
+import { DashboardPartenaireComponent } from './international/dashboard-partenaire/dashboard-partenaire.component';
 
 const routes: Routes = [
     {
@@ -332,7 +334,11 @@ const routes: Routes = [
             { path: 'international/partenaire/ajout-alternant/:code_commercial', component: AjoutAlternantPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/alternants/:id', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/:id', component: PovPartenaireListProspectsComponent, canActivate: [AuthGuardService] },
+            { path: 'dashboard/partenaire', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
+            { path: 'dashboard/partenaire/:id', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/brands/:id', component: BrandsListComponent, canActivate: [AuthGuardService] },
+            { path: 'international/brands', component: BrandsListComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

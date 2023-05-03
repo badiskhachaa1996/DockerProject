@@ -341,6 +341,7 @@ app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/alternantsPartenaire', PAC)
+app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
