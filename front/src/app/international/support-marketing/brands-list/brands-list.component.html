@@ -195,7 +195,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Ajouter une brand" class="mr-2 mb-2" style="float: right;"
+            <button pButton pRipple label="Ajouter une brand" class="mr-2 mb-2" style="float: right;" *ngIf="isAdminPartenaire"
                 (click)="showAdd = true;scrollToTop()"></button>
             <h5>Liste des brands</h5>
 
@@ -244,11 +244,11 @@
                         <td>
                             <i pTooltip="Support Marketing" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                                 (click)="initSupportMarketing(brand);scrollToTop()" aria-hidden="true"></i>
-                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2" *ngIf="isAdminPartenaire"
                                 (click)="initUpdate(brand);scrollToTop()" aria-hidden="true"></i>
-                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2" *ngIf="isAdminPartenaire"
                                 (click)="onDelete(brand)" aria-hidden="true"></i>
-                            <i pTooltip="Ajout du logo" tooltipPosition="bottom" class="pi pi-image"
+                            <i pTooltip="Ajout du logo" tooltipPosition="bottom" class="pi pi-image" *ngIf="isAdminPartenaire"
                                 (click)="onAddLogo(brand)" aria-hidden="true"></i>
 
                         </td>

@@ -481,6 +481,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
+                                    , routerLink: ['/dashboard/partenaire']
                                 },
                             ]
                         },
@@ -1223,7 +1224,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
                             ];
                         }
 
@@ -1276,7 +1277,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
                             ];
                         }
                     })

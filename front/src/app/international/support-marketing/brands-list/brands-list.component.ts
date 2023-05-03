@@ -18,7 +18,8 @@ import { saveAs } from "file-saver";
 })
 export class BrandsListComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
-  constructor(private route: ActivatedRoute, private SMService: SupportMarketingService, private ToastService: MessageService, private PService: PartenaireService, private CService: CommercialPartenaireService) { }
+  constructor(private route: ActivatedRoute, private SMService: SupportMarketingService, private ToastService: MessageService, private PService: PartenaireService,
+    private CService: CommercialPartenaireService) { }
 
   //Partie Brands
 
