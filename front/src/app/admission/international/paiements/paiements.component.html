@@ -417,6 +417,16 @@
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Modalité de Paiement" [options]="filterModalite"
+                        (onChange)="dt1.filter($event.value, 'payement','equals')"
+                        emptyFilterMessage="Pas de modalité trouvé" filterPlaceholder="Modalité de Paiement"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -456,6 +466,9 @@
                         </th>
                         <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
@@ -511,6 +524,9 @@
 
                         <td>
                             {{ prospect.phase_candidature }}
+                        </td>
+                        <td>
+                            {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
                             <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"

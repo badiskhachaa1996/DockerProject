@@ -341,7 +341,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects en attente d'orientation</h5>
+            <h5>Liste des prospects en phase d'orientation</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -411,6 +411,11 @@
                     <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
                         (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                 </ng-template>
@@ -535,7 +540,7 @@
                             {{ prospect.decision_orientation }}
                         </td>
                         <td>
-                            {{ prospect.avancement_orientation }} 
+                            {{ prospect.avancement_orientation }}
                         </td>
                         <td>
                             {{ prospect.phase_candidature }}

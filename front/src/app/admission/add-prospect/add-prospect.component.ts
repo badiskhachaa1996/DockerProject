@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
+import { Partenaire } from 'src/app/models/Partenaire';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { PartenaireService } from 'src/app/services/partenaire.service';
 
 @Component({
   selector: 'app-add-prospect',
@@ -41,21 +43,13 @@ export class AddProspectComponent implements OnInit {
   sourceList = [
     { label: "Partenaire", value: "Partenaire" },
     { label: "Equipe commerciale", value: "Equipe commerciale" },
-    { label: "Site web ESTYA", value: "Site web ESTYA" },
-    { label: "Site web Ecole", value: "Site web Ecole" },
-    { label: "Equipe communication", value: "Equipe communication" },
-    { label: "Bureau Congo", value: "Bureau Congo" },
-    { label: "Bureau Maroc", value: "Bureau Maroc" },
-    { label: "Collaborateur interne", value: "Collaborateur interne" },
-    { label: "Report", value: "Report" },
-    { label: "IGE", value: "IGE" }
   ]
 
   commercialList = []
 
   EcoleListRework = []
 
-  constructor(private commercialService: CommercialPartenaireService, private router: Router, private FAService: FormulaireAdmissionService) { }
+  constructor(private commercialService: CommercialPartenaireService, private router: Router, private FAService: FormulaireAdmissionService, private PService: PartenaireService) { }
 
   ngOnInit(): void {
     if (localStorage.getItem("token") != null) {
@@ -64,7 +58,7 @@ export class AddProspectComponent implements OnInit {
       this.commercialService.getAllPopulate().subscribe(commercials => {
         commercials.forEach(commercial => {
           let { user_id }: any = commercial
-          if (user_id)
+          if (user_id && commercial.isAdmin)
             this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
           if (user_id && user_id._id == decodeToken.id)
             this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
@@ -73,6 +67,15 @@ export class AddProspectComponent implements OnInit {
       this.FAService.EAgetAll().subscribe(data => {
         data.forEach(e => {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
+          this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
+          this.sourceList = this.sourceList.concat([
+            { label: "Equipe communication", value: "Equipe communication" },
+            { label: "Bureau Congo", value: "Bureau Congo" },
+            { label: "Bureau Maroc", value: "Bureau Maroc" },
+            { label: "Collaborateur interne", value: "Collaborateur interne" },
+            { label: "Report", value: "Report" },
+            { label: "IGE", value: "IGE" }
+          ])
         })
       })
     }
@@ -101,4 +104,24 @@ export class AddProspectComponent implements OnInit {
       this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole, code])
   }
 
+  changeSource(source: string) {
+    console.log(source)
+    if (source == "Partenaire") {
+      this.PService.getAll().subscribe(commercials => {
+        this.commercialList = []
+        commercials.forEach(commercial => {
+          this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
+        })
+      })
+    } else {
+      this.commercialService.getAllPopulate().subscribe(commercials => {
+        this.commercialList = []
+        commercials.forEach(commercial => {
+          let { user_id }: any = commercial
+          if (user_id && commercial.isAdmin)
+            this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+        })
+      })
+    }
+  }
 }

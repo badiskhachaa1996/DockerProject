@@ -448,6 +448,11 @@
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
