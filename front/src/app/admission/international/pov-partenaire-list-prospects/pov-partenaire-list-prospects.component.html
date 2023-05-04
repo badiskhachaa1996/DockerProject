@@ -588,8 +588,11 @@
                         <td>
                             {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de traitement" }}
                         </td>
-                        <td>
+                        <td *ngIf="prospect.statut_payement">
                             {{ prospect.statut_payement }}
+                        </td>
+                        <td *ngIf="!prospect.statut_payement">
+                            Non
                         </td>
                         <td>
                             {{ prospect.validated_cf }}

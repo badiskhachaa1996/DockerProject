@@ -305,6 +305,10 @@ export class AdmissionService {
   getDataForDashboardPartenaire(data: any) {
     let registreUrl = this.apiUrl + 'getDataForDashboardPartenaire';
     return this.httpClient.post<{ globalstats: any, activitystats: any }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getDataForDashboardInternational(data: any) {
+    let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
+    return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 
