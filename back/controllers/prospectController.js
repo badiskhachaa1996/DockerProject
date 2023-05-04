@@ -17,6 +17,8 @@ const { Etudiant } = require('../models/etudiant');
 const { ProspectIntuns } = require('../models/ProspectIntuns');
 const { ProspectAlternable } = require('../models/ProspectAlternable');
 const { CommercialPartenaire } = require('../models/CommercialPartenaire');
+const { Vente } = require('../models/vente');
+const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -999,6 +1001,98 @@ app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
+})
+
+app.post('/getDataForDashboardPartenaire', (req, res) => {
+    let data = req.body // {pays : string,rentree_scolaire:string,partenaire_id:string[],commercial_id:string[]}
+    let globalstats = {
+        nb_partenaire: 0,
+        anciennete: {
+            nouveau: 0,
+            ancien: 0
+        },
+        contribution: {
+            actif: 0,
+            non_actif: 0,
+            occasionel: 0
+        },
+        etat_contrat: {
+            pas_contrat: 0,
+            en_cours: 0,
+            signe: 0
+        }
+    }
+
+    let activitystats = {
+        chiffre_affaire: 0,
+        nb_prospects: 0,
+        nb_prospects_contact: 0,
+        nb_prospects_accepte: 0,
+        nb_prospects_preinscrits: 0,
+        nb_visas: 0,
+        nb_inscrits: 0,
+        nb_alternants: 0,
+        nb_contrats: 0,
+        nb_chaumage: 0
+    }
+    Partenaire.find().then(listPartenaire => {
+        globalstats.nb_partenaire = listPartenaire.length
+        globalstats.anciennete.ancien = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien' ? 1 : 0), 0))
+        globalstats.anciennete.nouveau = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien' ? 0 : 1), 0))
+
+        globalstats.contribution.actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Actif' ? 1 : 0), 0))
+        globalstats.contribution.non_actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Inactif' ? 1 : 0), 0))
+        globalstats.contribution.occasionel = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Occasionel' ? 1 : 0), 0))
+
+        globalstats.etat_contrat.pas_contrat = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.etat_contrat == 'Non' ? 1 : 0), 0))
+        globalstats.etat_contrat.en_cours = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.etat_contrat == 'En cours' ? 1 : 0), 0))
+        globalstats.etat_contrat.signe = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.etat_contrat == 'Signé' ? 1 : 0), 0))
+        let filter = { $exists: true }
+        // data : {pays : string,rentree_scolaire:string,partenaire_id:string[],commercial_id:string[]}
+        if (data.partenaire_id && data.partenaire_id.length != 0) filter = { $in: data.partenaire_id }
+        Vente.find({ partenaire_id: filter }).then(dataVente => {
+            activitystats.chiffre_affaire = Math.trunc(dataVente.reduce((total, next) => total + next?.montant, 0))
+            let newFilter = {}
+            newFilter['partenaire_id'] = filter
+            newFilter['_id'] = { $exists: true }
+            if (data.commercial_id && data.commercial_id.length != 0) newFilter['_id'] = { $in: data.commercial_id }
+            CommercialPartenaire.find(newFilter).then(listCommercial => {
+                let listCode = []
+                listCommercial.forEach(c => {
+                    listCode.push(c.code_commercial_partenaire)
+                })
+                delete data.partenaire_id
+                delete data.commercial_id
+                let pays_adresse = data.pays
+                delete data.pays
+                data.code_commercial = listCode
+                Prospect.find(data).populate('user_id').then(tempFiltered => {
+                    let prospectFiltered = []
+                    if (pays_adresse)
+                        tempFiltered.forEach(p => { if (p.user_id && p.user_id?.pays_adresse == pays_adresse) prospectFiltered.push(p) })
+                    else prospectFiltered = tempFiltered
+                    activitystats.nb_prospects = prospectFiltered.length
+                    activitystats.nb_prospects_contact = Math.trunc(prospectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'En attente' ? 1 : 0), 0))
+                    activitystats.nb_prospects_accepte = Math.trunc(prospectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' ? 1 : 0), 0))
+                    activitystats.nb_prospects_preinscrits = Math.trunc(prospectFiltered.reduce((total, next) => total + (next?.statut_payement == 'Oui' || next?.statut_payement == true ? 1 : 0), 0))
+                    activitystats.nb_visas = Math.trunc(prospectFiltered.reduce((total, next) => total + (next?.avancement_visa == 'Oui' ? 1 : 0), 0))
+                    activitystats.nb_inscrits = Math.trunc(prospectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'Inscription définitive' ? 1 : 0), 0))
+                    if (pays_adresse)
+                        data['pays'] = pays_adresse
+                    AlternantsPartenaire.find(data).then(alternantsFiltered => {
+                        activitystats.nb_alternants = alternantsFiltered.length
+                        activitystats.nb_contrats = Math.trunc(alternantsFiltered.reduce((total, next) => total + (next?.etat_contrat == 'Contrat signé' ? 1 : 0), 0))
+                        activitystats.nb_chaumage = Math.trunc(alternantsFiltered.reduce((total, next) => total + (next?.etat_contrat == 'A la recherche' ? 1 : 0), 0))
+                        res.send({ globalstats, activitystats })
+                    })
+
+                })
+            })
+
+        })
+
+    })
+
 })
 
 

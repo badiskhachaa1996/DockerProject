@@ -89,8 +89,8 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllByCommercialUserID(id){
-    let registreUrl = this.apiUrl + 'getAllByCommercialUserID/'+id;
+  getAllByCommercialUserID(id) {
+    let registreUrl = this.apiUrl + 'getAllByCommercialUserID/' + id;
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
@@ -299,6 +299,12 @@ export class AdmissionService {
     //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
     let registreUrl = this.apiUrl + 'getAllAdmission';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  getDataForDashboardPartenaire(data: any) {
+    let registreUrl = this.apiUrl + 'getDataForDashboardPartenaire';
+    return this.httpClient.post<{ globalstats: any, activitystats: any }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 
