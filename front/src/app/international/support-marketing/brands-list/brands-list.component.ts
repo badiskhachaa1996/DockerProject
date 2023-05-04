@@ -36,23 +36,18 @@ export class BrandsListComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     if (this.ID) {
-      this.SMService.BgetByPartenaireID(this.ID).subscribe(data => {
-        this.brands = data
-      })
       this.PService.getById(this.ID).subscribe(data => {
         this.PartenaireSelected = data
       })
       this.CService.getByUserId(this.token.id).subscribe(commercialPartenaire => {
         this.commercialPartenaire = commercialPartenaire
-        this.isAdminPartenaire = commercialPartenaire.isAdmin
+        this.isAdminPartenaire = false
       })
     }
-
-    else
-      this.SMService.BgetAll().subscribe(data => {
-        this.brands = data
-        this.isAdminPartenaire = true
-      })
+    else this.isAdminPartenaire = true;
+    this.SMService.BgetAll().subscribe(data => {
+      this.brands = data
+    })
     this.PService.getAll().subscribe(data => {
       this.PartenaireList = [{ label: "Tous les Partenaires", value: null, }]
       data.forEach(d => {
@@ -143,7 +138,12 @@ export class BrandsListComponent implements OnInit {
           const reader = new FileReader();
           reader.readAsDataURL(file);
           reader.onloadend = () => {
-            this.dicLogo[this.logoBrand._id].url = reader.result;
+            if (this.dicLogo[this.logoBrand._id])
+              this.dicLogo[this.logoBrand._id].url = reader.result;
+            else{
+              this.dicLogo[this.logoBrand._id] = {}
+              this.dicLogo[this.logoBrand._id].url = reader.result;
+            }
           }
         })
       }, (error) => {

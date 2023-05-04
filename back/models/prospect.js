@@ -241,6 +241,7 @@ const prospect_schema = new mongoose.Schema({
     },
     avancement_orientation: {
         type: String,
+        default: "En attente"
     },
     note_avancement: {
         type: String,

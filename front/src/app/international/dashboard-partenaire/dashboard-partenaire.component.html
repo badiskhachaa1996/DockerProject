@@ -65,11 +65,13 @@
         <h1 class="col-12" style="text-align: center;">Activité</h1>
         <div class="col-12" style="text-align: center;" *ngIf="isResponsable">
             <label>Choisissez le Partenaire: </label>
-            <p-multiSelect [options]="PartenaireList" placeholder="Choisissez le Partenaire:"></p-multiSelect>
+            <p-multiSelect [options]="PartenaireList" placeholder="Choisissez le Partenaire:" display="chip"
+                (onChange)="onSelectPartenaire($event.value);"></p-multiSelect>
         </div>
         <div class="col-12" style="text-align: center;" *ngIf="!isResponsable">
             <label>Choisissez le Commercial: </label>
-            <p-multiSelect [options]="CommercialList" placeholder="Choisissez le Commercial:"></p-multiSelect>
+            <p-multiSelect [options]="CommercialList" placeholder="Choisissez le Commercial:" display="chip"
+                (onChange)="onSelectCommercial($event.value)"></p-multiSelect>
         </div>
         <div class="col-12 grid" style="text-align: center;">
             <div class="col-12 sm:col-2">
@@ -77,11 +79,13 @@
             </div>
             <div class="col-12 sm:col-5">
                 <!--Filtre Rentrée scolaire-->
-                <p-dropdown [options]="RentreeScolaireList" placeholder="Choisissez la rentrée scolaire:"></p-dropdown>
+                <p-dropdown [options]="RentreeScolaireList" placeholder="Choisissez la rentrée scolaire:" filter="true"
+                    (onChange)="RentreeScolaireSelected=$event.value;onUpdateFilter()"></p-dropdown>
             </div>
             <div class="col-12 sm:col-5">
                 <!--Pays de résidence-->
-                <p-dropdown [options]="PaysList" placeholder="Choisissez le pays de résidence:"></p-dropdown>
+                <p-dropdown [options]="PaysList" placeholder="Choisissez le pays de résidence:" filter="true"
+                    (onChange)="PaysSelected=$event.value;onUpdateFilter()"></p-dropdown>
             </div>
         </div>
         <h5 class="col-12" style="text-align: center;">Chiffre d'affaire généré: {{activitystats.chiffre_affaire}}</h5>

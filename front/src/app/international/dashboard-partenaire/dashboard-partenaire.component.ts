@@ -8,6 +8,7 @@ import { SupportMarketingService } from 'src/app/services/support-marketing.serv
 import jwt_decode from "jwt-decode";
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { environment } from 'src/environments/environment';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 @Component({
   selector: 'app-dashboard-partenaire',
@@ -17,36 +18,41 @@ import { environment } from 'src/environments/environment';
 export class DashboardPartenaireComponent implements OnInit {
   token;
   isResponsable = false
-  PartenaireList: { label: string, value: Partenaire }[]
-  PaysList: { label: string, value: string }[]
-  RentreeScolaireList: { label: string, value: string }[]
-  CommercialList: { label: string, value: string }[]
-  PartenaireSelected: Partenaire;
-  ID = this.route.snapshot.paramMap.get('id');
-  filterRentreeScolaire = [
-    { value: null, label: 'Toutes les rentrées scolaires' }
-  ]
-  filterPays = [
+  PartenaireList: { label: string, value: string }[] = []
+  PaysList: { label: string, value: string }[] = [
     { value: null, label: "Tous les pays" }
   ]
+  RentreeScolaireList: { label: string, value: string }[] = [
+    { value: null, label: 'Toutes les rentrées scolaires' }
+  ]
+  CommercialList: { label: string, value: string }[] = []
+  PARTENAIRE: Partenaire;
+  ID = this.route.snapshot.paramMap.get('id');
+
+  RentreeScolaireSelected;
+  PaysSelected;
+  PartenaireSelected: string[];
+  CommercialSelected: string[];
+
+
   constructor(private route: ActivatedRoute, private SMService: SupportMarketingService, private ToastService: MessageService, private PService: PartenaireService,
-    private CService: CommercialPartenaireService, private FAService: FormulaireAdmissionService) { }
+    private CService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private AService: AdmissionService) { }
 
   globalstats = {
-    nb_partenaire: 1563,
+    nb_partenaire: 0,
     anciennete: {
-      nouveau: 85,
-      ancien: 1478
+      nouveau: 0,
+      ancien: 0
     },
     contribution: {
-      actif: 1510,
-      non_actif: 30,
-      occasionel: 22
+      actif: 0,
+      non_actif: 0,
+      occasionel: 0
     },
     etat_contrat: {
-      pas_contrat: 421,
-      en_cours: 932,
-      signe: 210
+      pas_contrat: 0,
+      en_cours: 0,
+      signe: 0
     }
   }
 
@@ -67,25 +73,60 @@ export class DashboardPartenaireComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     if (this.ID) {
       this.PService.getById(this.ID).subscribe(data => {
-        this.PartenaireSelected = data
+        this.PARTENAIRE = data
       })
-      this.CService.getByUserId(this.token.id).subscribe(data => {
-        this.isResponsable = data.isAdmin
+      this.CService.getAllByPartenaireID(this.ID).subscribe(data => {
+        data.forEach(d => {
+          let buffer: any = d.user_id
+          this.CommercialList.push({ label: buffer.lastname + " " + buffer.firstname, value: d._id })
+        })
       })
     }
     else {
       this.isResponsable = true
     }
     this.PService.getAll().subscribe(data => {
-      this.PartenaireList = [{ label: "Tous les Partenaires", value: null, }]
       data.forEach(d => {
-        this.PartenaireList.push({ label: d.nom, value: d })
+        this.PartenaireList.push({ label: d.nom, value: d._id })
       })
     })
     this.FAService.RAgetAll().subscribe(data => {
-      data.forEach(d => this.filterRentreeScolaire.push({ label: d.nom, value: d.nom }))
+      data.forEach(d => this.RentreeScolaireList.push({ label: d.nom, value: d.nom }))
     })
-    this.filterPays = this.filterPays.concat(environment.pays)
+    this.PaysList = this.PaysList.concat(environment.pays)
+    this.onUpdateFilter()
+  }
+
+  onSelectCommercial(ids: []) {
+    this.CommercialSelected = ids
+    this.onUpdateFilter()
+  }
+
+  onSelectPartenaire(ids: []) {
+    this.PartenaireSelected = ids
+    this.onUpdateFilter()
+  }
+
+  onUpdateFilter() {
+    let data = {}
+    if (this.PaysSelected) data['pays'] = this.PaysSelected
+
+    if (this.RentreeScolaireSelected) data['rentree_scolaire'] = this.RentreeScolaireSelected
+
+    if (this.isResponsable) {
+      //Charger les stats de tous les Partenaires
+      if (this.PartenaireSelected && this.PartenaireSelected.length != 0) data['partenaire_id'] = this.PartenaireSelected
+    } else {
+      //Charger les stats de this.ID
+      data['partenaire_id'] = [this.ID]
+      if (this.CommercialSelected && this.CommercialSelected.length != 0) data['commercial_id'] = this.CommercialSelected
+    }
+    this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
+    this.AService.getDataForDashboardPartenaire(data).subscribe(stats => {
+      this.ToastService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })
+      this.globalstats = stats.globalstats
+      this.activitystats = stats.activitystats
+    })
   }
 
 }

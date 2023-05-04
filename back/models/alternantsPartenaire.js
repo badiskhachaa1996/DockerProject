@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
     ecole: { type: String },
     formation: { type: String },
     rentree_scolaire: { type: String },
-    etat_contrat: { type: String },
+    etat_contrat: { type: String, default: 'A la recherche' },
     inscription: { type: String },
     documents_optionnel: {
         type: [{ nom: String, path: String }],
