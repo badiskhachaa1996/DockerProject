@@ -1003,6 +1003,54 @@ app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
         .catch((error) => { res.status(500).send(error.message); });
 })
 
+app.post('/getDataForDashboardInternational', (req, res) => {
+    let data = req.body //{  source,rentree_scolaire, formation,url_form,date_1,date_2,campus, pays, phase_candidature}
+    let filter = {}
+    if (!data.source || data.source.length == 0) delete data.source
+    else filter['source'] = { $in: data.source }
+    if (!data.rentree_scolaire || data.rentree_scolaire.length == 0) delete data.rentree_scolaire
+    else filter['rentree_scolaire'] = { $in: data.rentree_scolaire }
+    if (!data.formation || data.formation.length == 0) delete data.formation
+    else filter['formation'] = { $in: data.formation }
+    if (!data.url_form || data.url_form.length == 0) delete data.url_form
+    else filter['type_form'] = { $in: data.url_form }
+    if (!data.campus || data.campus.length == 0) delete data.campus
+    else filter['campus_choix_1'] = { $in: data.campus }
+    if (!data.phase_candidature || data.phase_candidature.length == 0) delete data.phase_candidature
+    else filter['phase_candidature'] = { $in: data.phase_candidature }
+
+    let date_debut = new Date(2000, 1, 1)
+    let date_fin = new Date()
+    if (data.date_1) {
+        date_debut = new Date(data.date_1)
+        if (data.date_2)
+            date_fin = new Date(data.date_2)
+    }
+    filter['date_creation'] = { $lte: date_fin, $gte: date_debut }
+    Prospect.find(filter).populate('user_id').then(prospectList => {
+        let ProspectFiltered = []
+        if (data.pays && data.pays.length != 0)
+            prospectList.forEach(val => {
+                if (val.user_id && data.pays.includes(val.user_id.pays_adresse))
+                    ProspectFiltered.push(val)
+            })
+        else
+            ProspectFiltered = prospectList
+        let r = {
+            tt_prospects: ProspectFiltered.length,
+            tt_admis: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' ? 1 : 0), 0)),
+            tt_paiements: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.statut_payement == 'Oui' ? 1 : 0), 0)),
+            tt_visa: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_visa == 'Oui' ? 1 : 0), 0)),
+            tt_etudiants: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'Inscription définitive' ? 1 : 0), 0)),
+            tt_orientation: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation scolaire' ? 1 : 0), 0)),
+            tt_admission: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'admission' ? 1 : 0), 0)),
+            tt_consulaire: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation consulaire' ? 1 : 0), 0)),
+        }
+        res.send(r)
+    })
+
+})
+
 app.post('/getDataForDashboardPartenaire', (req, res) => {
     let data = req.body // {pays : string,rentree_scolaire:string,partenaire_id:string[],commercial_id:string[]}
     let globalstats = {

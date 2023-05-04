@@ -77,7 +77,7 @@ export class DashboardPartenaireComponent implements OnInit {
       })
       this.CService.getAllByPartenaireID(this.ID).subscribe(data => {
         data.forEach(d => {
-          let buffer: any = d.user_id
+          let buffer: any = d.user_id //TODO problème d'affichage
           this.CommercialList.push({ label: buffer.lastname + " " + buffer.firstname, value: d._id })
         })
       })
@@ -121,6 +121,7 @@ export class DashboardPartenaireComponent implements OnInit {
       data['partenaire_id'] = [this.ID]
       if (this.CommercialSelected && this.CommercialSelected.length != 0) data['commercial_id'] = this.CommercialSelected
     }
+    this.ToastService.clear()
     this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
     this.AService.getDataForDashboardPartenaire(data).subscribe(stats => {
       this.ToastService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })

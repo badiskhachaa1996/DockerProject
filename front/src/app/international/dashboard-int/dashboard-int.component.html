@@ -1,63 +1,60 @@
 <div class="grid col-12 card">
     <div class="grid col-12">
+        <h1 class="col-12" style="text-align: center;">Préférences</h1>
         <div class="col-2">
             <label>Source:</label><br>
-            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+            <p-multiSelect filter="true" placeholder="Source" [options]="filterSource" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="source=$event.value;updateFilter()" emptyFilterMessage="Pas de source trouvé"
                 filterPlaceholder="Source">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
         <div class="col-3">
             <label>Rentrée scolaire:</label><br>
-            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentree"
+            <p-multiSelect filter="true" placeholder="Rentrée scolaire" [options]="filterRentree" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="rentree_scolaire=$event.value;updateFilter()"
                 emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Source">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
         <div class="col-3">
             <label>Formation:</label><br>
-            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+            <p-multiSelect filter="true" placeholder="Formation" [options]="filterFormation" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="formation=$event.value;updateFilter()" emptyFilterMessage="Pas de formation trouvé"
                 filterPlaceholder="Formation">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
         <div class="col-2">
             <label>Ecole:</label><br>
-            <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+            <p-multiSelect filter="true" placeholder="Ecole" [options]="filterEcole" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="ecole=$event.value;updateFilter()" emptyFilterMessage="Pas d'école trouvé"
                 filterPlaceholder="Ecole">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
         <div class="col-2">
             <label>Campus:</label><br>
-            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+            <p-multiSelect filter="true" placeholder="Campus" [options]="filterCampus" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="campus=$event.value;updateFilter()" emptyFilterMessage="Pas de campus trouvé"
                 filterPlaceholder="Campus">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
 
     </div>
     <div class="col-12 grid">
-        <div class="col-4">
+        <div class="col-6">
             <label>Pays:</label><br>
-            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+            <p-multiSelect filter="true" placeholder="Pays" [options]="filterPays" autoWidth="false" [style]="{'width':'100%'}"
                 (onChange)="pays=$event.value;updateFilter()" emptyFilterMessage="Pas de pays trouvé"
                 filterPlaceholder="Pays">
-            </p-dropdown>
+            </p-multiSelect>
         </div>
-        <div class="col-4">
+        <div class="col-6">
             <label>Date:</label><br>
-            <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range"></p-calendar>
-        </div>
-        <div class="col-4">
-            <label>Campus:</label><br>
-            <p-dropdown filter="true" placeholder="Campus" [options]="filterPhase"
-                (onChange)="phase_candidature=$event.value;updateFilter()" emptyFilterMessage="Pas de phase trouvé"
-                filterPlaceholder="Phase">
-            </p-dropdown>
+            <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range" autoWidth="false" [style]="{'width':'100%'}"></p-calendar>
         </div>
     </div>
     <div class="col-12 grid">
+        <div class="col-1">
+            &nbsp;
+        </div>
         <div class="col-2">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
@@ -135,6 +132,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <br>
+    <div class="col-12 grid">
+        <div class="col-3">
+            <label>Phase de candidature:</label><br>
+            <p-multiSelect filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase" autoWidth="false" [style]="{'width':'100%'}"
+                (onChange)="phase_candidature=$event.value;updateFilter()" emptyFilterMessage="Pas de phase trouvé"
+                filterPlaceholder="Phase">
+            </p-multiSelect>
+        </div>
+        <div class="col-3 grid">
+            <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation }}</h5>
+            <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}</h5>
+            <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
+            <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{ stats.tt_consulaire }}</h5>
+        </div>
+        <div class="col-6 grid card">
+            <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
+            <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions" #chart></p-chart>
         </div>
     </div>
 </div>
