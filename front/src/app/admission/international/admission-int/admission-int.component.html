@@ -35,16 +35,16 @@
                             <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
-                            <label For="email_perso">Email perso</label>
+                            <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
                                 placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
-                            <label For="pays">Pays</label>
+                            <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
                                 optionLabel="value"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -63,10 +63,10 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
