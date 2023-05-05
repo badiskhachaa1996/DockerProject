@@ -372,8 +372,9 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   dropdownEcole = []
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect

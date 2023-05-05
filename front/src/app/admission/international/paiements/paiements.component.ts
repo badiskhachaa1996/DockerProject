@@ -308,6 +308,9 @@ export class PaiementsComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.admissionService.getAllPaiement().subscribe(data => {
       this.prospects = data
+      data.forEach(v => {
+        v['modalite'] = this.getModalite(v.payement)
+      })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -386,8 +389,9 @@ export class PaiementsComponent implements OnInit {
   ]
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
 
   //Partie Details

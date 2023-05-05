@@ -75,7 +75,7 @@ export class DashboardPartenaireComponent implements OnInit {
       this.PService.getById(this.ID).subscribe(data => {
         this.PARTENAIRE = data
       })
-      this.CService.getAllByPartenaireID(this.ID).subscribe(data => {
+      this.CService.getAllPopulateByPartenaireID(this.ID).subscribe(data => {
         data.forEach(d => {
           let buffer: any = d.user_id //TODO problème d'affichage
           this.CommercialList.push({ label: buffer.lastname + " " + buffer.firstname, value: d._id })

@@ -169,10 +169,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
   ]
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
-
   ecoleList = [
     { label: "Toutes les écoles", value: null },
     { label: "Estya", value: "estya" },

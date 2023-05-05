@@ -135,6 +135,15 @@ export class SourcingComponent implements OnInit {
     { value: "UAE - Dubai", label: "UAE - Dubai" },
     { value: "En ligne", label: "En ligne" },
   ]
+
+  dropdownPhase = [
+    { value: 'Non affecté', label: "Non affecté" },
+    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
+    { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+    { value: "Recours", label: "Recours" },
+  ]
   filterSource = [
     { value: null, label: 'Tous les sources' }, { label: "Partenaire", value: "Partenaire" },
     { label: "Equipe commerciale", value: "Equipe commerciale" },
@@ -343,6 +352,7 @@ export class SourcingComponent implements OnInit {
     //Orientation
     decision_orientation: new FormControl(''),
     decision_admission: new FormControl(''),
+    phase_candidature:new FormControl(''),
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),

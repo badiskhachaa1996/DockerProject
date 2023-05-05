@@ -32,6 +32,12 @@ export class CommercialPartenaireService {
     return this.httpClient.get<CommercialPartenaire[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Recuperation de la liste des commercial
+  getAllPopulateByPartenaireID(partenaire_id: string) {
+    let registreUrl = this.apiurl + "getAllPopulateByPartenaireID/" + partenaire_id;
+    return this.httpClient.get<CommercialPartenaire[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   //Recuperation d'un commercial via son identifiant
   getById(id: string) {
     let registreUrl = this.apiurl + "getById/" + id;
