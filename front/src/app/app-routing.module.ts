@@ -182,6 +182,14 @@ import { AjoutAlternantPartenaireComponent } from './admission/international/pov
 import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
 import { BrandsListComponent } from './international/support-marketing/brands-list/brands-list.component';
 import { DashboardPartenaireComponent } from './international/dashboard-partenaire/dashboard-partenaire.component';
+import { GenerationDocComponent } from './international/generation-doc/generation-doc.component';
+import { GenDocInscriptionComponent } from './international/generation-doc/gen-doc-inscription/gen-doc-inscription.component';
+import { GenDocPreinscriptionComponent } from './international/generation-doc/gen-doc-preinscription/gen-doc-preinscription.component';
+import { GenDocPaiementPreinscriptionComponent } from './international/generation-doc/gen-doc-paiement-preinscription/gen-doc-paiement-preinscription.component';
+import { GenDocPaiementPreinscriptionAcompteComponent } from './international/generation-doc/gen-doc-paiement-preinscription-acompte/gen-doc-paiement-preinscription-acompte.component';
+import { GenDocPaiementAcompteComponent } from './international/generation-doc/gen-doc-paiement-acompte/gen-doc-paiement-acompte.component';
+import { GenDocDerogationComponent } from './international/generation-doc/gen-doc-derogation/gen-doc-derogation.component';
+import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 
 const routes: Routes = [
     {
@@ -339,6 +347,15 @@ const routes: Routes = [
             { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands/:id', component: BrandsListComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands', component: BrandsListComponent, canActivate: [AuthGuardService] },
+            /* Generation Documents */
+            { path: 'international/generation-documents', component: GenerationDocComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation', component: GenDocInscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/preinscription/:ecole/:prospect_id/:formation', component: GenDocPreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation', component: GenDocPaiementPreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation', component: GenDocPaiementPreinscriptionAcompteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation', component: GenDocPaiementAcompteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/derogation/:ecole/:prospect_id/:formation', component: GenDocDerogationComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/lettre-acceptation/:ecole/:prospect_id/:formation', component: GenDocLettreAcceptationComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

@@ -1,0 +1,94 @@
+<div class="grid col-12">
+    <form class="p-fluid p-formgrid grid card col-12" (ngSubmit)="openTemplate();" [formGroup]="documentForm">
+        <div class="col-12 md:col-6">
+            <label>Ecole <span style="color:red"> *</span></label>
+            <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <label>Formation <span style="color:red"> *</span></label>
+            <p-dropdown formControlName="formation" [options]="formationDropdown" autoWidth="false" [filter]="true"
+                [style]="{'width':'100%'}" placeholder="Choisissez une formation"></p-dropdown>
+        </div>
+        <div class="col-12 md:col-6" *ngIf="prospectDropdown.length!=0">
+            <label>Prospect <span style="color:red"> *</span></label>
+            <p-dropdown formControlName="prospect_id" [options]="prospectDropdown" autoWidth="false"
+                [virtualScroll]="true" [itemSize]="30" [filter]="true" [style]="{'width':'100%'}"
+                placeholder="Choisissez un prospect"></p-dropdown>
+        </div>
+        <div class="col-12 md:col-6" *ngIf="prospectDropdown.length==0">
+            <label>Prospect</label>
+            <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+            <p>Chargement des prospects en cours ...</p>
+        </div>
+        <div class="col-12 md:col-6">
+            <label>Type de document <span style="color:red"> *</span></label>
+            <p-dropdown formControlName="document" [options]="documentDropdown" autoWidth="false"
+                [style]="{'width':'100%'}" placeholder="Choisissez un type de document"></p-dropdown>
+        </div>
+        <div class="col-12">
+            <button type="submit" pButton [disabled]="documentForm.invalid" label="Voir le document"></button>
+        </div>
+    </form>
+    <div class="col-12 card">
+        <p-table #dt1 [value]="documents" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="['type']"
+            [rows]="5" [pageLinks]="5" [paginator]="true" [totalRecords]="documents.length"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Recherche" />
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="custom_id">
+                        ID Document <p-sortIcon field="custom_id"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="prospect_id">
+                        ID Prospect <p-sortIcon field="prospect_id"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="ecole">
+                        Ecole <p-sortIcon field="ecole"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="type">
+                        Type de document <p-sortIcon field="type"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="user_id">
+                        Généré par <p-sortIcon field="user_id"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date">
+                        Date de génération <p-sortIcon field="date"> </p-sortIcon>
+                    </th>
+                    <th>
+                        Lien de téléchargement
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doc>
+                <tr>
+                    <td>
+                        {{ doc.custom_id }}
+                    </td>
+                    <td>
+                        {{ doc.prospect_id.customid }}
+                    </td>
+                    <td>
+                        {{ doc.ecole }}
+                    </td>
+                    <td>
+                        {{ doc.type }}
+                    </td>
+                    <td>
+                        {{ doc.user_id.lastname | uppercase }} {{ doc.user_id.firstname | titlecase }}
+                    </td>
+                    <td>
+                        {{ doc.date | date:'mediumDate' }}
+                    </td>
+                    <td>
+                        En cours de dévéloppement
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

@@ -286,6 +286,14 @@ import { AjoutAlternantPartenaireComponent } from './admission/international/pov
 import { DashboardIntComponent } from './international/dashboard-int/dashboard-int.component';
 import { BrandsListComponent } from './international/support-marketing/brands-list/brands-list.component';
 import { DashboardPartenaireComponent } from './international/dashboard-partenaire/dashboard-partenaire.component';
+import { GenerationDocComponent } from './international/generation-doc/generation-doc.component';
+import { GenDocInscriptionComponent } from './international/generation-doc/gen-doc-inscription/gen-doc-inscription.component';
+import { GenDocPreinscriptionComponent } from './international/generation-doc/gen-doc-preinscription/gen-doc-preinscription.component';
+import { GenDocPaiementPreinscriptionComponent } from './international/generation-doc/gen-doc-paiement-preinscription/gen-doc-paiement-preinscription.component';
+import { GenDocPaiementPreinscriptionAcompteComponent } from './international/generation-doc/gen-doc-paiement-preinscription-acompte/gen-doc-paiement-preinscription-acompte.component';
+import { GenDocPaiementAcompteComponent } from './international/generation-doc/gen-doc-paiement-acompte/gen-doc-paiement-acompte.component';
+import { GenDocDerogationComponent } from './international/generation-doc/gen-doc-derogation/gen-doc-derogation.component';
+import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 
 
 @NgModule({
@@ -581,7 +589,15 @@ import { DashboardPartenaireComponent } from './international/dashboard-partenai
     AjoutAlternantPartenaireComponent,
     DashboardIntComponent,
     BrandsListComponent,
-    DashboardPartenaireComponent
+    DashboardPartenaireComponent,
+    GenerationDocComponent,
+    GenDocInscriptionComponent,
+    GenDocPreinscriptionComponent,
+    GenDocPaiementPreinscriptionComponent,
+    GenDocPaiementPreinscriptionAcompteComponent,
+    GenDocPaiementAcompteComponent,
+    GenDocDerogationComponent,
+    GenDocLettreAcceptationComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
