@@ -666,7 +666,7 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users'
                                         }
                                     ]
-                                },
+                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
                             ],
                         },
                         {

@@ -352,7 +352,7 @@ export class SourcingComponent implements OnInit {
     //Orientation
     decision_orientation: new FormControl(''),
     decision_admission: new FormControl(''),
-    phase_candidature:new FormControl(''),
+    phase_candidature: new FormControl(''),
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),
@@ -539,6 +539,15 @@ export class SourcingComponent implements OnInit {
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+      })
+  }
+
+  delete(prospect: Prospect) {
+    let { user_id }: any = prospect
+    if (confirm('Voulez-vous vraiment supprimer ' + user_id?.lastname + " " + user_id?.firstname + " ?"))
+      this.admissionService.delete(prospect._id, user_id._id).subscribe(data => {
+        this.prospects.splice(this.prospects.indexOf(prospect), 1)
+        this.messageService.add({ severity: "success", summary: "Prospect supprimé avec succès" })
       })
   }
 
