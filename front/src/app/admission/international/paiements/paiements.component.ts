@@ -308,6 +308,9 @@ export class PaiementsComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.admissionService.getAllPaiement().subscribe(data => {
       this.prospects = data
+      data.forEach(v => {
+        v['modalite'] = this.getModalite(v.payement)
+      })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}

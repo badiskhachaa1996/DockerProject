@@ -472,7 +472,7 @@
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
-                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation','payement']"
+                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','modalite','campus_choix_3','user_id.email_perso','rythme_formation','payement']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -525,7 +525,7 @@
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
                     <p-dropdown filter="true" placeholder="Modalité de Paiement" [options]="filterModalite"
-                        (onChange)="dt1.filterGlobal($event.value,'contains')"
+                        (onChange)="dt1.filter($event.value,'modalite','contains')"
                         emptyFilterMessage="Pas de modalité trouvé" filterPlaceholder="Modalité de Paiement"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
@@ -621,7 +621,7 @@
                             {{getMontant(prospect.payement)}}€
                         </td>
                         <td>
-                            {{getModalite(prospect.payement)}}
+                            <!--{{getModalite(prospect.payement)}}--> {{prospect?.modalite}}
                         </td>
 
                         <td>
