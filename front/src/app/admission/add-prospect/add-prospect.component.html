@@ -16,7 +16,7 @@
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
                     <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
-                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du prospect"
+                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du prospect" (onChange)="changeSource($event.value)"
                         formControlName="source"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->
@@ -48,7 +48,7 @@
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
                     <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
-                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du prospect"
+                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du prospect" (onChange)="changeSource($event.value)"
                         formControlName="source"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->

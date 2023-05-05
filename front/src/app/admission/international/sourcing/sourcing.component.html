@@ -63,16 +63,16 @@
                             <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
-                            <label For="email_perso">Email perso</label>
+                            <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
                                 placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
-                            <label For="pays">Pays</label>
+                            <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
                                 optionLabel="value"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -91,10 +91,10 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -358,12 +358,12 @@
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
 
-
-                    <!--<p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
                         (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
                         [style]="{'margin-right':'5px'}">
-                    </p-dropdown>-->
+                    </p-dropdown>
+                    
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -424,6 +424,9 @@
                         </th>
                         <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
@@ -511,6 +514,9 @@
                         </td>
                         <td>
                             {{ prospect.phase_candidature }}
+                        </td>
+                        <td>
+                            {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
                             <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search mr-2"
