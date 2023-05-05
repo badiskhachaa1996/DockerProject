@@ -328,6 +328,7 @@ export class OrientationComponent implements OnInit {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
     this.traitementForm.patchValue({ contact_date: this.convertTime(prospect.contact_date) })
+    this.traitementForm.patchValue({ validated_cf: prospect.validated_cf == "true" })
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
@@ -426,7 +427,7 @@ export class OrientationComponent implements OnInit {
       statut_payement = this.showDetails.statut_payement;
       phase_candidature = this.showDetails.phase_candidature;
     }*/
-    if (this.detailsForm.value.decision_orientation == "Validé")
+    if (this.detailsForm.value.decision_orientation == "Validé" || this.detailsForm.value.decision_orientation == "Changement de campus" || this.detailsForm.value.decision_orientation == "Changement de formation" || this.detailsForm.value.decision_orientation == "Changement de destination")
       phase_candidature = "En phase d'admission"
     let user = {
       civilite: this.detailsForm.value.civilite,

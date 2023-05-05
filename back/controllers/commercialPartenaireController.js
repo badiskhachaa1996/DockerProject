@@ -26,6 +26,12 @@ app.get("/getAllByPartenaireId/:partenaire_id", (req, res, next) => {
         .catch((error) => { res.status(400).send(error.message); })
 });
 
+app.get("/getAllPopulateByPartenaireID/:partenaire_id", (req, res, next) => {
+    CommercialPartenaire.find({ partenaire_id: req.params.partenaire_id }).populate('user_id')
+        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
+        .catch((error) => { res.status(400).send(error.message); })
+});
+
 //Recuperation d'un commercial partenaire via son id
 app.get("/getById/:id", (req, res, next) => {
     CommercialPartenaire.findOne({ _id: req.params.id })
