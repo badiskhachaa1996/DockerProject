@@ -663,7 +663,8 @@ export class AppMenuComponent implements OnInit {
                                         },
                                         {
                                             label: 'Performance scolaire',
-                                            icon: 'pi pi-users'
+                                            icon: 'pi pi-users',
+                                            routerLink: ['international/dashboard/performance']
                                         }
                                     ]
                                 }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }

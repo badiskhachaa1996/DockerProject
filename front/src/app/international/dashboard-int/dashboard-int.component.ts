@@ -147,7 +147,7 @@ export class DashboardIntComponent implements OnInit {
       this.stats_admission = r.stats_admission
       this.stats_consulaire = r.stats_consulaire
       this.stats_orientation = r.stats_orientation
-      this.stats_paiements = r.stats_orientation
+      this.stats_paiements = r.stats_paiements
       this.ToastService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })
       this.basicData.datasets[0].data = [this.stats.nn_affecte, this.stats.tt_orientation, this.stats.tt_admission, this.stats.tt_paiements, this.stats.tt_consulaire, this.stats.recours]
       this.chart.reinit();

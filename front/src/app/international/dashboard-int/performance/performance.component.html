@@ -1,0 +1,139 @@
+<div class="col-12 grid">
+    <div class="col-12 grid card">
+        <label class="col-12">Membre:</label><br>
+        <p-dropdown [options]="memberList" (onChange)="memberSelected=$event.value;onMemberSelect()" autoWidth="false"
+            [style]="{'width':'100%'}" placeholder="Choississez un membre" class="col-12"></p-dropdown>
+    </div>
+    <div class="col-12 grid card" *ngIf="memberSelected">
+        <div class="col-4 card">
+            <img [src]="imageToShow" alt="Profil" style="border-radius: 50px;max-width: 160px;max-height: 160px;" />
+        </div>
+        <div class="col-4 grid">
+            <div class="col-12 grid card">
+                <h3 class="col-12">
+                    Nom & Prénom: {{memberSelected?.user_id?.lastname | uppercase}} {{memberSelected?.user_id?.firstname
+                    | titlecase}}
+                </h3>
+                <h5 class="col-12">
+                    ID: {{memberSelected?.custom_id}}
+                </h5>
+                <h5 class="col-12">
+                    Equipe: {{memberSelected?.team_id?.nom}}
+                </h5>
+                <h5 class="col-12">
+                    Localisation: {{memberSelected?.localisation}}
+                </h5>
+            </div>
+            <div class="col-12 grid card">
+                <h5 class="col-12">
+                    Adresse mail: {{memberSelected?.user_id?.email}}
+                </h5>
+                <h5 class="col-12">
+                    Numéro de téléphone: {{memberSelected?.user_id?.indicatif}} {{memberSelected?.user_id?.phone}}
+                </h5>
+                <h5 class="col-12">
+                    Numéro WhatsApp: {{memberSelected?.numero_whatapp}}
+                </h5>
+            </div>
+        </div>
+        <div class="col-4 grid card">
+            <h3 class="col-12">Performance</h3>
+            <div class="col-12 grid">
+                <h5 class="col-12">Avancement avec la liste des prospects assignés: xxx</h5>
+                <h5 class="col-12">Moyen de contact par jour: xxx</h5>
+                <h5 class="col-12">Délai de prise du contact avec le prospect depuis la date d'inscription: xxx</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 grid card" *ngIf="memberSelected">
+        <h1 class="col-12">Performance</h1>
+        <div class="col-12 grid">
+            <div class="col-2">
+                <label>Source:</label><br>
+                <p-multiSelect filter="true" placeholder="Source" [options]="filterSource" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="source=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
+                </p-multiSelect>
+            </div>
+            <div class="col-3">
+                <label>Rentrée scolaire:</label><br>
+                <p-multiSelect filter="true" placeholder="Rentrée scolaire" [options]="filterRentree" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="rentree_scolaire=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Source">
+                </p-multiSelect>
+            </div>
+            <div class="col-3">
+                <label>Formation:</label><br>
+                <p-multiSelect filter="true" placeholder="Formation" [options]="filterFormation" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="formation=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation">
+                </p-multiSelect>
+            </div>
+            <div class="col-2">
+                <label>Ecole:</label><br>
+                <p-multiSelect filter="true" placeholder="Ecole" [options]="filterEcole" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="ecole=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole">
+                </p-multiSelect>
+            </div>
+            <div class="col-2">
+                <label>Campus:</label><br>
+                <p-multiSelect filter="true" placeholder="Campus" [options]="filterCampus" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="campus=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus">
+                </p-multiSelect>
+            </div>
+
+        </div>
+        <div class="col-12 grid">
+            <div class="col-6">
+                <label>Pays:</label><br>
+                <p-multiSelect filter="true" placeholder="Pays" [options]="filterPays" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="pays=$event.value;updateFilter()"
+                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays">
+                </p-multiSelect>
+            </div>
+            <div class="col-6">
+                <label>Date:</label><br>
+                <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-calendar>
+            </div>
+        </div>
+        <div class="col-12 grid">
+            <div class="col-3 card grid">
+                <h3 class="col-12">Orientation Prospects</h3>
+
+                <h5 class="col-12">Nombre des prospects assignés: xxx</h5>
+                <h5 class="col-12">Nombre des prospects contacté: xxx</h5>
+                <h5 class="col-12">Orienté: xxx</h5>
+                <h5 class="col-12">En suspension: xxx</h5>
+
+                <h5 class="col-6">Joignable: xxx</h5>
+                <h5 class="col-6">Non joignable: xxx</h5>
+
+                <h5 class="col-6">Validé: xxx</h5>
+                <h5 class="col-6">Non validé: xxx</h5>
+            </div>
+
+            <div class="col-3 card grid">
+                <h3 class="col-12">Admission Prospects</h3>
+
+                <h5 class="col-12">Nombre des prospects traités: xxx</h5>
+                <h5 class="col-12">Nombre des attestations traités: xxx</h5>
+            </div>
+            <div class="col-3 card grid">
+                <h3 class="col-12">Paiements</h3>
+
+                <h5 class="col-12">Nombre des paiements: xxx</h5>
+            </div>
+            <div class="col-3 card grid">
+                <h3 class="col-12">Accompagnement consulaire</h3>
+
+                <h5 class="col-12">Nombre des prospects contacté: xxx</h5>
+                <h5 class="col-12">Nombre des logements vendus: xxx</h5>
+            </div>
+        </div>
+
+    </div>
+
+</div>

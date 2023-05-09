@@ -1091,6 +1091,10 @@ app.post('/getDataForDashboardInternational', (req, res) => {
 
 })
 
+app.post('/getDataForDashboardPerformance', (req, res) => {
+
+})
+
 app.post('/getDataForDashboardPartenaire', (req, res) => {
     let data = req.body // {pays : string,rentree_scolaire:string,partenaire_id:string[],commercial_id:string[]}
     let globalstats = {
