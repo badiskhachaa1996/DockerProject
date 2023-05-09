@@ -1,13 +1,13 @@
 <p-toast></p-toast>
 <div class="grid card" *ngIf="showPDF">
     <div class="grid col-12">
-        <div class="col-3">
+        <div class="col-2">
             <label>Date de début et de fin de l'attestation :</label><br>
             <p-calendar [(ngModel)]="dateValue" [disabledDates]="invalidDates" selectionMode="range"
                 [disabledDays]="[0,6]"></p-calendar>
         </div>
 
-        <div class="col-3">
+        <div class="col-2">
             <label>Choix de la couleur de la bande :</label><br>
             <p-colorPicker class="mr-1" [(ngModel)]="colorBande"></p-colorPicker>
             <p-button label="Sauvegarder la couleur" icon="pi pi-save" iconPos="left" (click)="saveColor()"></p-button>
@@ -19,6 +19,10 @@
         <div class="col-2">
             <label>Temps de la phrase :</label><br>
             <p-dropdown [options]="dropdownTimes" [(ngModel)]="PHRASE"></p-dropdown>
+        </div>
+        <div class="col-2">
+            <label>Année scolaire :</label><br>
+            <input pInputText [(ngModel)]="annee_scolaire" />
         </div>
 
 
@@ -49,6 +53,7 @@
             {{EtudiantDetail.nationalite}}</h4>
         <h6 class="col-12 text-center">{{PHRASE}}</h6>
         <h5 class="text-center col-10 col-offset-1" style="font-weight: bold;">{{diplome_libelle}}</h5>
+        <h4 class="text-center col-10 col-offset-1" style="font-weight: 500;">Durant l'année universitaire : {{annee_scolaire}}</h4>
         <h6 class="col-12 text-center" *ngIf="dateValue && dateValue[0] && dateValue[1]">Dates: du {{dateValue[0] |
             date:'d/MM/YYYY'}} au {{dateValue[1]| date:'d/MM/YYYY'}} </h6>
         <h6 class="col-12 text-center" *ngIf="!dateValue || !dateValue[0] || !dateValue[1]">&nbsp; </h6>
@@ -92,9 +97,9 @@
     <div class="card col-12">
         <p-toast></p-toast>
         <h4>Listes des présences</h4>
-        <p-button
-            *ngIf="isNotEtudiant"
-            label="Générer l'attestation" icon="pi pi-file" iconPos="left" (click)="initGenerer()"></p-button> <!-- && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant) -->
+        <p-button *ngIf="isNotEtudiant" label="Générer l'attestation" icon="pi pi-file" iconPos="left"
+            (click)="initGenerer()"></p-button>
+        <!-- && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant) -->
         <p
             *ngIf="!EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé') &&  !EtudiantDetail.isAlternant">
             Votre dossier n'est pas régularisé, nous ne pouvons donc pas générer une attestation d'assiduité.<br>
@@ -155,9 +160,8 @@
                             class="pi pi-check" style="margin-left: 2%;" (click)="AbsenceApproved(Assiduit,true)"
                             aria-hidden="true"></i>
                         <i *ngIf="isNotEtudiant && isNotEntreprise && !Assiduit.isPresent && Assiduit.approved_by_pedagogie"
-                            pTooltip="Cacher l'absence à l'entreprise" tooltipPosition="bottom"
-                            class="pi pi-times" style="margin-left: 2%;" (click)="AbsenceApproved(Assiduit,false)"
-                            aria-hidden="true"></i>
+                            pTooltip="Cacher l'absence à l'entreprise" tooltipPosition="bottom" class="pi pi-times"
+                            style="margin-left: 2%;" (click)="AbsenceApproved(Assiduit,false)" aria-hidden="true"></i>
                         <i *ngIf="Assiduit.justificatif" pTooltip="Voir le justificatif" tooltipPosition="bottom"
                             class="pi pi-file" style="margin-left: 2%;" (click)="VoirJustificatif(Assiduit._id)"
                             aria-hidden="true"></i>
