@@ -374,7 +374,7 @@ export class AdmissionIntComponent implements OnInit {
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
-    this.traitementForm.patchValue({ dossier_traited_date: this.convertTime(prospect.dossier_traited_date)})
+    this.traitementForm.patchValue({ dossier_traited_date: this.convertTime(prospect.dossier_traited_date) })
     if (prospect.dossier_traited_by == null)
       this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(data => {
         if (data)
@@ -554,6 +554,7 @@ export class AdmissionIntComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },

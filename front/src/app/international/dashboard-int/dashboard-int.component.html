@@ -3,37 +3,37 @@
         <h1 class="col-12" style="text-align: center;">Préférences</h1>
         <div class="col-2">
             <label>Source:</label><br>
-            <p-multiSelect filter="true" placeholder="Source" [options]="filterSource" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="source=$event.value;updateFilter()" emptyFilterMessage="Pas de source trouvé"
-                filterPlaceholder="Source">
+            <p-multiSelect filter="true" placeholder="Source" [options]="filterSource" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="source=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
             </p-multiSelect>
         </div>
         <div class="col-3">
             <label>Rentrée scolaire:</label><br>
-            <p-multiSelect filter="true" placeholder="Rentrée scolaire" [options]="filterRentree" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="rentree_scolaire=$event.value;updateFilter()"
+            <p-multiSelect filter="true" placeholder="Rentrée scolaire" [options]="filterRentree" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="rentree_scolaire=$event.value;updateFilter()"
                 emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Source">
             </p-multiSelect>
         </div>
         <div class="col-3">
             <label>Formation:</label><br>
-            <p-multiSelect filter="true" placeholder="Formation" [options]="filterFormation" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="formation=$event.value;updateFilter()" emptyFilterMessage="Pas de formation trouvé"
-                filterPlaceholder="Formation">
+            <p-multiSelect filter="true" placeholder="Formation" [options]="filterFormation" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="formation=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation">
             </p-multiSelect>
         </div>
         <div class="col-2">
             <label>Ecole:</label><br>
-            <p-multiSelect filter="true" placeholder="Ecole" [options]="filterEcole" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="ecole=$event.value;updateFilter()" emptyFilterMessage="Pas d'école trouvé"
-                filterPlaceholder="Ecole">
+            <p-multiSelect filter="true" placeholder="Ecole" [options]="filterEcole" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="ecole=$event.value;updateFilter()"
+                emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole">
             </p-multiSelect>
         </div>
         <div class="col-2">
             <label>Campus:</label><br>
-            <p-multiSelect filter="true" placeholder="Campus" [options]="filterCampus" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="campus=$event.value;updateFilter()" emptyFilterMessage="Pas de campus trouvé"
-                filterPlaceholder="Campus">
+            <p-multiSelect filter="true" placeholder="Campus" [options]="filterCampus" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="campus=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus">
             </p-multiSelect>
         </div>
 
@@ -41,14 +41,15 @@
     <div class="col-12 grid">
         <div class="col-6">
             <label>Pays:</label><br>
-            <p-multiSelect filter="true" placeholder="Pays" [options]="filterPays" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="pays=$event.value;updateFilter()" emptyFilterMessage="Pas de pays trouvé"
-                filterPlaceholder="Pays">
+            <p-multiSelect filter="true" placeholder="Pays" [options]="filterPays" autoWidth="false"
+                [style]="{'width':'100%'}" (onChange)="pays=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays">
             </p-multiSelect>
         </div>
         <div class="col-6">
             <label>Date:</label><br>
-            <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range" autoWidth="false" [style]="{'width':'100%'}"></p-calendar>
+            <p-calendar (onChange)="dates=$event.value;updateFilter()" selectionMode="range" autoWidth="false"
+                [style]="{'width':'100%'}"></p-calendar>
         </div>
     </div>
     <div class="col-12 grid">
@@ -76,7 +77,7 @@
                     <div>
                         <span class="block text-500 font-medium mb-3"> Nombre total des Admis
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ stats.tt_admis }}</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_admis*100)/stats.tt_prospects }}%</div>
                     </div>
 
                     <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
@@ -93,7 +94,7 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des Paiements
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ stats.tt_paiements }}</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_paiements*100)/stats.tt_admis }}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -109,7 +110,7 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des Visa
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ stats.tt_visa }}</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_visa*100)/stats.tt_paiements }}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -124,7 +125,7 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des étudiants
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ stats.tt_etudiants }}</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_etudiants*100)/stats.tt_visa }}</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -138,20 +139,85 @@
     <div class="col-12 grid">
         <div class="col-3">
             <label>Phase de candidature:</label><br>
-            <p-multiSelect filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase" autoWidth="false" [style]="{'width':'100%'}"
-                (onChange)="phase_candidature=$event.value;updateFilter()" emptyFilterMessage="Pas de phase trouvé"
-                filterPlaceholder="Phase">
+            <p-multiSelect filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase"
+                autoWidth="false" [style]="{'width':'100%'}" (onChange)="phase_candidature=$event.value;updateFilter()"
+                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase">
             </p-multiSelect>
         </div>
         <div class="col-3 grid">
+            <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
             <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation }}</h5>
             <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}</h5>
             <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
             <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{ stats.tt_consulaire }}</h5>
+            <h5 class="col-12" style="text-align: center;">Inscription définitive : {{ stats.tt_admis }}</h5>
+            <h5 class="col-12" style="text-align: center;">Recours : {{ stats.recours }}</h5>
         </div>
         <div class="col-6 grid card">
             <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
             <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions" #chart></p-chart>
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="phase_candidature=='En phase d'orientation scolaire'">
+        <h1>Orientation Prospects</h1>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
+            <h5 class="col-12" style="text-align: center;">Joignable : {{ stats_orientation.joignable }}</h5>
+            <h5 class="col-12" style="text-align: center;">Validé : {{ stats_orientation.valide }}</h5>
+        </div>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_orientation.non_contact }}</h5>
+            <h5 class="col-12" style="text-align: center;">Non Joignable : {{ stats_orientation.non_joignable }}</h5>
+            <h5 class="col-12" style="text-align: center;">Non Validé : {{ stats_orientation.non_valide }}</h5>
+        </div>
+        <div class="col-12 grid">
+            <h5 class="col-12" style="text-align: center;">Orienté : {{ stats_orientation.oriente }}</h5>
+            <h5 class="col-12" style="text-align: center;">En suspension : {{ stats_orientation.suspension }}</h5>
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="phase_candidature=='En phase d'admission'">
+        <h1>Admission Prospects</h1>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>
+            <h5 class="col-12" style="text-align: center;">Admissible : {{ stats_admission.admissible }}</h5>
+        </div>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}</h5>
+            <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}</h5>
+        </div>
+        <div class="col-12 grid">
+            <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="phase_candidature=='En phase d'orientation consulaire'">
+        <h1>Accompagnement consulaire</h1>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_consulaire.contacte }}</h5>
+        </div>
+        <div class="col-6 grid">
+            <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_consulaire.non_contacte }}</h5>
+        </div>
+        <div class="col-12 grid">
+            <h5 class="col-12" style="text-align: center;">Logement vendu: {{ stats_consulaire.logement }}</h5>
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="phase_candidature=='Paiements'">
+        <h1>Paiements</h1>
+        <div class="col-6 grid">
+            <h3>Préinscription</h3>
+            <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement }}</h5>
+            <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece }}</h5>
+            <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque }}</h5>
+            <h5 class="col-12" style="text-align: center;">Lien de paiement : {{stats_paiements.preinscription.lien }}</h5>
+            <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{ stats_paiements.preinscription.compensation }}</h5>
+        </div>
+        <div class="col-6 grid">
+            <h3>Inscription</h3>
+            <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}</h5>
+            <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}</h5>
+            <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}</h5>
+            <h5 class="col-12" style="text-align: center;">Lien de paiement : {{ stats_paiements.inscription.lien }}</h5>
+            <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{ stats_paiements.inscription.compensation }}</h5>
         </div>
     </div>
 </div>
