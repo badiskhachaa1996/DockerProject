@@ -44,9 +44,10 @@ export class DashboardIntComponent implements OnInit {
     { value: 'Non affecté', label: "Non affecté" },
     { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
     { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "Paiements", label: "Paiements" }, //TODO
     { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
     { value: "Inscription définitive", label: "Inscription définitive" },
-    { value: "Recours", label: "Recours" },
+    //{ value: "Recours", label: "Recours" },
   ]
 
   source = [];
@@ -67,6 +68,46 @@ export class DashboardIntComponent implements OnInit {
     tt_orientation: 0,
     tt_admission: 0,
     tt_consulaire: 0,
+    recours: 0,
+    nn_affecte: 0
+  }
+  stats_orientation = {
+    contact: 0,
+    non_contact: 0,
+    joignable: 0,
+    non_joignable: 0,
+    valide: 0,
+    non_valide: 0,
+    oriente: 0,
+    suspension: 0
+  }
+  stats_admission = {
+    traite: 0,
+    non_traite: 0,
+    admissible: 0,
+    non_admissible: 0,
+    attente: 0,
+  }
+  stats_consulaire = {
+    contacte: 0,
+    non_contacte: 0,
+    logement: 0
+  }
+  stats_paiements = {
+    preinscription: {
+      virement: 0,
+      espece: 0,
+      cheque: 0,
+      lien: 0,
+      compensation: 0
+    },
+    inscription: {
+      virement: 0,
+      espece: 0,
+      cheque: 0,
+      lien: 0,
+      compensation: 0
+    }
   }
   constructor(private FAService: FormulaireAdmissionService, private AService: AdmissionService, private ToastService: MessageService) { }
   ngOnInit(): void {
@@ -77,7 +118,7 @@ export class DashboardIntComponent implements OnInit {
       data.forEach(d => {
         this.filterFormation.push({ label: d.nom, value: d.nom })
       })
-      console.log(data,this.filterFormation)
+      console.log(data, this.filterFormation)
     })
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(d => {
@@ -102,9 +143,13 @@ export class DashboardIntComponent implements OnInit {
     this.ToastService.clear()
     this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
     this.AService.getDataForDashboardInternational(data).subscribe(r => {
-      this.stats = r
+      this.stats = r.stats
+      this.stats_admission = r.stats_admission
+      this.stats_consulaire = r.stats_consulaire
+      this.stats_orientation = r.stats_orientation
+      this.stats_paiements = r.stats_paiements
       this.ToastService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })
-      this.basicData.datasets[0].data = [r.tt_orientation, r.tt_admission, r.tt_paiements, r.tt_consulaire]
+      this.basicData.datasets[0].data = [this.stats.nn_affecte, this.stats.tt_orientation, this.stats.tt_admission, this.stats.tt_paiements, this.stats.tt_consulaire, this.stats.recours]
       this.chart.reinit();
     })
   }
@@ -125,12 +170,12 @@ export class DashboardIntComponent implements OnInit {
   };
 
   basicData = {
-    labels: ['Orientation', 'Admission', 'Paiements', 'Accompagnement consulaire'],
+    labels: ['Non affecté', 'Orientation', 'Admission', 'Paiements', 'Accompagnement consulaire', 'Recours'],
     datasets: [
       {
         label: 'Prospects',
         backgroundColor: '#42A5F5',
-        data: [0, 0, 0, 0]
+        data: [0, 0, 0, 0, 0, 0]
       }
     ]
   };

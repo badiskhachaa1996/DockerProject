@@ -190,6 +190,7 @@ import { GenDocPaiementPreinscriptionAcompteComponent } from './international/ge
 import { GenDocPaiementAcompteComponent } from './international/generation-doc/gen-doc-paiement-acompte/gen-doc-paiement-acompte.component';
 import { GenDocDerogationComponent } from './international/generation-doc/gen-doc-derogation/gen-doc-derogation.component';
 import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
+import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
 
 const routes: Routes = [
     {
@@ -345,6 +346,7 @@ const routes: Routes = [
             { path: 'dashboard/partenaire', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'dashboard/partenaire/:id', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
+            { path: 'international/dashboard/performance', component: PerformanceComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands/:id', component: BrandsListComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands', component: BrandsListComponent, canActivate: [AuthGuardService] },
             /* Generation Documents */

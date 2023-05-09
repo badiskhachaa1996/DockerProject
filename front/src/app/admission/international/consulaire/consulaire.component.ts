@@ -544,6 +544,7 @@ export class ConsulaireComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },

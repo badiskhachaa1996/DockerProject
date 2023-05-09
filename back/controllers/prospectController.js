@@ -1036,7 +1036,7 @@ app.post('/getDataForDashboardInternational', (req, res) => {
             })
         else
             ProspectFiltered = prospectList
-        let r = {
+        let stats = {
             tt_prospects: ProspectFiltered.length,
             tt_admis: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' ? 1 : 0), 0)),
             tt_paiements: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.statut_payement == 'Oui' ? 1 : 0), 0)),
@@ -1045,9 +1045,53 @@ app.post('/getDataForDashboardInternational', (req, res) => {
             tt_orientation: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation scolaire' ? 1 : 0), 0)),
             tt_admission: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'admission' ? 1 : 0), 0)),
             tt_consulaire: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation consulaire' ? 1 : 0), 0)),
+            nn_affecte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En attente d\'affectation' ? 1 : 0), 0)),
+            recours: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'Recours' ? 1 : 0), 0)),
         }
-        res.send(r)
+        let stats_orientation = {
+            contact: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation != 'En attente' ? 1 : 0), 0)),
+            non_contact: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'En attente' ? 1 : 0), 0)),
+            joignable: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Joignable' ? 1 : 0), 0)),
+            non_joignable: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Non Joignable  &  Mail envoyé' ? 1 : 0), 0)),
+            valide: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Validé') ? 1 : 0), 0)),
+            non_valide: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Dossier rejeté') ? 1 : 0), 0)),
+            oriente: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Changement de campus') || next?.decision_orientation.includes('Changement de formation') || next?.decision_orientation.includes('Changement de destination') ? 1 : 0), 0)),
+            suspension: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Suspendu') ? 1 : 0), 0)),
+        }
+        let stats_admission = {
+            traite: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.dossier_traited_by != null ? 1 : 0), 0)),
+            non_traite: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.dossier_traited_by == null ? 1 : 0), 0)),
+            admissible: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' || next?.decision_admission == 'Accepté sur réserve' ? 1 : 0), 0)),
+            non_admissible: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Refusé' ? 1 : 0), 0)),
+            attente: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'En attente de traitement' ? 1 : 0), 0)),
+        }
+        let stats_consulaire = {
+            contacte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.contact_orientation != null ? 1 : 0), 0)),
+            non_contacte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.contact_orientation == null ? 1 : 0), 0)),
+            logement: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.logement != null ? 1 : 0), 0)),
+        }
+        let stats_paiements = {
+            preinscription: {
+                virement: 0,
+                espece: 0,
+                cheque: 0,
+                lien: 0,
+                compensation: 0
+            },
+            inscription: {
+                virement: 0,
+                espece: 0,
+                cheque: 0,
+                lien: 0,
+                compensation: 0
+            }
+        }
+        res.send({ stats, stats_orientation, stats_admission, stats_consulaire, stats_paiements })
     })
+
+})
+
+app.post('/getDataForDashboardPerformance', (req, res) => {
 
 })
 
