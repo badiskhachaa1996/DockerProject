@@ -43,8 +43,9 @@ export class GenerationDocComponent implements OnInit {
     this.AService.getAllSourcing().subscribe(data => {
       this.prospectDropdown = []
       data.forEach(p => {
-        let {user_id} : any = p
-        this.prospectDropdown.push({ label: `${p.customid} - ${user_id.lastname} ${user_id.firstname}`, value: p._id })
+        let { user_id }: any = p
+        if (user_id)
+          this.prospectDropdown.push({ label: `${p.customid} - ${user_id.lastname} ${user_id.firstname}`, value: user_id._id })
       })
     })
   }
