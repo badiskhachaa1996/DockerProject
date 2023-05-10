@@ -21,7 +21,8 @@ const schema = new mongoose.Schema({
     },
     date_creation: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now
     },
     numero_whatapp: {
         type: String

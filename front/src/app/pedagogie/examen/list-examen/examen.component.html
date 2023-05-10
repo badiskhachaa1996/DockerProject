@@ -10,8 +10,8 @@
             <div class="grid">
                 <div class="field col-12">
                     <label>Fichier Excel<span style="color:red">*</span>:</label><br>
-                    <p-fileUpload mode="basic" [customUpload]="true" [auto]="true" (uploadHandler)="incomingfile($event)"
-                        accept=".xlsx"></p-fileUpload>
+                    <p-fileUpload mode="basic" [customUpload]="true" [auto]="true"
+                        (uploadHandler)="incomingfile($event)" accept=".xlsx"></p-fileUpload>
                     <p *ngIf="file">
                         Fichier uploadé
                     </p>
@@ -70,8 +70,9 @@
             </p>
 
             <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
-                [globalFilterFields]="['etudiant_f','etudiant_l', 'id','appreciation']" [rows]="10" [pageLinks]="10" [paginator]="true"
-                rowExpandMode="single" [totalRecords]="tableauNotes.length" styleClass="p-datatable-gridlines">
+                [globalFilterFields]="['etudiant_f','etudiant_l', 'id','appreciation']" [rows]="10" [pageLinks]="10"
+                [paginator]="true" rowExpandMode="single" [totalRecords]="tableauNotes.length"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
@@ -342,7 +343,8 @@
                         </td>
                         <td>{{ examen.libelle }}</td>
                         <td *ngIf="!isArr(examen.date)">{{ examen.date | date:'dd/MM/YYYY' }}</td>
-                        <td *ngIf="isArr(examen.date) && examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }} - {{ examen.date[1] | date:'dd/MM/YYYY' }}</td>
+                        <td *ngIf="isArr(examen.date) && examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }} - {{
+                            examen.date[1] | date:'dd/MM/YYYY' }}</td>
                         <td *ngIf="isArr(examen.date) && !examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
@@ -399,6 +401,7 @@
                         <th pSortableColumn="firstname">Prénom & Nom</th>
                         <th pSortableColumn="note_val"> Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
+                        <th>Action</th>
                         <!--<th>
                             Appreciation
                         </th>-->
@@ -412,6 +415,10 @@
                         </td>
                         <td style="min-width: 10rem;">
                             {{ note.note_val | number : '0.2-9' }}
+                        </td>
+                        <td>
+                            <i type="button" pTooltip="Supprimer" tooltipPosition="bottom" *ngIf="!isFormateur"
+                                class="pi pi-trash ml-1" (click)="deleteNote(note)" aria-hidden="true"></i>
                         </td>
                         <!--<td style="min-width: 12rem; ">
                             {{ note.appreciation }}

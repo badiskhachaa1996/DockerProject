@@ -662,7 +662,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/international/dashboard']
                                         },
                                         {
-                                            label: 'Performance scolaire',
+                                            label: 'Performance équipe',
                                             icon: 'pi pi-users',
                                             routerLink: ['international/dashboard/performance']
                                         }

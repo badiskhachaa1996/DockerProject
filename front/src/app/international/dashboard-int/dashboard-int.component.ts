@@ -41,6 +41,7 @@ export class DashboardIntComponent implements OnInit {
     { value: "En ligne", label: "En ligne" },
   ]
   filterPhase = [
+    { value: 'Toutes les phases', label: null },
     { value: 'Non affecté', label: "Non affecté" },
     { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
     { value: "En phase d'admission", label: "En phase d'admission" },
@@ -57,7 +58,7 @@ export class DashboardIntComponent implements OnInit {
   ecole = [];
   campus = [];
   pays = [];
-  phase_candidature = [];
+  phase_candidature = null;
 
   stats = {
     tt_prospects: 0,
@@ -125,7 +126,15 @@ export class DashboardIntComponent implements OnInit {
         this.filterEcole.push({ label: d.titre, value: d.url_form })
       })
     })
-    this.updateFilter()
+    this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
+    this.AService.getDataForDashboardInternationalBasique().subscribe(r=>{
+      this.stats = r.stats
+      this.stats_admission = r.stats_admission
+      this.stats_consulaire = r.stats_consulaire
+      this.stats_orientation = r.stats_orientation
+      this.stats_paiements = r.stats_paiements
+      this.ToastService.add({ severity: 'success', summary: "Chargement des statistiques avec succès" })
+    })
   }
 
   updateFilter() {
@@ -137,13 +146,11 @@ export class DashboardIntComponent implements OnInit {
       date_1: this.dates[0],
       date_2: this.dates[1],
       campus: this.campus,
-      pays: this.pays,
-      phase_candidature: this.phase_candidature,
+      pays: this.pays
     }
     this.ToastService.clear()
     this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
     this.AService.getDataForDashboardInternational(data).subscribe(r => {
-      this.stats = r.stats
       this.stats_admission = r.stats_admission
       this.stats_consulaire = r.stats_consulaire
       this.stats_orientation = r.stats_orientation
