@@ -171,17 +171,50 @@
                             </form>
                         </div>
 
-                        <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions">
+                        <p-table class="col-12" styleClass="p-datatable-gridlines" [value]="commissions" editMode="row" dataKey="_id">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Description</th>
                                     <th>Montant</th>
+                                    <th>Action</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-co>
-                                <tr>
-                                    <td>{{co.description}}</td>
-                                    <td>{{co.montant}}</td>
+                            <ng-template pTemplate="body" let-co let-editing="editing" let-ri="rowIndex">
+                                <tr [pEditableRow]="co">
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input pInputText type="text" [(ngModel)]="co.description">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{co.description}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input pInputText type="text" [(ngModel)]="co.montant">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{co.montant}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Supprimer la commission" tooltipPosition="bottom"
+                                            class="pi pi-trash" (click)="deleteCommission(co)" aria-hidden="true"></i>
+                                        <i pTooltip="Modifier la commission" tooltipPosition="bottom" *ngIf="!editing"
+                                            type="button" pInitEditableRow class="pi pi-pencil"
+                                            (click)="onRowEditInit(co)"></i>
+                                        <i pTooltip="Sauvegarder la modification" tooltipPosition="bottom"
+                                            *ngIf="editing" type="button" pSaveEditableRow class="pi pi-check"
+                                            (click)="onRowEditSave(co)"></i>
+                                        <i pTooltip="Annuler la modification" tooltipPosition="bottom" *ngIf="editing"
+                                            type="button" pCancelEditableRow class="pi pi-times"
+                                            (click)="onRowEditCancel(co, ri)"></i>
+
+                                    </td>
                                 </tr>
                             </ng-template>
                         </p-table>

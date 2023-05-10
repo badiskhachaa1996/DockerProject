@@ -36,6 +36,7 @@ export class DetailsEtudiantComponent implements OnInit {
   ListeSeance: any[];
   barDataAJ: any;
   barDataHorAJ: any;
+  annee_scolaire  = "2022-2023"
   nb_absences = 0;
   nb_absencesNJ = 0;
   nb_presences = 0;

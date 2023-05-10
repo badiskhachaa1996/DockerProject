@@ -109,8 +109,6 @@ export class AdmissionIntComponent implements OnInit {
   downloadFile(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      var blob = new Blob([byteArray], { type: data.documentType });
-
       saveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
     }, (error) => {
       console.error(error)
@@ -369,17 +367,29 @@ export class AdmissionIntComponent implements OnInit {
   dropdownEcole = []
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
     this.traitementForm.patchValue({ ...prospect })
+    this.traitementForm.patchValue({ dossier_traited_date: this.convertTime(prospect.dossier_traited_date) })
     if (prospect.dossier_traited_by == null)
       this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(data => {
         if (data)
           this.traitementForm.patchValue({ dossier_traited_by: data._id })
       })
+  }
+
+  private formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
@@ -400,7 +410,7 @@ export class AdmissionIntComponent implements OnInit {
     note_decision: new FormControl(""),
     statut_payement: new FormControl(""),
     numero_dossier_campus_france: new FormControl(""),
-    validated_cf: new FormControl(""),
+    validated_cf: new FormControl(false),
   })
 
   //Partie Details
@@ -430,7 +440,7 @@ export class AdmissionIntComponent implements OnInit {
     decision_admission: new FormControl(''),
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
-    validated_cf: new FormControl(''),
+    validated_cf: new FormControl(false),
     logement: new FormControl(''),
     finance: new FormControl(''),
     type_form: new FormControl('', Validators.required),
@@ -499,6 +509,7 @@ export class AdmissionIntComponent implements OnInit {
       _id: this.showDetails._id
 
     }
+
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
@@ -543,6 +554,7 @@ export class AdmissionIntComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },

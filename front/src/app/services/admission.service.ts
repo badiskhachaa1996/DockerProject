@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { MemberInt } from '../models/memberInt';
 import { Prospect } from '../models/Prospect';
 import { ProspectAlternable } from '../models/ProspectAlternable';
 import { ProspectIntuns } from '../models/ProspectIntuns';
@@ -89,8 +90,8 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllByCommercialUserID(id){
-    let registreUrl = this.apiUrl + 'getAllByCommercialUserID/'+id;
+  getAllByCommercialUserID(id) {
+    let registreUrl = this.apiUrl + 'getAllByCommercialUserID/' + id;
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
@@ -300,6 +301,20 @@ export class AdmissionService {
     let registreUrl = this.apiUrl + 'getAllAdmission';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
+  }
+
+  getDataForDashboardPartenaire(data: any) {
+    let registreUrl = this.apiUrl + 'getDataForDashboardPartenaire';
+    return this.httpClient.post<{ globalstats: any, activitystats: any }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getDataForDashboardInternational(data: any) {
+    let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
+    return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getDataForDashboardPerformance(member: MemberInt, filter: any) {
+    let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
+    return this.httpClient.post<any>(registreUrl, { member, filter }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

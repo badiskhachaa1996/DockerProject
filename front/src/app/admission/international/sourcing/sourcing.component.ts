@@ -135,6 +135,15 @@ export class SourcingComponent implements OnInit {
     { value: "UAE - Dubai", label: "UAE - Dubai" },
     { value: "En ligne", label: "En ligne" },
   ]
+
+  dropdownPhase = [
+    { value: 'Non affecté', label: "Non affecté" },
+    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
+    { value: "En phase d'admission", label: "En phase d'admission" },
+    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
+    { value: "Inscription définitive", label: "Inscription définitive" },
+    { value: "Recours", label: "Recours" },
+  ]
   filterSource = [
     { value: null, label: 'Tous les sources' }, { label: "Partenaire", value: "Partenaire" },
     { label: "Equipe commerciale", value: "Equipe commerciale" },
@@ -343,6 +352,7 @@ export class SourcingComponent implements OnInit {
     //Orientation
     decision_orientation: new FormControl(''),
     decision_admission: new FormControl(''),
+    phase_candidature: new FormControl(''),
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),
@@ -452,6 +462,7 @@ export class SourcingComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },
@@ -529,6 +540,15 @@ export class SourcingComponent implements OnInit {
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+      })
+  }
+
+  delete(prospect: Prospect) {
+    let { user_id }: any = prospect
+    if (confirm('Voulez-vous vraiment supprimer ' + user_id?.lastname + " " + user_id?.firstname + " ?"))
+      this.admissionService.delete(prospect._id, user_id._id).subscribe(data => {
+        this.prospects.splice(this.prospects.indexOf(prospect), 1)
+        this.messageService.add({ severity: "success", summary: "Prospect supprimé avec succès" })
       })
   }
 

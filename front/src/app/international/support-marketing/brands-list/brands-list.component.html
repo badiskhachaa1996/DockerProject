@@ -1,0 +1,260 @@
+<input type="file" (change)="FileUploadPC($event)" id="selectedFile" #selectedFile accept=".jpg,.png,.jpeg"
+    style="display: none;" pInputFile />
+<input type="file" (change)="FileUploadSM($event)" id="fileSM" #fileSM style="display: none;" pInputFile />
+<div class="grid">
+    <!-- Formulaire d'ajout d'une brand -->
+    <div class="col-12" *ngIf="showAdd">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showAdd = false;">
+            </i>
+            <h4 style="text-align: center;">Insérer une brand</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="addForm" (ngSubmit)="onAdd()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom de la brand<span style="color: red;"> * </span></label>
+                    <input pInputText id="lastname" formControlName="nom" type="text" placeholder="Ex: Google" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Description</label>
+                    <textarea pInputTextarea formControlName="description"
+                        placeholder="Ex: Dévéloppement IT de nouvelles technologies IA et Moteur de recherche"></textarea>
+                </div>
+                <div class="field col-12" *ngIf="!PartenaireSelected">
+                    <label>Partenaire<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"></p-dropdown>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter cette brand" [disabled]="addForm.invalid" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Formulaire de mis à jour d'une brand -->
+    <div class="col-12" *ngIf="showUpdate">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUpdate = null;">
+            </i>
+            <h4 style="text-align: center;">Mettre à jour la brand {{showUpdate.nom}}</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom de la brand<span style="color: red;"> * </span></label>
+                    <input pInputText id="lastname" formControlName="nom" type="text" placeholder="Ex: Google" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Description</label>
+                    <textarea pInputTextarea formControlName="description"
+                        placeholder="Ex: Dévéloppement IT de nouvelles technologies IA et Moteur de recherche"></textarea>
+                </div>
+                <div class="field col-12" *ngIf="!PartenaireSelected">
+                    <label>Partenaire<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"></p-dropdown>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Mettre à jour cette brand" [disabled]="updateForm.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Formulaire d'ajout d'un support de marketing -->
+    <div class="col-12" *ngIf="showAddSM">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showAddSM = false;">
+            </i>
+            <h4 style="text-align: center;">Insérer un support Marketing</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="addFormSM" (ngSubmit)="onAddSM()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom du document<span style="color: red;"> * </span></label>
+                    <input pInputText id="lastname" formControlName="nom" type="text"
+                        placeholder="Ex: Prospectus de Pâques" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Description du Document</label>
+                    <textarea pInputTextarea formControlName="description"
+                        placeholder="Ex: Prospectus pour la fête de Pâques avec des oeufs à la place des O et des petits lapins dans le fond"></textarea>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter ce support marketing" [disabled]="addFormSM.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Formulaire de mis à jour d'un support de marketing -->
+    <div class="col-12" *ngIf="showUpdateSM">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUpdateSM = null;">
+            </i>
+            <h4 style="text-align: center;">Mettre à jour le support Marketing {{showUpdateSM.nom}}</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateFormSM" (ngSubmit)="onUpdateSM()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom du document<span style="color: red;"> * </span></label>
+                    <input pInputText id="lastname" formControlName="nom" type="text" placeholder="Ex: Google" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Description</label>
+                    <textarea pInputTextarea formControlName="description"
+                        placeholder="Ex: Dévéloppement IT de nouvelles technologies IA et Moteur de recherche"></textarea>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Mettre à jour ce support Marketing" [disabled]="updateFormSM.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="showSupportMarketing">
+        <div class="card">
+            <button pButton pRipple label="Ajouter un support Marketing" class="mr-2 mb-2" style="float: right;"
+                (click)="showAddSM = true;scrollToTop()"></button>
+            <h5>Liste des supports Marketing de {{showSupportMarketing.nom}}</h5>
+
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="SMs"
+                [paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['nom', 'description']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th SortableColumn="nom" scope="col" style="text-align: center;">
+                            Nom du Document <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th SortableColumn="description" scope="col" style="text-align: center;">
+                            Description du Document <p-sortIcon field="description"></p-sortIcon>
+                        </th>
+                        <th>
+                            Lien
+                        </th>
+                        <th SortableColumn="date_creation" scope="col" style="text-align: center;">
+                            Date de l'ajout <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th *ngIf="isAdminPartenaire">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-sm>
+                    <tr>
+                        <td>
+                            {{sm.nom}}
+                        </td>
+                        <td>
+                            {{sm.description}}
+                        </td>
+                        <td>
+                            <a *ngIf="sm.haveFile" (click)="downloadSM(sm)">Télécharger le document</a>
+                            <a *ngIf="!sm.haveFile" (click)="onAddFile(sm)">Uploader le document</a>
+                        </td>
+                        <td>
+                            {{sm.date_creation | date:'mediumDate'}}
+                        </td>
+                        <td *ngIf="isAdminPartenaire">
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2" 
+                                (click)="initUpdateSM(sm);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                (click)="onDeleteSM(sm)" aria-hidden="true"></i>
+                            <i pTooltip="Upload du document" tooltipPosition="bottom" class="pi pi-cloud-upload"
+                                (click)="onAddFile(sm)" aria-hidden="true"></i>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <!-- Table d'affichage de la liste des preinscription -->
+    <div class="col-12">
+        <div class="card">
+            <button pButton pRipple label="Ajouter une brand" class="mr-2 mb-2" style="float: right;" *ngIf="isAdminPartenaire"
+                (click)="showAdd = true;scrollToTop()"></button>
+            <h5>Liste des brands</h5>
+
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="brands"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['nom', 'description', 'partenaire_id.nom']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Logo
+                        </th>
+                        <th SortableColumn="nom" scope="col" style="text-align: center;">
+                            Nom du Brand <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th SortableColumn="description" scope="col" style="text-align: center;">
+                            Présentation <p-sortIcon field="description"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-brand>
+                    <tr>
+                        <td>
+                            <img *ngIf="dicLogo && dicLogo[brand._id]?.url" src="{{dicLogo[brand._id].url}}"
+                                style="max-width: 160px;max-height: 160px;" />
+                            <p *ngIf="!dicLogo || !dicLogo[brand._id]?.url">Aucun</p>
+                        </td>
+                        <td>
+                            {{brand.nom}}
+                        </td>
+                        <td>
+                            {{brand.description}}
+                        </td>
+                        <td>
+                            <i pTooltip="Support Marketing" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
+                                (click)="initSupportMarketing(brand);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2" *ngIf="isAdminPartenaire"
+                                (click)="initUpdate(brand);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2" *ngIf="isAdminPartenaire"
+                                (click)="onDelete(brand)" aria-hidden="true"></i>
+                            <i pTooltip="Ajout du logo" tooltipPosition="bottom" class="pi pi-image" *ngIf="isAdminPartenaire"
+                                (click)="onAddLogo(brand)" aria-hidden="true"></i>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

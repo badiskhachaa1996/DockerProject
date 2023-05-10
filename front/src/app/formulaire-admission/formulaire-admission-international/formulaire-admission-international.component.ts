@@ -38,7 +38,6 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     { label: 'Partenaires' },
     { label: 'Dernière étape' },
   ];;
-  cookieCodeCommercial = ""
   nationList = environment.nationalites;
   calendar: any;
   fr = environment.fr;
@@ -88,13 +87,13 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   campusDropdown =
     [
-    { value: "Paris - France", label: "Paris - France" },
-    { value: "Montpellier - France", label: "Montpellier - France" },
-    { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
-    { value: "Rabat - Maroc", label: "Rabat - Maroc" },
-    { value: "La Valette - Malte", label: "La Valette - Malte" },
-    { value: "UAE - Dubai", label: "UAE - Dubai" },
-    { value: "En ligne", label: "En ligne" },
+      { value: "Paris - France", label: "Paris - France" },
+      { value: "Montpellier - France", label: "Montpellier - France" },
+      { value: "Brazzaville - Congo", label: "Brazzaville - Congo" },
+      { value: "Rabat - Maroc", label: "Rabat - Maroc" },
+      { value: "La Valette - Malte", label: "La Valette - Malte" },
+      { value: "UAE - Dubai", label: "UAE - Dubai" },
+      { value: "En ligne", label: "En ligne" },
     ];
 
   niveauFR =
@@ -171,10 +170,6 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     this.defaultDropdown = this.programeFrDropdown
 
     this.onInitRegisterForm();
-
-    if (localStorage.getItem("CommercialCode"))
-      this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
-
     if (localStorage.getItem('token'))
       this.btnTextBack = "Revenir à IMS"
 
@@ -245,8 +240,9 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
     });
     if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
-      this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
+      this.RegisterForm.patchValue({ code_commercial: localStorage.getItem("CommercialCode") })
     }
+    console.log(this.RegisterForm.value.code_commercial, localStorage.getItem("CommercialCode"), this.route.snapshot.paramMap.get('code_commercial'))
   };
 
   nextPage() {
@@ -443,7 +439,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       customid = ""
     }
     let source = "Site Web";
-    if (code_commercial)
+    if (this.route.snapshot.paramMap.get('code_commercial') || localStorage.getItem("CommercialCode") || code_commercial)
       source = "Partenaire"
     if (localStorage.getItem('sourceProspect'))
       source = localStorage.getItem('sourceProspect')

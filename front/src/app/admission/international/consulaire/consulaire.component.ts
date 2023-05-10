@@ -261,7 +261,7 @@ export class ConsulaireComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  filterEcole = []
+  filterEcole = [{ value: null, label: 'Toutes les écoles"' },]
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
@@ -370,8 +370,9 @@ export class ConsulaireComponent implements OnInit {
   ]
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
   initTraitement(prospect: Prospect) {
     this.showTraitement = prospect
@@ -543,6 +544,7 @@ export class ConsulaireComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },

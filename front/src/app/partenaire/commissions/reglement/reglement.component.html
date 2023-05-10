@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Date du paiement<span style="color: red;"> * </span></label>
+                    <label>Date du réglement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_paiement"></p-calendar>
                 </div>
 
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Date du paiement<span style="color: red;"> * </span></label>
+                    <label>Date du réglement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_paiement"></p-calendar>
                 </div>
                 <div style="justify-content: right;">
@@ -196,10 +196,10 @@
                             emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
+                        <p-multiSelect [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
                             *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
                             emptyFilterMessage="Pas de statut trouvé"
-                            filterPlaceholder="Choisissez le statut"></p-dropdown>
+                            filterPlaceholder="Choisissez le statut"></p-multiSelect>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -214,7 +214,7 @@
                         <th pSortableColumn="tva" style="text-align: center;"> TVA <p-sortIcon field="tva">
                             </p-sortIcon>
                         </th>
-                        <th style="text-align: center;"> Montant Total </th>
+                        <th style="text-align: center;"> Montant Total (Après TVA) </th>
                         <th pSortableColumn="statut" style="text-align: center;"> Statut de la facture
                             <p-sortIcon field="statut">
                             </p-sortIcon>
@@ -225,7 +225,7 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="date_paiement" style="text-align: center;"> Date du paiement
+                        <th pSortableColumn="date_paiement" style="text-align: center;"> Date du réglement
                             <p-sortIcon field="date_paiement">
                             </p-sortIcon>
                         </th>

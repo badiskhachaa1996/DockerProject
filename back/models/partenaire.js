@@ -23,8 +23,8 @@ const sch = mongoose.Schema({
     description: { type: String },
     date_creation: { type: Date },
     statut_anciennete: { type: String, default: "Ancien" },
-    contribution: { type: String },
-    etat_contrat: { type: String },
+    contribution: { type: String, default: "Inactif" },
+    etat_contrat: { type: String, default:"Non" },
 
     pathImageProfil: { type: String },
     typeImageProfil: { type: String },

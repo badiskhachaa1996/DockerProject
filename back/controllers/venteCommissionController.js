@@ -27,6 +27,12 @@ app.get("/getAllByPartenaireID/:partenaire_id", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.post("/getAllByPartenaireIDs", (req, res, next) => {
+    Vente.find({ partenaire_id: { $in: req.body.partenaire_id } }).populate('partenaire_id')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 app.put("/update", (req, res) => {
     console.log(req.body)
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {

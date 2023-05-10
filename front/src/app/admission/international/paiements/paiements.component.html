@@ -8,9 +8,10 @@
             showDetails?.user_id?.firstname }} {{
             showDetails?.user_id?.lastname | uppercase }}
         </h3>
-        <form class="grid" [formGroup]="detailsForm">
-            <p-tabView class="col-12">
-                <p-tabPanel header="Informations Personnelles">
+
+        <p-tabView class="col-12">
+            <p-tabPanel header="Informations Personnelles">
+                <form class="grid" [formGroup]="detailsForm">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field col-12">
                             <label For="Civilite">Civilité</label>
@@ -35,16 +36,16 @@
                             <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
-                            <label For="email_perso">Email perso</label>
+                            <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
                                 placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
-                            <label For="pays">Pays</label>
+                            <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
                                 optionLabel="value"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -63,14 +64,16 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel header="Programme d'étude">
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Programme d'étude">
+                <form class="grid" [formGroup]="detailsForm">
                     <div class="p-fluid p-formgrid grid">
                         <div class="field md:col-6 col-12">
                             <label For="formation">Formation</label>
@@ -101,84 +104,183 @@
                                 formControlName="type_form"></p-dropdown>
                         </div>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel header="Dossier d'admission">
-                    <ul>
-                        <li *ngFor="let file of ListDocuments; index as i">
-                            <div class="grid">
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Dossier d'admission">
+                <ul>
+                    <li *ngFor="let file of ListDocuments; index as i">
+                        <div class="grid">
 
-                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                        pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
-                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
-                                        pTooltip=" Visualiser dans un nouvel onglet">
-                                        {{ ListPiped[i] }}
-                                    </em>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(showDetails._id,i)"></i>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-times"
-                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier"
-                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
-                                </div>
+                            <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                                <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                    pTooltip="Visualiser dans un nouvel onglet"
+                                    (click)="VisualiserFichier(showDetails._id,i)"></i>
+                                <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
+                                    pTooltip=" Visualiser dans un nouvel onglet">
+                                    {{ ListPiped[i] }}
+                                </em>
+                            </div>
+                            <div class="field col-1">
+                                <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                                    style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                    (click)="downloadFile(showDetails._id,i)"></i>
+                            </div>
+                            <div class="field col-1">
+                                <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                                    pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(showDetails._id,i)"
+                                    aria-hidden="true"> </i>
+                            </div>
 
-                            </div>
-                        </li>
-                    </ul>
-                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
-                        Aucun document n'a été chargé !
-                    </p>
-                </p-tabPanel>
-                <!--   <p-tabPanel header="Paiements">
-                    <div class="grid">
-                        <label>Montant Payé</label>
-                        <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                           
-                            <div class="field col-12 md:col-3">
-                                <label>Type de paiement:</label><br>
-                                <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                                    [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
-                            </div>
-                            <div class="field col-12 md:col-3">
-                                <label>Montant:</label><br>
-                                <input type="number" (change)="changeMontant(i,$event,'montant')"
-                                    [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-5">
-                                <label>Date du paiement:</label><br>
-                                <input type="date" (change)="changeMontant(i,$event,'date')"
-                                    [(value)]="payementList[i]['date']" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-1">
-                                <label>&nbsp;</label><br>
-                                <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
-                                    styleClass="p-button-danger"></button>
-                            </div>
                         </div>
-                        <div class="col-12">
-                            <button type="button" (click)="onAddPayement()" pButton
-                                label="Ajouter un paiement"></button>
+                    </li>
+                </ul>
+                <p *ngIf="ListDocuments==null || ListDocuments.length==0">
+                    Aucun document n'a été chargé !
+                </p>
+                <div class="col-12">
+                    <div class="col-12">
+                        <button pButton label="Ajouter un document"
+                            (click)="showUploadFile=showDetails;scrollToTop()"></button>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Paiements">
+                <div class="grid">
+                    <label>Montant Payé</label>
+                    <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+
+                        <div class="field col-12 md:col-3">
+                            <label>Type de paiement:</label><br>
+                            <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                                [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label>Montant:</label><br>
+                            <input type="number" (change)="changeMontant(i,$event,'montant')"
+                                [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                        </div>
+                        <div class="field col-12 md:col-5">
+                            <label>Date du paiement:</label><br>
+                            <input type="date" (change)="changeMontant(i,$event,'date')"
+                                [(value)]="payementList[i]['date']" pInputText>
+                        </div>
+                        <div class="field col-12 md:col-1">
+                            <label>&nbsp;</label><br>
+                            <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
+                                styleClass="p-button-danger"></button>
                         </div>
                     </div>
-                </p-tabPanel>-->
-            </p-tabView>
-            <div class="col-4">
+                    <div class="col-12">
+                        <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Orientation et Admission">
+                <form class="grid" [formGroup]="detailsForm">
+                    <div class="p-fluid p-formgrid grid col-12">
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Décision orientation</label>
+                            <p-multiSelect [options]="orientationList"
+                                formControlName="decision_orientation"></p-multiSelect>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Décision admission</label>
+                            <p-dropdown [options]="admissionList" formControlName="decision_admission"></p-dropdown>
+                        </div>
+                    </div>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Avancement consulaire">
+                <form class="grid" [formGroup]="detailsForm">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">A besoin d'un visa ?</label>
+                            <p-dropdown [options]="abesoinvisaList" formControlName="a_besoin_visa"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Avancement Campus France</label>
+                            <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Logement</label>
+                            <p-dropdown [options]="logementList" formControlName="logement"></p-dropdown>
+                        </div>
+                        <div class="field md:col-6 col-12">
+                            <label For="formation">Finance</label>
+                            <input pInputText formControlName="finance" />
+                        </div>
+                        <div class="field col-12">
+                            <label For="formation">Visa</label>
+                            <p-dropdown [options]="visaList" formControlName="avancement_visa"></p-dropdown>
+                        </div>
+                    </div>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Documents d'inscription">
+                <div class="col-12 grid">
+                    <div class="col-12">
+                        <strong>Mes attestations disponibles:</strong>
+                    </div>
+                    <div class="col-12">
+                        <p-table styleClass="p-datatable-gridlines" [value]="showDetails.documents_administrative"
+                            responsiveLayout="scroll" responsiveLayout="scroll">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Date de délivrance
+                                    </th>
+                                    <th>
+                                        Nom du document
+                                    </th>
+                                    <th>
+                                        Traité par
+                                    </th>
+                                    <th>
+                                        Lien de téléchargement
+                                    </th>
+                                    <th>
+                                        Note
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData>
+                                <tr>
+                                    <td>
+                                        {{rowData.date | date:'mediumDate'}}
+                                    </td>
+                                    <td>
+                                        {{rowData.nom}}
+                                    </td>
+                                    <td>
+                                        {{rowData.traited_by}}
+                                    </td>
+                                    <td>
+                                        <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                                    </td>
+                                    <td>
+                                        {{rowData.note}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <p *ngIf="showDetails.documents_administrative==null || showDetails.documents_administrative.length==0">
+                    Aucun document n'a été chargé !
+                </p>
+            </p-tabPanel>
+        </p-tabView>
+
+        <div class="col-12 grid">
+            <div class="col-6">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
             </div>
-            <div class="col-4">
-                <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
-            </div>
-            <div class="col-4">
+
+            <div class="col-6">
                 <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
                     (click)="saveDetails(true)"></button>
             </div>
-        </form>
+        </div>
     </div>
 
     <!-- partie ajout de document -->
@@ -365,12 +467,12 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects en accompagnement consulaire</h5>
+            <h5>Liste des prospects phase de paiements</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
-                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
+                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','modalite','campus_choix_3','user_id.email_perso','rythme_formation','payement']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -417,6 +519,16 @@
                         emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Modalité de Paiement" [options]="filterModalite"
+                        (onChange)="dt1.filter($event.value,'modalite','contains')"
+                        emptyFilterMessage="Pas de modalité trouvé" filterPlaceholder="Modalité de Paiement"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -456,6 +568,9 @@
                         </th>
                         <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
                         <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
@@ -506,15 +621,16 @@
                             {{getMontant(prospect.payement)}}€
                         </td>
                         <td>
-                            {{getModalite(prospect.payement)}}
+                            <!--{{getModalite(prospect.payement)}}--> {{prospect?.modalite}}
                         </td>
 
                         <td>
                             {{ prospect.phase_candidature }}
                         </td>
                         <td>
-                            <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
-                                (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
+                            {{ prospect.rentree_scolaire }}
+                        </td>
+                        <td>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
 

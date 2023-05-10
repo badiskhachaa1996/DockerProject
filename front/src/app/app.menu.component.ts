@@ -461,6 +461,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Support Marketing',
                                     icon: 'pi pi-briefcase'
+                                    , routerLink: ['/international/brands']
                                 },
                                 {
                                     label: 'Gestion des commissions',
@@ -481,6 +482,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
+                                    , routerLink: ['/dashboard/partenaire']
                                 },
                             ]
                         },
@@ -649,12 +651,23 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-calendar',
                                             routerLink: ['/admission/rentree']
                                         },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-home'
-                                        },
                                     ]
-                                },
+                                }, {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Général',
+                                            icon: 'pi pi-chart-bar',
+                                            routerLink: ['/international/dashboard']
+                                        },
+                                        {
+                                            label: 'Performance scolaire',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['international/dashboard/performance']
+                                        }
+                                    ]
+                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
                             ],
                         },
                         {
@@ -1211,9 +1224,9 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ]
                                 },
-                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
                             ];
                         }
 
@@ -1264,9 +1277,9 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ]
                                 },
-                                { label: 'Support Marketing', icon: 'pi pi-briefcase' },
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line' },
+                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
                             ];
                         }
                     })
@@ -1411,6 +1424,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Support Marketing',
                                     icon: 'pi pi-briefcase'
+                                    , routerLink: ['/international/brands']
                                 },
                                 {
                                     label: 'Gestion des commissions',
@@ -1431,6 +1445,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
+                                    , routerLink: ['/dashboard/partenaire']
                                 },
                             ]
                         },
@@ -2058,6 +2073,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Support Marketing',
                                             icon: 'pi pi-briefcase'
+                                            , routerLink: ['/international/brands']
                                         },
                                         {
                                             label: 'Gestion des commissions',
@@ -2077,7 +2093,8 @@ export class AppMenuComponent implements OnInit {
                                         },
                                         {
                                             label: 'Dashboard',
-                                            icon: 'pi pi-chart-line'
+                                            icon: 'pi pi-chart-line',
+                                            routerLink: ['/dashboard/partenaire']
                                         },
                                     ]
                                 },
@@ -2861,6 +2878,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Support Marketing',
                                             icon: 'pi pi-briefcase'
+                                            , routerLink: ['/international/brands']
                                         },
                                         {
                                             label: 'Gestion des commissions',
@@ -2881,6 +2899,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Dashboard',
                                             icon: 'pi pi-chart-line'
+                                            , routerLink: ['/dashboard/partenaire']
                                         },
                                     ]
                                 },

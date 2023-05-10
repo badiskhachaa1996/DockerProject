@@ -223,7 +223,7 @@
 								(click)="displayResponsive=true;mailtype='';groupeEdt=rowData" tooltipPosition="bottom"
 								pTooltip="Envoyer un mail au groupe"></i>
 							<i class="pi pi-file-excel" pTooltip="Générer un PV Semestriel/Annuel"
-								(click)="initPV(rowData)" tooltipPosition="bottom" aria-hidden="true"></i>
+								(click)="initPV(rowData);scrollToTop()" tooltipPosition="bottom" aria-hidden="true"></i>
 							<i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom" class="pi pi-file"
 								(click)="onInitLien(rowData);scrollToTop()" aria-hidden="true"></i>
 							<i pTooltip="Ajouter le calendrier de la formation en pdf" tooltipPosition="bottom" class="pi pi-calendar"

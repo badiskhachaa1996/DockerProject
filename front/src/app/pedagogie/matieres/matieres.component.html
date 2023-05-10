@@ -197,7 +197,7 @@
             <h5>Liste des modules</h5>
             <p-table #dt1 rowExpandMode="single" [value]="matieres" dataKey="_id" [rows]="10" [rowHover]="true"
                 [totalRecords]="matieres.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-                [globalFilterFields]="['nom','abbrv','remarque','semestre','niveau']" responsiveLayout="scroll">
+                [globalFilterFields]="['nom','abbrv','remarque','semestre','niveau']" responsiveLayout="scroll" [scrollable]="true" scrollDirection="both">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -218,57 +218,57 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="nom" style="text-align:center"> Nom <p-sortIcon field="nom"></p-sortIcon>
+                        <th pSortableColumn="nom" style="text-align:center;width:200px;" pFrozenColumn> Nom <p-sortIcon field="nom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="abreviation" style="text-align:center"> Abréviation <p-sortIcon
+                        <th pSortableColumn="abreviation" style="text-align:center;width:100px;"> Abréviation <p-sortIcon
                                 field="abreviation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="diplome" style="text-align:center"> Diplôme <p-sortIcon field="diplome">
+                        <th pSortableColumn="diplome" style="text-align:center;width:100px;"> Diplôme <p-sortIcon field="diplome">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="semestre" style="text-align:center">Semestre <p-sortIcon field="semestre">
+                        <th pSortableColumn="semestre" style="text-align:center;width:100px;">Semestre <p-sortIcon field="semestre">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="niveau" style="text-align:center">Année <p-sortIcon field="niveau">
+                        <th pSortableColumn="niveau" style="text-align:center;width:100px;">Année <p-sortIcon field="niveau">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="volume_init" style="text-align:center"> Volume initiale <p-sortIcon
+                        <th pSortableColumn="volume_init" style="text-align:center;width:100px;"> Volume initiale <p-sortIcon
                                 field="volume_init"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="volume_real" style="text-align:center"> Volume réalisé <p-sortIcon
+                        <th pSortableColumn="volume_real" style="text-align:center;width:100px;"> Volume réalisé <p-sortIcon
                                 field="volume_real"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="volume_plan" style="text-align:center"> Volume planifié <p-sortIcon
+                        <th pSortableColumn="volume_plan" style="text-align:center;width:100px;"> Volume planifié <p-sortIcon
                                 field="volume_plan"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="coeff" style="text-align:center">Coefficient <p-sortIcone field="coeff">
+                        <th pSortableColumn="coeff" style="text-align:center;width:100px;">Coefficient <p-sortIcone field="coeff">
                             </p-sortIcone>
                         </th>
-                        <th pSortableColumn="credit_ects" style="text-align:center">Crédits ECTS <p-sortIcon
+                        <th pSortableColumn="credit_ects" style="text-align:center;width:100px;">Crédits ECTS <p-sortIcon
                                 field="credit_ects"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="hors_bulletin" style="text-align:center"> Pris en compte dans le Bulletin
+                        <th pSortableColumn="hors_bulletin" style="text-align:center;width:100px;"> Pris en compte dans le Bulletin
                             <p-sortIcon field="hors_bulletin"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="remarque" style="text-align:center">Remarque <p-sortIcone field="remarque">
+                        <th pSortableColumn="remarque" style="text-align:center;width:100px;">Remarque <p-sortIcone field="remarque">
                             </p-sortIcone>
                         </th>
-                        <th style="text-align:center">Action</th>
+                        <th style="text-align:center;width:100px;" >Action</th>
                 </ng-template>
                 <ng-template pTemplate="body" let-matiere>
                     <tr>
-                        <td style="min-width: 12rem;">
+                        <td style="width:200px" pFrozenColumn>
                             {{ matiere.nom }}
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{ matiere.abbrv }}
                         </td>
                         <td *ngIf="formationDic[matiere.formation_id]!=undefined && !isArray(matiere.formation_id)"
-                            style="min-width: 12rem;">
+                        style="width:100px">
                             {{ formationDic[matiere.formation_id].titre }}
                         </td>
                         <td *ngIf="matiere.formation_id!=undefined && isArray(matiere.formation_id)"
-                            style="min-width: 12rem;">
+                        style="width:100px">
                             <span *ngFor="let cid of matiere.formation_id; let index = index">
                                 <span
                                     *ngIf="formationDic[cid] && formationDic[cid].titre && index==0">{{formationDic[cid].titre}}</span>
@@ -276,49 +276,49 @@
                                     *ngIf="formationDic[cid] && formationDic[cid].titre && index!=0">,<br>{{formationDic[cid].titre}}</span>
                             </span>
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.semestre}}
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.niveau}}
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.volume_init}}
                         </td>
                         <td *ngIf="matiereVolume && matiereVolume.rCons && matiereVolume.rCons[matiere._id]"
-                            style="min-width: 12rem;">
+                        style="width:100px">
                             {{matiereVolume.rCons[matiere._id]}}
                         </td>
                         <td *ngIf="!matiereVolume || !matiereVolume.rCons || !matiereVolume.rCons[matiere._id]"
-                            style="min-width: 12rem;">
+                            style="width:100px">
                             0
                         </td>
                         <td *ngIf="!matiereVolume || !matiereVolume.rPlan || !matiereVolume.rPlan[matiere._id]"
-                            style="min-width: 12rem;">
+                            style="width:100px">
                             0
                         </td>
                         <td *ngIf="matiereVolume && matiereVolume.rPlan && matiereVolume.rPlan[matiere._id]"
-                            style="min-width: 12rem;">
+                            style="width:100px">
                             {{matiereVolume.rPlan[matiere._id]}}
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.coeff}}
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.credit_ects}}
                         </td>
-                        <td style="min-width: 12rem;" *ngIf="matiere.hors_bulletin">
+                        <td style="width:100px" *ngIf="matiere.hors_bulletin">
                             <p-tag styleClass="mr-2" icon="pi pi-times" severity="danger" value="Hors Bulletin"></p-tag>
                         </td>
-                        <td style="min-width: 12rem;" *ngIf="!matiere.hors_bulletin">
+                        <td style="width:100px" *ngIf="!matiere.hors_bulletin">
                             <p-tag styleClass="mr-2" icon="pi pi-check" severity="success"
                                 value="Pris en compte"></p-tag>
                         </td>
-                        <td style="min-width: 12rem;">
+                        <td style="width:100px">
                             {{matiere.remarque}}
                         </td>
 
-                        <td>
+                        <td style="width:100px"> 
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showFormModifMatiere = true; idMatiereToUpdate = matiere._id; onGetbyId(matiere); showFormAddMatiere = false;"
                                 aria-hidden="true"></i>

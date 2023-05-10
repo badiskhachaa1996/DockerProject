@@ -71,7 +71,7 @@ const prospect_schema = new mongoose.Schema({
     },
     date_creation: {
         type: Date,
-        required: false,
+        default: Date.now
     },
     type_form: { type: String, required: false },
     code_commercial: { type: String, required: false },
@@ -241,6 +241,7 @@ const prospect_schema = new mongoose.Schema({
     },
     avancement_orientation: {
         type: String,
+        default: "En attente"
     },
     note_avancement: {
         type: String,

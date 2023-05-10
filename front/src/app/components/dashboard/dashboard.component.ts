@@ -810,7 +810,7 @@ export class  DashboardComponent implements OnInit {
     })
   }
 
-  //Méthode de test pour LW
+  //Méthode de test pour LW deprecated
   test() {
     const xhr = new XMLHttpRequest();
     const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';

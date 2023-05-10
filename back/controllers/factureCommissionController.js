@@ -27,6 +27,12 @@ app.get("/getAllByPartenaireID/:partenaire_id", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.post("/getAllByPartenaireIDs", (req, res, next) => {
+    FactureCommission.find({ partenaire_id: { $in: req.body.partenaire_id } }).populate('partenaire_id')
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
         if (!fs.existsSync('storage/facture/commission/' + req.body._id + '/')) {

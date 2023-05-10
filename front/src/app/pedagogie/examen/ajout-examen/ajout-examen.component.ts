@@ -219,6 +219,11 @@ export class AjoutExamenComponent implements OnInit {
                 value: f._id,
               })
           })
+          this.formateurService.getById("645a06f1a08b4b1f312758d0").subscribe(dataf => {
+            if (dataf)
+              this.dropdownFormateur.push({ label: "Formateur Fictif", value: "645a06f1a08b4b1f312758d0" })
+          })
+
         } else
           this.dropdownFormateur = this.defaultDropdownFormateur
       })

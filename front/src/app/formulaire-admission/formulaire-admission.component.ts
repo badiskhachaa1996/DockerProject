@@ -572,12 +572,8 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     } else if (this.form_origin == "estya-dubai") {
       this.programeFrDropdown = [
-        { label: 'Project Management', value: 'Project Management' },
         { label: 'Information Technology', value: 'Information Technology' },
         { label: 'Business Management', value: 'Business Management' },
-        { label: 'Master Manager en ressources humaine', value: 'Master Manager en ressources humaine' },
-        { label: 'Master Ingénieur d\'affaire', value: 'Master Ingénieur d\'affaire' },
-        { label: 'Chargé de gestion commerciale', value: 'Chargé de gestion commerciale' },
         { label: 'English Foundation Year', value: 'English Foundation Year' },
       ]
     } else if (this.form_origin == "intuns") {

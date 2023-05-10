@@ -283,12 +283,34 @@ export class PaiementsComponent implements OnInit {
       }
     }, 15);
   }
-
+  filterModalite = [
+    { label: "Toutes les modalités", value: null },
+    { value: "Chèque Montpellier", label: "Chèque Montpellier" },
+    { value: "Chèque Paris", label: "Chèque Paris" },
+    { value: "Chèque Tunis", label: "Chèque Tunis" },
+    { value: "Compensation", label: "Compensation" },
+    { value: "Espèce chèque Autre", label: "Espèce chèque Autre" },
+    { value: "Espèce chèque Montpellier", label: "Espèce chèque Montpellier" },
+    { value: "Espèce chèque Paris", label: "Espèce chèque Paris" },
+    { value: "Espèce Congo", label: "Espèce Congo" },
+    { value: "Espèce Maroc", label: "Espèce Maroc" },
+    { value: "Espèce Montpellier", label: "Espèce Montpellier" },
+    { value: "Espèce Paris", label: "Espèce Paris" },
+    { value: "Espèce Tunis", label: "Espèce Tunis" },
+    { value: "Lien de paiement", label: "Lien de paiement" },
+    { value: "PayPal", label: "PayPal" },
+    { value: "Virement", label: "Virement" },
+    { value: "Virement chèque Autre", label: "Virement chèque Autre" },
+    { value: "Virement chèque Montpellier", label: "Virement chèque Montpellier" },
+    { value: "Virement chèque Paris", label: "Virement chèque Paris" },]
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
     this.admissionService.getAllPaiement().subscribe(data => {
       this.prospects = data
+      data.forEach(v => {
+        v['modalite'] = this.getModalite(v.payement)
+      })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -367,8 +389,9 @@ export class PaiementsComponent implements OnInit {
   ]
 
   stat_cf = [
-    { label: "Oui", value: true },
-    { label: "Non", value: false }
+    { label: "Oui", value: "Oui" },
+    { label: "Non", value: "Non" },
+    { label: "Non concerné", value: "Non concerné" },
   ]
 
   //Partie Details
@@ -505,6 +528,7 @@ export class PaiementsComponent implements OnInit {
   orientationList = [
     { label: "En attente de contact", value: "En attente de contact" },
     { label: "Validé", value: "Validé" },
+    { label: "Suspendu", value: "Suspendu" },
     { label: "Changement de campus", value: "Changement de campus" },
     { label: "Changement de formation", value: "Changement de formation" },
     { label: "Changement de destination", value: "Changement de destination" },

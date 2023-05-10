@@ -1,0 +1,147 @@
+<div class="grid">
+    <div class="col-12 card grid" *ngIf="isResponsable">
+        <h1 class="col-12" style="text-align: center;">Général</h1>
+        <h5 class="col-12" style="text-align: center;">Nombre des partenaires: {{globalstats.nb_partenaire}}</h5>
+        <div class="col-12 grid">
+            <div class="col-12 sm:col-4 grid" style="text-align: center;">
+                <!--Ancienneté-->
+                <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption"> Ancienneté </ng-template>
+                    <ng-template pTemplate="body">
+                        <tr>
+                            <td style="font-weight: bold;"> Nouveau </td>
+                            <td> {{globalstats.anciennete.nouveau}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Ancien </td>
+                            <td> {{globalstats.anciennete.ancien}} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="col-12 sm:col-4 grid" style="text-align: center;">
+                <!--Contribution-->
+                <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption"> Contribution </ng-template>
+                    <ng-template pTemplate="body">
+                        <tr>
+                            <td style="font-weight: bold;"> Actif </td>
+                            <td> {{globalstats.contribution.actif}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Non Actif </td>
+                            <td> {{globalstats.contribution.non_actif}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Occasionel </td>
+                            <td> {{globalstats.contribution.occasionel}} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="col-12 sm:col-4 grid" style="text-align: center;">
+                <!--Etat de contrat-->
+                <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption"> Etat de contrat </ng-template>
+                    <ng-template pTemplate="body">
+                        <tr>
+                            <td style="font-weight: bold;"> Pas de contrat </td>
+                            <td> {{globalstats.etat_contrat.pas_contrat}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> En cours</td>
+                            <td> {{globalstats.etat_contrat.en_cours}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Signé </td>
+                            <td> {{globalstats.etat_contrat.signe}} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 card grid">
+        <h1 class="col-12" style="text-align: center;">Activité</h1>
+        <div class="col-12" style="text-align: center;" *ngIf="isResponsable">
+            <!--<label>Choisissez le Partenaire: </label>-->
+            <p-multiSelect [options]="PartenaireList" placeholder="Choisissez le Partenaire:" display="chip" autoWidth="false" [style]="{'width':'100%'}"
+                (onChange)="onSelectPartenaire($event.value);"></p-multiSelect>
+        </div>
+        <div class="col-12" style="text-align: center;" *ngIf="!isResponsable">
+            <label>Choisissez le Commercial: </label>
+            <p-multiSelect [options]="CommercialList" placeholder="Choisissez le Commercial:" display="chip" autoWidth="false" [style]="{'width':'100%'}"
+                (onChange)="onSelectCommercial($event.value)"></p-multiSelect>
+        </div>
+        <div class="col-12 grid" style="text-align: center;">
+            <div class="col-12 sm:col-2">
+                Filtres:
+            </div>
+            <div class="col-12 sm:col-5">
+                <!--Filtre Rentrée scolaire-->
+                <p-dropdown [options]="RentreeScolaireList" placeholder="Choisissez la rentrée scolaire:" filter="true" autoWidth="false" [style]="{'width':'100%'}"
+                    (onChange)="RentreeScolaireSelected=$event.value;onUpdateFilter()"></p-dropdown>
+            </div>
+            <div class="col-12 sm:col-5">
+                <!--Pays de résidence-->
+                <p-dropdown [options]="PaysList" placeholder="Choisissez le pays de résidence:" filter="true" autoWidth="false" [style]="{'width':'100%'}"
+                    (onChange)="PaysSelected=$event.value;onUpdateFilter()"></p-dropdown>
+            </div>
+        </div>
+        <h5 class="col-12" style="text-align: center;">Chiffre d'affaire généré: {{activitystats.chiffre_affaire}}€</h5>
+        <div class="col-12 grid">
+            <div class="col-12 sm:col-6">
+                <!--Les Prospects-->
+                <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption"> Les Prospects </ng-template>
+                    <ng-template pTemplate="body">
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre Total des prospects </td>
+                            <td> {{activitystats.nb_prospects}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre Total des prospects non contactés</td>
+                            <td> {{activitystats.nb_prospects_contact}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre des prospects acceptés </td>
+                            <td> {{activitystats.nb_prospects_accepte}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre des prospects préinscrits </td>
+                            <td> {{activitystats.nb_prospects_preinscrits}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre des visas </td>
+                            <td> {{activitystats.nb_visas}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre des inscriptions </td>
+                            <td> {{activitystats.nb_inscrits}} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="col-12 sm:col-6">
+                <!--Les alternants-->
+                <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption"> Les alternants </ng-template>
+                    <ng-template pTemplate="body">
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre Total des Alternants </td>
+                            <td> {{activitystats.nb_alternants}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre total des contrats signé</td>
+                            <td> {{activitystats.nb_contrats}} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;"> Nombre des alternants en recherche d'entreprise </td>
+                            <td> {{activitystats.nb_chaumage}} </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>

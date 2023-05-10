@@ -59,12 +59,12 @@ export class ReglementComponent implements OnInit {
   }
 
   PartenaireList = []
-  PartenaireSelected: string = null
+  PartenaireSelected: [string] = null
 
   isPovPartenaire = false
 
   formAddFacture: FormGroup = new FormGroup({
-    numero: new FormControl(this.factures.length, Validators.required),
+    numero: new FormControl(this.factures.length + 1, Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
     statut: new FormControl('', Validators.required),
@@ -74,10 +74,9 @@ export class ReglementComponent implements OnInit {
   })
 
   onAddFacture() {
-    if (this.PartenaireSelected)
-      this.formAddFacture.patchValue({ partenaire_id: this.PartenaireSelected })
     this.FCService.create({ ...this.formAddFacture.value }).subscribe(data => {
-      this.factures.push(data)
+      if (data.nature == "A la source" || data.nature == "Compensation")
+        this.factures.push(data)
       this.showFormAddFacture = false
       this.formAddFacture.reset()
       this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès" })
@@ -97,11 +96,11 @@ export class ReglementComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.route.snapshot.paramMap.get('partenaire_id')) {
-      this.PartenaireSelected = this.route.snapshot.paramMap.get('partenaire_id')
+      this.PartenaireSelected = [this.route.snapshot.paramMap.get('partenaire_id')]
       this.isPovPartenaire = true
-      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(dataF => {
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected[0]).subscribe(dataF => {
         this.factures = dataF
-        this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        this.VenteService.getAllByPartenaireID(this.PartenaireSelected[0]).subscribe(data => {
           this.updateStats(data, dataF)
         })
       })
@@ -123,27 +122,27 @@ export class ReglementComponent implements OnInit {
     }
   }
   updateStats(data: Vente[], dataFacture: FactureCommission[]) {
+    console.log(data)
     this.stats = {
-      tt_vente: Math.trunc(data.reduce((total, next) => total + next?.prospect_id?.montant_paye, 0)),
-      tt_commission: 0,
+      tt_vente: Math.trunc(data.reduce((total, next) => total + next?.montant, 0)),
+      tt_commission: Math.trunc(data.reduce((total, next) => total + this.getMontant(next?.produit), 0)),
       tt_paye: Math.trunc(dataFacture.reduce((total, next) => total + (next?.statut == 'Payé' ? next?.montant : 0), 0)), // Somme ((Statut de commission équal à Facturé payé ou A la source ou Compensation) *Montant de la commission)  
       //next?.statut == 'Facture payé' || next?.statut == 'A la source' || next?.statut == 'Compensation'
       reste_paye: 0
     }
-    data.forEach(v => {
-      if (v.produit) {
-        let nb = v.produit.substring(v.produit.lastIndexOf(':') + 1, v.produit.lastIndexOf('€'))
-        if (parseInt(nb) && !isNaN(parseInt(nb)))
-          this.stats.tt_commission += parseInt(nb)
-      }
-
-    })
-    if (Number.isNaN(this.stats.tt_vente))
-      this.stats.tt_vente = 0
+    if (Number.isNaN(this.stats.tt_commission))
+      this.stats.tt_commission = 0
     if (Number.isNaN(this.stats.tt_paye))
       this.stats.tt_paye = 0
     this.stats.reste_paye = this.stats.tt_commission - this.stats.tt_paye
 
+  }
+
+  getMontant(str: string) {
+    if (str.includes("\n"))
+      return parseInt(str.substring(str.lastIndexOf('Montant:') + 'Montant:'.length, str.lastIndexOf('€')))
+    else
+      return parseInt(str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€')))
   }
 
   download(facture: FactureCommission) {
@@ -185,7 +184,7 @@ export class ReglementComponent implements OnInit {
   showFormEditFacture = false
 
   formEditFacture: FormGroup = new FormGroup({
-    numero: new FormControl(this.factures.length, Validators.required),
+    numero: new FormControl(this.factures.length + 1, Validators.required),
     montant: new FormControl('', Validators.required),
     tva: new FormControl('', Validators.required),
     statut: new FormControl('', Validators.required),
@@ -214,11 +213,11 @@ export class ReglementComponent implements OnInit {
   }
 
   selectPartenaire() {
-    if (this.PartenaireSelected) {
-      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(dataF => {
+    if (this.PartenaireSelected && this.PartenaireSelected[0]) {
+      this.FCService.getAllByPartenaireIDs(this.PartenaireSelected).subscribe(dataF => {
         this.factures = dataF
-        this.VenteService.getAllByPartenaireID(this.PartenaireSelected).subscribe(data => {
-          this.updateStats(data,dataF)
+        this.VenteService.getAllByPartenaireIDs(this.PartenaireSelected).subscribe(data => {
+          this.updateStats(data, dataF)
         })
       })
 
