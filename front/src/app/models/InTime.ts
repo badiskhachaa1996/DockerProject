@@ -13,6 +13,7 @@ export class InTime
         public isCheckable?:                    boolean,
         public craIsValidate?:                  boolean,
         // public principale_activity_details?:    any,
+        public early_departure?:                string,
         public activity_details?:               string[],
         public number_of_hour?:                 number,
     ) {}

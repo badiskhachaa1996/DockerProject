@@ -478,6 +478,7 @@
                                 <th>Téléphone</th>
                                 <th>Heure d'arrivée</th>
                                 <th>Heure de depart</th>
+                                <th>Nombre d'heures/th>
                                 <th>Tâches</th>
                             </tr>
                         </ng-template>
@@ -491,6 +492,8 @@
                                 <td>{{ userco.indicatif }}{{userco.phone }}</td>
                                 <td>{{ presence.in_date | date: 'H:mm' }}</td>
                                 <td>{{ presence.out_date | date: 'H:mm' }}</td>
+                                <td *ngIf="presence.number_of_hour > 0">{{ presence.number_of_hour }} h</td>
+                                <td *ngIf="presence.number_of_hour == 0">-1 h</td>
                                 <td>
                                     <ul>
                                         <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}

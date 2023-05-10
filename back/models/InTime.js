@@ -11,6 +11,7 @@ const inTimeSchema = mongoose.Schema({
     isCheckable:                    { type: Boolean, required: false },
     craIsValidate:                  { type: Boolean, required: false },
     // principale_activity_details:    { type: String, required: false },
+    early_departure:                { type: String, required: false },
     activity_details:               { type: [String], required: false },
     number_of_hour:                 { type: Number, required: false },
 });
