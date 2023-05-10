@@ -243,6 +243,8 @@ export class  DashboardComponent implements OnInit {
   showButtonsValidateCra: boolean = false; // permet d'afficher les boutons qui s'affiche au click pour remplir le cra
   taskForUser: Tache[] = [];
   showTaskForUser: boolean = false; // permet d'afficher les tâches de l'utilisateur qui sont en cours
+  showFormEarlyDeparture: boolean = false; // permet d'afficher le formulaire de compte rendu de depart anticipé
+  formEarlyDeparture: FormGroup; // formulaire pour faire un compte rendu de depart anticipé
   clonedTaches: { [s: string]: Tache; } = {}; // pour le tableau éditable des taches
   initialNumberOfHours: number; // Nombre d'heure d'une tâche avant modification
 
@@ -353,8 +355,10 @@ export class  DashboardComponent implements OnInit {
     this.onIsCheck();
 
     //Initialisation du formulaire de tache
-    this.onInitFormDailyActivityDetails()
+    this.onInitFormDailyActivityDetails();
 
+    // initialisation du formulaire de depart
+    this.onInitFormEarlyDeparture();
   }
 
   SCIENCE() {
@@ -447,6 +451,7 @@ export class  DashboardComponent implements OnInit {
   }
 
 
+  /** check area */
 
   //Verification du checkin
   onIsCheck() {
@@ -471,6 +476,14 @@ export class  DashboardComponent implements OnInit {
           this.isCheck = true;
           if (response.out_date != null) {
             this.isCheckOut = true;
+          } 
+          // Si l'utilisateur n'a pas effectué son check out, faire un calcule pour voir le temps passé au travail
+          else {
+            let dateOne = new Date();
+            let dateTwo = new Date(this.dailyCheck?.in_date);
+            // console.log(this.dailyCheck.in_date, dateTwo.getHours(), this.user.pays_adresse)
+
+            // console.log(dateOne.getHours() - dateTwo.getHours());
           }
         }
         else {
@@ -660,6 +673,48 @@ export class  DashboardComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
   }
+
+
+  // méthode de création du formulaire de départ anticipé
+  onInitFormEarlyDeparture(): void
+  {
+    this.formEarlyDeparture = this.formBuilder.group({
+      motif: ['', Validators.required],
+      tasks: ['' , Validators.required],
+    });
+  }
+
+
+  // méthode de départ anticipé
+  onEarlyDeparture(): void
+  {
+    // récupération des données du formulaire
+    let formValue = this.formEarlyDeparture.value;
+    
+    // mis à jour du dailyCheck
+    this.dailyCheck.early_departure   = formValue.motif;
+    this.dailyCheck.activity_details  = formValue.tasks;
+    this.dailyCheck.craIsValidate = true;
+    this.dailyCheck.statut = 'Départ anticipé';
+
+    // calcule du temps passé au travail
+    let beginDate = new Date(this.dailyCheck.in_date);
+    let date = new Date();
+    this.dailyCheck.number_of_hour = date.getHours() - beginDate.getHours();
+
+    // envoi dans la base de données
+    this.inTimeService.patchCheck(this.dailyCheck)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
+      this.formEarlyDeparture.reset();
+      this.showFormEarlyDeparture = false;
+      this.onIsCheck();
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); });
+  }
+  /** end check area */
+
+
   clickFile() {
     document.getElementById('selectedFile').click();
   }
