@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
@@ -11,16 +12,12 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
-import { ActivatedRoute } from '@angular/router';
-import { PartenaireService } from 'src/app/services/partenaire.service';
-import { Partenaire } from 'src/app/models/Partenaire';
-
 @Component({
-  selector: 'app-pov-partenaire-list-prospects',
-  templateUrl: './pov-partenaire-list-prospects.component.html',
-  styleUrls: ['./pov-partenaire-list-prospects.component.scss']
+  selector: 'app-list-prospects',
+  templateUrl: './list-prospects.component.html',
+  styleUrls: ['./list-prospects.component.scss']
 })
-export class PovPartenaireListProspectsComponent implements OnInit {
+export class ListProspectsComponent implements OnInit {
 
   //Informations necessaires pour l'upload de fichier
   showUploadFile: Prospect = null
@@ -43,7 +40,6 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     note: new FormControl(""),
     traited_by: new FormControl("", Validators.required),
   })
-  ID = this.route.snapshot.paramMap.get('id');
   FileUpload(event) {
     if (this.uploadFileForm.value.typeDoc != null && event.files != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
@@ -268,11 +264,9 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   filterEcole = []
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute, private PService: PartenaireService) { }
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
 
   prospects: Prospect[];
-
-  PARTENAIRE: Partenaire
 
   selectedProspect: Prospect = null
 
@@ -294,11 +288,8 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllByCommercialUserID(this.ID).subscribe(data => {
+    this.admissionService.getAll().subscribe(data => {
       this.prospects = data
-    })
-    this.PService.getById(this.ID).subscribe(data => {
-      this.PARTENAIRE = data
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -675,4 +666,5 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+
 }

@@ -23,10 +23,10 @@
                     <textarea pInputTextarea formControlName="description"
                         placeholder="Ex: Dévéloppement IT de nouvelles technologies IA et Moteur de recherche"></textarea>
                 </div>
-                <div class="field col-12" *ngIf="!PartenaireSelected">
+                <!--<div class="field col-12" *ngIf="!PartenaireSelected">
                     <label>Partenaire<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="PartenaireList" formControlName="partenaire_id"></p-dropdown>
-                </div>
+                </div>-->
 
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter cette brand" [disabled]="addForm.invalid" type="submit"></button>
