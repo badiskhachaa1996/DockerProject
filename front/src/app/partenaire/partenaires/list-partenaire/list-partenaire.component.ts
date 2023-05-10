@@ -84,10 +84,10 @@ export class ListPartenaireComponent implements OnInit {
 
   canDelete = false
 
-  filterAnciennete = []
+  filterAnciennete = [{ label: 'Toutes les anciennetes', value: null }]
 
-  filterContribution = []
-  filterEtat = []
+  filterContribution = [{ label: 'Toutes les contributions', value: null }]
+  filterEtat = [{ label: 'Tous les états de contrats', value: null }]
 
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService) { }
@@ -111,12 +111,12 @@ export class ListPartenaireComponent implements OnInit {
         let temp = { label: d.statut_anciennete, value: d.statut_anciennete }
         let temp2 = { label: d.contribution, value: d.contribution }
         let temp3 = { label: d.etat_contrat, value: d.etat_contrat }
-        if (!temp2List.includes(temp2) && d.contribution)
-          this.filterContribution.push(temp2); temp2List.push(temp2)
-        if (!tempList.includes(temp) && d.statut_anciennete)
-          this.filterAnciennete.push(temp); tempList.push(temp)
-        if (!temp3List.includes(temp3) && d.etat_contrat)
-          this.filterEtat.push(temp3); temp3List.push(temp3)
+        if (d.contribution && !temp2List.includes(d.contribution))
+          this.filterContribution.push(temp2); temp2List.push(d.contribution)
+        if (d.statut_anciennete && !tempList.includes(d.statut_anciennete))
+          this.filterAnciennete.push(temp); tempList.push(d.statut_anciennete)
+        if (d.etat_contrat && !temp3List.includes(d.etat_contrat))
+          this.filterEtat.push(temp3); temp3List.push(d.etat_contrat)
       })
     })
     this.UserService.getAll().subscribe(dataU => {
@@ -127,7 +127,11 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   seePreRecruted(rowData: Partenaire) {
-    this.router.navigate(["/gestion-preinscriptions/" + rowData._id])
+    this.router.navigate(["/international/partenaire/" + rowData._id])
+  }
+
+  seeAlternants(rowData: Partenaire) {
+    this.router.navigate(["/international/partenaire/alternants/" + rowData._id])
   }
 
   seeRecruted(rowData: Partenaire) {

@@ -7,6 +7,8 @@ import { AlternantsPartenaire } from 'src/app/models/AlternantsPartenaire';
 import { AlternantsPartenaireService } from 'src/app/services/alternants-partenaire.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 
 @Component({
   selector: 'app-pov-partenaire-alternants',
@@ -16,17 +18,22 @@ import { saveAs } from "file-saver";
 export class PovPartenaireAlternantsComponent implements OnInit {
 
   alternants: AlternantsPartenaire[]
-
+  PARTENAIRE: Partenaire
   ID = this.route.snapshot.paramMap.get('id');
-  constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router,) { }
+  constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router, private PService: PartenaireService) { }
 
   showDocuments: AlternantsPartenaire;
 
   ngOnInit(): void {
-    if (this.ID)
+    if (this.ID) {
+      this.PService.getById(this.ID).subscribe(data => {
+        this.PARTENAIRE = data
+      })
       this.APService.getAllByCommercialUserID(this.ID).subscribe(data => {
         this.alternants = data
       })
+    }
+
     else
       this.APService.getAll().subscribe(data => {
         this.alternants = data

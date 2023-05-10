@@ -73,7 +73,6 @@ export class BrandsListComponent implements OnInit {
   addForm = new FormGroup({
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
-    partenaire_id: new FormControl(this.ID, Validators.required),
     logo: new FormControl(''),
   })
 
@@ -81,7 +80,6 @@ export class BrandsListComponent implements OnInit {
     _id: new FormControl('', Validators.required),
     nom: new FormControl('', Validators.required),
     description: new FormControl(),
-    partenaire_id: new FormControl(this.ID, Validators.required),
     logo: new FormControl(''),
   })
 
@@ -140,7 +138,7 @@ export class BrandsListComponent implements OnInit {
           reader.onloadend = () => {
             if (this.dicLogo[this.logoBrand._id])
               this.dicLogo[this.logoBrand._id].url = reader.result;
-            else{
+            else {
               this.dicLogo[this.logoBrand._id] = {}
               this.dicLogo[this.logoBrand._id].url = reader.result;
             }

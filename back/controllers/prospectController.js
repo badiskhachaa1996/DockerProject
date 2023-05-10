@@ -1144,42 +1144,8 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
                 total: 0
             }
         }
-        if (data.pays && data.pays.length != 0)
-            prospectList.forEach(val => {
-                if (val.user_id && data.pays.includes(val.user_id.pays_adresse)) {
-                    data.payement.forEach(pay => {
-                        if (pay.montant >= 560) {
-                            stats_paiements.inscription.total += 1
-                            if (pay.type == 'Lien de paiement')
-                                stats_paiements.inscription.lien += 1
-                            else if (pay.type == 'Compensation')
-                                stats_paiements.inscription.compensation += 1
-                            else if (pay.type.includes('Virement'))
-                                stats_paiements.inscription.virement += 1
-                            else if (pay.type.includes('Espèce'))
-                                stats_paiements.inscription.espece += 1
-                            else if (pay.type.includes('Chèque'))
-                                stats_paiements.inscription.cheque += 1
-                        } else {
-                            stats_paiements.preinscription.total += 1
-                            if (pay.type == 'Lien de paiement')
-                                stats_paiements.preinscription.lien += 1
-                            else if (pay.type == 'Compensation')
-                                stats_paiements.preinscription.compensation += 1
-                            else if (pay.type.includes('Virement'))
-                                stats_paiements.preinscription.virement += 1
-                            else if (pay.type.includes('Espèce'))
-                                stats_paiements.preinscription.espece += 1
-                            else if (pay.type.includes('Chèque'))
-                                stats_paiements.preinscription.cheque += 1
-                        }
-                    })
-                    ProspectFiltered.push(val)
-                }
-
-            })
-        else {
-            prospectList.forEach(data => {
+        prospectList.forEach(data => {
+            if (data && data.payement)
                 data.payement.forEach(pay => {
                     if (pay.montant >= 560) {
                         stats_paiements.inscription.total += 1
@@ -1207,9 +1173,9 @@ app.get('/getDataForDashboardInternationalBasique', (req, res) => {
                             stats_paiements.preinscription.cheque += 1
                     }
                 })
-            })
-            ProspectFiltered = prospectList
-        }
+        })
+        ProspectFiltered = prospectList
+
 
         let stats = {
             tt_prospects: ProspectFiltered.length,
@@ -1357,7 +1323,7 @@ app.post('/getDataForDashboardPerformance', (req, res) => {
                 logements: Math.trunc(ProspectConsulaireFiltered.reduce((total, next) => total + (next?.logement != null ? 1 : 0), 0)),
             },
             global: {
-                prospects: 0,//
+                prospects: Math.ceil(ProspectOrientationFiltered.length / Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.avancement_orientation != 'En attente' ? 1 : 0), 0))),//Nombre des prospects assigné / Nombre des prospects contactés 
                 daily_contact: Math.ceil(ProspectOrientationFiltered.length / days),
                 delai: Math.ceil(score_attente / ProspectOrientationFiltered.length) * -1
             }

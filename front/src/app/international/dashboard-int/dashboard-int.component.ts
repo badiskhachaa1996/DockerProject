@@ -100,14 +100,16 @@ export class DashboardIntComponent implements OnInit {
       espece: 0,
       cheque: 0,
       lien: 0,
-      compensation: 0
+      compensation: 0,
+      total: 0
     },
     inscription: {
       virement: 0,
       espece: 0,
       cheque: 0,
       lien: 0,
-      compensation: 0
+      compensation: 0,
+      total: 0
     }
   }
   constructor(private FAService: FormulaireAdmissionService, private AService: AdmissionService, private ToastService: MessageService) { }
@@ -127,7 +129,7 @@ export class DashboardIntComponent implements OnInit {
       })
     })
     this.ToastService.add({ severity: 'info', summary: "Chargement des statistiques en cours ..." })
-    this.AService.getDataForDashboardInternationalBasique().subscribe(r=>{
+    this.AService.getDataForDashboardInternationalBasique().subscribe(r => {
       this.stats = r.stats
       this.stats_admission = r.stats_admission
       this.stats_consulaire = r.stats_consulaire
