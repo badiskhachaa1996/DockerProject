@@ -1029,10 +1029,57 @@ app.post('/getDataForDashboardInternational', (req, res) => {
     filter['date_creation'] = { $lte: date_fin, $gte: date_debut }
     Prospect.find(filter).populate('user_id').then(prospectList => {
         let ProspectFiltered = []
+        let stats_paiements = {
+            preinscription: {
+                virement: 0,
+                espece: 0,
+                cheque: 0,
+                lien: 0,
+                compensation: 0,
+                total: 0
+            },
+            inscription: {
+                virement: 0,
+                espece: 0,
+                cheque: 0,
+                lien: 0,
+                compensation: 0,
+                total: 0
+            }
+        }
         if (data.pays && data.pays.length != 0)
             prospectList.forEach(val => {
-                if (val.user_id && data.pays.includes(val.user_id.pays_adresse))
+                if (val.user_id && data.pays.includes(val.user_id.pays_adresse)) {
+                    data.payement.forEach(pay => {
+                        if (pay.montant >= 560) {
+                            stats_paiements.inscription.total += 1
+                            if (pay.type == 'Lien de paiement')
+                                stats_paiements.inscription.lien += 1
+                            else if (pay.type == 'Compensation')
+                                stats_paiements.inscription.compensation += 1
+                            else if (pay.type.includes('Virement'))
+                                stats_paiements.inscription.virement += 1
+                            else if (pay.type.includes('Espèce'))
+                                stats_paiements.inscription.espece += 1
+                            else if (pay.type.includes('Chèque'))
+                                stats_paiements.inscription.cheque += 1
+                        } else {
+                            stats_paiements.preinscription.total += 1
+                            if (pay.type == 'Lien de paiement')
+                                stats_paiements.preinscription.lien += 1
+                            else if (pay.type == 'Compensation')
+                                stats_paiements.preinscription.compensation += 1
+                            else if (pay.type.includes('Virement'))
+                                stats_paiements.preinscription.virement += 1
+                            else if (pay.type.includes('Espèce'))
+                                stats_paiements.preinscription.espece += 1
+                            else if (pay.type.includes('Chèque'))
+                                stats_paiements.preinscription.cheque += 1
+                        }
+                    })
                     ProspectFiltered.push(val)
+                }
+
             })
         else
             ProspectFiltered = prospectList
@@ -1070,29 +1117,253 @@ app.post('/getDataForDashboardInternational', (req, res) => {
             non_contacte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.contact_orientation == null ? 1 : 0), 0)),
             logement: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.logement != null ? 1 : 0), 0)),
         }
+
+        res.send({ stats, stats_orientation, stats_admission, stats_consulaire, stats_paiements })
+    })
+
+})
+
+app.get('/getDataForDashboardInternationalBasique', (req, res) => {
+    Prospect.find().populate('user_id').then(prospectList => {
+        let ProspectFiltered = []
         let stats_paiements = {
             preinscription: {
                 virement: 0,
                 espece: 0,
                 cheque: 0,
                 lien: 0,
-                compensation: 0
+                compensation: 0,
+                total: 0
             },
             inscription: {
                 virement: 0,
                 espece: 0,
                 cheque: 0,
                 lien: 0,
-                compensation: 0
+                compensation: 0,
+                total: 0
             }
         }
+        if (data.pays && data.pays.length != 0)
+            prospectList.forEach(val => {
+                if (val.user_id && data.pays.includes(val.user_id.pays_adresse)) {
+                    data.payement.forEach(pay => {
+                        if (pay.montant >= 560) {
+                            stats_paiements.inscription.total += 1
+                            if (pay.type == 'Lien de paiement')
+                                stats_paiements.inscription.lien += 1
+                            else if (pay.type == 'Compensation')
+                                stats_paiements.inscription.compensation += 1
+                            else if (pay.type.includes('Virement'))
+                                stats_paiements.inscription.virement += 1
+                            else if (pay.type.includes('Espèce'))
+                                stats_paiements.inscription.espece += 1
+                            else if (pay.type.includes('Chèque'))
+                                stats_paiements.inscription.cheque += 1
+                        } else {
+                            stats_paiements.preinscription.total += 1
+                            if (pay.type == 'Lien de paiement')
+                                stats_paiements.preinscription.lien += 1
+                            else if (pay.type == 'Compensation')
+                                stats_paiements.preinscription.compensation += 1
+                            else if (pay.type.includes('Virement'))
+                                stats_paiements.preinscription.virement += 1
+                            else if (pay.type.includes('Espèce'))
+                                stats_paiements.preinscription.espece += 1
+                            else if (pay.type.includes('Chèque'))
+                                stats_paiements.preinscription.cheque += 1
+                        }
+                    })
+                    ProspectFiltered.push(val)
+                }
+
+            })
+        else {
+            prospectList.forEach(data => {
+                data.payement.forEach(pay => {
+                    if (pay.montant >= 560) {
+                        stats_paiements.inscription.total += 1
+                        if (pay.type == 'Lien de paiement')
+                            stats_paiements.inscription.lien += 1
+                        else if (pay.type == 'Compensation')
+                            stats_paiements.inscription.compensation += 1
+                        else if (pay.type.includes('Virement'))
+                            stats_paiements.inscription.virement += 1
+                        else if (pay.type.includes('Espèce'))
+                            stats_paiements.inscription.espece += 1
+                        else if (pay.type.includes('Chèque'))
+                            stats_paiements.inscription.cheque += 1
+                    } else {
+                        stats_paiements.preinscription.total += 1
+                        if (pay.type == 'Lien de paiement')
+                            stats_paiements.preinscription.lien += 1
+                        else if (pay.type == 'Compensation')
+                            stats_paiements.preinscription.compensation += 1
+                        else if (pay.type.includes('Virement'))
+                            stats_paiements.preinscription.virement += 1
+                        else if (pay.type.includes('Espèce'))
+                            stats_paiements.preinscription.espece += 1
+                        else if (pay.type.includes('Chèque'))
+                            stats_paiements.preinscription.cheque += 1
+                    }
+                })
+            })
+            ProspectFiltered = prospectList
+        }
+
+        let stats = {
+            tt_prospects: ProspectFiltered.length,
+            tt_admis: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' ? 1 : 0), 0)),
+            tt_paiements: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.statut_payement == 'Oui' ? 1 : 0), 0)),
+            tt_visa: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_visa == 'Oui' ? 1 : 0), 0)),
+            tt_etudiants: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'Inscription définitive' ? 1 : 0), 0)),
+            tt_orientation: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation scolaire' ? 1 : 0), 0)),
+            tt_admission: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'admission' ? 1 : 0), 0)),
+            tt_consulaire: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En phase d\'orientation consulaire' ? 1 : 0), 0)),
+            nn_affecte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'En attente d\'affectation' ? 1 : 0), 0)),
+            recours: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.phase_candidature == 'Recours' ? 1 : 0), 0)),
+        }
+        let stats_orientation = {
+            contact: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation != 'En attente' ? 1 : 0), 0)),
+            non_contact: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'En attente' ? 1 : 0), 0)),
+            joignable: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Joignable' ? 1 : 0), 0)),
+            non_joignable: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Non Joignable  &  Mail envoyé' ? 1 : 0), 0)),
+            valide: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Validé') ? 1 : 0), 0)),
+            non_valide: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Dossier rejeté') ? 1 : 0), 0)),
+            oriente: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Changement de campus') || next?.decision_orientation.includes('Changement de formation') || next?.decision_orientation.includes('Changement de destination') ? 1 : 0), 0)),
+            suspension: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Suspendu') ? 1 : 0), 0)),
+        }
+        let stats_admission = {
+            traite: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.dossier_traited_by != null ? 1 : 0), 0)),
+            non_traite: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.dossier_traited_by == null ? 1 : 0), 0)),
+            admissible: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Accepté' || next?.decision_admission == 'Accepté sur réserve' ? 1 : 0), 0)),
+            non_admissible: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'Refusé' ? 1 : 0), 0)),
+            attente: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.decision_admission == 'En attente de traitement' ? 1 : 0), 0)),
+        }
+        let stats_consulaire = {
+            contacte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.contact_orientation != null ? 1 : 0), 0)),
+            non_contacte: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.contact_orientation == null ? 1 : 0), 0)),
+            logement: Math.trunc(ProspectFiltered.reduce((total, next) => total + (next?.logement != null ? 1 : 0), 0)),
+        }
+
         res.send({ stats, stats_orientation, stats_admission, stats_consulaire, stats_paiements })
     })
-
 })
 
 app.post('/getDataForDashboardPerformance', (req, res) => {
+    let data = req.body //{  source,rentree_scolaire, formation,url_form,date_1,date_2,campus, pays, phase_candidature}
+    let filter = {}
+    if (!data.source || data.source.length == 0) delete data.source
+    else filter['source'] = { $in: data.source }
+    if (!data.rentree_scolaire || data.rentree_scolaire.length == 0) delete data.rentree_scolaire
+    else filter['rentree_scolaire'] = { $in: data.rentree_scolaire }
+    if (!data.formation || data.formation.length == 0) delete data.formation
+    else filter['formation'] = { $in: data.formation }
+    if (!data.url_form || data.url_form.length == 0) delete data.url_form
+    else filter['type_form'] = { $in: data.url_form }
+    if (!data.campus || data.campus.length == 0) delete data.campus
+    else filter['campus_choix_1'] = { $in: data.campus }
+    if (!data.phase_candidature || data.phase_candidature.length == 0) delete data.phase_candidature
+    else filter['phase_candidature'] = { $in: data.phase_candidature }
 
+    let date_debut = new Date(2000, 1, 1)
+    let date_fin = new Date()
+    if (data.date_1) {
+        date_debut = new Date(data.date_1)
+        if (data.date_2)
+            date_fin = new Date(data.date_2)
+    }
+    filter['date_creation'] = { $lte: date_fin, $gte: date_debut }
+    //filter['dossier_traited_by'] = req.body.member._id
+    Prospect.find(filter).populate('user_id').then(prospectList => {
+        let ProspectOrientationFiltered = []
+        let ProspectAdmissionFiltered = []
+        let ProspectSourcingFiltered = []
+        let ProspectConsulaireFiltered = []
+
+        let ProspectAttestation = []
+        let score_attente = 0
+        if (data.pays && data.pays.length != 0)
+            prospectList.forEach(val => {
+                if (val.user_id && data.pays.includes(val.user_id.pays_adresse)) {
+                    if (val.dossier_traited_by == req.body.member._id) {
+                        ProspectAdmissionFiltered.push(val)//????
+
+                    }
+
+                    if (val.agent_sourcing_id == req.body.member._id)
+                        ProspectSourcingFiltered.push(val)//Sourcing
+                    if (val.consulaire_traited_by == req.body.member._id) {
+                        ProspectConsulaireFiltered.push(val)//Consulaire
+                        let tempBool = false
+                        val.documents_administrative.forEach(doc => {
+                            if (doc.traited_by == `${req.body.member.lastname} ${req.body.member.firstname}`)
+                                tempBool = true
+                        })
+                        if (tempBool)
+                            ProspectAttestation.push(val)
+                    }
+
+                    if (val.contact_orientation == req.body.member._id) {
+                        ProspectOrientationFiltered.push(val)//Orientation
+                        score_attente += Math.ceil((new Date(val?.date_creation).getTime() - new Date(val?.contact_date).getTime()) / (1000 * 3600 * 24))
+                    }
+
+                }
+
+            })
+        else
+            prospectList.forEach(val => {
+                if (val.dossier_traited_by == req.body.member._id)
+                    ProspectAdmissionFiltered.push(val)//????
+                if (val.agent_sourcing_id == req.body.member._id)
+                    ProspectSourcingFiltered.push(val)//Sourcing
+                if (val.consulaire_traited_by == req.body.member._id) {
+                    ProspectConsulaireFiltered.push(val)//Consulaire
+                    let tempBool = false
+                    val.documents_administrative.forEach(doc => {
+                        if (doc?.traited_by == `${req.body.member.lastname} ${req.body.member.firstname}`)
+                            tempBool = true
+                    })
+                    if (tempBool)
+                        ProspectAttestation.push(val)
+                }
+                if (val.contact_orientation == req.body.member._id) {
+                    ProspectOrientationFiltered.push(val)//Orientation
+                    score_attente += Math.ceil((new Date(val?.date_creation).getTime() - new Date(val?.contact_date).getTime()) / (1000 * 3600 * 24))
+                }
+            })
+        //let ProspectFiltered = ProspectAdmissionFiltered.concat(ProspectSourcingFiltered, ProspectConsulaireFiltered, ProspectOrientationFiltered)
+        let days = Math.ceil((new Date(req.body.member.date_creation).getTime() - new Date().getTime()) / (1000 * 3600 * 24))
+
+        let r = {
+            orientation: {
+                assigned: ProspectOrientationFiltered.length,
+                contacted: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.avancement_orientation != 'En attente' ? 1 : 0), 0)),
+                oriented: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Changement de campus') || next?.decision_orientation.includes('Changement de formation') || next?.decision_orientation.includes('Changement de destination') ? 1 : 0), 0)),
+                suspension: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Suspendu') ? 1 : 0), 0)),
+                joignable: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Joignable' ? 1 : 0), 0)),
+                nn_joignable: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.avancement_orientation == 'Non Joignable  &  Mail envoyé' ? 1 : 0), 0)),
+                valided: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Validé') ? 1 : 0), 0)),
+                nn_valided: Math.trunc(ProspectOrientationFiltered.reduce((total, next) => total + (next?.decision_orientation.includes('Dossier rejeté') ? 1 : 0), 0)),
+            },
+            admission: {
+                prospects: ProspectAdmissionFiltered.length,
+                attestations: ProspectAttestation.length
+            },
+            paiements: { nb: Math.trunc(ProspectSourcingFiltered.reduce((total, next) => total + (next?.statut_payement == "Oui" ? 1 : 0), 0)), },
+            consulaire: {
+                prospects: ProspectConsulaireFiltered.length,
+                logements: Math.trunc(ProspectConsulaireFiltered.reduce((total, next) => total + (next?.logement != null ? 1 : 0), 0)),
+            },
+            global: {
+                prospects: 0,//
+                daily_contact: Math.ceil(ProspectOrientationFiltered.length / days),
+                delai: Math.ceil(score_attente / ProspectOrientationFiltered.length) * -1
+            }
+        }
+        res.send(r)
+    })
 })
 
 app.post('/getDataForDashboardPartenaire', (req, res) => {
