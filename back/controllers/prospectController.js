@@ -543,7 +543,6 @@ app
 
 //Mise à jour d'un prospect seulement
 app.put("/updateV2", (req, res, next) => {
-    console.log({ ...req.body })
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body

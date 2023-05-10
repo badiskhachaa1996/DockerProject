@@ -394,6 +394,14 @@
         </form>
     </div>
 
+    <div class="col-12 grid card" *ngIf="AttribuerProspect">
+        <h1 class="col-12" style="text-align: center;">Attribuer {{AttribuerProspect.user_id.lastname}}
+            {{AttribuerProspect.user_id.firstname}} à :
+        </h1>
+        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="collaborateurList" class="col-12"
+            (onChange)="onChangeAttribuer($event.value)"></p-dropdown>
+    </div>
+
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
@@ -614,6 +622,10 @@
                                 (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>-->
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Attribuer à un collaborateur" class="pi pi-user-plus" aria-hidden="true"
+                                (click)="initAttribuer(prospect)">
+
+                            </i>
 
                         </td>
                     </tr>

@@ -294,11 +294,20 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllByCommercialUserID(this.ID).subscribe(data => {
+    this.admissionService.getAllByCodeAdmin(this.ID).subscribe(data => {
       this.prospects = data
     })
     this.PService.getById(this.ID).subscribe(data => {
       this.PARTENAIRE = data
+    })
+
+    this.CommercialService.getAllPopulateByPartenaireID(this.ID).subscribe(data => {
+      console.log(data)
+      data.forEach(c => {
+        let { user_id }: any = c
+        if (user_id)
+          this.collaborateurList.push({ label: `${c.code_commercial_partenaire} ${user_id.lastname} ${user_id.firstname}`, value: c.code_commercial_partenaire })
+      })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -374,6 +383,8 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     { label: "Entretien de motivation", value: "Entretien de motivation" },
     { label: "Quiz Informatique", value: "Quiz Informatique" },
   ]
+
+  collaborateurList = []
 
   dropdownFormation = []
   dropdownEcole = []
@@ -674,5 +685,19 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
+  }
+
+  AttribuerProspect: Prospect
+
+  initAttribuer(prospect: Prospect) {
+    this.AttribuerProspect = prospect
+  }
+
+  onChangeAttribuer(code_commercial) {
+    this.admissionService.updateV2({ code_commercial, _id: this.AttribuerProspect._id }).subscribe(data => {
+      this.prospects.splice(this.prospects.indexOf(this.AttribuerProspect), 1, data)
+      this.AttribuerProspect = null
+      this.messageService.add({ severity: 'success', summary: "Attribuer du prospect avec succès" })
+    })
   }
 }
