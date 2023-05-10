@@ -405,7 +405,29 @@ app.get('/repairNote', (req, res) => {
                 if (n.classe_id != n.etudiant_id.classe_id)
                     Note.findByIdAndUpdate(n._id, { classe_id: n.etudiant_id.classe_id }, { new: true }, (err, doc) => { })
         })
-        res.send({ message: "DAB" })
+        //Supprimer les notes en doublons
+        Note.aggregate([
+            {
+                "$group": {
+                    _id: { examen_id: "$examen_id", etudiant_id: "$etudiant_id" },
+                    ids: { $addToSet: "$_id" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                "$match": {
+                    count: { "$gt": 1 }
+                }
+            }
+        ]).then(docs => {
+            docs.forEach(function (doc) {
+
+                doc.ids.shift();
+                Note.remove({
+                    _id: { $in: doc.note_id }
+                });
+            })
+        })
     })
 })
 

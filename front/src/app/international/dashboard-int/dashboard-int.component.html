@@ -142,7 +142,102 @@
     </div>
     <br>
     <div class="col-12 grid">
-        <div class="col-4">
+        <p-tabView class="col-12">
+            <p-tabPanel header="Toutes les phases">
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{ stats.tt_consulaire }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Inscription définitive : {{ stats.tt_admis }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Recours : {{ stats.recours }}</h5>
+                </div>
+                <div class="col-6 grid card">
+                    <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
+                    <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions"
+                        #chart></p-chart>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Orientation Prospects">
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Joignable : {{ stats_orientation.joignable }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Validé : {{ stats_orientation.valide }}</h5>
+                </div>
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_orientation.non_contact }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Non Joignable : {{ stats_orientation.non_joignable }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Non Validé : {{ stats_orientation.non_valide }}</h5>
+                </div>
+                <div class="col-12 grid">
+                    <h5 class="col-12" style="text-align: center;">Orienté : {{ stats_orientation.oriente }}</h5>
+                    <h5 class="col-12" style="text-align: center;">En suspension : {{ stats_orientation.suspension }}
+                    </h5>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Admission Prospects">
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Admissible : {{ stats_admission.admissible }}</h5>
+                </div>
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}
+                    </h5>
+                </div>
+                <div class="col-12 grid">
+                    <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Paiements">
+                <div class="col-6 grid">
+                    <h3 class="col-12">Préinscription :{{ stats_paiements.preinscription.total }} </h3>
+                    <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement
+                        }}</h5>
+                    <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Lien de paiement :
+                        {{stats_paiements.preinscription.lien }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                        stats_paiements.preinscription.compensation }}</h5>
+                </div>
+                <div class="col-6 grid">
+                    <h3 class="col-12">Inscription : {{ stats_paiements.inscription.total }}</h3>
+                    <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Lien de paiement : {{
+                        stats_paiements.inscription.lien }}
+                    </h5>
+                    <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                        stats_paiements.inscription.compensation }}</h5>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Accompagnement consulaire">
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_consulaire.contacte }}</h5>
+                </div>
+                <div class="col-6 grid">
+                    <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_consulaire.non_contacte }}
+                    </h5>
+                </div>
+                <div class="col-12 grid">
+                    <h5 class="col-12" style="text-align: center;">Logement vendu: {{ stats_consulaire.logement }}</h5>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+        <!--<div class="col-4">
             <label>Phase de candidature:</label><br>
             <p-dropdown filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase"
                 autoWidth="false" [style]="{'width':'100%'}" (onChange)="phase_candidature=$event.value;"
@@ -191,7 +286,8 @@
             </div>
             <div class="col-6 grid">
                 <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}</h5>
-                <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}</h5>
+                <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}
+                </h5>
             </div>
             <div class="col-12 grid">
                 <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
@@ -213,17 +309,20 @@
             <h1 class="col-12">Paiements</h1>
             <div class="col-6 grid">
                 <h3 class="col-12">Préinscription :{{ stats_paiements.preinscription.total }} </h3>
-                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement }}</h5>
+                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement }}
+                </h5>
                 <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece }}</h5>
                 <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque }}</h5>
-                <h5 class="col-12" style="text-align: center;">Lien de paiement : {{stats_paiements.preinscription.lien }}
+                <h5 class="col-12" style="text-align: center;">Lien de paiement : {{stats_paiements.preinscription.lien
+                    }}
                 </h5>
                 <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
                     stats_paiements.preinscription.compensation }}</h5>
             </div>
             <div class="col-6 grid">
                 <h3 class="col-12">Inscription : {{ stats_paiements.inscription.total }}</h3>
-                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}</h5>
+                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}
+                </h5>
                 <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}</h5>
                 <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}</h5>
                 <h5 class="col-12" style="text-align: center;">Lien de paiement : {{ stats_paiements.inscription.lien }}
@@ -231,10 +330,6 @@
                 <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
                     stats_paiements.inscription.compensation }}</h5>
             </div>
-        </div>
+        </div>-->
     </div>
-
-
-
-    
 </div>
