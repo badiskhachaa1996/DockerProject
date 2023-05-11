@@ -3151,6 +3151,8 @@ export class AppMenuComponent implements OnInit {
                         error: (error: any) => { console.log(error); },
                         complete: () => { console.log(" Informations de l'étudiant récupérer avec succès !"); },
                     });
+                } else if (response.role == "Responsable" && service_id?.label === 'Gestion des partenaires et des leads') {
+
                 }
                 /* end menus alternants intedgroup */
 

@@ -52,6 +52,7 @@ export class AddAgentComponent implements OnInit {
     { value : 'IGS - Inted Group Support', label : 'IGS - Inted Group Support'},
     { value : 'IGH - Inted Group RH', label : 'IGH - Inted Group RH'},
     { value : 'IGD - Inted Group Direction', label : 'IGD - Inted Group Direction'},
+    { value : 'GWO IGWIN - INTED GROUP', label : 'GWO IGWIN - INTED GROUP'},
   ];
   statutList = environment.typeUser
   campusList = []
