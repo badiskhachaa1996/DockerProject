@@ -35,16 +35,16 @@
                             <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
-                            <label For="email_perso">Email perso</label>
+                            <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
                                 placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
-                            <label For="pays">Pays</label>
+                            <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
                                 optionLabel="value"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -63,10 +63,10 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
-                            <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <label For="date_creation">Date d'inscription</label>
+                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -178,6 +178,70 @@
                             </div>
                         </div>
                     </div>
+                </p-tabPanel>
+                <p-tabPanel header="Orientation et Admission">
+                    <form class="grid" [formGroup]="detailsForm">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field md:col-6 col-12">
+                                <label For="formation">Décision orientation</label><br>
+                                <p>{{showDetails.decision_orientation}}</p>
+                                <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            </div>
+                            <div class="field md:col-6 col-12">
+                                <label For="formation">Décision admission</label><br>
+                                <p>{{showDetails.decision_admission}}</p>
+                                <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            </div>
+                        </div>
+                    </form>
+                </p-tabPanel>
+                <p-tabPanel header="Documents d'inscription">
+                    <div class="col-12 grid">
+                        <div class="col-12">
+                            <strong>Mes attestations disponibles:</strong>
+                        </div>
+                        <div class="col-12">
+                            <p-table styleClass="p-datatable-gridlines" [value]="showDetails.documents_administrative"
+                                responsiveLayout="scroll" responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th>
+                                            Date de délivrance
+                                        </th>
+                                        <th>
+                                            Nom du document
+                                        </th>
+                                        <th>
+                                            Lien de téléchargement
+                                        </th>
+                                        <th>
+                                            Note
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData>
+                                    <tr>
+                                        <td>
+                                            {{rowData.date | date:'mediumDate'}}
+                                        </td>
+                                        <td>
+                                            {{rowData.nom}}
+                                        </td>
+                                        <td>
+                                            <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                                        </td>
+                                        <td>
+                                            {{rowData.note}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                    <p
+                        *ngIf="showDetails.documents_administrative==null || showDetails.documents_administrative.length==0">
+                        Aucun document n'a été chargé !
+                    </p>
                 </p-tabPanel>
             </p-tabView>
             <div class="col-4">

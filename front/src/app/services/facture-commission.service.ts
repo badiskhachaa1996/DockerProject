@@ -41,6 +41,10 @@ export class FactureCommissionService {
 
   }
 
+  delete(id: string) {
+    let registreUrl = this.apiUrl + "delete/" + id;
+    return this.httpClient.delete<FactureCommission>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   downloadFile(id) {
     let url = this.apiUrl + "downloadFile/" + id

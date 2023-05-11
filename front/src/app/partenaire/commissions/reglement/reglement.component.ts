@@ -233,5 +233,11 @@ export class ReglementComponent implements OnInit {
     }
 
   }
-
+  delete(facture: FactureCommission) {
+    if (confirm(`Etes-vous sûr de vouloir supprimer cette vente ?`))
+      this.FCService.delete(facture._id).subscribe(data => {
+        this.factures.splice(this.factures.indexOf(facture), 1)
+        this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
+      })
+  }
 }

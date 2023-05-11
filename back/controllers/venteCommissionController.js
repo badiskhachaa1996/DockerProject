@@ -36,11 +36,17 @@ app.post("/getAllByPartenaireIDs", (req, res, next) => {
 app.put("/update", (req, res) => {
     console.log(req.body)
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
-        console.log(err,doc)
+        console.log(err, doc)
         Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
             .then((formFromDb) => { res.status(200).send(formFromDb); })
-            .catch((error) => { console.error(error);res.status(500).send(error); });
+            .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });
+})
+
+app.delete('/delete/:id', (req, res) => {
+    Vente.findByIdAndRemove(req.params.id).then(doc => {
+        res.send(doc)
+    })
 })
 
 module.exports = app;

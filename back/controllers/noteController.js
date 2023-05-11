@@ -424,9 +424,9 @@ app.get('/repairNote', (req, res) => {
                 doc.ids.shift();
                 Note.remove({
                     _id: { $in: doc.ids }
-                });
+                }).exec();
             })
-            res.send({docs})
+            res.send({ docs })
         })
     })
 })

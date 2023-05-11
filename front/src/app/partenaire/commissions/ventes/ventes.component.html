@@ -139,10 +139,10 @@
                             emptyFilterMessage="Pas de statut de commission trouvé"
                             filterPlaceholder="Choisissez le statut de commission"></p-dropdown>
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
+                        <!--<p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
                             (onChange)="dt1.filter($event.value, 'produit', 'equals'); "
                             emptyFilterMessage="Pas de Type de commission trouvé"
-                            filterPlaceholder="Choisissez le Type de commission"></p-dropdown>
+                            filterPlaceholder="Choisissez le Type de commission"></p-dropdown>-->
 
                         <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
                             *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
@@ -192,7 +192,8 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la commission 
+                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la
+                            commission
                             <p-sortIcon field="statutCommission">
                             </p-sortIcon>
                         </th>
@@ -251,6 +252,8 @@
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil"
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la vente"></i>
+                            <i style="margin-left: 2%;" (click)="delete(vente)" class="pi pi-trash"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Supprimer la vente"></i>
                         </td>
                     </tr>
                 </ng-template>

@@ -256,4 +256,12 @@ export class VentesComponent implements OnInit {
     else
       return str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€'))
   }
+
+  delete(vente: Vente) {
+    if (confirm(`Etes-vous sûr de vouloir supprimer cette vente ?`))
+      this.VenteService.delete(vente._id).subscribe(data => {
+        this.ventes.splice(this.ventes.indexOf(vente), 1)
+        this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
+      })
+  }
 }
