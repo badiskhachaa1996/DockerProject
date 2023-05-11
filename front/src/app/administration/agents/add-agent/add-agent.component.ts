@@ -63,7 +63,7 @@ export class AddAgentComponent implements OnInit {
     civilite: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")]),
+    email: new FormControl('', [Validators.required]),//Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")
     indicatif: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     phone: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     role: new FormControl('', Validators.required),
