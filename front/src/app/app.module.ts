@@ -296,6 +296,7 @@ import { GenDocDerogationComponent } from './international/generation-doc/gen-do
 import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
+import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 
 
 @NgModule({
@@ -601,7 +602,8 @@ import { ListProspectsComponent } from './admission/international/list-prospects
     GenDocDerogationComponent,
     GenDocLettreAcceptationComponent,
     PerformanceComponent,
-    ListProspectsComponent
+    ListProspectsComponent,
+    LivretGeneratorComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

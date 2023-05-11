@@ -423,7 +423,7 @@ app.get('/repairNote', (req, res) => {
             docs.forEach(function (doc) {
                 doc.ids.shift();
                 Note.remove({
-                    _id: { $in: doc.note_id }
+                    _id: { $in: doc.ids }
                 });
             })
             res.send({docs})
