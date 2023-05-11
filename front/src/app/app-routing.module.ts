@@ -192,6 +192,7 @@ import { GenDocDerogationComponent } from './international/generation-doc/gen-do
 import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
+import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 
 const routes: Routes = [
     {
@@ -307,6 +308,8 @@ const routes: Routes = [
             { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
+            { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
+            { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */

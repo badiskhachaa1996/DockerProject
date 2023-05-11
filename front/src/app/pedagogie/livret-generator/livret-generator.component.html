@@ -1,0 +1,199 @@
+<div class="col-12 grid">
+    <p-table [value]="['']" responsiveLayout="scroll" styleClass="p-datatable-gridlines" class="col-12">
+        <ng-template pTemplate="header">
+            <tr>
+                <th rowspan="2" colspan="3">BTS MCO</th>
+                <th rowspan="1" colspan="2">Année de l'examen: 2023</th>
+                <th rowspan="2" colspan="1">Nom: Hue</th>
+                <th rowspan="1" colspan="1">Prénom: Morgan</th>
+                <th rowspan="2" colspan="2">Cachet de l'établissement: @</th>
+            </tr>
+            <tr>
+                <th rowspan="1" colspan="1">Née le: 21/12/2000</th>
+                <th rowspan="1" colspan="1">Lieu : Deauville</th>
+                <th rowspan="1" colspan="1">Langue vivante : Français, Anglais</th>
+            </tr>
+            <tr>
+                <th rowspan="1" colspan="3">Classe de 1er année </th>
+                <th rowspan="2" colspan="2">Matières enseignées de la grille horaire réglementaire</th>
+                <th rowspan="1" colspan="3">Classe de 2ème année</th>
+                <th rowspan="2" colspan="3">Appréciations</th>
+            </tr>
+            <tr>
+                <th rowspan="1" colspan="1">1er Semestre</th>
+                <th rowspan="1" colspan="1">2ème Semestre</th>
+                <th rowspan="1" colspan="1">Moyenne</th>
+                <th rowspan="1" colspan="1">1er Semestre</th>
+                <th rowspan="1" colspan="1">2ème Semestre</th>
+                <th rowspan="1" colspan="1">Moyenne</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-sale>
+            <tr>
+                <td>{{notes.annee_1.semestre_1['Culture générale et expression']}}</td>
+                <td>{{notes.annee_1.semestre_2['Culture générale et expression']}}</td>
+                <td>{{notes.annee_1.moyenne['Culture générale et expression']}}</td>
+                <td rowspan="1" colspan="2">Culture générale et expression</td>
+                <td>{{notes.annee_2.semestre_1['Culture générale et expression']}}</td>
+                <td>{{notes.annee_2.semestre_2['Culture générale et expression']}}</td>
+                <td>{{notes.annee_2.moyenne['Culture générale et expression']}}</td>
+                <td rowspan="1" colspan="2">{{notes.appreciations['Culture générale et expression']}}</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Langue Vivante 1</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Culture économique, juridique et managériale</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Développement de la relation client et vente conseil</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Animation et dynamisation de l'offre commerciale</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Gestion opérationnelle</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Management de l'équipe commerciale</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td rowspan="1" colspan="2">Moyen</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-table responsiveLayout="scroll" [value]="['']" styleClass="p-datatable-gridlines"
+        class="col-4">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Avis du Conseil de classe et observations éventuelles</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td rowspan="2" colspan="1">
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                </td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+    <p-table responsiveLayout="scroll" [value]="['']" styleClass="p-datatable-gridlines" class="col-4">
+        <ng-template pTemplate="header">
+            <tr>
+                <th rowspan="1" colspan="5">Cotation de la classe</th>
+            </tr>
+            <tr>
+                <th rowspan="3">Répartition</th>
+                <th colspan="3">AVIS</th>
+                <th rowspan="2">Effectif total de la classe</th>
+            </tr>
+            <tr>
+                <th>Très favorable</th>
+                <th>Favorable</th>
+                <th>Doit faire ses preuves</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td rowspan="1">Répartition</td>
+                <td rowspan="1" colspan="1">20%</td>
+                <td rowspan="1" colspan="1">20%</td>
+                <td rowspan="1" colspan="1">60%</td>
+                <td rowspan="1" colspan="1">83</td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+
+    <!--<p-table responsiveLayout="scroll" [value]="['']" styleClass="p-datatable-gridlines" class="col-3">
+        <ng-template pTemplate="header">
+            <tr>
+                <th colspan="4">Résultats de la section les 5 dernières sessions</th>
+            </tr>
+            <tr>
+                <th>Années</th>
+                <th rowspan="1" colspan="1">Présentés</th>
+                <th rowspan="1" colspan="1">Reçus</th>
+                <th rowspan="1" colspan="1">%</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td></td>
+            </tr>
+
+        </ng-template>
+    </p-table>-->
+    <p-table responsiveLayout="scroll" [value]="['']" styleClass="p-datatable-gridlines" class="col-4">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Date et signature du candidat et remaques éventuelles</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td rowspan="2" colspan="1">
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                    &nbsp;<br>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="card col-12">
+        <p-chart type="line" [data]="basicData" [options]="options"></p-chart>
+    </div>
+
+</div>
