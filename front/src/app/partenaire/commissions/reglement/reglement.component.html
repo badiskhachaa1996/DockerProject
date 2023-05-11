@@ -277,6 +277,8 @@
                                 class="pi pi-download" aria-hidden="true" pTooltip="Télécharger la facture"></i>
                             <i style="margin-left: 2%;" (click)="uploadFile(facture)" class="pi pi-cloud-upload"
                                 aria-hidden="true" pTooltip="Upload la facture"></i>
+                            <i style="margin-left: 2%;" (click)="delete(facture)" class="pi pi-trash"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Supprimer la facture"></i>
                         </td>
                     </tr>
                 </ng-template>

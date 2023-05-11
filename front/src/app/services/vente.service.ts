@@ -21,6 +21,10 @@ export class VenteService {
     let registreUrl = this.apiUrl + "update";
     return this.httpClient.put<Vente>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  delete(id: string) {
+    let registreUrl = this.apiUrl + "delete/" + id;
+    return this.httpClient.delete<Vente>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   getAll() {
     let registreUrl = this.apiUrl + "getAll";

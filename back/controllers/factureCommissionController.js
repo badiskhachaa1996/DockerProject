@@ -85,4 +85,10 @@ app.put("/update", (req, res) => {
     })
 })
 
+app.delete('/delete/:id', (req, res) => {
+    FactureCommission.findByIdAndRemove(req.params.id).then(doc => {
+        res.send(doc)
+    })
+})
+
 module.exports = app;
