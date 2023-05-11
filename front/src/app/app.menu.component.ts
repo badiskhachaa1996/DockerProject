@@ -3152,7 +3152,142 @@ export class AppMenuComponent implements OnInit {
                         complete: () => { console.log(" Informations de l'étudiant récupérer avec succès !"); },
                     });
                 } else if (response.role == "Responsable" && service_id?.label === 'Gestion des partenaires et des leads') {
-
+                    this.items = [
+                        {
+                            label: 'Tableau de bord',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        },
+                        {
+                            label: 'Partenaires',
+                            icon: 'pi pi-share-alt',
+                            items: [
+                                {
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                    , routerLink: ['/international/brands']
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items: [
+                                        {
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
+                                        },
+                                        {
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
+                                    , routerLink: ['/dashboard/partenaire']
+                                },
+                            ]
+                        }, {
+                            label: 'International',
+                            icon: 'pi pi-globe',
+                            items: [
+                                {
+                                    label: 'Insérer un prospect',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/ajout-prospect']
+                                },
+                                {
+                                    label: 'Source',
+                                    icon: 'pi pi-send',
+                                    routerLink: ['/international/sourcing']
+                                },
+                                {
+                                    label: 'Orientation Prospects',
+                                    icon: 'pi pi-globe',
+                                    routerLink: ['/international/orientation']
+                                },
+                                {
+                                    label: 'Admission Prospects',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/international/admission']
+                                },
+                                {
+                                    label: 'Paiement',
+                                    icon: 'pi pi-money-bill',
+                                    routerLink: ['/international/paiement']
+                                },
+                                {
+                                    label: 'Accompagenement Consulaire',
+                                    icon: 'pi pi-whatsapp',
+                                    routerLink: ['/international/consulaire']
+                                },
+                                {
+                                    label: 'Gestion de l\'équipe',
+                                    icon: 'pi pi-briefcase',
+                                    items: [
+                                        {
+                                            label: 'Gestion des membres',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/international/member']
+                                        },
+                                        {
+                                            label: 'Gestion de l\'équipe',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/international/teams']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion de l\'année scolaire',
+                                    icon: 'pi pi-calendar',
+                                    items: [
+                                        {
+                                            label: 'Formations disponibles',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/admission/formations']
+                                        },
+                                        {
+                                            label: 'Ecoles',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['/admission/ecoles']
+                                        },
+                                        {
+                                            label: 'Rentrées Scolaire',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/admission/rentree']
+                                        },
+                                    ]
+                                }, {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Général',
+                                            icon: 'pi pi-chart-bar',
+                                            routerLink: ['/international/dashboard']
+                                        },
+                                        {
+                                            label: 'Performance équipe',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['international/dashboard/performance']
+                                        }
+                                    ]
+                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
+                            ],
+                        },
+                    ]
                 }
                 /* end menus alternants intedgroup */
 
