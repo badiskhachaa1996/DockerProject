@@ -6,8 +6,9 @@
     <input type="file" (change)="FileUpload2($event.target.files)" id="selectedFile2" #selectedFile2
         style="display: none;" pInputFile />
 </div>
+<p-toast></p-toast>
 <div class="grid">
-    <div class="col-12 grid" *ngIf="managePartenaire">
+    <div class="col-12 grid card" *ngIf="managePartenaire">
         <h4 class="col-12" style="text-align: center;">Partenaire gérer par : </h4>
         <p-dropdown class="col-12" filter="true" placeholder="Choisissez un membre de l'équipe international"
             [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}"
@@ -394,7 +395,7 @@
                                 (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData; onGetbyId(rowData);this.loadPP(rowData);scrollToTop()"></i>
                             <i pTooltip="Attribuer le partenaire" tooltipPosition="bottom" class="pi pi-user-plus"
                                 style="margin-left: 7px" aria-hidden="true"
-                                (click)="managePartenaire=rowData;scrollToTop()"></i>
+                                (click)="initManage(rowData);scrollToTop()"></i>
                             <i pTooltip="Afficher la liste des prospects" tooltipPosition="bottom"
                                 class="pi pi-envelope" (click)="seePreRecruted(rowData)" aria-hidden="true"
                                 style="margin-left: 7px"></i>

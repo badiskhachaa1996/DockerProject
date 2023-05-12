@@ -1,8 +1,19 @@
 <p-toast></p-toast>
 <div class="grid">
     <!-- Formulaire d'ajout d'un collaborateur -->
-    <div class="col-12" *ngIf="gestionCommercial">
-
+    <div class="col-12 card" *ngIf="gestionCommercial">
+        <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="gestionCommercial = null;">
+        </i>
+        <h4 style="text-align: center;">Gestion du commercial</h4>
+        <form class="grid" [formGroup]="formGestion" (ngSubmit)="onGestion()">
+            <div class="p-fluid p-formgrid col-12">
+                <h2>Informations commercial</h2>
+            </div>
+            <div class="p-fluid p-formgrid col-12">
+                <h2>Contrat et commissions</h2>
+            </div>
+        </form>
     </div>
     <div class="col-12" *ngIf="showFormAddCommercial">
         <div class="card">
@@ -165,7 +176,7 @@
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
                                 (click)="gestionCommercial=commercial" class="pi pi-user-edit" aria-hidden="true"
-                                pTooltip="Modifier le commercial">
+                                pTooltip="Gestion de commercial">
                             </i>
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
                                 (click)="showFormUpdateCommercial = true; showFormAddCommercial = false; idCommercialToUpdate = commercial._id; idUserToUpdate = commercial.user_id; onGetById();"
