@@ -193,6 +193,7 @@ import { GenDocLettreAcceptationComponent } from './international/generation-doc
 import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
+import { ActualiteComponent } from './international/actualite/actualite.component';
 
 const routes: Routes = [
     {
@@ -354,6 +355,8 @@ const routes: Routes = [
             { path: 'international/brands/:id', component: BrandsListComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands', component: BrandsListComponent, canActivate: [AuthGuardService] },
             { path: 'international/prospects', component: ListProspectsComponent, canActivate: [AuthGuardService] },
+            { path: 'international/actualite/:type', component: ActualiteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/actualite', component: ActualiteComponent, canActivate: [AuthGuardService] },
             /* Generation Documents */
             { path: 'international/generation-documents', component: GenerationDocComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation', component: GenDocInscriptionComponent, canActivate: [AuthGuardService] },

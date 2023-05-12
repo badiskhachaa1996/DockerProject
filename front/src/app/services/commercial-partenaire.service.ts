@@ -84,7 +84,7 @@ export class CommercialPartenaireService {
   }
   getByCode(code: string) {
     let url = this.apiurl + "getByCode/" + code;
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.httpClient.get<CommercialPartenaire>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
 
   }
 }

@@ -266,6 +266,9 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' }
   ]
   filterEcole = []
+  filterCommercial = [
+    { value: null, label: 'Tous les commercials' }
+  ]
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
     private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute, private PService: PartenaireService) { }
@@ -294,19 +297,34 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllByCodeAdmin(this.ID).subscribe(data => {
-      this.prospects = data
-    })
-    this.PService.getById(this.ID).subscribe(data => {
-      this.PARTENAIRE = data
-    })
+    if (this.ID.length > 10) {
+      this.admissionService.getAllByCodeAdmin(this.ID).subscribe(data => {
+        this.prospects = data
+      })
+      this.PService.getById(this.ID).subscribe(data => {
+        this.PARTENAIRE = data
+      })
+    } else {
+      this.admissionService.getAllCodeCommercial(this.ID).subscribe(data => {
+        this.prospects = data
+      })
+      this.CommercialService.getByCode(this.ID).subscribe(c => {
+        this.PService.getById(c.partenaire_id).subscribe(d => {
+          this.PARTENAIRE = d
+        })
+      })
+    }
+
 
     this.CommercialService.getAllPopulateByPartenaireID(this.ID).subscribe(data => {
       console.log(data)
       data.forEach(c => {
         let { user_id }: any = c
-        if (user_id)
+        if (user_id) {
           this.collaborateurList.push({ label: `${c.code_commercial_partenaire} ${user_id.lastname} ${user_id.firstname}`, value: c.code_commercial_partenaire })
+          this.filterCommercial.push({ label: `${c.code_commercial_partenaire} ${user_id.lastname} ${user_id.firstname}`, value: c.code_commercial_partenaire })
+        }
+
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -699,5 +717,5 @@ export class PovPartenaireListProspectsComponent implements OnInit {
       this.AttribuerProspect = null
       this.messageService.add({ severity: 'success', summary: "Attribuer du prospect avec succès" })
     })
-  }
+  }s
 }

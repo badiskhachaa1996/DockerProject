@@ -1018,14 +1018,15 @@ app.post('/getDataForDashboardInternational', (req, res) => {
     if (!data.phase_candidature || data.phase_candidature.length == 0) delete data.phase_candidature
     else filter['phase_candidature'] = { $in: data.phase_candidature }
 
-    /*let date_debut = new Date(2000, 1, 1)
+    let date_debut = new Date(2000, 1, 1)
     let date_fin = new Date()
     if (data.date_1) {
         date_debut = new Date(data.date_1)
         if (data.date_2)
             date_fin = new Date(data.date_2)
     }
-    filter['date_creation'] = { $lte: date_fin, $gte: date_debut }*/
+
+    //filter['date_creation'] = { $lte: date_fin, $gte: date_debut }
     Prospect.find(filter).populate('user_id').then(prospectList => {
         let ProspectFiltered = []
         let stats_paiements = {
@@ -1231,14 +1232,14 @@ app.post('/getDataForDashboardPerformance', (req, res) => {
     if (!data.phase_candidature || data.phase_candidature.length == 0) delete data.phase_candidature
     else filter['phase_candidature'] = { $in: data.phase_candidature }
 
-    /*let date_debut = new Date(2000, 1, 1)
+    let date_debut = new Date(2000, 1, 1)
     let date_fin = new Date()
     if (data.date_1) {
         date_debut = new Date(data.date_1)
         if (data.date_2)
             date_fin = new Date(data.date_2)
     }
-    filter['date_creation'] = { $lte: date_fin, $gte: date_debut }*/
+    //filter['date_creation'] = { $lte: date_fin, $gte: date_debut }
     //filter['dossier_traited_by'] = req.body.member._id
     Prospect.find(filter).populate('user_id').then(prospectList => {
         let ProspectOrientationFiltered = []

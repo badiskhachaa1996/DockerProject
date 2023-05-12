@@ -93,22 +93,22 @@
             <div class="col-12 sm:col-6">
                 <!--Les Prospects-->
                 <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="caption"> Les Prospects </ng-template>
+                    <ng-template pTemplate="caption"> Leads - Initial  </ng-template>
                     <ng-template pTemplate="body">
                         <tr>
-                            <td style="font-weight: bold;"> Nombre Total des prospects </td>
+                            <td style="font-weight: bold;"> Nombre Total  </td>
                             <td> {{activitystats.nb_prospects}} </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold;"> Nombre Total des prospects non contactés</td>
+                            <td style="font-weight: bold;"> Nombre Total non contactés</td>
                             <td> {{activitystats.nb_prospects_contact}} </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold;"> Nombre des prospects acceptés </td>
+                            <td style="font-weight: bold;"> Nombre des leads acceptés </td>
                             <td> {{activitystats.nb_prospects_accepte}} </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold;"> Nombre des prospects préinscrits </td>
+                            <td style="font-weight: bold;"> Nombre des leads préinscrits </td>
                             <td> {{activitystats.nb_prospects_preinscrits}} </td>
                         </tr>
                         <tr>
@@ -125,10 +125,10 @@
             <div class="col-12 sm:col-6">
                 <!--Les alternants-->
                 <p-table [value]="['dab']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="caption"> Les alternants </ng-template>
+                    <ng-template pTemplate="caption"> Leads - Alternance </ng-template>
                     <ng-template pTemplate="body">
                         <tr>
-                            <td style="font-weight: bold;"> Nombre Total des Alternants </td>
+                            <td style="font-weight: bold;"> Nombre Total </td>
                             <td> {{activitystats.nb_alternants}} </td>
                         </tr>
                         <tr>
@@ -136,7 +136,7 @@
                             <td> {{activitystats.nb_contrats}} </td>
                         </tr>
                         <tr>
-                            <td style="font-weight: bold;"> Nombre des alternants en recherche d'entreprise </td>
+                            <td style="font-weight: bold;"> Nombre des alternables </td>
                             <td> {{activitystats.nb_chaumage}} </td>
                         </tr>
                     </ng-template>

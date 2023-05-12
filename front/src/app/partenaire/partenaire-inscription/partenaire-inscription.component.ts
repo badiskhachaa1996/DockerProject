@@ -64,6 +64,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     ville_ent: new FormControl("", Validators.required),
     code_postale_ent: new FormControl("", Validators.required),
     adresse_ent: new FormControl("", Validators.required),
+    localisation: new FormControl('', Validators.required),
     facebook: new FormControl(""),
     site_web: new FormControl(""),
     Pays: new FormControl([], [Validators.required]),

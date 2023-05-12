@@ -1,0 +1,111 @@
+<div class="grid col-12">
+    <div class="grid col-12 card" *ngIf="showEmail">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showEmail=null"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Envoie du mail
+            {{showEmail.titre }} à :
+        </h3>
+        <div class="col-12 grid">
+            <label class="col-12">Partenaires :</label><br>
+            <p-multiSelect autoWidth="false" [style]="{'width':'100%'}" [options]="partenaireList" class="col-12"
+                [(ngModel)]="emailList">
+
+            </p-multiSelect>
+            <div class="col-12">
+                <button pButton label="Envoyer l'email" (click)="onSendEmail()"></button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid col-12 card" *ngIf="EditActivite">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="EditActivite=null"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Mettre à jour
+            : {{EditActivite.titre }}
+        </h3>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEdit" (ngSubmit)="onUpdate()">
+            <div class="field col-12">
+                <label>Titre: </label>
+                <input type="text" formControlName="titre" pInputText>
+            </div>
+            <div class="field col-12">
+                <label>Contenu de l'activité </label>
+                <textarea pInputTextarea formControlName="description" autoResize rows="3" cols="30"></textarea>
+            </div>
+            <button pButton [disabled]="formEdit.invalid" label="Mettre à jour l'actualité"></button>
+        </form>
+    </div>
+    <div class="grid col-12 card" *ngIf="AddActivite">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="AddActivite=false"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Création d'une actualité
+        </h3>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onSave()">
+            <div class="field col-12">
+                <label>Titre: </label>
+                <input type="text" formControlName="titre" pInputText>
+            </div>
+            <div class="field col-12">
+                <label>Contenu de l'activité </label>
+                <textarea pInputTextarea formControlName="description" autoResize rows="3" cols="30"></textarea>
+            </div>
+            <button pButton [disabled]="formAdd.invalid" label="Ajouter l'actualité"></button>
+        </form>
+    </div>
+    <div class="grid col-12 card">
+        <h5 class="col-9">Liste des actualités</h5>
+        <div class="col-3 grid">
+            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"
+                (click)="AddActivite = true;"></button>
+        </div>
+        <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"
+            [paginator]="true" [pageLinks]="5" [globalFilterFields]="['titre', 'description']" responsiveLayout="scroll"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                        Date de l'actualité <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="titre" scope="col" style="text-align: center;">
+                        Titre de l'actualité <p-sortIcon field="titre"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="description" scope="col" style="text-align: center;">
+                        Contenu de l'actualité <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th *ngIf="type">
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-actualite>
+                <tr>
+                    <td>
+                        {{actualite?.date_creation | date :'medium' }}
+                    </td>
+                    <td>
+                        {{actualite?.titre}}
+                    </td>
+                    <td>
+                        {{actualite?.description}}
+                    </td>
+                    <td *ngIf="type">
+                        <i pTooltip="Envoyer par email" tooltipPosition="bottom" class="pi pi-envelope mr-2"
+                            aria-hidden="true" (click)="showEmail=actualite"></i>
+                        <i pTooltip="Supprimer l'actualité" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                            (click)="onDelete(actualite)" aria-hidden="true"></i>
+                        <i pTooltip="Mettre à jour l'actualité" tooltipPosition="bottom" class="pi pi-pencil mr-2"
+                            (click)="onInitUpdate(actualite)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+
+            </ng-template>
+        </p-table>
+    </div>
+</div>
