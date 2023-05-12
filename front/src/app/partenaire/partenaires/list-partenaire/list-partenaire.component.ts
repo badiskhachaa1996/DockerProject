@@ -16,6 +16,7 @@ import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { TeamsIntService } from 'src/app/services/teams-int.service';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -47,6 +48,7 @@ export class ListPartenaireComponent implements OnInit {
   statutList = environment.typeUser
   civiliteList = environment.civilite;
   paysList = environment.pays;
+  filterPays = this.paysList
   entreprisesList = []
   campusList = []
   formationList = []
@@ -55,8 +57,8 @@ export class ListPartenaireComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   dropdownAnciennete = [
-    { label: "Nouveau", value: "Nouveau" },
-    { label: "Ancien", value: "Ancien" }
+    { label: "Nouveau < 1 an", value: "Nouveau" },
+    { label: "Ancien > 1 an", value: "Ancien" }
   ]
   dropdownContribution = [
     { label: "Actif", value: "Actif" },
@@ -69,6 +71,11 @@ export class ListPartenaireComponent implements OnInit {
     { label: "Signé", value: "Signé" },
     { label: "Annulé", value: "Annulé" },
   ]
+  dropdownType = [
+    { label: 'Apporteur d’affaire', value: 'Apporteur d’affaire' },
+    { label: 'Agence de voyage', value: 'Agence de voyage' },
+    { label: 'Entreprise', value: 'Entreprise' },
+  ]
 
   registerForm: FormGroup;
 
@@ -78,6 +85,9 @@ export class ListPartenaireComponent implements OnInit {
   idUserOfPartenaireToUpdate: string;
   showFormModifPartenaire = false;
   partenaireList: any = {};
+  internationalList = []
+
+  managePartenaire: Partenaire
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
@@ -90,14 +100,21 @@ export class ListPartenaireComponent implements OnInit {
   filterEtat = [{ label: 'Tous les états de contrats', value: null }]
 
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
-    private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService) { }
+    private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
+    private MIService: TeamsIntService) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
     let tkn = jwt_decode(localStorage.getItem("token"))
     this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
     this.updateList();
+    this.filterPays = [{ label: 'Tous les pays', value: null }].concat(this.paysList)
     this.onInitFormModifPartenaire()
+    this.MIService.MIgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
+      })
+    })
   }
 
 
@@ -441,6 +458,8 @@ export class ListPartenaireComponent implements OnInit {
   editInfoPartenariatForm: FormGroup = new FormGroup({
     statut_anciennete: new FormControl('', Validators.required),
     contribution: new FormControl('', Validators.required),
+    typePartenaire: new FormControl(''),
+    groupeWhatsApp: new FormControl('')
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true
@@ -475,6 +494,26 @@ export class ListPartenaireComponent implements OnInit {
       console.error(error)
     })
   }*/
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 50) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  onSelectManage(id: string) {
+    this.PartenaireService.newUpdate({ manage_by: id }).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Attribution du partenaire avec succès' })
+      this.managePartenaire = null
+    })
+  }
 
 }
 

@@ -24,13 +24,18 @@ const sch = mongoose.Schema({
     date_creation: { type: Date },
     statut_anciennete: { type: String, default: "Ancien" },
     contribution: { type: String, default: "Inactif" },
-    etat_contrat: { type: String, default:"Non" },
+    etat_contrat: { type: String, default: "Non" },
 
     pathImageProfil: { type: String },
     typeImageProfil: { type: String },
     commissions: { type: [{ description: String, montant: String }], default: [] },
     pathEtatContrat: { type: String },
     typeEtatContrat: { type: String },
+
+    typePartenaire: { type: String },
+    groupeWhatsApp: { type: String },
+    localisation: { type: String },
+    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "memberInt" }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

@@ -1,12 +1,15 @@
 <p-toast></p-toast>
 <div class="grid">
     <!-- Formulaire d'ajout d'un collaborateur -->
+    <div class="col-12" *ngIf="gestionCommercial">
+
+    </div>
     <div class="col-12" *ngIf="showFormAddCommercial">
         <div class="card">
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showFormAddCommercial = false;">
             </i>
-            <h4 style="text-align: center;">Ajouter un collaborateur</h4>
+            <h4 style="text-align: center;">Ajouter un commercial</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddCommercial" (ngSubmit)="onAddCommercial()">
                 <div class="field col-12 md:col-2">
                     <label>Civilité</label>
@@ -54,7 +57,7 @@
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showFormUpdateCommercial = false;">
             </i>
-            <h4 style="text-align: center;">Modifier un collaborateur</h4>
+            <h4 style="text-align: center;">Modifier un commercial</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateCommercial" (ngSubmit)="onUpdateCommercial()">
                 <div class="field col-12 md:col-2">
                     <label>Civilité</label>
@@ -94,7 +97,7 @@
                 style="float: right;"
                 (click)="showFormAddCommercial = true; showFormUpdateCommercial = false;"></button>
 
-            <h5>Liste des collaborateurs</h5>
+            <h5>Liste des commercials</h5>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single"
                 [value]="commercialPartenaires" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['code_commercial_partenaire', 'statut']"
@@ -161,14 +164,17 @@
 
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
+                                (click)="gestionCommercial=commercial" class="pi pi-user-edit" aria-hidden="true"
+                                pTooltip="Modifier le commercial">
+                            </i>
+                            <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
                                 (click)="showFormUpdateCommercial = true; showFormAddCommercial = false; idCommercialToUpdate = commercial._id; idUserToUpdate = commercial.user_id; onGetById();"
                                 class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le commercial"></i>
-                            <i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
-                                (click)="seeRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
                             <i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
                                 (click)="seePreRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i *ngIf="commercial.statut!='Admin'" pTooltip="Supprimer le collaborateur" tooltipPosition="bottom" class="pi pi-trash"
-                                (click)="delete(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i *ngIf="commercial.statut!='Admin'" pTooltip="Supprimer le commercial"
+                                tooltipPosition="bottom" class="pi pi-trash" (click)="delete(commercial)"
+                                aria-hidden="true" style="margin-left: 7px"></i>
                         </td>
                     </tr>
                 </ng-template>

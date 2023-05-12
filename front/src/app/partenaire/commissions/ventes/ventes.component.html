@@ -32,15 +32,10 @@
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="tva" suffix="%">
-                    </p-inputNumber>
-                </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutCommission" formControlName="statutCommission"
-                        placeholder="Statut de règlement de la commission "></p-dropdown>
+                    <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
@@ -90,15 +85,10 @@
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="tva" suffix="%">
-                    </p-inputNumber>
-                </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutCommission" formControlName="statutCommission"
-                        placeholder="Statut de règlement de la commission "></p-dropdown>
+                    <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6   ">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
@@ -187,18 +177,20 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="tva" style="text-align: center;"> TVA
-                            <p-sortIcon field="tva">
-                            </p-sortIcon>
-                        </th>
+
+
 
                         <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la
                             commission
                             <p-sortIcon field="statutCommission">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="facture_id" style="text-align: center;"> Numéro de facture
+                            <p-sortIcon field="facture_id">
+                            </p-sortIcon>
+                        </th>
 
-                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date du paiement
+                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date du réglement
                             <p-sortIcon field="date_reglement">
                             </p-sortIcon>
                         </th>
@@ -240,10 +232,11 @@
                             {{ getMontant(vente.produit) }}€
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente.tva }}%
+                            {{ vente.statutCommission }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente.statutCommission }}
+                            <span *ngIf="vente?.facture_id">{{ vente?.facture_id }}</span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>
                         <td style="min-width: 14rem;">
                             {{ vente.date_reglement| date:'mediumDate' }}

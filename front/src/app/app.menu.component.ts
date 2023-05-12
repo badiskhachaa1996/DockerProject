@@ -667,7 +667,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['international/dashboard/performance']
                                         }
                                     ]
-                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
+                                }, 
+                                { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
                             ],
                         },
                         {
@@ -1190,14 +1192,14 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
                                     label: 'Alternants',
                                     items: [
                                         { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
-                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
@@ -1227,6 +1229,7 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
                         }
 
@@ -1243,14 +1246,14 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Prospects',
                                     items: [
                                         { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.partenaire_id] },
                                     ]
                                 },
                                 {
                                     label: 'Alternants',
                                     items: [
                                         { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
-                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', cData.partenaire_id] },
                                     ]
                                 },
                                 {
@@ -1280,6 +1283,7 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
                         }
                     })

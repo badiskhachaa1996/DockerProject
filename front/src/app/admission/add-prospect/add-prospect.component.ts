@@ -55,15 +55,28 @@ export class AddProspectComponent implements OnInit {
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.isPartenaireExterne = decodeToken.role === 'Agent' && decodeToken.type === 'Commercial' && !decodeToken.service_id
-      this.commercialService.getAllPopulate().subscribe(commercials => {
-        commercials.forEach(commercial => {
-          let { user_id }: any = commercial
-          if (user_id && commercial.isAdmin)
-            this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
-          if (user_id && user_id._id == decodeToken.id)
-            this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
+      if (this.isPartenaireExterne) {
+        this.RegisterForm.patchValue({ source: 'Partenaire' });
+        this.RegisterForm2.patchValue({ source: 'Partenaire' });
+        this.commercialService.getByUserId(decodeToken.id).subscribe(commercial => {
+          if (commercial) {
+            this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire })
+            this.RegisterForm2.patchValue({ commercial: commercial.code_commercial_partenaire })
+          }
         })
-      })
+      } else {
+        this.commercialService.getAllPopulate().subscribe(commercials => {
+          commercials.forEach(commercial => {
+            let { user_id }: any = commercial
+            if (user_id && commercial.isAdmin)
+              this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+            if (user_id && user_id._id == decodeToken.id)
+              this.RegisterForm.patchValue({ commercial: commercial.code_commercial_partenaire, source: "Partenaire" })
+          })
+        })
+      }
+
+
       this.FAService.EAgetAll().subscribe(data => {
         data.forEach(e => {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })

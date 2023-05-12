@@ -119,7 +119,6 @@ export class VentesComponent implements OnInit {
   formAddVente: FormGroup = new FormGroup({
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
     statutCommission: new FormControl('', Validators.required),
     date_reglement: new FormControl('', Validators.required),
     prospect_id: new FormControl('', Validators.required),
@@ -167,7 +166,6 @@ export class VentesComponent implements OnInit {
     _id: new FormControl('', Validators.required),
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
     statutCommission: new FormControl('', Validators.required),
     date_reglement: new FormControl('', Validators.required),
     modalite_paiement: new FormControl('', Validators.required)

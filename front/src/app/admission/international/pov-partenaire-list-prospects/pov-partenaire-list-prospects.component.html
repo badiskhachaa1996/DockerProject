@@ -512,11 +512,16 @@
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                    <p-dropdown filter="true" placeholder="Commercial" [options]="filterCommercial"
+                        (onChange)="dt1.filter($event.value, 'code_commercial','equals')"
+                        emptyFilterMessage="Pas de commercial trouvé" filterPlaceholder="Commercial"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <!--<p-dropdown filter="true" placeholder="Source" [options]="filterSource"
                         (onChange)="dt1.filter($event.value, 'source','startsWith')"
                         emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
                         [style]="{'margin-left':'5px','margin-right':'5px'}">
-                    </p-dropdown>
+                    </p-dropdown>-->
                     <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"
                         (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"

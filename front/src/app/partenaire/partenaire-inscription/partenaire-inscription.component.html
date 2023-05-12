@@ -137,6 +137,13 @@
                                     <input pInputText type="text" formControlName="facebook"
                                         placeholder="https://example.com/" />
                                 </div>
+                                <div class="field col-12">
+                                    <label>Localisation</label>
+                                    <p-dropdown [options]="paysList" formControlName="localisation"
+                                        placeholder="Choisissez un pays" optionLabel="value" optionValue="value"
+                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true">
+                                    </p-dropdown>
+                                </div>
                                 <div class="field col-12 md:col-12">
                                     <label For="Pays">Pays d'activité : <span style="color: red;"> * </span></label>
                                     <!--<input pInputText id="Pays" type="text" formControlName="Pays"
@@ -317,9 +324,9 @@
                                 </div>-->
                                 <div class="field col-12 md:col-6">
                                     <label For="nationalite">Nationalité : <span style="color: red;"> * </span></label>
-                                    <p-dropdown formControlName="nationalite" [options]="nationList"
-                                        optionLabel="label" emptyFilterMessage="Pas de nationalité trouvé"
-                                        filterPlaceholder="Nationalité" filter="true"></p-dropdown>
+                                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                                        filter="true"></p-dropdown>
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="numero_adresse">Numéro de la rue : <span style="color: red;"> *
