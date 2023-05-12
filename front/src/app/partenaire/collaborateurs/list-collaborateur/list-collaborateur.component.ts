@@ -56,6 +56,12 @@ export class ListCollaborateurComponent implements OnInit {
 
   canDelete = false
   gestionCommercial: CommercialPartenaire
+  formGestion: FormGroup = new FormGroup({
+
+  })
+  onGestion(){
+    
+  }
 
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
     private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }

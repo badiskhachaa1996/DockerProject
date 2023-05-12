@@ -509,10 +509,16 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   onSelectManage(id: string) {
-    this.PartenaireService.newUpdate({ manage_by: id }).subscribe(data => {
+    this.PartenaireService.newUpdate({ manage_by: id, _id: this.managePartenaire._id }).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Attribution du partenaire avec succès' })
       this.managePartenaire = null
     })
+  }
+
+  initManage(rowData: Partenaire) {
+    this.managePartenaire = rowData
+    if (!rowData.manage_by)
+      this.managePartenaire['manage_by'] = { _id: null }
   }
 
 }

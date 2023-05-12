@@ -483,7 +483,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
                                     , routerLink: ['/dashboard/partenaire']
-                                },
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
                             ]
                         },
                         {
@@ -667,9 +667,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['international/dashboard/performance']
                                         }
                                     ]
-                                }, 
+                                },
                                 { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
-                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
+
                             ],
                         },
                         {
@@ -1450,7 +1450,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
                                     , routerLink: ['/dashboard/partenaire']
-                                },
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
                         },
                         {
@@ -2099,7 +2099,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Dashboard',
                                             icon: 'pi pi-chart-line',
                                             routerLink: ['/dashboard/partenaire']
-                                        },
+                                        }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },
                                 {
@@ -2904,7 +2904,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Dashboard',
                                             icon: 'pi pi-chart-line'
                                             , routerLink: ['/dashboard/partenaire']
-                                        },
+                                        }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },
                                 {
@@ -3201,7 +3201,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
                                     , routerLink: ['/dashboard/partenaire']
-                                },
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
                         }, {
                             label: 'International',

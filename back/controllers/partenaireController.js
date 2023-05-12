@@ -361,13 +361,11 @@ app.put("/newUpdate", (req, res, next) => {
     let id = partenaireData._id
     delete partenaireData._id
     //Mise à jour du partenaire
-    console.log(partenaireData)
     Partenaire.findByIdAndUpdate(id,
         {
             ...partenaireData
         }, { new: true })
         .then((partenaireFromDB) => {
-            console.log(partenaireFromDB)
             res.status(200).send(partenaireFromDB);
         })
         .catch((error) => {
