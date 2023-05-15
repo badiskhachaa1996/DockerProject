@@ -7,6 +7,13 @@ export class CommercialPartenaire {
         public statut?: string,
         public isAdmin?: boolean,
         public pays?: string,
-        public whatsapp?: string
+        public whatsapp?: string,
+        public contribution?: string,
+        public localisation?: string,
+        public pays_prospections?: string[],
+        public etat_contrat?: string,
+        public commissions?: { description: string, montant: number, _id: string }[],
+        public contrat?: string
+
     ) { }
 }

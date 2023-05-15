@@ -87,4 +87,22 @@ export class CommercialPartenaireService {
     return this.httpClient.get<CommercialPartenaire>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
 
   }
+
+  newUpdate(data: any) {
+    let url = this.apiurl + "newUpdate";
+    return this.httpClient.put<CommercialPartenaire>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+
+  }
+
+  uploadContrat(formData: FormData, id) {
+    let url = this.apiurl + "uploadContrat/" + id
+    return this.httpClient.post<CommercialPartenaire>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  downloadContrat(id: string) {
+    let url = this.apiurl + "downloadContrat/" + id;
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+
+  }
 }

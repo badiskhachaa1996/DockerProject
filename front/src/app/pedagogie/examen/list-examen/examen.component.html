@@ -275,7 +275,7 @@
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field" *ngIf="dropdownGroupe.length!=1">
-                            <p-dropdown filter="true" [options]="dropdownGroupe" class="mr-2"
+                            <!--<p-dropdown filter="true" [options]="dropdownGroupe" class="mr-2"
                                 (onChange)="dt1.filterGlobal($event.value.abbrv,'contains');filterModuleByGroupe($event.value,$event)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du groupe">
                             </p-dropdown>
@@ -283,7 +283,7 @@
                             <p-dropdown filter="true" [options]="dropdownModule" class="mr-2"
                                 (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals');filterFormateurByModule($event.value)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
-                            </p-dropdown>
+                            </p-dropdown>-->
 
                             <p-dropdown filter="true" [options]="filterFormateur" class="mr-2"
                                 (onChange)="dt1.filter($event.value, 'formateur_id._id', 'equals')"
