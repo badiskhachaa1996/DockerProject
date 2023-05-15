@@ -1,4 +1,8 @@
 <p-toast></p-toast>
+<div class="col-12">
+    <input type="file" (change)="FileUpload($event.target)" id="selectedFile" #selectedFile style="display: none;"
+        pInputFile />
+</div>
 <div class="grid">
     <!-- Formulaire d'ajout d'un collaborateur -->
     <div class="col-12 card" *ngIf="gestionCommercial">
@@ -6,14 +10,138 @@
             (click)="gestionCommercial = null;">
         </i>
         <h4 style="text-align: center;">Gestion du commercial</h4>
-        <form class="grid" [formGroup]="formGestion" (ngSubmit)="onGestion()">
-            <div class="p-fluid p-formgrid col-12">
-                <h2>Informations commercial</h2>
+        <form class="p-fluid p-formgrid grid" [formGroup]="formGestion" (ngSubmit)="onGestion()">
+            <h2 class="col-12">Informations commercial</h2>
+            <div class="field col-12 md:col-6">
+                <label>Date d'ajout</label>
+                <p>{{gestionCommercial?.user_id?.date_creation | date:'mediumDate'}}</p>
             </div>
-            <div class="p-fluid p-formgrid col-12">
-                <h2>Contrat et commissions</h2>
+            <div class="field col-12 md:col-6">
+                <label>Contribution</label>
+                <p-dropdown [options]="contributionList" formControlName="contribution" autoWidth="false"
+                    [style]="{'width':'100%'}" placeholder="Choisissez une contribution"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Pays de prospection</label>
+                <p-multiSelect [options]="paysList" formControlName="pays_prospections" autoWidth="false" filter="true"
+                    [style]="{'width':'100%'}" placeholder="Choisissez des pays"></p-multiSelect>
+                <!--<p>{{gestionCommercial?.pays_prospections}}</p>-->
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Localisation du commercial</label>
+                <p-dropdown [options]="paysList" formControlName="localisation" autoWidth="false" filter="true"
+                    [style]="{'width':'100%'}" placeholder="Choisissez un pays"></p-dropdown>
+                <!--<p>{{gestionCommercial?.localisation}}</p>-->
+            </div>
+            <h2 class="col-12">Contrat et commissions</h2>
+            <div class="field col-12 md:col-6">
+                <label>Etat contrat</label>
+                <p-dropdown [options]="etatContratList" formControlName="etat_contrat" autoWidth="false"
+                    [style]="{'width':'100%'}" placeholder="Choisissez un état"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Contrat</label><br>
+                <a *ngIf="gestionCommercial.contrat" (click)="downloadContrat()">Télécharger le contrat</a><br>
+                <a (click)="uploadContrat()">Ajouter un contrat</a>
             </div>
         </form>
+        <div class="col-12 card" *ngIf="AddCommission">
+            <h3>Ajouter une commission</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formCommission" (ngSubmit)="onAddCommission()">
+                <div class="field col-12">
+                    <label>Description</label>
+                    <textarea pInputTextarea formControlName="description"></textarea>
+                </div>
+                <div class="field col-12">
+                    <label>Montant</label>
+                    <p-inputNumber formControlName="montant" inputId="locale-german" mode="currency" currency="EUR"
+                        locale="fr-FR" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+                <div class="col-12">
+                    <button pButton label="Ajouter cette commission" [disabled]="formCommission.invalid"
+                        type="submit"></button>
+                </div>
+            </form>
+        </div>
+        <div class="col-12">
+            <h3>Tableau Commissions</h3>
+            <p-table #dt2 dataKey="_id" [rows]="10" [value]="gestionCommercial.commissions" [paginator]="true"
+                editMode="row" [pageLinks]="5" [globalFilterFields]="['montant', 'description']"
+                [totalRecords]="gestionCommercial.commissions.length" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                        <button pButton icon="pi pi-file" label="Ajouter" (click)="AddCommission=true" type="button"
+                            style="float: right;margin-left:2%">
+                        </button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="description" style="text-align: center;"> Description <p-sortIcon
+                                field="description">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                field="montant"></p-sortIcon>
+                        </th>
+
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-commission let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="commission">
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <textarea pInputTextarea [(ngModel)]="commission.description"></textarea>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{commission.description}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-inputNumber [(ngModel)]="commission.montant" inputId="locale-german"
+                                        mode="currency" currency="EUR" locale="fr-FR" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{commission.montant}}€
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i *ngIf="!editing" pTooltip="Modifier la commission" pInitEditableRow
+                                tooltipPosition="bottom" class="pi pi-pencil mr-2" (click)="onRowEditInit(commission);"
+                                aria-hidden="true"></i>
+                            <i *ngIf="editing" pSaveEditableRow class="pi pi-check p-button-success mr-2"
+                                pTooltip="Sauvegarder les modifications" (click)="onRowEditSave(commission)"></i>
+                            <i *ngIf="editing" pCancelEditableRow class="pi pi-times p-button-danger mr-2"
+                                pTooltip="Annuler les modifications" (click)="onRowEditCancel(commission, ri)"></i>
+                            <i pTooltip="Supprimer la commission" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deleteCommission(commission)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <button pButton label="Enregistrer les modifications" class='col-12' (click)="onGestion()"></button>
+        </div>
+
     </div>
     <div class="col-12" *ngIf="showFormAddCommercial">
         <div class="card">
@@ -175,7 +303,7 @@
 
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
-                                (click)="gestionCommercial=commercial" class="pi pi-user-edit" aria-hidden="true"
+                                (click)="onInitGestion(commercial)" class="pi pi-user-edit" aria-hidden="true"
                                 pTooltip="Gestion de commercial">
                             </i>
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
