@@ -323,7 +323,7 @@ export class SourcingComponent implements OnInit {
     this.admissionService.updateV2(data).subscribe(newProspect => {
       this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
-      this.messageService.add({ severity: "success", summary: "Affectation du prospect avec succès" })
+      this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })
   }
 
@@ -548,7 +548,7 @@ export class SourcingComponent implements OnInit {
     if (confirm('Voulez-vous vraiment supprimer ' + user_id?.lastname + " " + user_id?.firstname + " ?"))
       this.admissionService.delete(prospect._id, user_id._id).subscribe(data => {
         this.prospects.splice(this.prospects.indexOf(prospect), 1)
-        this.messageService.add({ severity: "success", summary: "Prospect supprimé avec succès" })
+        this.messageService.add({ severity: "success", summary: "Lead supprimé avec succès" })
       })
   }
 

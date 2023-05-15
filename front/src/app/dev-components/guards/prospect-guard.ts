@@ -22,8 +22,6 @@ export class ProspectGuard implements CanActivate {
 
     else {
 
-      console.log("Prospect non authentifier");
-
       return this.router.createUrlTree(['/login']);;
     }
 

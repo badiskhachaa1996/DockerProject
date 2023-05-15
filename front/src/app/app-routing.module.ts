@@ -241,7 +241,7 @@ const routes: Routes = [
             { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
             { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
-            { path: 'ajout-prospect', component: AddProspectComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+            { path: 'ajout-lead', component: AddProspectComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
             { path: 'gestion-preinscriptions-filtered/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
             { path: 'gestion-preinscriptions-filter/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
             { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial

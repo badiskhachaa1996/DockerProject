@@ -60,7 +60,7 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
-                        <span class="block text-500 font-medium mb-3">Nombre total des prospects</span>
+                        <span class="block text-500 font-medium mb-3">Nombre total des leads</span>
                         <div class="text-900 font-medium text-xl">{{ stats.tt_prospects }}</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -147,10 +147,10 @@
                 <div class="col-12 grid">
                     <div class="col-6 grid">
                         <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
-                        <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation
+                        <h5 class="col-12" style="text-align: center;">Orientation Leads : {{ stats.tt_orientation
                             }}
                         </h5>
-                        <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}
+                        <h5 class="col-12" style="text-align: center;">Admission Leads : {{ stats.tt_admission }}
                         </h5>
                         <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
                         <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{
@@ -168,7 +168,7 @@
                 </div>
 
             </p-tabPanel>
-            <p-tabPanel header="Orientation Prospects">
+            <p-tabPanel header="Orientation Leads">
                 <div class="col-12 grid">
                     <div class="col-6 grid">
                         <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
@@ -195,7 +195,7 @@
                 </div>
 
             </p-tabPanel>
-            <p-tabPanel header="Admission Prospects">
+            <p-tabPanel header="Admission Leads">
                 <div class="col-12 grid">
                     <div class="col-6 grid">
                         <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>

@@ -347,7 +347,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-check-circle',
                             items: [
                                 {
-                                    label: 'Gestions des prospects',
+                                    label: 'Gestions des Leads',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -363,7 +363,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
                                     ]
                                 },
@@ -373,7 +373,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-preinscriptions']
                                 },
                                 {
-                                    label: 'Gestions des prospects Intuns',
+                                    label: 'Gestions des leads Intuns',
                                     icon: 'pi pi-user-plus',
                                     routerLink: ['/prospects-intuns']
                                 },
@@ -431,14 +431,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -587,9 +587,9 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-globe',
                             items: [
                                 {
-                                    label: 'Insérer un prospect',
+                                    label: 'Insérer un lead',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
                                 {
                                     label: 'Source',
@@ -597,12 +597,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/international/sourcing']
                                 },
                                 {
-                                    label: 'Orientation Prospects',
+                                    label: 'Orientation Leads',
                                     icon: 'pi pi-globe',
                                     routerLink: ['/international/orientation']
                                 },
                                 {
-                                    label: 'Admission Prospects',
+                                    label: 'Admission Leads',
                                     icon: 'pi pi-users',
                                     routerLink: ['/international/admission']
                                 },
@@ -888,14 +888,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -969,7 +969,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-check-circle',
                             items: [
                                 {
-                                    label: 'Gestions des prospects',
+                                    label: 'Gestions des leads',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -985,7 +985,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
                                     ]
                                 },
@@ -995,7 +995,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-preinscriptions']
                                 },
                                 {
-                                    label: 'Gestions des prospects Intuns',
+                                    label: 'Gestions des leads Intuns',
                                     icon: 'pi pi-user-plus',
                                     routerLink: ['/prospects-intuns']
                                 },
@@ -1189,10 +1189,10 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Prospects',
+                                    label: 'Leads',
                                     items: [
-                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.code_commercial_partenaire] },
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
@@ -1243,10 +1243,10 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Prospects',
+                                    label: 'Leads',
                                     items: [
-                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.partenaire_id] },
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.partenaire_id] },
                                     ]
                                 },
                                 {
@@ -1398,14 +1398,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -1963,7 +1963,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-check-circle',
                                     items: [
                                         {
-                                            label: 'Gestions des prospects',
+                                            label: 'Gestions des leads',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -1979,7 +1979,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un dossier',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-prospect']
+                                                    routerLink: ['/ajout-lead']
                                                 },
                                             ]
                                         },
@@ -1989,9 +1989,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/gestion-preinscriptions']
                                         },
                                         {
-                                            label: 'Gestions des prospects Intuns',
+                                            label: 'Gestions des leads Intuns',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/prospects-intuns']
+                                            routerLink: ['/leads-intuns']
                                         },
                                         {
                                             label: 'Gestion des participantes pour les événements',
@@ -2047,14 +2047,14 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/equipe-commercial']
                                         },
                                         {
-                                            label: 'Gestion des prospects alternables',
+                                            label: 'Gestion des leads alternables',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/prospects-alt']
+                                            routerLink: ['/leads-alt']
                                         },
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
 
                                     ]
@@ -2414,14 +2414,14 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/equipe-commercial']
                                         },
                                         {
-                                            label: 'Gestion des prospects alternables',
+                                            label: 'Gestion des leads alternables',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/prospects-alt']
+                                            routerLink: ['/leads-alt']
                                         },
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
 
                                     ]
@@ -2510,7 +2510,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-check-circle',
                                     items: [
                                         {
-                                            label: 'Gestions des prospects',
+                                            label: 'Gestions des leads',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -2526,7 +2526,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un dossier',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-prospect']
+                                                    routerLink: ['/ajout-lead']
                                                 },
                                             ]
                                         },
@@ -2536,9 +2536,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/gestion-preinscriptions']
                                         },
                                         {
-                                            label: 'Gestions des prospects Intuns',
+                                            label: 'Gestions des leads Intuns',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/prospects-intuns']
+                                            routerLink: ['/leads-intuns']
                                         },
                                         {
                                             label: 'Gestion des participantes pour les événements',
@@ -3208,9 +3208,9 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-globe',
                             items: [
                                 {
-                                    label: 'Insérer un prospect',
+                                    label: 'Insérer un lead',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
                                 {
                                     label: 'Source',
@@ -3218,12 +3218,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/international/sourcing']
                                 },
                                 {
-                                    label: 'Orientation Prospects',
+                                    label: 'Orientation Leads',
                                     icon: 'pi pi-globe',
                                     routerLink: ['/international/orientation']
                                 },
                                 {
-                                    label: 'Admission Prospects',
+                                    label: 'Admission Leads',
                                     icon: 'pi pi-users',
                                     routerLink: ['/international/admission']
                                 },

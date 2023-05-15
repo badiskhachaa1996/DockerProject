@@ -469,7 +469,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects de {{PARTENAIRE?.nom}}</h5>
+            <h5>Liste des leads de {{PARTENAIRE?.nom}}</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -507,7 +507,7 @@
                         emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
                         (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
@@ -705,7 +705,7 @@
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
         <div *ngIf="selectedProspect">
-            <h5>Informations Prospect</h5>
+            <h5>Informations Lead</h5>
             <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
@@ -735,7 +735,7 @@
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
 
             <h5>Source </h5>
-            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Source du lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
             </p>

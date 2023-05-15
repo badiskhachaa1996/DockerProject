@@ -182,7 +182,7 @@ export class DashboardIntComponent implements OnInit {
     labels: ['Non affecté', 'Orientation', 'Admission', 'Paiements', 'Accompagnement consulaire', 'Recours'],
     datasets: [
       {
-        label: 'Prospects',
+        label: 'Leads',
         backgroundColor: '#42A5F5',
         data: [0, 0, 0, 0, 0, 0]
       }

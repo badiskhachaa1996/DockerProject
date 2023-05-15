@@ -23,12 +23,12 @@
                         placeholder="Description du Type de commission"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Prospect<span style="color: red;"> * </span></label>
+                    <label>Lead<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
-                        formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
+                        formControlName="prospect_id" filter="true" placeholder="Choissisez le lead"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant payé par le prospect<span style="color: red;"> * </span></label>
+                    <label for="nom">Montant payé par le lead<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
@@ -72,7 +72,7 @@
                     <p> {{venteSelected?.partenaire_id?.nom}}</p>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Prospect:</label>
+                    <label for="nom">Lead:</label>
                     <p> {{venteSelected?.prospect_id?.user_id?.lastname | uppercase}}
                         {{venteSelected?.prospect_id?.user_id?.firstname | titlecase}}</p>
                 </div>
@@ -81,7 +81,7 @@
                     <textarea pInputTextarea formControlName="produit"></textarea>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant payé par le prospect<span style="color: red;"> * </span></label>
+                    <label for="nom">Montant payé par le lead<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
@@ -142,14 +142,14 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Prospect <p-sortIcon
+                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Lead <p-sortIcon
                                 field="prospect_id.customid">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="prospect_id.user_id.lastname" style="text-align: center;"> Nom & Prénom
                             <p-sortIcon field="prospect_id.user_id.lastname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="montant" style="text-align: center;"> Montant payé par le prospect
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant payé par le lead
                             <p-sortIcon field="montant">
                             </p-sortIcon>
                         </th>

@@ -12,15 +12,15 @@
                 [style]="{'width':'100%'}" placeholder="Choisissez une formation"></p-dropdown>
         </div>
         <div class="col-12 md:col-6" *ngIf="prospectDropdown.length!=0">
-            <label>Prospect <span style="color:red"> *</span></label>
+            <label>Lead <span style="color:red"> *</span></label>
             <p-dropdown formControlName="prospect_id" [options]="prospectDropdown" autoWidth="false"
                 [virtualScroll]="true" [itemSize]="30" [filter]="true" [style]="{'width':'100%'}"
-                placeholder="Choisissez un prospect"></p-dropdown>
+                placeholder="Choisissez un lead"></p-dropdown>
         </div>
         <div class="col-12 md:col-6" *ngIf="prospectDropdown.length==0">
-            <label>Prospect</label>
+            <label>Lead</label>
             <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
-            <p>Chargement des prospects en cours ...</p>
+            <p>Chargement des leads en cours ...</p>
         </div>
         <div class="col-12 md:col-6">
             <label>Type de document <span style="color:red"> *</span></label>
@@ -45,7 +45,7 @@
                         ID Document <p-sortIcon field="custom_id"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="prospect_id">
-                        ID Prospect <p-sortIcon field="prospect_id"> </p-sortIcon>
+                        ID Lead <p-sortIcon field="prospect_id"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="ecole">
                         Ecole <p-sortIcon field="ecole"> </p-sortIcon>

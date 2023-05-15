@@ -160,7 +160,7 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   delete(rowData: Partenaire) {
-    if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs prospects\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
+    if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs leads\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
       this.partenaireService.delete(rowData._id).subscribe(p => {
         this.partenaires.forEach((val, index) => {
           if (val._id == p._id) {

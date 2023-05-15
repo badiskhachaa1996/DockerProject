@@ -11,6 +11,10 @@ import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { VenteService } from 'src/app/services/vente.service';
+import { Vente } from 'src/app/models/Vente';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-paiements',
   templateUrl: './paiements.component.html',
@@ -263,13 +267,16 @@ export class PaiementsComponent implements OnInit {
     { value: "Programme Français", label: "Programme Français", },
     { value: "Programme Anglais", label: "Programme Anglais", }
   ];
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService,
+    private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private VenteService: VenteService, private PService: PartenaireService, private CService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
   selectedProspect: Prospect = null
 
   token;
+
+  partenaireOwned: Partenaire
 
   scrollToTop() {
     var scrollDuration = 250;
@@ -310,6 +317,11 @@ export class PaiementsComponent implements OnInit {
       this.prospects = data
       data.forEach(v => {
         v['modalite'] = this.getModalite(v.payement)
+      })
+    })
+    this.CService.getByUserId(this.token.id).subscribe(c => {
+      this.PService.getById(c.partenaire_id).subscribe(p => {
+        this.partenaireOwned = p
       })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
@@ -428,6 +440,7 @@ export class PaiementsComponent implements OnInit {
     type_form: new FormControl('', Validators.required),
 
   })
+  initalPayement = []
 
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
@@ -445,6 +458,7 @@ export class PaiementsComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    this.initalPayement = [...prospect?.payement]
     this.scrollToTop()
   }
 
@@ -483,9 +497,32 @@ export class PaiementsComponent implements OnInit {
       _id: this.showDetails._id
 
     }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      console.log(this.initalPayement, this.payementList)
+      if (this.initalPayement.length == this.payementList.length) {
+        this.payementList.forEach((val, idx) => {
+          if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
+            //Ajout d'une facture car nouvelle entrée
+            let data: any = { prospect_id: this.showDetails._id, montant_paye: val.montant, date_paiement: new Date(), modalite_paiement: val.type }
+            this.VenteService.create({ ...data }).subscribe(v => {
+              this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
+            })
+          }
+        })
+      } else if (this.initalPayement.length < this.payementList.length) {
+        //Ajout d'une facture avec le dernier élément de payementList
+        let pay = this.payementList[this.payementList.length - 1]
+        let data: any = { prospect_id: this.showDetails._id, montant_paye: pay.montant, date_paiement: new Date(), modalite_paiement: pay.type }
+        this.VenteService.create({ ...data }).subscribe(v => {
+          this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
+        })
+      }
+    }
+
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this
       if (willClose)
         this.showDetails = null
     })
@@ -671,4 +708,6 @@ export class PaiementsComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+
+
 }

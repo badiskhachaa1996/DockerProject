@@ -715,7 +715,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     this.admissionService.updateV2({ code_commercial, _id: this.AttribuerProspect._id }).subscribe(data => {
       this.prospects.splice(this.prospects.indexOf(this.AttribuerProspect), 1, data)
       this.AttribuerProspect = null
-      this.messageService.add({ severity: 'success', summary: "Attribuer du prospect avec succès" })
+      this.messageService.add({ severity: 'success', summary: "Attribution du lead avec succès" })
     })
   }s
 }

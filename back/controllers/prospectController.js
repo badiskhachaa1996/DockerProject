@@ -132,19 +132,19 @@ app.post("/create", (req, res, next) => {
                 Prospect.findOne({ user_id: userFromDb._id })
                     .then((prospectFromDb) => {
                         if (prospectFromDb) {
-                            res.status(201).json({ error: 'Ce prospect existe déjà !' });
+                            res.status(201).json({ error: 'Ce lead existe déjà !' });
                         } else {
                             prospect.user_id = userFromDb._id;
                             prospect.save()
                                 .then((prospectSaved) => {
                                     let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
-                                    res.status(201).json({ success: 'Prospect ajouté dans la BD', dataUser: userFromDb, token });
+                                    res.status(201).json({ success: 'Lead ajouté dans la BD', dataUser: userFromDb, token });
                                 })
-                                .catch((error) => { res.status(400).json({ error: 'Impossible d\ajouter ce prospect' }) });
+                                .catch((error) => { res.status(400).json({ error: 'Impossible d\ajouter ce lead' }) });
                         }
 
                     })
-                    .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
+                    .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du lead" }); });
             }
             else {
                 user.save()
@@ -314,7 +314,7 @@ app.post("/create", (req, res, next) => {
 
                                     });
                                 }
-                                res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
+                                res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token });
                             })
 
                     })
