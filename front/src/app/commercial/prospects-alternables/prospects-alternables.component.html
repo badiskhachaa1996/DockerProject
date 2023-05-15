@@ -20,7 +20,7 @@
     <div class="col-12">
         <div class="card">
             <button pButton label="Générer un lien" style="float: right;" (click)="onShowFormGenerateLink();" class="p-button-outlined p-button-warning mr-2 mb-2"></button>
-            <h5>Liste des prospects alternables</h5>
+            <h5>Liste des leads alternables</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="prospects" dataKey="_id" [globalFilterFields]="['_id', 'user_id.lastname', 'user_id.firstname']"
                      responsiveLayout="scroll"

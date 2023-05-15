@@ -213,7 +213,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Liste des prospects alternables récupérés'); }
+        complete: () => { console.log('Liste des leads alternables récupérés'); }
       });
     });
   }
@@ -225,7 +225,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Liste des prospects alternables du commercial récupérés'); }
+        complete: () => { console.log('Liste des leads alternables du commercial récupérés'); }
       });
     });
   }
@@ -237,7 +237,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable récupéré'); }
+        complete: () => { console.log('Leads alternable récupéré'); }
       });
     });
   }
@@ -249,7 +249,7 @@ export class AdmissionService {
       this.httpClient.post<any[]>(url, obj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable crée'); }
+        complete: () => { console.log('Leads alternable crée'); }
       });
     });
   }
@@ -261,7 +261,7 @@ export class AdmissionService {
       this.httpClient.patch<any[]>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable modifié'); }
+        complete: () => { console.log('Leads alternable modifié'); }
       });
     });
   }

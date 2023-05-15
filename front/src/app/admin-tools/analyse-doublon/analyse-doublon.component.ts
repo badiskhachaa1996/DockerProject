@@ -76,10 +76,10 @@ export class AnalyseDoublonComponent implements OnInit {
   searchProspect(user_id) {
     this.ProspectService.getByUserId(user_id).subscribe(r => {
       if (r) {
-        this.MessageService.add({ severity: 'success', summary: 'Un prospect a été trouvé rattacher à cette entité \nMerci de regarder dans la console' })
+        this.MessageService.add({ severity: 'success', summary: 'Un lead a été trouvé rattacher à cette entité \nMerci de regarder dans la console' })
         console.log(r)
       } else {
-        this.MessageService.add({ severity: 'error', summary: 'Aucun prospect a été trouvé rattacher à cette entité' })
+        this.MessageService.add({ severity: 'error', summary: 'Aucun lead a été trouvé rattacher à cette entité' })
       }
     })
   }
@@ -138,15 +138,15 @@ export class AnalyseDoublonComponent implements OnInit {
 
   deleteDuplicateProspect() {
     this.UserService.deleteDuplicateProspect().subscribe(r => {
-      this.MessageService.add({ severity: 'success', summary: 'Les duplicats de prospects ont été supprimés', detail: 'Rechargez la page pour voir le résultat' })
+      this.MessageService.add({ severity: 'success', summary: 'Les duplicats de leads ont été supprimés', detail: 'Rechargez la page pour voir le résultat' })
     }, err => {
-      this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu lors de la suppresion des prospects', detail: err.message })
+      this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu lors de la suppresion des leads', detail: err.message })
     })
   }
 
   cleanModel() {
     this.UserService.cleanModel().subscribe(r => {
-      this.MessageService.add({ severity: 'success', summary: 'Les models ont été nettoyés', detail: 'Les étudiants, formateurs, commercial, prospects sans user_id ont été supprimés.' })
+      this.MessageService.add({ severity: 'success', summary: 'Les models ont été nettoyés', detail: 'Les étudiants, formateurs, commercial, leads sans user_id ont été supprimés.' })
     }, err => {
       this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu lors du nettoyage des models', detail: err.message })
     })

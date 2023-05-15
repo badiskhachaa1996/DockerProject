@@ -29,7 +29,7 @@ export class ProspectsAlternablesComponent implements OnInit {
     // recuperation de la liste des prospects alternables
     this.admissionService.getProspectsAlt()
     .then((response) => { this.prospects = response; })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Prospects', detail: error.errMsg }); });
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Leads', detail: error.errMsg }); });
 
     // initialisation du formulaire de génération du lien
     this.formGenerateLink = this.formBuilder.group({

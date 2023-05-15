@@ -461,7 +461,7 @@
                 <tr>
                     <th style="width: 3rem" scope="col"></th>
                     <th pSortableColumn="customid" scope="col">
-                        ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                        ID Lead <p-sortIcon field="customid"></p-sortIcon>
                     </th>
                     <th scope="col">
                         Email perso <p-sortIcon field="email_perso"></p-sortIcon>
@@ -670,7 +670,7 @@
                     <td *ngIf="!infoCommercialExpand || !infoCommercialExpand.user_id"></td>
                     <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
                     <td *ngIf="!prospect.nomAgence && (!prospect.code_commercial || !dicCommercial[prospect.code_commercial])"
-                        style="color: red;">Ce prospect ne
+                        style="color: red;">Ce lead ne
                         vient pas d'une agence</td>
                     <td *ngIf="!prospect.nomAgence && prospect.code_commercial && dicCommercial[prospect.code_commercial] && dicCommercial[prospect.code_commercial].nom"
                         style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td>
@@ -681,12 +681,12 @@
         </p-table>
 
         <p *ngIf="prospect.donneePerso">
-            <strong>Ce prospect <span style="color: green;">accepte</span> que ses données personnelles soient
+            <strong>Ce lead <span style="color: green;">accepte</span> que ses données personnelles soient
                 utilisées</strong>
         </p>
 
         <p *ngIf="!prospect.donneePerso">
-            <strong>Ce prospect <span style="color: red;">réfuse</span> que ses données personnelles soient
+            <strong>Ce lead <span style="color: red;">réfuse</span> que ses données personnelles soient
                 utilisées</strong>
         </p>
 

@@ -151,8 +151,9 @@
 
                         <div class="field col-12 md:col-3">
                             <label>Type de paiement:</label><br>
-                            <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                                [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                            <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
+                                placeholder="Choisissez la méthode de paiement"
+                                (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
                         </div>
                         <div class="field col-12 md:col-3">
                             <label>Montant:</label><br>
@@ -467,7 +468,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects phase de paiements</h5>
+            <h5>Liste des leads phase de paiements</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -537,7 +538,7 @@
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="source" scope="col" style="text-align: center;">
                             Source <p-sortIcon field="source"></p-sortIcon>
@@ -643,7 +644,7 @@
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
         <div *ngIf="selectedProspect">
-            <h5>Informations Prospect</h5>
+            <h5>Informations Lead</h5>
             <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
@@ -673,7 +674,7 @@
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
 
             <h5>Source </h5>
-            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Source du lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
             </p>
