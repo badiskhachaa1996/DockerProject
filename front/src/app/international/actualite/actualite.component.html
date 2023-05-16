@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="grid col-12">
     <div class="grid col-12 card" *ngIf="showEmail">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showEmail=null"
@@ -54,8 +55,8 @@
     </div>
     <div class="grid col-12 card">
         <h5 class="col-9">Liste des actualités</h5>
-        <div class="col-3 grid">
-            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"
+        <div class="col-3 grid" >
+            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"  *ngIf="type"
                 (click)="AddActivite = true;"></button>
         </div>
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"

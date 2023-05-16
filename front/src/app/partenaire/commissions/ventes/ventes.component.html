@@ -129,6 +129,11 @@
                             emptyFilterMessage="Pas de statut de commission trouvé"
                             filterPlaceholder="Choisissez le statut de commission"></p-dropdown>
 
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterCommercial" filter="true"
+                            (onChange)="dt1.filter($event.value, 'prospect_id.code_commercial', 'equals');"
+                            emptyFilterMessage="Pas de commercial trouvé"
+                            filterPlaceholder="Choisissez le comemrcial"></p-dropdown>
+
                         <!--<p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
                             (onChange)="dt1.filter($event.value, 'produit', 'equals'); "
                             emptyFilterMessage="Pas de Type de commission trouvé"
@@ -148,6 +153,9 @@
                         </th>
                         <th pSortableColumn="prospect_id.user_id.lastname" style="text-align: center;"> Nom & Prénom
                             <p-sortIcon field="prospect_id.user_id.lastname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prospect_id.code_commercial" style="text-align: center;"> Commercial
+                            <p-sortIcon field="prospect_id.code_commercial"></p-sortIcon>
                         </th>
                         <th pSortableColumn="montant" style="text-align: center;"> Montant payé par le lead
                             <p-sortIcon field="montant">
@@ -212,6 +220,14 @@
                             {{ vente?.prospect_id?.user_id?.firstname | titlecase}}
 
                         </td>
+                        <td style="min-width: 12rem;"
+                            *ngIf="dicCommercial && vente?.prospect_id?.code_commercial && dicCommercial[vente?.prospect_id?.code_commercial]">
+                            {{ dicCommercial[vente?.prospect_id?.code_commercial] }}
+                        </td>
+                        <td style="min-width: 12rem;"
+                            *ngIf="!dicCommercial || !vente?.prospect_id?.code_commercial || !dicCommercial[vente?.prospect_id?.code_commercial]">
+                            Aucun
+                        </td>
                         <td style="min-width: 12rem;">
                             {{ vente?.montant }}€
                         </td>
@@ -231,12 +247,13 @@
                         <td style="min-width: 14rem;" *ngIf="vente.produit">
                             {{ getMontant(vente.produit) }}€
                         </td>
-                        <td *ngIf="!vente.produit">Aucun</td>  <td *ngIf="!vente.produit">Aucun</td>
+                        <td *ngIf="!vente.produit">Aucun</td>
+                        <td *ngIf="!vente.produit">Aucun</td>
                         <td style="min-width: 14rem;">
                             {{ vente.statutCommission }}
                         </td>
                         <td style="min-width: 14rem;">
-                            <span *ngIf="vente?.facture_id">{{ vente?.facture_id }}</span>
+                            <span *ngIf="vente?.facture_id">{{ vente?.facture_id?.numero }}</span>
                             <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>
                         <td style="min-width: 14rem;">
@@ -244,6 +261,9 @@
                         </td>
 
                         <td style="min-width: 10rem;">
+                            <i style="margin-left: 2%;" (click)="initAttributionForm(vente)"
+                                class="pi ppi-arrow-up-right" *ngIf="!isPovPartenaire" aria-hidden="true"
+                                pTooltip="Attribuer à une facture"></i>
                             <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil"
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la vente"></i>
                             <i style="margin-left: 2%;" (click)="delete(vente)" class="pi pi-trash"

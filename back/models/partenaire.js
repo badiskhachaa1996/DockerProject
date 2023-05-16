@@ -22,7 +22,7 @@ const sch = mongoose.Schema({
     facebook: { type: String },
     description: { type: String },
     date_creation: { type: Date },
-    statut_anciennete: { type: String, default: "Ancien" },
+    statut_anciennete: { type: String, default: "Ancien > 1 an" },
     contribution: { type: String, default: "Inactif" },
     etat_contrat: { type: String, default: "Non" },
 

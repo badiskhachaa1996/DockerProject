@@ -343,6 +343,7 @@ app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
+app.use('/soc/docGenInt', require('./controllers/docGenController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

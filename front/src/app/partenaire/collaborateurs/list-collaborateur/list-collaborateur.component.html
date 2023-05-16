@@ -273,6 +273,27 @@
                         <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="date_ajout" style="text-align: center;"> Date d'ajout <p-sortIcon
+                                field="date_ajout">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="contribution" style="text-align: center;"> Contribution <p-sortIcon
+                                field="contribution">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="pays_prospections" style="text-align: center;"> Pays de prospections
+                            <p-sortIcon field="pays_prospections">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="localisation" style="text-align: center;"> Localisation <p-sortIcon
+                                field="localisation">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="etat_contrat" style="text-align: center;"> Etat de contrat <p-sortIcon
+                                field="etat_contrat">
+                            </p-sortIcon>
+                        </th>
+
 
                         <th>
                             <div class="flex justify-content-between align-items-center">
@@ -300,6 +321,26 @@
                         <td style="min-width: 14rem;">
                             {{ commercial.statut }}
                         </td>
+
+                        <td style="min-width: 14rem;" *ngIf="users[commercial.user_id]?.date_creation">
+                            {{ users[commercial.user_id]?.date_creation| date:'mediumDate' }}
+                        </td>
+                        <td style="min-width: 14rem;" *ngIf="!users[commercial.user_id]?.date_creation">
+                            {{ commercial.date_ajout | date:'mediumDate' }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.contribution }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.pays_prospections }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.localisation }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.etat_contrat }}
+                        </td>
+
 
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"

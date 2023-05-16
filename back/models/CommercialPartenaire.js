@@ -15,7 +15,8 @@ const commercialPartenaireSchema = mongoose.Schema({
     pays_prospections: { type: [String], default: [] },
     etat_contrat: { type: String },
     commissions: { type: [{ description: String, montant: Number }], default: [] },
-    contrat: { type: String }
+    contrat: { type: String },
+    date_ajout: { type: Date, default: Date.now }
 });
 
 //Création de la table puis exportation du modele partenaire

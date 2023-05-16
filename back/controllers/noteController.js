@@ -218,6 +218,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 if (!dicAppreciation[e_id])
                     dicAppreciation[e_id] = {}
                 listMatiereNOM.forEach(m_nom => {
+                    m_nom.replace('.','_')
                     if (!listNotesEtudiantsCoeff[e_id][m_nom])
                         listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0, Appreciation: [] }
                     if (!dicAppreciation[e_id][m_nom])

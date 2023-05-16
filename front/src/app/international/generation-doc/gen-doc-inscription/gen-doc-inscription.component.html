@@ -1,6 +1,7 @@
+<p-toast></p-toast>
 <div class="grid col-12">
     <div *ngIf="ecole?.url_form=='int_education'" id="body" class="col-6">
-        <div class="page-container">
+        <div class="page-container" id="page-container">
             <div class="page-inner-content">
                 <div class="header">
                     <h1 class="page-title">ATTESTATION D’INSCRIPTION</h1>
@@ -115,8 +116,11 @@
                     (onSelect)="updateDateLimite($event.value)" (onInput)="updateDateLimite($event.value)"></p-calendar>
             </div>
         </div>
-        <div class="col-12">
+        <div class="col-6">
             <p-button label="Exporter en pdf" icon="pi pi-file-pdf" (click)="exportPDF()"></p-button>
+        </div>
+        <div class="col-6">
+            <p-button label="Sauvegarder le document" icon="pi pi-save" (click)="saveDocument()"></p-button>
         </div>
     </div>
 </div>
