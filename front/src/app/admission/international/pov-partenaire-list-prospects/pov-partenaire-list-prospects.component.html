@@ -469,8 +469,8 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des leads de {{PARTENAIRE?.nom}}</h5>
-
+            <h5 *ngIf="ID.length > 12">Liste des leads de {{PARTENAIRE?.nom}}</h5>
+            <h5 *ngIf="COMMERCIAL">Liste des leads de {{COMMERCIAL.user_id?.lastname}} {{COMMERCIAL.user_id?.firstname}}</h5>
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
