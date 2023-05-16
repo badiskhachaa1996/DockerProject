@@ -279,6 +279,8 @@ export class PovPartenaireListProspectsComponent implements OnInit {
 
   selectedProspect: Prospect = null
 
+  COMMERCIAL: CommercialPartenaire
+
   token;
 
   scrollToTop() {
@@ -297,7 +299,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    if (this.ID.length > 10) {
+    if (this.ID.length > 12) {
       this.admissionService.getAllByCodeAdmin(this.ID).subscribe(data => {
         this.prospects = data
       })
@@ -309,6 +311,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
         this.prospects = data
       })
       this.CommercialService.getByCode(this.ID).subscribe(c => {
+        this.COMMERCIAL = c
         this.PService.getById(c.partenaire_id).subscribe(d => {
           this.PARTENAIRE = d
         })
@@ -717,5 +720,5 @@ export class PovPartenaireListProspectsComponent implements OnInit {
       this.AttribuerProspect = null
       this.messageService.add({ severity: 'success', summary: "Attribution du lead avec succès" })
     })
-  }s
+  } s
 }
