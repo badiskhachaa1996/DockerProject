@@ -225,12 +225,13 @@
                             {{ vente?.partenaire_id?.nom }}
                         </td>
 
-                        <td style="min-width: 14rem;">
+                        <td style="min-width: 14rem;" *ngIf="vente.produit">
                             {{ getProduit(vente.produit) }}
                         </td>
-                        <td style="min-width: 14rem;">
+                        <td style="min-width: 14rem;" *ngIf="vente.produit">
                             {{ getMontant(vente.produit) }}€
                         </td>
+                        <td *ngIf="!vente.produit">Aucun</td>  <td *ngIf="!vente.produit">Aucun</td>
                         <td style="min-width: 14rem;">
                             {{ vente.statutCommission }}
                         </td>

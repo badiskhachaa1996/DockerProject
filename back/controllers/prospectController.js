@@ -1423,7 +1423,11 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
     })
 
 })
-
+app.get('/getPopulate/:id', (req, res) => {
+    Prospect.findById(req.params.id).populate('user_id').then(data => {
+        res.send(data)
+    })
+})
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user
 

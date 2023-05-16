@@ -774,7 +774,7 @@
             </p>
 
             <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['note_val', 'semestre']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="10" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">

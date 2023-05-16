@@ -171,7 +171,7 @@ export class AdmissionService {
 
   getPopulateByUserid(user_id) {
     let url = this.apiUrl + "getPopulateByUserid/" + user_id
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
   }
 
   updateDossier(id, statut_dossier) {
@@ -308,10 +308,10 @@ export class AdmissionService {
     return this.httpClient.post<{ globalstats: any, activitystats: any }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getDataForDashboardInternationalBasique(){
+  getDataForDashboardInternationalBasique() {
     let registreUrl = this.apiUrl + 'getDataForDashboardInternationalBasique';
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
- 
+
   }
   getDataForDashboardInternational(data: any) {
     let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
@@ -321,6 +321,11 @@ export class AdmissionService {
   getDataForDashboardPerformance(member: MemberInt, filter: any) {
     let registreUrl = this.apiUrl + 'getDataForDashboardPerformance';
     return this.httpClient.post<any>(registreUrl, { member, filter }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getPopulate(id) {
+    let registreUrl = this.apiUrl + 'getPopulate/' + id;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

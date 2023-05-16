@@ -2,7 +2,7 @@
     <form class="p-fluid p-formgrid grid card col-12" (ngSubmit)="openTemplate();" [formGroup]="documentForm">
         <div class="col-12 md:col-6">
             <label>Ecole <span style="color:red"> *</span></label>
-            <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}"
+            <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}" (onChange)="onSelectEcole()"
                 [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
         </div>
 
@@ -26,6 +26,11 @@
             <label>Type de document <span style="color:red"> *</span></label>
             <p-dropdown formControlName="document" [options]="documentDropdown" autoWidth="false"
                 [style]="{'width':'100%'}" placeholder="Choisissez un type de document"></p-dropdown>
+        </div>
+        <div class="col-12">
+            <label>Rentrée scolaire<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="rentree_scolaire" [options]="rentreeDropdown" autoWidth="false"
+                [style]="{'width':'100%'}" placeholder="Choisissez une rentrée scolaire"></p-dropdown>
         </div>
         <div class="col-12">
             <button type="submit" pButton [disabled]="documentForm.invalid" label="Voir le document"></button>

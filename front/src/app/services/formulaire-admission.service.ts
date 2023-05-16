@@ -39,6 +39,11 @@ export class FormulaireAdmissionService {
     return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
+  RAgetAllByEcoleID(id: string) {
+    let registerUrl = this.apiUrl + 'RA/getAllByEcoleID/' + id;
+    return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
   RAgetAll() {
     let registerUrl = this.apiUrl + 'RA/getAll';
     return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })

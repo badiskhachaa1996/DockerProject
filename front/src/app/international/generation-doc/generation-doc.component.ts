@@ -24,7 +24,7 @@ export class GenerationDocComponent implements OnInit {
   formationDropdown = []
   ecoleDropdown = []
   prospectDropdown = []
-
+  rentreeDropdown = []
   documents = []
 
   constructor(private router: Router, private AService: AdmissionService, private FAService: FormulaireAdmissionService) { }
@@ -32,7 +32,7 @@ export class GenerationDocComponent implements OnInit {
   ngOnInit(): void {
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(ecole => {
-        this.ecoleDropdown.push({ label: ecole.titre, value: ecole.url_form })
+        this.ecoleDropdown.push({ label: ecole.titre, value: ecole._id })
       })
     })
     this.FAService.FAgetAll().subscribe(data => {
@@ -48,6 +48,11 @@ export class GenerationDocComponent implements OnInit {
           this.prospectDropdown.push({ label: `${p.customid} - ${user_id.lastname} ${user_id.firstname}`, value: user_id._id })
       })
     })
+    this.FAService.RAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.rentreeDropdown.push({ label: d.nom, value: d._id })
+      })
+    })
   }
 
 
@@ -56,12 +61,23 @@ export class GenerationDocComponent implements OnInit {
     ecole: new FormControl('', Validators.required),
     formation: new FormControl('', Validators.required),
     prospect_id: new FormControl('', Validators.required),
-    document: new FormControl('', Validators.required)
+    document: new FormControl('', Validators.required),
+    rentree_scolaire: new FormControl('', Validators.required)
   })
+
+  onSelectEcole(){
+    this.FAService.RAgetAllByEcoleID(this.documentForm.value.ecole).subscribe(data => {
+      this.rentreeDropdown = []
+      console.log(data,this.documentForm.value.ecole)
+      data.forEach(d => {
+        this.rentreeDropdown.push({ label: d.nom, value: d._id })
+      })
+    })
+  }
 
   openTemplate() {
     //console.log(['international/generation-documents', this.documentForm.value.document, this.documentForm.value.ecole, this.documentForm.value.prospect_id, this.documentForm.value.formation])
-    this.router.navigate(['international/generation-documents', this.documentForm.value.document, this.documentForm.value.ecole, this.documentForm.value.prospect_id, this.documentForm.value.formation])
+    this.router.navigate(['international/generation-documents', this.documentForm.value.document, this.documentForm.value.ecole, this.documentForm.value.prospect_id, this.documentForm.value.formation, this.documentForm.value.rentree_scolaire])
   }
 
 }
