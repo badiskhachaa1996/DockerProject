@@ -74,11 +74,15 @@ export class ActualiteComponent implements OnInit {
   }
 
   onSendEmail() {
-    console.log(this.showEmail)
-    this.activiteService.sendEmail(this.showEmail._id,this.emailList).subscribe(data=>{
+    this.ToastService.add({ severity: 'info', summary: 'Envoie des mails en cours...' })
+
+    this.activiteService.sendEmail(this.showEmail._id, this.emailList).subscribe(data => {
       this.emailList = []
       this.showEmail = null
       this.ToastService.add({ severity: 'success', summary: 'Envoi du mail avec succès' })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Echec de l\'envoi du mail', detail: "Vérifiez que tous les partenaires ont un email, sinon contactez un Admin" })
     })
   }
 

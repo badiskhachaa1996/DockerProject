@@ -57,8 +57,8 @@ export class ListPartenaireComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   dropdownAnciennete = [
-    { label: "Nouveau < 1 an", value: "Nouveau" },
-    { label: "Ancien > 1 an", value: "Ancien" }
+    { label: "Nouveau < 1 an", value: "Nouveau < 1 an" },
+    { label: "Ancien > 1 an", value: "Ancien > 1 an" }
   ]
   dropdownContribution = [
     { label: "Actif", value: "Actif" },
@@ -463,9 +463,8 @@ export class ListPartenaireComponent implements OnInit {
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true
-    this.editInfoPartenariatForm.setValue({
-      statut_anciennete: this.idPartenaireToUpdate.statut_anciennete,
-      contribution: this.idPartenaireToUpdate.contribution,
+    this.editInfoPartenariatForm.patchValue({
+      ...this.idPartenaireToUpdate
     })
   }
 

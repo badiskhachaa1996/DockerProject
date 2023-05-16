@@ -1366,8 +1366,8 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
     }
     Partenaire.find().then(listPartenaire => {
         globalstats.nb_partenaire = listPartenaire.length
-        globalstats.anciennete.ancien = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien' ? 1 : 0), 0))
-        globalstats.anciennete.nouveau = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien' ? 0 : 1), 0))
+        globalstats.anciennete.ancien = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an"' ? 1 : 0), 0))
+        globalstats.anciennete.nouveau = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an"' ? 0 : 1), 0))
 
         globalstats.contribution.actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Actif' ? 1 : 0), 0))
         globalstats.contribution.non_actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Inactif' ? 1 : 0), 0))

@@ -155,10 +155,12 @@ export class PartenaireInscriptionComponent implements OnInit {
       this.RegisterForm.value.site_web,
       this.RegisterForm.value.facebook,
       this.RegisterForm.value.description,
-      new Date()
+      new Date(),
+      null, null, null, null, null, null, null, null, null, null,
+      this.RegisterForm.value.localisation, null
     )
 
-    let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
+    let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin", true, null, this.RegisterForm.value.whatsApp, null, this.RegisterForm.value.localisation)
 
     this.PartenaireService.inscription(u, p, c).subscribe(data => {
       console.log(data)

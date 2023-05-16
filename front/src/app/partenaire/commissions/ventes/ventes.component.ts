@@ -10,6 +10,7 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import { ActivatedRoute } from '@angular/router';
 import { FactureCommission } from 'src/app/models/FactureCommission';
 import { FactureCommissionService } from 'src/app/services/facture-commission.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 @Component({
   selector: 'app-ventes',
   templateUrl: './ventes.component.html',
@@ -46,7 +47,7 @@ export class VentesComponent implements OnInit {
   isPovPartenaire = false
   factures = 0
 
-  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService,
+  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService, private CService: CommercialPartenaireService,
     private route: ActivatedRoute, private PartenaireService: PartenaireService, private FCService: FactureCommissionService) { }
 
   ngOnInit(): void {
@@ -89,10 +90,21 @@ export class VentesComponent implements OnInit {
     this.FCService.getAll().subscribe(data => {
       this.factures = data.length
     })
+    this.CService.getAllPopulate().subscribe(data => {
+      data.forEach(d => {
+        let { user_id }: any = d
+        if (user_id) {
+          this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+          this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+        }
+
+      })
+    })
   }
 
   showFormAddVente = false
-
+  filterCommercial = [{ label: 'Tous les commerciaux', value: null }]
+  dicCommercial = {}
   ventes = []
 
   modaliteList = [
@@ -261,5 +273,11 @@ export class VentesComponent implements OnInit {
         this.ventes.splice(this.ventes.indexOf(vente), 1)
         this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
       })
+  }
+
+  showAttribution: Vente = null
+  factureList = []
+  initAttributionForm(vente: Vente) {
+    this.showAttribution = vente
   }
 }

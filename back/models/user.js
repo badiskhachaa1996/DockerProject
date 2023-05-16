@@ -96,7 +96,7 @@ const user_schema = new mongoose.Schema({
         required: false,
         default: false
     },
-    date_creation: { type: Date, required: false },
+    date_creation: { type: Date, required: false, default: Date.now },
     departement: { type: String },
     last_connection: { type: Date },
     mention: { //not used

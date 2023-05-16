@@ -16,28 +16,26 @@ app.post("/create", (req, res) => {
 })
 
 app.get("/getAll", (req, res, next) => {
-    Vente.find().populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
+    Vente.find().populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllByPartenaireID/:partenaire_id", (req, res, next) => {
-    Vente.find({ partenaire_id: req.params.partenaire_id }).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
+    Vente.find({ partenaire_id: req.params.partenaire_id }).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.post("/getAllByPartenaireIDs", (req, res, next) => {
-    Vente.find({ partenaire_id: { $in: req.body.partenaire_id } }).populate('partenaire_id')
+    Vente.find({ partenaire_id: { $in: req.body.partenaire_id } }).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.put("/update", (req, res) => {
-    console.log(req.body)
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
-        console.log(err, doc)
-        Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } })
+        Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')
             .then((formFromDb) => { res.status(200).send(formFromDb); })
             .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });

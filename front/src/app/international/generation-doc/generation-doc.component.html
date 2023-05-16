@@ -2,8 +2,8 @@
     <form class="p-fluid p-formgrid grid card col-12" (ngSubmit)="openTemplate();" [formGroup]="documentForm">
         <div class="col-12 md:col-6">
             <label>Ecole <span style="color:red"> *</span></label>
-            <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}" (onChange)="onSelectEcole()"
-                [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
+            <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                (onChange)="onSelectEcole()" [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
         </div>
 
         <div class="col-12 md:col-6">
@@ -75,22 +75,22 @@
                         {{ doc.custom_id }}
                     </td>
                     <td>
-                        {{ doc.prospect_id.customid }}
+                        {{ doc?.prospect_id?.customid }}
                     </td>
                     <td>
-                        {{ doc.ecole }}
+                        {{ doc?.ecole?.titre }}
                     </td>
                     <td>
                         {{ doc.type }}
                     </td>
                     <td>
-                        {{ doc.user_id.lastname | uppercase }} {{ doc.user_id.firstname | titlecase }}
+                        {{ doc?.user_id?.lastname | uppercase }} {{ doc?.user_id?.firstname | titlecase }}
                     </td>
                     <td>
                         {{ doc.date | date:'mediumDate' }}
                     </td>
                     <td>
-                        En cours de dévéloppement
+                        <a (click)="downloadFile(doc.filename,doc._id)">Télécharger le document</a>
                     </td>
                 </tr>
             </ng-template>
