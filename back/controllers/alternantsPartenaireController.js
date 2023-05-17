@@ -10,6 +10,7 @@ const { MemberInt } = require("../models/memberInt");
 const { User } = require("../models/user");
 const { AlternantsPartenaire } = require("../models/alternantsPartenaire");
 const { CommercialPartenaire } = require("../models/CommercialPartenaire");
+const { Partenaire } = require("./../models/partenaire");
 
 app.post("/create", (req, res) => {
     delete req.body._id
@@ -63,6 +64,24 @@ app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
 
     })
 });
+
+app.get('/getAllByPartenaireID/:id', (req, res) => {
+    Partenaire.findById(req.params.id).then(partenaire => {
+        AlternantsPartenaire.find({ code_commercial: { $regex: "^" + partenaire.code_partenaire } }).populate("user_id").populate('agent_id')
+            .then((prospectsFromDb) => {
+                res.status(201).send(prospectsFromDb)
+            })
+            .catch((error) => { res.status(500).send(error.message); });
+    })
+})
+
+app.get('/getAllByCommercialCode/:code', (req, res) => {
+    AlternantsPartenaire.find({ code_commercial: req.params.code }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            res.status(201).send(prospectsFromDb)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+})
 
 app.put("/update", (req, res) => {
     AlternantsPartenaire.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {

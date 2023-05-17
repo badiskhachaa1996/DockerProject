@@ -54,6 +54,23 @@
         </div>
     </div>
 
+    <div class="col-12" *ngIf="showAttribution">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showAttribution = null;"> </i>
+            <h4 style="text-align: center;">Attribuer une facture à une vente</h4>
+            <div class="col-12 grid">
+                <div class="col-12">
+                    <label>Facture:</label><br>
+                    <p-dropdown [options]="factureList" placeholder="Choisissez une facture" [(ngModel)]="tempFactureid"
+                        (onChange)="onMatchFacture($event.value)" autoWidth="false"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div class="col-12" *ngIf="showFormEditVente">
         <div class="card">
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
@@ -188,7 +205,7 @@
 
 
 
-                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la
+                        <!-- <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la
                             commission
                             <p-sortIcon field="statutCommission">
                             </p-sortIcon>
@@ -196,12 +213,23 @@
                         <th pSortableColumn="facture_id" style="text-align: center;"> Numéro de facture
                             <p-sortIcon field="facture_id">
                             </p-sortIcon>
-                        </th>
+                        </th>-->
 
-                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date du réglement
-                            <p-sortIcon field="date_reglement">
+                        <th pSortableColumn="statut" style="text-align: center;"> Facturation
+                            <p-sortIcon field="statut">
                             </p-sortIcon>
                         </th>
+
+                        <th pSortableColumn="facture_id.statut" style="text-align: center;"> Statut de la facture
+                            <p-sortIcon field="facture_id.statut">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="facture_id?.date_paiement" style="text-align: center;"> Date du réglement
+                            <p-sortIcon field="facture_id?.date_paiement">
+                            </p-sortIcon>
+                        </th>
+
 
                         <th>
                             <div class="flex justify-content-between align-items-center">
@@ -249,22 +277,34 @@
                         </td>
                         <td *ngIf="!vente.produit">Aucun</td>
                         <td *ngIf="!vente.produit">Aucun</td>
-                        <td style="min-width: 14rem;">
+                        <!--<td style="min-width: 14rem;">
                             {{ vente.statutCommission }}
                         </td>
                         <td style="min-width: 14rem;">
                             <span *ngIf="vente?.facture_id">{{ vente?.facture_id?.numero }}</span>
                             <span *ngIf="!vente?.facture_id"> Aucune</span>
+                        </td>-->
+                        <td style="min-width: 14rem;">
+                            {{ vente?.statut }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente.date_reglement| date:'mediumDate' }}
+                            <span *ngIf="vente?.facture_id">
+                                {{ vente?.facture_id?.statut }}
+                            </span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
+                        </td>
+                        <td style="min-width: 14rem;">
+                            <span *ngIf="vente?.facture_id">
+                                {{ vente?.facture_id?.date_paiement| date:'mediumDate' }}
+                            </span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" (click)="initAttributionForm(vente)"
-                                class="pi ppi-arrow-up-right" *ngIf="!isPovPartenaire" aria-hidden="true"
+                            <i style="margin-left: 2%;" (click)="initAttributionForm(vente);scrollToTop()"
+                                class="pi pi-arrow-up-right" *ngIf="!isPovPartenaire" aria-hidden="true"
                                 pTooltip="Attribuer à une facture"></i>
-                            <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil"
+                            <i style="margin-left: 2%;" (click)="initEditForm(vente);scrollToTop()" class="pi pi-pencil"
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la vente"></i>
                             <i style="margin-left: 2%;" (click)="delete(vente)" class="pi pi-trash"
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Supprimer la vente"></i>

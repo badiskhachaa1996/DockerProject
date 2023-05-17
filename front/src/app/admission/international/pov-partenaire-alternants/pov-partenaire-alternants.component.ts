@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 
 @Component({
   selector: 'app-pov-partenaire-alternants',
@@ -19,19 +21,33 @@ export class PovPartenaireAlternantsComponent implements OnInit {
 
   alternants: AlternantsPartenaire[]
   PARTENAIRE: Partenaire
+  COMMERCIAL: CommercialPartenaire
   ID = this.route.snapshot.paramMap.get('id');
-  constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router, private PService: PartenaireService) { }
+  constructor(private route: ActivatedRoute, private CommercialService: CommercialPartenaireService, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router, private PService: PartenaireService) { }
 
   showDocuments: AlternantsPartenaire;
 
   ngOnInit(): void {
     if (this.ID) {
-      this.PService.getById(this.ID).subscribe(data => {
-        this.PARTENAIRE = data
-      })
-      this.APService.getAllByCommercialUserID(this.ID).subscribe(data => {
-        this.alternants = data
-      })
+      //T'as fumé quoi ????
+      if (this.ID.length > 12) {
+        //this.ID corresponds alors à un partenaire ID
+        this.PService.getById(this.ID).subscribe(data => {
+          this.PARTENAIRE = data
+        })
+        this.APService.getAllByPartenaireID(this.ID).subscribe(data => {
+          this.alternants = data
+        })
+      } else {
+        //ID correponds alors à un code commercial
+        this.APService.getAllByCommercialCode(this.ID).subscribe(data => {
+          this.alternants = data
+        })
+        this.CommercialService.getByCode(this.ID).subscribe(data => {
+          this.COMMERCIAL = data
+        })
+      }
+
     }
 
     else

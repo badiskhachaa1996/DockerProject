@@ -1,4 +1,5 @@
 import { Entreprise } from "./Entreprise";
+import { FactureCommission } from "./FactureCommission";
 import { Partenaire } from "./Partenaire";
 import { Prospect } from "./Prospect";
 import { User } from "./User";
@@ -15,7 +16,9 @@ export class Vente {
         public date_paiement?: Date,
         public modalite_paiement?: string,
         public partenaire_id?: Partenaire,
-        public _id?: string
+        public _id?: string,
+        public facture_id?: FactureCommission,
+        public statut?: string
     ) { }
 
 }

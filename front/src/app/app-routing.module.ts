@@ -194,6 +194,7 @@ import { PerformanceComponent } from './international/dashboard-int/performance/
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 import { ActualiteComponent } from './international/actualite/actualite.component';
+import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
 
 const routes: Routes = [
     {
@@ -349,6 +350,7 @@ const routes: Routes = [
             { path: 'international/partenaire/alternants/:id', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/:id', component: PovPartenaireListProspectsComponent, canActivate: [AuthGuardService] },
             { path: 'dashboard/partenaire', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
+            { path: 'dashboard/commercial', component: DashboardCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'dashboard/partenaire/:id', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard/performance', component: PerformanceComponent, canActivate: [AuthGuardService] },

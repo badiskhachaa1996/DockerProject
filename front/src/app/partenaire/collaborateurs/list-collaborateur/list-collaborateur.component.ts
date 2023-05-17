@@ -360,6 +360,10 @@ export class ListCollaborateurComponent implements OnInit {
     this.router.navigate(["/international/partenaire/" + rowData.code_commercial_partenaire])
   }
 
+  seeAlternants(rowData: CommercialPartenaire) {
+    this.router.navigate(["/international/partenaire/alternants/" + rowData.code_commercial_partenaire])
+  }
+
   seeRecruted(rowData: CommercialPartenaire) {
     this.router.navigate(["/etudiants/" + rowData.code_commercial_partenaire])
   }

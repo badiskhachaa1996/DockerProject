@@ -123,7 +123,7 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
   onAddAlternant() {
     this.APService.create({ ...this.RegisterForm.value, custom_id: this.generateID() }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: "Ajout d'alternant avec succès" })
-      this.router.navigate(['/international/partenaire/alternants/', this.token.id]) //642ade6cc872445e7c0e9f12
+      this.router.navigate(['/international/partenaire/alternants/', this.CODE])
     })
   }
 
