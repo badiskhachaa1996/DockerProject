@@ -14,11 +14,13 @@
                         0755084U, attestons que :
                     </p>
                     <div class="owner-file">
-                        <h2>Madame / Monsieur {{user?.lastname | uppercase}} {{user?.firstname | titlecase}}.</h2>
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}.</h2>
                         <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} en {{user?.pays_adresse}}</h2>
                     </div>
                     <div id="outro-file" class="outro-file">
-                        <p>Est bien admis(e) et inscrit(e) au sein de notre établissement à """"(Paris/Montpellier)"""" pour la
+                        <p>Est bien admis(e) et inscrit(e) au sein de notre établissement à {{ville|titlecase}}
+                            pour la
                             rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
                             date: 'shortDate'}}.</p>
                         <p>L’étudiant(e) suivra en présentiel la 1re année de la formation {{formation?.nom}}.,
@@ -84,6 +86,14 @@
                 <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
                 <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
             </div>
+            <div class="col-12 md:col-6">
+                <label>Civilite</label><br>
+                <input type="text" pInputText [(ngModel)]="user.civilite" />
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Ville</label><br>
+                <input type="text" pInputText [(ngModel)]="ville" />
+            </div>
         </div>
         <div class="col-12 grid" *ngIf="formation">
             <div class="col-12 md:col-3">
@@ -102,18 +112,23 @@
                 <label>Durée de la formation</label><br>
                 <input type="text" pInputText [(ngModel)]="formation.duree" />
             </div>
-            <div class="col-12 md:col-3">
+
+            <div class="col-12 md:col-6">
                 <label>Tarif de la formation</label><br>
                 <input type="text" pInputText [(ngModel)]="formation.tarif" />
             </div>
-            <div class="col-12 md:col-3">
+            <div class="col-12 md:col-6">
                 <label>Frais de préinscription</label><br>
                 <input type="text" pInputText [(ngModel)]="frais_preinscription" />
             </div>
-            <div class="col-12 md:col-3" *ngIf="rentree">
-                <label>Date de commencement</label><br>
+            <div class="col-12 md:col-6" *ngIf="rentree">
+                <label>Date de commencement {{rentree.date_commencement | date: 'shortDate'}}</label><br>
                 <p-calendar [(ngModel)]="rentree.date_commencement" dateFormat="dd/mm/yy"
                     (onSelect)="updateDateLimite($event.value)" (onInput)="updateDateLimite($event.value)"></p-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Date de limite d'arrivée {{date_limite_arrivee | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="date_limite_arrivee" dateFormat="dd/mm/yy"></p-calendar>
             </div>
         </div>
         <div class="col-6">
