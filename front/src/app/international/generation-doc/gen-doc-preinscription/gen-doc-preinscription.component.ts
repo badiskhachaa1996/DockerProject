@@ -72,7 +72,7 @@ export class GenDocPreinscriptionComponent implements OnInit {
     var element = document.getElementById('page-container');
     var opt = {
       margin: 0,
-      filename: `INSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
+      filename: `PREINSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'p', hotfixes: ['px_scaling'] }
@@ -82,12 +82,12 @@ export class GenDocPreinscriptionComponent implements OnInit {
 
   saveDocument() {
     let data: any = this.prospect._id
-    this.GenDocService.create(new DocumentInternational(null, this.generateCode(), data, this.ecole_id, "Inscription", new Date(), this.token.id, `INSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`)).subscribe(doc => {
+    this.GenDocService.create(new DocumentInternational(null, this.generateCode(), data, this.ecole_id, "Préinscription", new Date(), this.token.id, `PREINSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`)).subscribe(doc => {
 
       var element = document.getElementById('page-container');
       var opt = {
         margin: 0,
-        filename: `INSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
+        filename: `PREINSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
         image: { type: 'jpeg', quality: 0.9 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'p', hotfixes: ['px_scaling'] }
@@ -99,7 +99,7 @@ export class GenDocPreinscriptionComponent implements OnInit {
 
           const file = new File(
             [pdfBase64],
-            `INSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
+            `PREINSCRIPTION_${this.user.lastname}_${this.user.firstname}.pdf`,
             { type: 'application/pdf' }
           );
           const formData = new FormData();
