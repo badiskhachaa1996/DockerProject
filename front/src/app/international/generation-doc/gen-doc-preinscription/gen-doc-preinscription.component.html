@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="grid col-12">
     <div *ngIf="ecole?.url_form=='int_education'" id="body" class="col-6">
-        <div class="page-container">
+        <div class="page-container" id="page-container">
             <div class="page-inner-content">
                 <div class="header">
                     <h1 class="page-title">ATTESTATION DE PREINSCRIPTION</h1>
@@ -44,7 +44,7 @@
                     <div class="date-sign-file">
                         <p id="certificate-date">Paris, le 3 mai 2023</p>
                         <p><strong>Département ADMISSION</strong></p>
-                        <img id="school-signature" src="img/signature-int.png" class="signature-image" />
+                        <img id="school-signature" src="/assets/images/generation-documents/int-education/signature-int.png" class="signature-image" />
                     </div>
                 </div>
                 <div class="footer-file">
@@ -58,76 +58,76 @@
                         <p>Campus Marne : 6 allée Hendrik Lorentz 77420 Champs sur Marne</p>
                         <p>Campus Montpellier : 1 Place Charles De Gaulle 34170 Castelnau-le-Lez</p>
                     </div>
-                    <img id="school-qr" src="img/qr-certificate.png" class="qr-file" />
+                    <img id="school-qr" src="/assets/images/generation-documents/int-education/qr-certificate.png" class="qr-file" />
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-12 grid card">
-    <h1 class="col-12">Customisation du document</h1>
-    <div class="col-12 grid" *ngIf="user">
-        <div class="col-12 md:col-3">
-            <label>Nom</label><br>
-            <input type="text" pInputText [(ngModel)]="user.lastname" />
+    <div class="col-12 grid card">
+        <h1 class="col-12">Customisation du document</h1>
+        <div class="col-12 grid" *ngIf="user">
+            <div class="col-12 md:col-3">
+                <label>Nom</label><br>
+                <input type="text" pInputText [(ngModel)]="user.lastname" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Prénom</label><br>
+                <input type="text" pInputText [(ngModel)]="user.firstname" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Pays de naissance</label><br>
+                <input type="text" pInputText [(ngModel)]="user.pays_adresse" />
+            </div>
+            <div class="col-12 md:col-3" *ngIf="prospect">
+                <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Civilite</label><br>
+                <input type="text" pInputText [(ngModel)]="user.civilite" />
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Ville</label><br>
+                <input type="text" pInputText [(ngModel)]="ville" />
+            </div>
         </div>
-        <div class="col-12 md:col-3">
-            <label>Prénom</label><br>
-            <input type="text" pInputText [(ngModel)]="user.firstname" />
+        <div class="col-12 grid" *ngIf="formation">
+            <div class="col-12 md:col-4">
+                <label>Nom de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.nom" />
+            </div>
+            <div class="col-12 md:col-4">
+                <label>Code RNCP</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.rncp" />
+            </div>
+            <div class="col-12 md:col-4">
+                <label>Certificateur</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.certificateur" />
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Durée de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.duree" />
+            </div>
+    
+            <div class="col-12 md:col-6">
+                <label>Tarif de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.tarif" />
+            </div>
+            <div class="col-12 md:col-6" *ngIf="rentree">
+                <label>Date de commencement</label><br>
+                <p-calendar [(ngModel)]="rentree.date_commencement" dateFormat="dd/mm/yy"
+                    (onSelect)="updateDateLimite($event.value)" (onInput)="updateDateLimite($event.value)"></p-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Date de limite d'arrivée {{date_limite_arrivee | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="date_limite_arrivee" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
         </div>
-        <div class="col-12 md:col-3">
-            <label>Pays de naissance</label><br>
-            <input type="text" pInputText [(ngModel)]="user.pays_adresse" />
+        <div class="col-6">
+            <p-button label="Exporter en pdf" icon="pi pi-file-pdf" (click)="exportPDF()"></p-button>
         </div>
-        <div class="col-12 md:col-3" *ngIf="prospect">
-            <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
-            <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
+        <div class="col-6">
+            <p-button label="Sauvegarder le document" icon="pi pi-save" (click)="saveDocument()"></p-button>
         </div>
-        <div class="col-12 md:col-6">
-            <label>Civilite</label><br>
-            <input type="text" pInputText [(ngModel)]="user.civilite" />
-        </div>
-        <div class="col-12 md:col-6">
-            <label>Ville</label><br>
-            <input type="text" pInputText [(ngModel)]="ville" />
-        </div>
-    </div>
-    <div class="col-12 grid" *ngIf="formation">
-        <div class="col-12 md:col-4">
-            <label>Nom de la formation</label><br>
-            <input type="text" pInputText [(ngModel)]="formation.nom" />
-        </div>
-        <div class="col-12 md:col-4">
-            <label>Code RNCP</label><br>
-            <input type="text" pInputText [(ngModel)]="formation.rncp" />
-        </div>
-        <div class="col-12 md:col-4">
-            <label>Certificateur</label><br>
-            <input type="text" pInputText [(ngModel)]="formation.certificateur" />
-        </div>
-        <div class="col-12 md:col-6">
-            <label>Durée de la formation</label><br>
-            <input type="text" pInputText [(ngModel)]="formation.duree" />
-        </div>
-
-        <div class="col-12 md:col-6">
-            <label>Tarif de la formation</label><br>
-            <input type="text" pInputText [(ngModel)]="formation.tarif" />
-        </div>
-        <div class="col-12 md:col-6" *ngIf="rentree">
-            <label>Date de commencement</label><br>
-            <p-calendar [(ngModel)]="rentree.date_commencement" dateFormat="dd/mm/yy"
-                (onSelect)="updateDateLimite($event.value)" (onInput)="updateDateLimite($event.value)"></p-calendar>
-        </div>
-        <div class="col-12 md:col-6">
-            <label>Date de limite d'arrivée {{date_limite_arrivee | date: 'shortDate'}}</label><br>
-            <p-calendar [(ngModel)]="date_limite_arrivee" dateFormat="dd/mm/yy"></p-calendar>
-        </div>
-    </div>
-    <div class="col-6">
-        <p-button label="Exporter en pdf" icon="pi pi-file-pdf" (click)="exportPDF()"></p-button>
-    </div>
-    <div class="col-6">
-        <p-button label="Sauvegarder le document" icon="pi pi-save" (click)="saveDocument()"></p-button>
     </div>
 </div>
