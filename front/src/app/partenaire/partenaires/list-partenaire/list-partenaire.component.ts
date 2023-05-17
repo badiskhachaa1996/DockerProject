@@ -76,6 +76,18 @@ export class ListPartenaireComponent implements OnInit {
     { label: 'Agence de voyage', value: 'Agence de voyage' },
     { label: 'Entreprise', value: 'Entreprise' },
   ]
+  localisationList = [
+    { label: "Paris - France", value: "Paris - France" },
+    { label: "Marne - France", value: "Marne - France" },
+    { label: "Montpellier - France", value: "Montpellier - France" },
+    { label: "Tunis - Tunisie", value: "Tunis - Tunisie" },
+    { label: "Maroc", value: "Maroc" },
+    { label: "Dubaï", value: "Dubaï" },
+    { label: "Brazzaville - Congo", value: "Brazzaville - Congo" },
+    { label: "Malte", value: "Malte" },
+    { label: "Londres - Royaume-Uni", value: "Londres - Royaume-Uni" },
+    { label: "Italie", value: "Italie" },
+  ]
 
   registerForm: FormGroup;
 
@@ -459,7 +471,8 @@ export class ListPartenaireComponent implements OnInit {
     statut_anciennete: new FormControl('', Validators.required),
     contribution: new FormControl('', Validators.required),
     typePartenaire: new FormControl(''),
-    groupeWhatsApp: new FormControl('')
+    groupeWhatsApp: new FormControl(''),
+    localisation: new FormControl('')
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true
@@ -519,6 +532,5 @@ export class ListPartenaireComponent implements OnInit {
     if (!rowData.manage_by)
       this.managePartenaire['manage_by'] = { _id: null }
   }
-
 }
 

@@ -52,6 +52,8 @@ app.post('/sendEmail/:id', (req, res) => {
             if (error) {
                 console.error(error);
                 res.status(500).send(error)
+            } else {
+                res.send(act)
             }
         });
     })
