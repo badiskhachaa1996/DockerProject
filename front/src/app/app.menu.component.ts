@@ -1192,7 +1192,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
-                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.code_commercial_partenaire] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData?.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
@@ -1233,7 +1233,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         }
 
-                        else {
+                        else if (cData) {
                             //Commercial considéré Admin dans son Partenaire
                             this.items = [
                                 {
@@ -1283,6 +1283,23 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
+                            ];
+                        } else {
+                            this.items = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                    ]
+                                },
+                                {
+                                    label: 'Leads',
+                                    items: [
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                    ]
+                                },
+                                { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
                         }

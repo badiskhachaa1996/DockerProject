@@ -277,7 +277,40 @@ export class VentesComponent implements OnInit {
 
   showAttribution: Vente = null
   factureList = []
+  tempFactureid = null
   initAttributionForm(vente: Vente) {
     this.showAttribution = vente
+    if (this.PartenaireSelected)
+      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(factures => {
+        this.factureList = []
+        factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
+      })
+    else
+      this.FCService.getAll().subscribe(factures => {
+        this.factureList = []
+        factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
+      })
+    if (this.showAttribution.facture_id)
+      this.tempFactureid = this.showAttribution.facture_id._id
+  }
+  onMatchFacture(facture_id: any) {
+
+    this.VenteService.update({ facture_id, _id: this.showAttribution._id, statut: 'Facturé' }).subscribe(vente => {
+      this.ventes.splice(this.ventes.indexOf(this.showAttribution), 1, vente)
+      this.showAttribution = null
+      this.MessageService.add({ severity: 'success', summary: 'Attribution de la facture avec succès' })
+    })
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 }

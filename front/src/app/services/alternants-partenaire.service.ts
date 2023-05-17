@@ -63,4 +63,14 @@ export class AlternantsPartenaireService {
     return this.http.post<AlternantsPartenaire>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem("token")) });
   }
 
+  getAllByPartenaireID(id: string) {
+    let url = this.apiUrl + "getAllByPartenaireID/" + id
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllByCommercialCode(code: string) {
+    let url = this.apiUrl + "getAllByCommercialCode/" + code
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

@@ -298,6 +298,7 @@ import { PerformanceComponent } from './international/dashboard-int/performance/
 import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 import { ActualiteComponent } from './international/actualite/actualite.component';
+import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
 
 
 @NgModule({
@@ -605,7 +606,8 @@ import { ActualiteComponent } from './international/actualite/actualite.componen
     PerformanceComponent,
     ListProspectsComponent,
     LivretGeneratorComponent,
-    ActualiteComponent
+    ActualiteComponent,
+    DashboardCommercialComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -352,6 +352,8 @@
                                 class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le commercial"></i>
                             <i pTooltip="Voir les Leads affiliés" tooltipPosition="bottom" class="pi pi-envelope"
                                 (click)="seePreRecruted(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i pTooltip="Voir les Alternants affiliés" tooltipPosition="bottom" class="pi pi-envelope"
+                                (click)="seeAlternants(commercial)" aria-hidden="true" style="margin-left: 7px"></i>
                             <i *ngIf="commercial.statut!='Admin'" pTooltip="Supprimer le commercial"
                                 tooltipPosition="bottom" class="pi pi-trash" (click)="delete(commercial)"
                                 aria-hidden="true" style="margin-left: 7px"></i>
