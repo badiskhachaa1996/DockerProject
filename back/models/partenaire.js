@@ -7,6 +7,7 @@ const sch = mongoose.Schema({
     nom: { type: String },
     phone: { type: String },
     email: { type: String },
+
     number_TVA: { type: String },
     SIREN: { type: String },
     SIRET: { type: String },
@@ -14,6 +15,7 @@ const sch = mongoose.Schema({
     type: { type: String },
     APE: { type: String },
     Services: { type: String },
+
     Pays: { type: String },
     WhatsApp: { type: String },
     indicatifPhone: { type: String },

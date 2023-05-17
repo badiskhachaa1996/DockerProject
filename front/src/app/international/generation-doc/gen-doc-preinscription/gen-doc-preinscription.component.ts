@@ -28,7 +28,8 @@ export class GenDocPreinscriptionComponent implements OnInit {
 
   frais_preinscription = "550"
   date_limite_arrivee = new Date()
-
+  ville = "Paris"
+  
   user: User
   prospect: Prospect
   ecole: EcoleAdmission
