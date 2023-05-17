@@ -9,7 +9,7 @@ var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 var nb = 0
 const bcrypt = require("bcryptjs");
 mongoose
-    .connect(`mongodb://localhost:27017/imaginePartenaire`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
