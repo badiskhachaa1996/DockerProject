@@ -204,12 +204,9 @@ export class VentesComponent implements OnInit {
   })
 
   onUpdateVente() {
-    let day = this.formEditVente.value.date_reglement.substring(0, 2)
-    let month = this.formEditVente.value.date_reglement.substring(3, 5)
-    let year = this.formEditVente.value.date_reglement.substring(6)
-    this.formEditVente.patchValue({
-      date_reglement: new Date(year, month, day)
-    })
+
+    console.log(this.formEditVente.value.date_reglement)
+    this.formEditVente.patchValue({ date_reglement: new Date(this.formEditVente.value.date_reglement) })
     this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
@@ -223,11 +220,11 @@ export class VentesComponent implements OnInit {
 
   convertTime(v) {
     let date = new Date(v)
-    let day = date.getUTCDate() + 1
+    let day = date.getUTCDate() 
     let month = date.getMonth() + 1
     let year = date.getFullYear()
     if (year != 1970)
-      return `${this.pad(day)}-${this.pad(month)}-${year}`
+      return `${year}-${this.pad(month)}-${this.pad(day)}`
     else
       return ""
   }
