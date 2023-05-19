@@ -276,7 +276,7 @@ export class PaiementsComponent implements OnInit {
 
   token;
 
-  partenaireOwned: Partenaire
+  partenaireOwned: string
 
   scrollToTop() {
     var scrollDuration = 250;
@@ -320,9 +320,8 @@ export class PaiementsComponent implements OnInit {
       })
     })
     this.CService.getByUserId(this.token.id).subscribe(c => {
-      this.PService.getById(c.partenaire_id).subscribe(p => {
-        this.partenaireOwned = p
-      })
+      if (c)
+        this.partenaireOwned = c.partenaire_id
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -460,6 +459,10 @@ export class PaiementsComponent implements OnInit {
     this.payementList = prospect?.payement
     this.initalPayement = [...prospect?.payement]
     this.scrollToTop()
+    if (prospect.code_commercial)
+      this.CService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
 
   saveDetails(willClose = false) {
@@ -498,12 +501,11 @@ export class PaiementsComponent implements OnInit {
 
     }
     if (this.initalPayement.toString() != this.payementList.toString()) {
-      console.log(this.initalPayement, this.payementList)
       if (this.initalPayement.length == this.payementList.length) {
         this.payementList.forEach((val, idx) => {
           if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
             //Ajout d'une facture car nouvelle entrée
-            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned?._id }
+            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
             this.VenteService.create({ ...data }).subscribe(v => {
               console.log(v)
               this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
@@ -513,7 +515,7 @@ export class PaiementsComponent implements OnInit {
       } else if (this.initalPayement.length < this.payementList.length) {
         //Ajout d'une facture avec le dernier élément de payementList
         let pay = this.payementList[this.payementList.length - 1]
-        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned?._id }
+        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned }
         this.VenteService.create({ ...data }).subscribe(v => {
           console.log(v)
           this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
