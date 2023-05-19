@@ -217,7 +217,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl === "/soc/user/send-recovery-password-mail" ||
       req.originalUrl === "/soc/user/recovery-password" ||
       req.originalUrl === "/soc/user/verifyUserPassword" ||
-      req.originalUrl.startsWith("/soc/formulaireAdmission/")
+      req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
+      req.originalUrl.startsWith("/soc/formulaireICBS/")
     ) {
       next();
     } else {
@@ -344,6 +345,7 @@ app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
 app.use('/soc/docGenInt', require('./controllers/docGenController'))
+app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

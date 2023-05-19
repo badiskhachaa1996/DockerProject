@@ -195,6 +195,8 @@ import { ListProspectsComponent } from './admission/international/list-prospects
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 import { ActualiteComponent } from './international/actualite/actualite.component';
 import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
+import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
+import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 
 const routes: Routes = [
     {
@@ -319,6 +321,7 @@ const routes: Routes = [
             { path: 'gestion-des-ressources-humaines', component: GrhComponent },
 
             /** end */
+            { path: 'resultats-icbs', component: ResultatsFormulaireIcbsComponent },
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
@@ -407,6 +410,7 @@ const routes: Routes = [
     { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent },
     { path: 'mp-oublie', component: MpOublieComponent },
     { path: 'mp-oublie/:id', component: MpOublieComponent },
+    { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
 
 ]
 
