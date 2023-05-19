@@ -1185,7 +1185,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Accueil',
                                     items: [
-                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                                        //{ label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                                         { label: 'Tableau de bord Commercial', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard/commercial'] }
                                     ]
                                 },
@@ -1211,7 +1211,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                {
+                                /*{
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
                                     items: [
@@ -1226,10 +1226,10 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/commissions/reglement', cData.partenaire_id]
                                         }
                                     ]
-                                },
+                                },*/
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                //{ label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
                                 { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
                         }

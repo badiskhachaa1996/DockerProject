@@ -196,11 +196,15 @@ export class VentesComponent implements OnInit {
   })
 
   onUpdateVente() {
+    console.log({ ...this.formEditVente.value }, this.formEditVente.value.produit)
     this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
       this.formEditVente.reset()
       this.MessageService.add({ severity: 'success', summary: "Mise à jour de la facture avec succès" })
+    }, error => {
+      this.MessageService.add({ severity: 'error', summary: "Une erreur s'est produit contacté un Admin" })
+      console.error(error)
     })
   }
 
@@ -294,16 +298,10 @@ export class VentesComponent implements OnInit {
   tempFactureid = null
   initAttributionForm(vente: Vente) {
     this.showAttribution = vente
-    if (this.PartenaireSelected)
-      this.FCService.getAllByPartenaireID(this.PartenaireSelected).subscribe(factures => {
-        this.factureList = []
-        factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
-      })
-    else
-      this.FCService.getAll().subscribe(factures => {
-        this.factureList = []
-        factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
-      })
+    this.FCService.getAllByPartenaireID(vente.partenaire_id._id).subscribe(factures => {
+      this.factureList = []
+      factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
+    })
     if (this.showAttribution.facture_id)
       this.tempFactureid = this.showAttribution.facture_id._id
   }

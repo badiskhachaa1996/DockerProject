@@ -5,6 +5,7 @@ import { MemberInt } from 'src/app/models/memberInt';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-member-int',
@@ -16,18 +17,7 @@ export class MemberIntComponent implements OnInit {
   members: MemberInt[] = []
   selectedMember: MemberInt
   teamsList = []
-  localisationList = [
-    { label: "Paris - France", value: "Paris - France" },
-    { label: "Marne - France", value: "Marne - France" },
-    { label: "Montpellier - France", value: "Montpellier - France" },
-    { label: "Tunis - Tunisie", value: "Tunis - Tunisie" },
-    { label: "Maroc", value: "Maroc" },
-    { label: "Dubaï", value: "Dubaï" },
-    { label: "Brazzaville - Congo", value: "Brazzaville - Congo" },
-    { label: "Malte", value: "Malte" },
-    { label: "Londres - Royaume-Uni", value: "Londres - Royaume-Uni" },
-    { label: "Italie", value: "Italie" },
-  ]
+  localisationList = environment.pays
   roleList = [
     { label: "Super Admin", value: "Super Admin" },
     { label: "Admin", value: "Admin" },

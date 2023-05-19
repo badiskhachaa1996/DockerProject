@@ -13,7 +13,8 @@ const tuteurSch = mongoose.Schema({
     modalite_paiement: { type: String },
     partenaire_id: { type: mongoose.Schema.Types.ObjectId, ref: "partenaire" },
     facture_id: { type: mongoose.Schema.Types.ObjectId, ref: "factureCommission" },
-    statut: { type: String, default: 'Non Facturé' }
+    statut: { type: String, default: 'Non Facturé' },
+    paiement_prospect_id: { type: String, default: null }
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

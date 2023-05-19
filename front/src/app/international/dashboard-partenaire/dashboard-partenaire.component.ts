@@ -47,7 +47,7 @@ export class DashboardPartenaireComponent implements OnInit {
     contribution: {
       actif: 0,
       non_actif: 0,
-      occasionel: 0
+      occasionnel: 0
     },
     etat_contrat: {
       pas_contrat: 0,

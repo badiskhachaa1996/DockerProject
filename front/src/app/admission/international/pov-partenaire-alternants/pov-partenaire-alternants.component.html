@@ -140,11 +140,18 @@
                                     placeholder="Choisissez un campus">
                                 </p-dropdown>
                             </div>
-                            <div class="field col-12">
+                            <div class="field col-12 md:col-6">
                                 <label For="autre">Rentrée Scolaire <span style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
                                     placeholder="Choisissez une rentrée scolaire">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="autre">Formation <span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="formationlist" formControlName="formation"
+                                    placeholder="Choisissez une formation">
                                 </p-dropdown>
                             </div>
                         </div>
@@ -397,7 +404,9 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des alternants <span *ngIF="PARTENAIRE">de {{PARTENAIRE?.nom}}</span>  <span *ngIF="COMMERCIAL">de {{COMMERCIAL?.user_id?.lastname | uppercase}} {{COMMERCIAL?.user_id?.firstname | titlecase}}</span></h5>
+            <h5>Liste des alternants <span *ngIF="PARTENAIRE">de {{PARTENAIRE?.nom}}</span> <span *ngIF="COMMERCIAL">de
+                    {{COMMERCIAL?.user_id?.lastname | uppercase}} {{COMMERCIAL?.user_id?.firstname | titlecase}}</span>
+            </h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="alternants"
@@ -491,6 +500,9 @@
                         <th pSortableColumn="pays" scope="col" style="text-align: center;">
                             Pays de résidence <p-sortIcon field="pays"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
+                            Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="campus" scope="col" style="text-align: center;">
                             Campus <p-sortIcon field="campus"></p-sortIcon>
                         </th>
@@ -531,7 +543,16 @@
                         <td>
                             {{ alternant.pays }}
                         </td>
+                        <td
+                            *ngIf="dicCommercial && alternant?.code_commercial && dicCommercial[alternant?.code_commercial]">
+                            {{ dicCommercial[alternant?.code_commercial] }}
+                        </td>
 
+                        <td
+                            *ngIf="!dicCommercial || !alternant?.code_commercial || dicCommercial[alternant?.code_commercial]">
+                            Aucun
+
+                        </td>
                         <td>
                             {{ alternant.campus }}
                         </td>

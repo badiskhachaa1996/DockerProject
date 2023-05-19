@@ -46,5 +46,10 @@ app.delete('/delete/:id', (req, res) => {
         res.send(doc)
     })
 })
+app.delete('/deleteByPaymentID/:id', (req, res) => {
+    Vente.findOneAndRemove({ paiement_prospect_id: req.params.id }).then(doc => {
+        res.send(doc)
+    })
+})
 
 module.exports = app;

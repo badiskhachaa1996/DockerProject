@@ -1145,7 +1145,7 @@
     <!-- Afficher le nombre total d'étudiants avec leur code -->
 </div>
 
-<div *ngIf="isCommercial && CommercialExterne">
+<div *ngIf="isCommercial && CommercialExterne && CommercialExterne.statut=='Admin'">
 
     <div class="col-12">
         <h1 class="text-center" *ngIf="PartenaireInfo">Bonjour notre cher partenaire {{PartenaireInfo.nom}}</h1>
