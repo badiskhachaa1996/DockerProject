@@ -3,7 +3,7 @@
     <div class="col-2">
 
     </div>
-    <form class="p-fluid p-formgrid grid col-8 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm"
+    <form class="p-fluid p-formgrid grid md:col-8 col-12 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm"
         *ngIf="ETAT=='DEBUT'">
         <!--<div class="col-12">
             <h1>Event title</h1>
@@ -12,16 +12,16 @@
                 learn several new langauges, You are invited to fill this form and join us on the 27th of May.
             </p>
         </div>-->
-        <div class="field col-6">
+        <div class="field md:col-6 col-12">
             <label>Full Name <span style="color:red"> *</span></label>
             <input pInputText formControlName="name" type="text" placeholder="Ex: John Smith" />
         </div>
-        <div class="field col-6">
+        <div class="field md:col-6 col-12">
             <label>Age <span style="color:red"> *</span></label>
             <p-inputNumber inputId="integeronly" formControlName="age">
             </p-inputNumber>
         </div>
-        <div class="field col-6">
+        <div class="field md:col-6 col-12">
             <label>Valid Phone Number <span style="color:red"> *</span></label><br>
             <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
                 [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
@@ -34,17 +34,17 @@
             <p style="color:red" *ngIf="phone.invalid && (phone.touched || phone.dirty)">The phone number is
                 invalid, please respect the format</p>
         </div>
-        <div class="field col-6">
+        <div class="field md:col-6 col-12">
             <label>Email Adress <span style="color:red"> *</span></label>
             <input pInputText formControlName="email" type="email" placeholder="Ex: john.smith@gmail.com" />
         </div>
 
-        <div class="field col-6">
+        <div class="field md:col-6 col-12">
             <label>Occupation <span style="color:red"> *</span></label>
             <p-dropdown placeholder="Choose a occupation" [options]="occupations"
                 formControlName="occupation"></p-dropdown>
         </div>
-        <div class="field col-6" *ngIf="RegisterForm.value.occupation=='Employees'">
+        <div class="field md:col-6 col-12" *ngIf="RegisterForm.value.occupation=='Employees'">
             <label>In which field are you working ? <span style="color:red"> *</span></label>
             <input pInputText formControlName="field" type="text" placeholder="Ex: IT" />
         </div>
@@ -56,7 +56,7 @@
             <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid"></button>
         </div>
     </form>
-    <div class="grid col-8 card" *ngIf="ETAT!='DEBUT'">
+    <div class="grid md:col-8 col-12 card" *ngIf="ETAT!='DEBUT'">
         <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
             Votre candidature a été envoyé !</h2>
         <div class="col-12 flex justify-content-center flex-wrap card-container">
