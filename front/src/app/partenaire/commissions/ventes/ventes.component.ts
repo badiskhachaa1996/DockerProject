@@ -204,8 +204,13 @@ export class VentesComponent implements OnInit {
   })
 
   onUpdateVente() {
-    console.log({ ...this.formEditVente.value }, this.formEditVente.value.produit)
-    this.VenteService.update({ ...this.formEditVente.value, date_reglement: new Date(this.formEditVente.value.date_reglement) }).subscribe(data => {
+    let day = this.formEditVente.value.date_reglement.substring(0, 2)
+    let month = this.formEditVente.value.date_reglement.substring(3, 5)
+    let year = this.formEditVente.value.date_reglement.substring(6)
+    this.formEditVente.patchValue({
+      date_reglement: new Date(year, month, day)
+    })
+    this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
       this.formEditVente.reset()

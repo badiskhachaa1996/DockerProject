@@ -34,7 +34,6 @@ app.post("/getAllByPartenaireIDs", (req, res, next) => {
 });
 
 app.put("/update", (req, res) => {
-    console.log({ ...req.body })
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
         if (err) {
             console.error(err); res.status(500).send(err);
