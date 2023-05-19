@@ -32,11 +32,11 @@
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12">
+                <!--<div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
                         [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
-                </div>
+                </div>-->
                 <div class="field col-12 md:col-6">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_reglement"></p-calendar>
@@ -95,18 +95,20 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Type de commission<span style="color: red;"> * </span></label>
-                    <textarea pInputTextarea formControlName="produit"></textarea>
+                    <p-dropdown [options]="produitListUpdate" formControlName="produit"
+                        placeholder="Description du Type de commission"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant payé par le lead<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
-                    </p-inputNumber>
+                    <label for="nom">Montant payé par le lead:</label>
+                    <p>{{venteSelected.montant}}</p>
+                    <!--<p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
+                    </p-inputNumber>-->
                 </div>
-                <div class="field col-12">
+                <!--<div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
                         [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
-                </div>
+                </div>-->
                 <div class="field col-12 md:col-6   ">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_reglement"></p-calendar>
@@ -141,10 +143,10 @@
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatutCommission" filter="true"
+                        <!--<p-dropdown [style]="{'margin':'5px'}" [options]="filterStatutCommission" filter="true"
                             (onChange)="dt1.filter($event.value, 'statutCommission', 'equals');"
                             emptyFilterMessage="Pas de statut de commission trouvé"
-                            filterPlaceholder="Choisissez le statut de commission"></p-dropdown>
+                            filterPlaceholder="Choisissez le statut de commission"></p-dropdown>-->
 
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filterCommercial" filter="true"
                             (onChange)="dt1.filter($event.value, 'prospect_id.code_commercial', 'equals');"
@@ -209,11 +211,11 @@
                             commission
                             <p-sortIcon field="statutCommission">
                             </p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="facture_id" style="text-align: center;"> Numéro de facture
                             <p-sortIcon field="facture_id">
                             </p-sortIcon>
-                        </th>-->
+                        </th>
 
                         <th pSortableColumn="statut" style="text-align: center;"> Facturation
                             <p-sortIcon field="statut">
@@ -279,11 +281,11 @@
                         <td *ngIf="!vente.produit">Aucun</td>
                         <!--<td style="min-width: 14rem;">
                             {{ vente.statutCommission }}
-                        </td>
+                        </td>-->
                         <td style="min-width: 14rem;">
                             <span *ngIf="vente?.facture_id">{{ vente?.facture_id?.numero }}</span>
                             <span *ngIf="!vente?.facture_id"> Aucune</span>
-                        </td>-->
+                        </td>
                         <td style="min-width: 14rem;">
                             {{ vente?.statut }}
                         </td>

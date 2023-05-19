@@ -729,7 +729,7 @@
                             {{ (prospect.decision_admission)?prospect.decision_admission:"En attente de traitement" }}
                         </td>
                         <td *ngIf="prospect.statut_payement">
-                            "{{ prospect.statut_payement }}" '{{ prospect.statut_payement | json }}'
+                            {{ prospect.statut_payement }}
                         </td>
                         <td *ngIf="!prospect.statut_payement">
                             Non

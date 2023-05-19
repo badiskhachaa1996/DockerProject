@@ -34,10 +34,8 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
   ];
 
   ecoleList = [
-    { label: 'ESPIC', value: "ESPIC" },
-    { label: 'ADG', value: "ADG" },
-    { label: 'STUDINFO', value: "STUDINFO" },
   ]
+  dicEcole = {}
   campusList = [
     { label: 'Paris - Champs sur Marne', value: 'Paris - Champs sur Marne' },
     { label: 'Paris - Louvre', value: 'Paris - Louvre' },
@@ -57,6 +55,10 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
     { label: 'Contrat validé à la facturation', value: "Contrat validé à la facturation" },
   ]
 
+  formationlist = [
+
+  ]
+
   constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService,
     private ToastService: MessageService, private router: Router, private FAService: FormulaireAdmissionService) { }
 
@@ -68,9 +70,9 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
     pays: new FormControl('', Validators.required),
     campus: new FormControl('', Validators.required),
     ecole: new FormControl('', Validators.required),
-    //formation: new FormControl(''),
+    formation: new FormControl(''),
     rentree_scolaire: new FormControl('', Validators.required),
-    etat_contrat: new FormControl('', Validators.required),
+    etat_contrat: new FormControl('',),
     code_commercial: new FormControl(this.CODE, Validators.required),
     civilite: new FormControl('', Validators.required),
     date_naissance: new FormControl('', Validators.required),
@@ -84,11 +86,11 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
     numero: new FormControl('', Validators.required),
     postal: new FormControl('', Validators.required),
     ville: new FormControl('', Validators.required),
-    date_contrat: new FormControl('', Validators.required),
-    entreprise: new FormControl('', Validators.required),
-    adresse_entreprise: new FormControl('', Validators.required),
-    telephone_entreprise: new FormControl('', Validators.required),
-    mail_entreprise: new FormControl('', [Validators.required, Validators.email]),
+    date_contrat: new FormControl('',),
+    entreprise: new FormControl('',),
+    adresse_entreprise: new FormControl('',),
+    telephone_entreprise: new FormControl('',),
+    mail_entreprise: new FormControl('', [Validators.email]),
   })
 
   canNext1() {
@@ -112,11 +114,17 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
   }
   token;
   ngOnInit(): void {
-    /*this.FAService.EAgetAll().subscribe(data => {
+    this.FAService.EAgetAll().subscribe(data => {
       data.forEach(d => {
         this.ecoleList.push({ label: d.titre, value: d.titre })
+        this.dicEcole[d.titre] = d
       })
-    })*/
+    })
+    this.FAService.FAgetAll().subscribe(data => {
+      data.forEach(f => {
+        this.formationlist.push({ label: f.nom, value: f.nom })
+      })
+    })
     this.token = jwt_decode(localStorage.getItem('token'));
   }
 
@@ -143,6 +151,13 @@ export class AjoutAlternantPartenaireComponent implements OnInit {
     while (number.length < 3)
       number = `0${number}`
     return number
+  }
+
+  onSelectEcole() {
+    this.formationlist = []
+    this.dicEcole[this.RegisterForm.value.ecole].formations.forEach(f => {
+      this.formationlist.push({ label: f.nom, value: f.nom })
+    })
   }
 
 }

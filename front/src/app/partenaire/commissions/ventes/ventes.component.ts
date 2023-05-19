@@ -36,6 +36,9 @@ export class VentesComponent implements OnInit {
   produitList = [
     { label: "Liste déroulante avec la description de commission", value: "Liste déroulante avec la description de commission" }
   ]
+  produitListUpdate = [
+
+  ]
 
   filterProduit = [
     { label: "Tous les produits", value: null },
@@ -65,9 +68,13 @@ export class VentesComponent implements OnInit {
           })
         })
         this.produitList = []
+        this.produitListUpdate = []
         partenaire.commissions.forEach(c => {
           this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+          this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
         })
+
+
       })
     } else {
       this.VenteService.getAll().subscribe(data => {
@@ -75,6 +82,7 @@ export class VentesComponent implements OnInit {
       })
       this.PartenaireService.getAll().subscribe(data => {
         this.produitList = []
+        this.produitListUpdate = []
         this.PartenaireList = [{ label: "Tous les Partenaires", value: null, }]
         data.forEach(d => {
           this.PartenaireList.push({ label: d.nom, value: d._id })
@@ -131,7 +139,7 @@ export class VentesComponent implements OnInit {
   formAddVente: FormGroup = new FormGroup({
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
-    statutCommission: new FormControl('', Validators.required),
+    statutCommission: new FormControl(''),
     date_reglement: new FormControl('', Validators.required),
     prospect_id: new FormControl('', Validators.required),
     partenaire_id: new FormControl('', Validators.required),
@@ -162,23 +170,27 @@ export class VentesComponent implements OnInit {
     this.formEditVente.patchValue({
       ...vente
     })
-    /*this.formEditVente.patchValue({
+    this.formEditVente.patchValue({
       date_reglement: this.convertTime(vente.date_reglement)
-      
-    })*/
+
+    })
     this.showFormEditVente = true
-    //TODO produit problème
+    this.produitListUpdate = []
+    this.venteSelected.partenaire_id.commissions.forEach(c => {
+      this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+      this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
+    })
   }
 
-  venteSelected = null
+  venteSelected: Vente = null
 
   showFormEditVente = false
 
   formEditVente: FormGroup = new FormGroup({
     _id: new FormControl('', Validators.required),
     produit: new FormControl('', Validators.required),
-    montant: new FormControl('', Validators.required),
-    statutCommission: new FormControl('', Validators.required),
+    montant: new FormControl(''),
+    statutCommission: new FormControl(''),
     date_reglement: new FormControl('', Validators.required),
     modalite_paiement: new FormControl('', Validators.required)
   })
@@ -218,8 +230,10 @@ export class VentesComponent implements OnInit {
     if (this.PartenaireSelected)
       this.PartenaireService.getById(this.PartenaireSelected).subscribe(data => {
         this.produitList = []
+        this.produitListUpdate = []
         data.commissions.forEach(c => {
           this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+          this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
         })
       })
   }
