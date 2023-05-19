@@ -271,13 +271,8 @@
             </p-tabPanel>
         </p-tabView>
         <div class="grid col-12">
-            <div class="col-6">
+            <div class="col-12">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
-            </div>
-
-            <div class="col-6">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
             </div>
         </div>
 
@@ -387,12 +382,8 @@
                     </div>
                 </p-tabPanel>
             </p-tabView>
-            <div class="col-6">
+            <div class="col-12">
                 <button pButton label="Sauvegardez les modifications" (click)="saveTraitement()"></button>
-            </div>
-            <div class="col-6">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveTraitement(true)"></button>
             </div>
         </form>
     </div>
@@ -654,6 +645,9 @@
             <p>Source de lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
+            </p>
+            <p>
+                Nom du Partenaire : {{infoPartenaire?.nom}}
             </p>
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 

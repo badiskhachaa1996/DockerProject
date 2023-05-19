@@ -1343,7 +1343,7 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
         contribution: {
             actif: 0,
             non_actif: 0,
-            occasionel: 0
+            occasionnel: 0
         },
         etat_contrat: {
             pas_contrat: 0,
@@ -1366,12 +1366,12 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
     }
     Partenaire.find().then(listPartenaire => {
         globalstats.nb_partenaire = listPartenaire.length
-        globalstats.anciennete.ancien = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an"' ? 1 : 0), 0))
-        globalstats.anciennete.nouveau = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an"' ? 0 : 1), 0))
+        globalstats.anciennete.ancien = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an' ? 1 : 0), 0))
+        globalstats.anciennete.nouveau = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.statut_anciennete == 'Ancien > 1 an' ? 0 : 1), 0))
 
         globalstats.contribution.actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Actif' ? 1 : 0), 0))
         globalstats.contribution.non_actif = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Inactif' ? 1 : 0), 0))
-        globalstats.contribution.occasionel = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Occasionel' ? 1 : 0), 0))
+        globalstats.contribution.occasionnel = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.contribution == 'Occasionnel' ? 1 : 0), 0))
 
         globalstats.etat_contrat.pas_contrat = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.etat_contrat == 'Non' ? 1 : 0), 0))
         globalstats.etat_contrat.en_cours = Math.trunc(listPartenaire.reduce((total, next) => total + (next?.etat_contrat == 'En cours' ? 1 : 0), 0))

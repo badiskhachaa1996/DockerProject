@@ -63,7 +63,7 @@ export class ListPartenaireComponent implements OnInit {
   dropdownContribution = [
     { label: "Actif", value: "Actif" },
     { label: "Inactif", value: "Inactif" },
-    { label: "Occasionel", value: "Occasionel" },
+    { label: "Occasionnel", value: "Occasionnel" },
   ]
   dropdownEtatContrat = [
     { label: "Non", value: "Non" },
@@ -72,22 +72,11 @@ export class ListPartenaireComponent implements OnInit {
     { label: "Annulé", value: "Annulé" },
   ]
   dropdownType = [
-    { label: 'Apporteur d’affaire', value: 'Apporteur d’affaire' },
+    { label: 'Apporteur d\'affaire', value: 'Apporteur d\'affaire' },
     { label: 'Agence de voyage', value: 'Agence de voyage' },
     { label: 'Entreprise', value: 'Entreprise' },
   ]
-  localisationList = [
-    { label: "Paris - France", value: "Paris - France" },
-    { label: "Marne - France", value: "Marne - France" },
-    { label: "Montpellier - France", value: "Montpellier - France" },
-    { label: "Tunis - Tunisie", value: "Tunis - Tunisie" },
-    { label: "Maroc", value: "Maroc" },
-    { label: "Dubaï", value: "Dubaï" },
-    { label: "Brazzaville - Congo", value: "Brazzaville - Congo" },
-    { label: "Malte", value: "Malte" },
-    { label: "Londres - Royaume-Uni", value: "Londres - Royaume-Uni" },
-    { label: "Italie", value: "Italie" },
-  ]
+  localisationList = environment.pays
 
   registerForm: FormGroup;
 
@@ -106,10 +95,19 @@ export class ListPartenaireComponent implements OnInit {
 
   canDelete = false
 
-  filterAnciennete = [{ label: 'Toutes les anciennetes', value: null }]
+  filterAnciennete = [{ label: 'Toutes les anciennetes', value: null },
+  { label: "Nouveau < 1 an", value: "Nouveau < 1 an" },
+  { label: "Ancien > 1 an", value: "Ancien > 1 an" }]
 
-  filterContribution = [{ label: 'Toutes les contributions', value: null }]
-  filterEtat = [{ label: 'Tous les états de contrats', value: null }]
+  filterContribution = [{ label: 'Toutes les contributions', value: null },
+  { label: "Actif", value: "Actif" },
+  { label: "Inactif", value: "Inactif" },
+  { label: "Occasionnel", value: "Occasionnel" }]
+  filterEtat = [{ label: 'Tous les états de contrats', value: null },
+  { label: "Non", value: "Non" },
+  { label: "En cours", value: "En cours" },
+  { label: "Signé", value: "Signé" },
+  { label: "Annulé", value: "Annulé" },]
 
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
@@ -133,20 +131,6 @@ export class ListPartenaireComponent implements OnInit {
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
-      let tempList = []
-      let temp2List = []
-      let temp3List = []
-      data.forEach(d => {
-        let temp = { label: d.statut_anciennete, value: d.statut_anciennete }
-        let temp2 = { label: d.contribution, value: d.contribution }
-        let temp3 = { label: d.etat_contrat, value: d.etat_contrat }
-        if (d.contribution && !temp2List.includes(d.contribution))
-          this.filterContribution.push(temp2); temp2List.push(d.contribution)
-        if (d.statut_anciennete && !tempList.includes(d.statut_anciennete))
-          this.filterAnciennete.push(temp); tempList.push(d.statut_anciennete)
-        if (d.etat_contrat && !temp3List.includes(d.etat_contrat))
-          this.filterEtat.push(temp3); temp3List.push(d.etat_contrat)
-      })
     })
     this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {
@@ -480,6 +464,7 @@ export class ListPartenaireComponent implements OnInit {
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true
+    console.log(this.idPartenaireToUpdate)
     this.editInfoPartenariatForm.patchValue({
       ...this.idPartenaireToUpdate
     })

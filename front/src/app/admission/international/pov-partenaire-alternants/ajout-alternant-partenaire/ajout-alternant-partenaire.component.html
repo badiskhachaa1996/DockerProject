@@ -135,7 +135,7 @@
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-6">
                                 <label>Ecole/CFA <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école"
+                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école" (onChange)="onSelectEcole()"
                                     formControlName="ecole"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">

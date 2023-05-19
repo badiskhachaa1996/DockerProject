@@ -528,7 +528,7 @@ export class AdmissionIntComponent implements OnInit {
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
         if (val.ID && listIDS.includes(val.ID) == false) {
-          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
           this.VenteService.create({ ...data }).subscribe(v => {
             console.log(v)
             this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
@@ -647,14 +647,21 @@ export class AdmissionIntComponent implements OnInit {
 
   generateIDPaiement() {
     let date = new Date()
-    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getMinutes().toString()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString()+ date.getSeconds().toString()
   }
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
+
+
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
@@ -699,7 +706,7 @@ export class AdmissionIntComponent implements OnInit {
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
         if (val.ID && listIDS.includes(val.ID) == false) {
-          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
           this.VenteService.create({ ...data }).subscribe(v => {
             console.log(v)
             this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
