@@ -205,7 +205,7 @@ export class VentesComponent implements OnInit {
 
   onUpdateVente() {
     console.log({ ...this.formEditVente.value }, this.formEditVente.value.produit)
-    this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
+    this.VenteService.update({ ...this.formEditVente.value, date_reglement: new Date(this.formEditVente.value.date_reglement) }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
       this.formEditVente.reset()
