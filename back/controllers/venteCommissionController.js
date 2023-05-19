@@ -34,6 +34,7 @@ app.post("/getAllByPartenaireIDs", (req, res, next) => {
 });
 
 app.put("/update", (req, res) => {
+    console.log({ ...req.body })
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
         Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')
             .then((formFromDb) => { res.status(200).send(formFromDb); })
