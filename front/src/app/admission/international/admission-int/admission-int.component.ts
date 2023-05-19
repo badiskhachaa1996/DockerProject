@@ -518,6 +518,7 @@ export class AdmissionIntComponent implements OnInit {
 
     }
 
+
     if (this.initalPayement.toString() != this.payementList.toString()) {
       if (this.initalPayement.length == this.payementList.length) {
         this.payementList.forEach((val, idx) => {
@@ -540,6 +541,7 @@ export class AdmissionIntComponent implements OnInit {
         })
       }
     }
+
 
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
@@ -670,7 +672,12 @@ export class AdmissionIntComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
     this.lengthPaiement = prospect?.payement?.length
+    this.initalPayement = [...prospect?.payement]
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
@@ -678,6 +685,30 @@ export class AdmissionIntComponent implements OnInit {
     if (this.lengthPaiement >= this.payementList.length) {
       statut_payement = this.showPaiement.statut_payement;
       phase_candidature = this.showPaiement.phase_candidature;
+    }
+
+
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      if (this.initalPayement.length == this.payementList.length) {
+        this.payementList.forEach((val, idx) => {
+          if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
+            //Ajout d'une facture car nouvelle entrée
+            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+            this.VenteService.create({ ...data }).subscribe(v => {
+              console.log(v)
+              this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+            })
+          }
+        })
+      } else if (this.initalPayement.length < this.payementList.length) {
+        //Ajout d'une facture avec le dernier élément de payementList
+        let pay = this.payementList[this.payementList.length - 1]
+        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned }
+        this.VenteService.create({ ...data }).subscribe(v => {
+          console.log(v)
+          this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
+        })
+      }
     }
 
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
