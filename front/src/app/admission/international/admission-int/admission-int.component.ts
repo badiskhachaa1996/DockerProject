@@ -519,27 +519,21 @@ export class AdmissionIntComponent implements OnInit {
     }
 
 
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
     if (this.initalPayement.toString() != this.payementList.toString()) {
-      if (this.initalPayement.length == this.payementList.length) {
-        this.payementList.forEach((val, idx) => {
-          if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
-            //Ajout d'une facture car nouvelle entrée
-            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
-            this.VenteService.create({ ...data }).subscribe(v => {
-              console.log(v)
-              this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
-            })
-          }
-        })
-      } else if (this.initalPayement.length < this.payementList.length) {
-        //Ajout d'une facture avec le dernier élément de payementList
-        let pay = this.payementList[this.payementList.length - 1]
-        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned }
-        this.VenteService.create({ ...data }).subscribe(v => {
-          console.log(v)
-          this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
-        })
-      }
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
 
 
@@ -637,7 +631,7 @@ export class AdmissionIntComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -647,6 +641,11 @@ export class AdmissionIntComponent implements OnInit {
     } else {
       this.payementList[i][type] = event.target.value;
     }
+  }
+
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getMinutes().toString()
   }
 
   deletePayement(i) {
@@ -686,29 +685,21 @@ export class AdmissionIntComponent implements OnInit {
       statut_payement = this.showPaiement.statut_payement;
       phase_candidature = this.showPaiement.phase_candidature;
     }
-
-
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
     if (this.initalPayement.toString() != this.payementList.toString()) {
-      if (this.initalPayement.length == this.payementList.length) {
-        this.payementList.forEach((val, idx) => {
-          if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
-            //Ajout d'une facture car nouvelle entrée
-            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
-            this.VenteService.create({ ...data }).subscribe(v => {
-              console.log(v)
-              this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
-            })
-          }
-        })
-      } else if (this.initalPayement.length < this.payementList.length) {
-        //Ajout d'une facture avec le dernier élément de payementList
-        let pay = this.payementList[this.payementList.length - 1]
-        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned }
-        this.VenteService.create({ ...data }).subscribe(v => {
-          console.log(v)
-          this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
-        })
-      }
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
 
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
