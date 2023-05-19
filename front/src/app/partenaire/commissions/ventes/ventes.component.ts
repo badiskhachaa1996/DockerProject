@@ -73,10 +73,27 @@ export class VentesComponent implements OnInit {
           this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
           this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
         })
+      })
+      this.CService.getAllPopulateByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
 
-
+        })
       })
     } else {
+      this.CService.getAllPopulate().subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
+        })
+      })
       this.VenteService.getAll().subscribe(data => {
         this.ventes = data
       })
@@ -98,16 +115,7 @@ export class VentesComponent implements OnInit {
     this.FCService.getAll().subscribe(data => {
       this.factures = data.length
     })
-    this.CService.getAllPopulate().subscribe(data => {
-      data.forEach(d => {
-        let { user_id }: any = d
-        if (user_id) {
-          this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
-          this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
-        }
 
-      })
-    })
   }
 
   showFormAddVente = false
@@ -148,7 +156,7 @@ export class VentesComponent implements OnInit {
 
   onAddVente() {
     this.VenteService.create({ ...this.formAddVente.value }).subscribe(data => {
-      this.selectPartenaire()
+      this.selectPartenaire(this.formAddVente.value.partenaire_id)
       this.showFormAddVente = false
       this.formAddVente.reset()
       this.MessageService.add({ severity: 'success', summary: "Création de vente avec succès" })
@@ -230,7 +238,7 @@ export class VentesComponent implements OnInit {
 
   onPartenaireSelect() {
     this.PartenaireSelected = this.formAddVente.value.partenaire_id
-    this.selectPartenaire()
+    this.selectPartenaire(this.formAddVente.value.partenaire_id)
     if (this.PartenaireSelected)
       this.PartenaireService.getById(this.PartenaireSelected).subscribe(data => {
         this.produitList = []
@@ -242,7 +250,7 @@ export class VentesComponent implements OnInit {
       })
   }
 
-  selectPartenaire() {
+  selectPartenaire(partenaire_id) {
     if (!this.formAddVente.value.partenaire_id)
       this.formAddVente.patchValue({ partenaire_id: this.PartenaireSelected })
     if (this.PartenaireSelected) {
@@ -268,7 +276,20 @@ export class VentesComponent implements OnInit {
         })
       })
     }
+    if (partenaire_id) {
+      this.filterCommercial = []
+      this.dicCommercial = {}
+      this.CService.getAllPopulateByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
 
+        })
+      })
+    }
   }
 
   getProduit(str: string) {

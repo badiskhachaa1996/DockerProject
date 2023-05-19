@@ -159,8 +159,8 @@
                             filterPlaceholder="Choisissez le Type de commission"></p-dropdown>-->
 
                         <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
-                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
-                            emptyFilterMessage="Pas de statut trouvé"
+                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected"
+                            (onChange)="selectPartenaire($event.value)" emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
                     </div>
                 </ng-template>

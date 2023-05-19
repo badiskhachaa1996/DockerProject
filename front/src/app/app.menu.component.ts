@@ -580,6 +580,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-check-circle',
                                     routerLink: ['resultat-qff']
                                 },
+                                {
+                                    label:'Questionnaire ICBS Event title',
+                                    icon: 'pi pi-question-circle',
+                                    routerLink:['resultats-icbs']
+                                }
                             ]
                         },
                         {

@@ -299,6 +299,8 @@ import { ListProspectsComponent } from './admission/international/list-prospects
 import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
 import { ActualiteComponent } from './international/actualite/actualite.component';
 import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
+import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
+import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 
 
 @NgModule({
@@ -607,7 +609,9 @@ import { DashboardCommercialComponent } from './commercial/dashboard-commercial/
     ListProspectsComponent,
     LivretGeneratorComponent,
     ActualiteComponent,
-    DashboardCommercialComponent
+    DashboardCommercialComponent,
+    FormulaireIcbsComponent,
+    ResultatsFormulaireIcbsComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
