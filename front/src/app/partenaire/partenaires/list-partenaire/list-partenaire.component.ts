@@ -424,7 +424,11 @@ export class ListPartenaireComponent implements OnInit {
     montant: new FormControl('', Validators.required)
   })
   addCommission() {
-    this.commissions.push({ ...this.ajoutCommission.value })
+    if (this.commissions)
+      this.commissions.push({ ...this.ajoutCommission.value })
+    else {
+      this.commissions = [{ ...this.ajoutCommission.value }]
+    }
     //Update sur le server
     this.PartenaireService.newUpdate({ _id: this.idPartenaireToUpdate._id, commissions: this.commissions }).subscribe(data => {
 
