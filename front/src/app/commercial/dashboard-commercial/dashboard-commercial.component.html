@@ -2,13 +2,12 @@
     <div class="grid col-12 card">
         <h3 class="col-12" style="text-align:center">Information commercial</h3>
         <div class="col-12 md:col-4" style="text-align:center">
-            <img [src]="imageToShow" alt="Profil" width="150" height="150"
-            style="border-radius: 50px;" />
+            <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
         </div>
         <div class="col-12 md:col-8 grid">
             <div class="col-12 grid">
                 <div class="col-12 md:col-4" *ngIf="user">
-                    <p>Nom & Prénom:</p>
+                    <p><strong>Nom & Prénom:</strong></p>
                     <p>{{user.lastname | uppercase}} {{user.firstname | titlecase}}</p>
                 </div>
                 <div class="col-12 md:col-4" *ngIf="user">
