@@ -1204,10 +1204,10 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Collaborateurs',
+                                    label: 'Commercials',
                                     items: [
                                         //{ label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur'] },
-                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                        { label: 'Liste des Commercials', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                     ]
                                 },
 
@@ -1259,10 +1259,10 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Collaborateurs',
+                                    label: 'Commercials',
                                     items: [
-                                        { label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur', cData.partenaire_id] },
-                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                        { label: 'Insérer un commercial', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur', cData.partenaire_id] },
+                                        { label: 'Liste des Commercials', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                     ]
                                 },
 
