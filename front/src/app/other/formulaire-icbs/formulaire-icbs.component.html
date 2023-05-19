@@ -46,7 +46,7 @@
         </div>
         <div class="field col-6" *ngIf="RegisterForm.value.occupation=='Employees'">
             <label>In which field are you working ? <span style="color:red"> *</span></label>
-            <textarea pInputTextarea formControlName="field"></textarea>
+            <input pInputText formControlName="field" type="text" placeholder="Ex: IT" />
         </div>
         <div class="field col-12">
             <label>Which language do you prefer to learn ? <span style="color:red"> *</span></label>
