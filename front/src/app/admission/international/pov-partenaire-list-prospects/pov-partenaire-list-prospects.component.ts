@@ -651,13 +651,18 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
     this.infoCommercial = null
+    this.infoPartenaire = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 

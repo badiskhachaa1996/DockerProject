@@ -10,6 +10,8 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -225,7 +227,7 @@ export class SourcingComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -533,6 +535,7 @@ export class SourcingComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
@@ -540,6 +543,9 @@ export class SourcingComponent implements OnInit {
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PartenaireService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 

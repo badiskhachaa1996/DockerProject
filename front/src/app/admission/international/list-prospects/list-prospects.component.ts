@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-list-prospects',
   templateUrl: './list-prospects.component.html',
@@ -263,7 +265,7 @@ export class ListProspectsComponent implements OnInit {
   ]
   filterEcole = []
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
+  constructor(private PartenaireService: PartenaireService, private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
     private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
 
   prospects: Prospect[];
@@ -610,13 +612,18 @@ export class ListProspectsComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
+    this.infoPartenaire = null
     this.infoCommercial = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PartenaireService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
