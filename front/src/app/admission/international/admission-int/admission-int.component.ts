@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { VenteService } from 'src/app/services/vente.service';
 
 @Component({
   selector: 'app-admission-int',
@@ -261,7 +262,7 @@ export class AdmissionIntComponent implements OnInit {
   filterEcole = []
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService) { }
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService) { }
 
   prospects: Prospect[];
 
@@ -448,7 +449,7 @@ export class AdmissionIntComponent implements OnInit {
 
 
   })
-
+  initalPayement = []
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -462,11 +463,18 @@ export class AdmissionIntComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
+    this.initalPayement = [...prospect?.payement]
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
     this.scrollToTop()
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
+
+  partenaireOwned: string = null
 
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
@@ -508,6 +516,29 @@ export class AdmissionIntComponent implements OnInit {
       phase_candidature,
       _id: this.showDetails._id
 
+    }
+
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      if (this.initalPayement.length == this.payementList.length) {
+        this.payementList.forEach((val, idx) => {
+          if (val.montant != this.initalPayement[idx].montant && val.type != this.initalPayement[idx].type) {
+            //Ajout d'une facture car nouvelle entrée
+            let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(), modalite_paiement: val.type, partenaire_id: this.partenaireOwned }
+            this.VenteService.create({ ...data }).subscribe(v => {
+              console.log(v)
+              this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+            })
+          }
+        })
+      } else if (this.initalPayement.length < this.payementList.length) {
+        //Ajout d'une facture avec le dernier élément de payementList
+        let pay = this.payementList[this.payementList.length - 1]
+        let data: any = { prospect_id: this.showDetails._id, montant: pay.montant, date_reglement: new Date(), modalite_paiement: pay.type, partenaire_id: this.partenaireOwned }
+        this.VenteService.create({ ...data }).subscribe(v => {
+          console.log(v)
+          this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créer avec succès" })
+        })
+      }
     }
 
     this.admissionService.update({ user, prospect }).subscribe(data => {
