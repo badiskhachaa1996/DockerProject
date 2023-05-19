@@ -36,8 +36,9 @@ app.post("/getAllByPartenaireIDs", (req, res, next) => {
 app.put("/update", (req, res) => {
     console.log({ ...req.body })
     Vente.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
+        console.log(doc)
         if (err) {
-            console.error(error); res.status(500).send(error);
+            console.error(err); res.status(500).send(err);
         }
         else
             Vente.findById(req.body._id).populate('partenaire_id').populate({ path: 'prospect_id', populate: { path: 'user_id' } }).populate('facture_id')

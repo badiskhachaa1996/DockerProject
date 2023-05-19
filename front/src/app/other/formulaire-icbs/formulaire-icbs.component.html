@@ -38,20 +38,20 @@
             <label>Email Adress <span style="color:red"> *</span></label>
             <input pInputText formControlName="email" type="email" placeholder="Ex: john.smith@gmail.com" />
         </div>
-        <div class="field col-6">
-            <label>Which language do you prefer to learn ? <span style="color:red"> *</span></label>
-            <p-dropdown placeholder="Choose a language" [options]="languages" formControlName="langue"></p-dropdown>
-        </div>
+
         <div class="field col-6">
             <label>Occupation <span style="color:red"> *</span></label>
             <p-dropdown placeholder="Choose a occupation" [options]="occupations"
                 formControlName="occupation"></p-dropdown>
         </div>
-        <div class="field col-12" *ngIf="RegisterForm.value.occupation=='Employees'">
+        <div class="field col-6" *ngIf="RegisterForm.value.occupation=='Employees'">
             <label>In which field are you working ? <span style="color:red"> *</span></label>
             <textarea pInputTextarea formControlName="field"></textarea>
         </div>
-
+        <div class="field col-12">
+            <label>Which language do you prefer to learn ? <span style="color:red"> *</span></label>
+            <p-dropdown placeholder="Choose a language" [options]="languages" formControlName="langue"></p-dropdown>
+        </div>
         <div class="field col-12">
             <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid"></button>
         </div>
