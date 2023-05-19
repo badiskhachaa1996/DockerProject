@@ -11,6 +11,8 @@ import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { Partenaire } from 'src/app/models/Partenaire';
+import { PartenaireService } from 'src/app/services/partenaire.service';
 
 @Component({
   selector: 'app-consulaire',
@@ -263,7 +265,7 @@ export class ConsulaireComponent implements OnInit {
 
   filterEcole = [{ value: null, label: 'Toutes les écoles"' },]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private PartenaireService: PartenaireService,private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -615,13 +617,18 @@ export class ConsulaireComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
     this.infoCommercial = null
+    this.infoPartenaire = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PartenaireService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
