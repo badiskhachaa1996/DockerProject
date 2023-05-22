@@ -679,7 +679,7 @@
                             <small style="color: red;">Aucune action disponible pour ce compte</small>
                         </td>
                         <td>
-                            {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
+                            {{ etudiant.user_id?.civilite }} {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
                         <td>{{etudiant?.ecole_id?.libelle}}</td>
                         <td>{{etudiant?.filiere?.titre}}</td>
