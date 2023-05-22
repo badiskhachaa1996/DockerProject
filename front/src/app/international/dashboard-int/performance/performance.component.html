@@ -39,9 +39,9 @@
         <div class="col-4 grid card">
             <h3 class="col-12">Performance</h3>
             <div class="col-12 grid">
-                <h5 class="col-12">Avancement avec la liste des prospects assignés: xxx</h5>
-                <h5 class="col-12">Moyen de contact par jour: xxx</h5>
-                <h5 class="col-12">Délai de prise du contact avec le prospect depuis la date d'inscription: xxx</h5>
+                <h5 class="col-12">Avancement avec la liste des leads assignés: {{stats.global.prospects}}</h5>
+                <h5 class="col-12">Moyen de contact par jour: {{stats.global.daily_contact}}</h5>
+                <h5 class="col-12">Délai de prise du contact avec le lead depuis la date d'inscription: {{stats.global.delai}} jours</h5>
             </div>
         </div>
     </div>
@@ -101,36 +101,36 @@
         </div>
         <div class="col-12 grid">
             <div class="col-3 card grid">
-                <h3 class="col-12">Orientation Prospects</h3>
+                <h3 class="col-12">Orientation Leads</h3>
 
-                <h5 class="col-12">Nombre des prospects assignés: xxx</h5>
-                <h5 class="col-12">Nombre des prospects contacté: xxx</h5>
-                <h5 class="col-12">Orienté: xxx</h5>
-                <h5 class="col-12">En suspension: xxx</h5>
+                <h5 class="col-12">Nombre des leads assignés: {{stats.orientation.assigned}}</h5>
+                <h5 class="col-12">Nombre des leads contacté: {{stats.orientation.contacted}}</h5>
+                <h5 class="col-12">Orienté: {{stats.orientation.oriented}}</h5>
+                <h5 class="col-12">En suspension: {{stats.orientation.suspension}}</h5>
 
-                <h5 class="col-6">Joignable: xxx</h5>
-                <h5 class="col-6">Non joignable: xxx</h5>
+                <h5 class="col-6">Joignable: {{stats.orientation.joignable}}</h5>
+                <h5 class="col-6">Non joignable: {{stats.orientation.nn_joignable}}</h5>
 
-                <h5 class="col-6">Validé: xxx</h5>
-                <h5 class="col-6">Non validé: xxx</h5>
+                <h5 class="col-6">Validé: {{stats.orientation.valided}}</h5>
+                <h5 class="col-6">Non validé: {{stats.orientation.nn_valided}}</h5>
             </div>
 
             <div class="col-3 card grid">
-                <h3 class="col-12">Admission Prospects</h3>
+                <h3 class="col-12">Admission Leads</h3>
 
-                <h5 class="col-12">Nombre des prospects traités: xxx</h5>
-                <h5 class="col-12">Nombre des attestations traités: xxx</h5>
+                <h5 class="col-12">Nombre des leads traités: {{stats.admission.prospects}}</h5>
+                <h5 class="col-12">Nombre des attestations traités: {{stats.admission.attestations}}</h5>
             </div>
             <div class="col-3 card grid">
                 <h3 class="col-12">Paiements</h3>
 
-                <h5 class="col-12">Nombre des paiements: xxx</h5>
+                <h5 class="col-12">Nombre des paiements: {{stats.paiements.nb}}</h5>
             </div>
             <div class="col-3 card grid">
                 <h3 class="col-12">Accompagnement consulaire</h3>
 
-                <h5 class="col-12">Nombre des prospects contacté: xxx</h5>
-                <h5 class="col-12">Nombre des logements vendus: xxx</h5>
+                <h5 class="col-12">Nombre des leads contacté: {{stats.consulaire.prospects}}</h5>
+                <h5 class="col-12">Nombre des logements vendus: {{stats.consulaire.logements}}</h5>
             </div>
         </div>
 

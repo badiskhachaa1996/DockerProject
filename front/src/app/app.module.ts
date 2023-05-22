@@ -295,6 +295,12 @@ import { GenDocPaiementAcompteComponent } from './international/generation-doc/g
 import { GenDocDerogationComponent } from './international/generation-doc/gen-doc-derogation/gen-doc-derogation.component';
 import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
+import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
+import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
+import { ActualiteComponent } from './international/actualite/actualite.component';
+import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
+import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
+import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 
 
 @NgModule({
@@ -599,7 +605,13 @@ import { PerformanceComponent } from './international/dashboard-int/performance/
     GenDocPaiementAcompteComponent,
     GenDocDerogationComponent,
     GenDocLettreAcceptationComponent,
-    PerformanceComponent
+    PerformanceComponent,
+    ListProspectsComponent,
+    LivretGeneratorComponent,
+    ActualiteComponent,
+    DashboardCommercialComponent,
+    FormulaireIcbsComponent,
+    ResultatsFormulaireIcbsComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

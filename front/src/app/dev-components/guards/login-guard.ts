@@ -22,7 +22,6 @@ export class LoginGuard implements CanActivate {
             return true
         }
         else if (localStorage.getItem('ProspectConected')) {
-            console.log("Prospect token")
             this.router.navigate(['/suivre-ma-preinscription']);
             return false
         }

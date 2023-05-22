@@ -7,6 +7,7 @@ const sch = mongoose.Schema({
     nom: { type: String },
     phone: { type: String },
     email: { type: String },
+
     number_TVA: { type: String },
     SIREN: { type: String },
     SIRET: { type: String },
@@ -14,6 +15,7 @@ const sch = mongoose.Schema({
     type: { type: String },
     APE: { type: String },
     Services: { type: String },
+
     Pays: { type: String },
     WhatsApp: { type: String },
     indicatifPhone: { type: String },
@@ -22,15 +24,20 @@ const sch = mongoose.Schema({
     facebook: { type: String },
     description: { type: String },
     date_creation: { type: Date },
-    statut_anciennete: { type: String, default: "Ancien" },
+    statut_anciennete: { type: String, default: "Ancien > 1 an" },
     contribution: { type: String, default: "Inactif" },
-    etat_contrat: { type: String, default:"Non" },
+    etat_contrat: { type: String, default: "Non" },
 
     pathImageProfil: { type: String },
     typeImageProfil: { type: String },
     commissions: { type: [{ description: String, montant: String }], default: [] },
     pathEtatContrat: { type: String },
     typeEtatContrat: { type: String },
+
+    typePartenaire: { type: String },
+    groupeWhatsApp: { type: String },
+    localisation: { type: String },
+    manage_by: { type: mongoose.Schema.Types.ObjectId, ref: "memberInt" }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

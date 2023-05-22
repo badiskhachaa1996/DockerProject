@@ -52,6 +52,7 @@ export class AddAgentComponent implements OnInit {
     { value : 'IGS - Inted Group Support', label : 'IGS - Inted Group Support'},
     { value : 'IGH - Inted Group RH', label : 'IGH - Inted Group RH'},
     { value : 'IGD - Inted Group Direction', label : 'IGD - Inted Group Direction'},
+    { value : 'GWO IGWIN - INTED GROUP', label : 'GWO IGWIN - INTED GROUP'},
   ];
   statutList = environment.typeUser
   campusList = []
@@ -62,7 +63,7 @@ export class AddAgentComponent implements OnInit {
     civilite: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")]),
+    email: new FormControl('', [Validators.required]),//Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")
     indicatif: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     phone: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     role: new FormControl('', Validators.required),

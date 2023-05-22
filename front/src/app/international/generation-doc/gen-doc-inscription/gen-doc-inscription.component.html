@@ -1,1 +1,141 @@
-Page en cours de dévéloppement
+<p-toast></p-toast>
+<div class="grid col-12">
+    <div *ngIf="ecole?.url_form=='int_education'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header">
+                    <h1 class="page-title">ATTESTATION D’INSCRIPTION</h1>
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous soussignons le service admission de l’école INT Education, établissement d'enseignement
+                        supérieur privé, association loi 1901 enregistrée le 28 janvier 1991 sous le numéro W751098589,
+                        immatriculée dans la base rectorale des établissements de l’académie de Paris sous le numéro UAI
+                        0755084U, attestons que :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}.</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} en {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>Est bien admis(e) et inscrit(e) au sein de notre établissement à {{ville|titlecase}}
+                            pour la
+                            rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
+                            date: 'shortDate'}}.</p>
+                        <p>L’étudiant(e) suivra en présentiel la 1re année de la formation {{formation?.nom}}.,
+                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> et accréditée par
+                            {{formation?.certificateur}}</p>
+                        <p>La durée de la formation est de {{formation?.duree}} mois.</p>
+                        <p>La date limite d’arrivée : <span class="underlined">{{date_limite_arrivee | date:
+                                'shortDate'}}</span></p>
+                        <p class="underlined">L’étudiant(e) est sélectionné(e) suite à l’appréciation de son projet
+                            académique et le
+                            remplissage des critères exigés par l’équipe pédagogique.</p>
+                        <p>L’étudiant(e) a bien réglé la somme de {{frais_preinscription}} € dont 550 € frais de dossier
+                            <span class="underlined">non remboursable</span> hormis
+                            les
+                            frais de sa formation qui coûte <strong>{{formation?.tarif}} € par an</strong>.
+                        </p>
+                        <p>L’inscription de l’étudiant(e) ne sera définitive qu’à l’obtention de son visa d’entrée sur
+                            le
+                            territoire français.</p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Département ADMISSION</strong></p>
+                        <img id="school-signature"
+                            src="/assets/images/generation-documents/int-education/signature-int.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+
+                    <h3>« <span id="school-name">INT Education</span> »</h3>
+                    <p id="school-details"> Tél. : +33 1 89 19 55 15 - email : international@int-edu.com - site Internet
+                        : www.int-edu.com</p>
+                    <p id="school-siret">SIRET 453 183 394 000 49</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                        <p>Campus Marne : 6 allée Hendrik Lorentz 77420 Champs sur Marne</p>
+                        <p>Campus Montpellier : 1 Place Charles De Gaulle 34170 Castelnau-le-Lez</p>
+                    </div>
+                    <img id="school-qr" src="/assets/images/generation-documents/int-education/qr-certificate.png"
+                        class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 grid card">
+        <h1 class="col-12">Customisation du document</h1>
+        <div class="col-12 grid" *ngIf="user">
+            <div class="col-12 md:col-3">
+                <label>Nom</label><br>
+                <input type="text" pInputText [(ngModel)]="user.lastname" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Prénom</label><br>
+                <input type="text" pInputText [(ngModel)]="user.firstname" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Pays de naissance</label><br>
+                <input type="text" pInputText [(ngModel)]="user.pays_adresse" />
+            </div>
+            <div class="col-12 md:col-3" *ngIf="prospect">
+                <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Civilite</label><br>
+                <input type="text" pInputText [(ngModel)]="user.civilite" />
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Ville</label><br>
+                <input type="text" pInputText [(ngModel)]="ville" />
+            </div>
+        </div>
+        <div class="col-12 grid" *ngIf="formation">
+            <div class="col-12 md:col-3">
+                <label>Nom de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.nom" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Code RNCP</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.rncp" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Certificateur</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.certificateur" />
+            </div>
+            <div class="col-12 md:col-3">
+                <label>Durée de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.duree" />
+            </div>
+
+            <div class="col-12 md:col-6">
+                <label>Tarif de la formation</label><br>
+                <input type="text" pInputText [(ngModel)]="formation.tarif" />
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Frais de préinscription</label><br>
+                <input type="text" pInputText [(ngModel)]="frais_preinscription" />
+            </div>
+            <div class="col-12 md:col-6" *ngIf="rentree">
+                <label>Date de commencement {{rentree.date_commencement | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="rentree.date_commencement" dateFormat="dd/mm/yy"
+                    (onSelect)="updateDateLimite($event.value)" (onInput)="updateDateLimite($event.value)"></p-calendar>
+            </div>
+            <div class="col-12 md:col-6">
+                <label>Date de limite d'arrivée {{date_limite_arrivee | date: 'shortDate'}}</label><br>
+                <p-calendar [(ngModel)]="date_limite_arrivee" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+        </div>
+        <div class="col-6">
+            <p-button label="Exporter en pdf" icon="pi pi-file-pdf" (click)="exportPDF()"></p-button>
+        </div>
+        <div class="col-6">
+            <p-button label="Sauvegarder le document" icon="pi pi-save" (click)="saveDocument()"></p-button>
+        </div>
+    </div>
+</div>

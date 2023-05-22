@@ -1,0 +1,80 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Go to the form" icon="pi pi-arrow-right" (click)="goToForm();"
+                    style="margin-right: 3px;"></button>
+            </div>
+            <h5>Liste des réponses au formulaire ICBS Event title</h5>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="resultats"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['name', 'age', 'phone.nationalNumber', 'email','occupation','langue']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name" scope="col" style="text-align: center;">
+                            Full Name <p-sortIcon field="name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="age" scope="col" style="text-align: center;">
+                            Age <p-sortIcon field="age"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="phone.nationalNumber" scope="col" style="text-align: center;">
+                            Phone <p-sortIcon field="phone.nationalNumber"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email" scope="col" style="text-align: center;">
+                            Email Adress <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="occupation" scope="col" style="text-align: center;">
+                            Occupation <p-sortIcon field="occupation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="field" scope="col" style="text-align: center;">
+                            Working Field <p-sortIcon field="field"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="langue" scope="col" style="text-align: center;">
+                            Langue <p-sortIcon field="langue"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                            Date of addition <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-resultat>
+                    <tr>
+                        <td>
+                            {{resultat.name}}
+                        </td>
+                        <td>
+                            {{resultat.age}}
+                        </td>
+                        <td>
+                            {{resultat.phone.nationalNumber}}
+                        </td>
+                        <td>
+                            {{resultat.email}}
+                        </td>
+                        <td>
+                            {{resultat.occupation}}
+                        </td>
+                        <td>
+                            {{resultat.field}}
+                        </td>
+                        <td>
+                            {{resultat.langue}}
+                        </td>
+                        <td>
+                            {{resultat.date_creation | date: 'mediumDate'}}
+                        </td>
+                        <td>
+                            <i pTooltip="Delete this row" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                (click)="delete(resultat);" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -198,7 +198,7 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>-->
-            <h5>Liste des prospects {{infoFiltered}}</h5>
+            <h5>Liste des leads {{infoFiltered}}</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
@@ -272,7 +272,7 @@
                             Source <p-sortIcon field="source"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
@@ -392,10 +392,10 @@
                             <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
-                            <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
+                            <i pTooltip="Voir le dossier du point de vue d'un lead" tooltipPosition="bottom"
                                 class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
-                                pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
+                                pTooltip="Supprimer le lead" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
@@ -738,8 +738,8 @@
     </div>-->
     <div class="col-12" *ngIf="!isPartenaireExterne">
         <div class="card">
-            <h5>Liste des prospects pour le call center : Alternant</h5>
-            <small style="color: red;">Tous les champs qui sont en couleur rouge, sont des prospects qui doivent être appelé dans le call center</small>
+            <h5>Liste des leads pour le call center : Alternant</h5>
+            <small style="color: red;">Tous les champs qui sont en couleur rouge, sont des leads qui doivent être appelé dans le call center</small>
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="alternants" [paginator]="true" [pageLinks]="5" selectionMode="single"
@@ -813,7 +813,7 @@
                             Source <p-sortIcon field="source"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
@@ -945,13 +945,13 @@
                             <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
-                            <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
+                            <i pTooltip="Voir le dossier du point de vue d'un lead" tooltipPosition="bottom"
                                 class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
-                            <i pTooltip="Voir le CV du prospect" tooltipPosition="bottom" class="pi pi-book"
+                            <i pTooltip="Voir le CV du lead" tooltipPosition="bottom" class="pi pi-book"
                                 aria-hidden="true" (click)="onNavigateToCV(prospect?.user_id?._id)"></i>
-                            <i pTooltip="Prospect appelé" class="pi pi-phone" (click)="prospectCalled"></i>
+                            <i pTooltip="Lead appelé" class="pi pi-phone" (click)="prospectCalled"></i>
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
-                                pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
+                                pTooltip="Supprimer le lead" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
 
                         </td>
@@ -1099,7 +1099,7 @@
                             users[infoCommercialExpand.user_id].email }}
                         </td>
                         <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
-                        <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
+                        <td *ngIf="!prospect.nomAgence" style="color: red;">Ce lead ne vient pas d'une agence</td>
                         <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
 
                     </tr>

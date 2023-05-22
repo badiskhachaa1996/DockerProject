@@ -255,4 +255,70 @@ app.get("/getProfilePicture/:id", (req, res) => {
         }
     });
 });
+
+app.put('/newUpdate', (req, res) => {
+    CommercialPartenaire.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
+        if (!err)
+            res.send(doc);
+        else {
+            console.error(err)
+            res.status(500).send(err);
+        }
+
+    })
+})
+
+var mime = require('mime-types')
+const path = require('path');
+
+const uploadContrat = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, callBack) => {
+            if (!fs.existsSync('storage/commercial/contrat/' + req.body.id + '/')) {
+                fs.mkdirSync('storage/commercial/contrat/' + req.body.id + '/', { recursive: true })
+            } else {
+                let filenames = fs.readdirSync('storage/commercial/contrat/' + req.body.id + '/')
+                if (filenames && filenames[0])
+                    fs.unlinkSync('storage/commercial/contrat/' + req.body.id + '/' + filenames[0])
+            }
+            callBack(null, 'storage/commercial/contrat/' + req.body.id + '/')
+        },
+        filename: (req, file, callBack) => {
+            callBack(null, file.originalname)
+        }
+    })
+    , limits: { fileSize: 10000000 }
+})
+
+
+app.post('/uploadContrat/:id', uploadContrat.single('file'), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+        CommercialPartenaire.findByIdAndUpdate(req.params.id, { contrat: file.originalname }, { new: true }, (err, doc) => {
+            res.status(201).json(doc);
+        })
+    }
+
+}, (error) => { res.status(500).send(error); })
+
+app.get("/downloadContrat/:id", (req, res) => {
+    let pathFile = "storage/commercial/contrat/" + req.params.id
+    fs.readdir(pathFile, (err, files) => {
+        if (err) {
+            return console.error(err);
+        }
+        let file = files[0]
+        const pathFileFinal = `${pathFile}/${file}`
+        let fileFinal = fs.readFileSync(pathFileFinal, { encoding: 'base64' }, (err) => {
+            if (err) {
+                return console.error(err);
+            }
+        });
+        res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFileFinal)), fileName: file })
+    });
+});
 module.exports = app;

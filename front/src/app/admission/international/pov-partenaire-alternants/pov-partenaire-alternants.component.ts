@@ -7,6 +7,11 @@ import { AlternantsPartenaire } from 'src/app/models/AlternantsPartenaire';
 import { AlternantsPartenaireService } from 'src/app/services/alternants-partenaire.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-pov-partenaire-alternants',
@@ -16,17 +21,57 @@ import { saveAs } from "file-saver";
 export class PovPartenaireAlternantsComponent implements OnInit {
 
   alternants: AlternantsPartenaire[]
-
+  PARTENAIRE: Partenaire
+  COMMERCIAL: CommercialPartenaire
   ID = this.route.snapshot.paramMap.get('id');
-  constructor(private route: ActivatedRoute, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router,) { }
+  constructor(private route: ActivatedRoute, private FAService: FormulaireAdmissionService, private CommercialService: CommercialPartenaireService, private APService: AlternantsPartenaireService, private ToastService: MessageService, private router: Router, private PService: PartenaireService) { }
 
   showDocuments: AlternantsPartenaire;
-
+  dicCommercial = {}
   ngOnInit(): void {
-    if (this.ID)
-      this.APService.getAllByCommercialUserID(this.ID).subscribe(data => {
-        this.alternants = data
+    this.CommercialService.getAllPopulate().subscribe(data => {
+      data.forEach(d => {
+        let { user_id }: any = d
+        if (user_id) {
+          //this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+          this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+        }
+
       })
+    })
+    this.FAService.FAgetAll().subscribe(data => {
+      data.forEach(f => {
+        this.formationlist.push({ label: f.nom, value: f.nom })
+      })
+    })
+    this.FAService.EAgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.ecoleList.push({ label: d.titre, value: d.titre })
+        this.dicEcole[d.titre] = d
+      })
+    })
+    if (this.ID) {
+      //T'as fumé quoi ????
+      if (this.ID.length > 12) {
+        //this.ID corresponds alors à un partenaire ID
+        this.PService.getById(this.ID).subscribe(data => {
+          this.PARTENAIRE = data
+        })
+        this.APService.getAllByPartenaireID(this.ID).subscribe(data => {
+          this.alternants = data
+        })
+      } else {
+        //ID correponds alors à un code commercial
+        this.APService.getAllByCommercialCode(this.ID).subscribe(data => {
+          this.alternants = data
+        })
+        this.CommercialService.getByCode(this.ID).subscribe(data => {
+          this.COMMERCIAL = data
+        })
+      }
+
+    }
+
     else
       this.APService.getAll().subscribe(data => {
         this.alternants = data
@@ -119,7 +164,7 @@ export class PovPartenaireAlternantsComponent implements OnInit {
     pays: new FormControl('', Validators.required),
     campus: new FormControl('', Validators.required),
     ecole: new FormControl('', Validators.required),
-    //formation: new FormControl(''),
+    formation: new FormControl(''),
     rentree_scolaire: new FormControl('', Validators.required),
     etat_contrat: new FormControl('', Validators.required),
     civilite: new FormControl('', Validators.required),
@@ -152,10 +197,8 @@ export class PovPartenaireAlternantsComponent implements OnInit {
   ];
 
   ecoleList = [
-    { label: 'ESPIC', value: "ESPIC" },
-    { label: 'ADG', value: "ADG" },
-    { label: 'STUDINFO', value: "STUDINFO" },
   ]
+  dicEcole = {}
   campusList = [
     { label: 'Paris - Champs sur Marne', value: 'Paris - Champs sur Marne' },
     { label: 'Paris - Louvre', value: 'Paris - Louvre' },
@@ -273,6 +316,13 @@ export class PovPartenaireAlternantsComponent implements OnInit {
         this.ToastService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+  formationlist = []
+  onSelectEcole() {
+    this.formationlist = []
+    this.dicEcole[this.updateForm.value.ecole].formations.forEach(f => {
+      this.formationlist.push({ label: f.nom, value: f.nom })
+    })
   }
 
 }

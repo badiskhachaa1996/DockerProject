@@ -147,7 +147,7 @@ export class InfoImsComponent implements OnInit {
       todo: "x",
       details: [
         {
-          tache: 'Gestion des prospects',
+          tache: 'Gestion des leads',
           detail: "Liste des personnes ayant effectuer une demande d'admission, possibilité de formuler des demandes d'admissions depuis cet écran",
           date_liv: 'x',
           percent: 100
@@ -186,13 +186,13 @@ export class InfoImsComponent implements OnInit {
       details: [
         {
           tache: 'Gestion des collaborateurs',
-          detail: "Permet de voir la liste des collaborateurs, devoir les élèves et les prospects affiliés à un collaborateur ou de le supprimer",
+          detail: "Permet de voir la liste des collaborateurs, devoir les élèves et les leads affiliés à un collaborateur ou de le supprimer",
           date_liv: 'x',
           percent: 100
         },
         {
           tache: 'gestion des partenaires',
-          detail: "Permet de voir les informations sur les partenaires, la liste des collaborateurs, des élèves et des prospects affiliés à chaque partenaire, mais aussi de le supprimer",
+          detail: "Permet de voir les informations sur les partenaires, la liste des collaborateurs, des élèves et des leads affiliés à chaque partenaire, mais aussi de le supprimer",
           date_liv: 'x',
           percent: 100
         },

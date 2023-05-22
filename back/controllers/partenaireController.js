@@ -226,7 +226,7 @@ app.post("/inscription", (req, res, next) => {
 });
 
 app.get("/getAll", (req, res) => {
-    Partenaire.find().populate('user_id')
+    Partenaire.find().populate('user_id').populate({ path: 'manage_by', populate: { path: 'user_id' } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -361,13 +361,11 @@ app.put("/newUpdate", (req, res, next) => {
     let id = partenaireData._id
     delete partenaireData._id
     //Mise à jour du partenaire
-    console.log(partenaireData)
     Partenaire.findByIdAndUpdate(id,
         {
             ...partenaireData
         }, { new: true })
         .then((partenaireFromDB) => {
-            console.log(partenaireFromDB)
             res.status(200).send(partenaireFromDB);
         })
         .catch((error) => {
@@ -429,11 +427,11 @@ app.get("/download-contrat/:id", (req, res) => {
     Partenaire.findById(req.params.id, (err, cp) => {
         res.download(`./storage/Partenaire/etat_contrat/${req.params.id}/${cp.pathEtatContrat}`, function (err) {
             if (err) {
-              res.status(400).send(err);
+                res.status(400).send(err);
             }
-          });
+        });
     });
 
-  });
+});
 
 module.exports = app;

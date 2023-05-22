@@ -173,7 +173,7 @@
 
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;"
+            <button pButton pRipple label="Insérer une facture" class="mr-2 mb-2" style="float: right;" *ngIf="!isPovPartenaire"
                 (click)="showFormAddFacture = true;"></button>
 
             <h5>Liste des factures</h5>
@@ -275,8 +275,10 @@
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la facture"></i>
                             <i *ngIf="facture.factureUploaded" style="margin-left: 2%;" (click)="download(facture)"
                                 class="pi pi-download" aria-hidden="true" pTooltip="Télécharger la facture"></i>
-                            <i style="margin-left: 2%;" (click)="uploadFile(facture)" class="pi pi-cloud-upload"
+                            <i *ngIf="!isPovPartenaire" style="margin-left: 2%;" (click)="uploadFile(facture)" class="pi pi-cloud-upload"
                                 aria-hidden="true" pTooltip="Upload la facture"></i>
+                            <i style="margin-left: 2%;" (click)="delete(facture)" class="pi pi-trash"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Supprimer la facture"></i>
                         </td>
                     </tr>
                 </ng-template>

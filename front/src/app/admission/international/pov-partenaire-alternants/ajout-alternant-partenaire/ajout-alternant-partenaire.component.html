@@ -41,8 +41,9 @@
                             <div class="field col-12 md:col-6">
                                 <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
                                 <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
-                                    optionValue="label" emptyFilterMessage="Pas de nationalité trouvé" placeholder="Choisissez une nationalité"
-                                    filterPlaceholder="Nationalité" filter="true"></p-dropdown>
+                                    optionValue="label" emptyFilterMessage="Pas de nationalité trouvé"
+                                    placeholder="Choisissez une nationalité" filterPlaceholder="Nationalité"
+                                    filter="true"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label>Adresse électronique :<span style="color:red"> *</span></label>
@@ -134,7 +135,7 @@
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-6">
                                 <label>Ecole/CFA <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école"
+                                <p-dropdown [options]="ecoleList" placeholder="Choisissez une école" (onChange)="onSelectEcole()"
                                     formControlName="ecole"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">
@@ -143,11 +144,18 @@
                                     placeholder="Choisissez un campus">
                                 </p-dropdown>
                             </div>
-                            <div class="field col-12">
+                            <div class="field col-12 md:col-6">
                                 <label For="autre">Rentrée Scolaire <span style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
                                     placeholder="Choisissez une rentrée scolaire">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="autre">Formation <span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="formationlist" formControlName="formation"
+                                    placeholder="Choisissez une formation">
                                 </p-dropdown>
                             </div>
                         </div>
@@ -174,35 +182,29 @@
                                 </p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="date_contrat">Date du contrat <span style="color: red;"> *
-                                    </span></label>
+                                <label For="date_contrat">Date du contrat</label>
                                 <input type="date" formControlName="date_contrat" pInputText />
                             </div>
 
                             <div class="field col-12 md:col-6">
-                                <label For="date_contrat">Nom de l'Entreprise <span style="color: red;"> *
-                                    </span></label>
+                                <label For="date_contrat">Nom de l'Entreprise</label>
                                 <input type="text" formControlName="entreprise" placeholder="Ex: Google" pInputText />
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="date_contrat">Adresse de l'Entreprise <span style="color: red;"> *
-                                    </span></label>
+                                <label For="date_contrat">Adresse de l'Entreprise </label>
                                 <textarea pInputTextarea type="text" placeholder="Ex: 10 Place de la République 75001"
                                     formControlName="adresse_entreprise"></textarea>
                             </div>
 
                             <div class="field col-12 md:col-6">
-                                <label For="date_contrat">Numéro de Téléphone de l'Entreprise <span style="color: red;">
-                                        *
-                                    </span></label>
+                                <label For="date_contrat">Numéro de Téléphone de l'Entreprise </label>
                                 <input type="text" formControlName="telephone_entreprise"
                                     placeholder="Ex: +33 0612345678" pInputText />
                             </div>
 
 
                             <div class="field col-12 md:col-6">
-                                <label For="date_contrat">Email de l'Entreprise <span style="color: red;"> *
-                                    </span></label>
+                                <label For="date_contrat">Email de l'Entreprise</label>
                                 <input type="text" formControlName="mail_entreprise" placeholder="Ex: +33 0612345678"
                                     pInputText />
                             </div>
@@ -213,8 +215,8 @@
                         <!--ormulaireAdmissionComponent_div_27_Template (formulaire-admission.component.html:353:29)-->
                         <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
                         </button>
-                        <button pButton type="button" label="Validez le formulaire" [disabled]="RegisterForm.invalid" type="submit"
-                            style="float: right;"></button>
+                        <button pButton type="button" label="Validez le formulaire" [disabled]="RegisterForm.invalid"
+                            type="submit" style="float: right;"></button>
                     </div>
                 </p-fieldset>
             </div>

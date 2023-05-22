@@ -121,4 +121,10 @@ export class NoteService {
 
   }
 
+  delete(note_id: string) {
+    let url = this.apiUrl + "delete/" + note_id
+    return this.httpClient.delete<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 }

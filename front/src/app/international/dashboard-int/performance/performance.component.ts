@@ -40,15 +40,6 @@ export class PerformanceComponent implements OnInit {
     { value: "UAE - Dubai", label: "UAE - Dubai" },
     { value: "En ligne", label: "En ligne" },
   ]
-  filterPhase = [
-    { value: 'Non affecté', label: "Non affecté" },
-    { value: "En phase d'orientation scolaire", label: "En phase d'orientation scolaire" },
-    { value: "En phase d'admission", label: "En phase d'admission" },
-    { value: "Paiements", label: "Paiements" }, //TODO
-    { value: "En phase d'orientation consulaire", label: "En phase d'orientation consulaire" },
-    { value: "Inscription définitive", label: "Inscription définitive" },
-    //{ value: "Recours", label: "Recours" },
-  ]
 
   source = [];
   rentree_scolaire = [];
@@ -57,9 +48,33 @@ export class PerformanceComponent implements OnInit {
   ecole = [];
   campus = [];
   pays = [];
-  phase_candidature = [];
 
-  stats = {}
+  stats = {
+    orientation: {
+      assigned: 0,
+      contacted: 0,
+      oriented: 0,
+      suspension: 0,
+      joignable: 0,
+      nn_joignable: 0,
+      valided: 0,
+      nn_valided: 0
+    },
+    admission: {
+      prospects: 0,
+      attestations: 0
+    },
+    paiements: { nb: 0 },
+    consulaire: {
+      prospects: 0,
+      logements: 0
+    },
+    global: {
+      prospects: 0,
+      daily_contact: 0,
+      delai: 0
+    }
+  }
   imageToShow: any = "../assets/images/avatar.PNG";
 
   memberSelected: MemberInt
@@ -95,8 +110,9 @@ export class PerformanceComponent implements OnInit {
     this.updateFilter()
   }
   updateFilter() {
-    this.AService.getDataForDashboardPerformance(this.memberSelected, null).subscribe(data => {
+    this.AService.getDataForDashboardPerformance(this.memberSelected, { source: this.source, rentree_scolaire: this.rentree_scolaire, formation: this.formation, dates: this.dates, ecole: this.dates, campus: this.campus, pays: this.pays, }).subscribe(data => {
       this.stats = data
+      console.log(data)
     })
   }
 

@@ -392,7 +392,7 @@ export class NotesComponent implements OnInit {
     });
   }
 
-  exInfoDiplome = ""
+  exInfoDiplome = "2022-2023"
   //Methode de selection d'une classe et d'un semestre
   onSelectClasse() {
     // this.semestreSelected = this.formSelectClasse.get('semestre').value.value;

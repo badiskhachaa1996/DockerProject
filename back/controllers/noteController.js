@@ -181,13 +181,13 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
                     if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
-                        
+
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname.toUpperCase() + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
-                    }else{
+                    } else {
                         console.log(mid)
                     }
                 })
@@ -205,7 +205,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
             if (req.params.source == "PV" && examens)
                 examens.forEach(ex => {
                     ex.matiere_id.forEach(mid => {
-                        if (notes.length!=0 && notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
+                        if (notes.length != 0 && notes[0].etudiant_id && notes[0].etudiant_id.classe_id && mid.formation_id.includes(notes[0].etudiant_id.classe_id.diplome_id) && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: ex.formateur_id.user_id.lastname.toUpperCase() + " " + ex.formateur_id.user_id.firstname, coeff: mid.coeff })
@@ -218,6 +218,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 if (!dicAppreciation[e_id])
                     dicAppreciation[e_id] = {}
                 listMatiereNOM.forEach(m_nom => {
+                    m_nom.replace('.','_')
                     if (!listNotesEtudiantsCoeff[e_id][m_nom])
                         listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0, Appreciation: [] }
                     if (!dicAppreciation[e_id][m_nom])
@@ -405,7 +406,35 @@ app.get('/repairNote', (req, res) => {
                 if (n.classe_id != n.etudiant_id.classe_id)
                     Note.findByIdAndUpdate(n._id, { classe_id: n.etudiant_id.classe_id }, { new: true }, (err, doc) => { })
         })
-        res.send({ message: "DAB" })
+        //Supprimer les notes en doublons
+        Note.aggregate([
+            {
+                "$group": {
+                    _id: { examen_id: "$examen_id", etudiant_id: "$etudiant_id" },
+                    ids: { $addToSet: "$_id" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                "$match": {
+                    count: { "$gt": 1 }
+                }
+            }
+        ]).then(docs => {
+            docs.forEach(function (doc) {
+                doc.ids.shift();
+                Note.remove({
+                    _id: { $in: doc.ids }
+                }).exec();
+            })
+            res.send({ docs })
+        })
+    })
+})
+
+app.delete('/delete/:id', (req, res) => {
+    Note.findByIdAndRemove(req.params.id).then(n => {
+        res.send(n)
     })
 })
 

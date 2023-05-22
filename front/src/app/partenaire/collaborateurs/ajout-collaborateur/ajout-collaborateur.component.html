@@ -2,7 +2,7 @@
     <!-- Formulaire d'ajout d'un collaborateur -->
     <div class="col-12">
         <div class="card">
-            <h4 style="text-align: center;">Ajouter un collaborateur</h4>
+            <h4 style="text-align: center;">Ajouter un commercial</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddCommercial" (ngSubmit)="onAddCommercial()">
                 <div class="field col-12 md:col-2">
                     <label>Civilité: <span style="color: red;"> * </span></label>
@@ -37,7 +37,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Role: <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutList" formControlName="statut"
-                        placeholder="Choissiez un niveau d'accès à ce collaborateur"></p-dropdown>
+                        placeholder="Choissiez un niveau d'accès à ce commercial"></p-dropdown>
                 </div>
 
 

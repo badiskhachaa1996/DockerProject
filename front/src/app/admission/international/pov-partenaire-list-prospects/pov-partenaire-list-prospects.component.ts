@@ -12,6 +12,8 @@ import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { ActivatedRoute } from '@angular/router';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 
 @Component({
   selector: 'app-pov-partenaire-list-prospects',
@@ -264,13 +266,20 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' }
   ]
   filterEcole = []
+  filterCommercial = [
+    { value: null, label: 'Tous les commercials' }
+  ]
 
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute, private PService: PartenaireService) { }
 
   prospects: Prospect[];
 
+  PARTENAIRE: Partenaire
+
   selectedProspect: Prospect = null
+
+  COMMERCIAL: CommercialPartenaire
 
   token;
 
@@ -290,8 +299,36 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllByCommercialUserID(this.ID).subscribe(data => {
-      this.prospects = data
+    if (this.ID.length > 12) {
+      this.admissionService.getAllByCodeAdmin(this.ID).subscribe(data => {
+        this.prospects = data
+      })
+      this.PService.getById(this.ID).subscribe(data => {
+        this.PARTENAIRE = data
+      })
+    } else {
+      this.admissionService.getAllCodeCommercial(this.ID).subscribe(data => {
+        this.prospects = data
+      })
+      this.CommercialService.getByCode(this.ID).subscribe(c => {
+        this.COMMERCIAL = c
+        this.PService.getById(c.partenaire_id).subscribe(d => {
+          this.PARTENAIRE = d
+        })
+      })
+    }
+
+
+    this.CommercialService.getAllPopulateByPartenaireID(this.ID).subscribe(data => {
+      console.log(data)
+      data.forEach(c => {
+        let { user_id }: any = c
+        if (user_id) {
+          this.collaborateurList.push({ label: `${c.code_commercial_partenaire} ${user_id.lastname} ${user_id.firstname}`, value: c.code_commercial_partenaire })
+          this.filterCommercial.push({ label: `${c.code_commercial_partenaire} ${user_id.lastname} ${user_id.firstname}`, value: c.code_commercial_partenaire })
+        }
+
+      })
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -367,6 +404,8 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     { label: "Entretien de motivation", value: "Entretien de motivation" },
     { label: "Quiz Informatique", value: "Quiz Informatique" },
   ]
+
+  collaborateurList = []
 
   dropdownFormation = []
   dropdownEcole = []
@@ -612,13 +651,18 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
     this.infoCommercial = null
+    this.infoPartenaire = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
@@ -668,4 +712,18 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+
+  AttribuerProspect: Prospect
+
+  initAttribuer(prospect: Prospect) {
+    this.AttribuerProspect = prospect
+  }
+
+  onChangeAttribuer(code_commercial) {
+    this.admissionService.updateV2({ code_commercial, _id: this.AttribuerProspect._id }).subscribe(data => {
+      this.prospects.splice(this.prospects.indexOf(this.AttribuerProspect), 1, data)
+      this.AttribuerProspect = null
+      this.messageService.add({ severity: 'success', summary: "Attribution du lead avec succès" })
+    })
+  } s
 }

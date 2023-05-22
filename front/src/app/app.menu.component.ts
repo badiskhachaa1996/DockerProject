@@ -347,7 +347,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-check-circle',
                             items: [
                                 {
-                                    label: 'Gestions des prospects',
+                                    label: 'Gestions des Leads',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -363,7 +363,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
                                     ]
                                 },
@@ -373,7 +373,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-preinscriptions']
                                 },
                                 {
-                                    label: 'Gestions des prospects Intuns',
+                                    label: 'Gestions des leads Intuns',
                                     icon: 'pi pi-user-plus',
                                     routerLink: ['/prospects-intuns']
                                 },
@@ -431,14 +431,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -483,7 +483,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
                                     , routerLink: ['/dashboard/partenaire']
-                                },
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
                             ]
                         },
                         {
@@ -580,6 +580,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-check-circle',
                                     routerLink: ['resultat-qff']
                                 },
+                                {
+                                    label:'Questionnaire ICBS Event title',
+                                    icon: 'pi pi-question-circle',
+                                    routerLink:['resultats-icbs']
+                                }
                             ]
                         },
                         {
@@ -587,9 +592,9 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-globe',
                             items: [
                                 {
-                                    label: 'Insérer un prospect',
+                                    label: 'Insérer un lead',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
                                 {
                                     label: 'Source',
@@ -597,12 +602,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/international/sourcing']
                                 },
                                 {
-                                    label: 'Orientation Prospects',
+                                    label: 'Orientation Leads',
                                     icon: 'pi pi-globe',
                                     routerLink: ['/international/orientation']
                                 },
                                 {
-                                    label: 'Admission Prospects',
+                                    label: 'Admission Leads',
                                     icon: 'pi pi-users',
                                     routerLink: ['/international/admission']
                                 },
@@ -662,12 +667,14 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/international/dashboard']
                                         },
                                         {
-                                            label: 'Performance scolaire',
+                                            label: 'Performance équipe',
                                             icon: 'pi pi-users',
                                             routerLink: ['international/dashboard/performance']
                                         }
                                     ]
-                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
+                                },
+                                { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
                             ],
                         },
                         {
@@ -886,14 +893,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -967,7 +974,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-check-circle',
                             items: [
                                 {
-                                    label: 'Gestions des prospects',
+                                    label: 'Gestions des leads',
                                     icon: 'pi pi-users',
                                     items: [
                                         {
@@ -983,7 +990,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
                                     ]
                                 },
@@ -993,7 +1000,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-preinscriptions']
                                 },
                                 {
-                                    label: 'Gestions des prospects Intuns',
+                                    label: 'Gestions des leads Intuns',
                                     icon: 'pi pi-user-plus',
                                     routerLink: ['/prospects-intuns']
                                 },
@@ -1183,28 +1190,84 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Accueil',
                                     items: [
-                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                        //{ label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                                        { label: 'Tableau de bord Commercial', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard/commercial'] }
                                     ]
                                 },
                                 {
-                                    label: 'Prospects',
+                                    label: 'Leads',
                                     items: [
-                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData?.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
                                     label: 'Alternants',
                                     items: [
                                         { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
-                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', cData.code_commercial_partenaire] },
                                     ]
                                 },
                                 {
-                                    label: 'Collaborateurs',
+                                    label: 'Commercials',
                                     items: [
                                         //{ label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur'] },
-                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                        { label: 'Liste des Commercials', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                    ]
+                                },
+
+                                /*{
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items: [
+                                        {
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
+                                        },
+                                        {
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
+                                        }
+                                    ]
+                                },*/
+                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
+                                { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
+                                //{ label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
+                            ];
+                        }
+
+                        else if (cData) {
+                            //Commercial considéré Admin dans son Partenaire
+                            this.items = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                                        { label: 'Tableau de bord Commercial', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard/commercial'] }
+                                    ]
+                                },
+                                {
+                                    label: 'Leads',
+                                    items: [
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData.partenaire_id] },
+                                    ]
+                                },
+                                {
+                                    label: 'Alternants',
+                                    items: [
+                                        { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', cData.partenaire_id] },
+                                    ]
+                                },
+                                {
+                                    label: 'Commercials',
+                                    items: [
+                                        { label: 'Insérer un commercial', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur', cData.partenaire_id] },
+                                        { label: 'Liste des Commercials', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                     ]
                                 },
 
@@ -1227,11 +1290,9 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
                                 { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
-                        }
-
-                        else {
-                            //Commercial considéré Admin dans son Partenaire
+                        } else {
                             this.items = [
                                 {
                                     label: 'Accueil',
@@ -1240,46 +1301,13 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Prospects',
+                                    label: 'Leads',
                                     items: [
-                                        { label: 'Insérer un prospect', icon: 'pi pi-user-plus', routerLink: ['/ajout-prospect'] },
-                                        { label: 'Liste des Prospects', icon: 'pi pi-users', routerLink: ['international/partenaire/', this.token.id] },
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
                                     ]
                                 },
-                                {
-                                    label: 'Alternants',
-                                    items: [
-                                        { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
-                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', this.token.id] },
-                                    ]
-                                },
-                                {
-                                    label: 'Collaborateurs',
-                                    items: [
-                                        { label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur', cData.partenaire_id] },
-                                        { label: 'Liste des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
-                                    ]
-                                },
-
-                                {
-                                    label: 'Gestion des commissions',
-                                    icon: 'pi pi-credit-card',
-                                    items: [
-                                        {
-                                            label: "Ventes",
-                                            icon: 'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
-                                        },
-                                        {
-                                            label: "Réglement",
-                                            icon: 'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
-                                        }
-                                    ]
-                                },
-                                { label: 'Support Marketing', icon: 'pi pi-briefcase', routerLink: ['/international/brands', cData.partenaire_id] },
                                 { label: 'Effectuer un paiement', icon: 'pi pi-dollar' },
-                                { label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ];
                         }
                     })
@@ -1394,14 +1422,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/equipe-commercial']
                                 },
                                 {
-                                    label: 'Gestion des prospects alternables',
+                                    label: 'Gestion des leads alternables',
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/prospects-alt']
                                 },
                                 {
                                     label: 'Ajouter un dossier',
                                     icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-prospect']
+                                    routerLink: ['/ajout-lead']
                                 },
 
                             ]
@@ -1446,7 +1474,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Dashboard',
                                     icon: 'pi pi-chart-line'
                                     , routerLink: ['/dashboard/partenaire']
-                                },
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
                         },
                         {
@@ -1959,7 +1987,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-check-circle',
                                     items: [
                                         {
-                                            label: 'Gestions des prospects',
+                                            label: 'Gestions des leads',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -1975,7 +2003,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un dossier',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-prospect']
+                                                    routerLink: ['/ajout-lead']
                                                 },
                                             ]
                                         },
@@ -1985,9 +2013,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/gestion-preinscriptions']
                                         },
                                         {
-                                            label: 'Gestions des prospects Intuns',
+                                            label: 'Gestions des leads Intuns',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/prospects-intuns']
+                                            routerLink: ['/leads-intuns']
                                         },
                                         {
                                             label: 'Gestion des participantes pour les événements',
@@ -2043,14 +2071,14 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/equipe-commercial']
                                         },
                                         {
-                                            label: 'Gestion des prospects alternables',
+                                            label: 'Gestion des leads alternables',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/prospects-alt']
+                                            routerLink: ['/leads-alt']
                                         },
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
 
                                     ]
@@ -2095,7 +2123,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Dashboard',
                                             icon: 'pi pi-chart-line',
                                             routerLink: ['/dashboard/partenaire']
-                                        },
+                                        }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },
                                 {
@@ -2410,14 +2438,14 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/equipe-commercial']
                                         },
                                         {
-                                            label: 'Gestion des prospects alternables',
+                                            label: 'Gestion des leads alternables',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/prospects-alt']
+                                            routerLink: ['/leads-alt']
                                         },
                                         {
                                             label: 'Ajouter un dossier',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/ajout-prospect']
+                                            routerLink: ['/ajout-lead']
                                         },
 
                                     ]
@@ -2506,7 +2534,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-check-circle',
                                     items: [
                                         {
-                                            label: 'Gestions des prospects',
+                                            label: 'Gestions des leads',
                                             icon: 'pi pi-users',
                                             items: [
                                                 {
@@ -2522,7 +2550,7 @@ export class AppMenuComponent implements OnInit {
                                                 {
                                                     label: 'Ajouter un dossier',
                                                     icon: 'pi pi-user-plus',
-                                                    routerLink: ['/ajout-prospect']
+                                                    routerLink: ['/ajout-lead']
                                                 },
                                             ]
                                         },
@@ -2532,9 +2560,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/gestion-preinscriptions']
                                         },
                                         {
-                                            label: 'Gestions des prospects Intuns',
+                                            label: 'Gestions des leads Intuns',
                                             icon: 'pi pi-user-plus',
-                                            routerLink: ['/prospects-intuns']
+                                            routerLink: ['/leads-intuns']
                                         },
                                         {
                                             label: 'Gestion des participantes pour les événements',
@@ -2900,7 +2928,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Dashboard',
                                             icon: 'pi pi-chart-line'
                                             , routerLink: ['/dashboard/partenaire']
-                                        },
+                                        }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },
                                 {
@@ -3151,6 +3179,143 @@ export class AppMenuComponent implements OnInit {
                         error: (error: any) => { console.log(error); },
                         complete: () => { console.log(" Informations de l'étudiant récupérer avec succès !"); },
                     });
+                } else if (response.role == "Responsable" && service_id?.label === 'Gestion des partenaires et des leads') {
+                    this.items = [
+                        {
+                            label: 'Tableau de bord',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        },
+                        {
+                            label: 'Partenaires',
+                            icon: 'pi pi-share-alt',
+                            items: [
+                                {
+                                    label: 'Insérer un Partenaire',
+                                    icon: 'pi pi pi-user-plus',
+                                    routerLink: ['/partenaireInscription']
+                                },
+                                {
+                                    label: 'Liste des partenaires',
+                                    icon: 'pi pi-sort-alpha-down',
+                                    routerLink: ['/admin/partenaire']
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase'
+                                    , routerLink: ['/international/brands']
+                                },
+                                {
+                                    label: 'Gestion des commissions',
+                                    icon: 'pi pi-credit-card',
+                                    items: [
+                                        {
+                                            label: "Ventes",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/ventes']
+                                        },
+                                        {
+                                            label: "Réglement",
+                                            icon: 'pi pi-shopping-cart',
+                                            routerLink: ['/commissions/reglement']
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line'
+                                    , routerLink: ['/dashboard/partenaire']
+                                }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
+                            ]
+                        }, {
+                            label: 'International',
+                            icon: 'pi pi-globe',
+                            items: [
+                                {
+                                    label: 'Insérer un lead',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/ajout-lead']
+                                },
+                                {
+                                    label: 'Source',
+                                    icon: 'pi pi-send',
+                                    routerLink: ['/international/sourcing']
+                                },
+                                {
+                                    label: 'Orientation Leads',
+                                    icon: 'pi pi-globe',
+                                    routerLink: ['/international/orientation']
+                                },
+                                {
+                                    label: 'Admission Leads',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/international/admission']
+                                },
+                                {
+                                    label: 'Paiement',
+                                    icon: 'pi pi-money-bill',
+                                    routerLink: ['/international/paiement']
+                                },
+                                {
+                                    label: 'Accompagenement Consulaire',
+                                    icon: 'pi pi-whatsapp',
+                                    routerLink: ['/international/consulaire']
+                                },
+                                {
+                                    label: 'Gestion de l\'équipe',
+                                    icon: 'pi pi-briefcase',
+                                    items: [
+                                        {
+                                            label: 'Gestion des membres',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/international/member']
+                                        },
+                                        {
+                                            label: 'Gestion de l\'équipe',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/international/teams']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion de l\'année scolaire',
+                                    icon: 'pi pi-calendar',
+                                    items: [
+                                        {
+                                            label: 'Formations disponibles',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/admission/formations']
+                                        },
+                                        {
+                                            label: 'Ecoles',
+                                            icon: 'pi pi-building',
+                                            routerLink: ['/admission/ecoles']
+                                        },
+                                        {
+                                            label: 'Rentrées Scolaire',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/admission/rentree']
+                                        },
+                                    ]
+                                }, {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Général',
+                                            icon: 'pi pi-chart-bar',
+                                            routerLink: ['/international/dashboard']
+                                        },
+                                        {
+                                            label: 'Performance équipe',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['international/dashboard/performance']
+                                        }
+                                    ]
+                                }, { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] }
+                            ],
+                        },
+                    ]
                 }
                 /* end menus alternants intedgroup */
 

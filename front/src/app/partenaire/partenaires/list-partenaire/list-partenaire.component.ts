@@ -16,6 +16,7 @@ import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { TeamsIntService } from 'src/app/services/teams-int.service';
 
 @Component({
   selector: 'app-list-partenaire',
@@ -47,6 +48,7 @@ export class ListPartenaireComponent implements OnInit {
   statutList = environment.typeUser
   civiliteList = environment.civilite;
   paysList = environment.pays;
+  filterPays = this.paysList
   entreprisesList = []
   campusList = []
   formationList = []
@@ -55,13 +57,13 @@ export class ListPartenaireComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   dropdownAnciennete = [
-    { label: "Nouveau", value: "Nouveau" },
-    { label: "Ancien", value: "Ancien" }
+    { label: "Nouveau < 1 an", value: "Nouveau < 1 an" },
+    { label: "Ancien > 1 an", value: "Ancien > 1 an" }
   ]
   dropdownContribution = [
     { label: "Actif", value: "Actif" },
     { label: "Inactif", value: "Inactif" },
-    { label: "Occasionel", value: "Occasionel" },
+    { label: "Occasionnel", value: "Occasionnel" },
   ]
   dropdownEtatContrat = [
     { label: "Non", value: "Non" },
@@ -69,6 +71,12 @@ export class ListPartenaireComponent implements OnInit {
     { label: "Signé", value: "Signé" },
     { label: "Annulé", value: "Annulé" },
   ]
+  dropdownType = [
+    { label: 'Apporteur d\'affaire', value: 'Apporteur d\'affaire' },
+    { label: 'Agence de voyage', value: 'Agence de voyage' },
+    { label: 'Entreprise', value: 'Entreprise' },
+  ]
+  localisationList = environment.pays
 
   registerForm: FormGroup;
 
@@ -78,46 +86,51 @@ export class ListPartenaireComponent implements OnInit {
   idUserOfPartenaireToUpdate: string;
   showFormModifPartenaire = false;
   partenaireList: any = {};
+  internationalList = []
+
+  managePartenaire: Partenaire
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
 
   canDelete = false
 
-  filterAnciennete = []
+  filterAnciennete = [{ label: 'Toutes les anciennetes', value: null },
+  { label: "Nouveau < 1 an", value: "Nouveau < 1 an" },
+  { label: "Ancien > 1 an", value: "Ancien > 1 an" }]
 
-  filterContribution = []
-  filterEtat = []
+  filterContribution = [{ label: 'Toutes les contributions', value: null },
+  { label: "Actif", value: "Actif" },
+  { label: "Inactif", value: "Inactif" },
+  { label: "Occasionnel", value: "Occasionnel" }]
+  filterEtat = [{ label: 'Tous les états de contrats', value: null },
+  { label: "Non", value: "Non" },
+  { label: "En cours", value: "En cours" },
+  { label: "Signé", value: "Signé" },
+  { label: "Annulé", value: "Annulé" },]
 
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
-    private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService) { }
+    private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
+    private MIService: TeamsIntService) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
     let tkn = jwt_decode(localStorage.getItem("token"))
     this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
     this.updateList();
+    this.filterPays = [{ label: 'Tous les pays', value: null }].concat(this.paysList)
     this.onInitFormModifPartenaire()
+    this.MIService.MIgetAll().subscribe(data => {
+      data.forEach(d => {
+        this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
+      })
+    })
   }
 
 
   updateList() {
     this.partenaireService.getAll().subscribe(data => {
       this.partenaires = data
-      let tempList = []
-      let temp2List = []
-      let temp3List = []
-      data.forEach(d => {
-        let temp = { label: d.statut_anciennete, value: d.statut_anciennete }
-        let temp2 = { label: d.contribution, value: d.contribution }
-        let temp3 = { label: d.etat_contrat, value: d.etat_contrat }
-        if (!temp2List.includes(temp2) && d.contribution)
-          this.filterContribution.push(temp2); temp2List.push(temp2)
-        if (!tempList.includes(temp) && d.statut_anciennete)
-          this.filterAnciennete.push(temp); tempList.push(temp)
-        if (!temp3List.includes(temp3) && d.etat_contrat)
-          this.filterEtat.push(temp3); temp3List.push(temp3)
-      })
     })
     this.UserService.getAll().subscribe(dataU => {
       dataU.forEach(u => {
@@ -127,7 +140,11 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   seePreRecruted(rowData: Partenaire) {
-    this.router.navigate(["/gestion-preinscriptions/" + rowData._id])
+    this.router.navigate(["/international/partenaire/" + rowData._id])
+  }
+
+  seeAlternants(rowData: Partenaire) {
+    this.router.navigate(["/international/partenaire/alternants/" + rowData._id])
   }
 
   seeRecruted(rowData: Partenaire) {
@@ -139,7 +156,7 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   delete(rowData: Partenaire) {
-    if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs prospects\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
+    if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs leads\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
       this.partenaireService.delete(rowData._id).subscribe(p => {
         this.partenaires.forEach((val, index) => {
           if (val._id == p._id) {
@@ -391,7 +408,11 @@ export class ListPartenaireComponent implements OnInit {
     montant: new FormControl('', Validators.required)
   })
   addCommission() {
-    this.commissions.push({ ...this.ajoutCommission.value })
+    if (this.commissions)
+      this.commissions.push({ ...this.ajoutCommission.value })
+    else {
+      this.commissions = [{ ...this.ajoutCommission.value }]
+    }
     //Update sur le server
     this.PartenaireService.newUpdate({ _id: this.idPartenaireToUpdate._id, commissions: this.commissions }).subscribe(data => {
 
@@ -437,12 +458,15 @@ export class ListPartenaireComponent implements OnInit {
   editInfoPartenariatForm: FormGroup = new FormGroup({
     statut_anciennete: new FormControl('', Validators.required),
     contribution: new FormControl('', Validators.required),
+    typePartenaire: new FormControl(''),
+    groupeWhatsApp: new FormControl(''),
+    localisation: new FormControl('')
   })
   initEditPartenariatForm() {
     this.editInfoPartenariat = true
-    this.editInfoPartenariatForm.setValue({
-      statut_anciennete: this.idPartenaireToUpdate.statut_anciennete,
-      contribution: this.idPartenaireToUpdate.contribution,
+    console.log(this.idPartenaireToUpdate)
+    this.editInfoPartenariatForm.patchValue({
+      ...this.idPartenaireToUpdate
     })
   }
 
@@ -472,5 +496,30 @@ export class ListPartenaireComponent implements OnInit {
     })
   }*/
 
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 50) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  onSelectManage(id: string) {
+    this.PartenaireService.newUpdate({ manage_by: id, _id: this.managePartenaire._id }).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Attribution du partenaire avec succès' })
+      this.managePartenaire = null
+    })
+  }
+
+  initManage(rowData: Partenaire) {
+    this.managePartenaire = rowData
+    if (!rowData.manage_by)
+      this.managePartenaire['manage_by'] = { _id: null }
+  }
 }
 

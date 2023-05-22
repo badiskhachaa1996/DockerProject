@@ -755,7 +755,12 @@ export class ExamenComponent implements OnInit {
     fileReader.readAsArrayBuffer(this.file);
   }
 
-  isArr(arr){
+  isArr(arr) {
     return Array.isArray(arr)
+  }
+  deleteNote(note: Note) {
+    this.NotesService.delete(note._id).subscribe(data => {
+      this.notes.splice(this.notes.indexOf(note), 1)
+    })
   }
 }

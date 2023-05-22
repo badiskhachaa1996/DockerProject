@@ -1,0 +1,72 @@
+<div class="grid col-12">
+    <div class="grid col-12 card">
+        <h3 class="col-12" style="text-align:center">Information commercial</h3>
+        <div class="col-12 md:col-4" style="text-align:center">
+            <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
+        </div>
+        <div class="col-12 md:col-8 grid">
+            <div class="col-12 grid">
+                <div class="col-12 md:col-4" *ngIf="user">
+                    <p><strong>Nom & Prénom:</strong></p>
+                    <p>{{user.lastname | uppercase}} {{user.firstname | titlecase}}</p>
+                </div>
+                <div class="col-12 md:col-4" *ngIf="user">
+                    <p>Email:</p>
+                    <p>{{user.email_perso}}</p>
+                </div>
+                <div class="col-12 md:col-4" *ngIf="commercial">
+                    <p>Localisation:</p>
+                    <p>{{commercial.localisation}}</p>
+                </div>
+                <div class="col-12 md:col-4" *ngIf="commercial">
+                    <p>ID Commercial:</p>
+                    <p>{{commercial.code_commercial_partenaire}}</p>
+                </div>
+                <div class="col-12 md:col-4" *ngIf="user">
+                    <p>Téléphone:</p>
+                    <p>{{user.phone}}</p>
+                </div>
+                <div class="col-12 md:col-4" *ngIf="commercial">
+                    <p>Pays de prospection:</p>
+                    <p>{{commercial.pays_prospections}}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="grid col-12 card" *ngIf="commercial">
+        <h3 class="col-12" style="text-align:center">Information activité et contrat</h3>
+        <div class="grid col-12">
+            <div class="col-12 md:col-4">
+                <p>Contribution:</p>
+                <p>{{commercial.contribution}}</p>
+            </div>
+            <div class="col-12 md:col-4">
+                <p>Etat Contrat:</p>
+                <p>{{commercial.etat_contrat}}</p>
+            </div>
+            <div class="col-12 md:col-4">
+                <a (click)="downloadContrat()">Télécharger le contrat</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="grid col-12 card" *ngIf="commercial">
+        <h3 class="col-12" style="text-align:center">Commissions</h3>
+        <p-table class="col-12" [value]="commercial.commissions" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Description</th>
+                    <th>Montant</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-co>
+                <tr>
+                    <td>{{co.description}}</td>
+                    <td>{{co.montant}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>

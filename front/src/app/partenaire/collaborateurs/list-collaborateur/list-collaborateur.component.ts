@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import * as mongoose from 'mongoose';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
-
+import { environment } from 'src/environments/environment';
+import { saveAs } from "file-saver";
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-list-collaborateur',
   templateUrl: './list-collaborateur.component.html',
@@ -20,7 +23,7 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
 export class ListCollaborateurComponent implements OnInit {
 
   partenaire: Partenaire;
-
+  paysList = environment.pays
   commercialPartenaires: CommercialPartenaire[] = [];
 
   formAddCommercial: FormGroup;
@@ -54,7 +57,52 @@ export class ListCollaborateurComponent implements OnInit {
     { label: 'Externe', value: 'Externe' }
   ];
 
+  contributionList = [
+    { label: 'Actif', value: 'Actif' },
+    { label: 'Inactif', value: 'Inactif' },
+    { label: 'Occasionnelle', value: 'Occasionnelle' },
+  ]
+
+  etatContratList = [
+    { label: 'Non', value: 'Non' },
+    { label: 'En cours', value: 'En cours' },
+    { label: 'Signé', value: 'Signé' },
+    { label: 'Annulé', value: 'Annulé' },
+  ]
+
   canDelete = false
+  gestionCommercial: CommercialPartenaire
+  formGestion: FormGroup = new FormGroup({
+    contribution: new FormControl(),
+    pays_prospections: new FormControl([]),
+    localisation: new FormControl(),
+    etat_contrat: new FormControl(),
+    commissions: new FormControl([])
+  })
+
+  formCommission: FormGroup = new FormGroup({
+    description: new FormControl(''),
+    montant: new FormControl(0),
+  })
+
+  onAddCommission() {
+    let commissions: [{ description: string, montant: number, _id: string }] = this.formGestion.value.commissions
+    commissions.push({ ...this.formCommission.value, _id: new mongoose.Types.ObjectId().toString() })
+    this.formGestion.patchValue({ commissions })
+    this.gestionCommercial.commissions = commissions
+    this.formCommission.reset()
+    this.AddCommission = false
+  }
+  onGestion() {
+    this.commercialPartenaireService.newUpdate({ ...this.formGestion.value, _id: this.gestionCommercial._id }).subscribe(data => {
+      this.commercialPartenaires.splice(this.commercialPartenaires.indexOf(this.gestionCommercial), 1, data)
+      this.formGestion.reset()
+      this.gestionCommercial = null
+      this.messageService.add({ severity: 'success', summary: 'Modification du collaborateur avec succès' });
+    })
+  }
+
+  AddCommission = false
 
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
     private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
@@ -309,7 +357,11 @@ export class ListCollaborateurComponent implements OnInit {
 
 
   seePreRecruted(rowData: CommercialPartenaire) {
-    this.router.navigate(["/international/partenaire/" + rowData.user_id])
+    this.router.navigate(["/international/partenaire/" + rowData.code_commercial_partenaire])
+  }
+
+  seeAlternants(rowData: CommercialPartenaire) {
+    this.router.navigate(["/international/partenaire/alternants/" + rowData.code_commercial_partenaire])
   }
 
   seeRecruted(rowData: CommercialPartenaire) {
@@ -317,7 +369,7 @@ export class ListCollaborateurComponent implements OnInit {
   }
 
   delete(rowData: CommercialPartenaire) {
-    if (confirm("La suppression de ce commercial, supprimera aussi son compte IMS et enlevera les codes commerciaux de ces prospects\nL'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppression\nEtes-vous sûr de vouloir faire cela ?"))
+    if (confirm("La suppression de ce commercial, supprimera aussi son compte IMS et enlevera les codes commerciaux de ces leads\nL'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppression\nEtes-vous sûr de vouloir faire cela ?"))
       this.commercialPartenaireService.delete(rowData._id).subscribe(p => {
         this.commercialPartenaires.forEach((val, index) => {
           if (val._id == rowData._id) {
@@ -326,6 +378,82 @@ export class ListCollaborateurComponent implements OnInit {
         })
       })
   }
+
+  clonedCommission = []
+
+  onRowEditInit(product) {
+    this.clonedCommission[product._id] = { ...product };
+  }
+
+  onRowEditSave(product: any) {
+    if (product.montant > 0) {
+
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Commision est mise à jour' });
+      let commissions: [{ description: string, montant: number }] = this.formGestion.value.commissions
+      commissions.splice(commissions.indexOf(this.clonedCommission[product._id]), 1)
+      this.formGestion.patchValue({ commissions })
+      delete this.clonedCommission[product._id];
+    }
+    else {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Le montant est invalide' });
+    }
+  }
+
+  onRowEditCancel(product: any, index: number) {
+    this.gestionCommercial.commissions[index] = this.clonedCommission[product._id];
+    delete this.clonedCommission[product._id];
+  }
+
+  deleteCommission(commission) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette commission ?')) {
+      this.gestionCommercial.commissions.splice(this.gestionCommercial.commissions.indexOf(commission), 1)
+      let commissions: [{ description: string, montant: number }] = this.formGestion.value.commissions
+      commissions.splice(commissions.indexOf(commission), 1)
+      this.formGestion.patchValue({ commissions })
+    }
+
+  }
+  onInitGestion(commercial: CommercialPartenaire) {
+    this.gestionCommercial = commercial;
+    this.formGestion.patchValue({ ...commercial })
+    this.clonedCommission = commercial.commissions
+  }
+
+  downloadContrat() {
+    this.commercialPartenaireService.downloadContrat(this.gestionCommercial._id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
+    }, (error) => {
+      console.error(error)
+      this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+
+
+
+  uploadContrat() {
+    document.getElementById('selectedFile').click();
+  }
+
+  FileUpload(event: { files: [File], target: EventTarget }) {
+    console.log(event)
+    if (event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+
+      formData.append('id', this.gestionCommercial._id)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.commercialPartenaireService.uploadContrat(formData, this.gestionCommercial._id).subscribe((data) => {
+        this.gestionCommercial.contrat = data.contrat
+        this.messageService.add({ severity: 'success', summary: 'Fichier envoyé', detail: 'Envoi avec succès' });
+      }, (error) => {
+        console.error(error)
+        this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+      })
+    }
+  }
+  @ViewChild('fileInput') fileInput: FileUpload;
 
 
 }

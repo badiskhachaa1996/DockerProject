@@ -78,9 +78,15 @@ export class ReglementComponent implements OnInit {
       if (data.nature == "A la source" || data.nature == "Compensation")
         this.factures.push(data)
       this.showFormAddFacture = false
+      this.formAddFacture.patchValue({ numero: this.generateIDFacture() })
       this.formAddFacture.reset()
       this.MessageService.add({ severity: 'success', summary: "Création de facture avec succès" })
     })
+  }
+  generateIDFacture() {
+    let date = new Date()
+    return (this.factures.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+
   }
 
   initEditForm(facture) {
@@ -130,6 +136,8 @@ export class ReglementComponent implements OnInit {
       //next?.statut == 'Facture payé' || next?.statut == 'A la source' || next?.statut == 'Compensation'
       reste_paye: 0
     }
+    if (Number.isNaN(this.stats.tt_vente))
+      this.stats.tt_vente = 0
     if (Number.isNaN(this.stats.tt_commission))
       this.stats.tt_commission = 0
     if (Number.isNaN(this.stats.tt_paye))
@@ -139,10 +147,24 @@ export class ReglementComponent implements OnInit {
   }
 
   getMontant(str: string) {
-    if (str.includes("\n"))
-      return parseInt(str.substring(str.lastIndexOf('Montant:') + 'Montant:'.length, str.lastIndexOf('€')))
-    else
-      return parseInt(str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€')))
+    if (str)
+      if (str.includes("\n")) {
+        let val = parseInt(str.substring(str.lastIndexOf('Montant:') + 'Montant:'.length, str.lastIndexOf('€')))
+        console.log(val)
+        if (Number.isNaN(val))
+          return 0
+        else
+          return val
+      }
+      else {
+        let val = parseInt(str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€')))
+        console.log(val)
+        if (Number.isNaN(val))
+          return 0
+        else
+          return val
+      }
+    else return 0
   }
 
   download(facture: FactureCommission) {
@@ -233,5 +255,11 @@ export class ReglementComponent implements OnInit {
     }
 
   }
-
+  delete(facture: FactureCommission) {
+    if (confirm(`Etes-vous sûr de vouloir supprimer cette vente ?`))
+      this.FCService.delete(facture._id).subscribe(data => {
+        this.factures.splice(this.factures.indexOf(facture), 1)
+        this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
+      })
+  }
 }

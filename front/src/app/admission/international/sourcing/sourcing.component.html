@@ -4,7 +4,7 @@
     <div class="col-12 card" *ngIf="showAffectation">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showAffectation = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showAffectation?.user_id" class="text-center" style="font-weight: bold;"> Affecter le prospect : {{
+        <h3 *ngIf="showAffectation?.user_id" class="text-center" style="font-weight: bold;"> Affecter le lead : {{
             showAffectation?.user_id?.firstname }} {{
             showAffectation?.user_id?.lastname | uppercase }}
         </h3>
@@ -309,12 +309,8 @@
             </p-tabPanel>
         </p-tabView>
         <div class="grid col-12">
-            <div class="col-6">
+            <div class="col-12">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
-            </div>
-            <div class="col-6">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
             </div>
         </div>
 
@@ -350,7 +346,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects Sourcing</h5>
+            <h5>Liste des leads Sourcing</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -388,7 +384,7 @@
                         emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
                         (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
@@ -440,7 +436,7 @@
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="source" scope="col" style="text-align: center;">
                             Source <p-sortIcon field="source"></p-sortIcon>
@@ -482,7 +478,7 @@
                             Decision Admission<p-sortIcon field="decision_admission"></p-sortIcon>
                         </th>
                         <th scope="col" style="text-align: center;">
-                            Dossier Prospect
+                            Dossier Lead
                         </th>
                         <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
                             Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
@@ -587,11 +583,11 @@
                             {{ prospect.rentree_scolaire }}
                         </td>
                         <td>
-                            <i pTooltip="Affecter le prospect" tooltipPosition="bottom" class="pi pi-search mr-2"
+                            <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"
                                 (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
-                            <i pTooltip="Supprimer le Prospect" tooltipPosition="bottom" class="pi pi-trash"
+                            <i pTooltip="Supprimer le Lead" tooltipPosition="bottom" class="pi pi-trash"
                                 aria-hidden="true" (click)="delete(prospect)"> </i>
                         </td>
                     </tr>
@@ -603,7 +599,7 @@
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
         <div *ngIf="selectedProspect">
-            <h5>Informations Prospect</h5>
+            <h5>Informations Lead</h5>
             <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
@@ -633,9 +629,12 @@
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
 
             <h5>Source </h5>
-            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Source du lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
+            </p>
+            <p>
+                Nom du Partenaire : {{infoPartenaire?.nom}}
             </p>
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 

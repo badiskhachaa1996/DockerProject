@@ -191,6 +191,12 @@ import { GenDocPaiementAcompteComponent } from './international/generation-doc/g
 import { GenDocDerogationComponent } from './international/generation-doc/gen-doc-derogation/gen-doc-derogation.component';
 import { GenDocLettreAcceptationComponent } from './international/generation-doc/gen-doc-lettre-acceptation/gen-doc-lettre-acceptation.component';
 import { PerformanceComponent } from './international/dashboard-int/performance/performance.component';
+import { ListProspectsComponent } from './admission/international/list-prospects/list-prospects.component';
+import { LivretGeneratorComponent } from './pedagogie/livret-generator/livret-generator.component';
+import { ActualiteComponent } from './international/actualite/actualite.component';
+import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
+import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
+import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 
 const routes: Routes = [
     {
@@ -238,7 +244,7 @@ const routes: Routes = [
             { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
             { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
-            { path: 'ajout-prospect', component: AddProspectComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+            { path: 'ajout-lead', component: AddProspectComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
             { path: 'gestion-preinscriptions-filtered/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
             { path: 'gestion-preinscriptions-filter/:statut', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admissio
             { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
@@ -306,6 +312,8 @@ const routes: Routes = [
             { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
+            { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
+            { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
 
             /*** RH paths */
@@ -313,6 +321,7 @@ const routes: Routes = [
             { path: 'gestion-des-ressources-humaines', component: GrhComponent },
 
             /** end */
+            { path: 'resultats-icbs', component: ResultatsFormulaireIcbsComponent },
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
@@ -344,20 +353,24 @@ const routes: Routes = [
             { path: 'international/partenaire/alternants/:id', component: PovPartenaireAlternantsComponent, canActivate: [AuthGuardService] },
             { path: 'international/partenaire/:id', component: PovPartenaireListProspectsComponent, canActivate: [AuthGuardService] },
             { path: 'dashboard/partenaire', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
+            { path: 'dashboard/commercial', component: DashboardCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'dashboard/partenaire/:id', component: DashboardPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard', component: DashboardIntComponent, canActivate: [AuthGuardService] },
             { path: 'international/dashboard/performance', component: PerformanceComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands/:id', component: BrandsListComponent, canActivate: [AuthGuardService] },
             { path: 'international/brands', component: BrandsListComponent, canActivate: [AuthGuardService] },
+            { path: 'international/prospects', component: ListProspectsComponent, canActivate: [AuthGuardService] },
+            { path: 'international/actualite/:type', component: ActualiteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/actualite', component: ActualiteComponent, canActivate: [AuthGuardService] },
             /* Generation Documents */
             { path: 'international/generation-documents', component: GenerationDocComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation', component: GenDocInscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/preinscription/:ecole/:prospect_id/:formation', component: GenDocPreinscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation', component: GenDocPaiementPreinscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation', component: GenDocPaiementPreinscriptionAcompteComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation', component: GenDocPaiementAcompteComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/derogation/:ecole/:prospect_id/:formation', component: GenDocDerogationComponent, canActivate: [AuthGuardService] },
-            { path: 'international/generation-documents/lettre-acceptation/:ecole/:prospect_id/:formation', component: GenDocLettreAcceptationComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocInscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/preinscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocPreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementPreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementPreinscriptionAcompteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementAcompteComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/derogation/:ecole/:prospect_id/:formation/:rentree', component: GenDocDerogationComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/lettre-acceptation/:ecole/:prospect_id/:formation/:rentree', component: GenDocLettreAcceptationComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
@@ -397,6 +410,7 @@ const routes: Routes = [
     { path: 'formulaire-externe', component: FormulaireExterneSkillsnetComponent },
     { path: 'mp-oublie', component: MpOublieComponent },
     { path: 'mp-oublie/:id', component: MpOublieComponent },
+    { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
 
 ]
 

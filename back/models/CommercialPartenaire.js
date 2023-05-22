@@ -9,7 +9,14 @@ const commercialPartenaireSchema = mongoose.Schema({
     statut: { type: String, required: false },
     isAdmin: { type: Boolean, default: false },
     pays: { type: String },
-    whatsapp: { type: String }
+    whatsapp: { type: String },
+    contribution: { type: String },
+    localisation: { type: String },
+    pays_prospections: { type: [String], default: [] },
+    etat_contrat: { type: String },
+    commissions: { type: [{ description: String, montant: Number }], default: [] },
+    contrat: { type: String },
+    date_ajout: { type: Date, default: Date.now }
 });
 
 //Création de la table puis exportation du modele partenaire

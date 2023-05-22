@@ -10,6 +10,7 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import { ActivatedRoute } from '@angular/router';
 import { FactureCommission } from 'src/app/models/FactureCommission';
 import { FactureCommissionService } from 'src/app/services/facture-commission.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 @Component({
   selector: 'app-ventes',
   templateUrl: './ventes.component.html',
@@ -35,6 +36,9 @@ export class VentesComponent implements OnInit {
   produitList = [
     { label: "Liste déroulante avec la description de commission", value: "Liste déroulante avec la description de commission" }
   ]
+  produitListUpdate = [
+
+  ]
 
   filterProduit = [
     { label: "Tous les produits", value: null },
@@ -46,7 +50,7 @@ export class VentesComponent implements OnInit {
   isPovPartenaire = false
   factures = 0
 
-  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService,
+  constructor(private VenteService: VenteService, private MessageService: MessageService, private ProspectService: AdmissionService, private CService: CommercialPartenaireService,
     private route: ActivatedRoute, private PartenaireService: PartenaireService, private FCService: FactureCommissionService) { }
 
   ngOnInit(): void {
@@ -64,16 +68,38 @@ export class VentesComponent implements OnInit {
           })
         })
         this.produitList = []
+        this.produitListUpdate = []
         partenaire.commissions.forEach(c => {
           this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+          this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
+        })
+      })
+      this.CService.getAllPopulateByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
+
         })
       })
     } else {
+      this.CService.getAllPopulate().subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
+        })
+      })
       this.VenteService.getAll().subscribe(data => {
         this.ventes = data
       })
       this.PartenaireService.getAll().subscribe(data => {
         this.produitList = []
+        this.produitListUpdate = []
         this.PartenaireList = [{ label: "Tous les Partenaires", value: null, }]
         data.forEach(d => {
           this.PartenaireList.push({ label: d.nom, value: d._id })
@@ -89,10 +115,12 @@ export class VentesComponent implements OnInit {
     this.FCService.getAll().subscribe(data => {
       this.factures = data.length
     })
+
   }
 
   showFormAddVente = false
-
+  filterCommercial = [{ label: 'Tous les commerciaux', value: null }]
+  dicCommercial = {}
   ventes = []
 
   modaliteList = [
@@ -119,8 +147,7 @@ export class VentesComponent implements OnInit {
   formAddVente: FormGroup = new FormGroup({
     produit: new FormControl('', Validators.required),
     montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
-    statutCommission: new FormControl('', Validators.required),
+    statutCommission: new FormControl(''),
     date_reglement: new FormControl('', Validators.required),
     prospect_id: new FormControl('', Validators.required),
     partenaire_id: new FormControl('', Validators.required),
@@ -129,7 +156,7 @@ export class VentesComponent implements OnInit {
 
   onAddVente() {
     this.VenteService.create({ ...this.formAddVente.value }).subscribe(data => {
-      this.selectPartenaire()
+      this.selectPartenaire(this.formAddVente.value.partenaire_id)
       this.showFormAddVente = false
       this.formAddVente.reset()
       this.MessageService.add({ severity: 'success', summary: "Création de vente avec succès" })
@@ -151,44 +178,53 @@ export class VentesComponent implements OnInit {
     this.formEditVente.patchValue({
       ...vente
     })
-    /*this.formEditVente.patchValue({
+    this.formEditVente.patchValue({
       date_reglement: this.convertTime(vente.date_reglement)
-      
-    })*/
+
+    })
     this.showFormEditVente = true
-    //TODO produit problème
+    this.produitListUpdate = []
+    this.venteSelected.partenaire_id.commissions.forEach(c => {
+      this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+      this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
+    })
   }
 
-  venteSelected = null
+  venteSelected: Vente = null
 
   showFormEditVente = false
 
   formEditVente: FormGroup = new FormGroup({
     _id: new FormControl('', Validators.required),
     produit: new FormControl('', Validators.required),
-    montant: new FormControl('', Validators.required),
-    tva: new FormControl('', Validators.required),
-    statutCommission: new FormControl('', Validators.required),
+    montant: new FormControl(''),
+    statutCommission: new FormControl(''),
     date_reglement: new FormControl('', Validators.required),
     modalite_paiement: new FormControl('', Validators.required)
   })
 
   onUpdateVente() {
+
+    console.log(this.formEditVente.value.date_reglement)
+    this.formEditVente.patchValue({ date_reglement: new Date(this.formEditVente.value.date_reglement) })
     this.VenteService.update({ ...this.formEditVente.value }).subscribe(data => {
       this.ventes[this.ventes.indexOf(this.venteSelected)] = data
       this.showFormEditVente = false
       this.formEditVente.reset()
       this.MessageService.add({ severity: 'success', summary: "Mise à jour de la facture avec succès" })
+    }, error => {
+      this.MessageService.add({ severity: 'error', summary: "Une erreur s'est produit contacté un Admin" })
+      console.error(error)
     })
   }
 
   convertTime(v) {
     let date = new Date(v)
-    let day = date.getUTCDate() + 1
+    let day = date.getUTCDate() 
     let month = date.getMonth() + 1
     let year = date.getFullYear()
     if (year != 1970)
-      return `${this.pad(day)}-${this.pad(month)}-${year}`
+      return `${year}-${this.pad(month)}-${this.pad(day)}`
     else
       return ""
   }
@@ -204,17 +240,19 @@ export class VentesComponent implements OnInit {
 
   onPartenaireSelect() {
     this.PartenaireSelected = this.formAddVente.value.partenaire_id
-    this.selectPartenaire()
+    this.selectPartenaire(this.formAddVente.value.partenaire_id)
     if (this.PartenaireSelected)
       this.PartenaireService.getById(this.PartenaireSelected).subscribe(data => {
         this.produitList = []
+        this.produitListUpdate = []
         data.commissions.forEach(c => {
           this.produitList.push({ label: c.description, value: `${c.description} ${c.montant}€` })
+          this.produitListUpdate.push({ label: `${c.description} ${c.montant}€`, value: `${c.description} ${c.montant}€` })
         })
       })
   }
 
-  selectPartenaire() {
+  selectPartenaire(partenaire_id) {
     if (!this.formAddVente.value.partenaire_id)
       this.formAddVente.patchValue({ partenaire_id: this.PartenaireSelected })
     if (this.PartenaireSelected) {
@@ -240,7 +278,20 @@ export class VentesComponent implements OnInit {
         })
       })
     }
+    if (partenaire_id) {
+      this.filterCommercial = []
+      this.dicCommercial = {}
+      this.CService.getAllPopulateByPartenaireID(this.PartenaireSelected).subscribe(data => {
+        data.forEach(d => {
+          let { user_id }: any = d
+          if (user_id) {
+            this.filterCommercial.push({ label: user_id.lastname + " " + user_id.firstname, value: d.code_commercial_partenaire })
+            this.dicCommercial[d.code_commercial_partenaire] = user_id.lastname + " " + user_id.firstname
+          }
 
+        })
+      })
+    }
   }
 
   getProduit(str: string) {
@@ -255,5 +306,46 @@ export class VentesComponent implements OnInit {
       return str.substring(str.lastIndexOf('Montant:') + 'Montant:'.length, str.lastIndexOf('€'))
     else
       return str.substring(str.lastIndexOf(' ') + 1, str.lastIndexOf('€'))
+  }
+
+  delete(vente: Vente) {
+    if (confirm(`Etes-vous sûr de vouloir supprimer cette vente ?`))
+      this.VenteService.delete(vente._id).subscribe(data => {
+        this.ventes.splice(this.ventes.indexOf(vente), 1)
+        this.MessageService.add({ severity: 'success', summary: 'Suppresion de la vente avec succès' })
+      })
+  }
+
+  showAttribution: Vente = null
+  factureList = []
+  tempFactureid = null
+  initAttributionForm(vente: Vente) {
+    this.showAttribution = vente
+    this.FCService.getAllByPartenaireID(vente.partenaire_id._id).subscribe(factures => {
+      this.factureList = []
+      factures.forEach(f => { this.factureList.push({ label: f.numero, value: f._id }) })
+    })
+    if (this.showAttribution.facture_id)
+      this.tempFactureid = this.showAttribution.facture_id._id
+  }
+  onMatchFacture(facture_id: any) {
+
+    this.VenteService.update({ facture_id, _id: this.showAttribution._id, statut: 'Facturé' }).subscribe(vente => {
+      this.ventes.splice(this.ventes.indexOf(this.showAttribution), 1, vente)
+      this.showAttribution = null
+      this.MessageService.add({ severity: 'success', summary: 'Attribution de la facture avec succès' })
+    })
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 }

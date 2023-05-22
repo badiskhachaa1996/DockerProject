@@ -66,7 +66,7 @@
                 label="Attribuer au support" icon="pi pi-send" class="p-button-danger" (click)="toSupport();"
                 style="margin-right: 3px;"></button>
             <button pButton
-                pTooltip="Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc"
+                pTooltip="Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Leads, Commercial etc"
                 label="Nettoyer les models" icon="pi pi-trash" class="p-button-danger" (click)="cleanModel();"
                 style="margin-right: 3px;"></button>
         </div>
@@ -158,7 +158,7 @@
 <div class="col-12">
     <div class="card">
         <div style="float: right;">
-            <button pButton pTooltip="Supprimer les doublons de prospects" label="Supprimer les doublons de prospects"
+            <button pButton pTooltip="Supprimer les doublons de leads" label="Supprimer les doublons de leads"
                 icon="pi pi-send" class="p-button-danger" (click)="deleteDuplicateProspect();"
                 style="margin-right: 3px;"></button>
         </div>
@@ -212,7 +212,7 @@
                     <td>{{ user.last_connection | date:'dd/MM/YYYY à HH:mm'}}
                     </td>
                     <td>
-                        <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects"
+                        <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects/leads"
                             style="margin-left: 2%; cursor: pointer;" class="pi pi-eye"
                             (click)="searchProspect(user._id)" aria-hidden="true"></i>
                         <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"

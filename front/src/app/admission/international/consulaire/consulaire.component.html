@@ -270,13 +270,8 @@
             </p-tabPanel>
         </p-tabView>
         <div class="col-12 grid">
-            <div class="col-6">
+            <div class="col-12">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
-            </div>
-
-            <div class="col-6">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
             </div>
         </div>
     </div>
@@ -526,7 +521,7 @@
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects en accompagnement consulaire</h5>
+            <h5>Liste des leads en accompagnement consulaire</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
@@ -564,7 +559,7 @@
                         emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
                         (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
@@ -611,7 +606,7 @@
                             Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="source" scope="col" style="text-align: center;">
                             Source <p-sortIcon field="source"></p-sortIcon>
@@ -749,7 +744,7 @@
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
         <div *ngIf="selectedProspect">
-            <h5>Informations Prospect</h5>
+            <h5>Informations Lead</h5>
             <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
@@ -779,9 +774,12 @@
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
 
             <h5>Source </h5>
-            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Source de lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
+            </p>
+            <p>
+                Nom du Partenaire : {{infoPartenaire?.nom}}
             </p>
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 

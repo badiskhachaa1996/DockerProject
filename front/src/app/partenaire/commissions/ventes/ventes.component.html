@@ -23,25 +23,20 @@
                         placeholder="Description du Type de commission"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Prospect<span style="color: red;"> * </span></label>
+                    <label>Lead<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="listProspect" [virtualScroll]="true" [itemSize]="31"
-                        formControlName="prospect_id" filter="true" placeholder="Choissisez le prospect"></p-dropdown>
+                        formControlName="prospect_id" filter="true" placeholder="Choissisez le lead"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant payé par le prospect<span style="color: red;"> * </span></label>
+                    <label for="nom">Montant payé par le lead<span style="color: red;"> * </span></label>
                     <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
                     </p-inputNumber>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="tva" suffix="%">
-                    </p-inputNumber>
-                </div>
-                <div class="field col-12 md:col-6">
+                <!--<div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutCommission" formControlName="statutCommission"
-                        placeholder="Statut de règlement de la commission "></p-dropdown>
-                </div>
+                    <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
+                </div>-->
                 <div class="field col-12 md:col-6">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
                     <p-calendar formControlName="date_reglement"></p-calendar>
@@ -57,6 +52,23 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div class="col-12" *ngIf="showAttribution">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showAttribution = null;"> </i>
+            <h4 style="text-align: center;">Attribuer une facture à une vente</h4>
+            <div class="col-12 grid">
+                <div class="col-12">
+                    <label>Facture:</label><br>
+                    <p-dropdown [options]="factureList" placeholder="Choisissez une facture" [(ngModel)]="tempFactureid"
+                        (onChange)="onMatchFacture($event.value)" autoWidth="false"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="col-12" *ngIf="showFormEditVente">
@@ -77,32 +89,29 @@
                     <p> {{venteSelected?.partenaire_id?.nom}}</p>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Prospect:</label>
+                    <label for="nom">Lead:</label>
                     <p> {{venteSelected?.prospect_id?.user_id?.lastname | uppercase}}
                         {{venteSelected?.prospect_id?.user_id?.firstname | titlecase}}</p>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Type de commission<span style="color: red;"> * </span></label>
-                    <textarea pInputTextarea formControlName="produit"></textarea>
+                    <p-dropdown [options]="produitListUpdate" formControlName="produit"
+                        placeholder="Description du Type de commission"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="nom">Montant payé par le prospect<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
-                    </p-inputNumber>
+                    <label for="nom">Montant payé par le lead:</label>
+                    <p>{{venteSelected.montant}}</p>
+                    <!--<p-inputNumber formControlName="montant" mode="currency" currency="EUR" locale="fr-FR">
+                    </p-inputNumber>-->
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label for="prenom">TVA<span style="color: red;"> * </span></label>
-                    <p-inputNumber formControlName="tva" suffix="%">
-                    </p-inputNumber>
-                </div>
-                <div class="field col-12 md:col-6">
+                <!--<div class="field col-12">
                     <label>Statut de règlement de la commission <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutCommission" formControlName="statutCommission"
-                        placeholder="Statut de règlement de la commission "></p-dropdown>
-                </div>
+                    <p-dropdown [options]="statutCommission" formControlName="statutCommission" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Statut de règlement de la commission "></p-dropdown>
+                </div>-->
                 <div class="field col-12 md:col-6   ">
                     <label>Date du paiement<span style="color: red;"> * </span></label>
-                    <p-calendar formControlName="date_reglement"></p-calendar>
+                    <input type="date" formControlName="date_reglement" pInputText />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Modalité de Paiement<span style="color: red;"> * </span></label>
@@ -134,32 +143,40 @@
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatutCommission" filter="true"
+                        <!--<p-dropdown [style]="{'margin':'5px'}" [options]="filterStatutCommission" filter="true"
                             (onChange)="dt1.filter($event.value, 'statutCommission', 'equals');"
                             emptyFilterMessage="Pas de statut de commission trouvé"
-                            filterPlaceholder="Choisissez le statut de commission"></p-dropdown>
+                            filterPlaceholder="Choisissez le statut de commission"></p-dropdown>-->
 
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterCommercial" filter="true"
+                            (onChange)="dt1.filter($event.value, 'prospect_id.code_commercial', 'equals');"
+                            emptyFilterMessage="Pas de commercial trouvé"
+                            filterPlaceholder="Choisissez le comemrcial"></p-dropdown>
+
+                        <!--<p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
                             (onChange)="dt1.filter($event.value, 'produit', 'equals'); "
                             emptyFilterMessage="Pas de Type de commission trouvé"
-                            filterPlaceholder="Choisissez le Type de commission"></p-dropdown>
+                            filterPlaceholder="Choisissez le Type de commission"></p-dropdown>-->
 
                         <p-dropdown [style]="{'margin':'5px'}" [options]="PartenaireList" filter="true"
-                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected" (onChange)="selectPartenaire()"
-                            emptyFilterMessage="Pas de statut trouvé"
+                            *ngIf="!isPovPartenaire" [(ngModel)]="PartenaireSelected"
+                            (onChange)="selectPartenaire($event.value)" emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez le statut"></p-dropdown>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Prospect <p-sortIcon
+                        <th pSortableColumn="prospect_id.customid" style="text-align: center;"> ID Lead <p-sortIcon
                                 field="prospect_id.customid">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="prospect_id.user_id.lastname" style="text-align: center;"> Nom & Prénom
                             <p-sortIcon field="prospect_id.user_id.lastname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="montant" style="text-align: center;"> Montant payé par le prospect
+                        <th pSortableColumn="prospect_id.code_commercial" style="text-align: center;"> Commercial
+                            <p-sortIcon field="prospect_id.code_commercial"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="montant" style="text-align: center;"> Montant payé par le lead
                             <p-sortIcon field="montant">
                             </p-sortIcon>
                         </th>
@@ -187,20 +204,34 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="tva" style="text-align: center;"> TVA
-                            <p-sortIcon field="tva">
-                            </p-sortIcon>
-                        </th>
 
-                        <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la commission 
+
+
+                        <!-- <th pSortableColumn="statutCommission" style="text-align: center;"> Statut de règlement de la
+                            commission
                             <p-sortIcon field="statutCommission">
                             </p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="date_reglement" style="text-align: center;"> Date du paiement
-                            <p-sortIcon field="date_reglement">
+                        </th>-->
+                        <th pSortableColumn="facture_id" style="text-align: center;"> Numéro de facture
+                            <p-sortIcon field="facture_id">
                             </p-sortIcon>
                         </th>
+
+                        <th pSortableColumn="statut" style="text-align: center;"> Facturation
+                            <p-sortIcon field="statut">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="facture_id.statut" style="text-align: center;"> Statut de la facture
+                            <p-sortIcon field="facture_id.statut">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="facture_id?.date_paiement" style="text-align: center;"> Date du réglement
+                            <p-sortIcon field="facture_id?.date_paiement">
+                            </p-sortIcon>
+                        </th>
+
 
                         <th>
                             <div class="flex justify-content-between align-items-center">
@@ -219,6 +250,14 @@
                             {{ vente?.prospect_id?.user_id?.firstname | titlecase}}
 
                         </td>
+                        <td style="min-width: 12rem;"
+                            *ngIf="dicCommercial && vente?.prospect_id?.code_commercial && dicCommercial[vente?.prospect_id?.code_commercial]">
+                            {{ dicCommercial[vente?.prospect_id?.code_commercial] }}
+                        </td>
+                        <td style="min-width: 12rem;"
+                            *ngIf="!dicCommercial || !vente?.prospect_id?.code_commercial || !dicCommercial[vente?.prospect_id?.code_commercial]">
+                            Aucun
+                        </td>
                         <td style="min-width: 12rem;">
                             {{ vente?.montant }}€
                         </td>
@@ -232,25 +271,45 @@
                             {{ vente?.partenaire_id?.nom }}
                         </td>
 
-                        <td style="min-width: 14rem;">
+                        <td style="min-width: 14rem;" *ngIf="vente.produit">
                             {{ getProduit(vente.produit) }}
                         </td>
-                        <td style="min-width: 14rem;">
+                        <td style="min-width: 14rem;" *ngIf="vente.produit">
                             {{ getMontant(vente.produit) }}€
                         </td>
-                        <td style="min-width: 14rem;">
-                            {{ vente.tva }}%
-                        </td>
-                        <td style="min-width: 14rem;">
+                        <td *ngIf="!vente.produit">Aucun</td>
+                        <td *ngIf="!vente.produit">Aucun</td>
+                        <!--<td style="min-width: 14rem;">
                             {{ vente.statutCommission }}
+                        </td>-->
+                        <td style="min-width: 14rem;">
+                            <span *ngIf="vente?.facture_id">{{ vente?.facture_id?.numero }}</span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ vente.date_reglement| date:'mediumDate' }}
+                            {{ vente?.statut }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            <span *ngIf="vente?.facture_id">
+                                {{ vente?.facture_id?.statut }}
+                            </span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
+                        </td>
+                        <td style="min-width: 14rem;">
+                            <span *ngIf="vente?.facture_id">
+                                {{ vente?.facture_id?.date_paiement| date:'mediumDate' }}
+                            </span>
+                            <span *ngIf="!vente?.facture_id"> Aucune</span>
                         </td>
 
                         <td style="min-width: 10rem;">
-                            <i style="margin-left: 2%;" (click)="initEditForm(vente)" class="pi pi-pencil"
+                            <i style="margin-left: 2%;" (click)="initAttributionForm(vente);scrollToTop()"
+                                class="pi pi-arrow-up-right" *ngIf="!isPovPartenaire" aria-hidden="true"
+                                pTooltip="Attribuer à une facture"></i>
+                            <i style="margin-left: 2%;" (click)="initEditForm(vente);scrollToTop()" class="pi pi-pencil"
                                 *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Modifier la vente"></i>
+                            <i style="margin-left: 2%;" (click)="delete(vente)" class="pi pi-trash"
+                                *ngIf="!isPovPartenaire" aria-hidden="true" pTooltip="Supprimer la vente"></i>
                         </td>
                     </tr>
                 </ng-template>

@@ -60,8 +60,8 @@
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
                     <div>
-                        <span class="block text-500 font-medium mb-3">Nombre total des prospects</span>
-                        <div class="text-900 font-medium text-xl">{{ stats.tt_prospects  }}</div>
+                        <span class="block text-500 font-medium mb-3">Nombre total des leads</span>
+                        <div class="text-900 font-medium text-xl">{{ stats.tt_prospects }}</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -77,7 +77,8 @@
                     <div>
                         <span class="block text-500 font-medium mb-3"> Nombre total des Admis
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ (stats.tt_admis*100)/stats.tt_prospects | number:'1.0-2'  }}%</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_admis*100)/stats.tt_prospects |
+                            number:'1.0-2' }}%</div>
                     </div>
 
                     <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
@@ -94,7 +95,8 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des Paiements
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ (stats.tt_paiements*100)/stats.tt_admis | number:'1.0-2' }}%</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_paiements*100)/stats.tt_admis |
+                            number:'1.0-2' }}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -110,7 +112,8 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des Visa
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ (stats.tt_visa*100)/stats.tt_paiements | number:'1.0-2'  }}%</div>
+                        <div class="text-900 font-medium text-xl">{{ (stats.tt_visa*100)/stats.tt_paiements |
+                            number:'1.0-2' }}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -125,7 +128,9 @@
                     <div>
                         <span class="block text-500 font-medium mb-3">Nombre total des étudiants
                         </span>
-                        <div class="text-900 font-medium text-xl">{{ (stats.tt_etudiants*100)/stats.tt_visa | number:'1.0-2'  }}%</div>
+                        <div class="text-900 font-medium text-xl">{{stats.tt_etudiants}} /
+                            {{ (stats.tt_etudiants*100)/stats.tt_visa |
+                            number:'1.0-2' }}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                         [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
@@ -137,87 +142,225 @@
     </div>
     <br>
     <div class="col-12 grid">
-        <div class="col-3">
+        <p-tabView>
+            <p-tabPanel header="Toutes les phases">
+                <div class="col-12 grid">
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
+                        <h5 class="col-12" style="text-align: center;">Orientation Leads : {{ stats.tt_orientation
+                            }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Admission Leads : {{ stats.tt_admission }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
+                        <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{
+                            stats.tt_consulaire }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Inscription définitive : {{ stats.tt_admis }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Recours : {{ stats.recours }}</h5>
+                    </div>
+                    <div class="col-6 grid card">
+                        <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
+                        <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions"
+                            #chart></p-chart>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Orientation Leads">
+                <div class="col-12 grid">
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
+                        <h5 class="col-12" style="text-align: center;">Joignable : {{ stats_orientation.joignable }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Validé : {{ stats_orientation.valide }}</h5>
+                    </div>
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_orientation.non_contact
+                            }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Non Joignable : {{
+                            stats_orientation.non_joignable }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Non Validé : {{ stats_orientation.non_valide }}
+                        </h5>
+                    </div>
+                    <div class="col-12 grid">
+                        <h5 class="col-12" style="text-align: center;">Orienté : {{ stats_orientation.oriente }}</h5>
+                        <h5 class="col-12" style="text-align: center;">En suspension : {{ stats_orientation.suspension
+                            }}
+                        </h5>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Admission Leads">
+                <div class="col-12 grid">
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>
+                        <h5 class="col-12" style="text-align: center;">Admissible : {{ stats_admission.admissible }}
+                        </h5>
+                    </div>
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Non admissible : {{
+                            stats_admission.non_admissible }}
+                        </h5>
+                    </div>
+                    <div class="col-12 grid">
+                        <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Paiements">
+                <div class="col-12 grid">
+                    <div class="col-6 grid">
+                        <h3 class="col-12">Préinscription: {{ stats_paiements.preinscription.total }} </h3>
+                        <h5 class="col-12" style="text-align: center;">Virement : {{
+                            stats_paiements.preinscription.virement
+                            }}</h5>
+                        <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece
+                            }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque
+                            }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Lien de paiement :
+                            {{stats_paiements.preinscription.lien }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                            stats_paiements.preinscription.compensation }}</h5>
+                    </div>
+                    <div class="col-6 grid">
+                        <h3 class="col-12">Inscription : {{ stats_paiements.inscription.total }}</h3>
+                        <h5 class="col-12" style="text-align: center;">Virement : {{
+                            stats_paiements.inscription.virement }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Lien de paiement : {{
+                            stats_paiements.inscription.lien }}
+                        </h5>
+                        <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                            stats_paiements.inscription.compensation }}</h5>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Accompagnement consulaire">
+                <div class="col-12 grid">
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_consulaire.contacte }}</h5>
+                    </div>
+                    <div class="col-6 grid">
+                        <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_consulaire.non_contacte }}
+                        </h5>
+                    </div>
+                    <div class="col-12 grid">
+                        <h5 class="col-12" style="text-align: center;">Logement vendu: {{ stats_consulaire.logement }}</h5>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+        </p-tabView>
+        <!--<div class="col-4">
             <label>Phase de candidature:</label><br>
-            <p-multiSelect filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase"
-                autoWidth="false" [style]="{'width':'100%'}" (onChange)="phase_candidature=$event.value;updateFilter()"
+            <p-dropdown filter="true" placeholder="Choisissez une phase de candidature" [options]="filterPhase"
+                autoWidth="false" [style]="{'width':'100%'}" (onChange)="phase_candidature=$event.value;"
                 emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase">
-            </p-multiSelect>
+            </p-dropdown>
         </div>
-        <div class="col-3 grid">
-            <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
-            <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation }}</h5>
-            <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}</h5>
-            <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
-            <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{ stats.tt_consulaire }}</h5>
-            <h5 class="col-12" style="text-align: center;">Inscription définitive : {{ stats.tt_admis }}</h5>
-            <h5 class="col-12" style="text-align: center;">Recours : {{ stats.recours }}</h5>
+        <div class="col-8 grid" *ngIf="phase_candidature==null">
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Non affecté : {{ stats.nn_affecte }}</h5>
+                <h5 class="col-12" style="text-align: center;">Orientation Prospects : {{ stats.tt_orientation }}</h5>
+                <h5 class="col-12" style="text-align: center;">Admission Prospects : {{ stats.tt_admission }}</h5>
+                <h5 class="col-12" style="text-align: center;">Paiements : {{ stats.tt_paiements }}</h5>
+                <h5 class="col-12" style="text-align: center;">Accompagnement consulaire : {{ stats.tt_consulaire }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Inscription définitive : {{ stats.tt_admis }}</h5>
+                <h5 class="col-12" style="text-align: center;">Recours : {{ stats.recours }}</h5>
+            </div>
+            <div class="col-6 grid card">
+                <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
+                <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions" #chart></p-chart>
+            </div>
         </div>
-        <div class="col-6 grid card">
-            <h3 class="col-12" style="text-align: center;">"Nombre" par "Phase" </h3>
-            <p-chart class="col-12" type="bar" [data]="basicData" [options]="horizontalOptions" #chart></p-chart>
+        <div class="col-8 grid" *ngIf="phase_candidature =='En phase d\'orientation scolaire'">
+            <h1>Orientation Prospects</h1>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
+                <h5 class="col-12" style="text-align: center;">Joignable : {{ stats_orientation.joignable }}</h5>
+                <h5 class="col-12" style="text-align: center;">Validé : {{ stats_orientation.valide }}</h5>
+            </div>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_orientation.non_contact }}</h5>
+                <h5 class="col-12" style="text-align: center;">Non Joignable : {{ stats_orientation.non_joignable }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Non Validé : {{ stats_orientation.non_valide }}</h5>
+            </div>
+            <div class="col-12 grid">
+                <h5 class="col-12" style="text-align: center;">Orienté : {{ stats_orientation.oriente }}</h5>
+                <h5 class="col-12" style="text-align: center;">En suspension : {{ stats_orientation.suspension }}</h5>
+            </div>
         </div>
-    </div>
-    <div class="col-12 grid" *ngIf="phase_candidature.includes('En phase d\'orientation scolaire')">
-        <h1>Orientation Prospects</h1>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_orientation.contact }}</h5>
-            <h5 class="col-12" style="text-align: center;">Joignable : {{ stats_orientation.joignable }}</h5>
-            <h5 class="col-12" style="text-align: center;">Validé : {{ stats_orientation.valide }}</h5>
+        <div class="col-8 grid" *ngIf="phase_candidature =='En phase d\'admission'">
+            <h1 class="col-12">Admission Prospects</h1>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>
+                <h5 class="col-12" style="text-align: center;">Admissible : {{ stats_admission.admissible }}</h5>
+            </div>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}</h5>
+                <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}
+                </h5>
+            </div>
+            <div class="col-12 grid">
+                <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
+            </div>
         </div>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_orientation.non_contact }}</h5>
-            <h5 class="col-12" style="text-align: center;">Non Joignable : {{ stats_orientation.non_joignable }}</h5>
-            <h5 class="col-12" style="text-align: center;">Non Validé : {{ stats_orientation.non_valide }}</h5>
+        <div class="col-8 grid" *ngIf="phase_candidature == 'En phase d\'orientation consulaire'">
+            <h1 class="col-12">Accompagnement consulaire</h1>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_consulaire.contacte }}</h5>
+            </div>
+            <div class="col-6 grid">
+                <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_consulaire.non_contacte }}</h5>
+            </div>
+            <div class="col-12 grid">
+                <h5 class="col-12" style="text-align: center;">Logement vendu: {{ stats_consulaire.logement }}</h5>
+            </div>
         </div>
-        <div class="col-12 grid">
-            <h5 class="col-12" style="text-align: center;">Orienté : {{ stats_orientation.oriente }}</h5>
-            <h5 class="col-12" style="text-align: center;">En suspension : {{ stats_orientation.suspension }}</h5>
-        </div>
-    </div>
-    <div class="col-12 grid" *ngIf="phase_candidature.includes('En phase d\'admission')">
-        <h1 class="col-12">Admission Prospects</h1>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Traité : {{ stats_admission.traite }}</h5>
-            <h5 class="col-12" style="text-align: center;">Admissible : {{ stats_admission.admissible }}</h5>
-        </div>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Non traité : {{ stats_admission.non_traite }}</h5>
-            <h5 class="col-12" style="text-align: center;">Non admissible : {{ stats_admission.non_admissible }}</h5>
-        </div>
-        <div class="col-12 grid">
-            <h5 class="col-12" style="text-align: center;">En attente : {{ stats_admission.attente }}</h5>
-        </div>
-    </div>
-    <div class="col-12 grid" *ngIf="phase_candidature.includes('En phase d\'orientation consulaire')">
-        <h1 class="col-12">Accompagnement consulaire</h1>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Contacté : {{ stats_consulaire.contacte }}</h5>
-        </div>
-        <div class="col-6 grid">
-            <h5 class="col-12" style="text-align: center;">Non contacté : {{ stats_consulaire.non_contacte }}</h5>
-        </div>
-        <div class="col-12 grid">
-            <h5 class="col-12" style="text-align: center;">Logement vendu: {{ stats_consulaire.logement }}</h5>
-        </div>
-    </div>
-    <div class="col-12 grid" *ngIf="phase_candidature.includes('Paiements')">
-        <h1 class="col-12">Paiements</h1>
-        <div class="col-6 grid">
-            <h3 class="col-12">Préinscription</h3>
-            <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement }}</h5>
-            <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece }}</h5>
-            <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque }}</h5>
-            <h5 class="col-12" style="text-align: center;">Lien de paiement : {{stats_paiements.preinscription.lien }}</h5>
-            <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{ stats_paiements.preinscription.compensation }}</h5>
-        </div>
-        <div class="col-6 grid">
-            <h3 class="col-12">Inscription</h3>
-            <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}</h5>
-            <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}</h5>
-            <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}</h5>
-            <h5 class="col-12" style="text-align: center;">Lien de paiement : {{ stats_paiements.inscription.lien }}</h5>
-            <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{ stats_paiements.inscription.compensation }}</h5>
-        </div>
+        <div class="col-8 grid" *ngIf="phase_candidature == 'Paiements'">
+            <h1 class="col-12">Paiements</h1>
+            <div class="col-6 grid">
+                <h3 class="col-12">Préinscription :{{ stats_paiements.preinscription.total }} </h3>
+                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.preinscription.virement }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.preinscription.espece }}</h5>
+                <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.preinscription.cheque }}</h5>
+                <h5 class="col-12" style="text-align: center;">Lien de paiement : {{stats_paiements.preinscription.lien
+                    }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                    stats_paiements.preinscription.compensation }}</h5>
+            </div>
+            <div class="col-6 grid">
+                <h3 class="col-12">Inscription : {{ stats_paiements.inscription.total }}</h3>
+                <h5 class="col-12" style="text-align: center;">Virement : {{ stats_paiements.inscription.virement }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Espèce : {{ stats_paiements.inscription.espece }}</h5>
+                <h5 class="col-12" style="text-align: center;">Chèque : {{ stats_paiements.inscription.cheque }}</h5>
+                <h5 class="col-12" style="text-align: center;">Lien de paiement : {{ stats_paiements.inscription.lien }}
+                </h5>
+                <h5 class="col-12" style="text-align: center;">Compensation/Avoir : {{
+                    stats_paiements.inscription.compensation }}</h5>
+            </div>
+        </div>-->
     </div>
 </div>

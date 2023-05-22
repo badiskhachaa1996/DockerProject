@@ -168,7 +168,7 @@ export class DetailsEtudiantComponent implements OnInit {
           console.log(userConnected.type != "Initial" && userConnected.type != "Alternant", this.isNotEtudiant)
           this.isNotEntreprise = userConnected.type != 'CEO Entreprise'
           let type = "Agent"
-          if (userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'CEO Entreprise' && userConnected.role != "Agent" && userConnected.role != "Admin" && userConnected.role != "Responsable")
+          if ((userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'CEO Entreprise') && userConnected.role != "Agent" && userConnected.role != "Admin" && userConnected.role != "Responsable")
             type = "EtudiantOuEntreprise"
           this.presenceService.getAllByUser(this.EtudiantDetail.user_id, type).subscribe((presenceData) => {
             this.AssiduiteListe = presenceData
@@ -176,7 +176,6 @@ export class DetailsEtudiantComponent implements OnInit {
             this.ListeSeance.forEach(seance => {
               this.ListeSeanceDIC[seance._id] = seance;
             });
-
 
             this.matiereService.getAll().subscribe(data => {
               data.forEach(m => {

@@ -35,16 +35,16 @@
                             <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                         </div>
                         <div class="field col-12">
-                            <label For="email_perso">Email perso</label>
+                            <label For="email_perso">Adresse Email</label>
                             <input pInputText id="phone" formControlName="email_perso" type="email"
                                 placeholder="s.hue@gmail.com" />
                         </div>
                         <div class="field col-12 md:col-7">
-                            <label For="pays">Pays</label>
+                            <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse" optionValue="value"
                                 optionLabel="value"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -63,10 +63,10 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
-                            <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.user_id?.date_creation|date:'mediumDate'}}</p>
+                            <label For="date_creation">Date d'inscription</label>
+                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -179,16 +179,77 @@
                         </div>
                     </div>
                 </p-tabPanel>
+                <p-tabPanel header="Orientation et Admission">
+                    <form class="grid" [formGroup]="detailsForm">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field md:col-6 col-12">
+                                <label For="formation">Décision orientation</label><br>
+                                <p>{{showDetails.decision_orientation}}</p>
+                                <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            </div>
+                            <div class="field md:col-6 col-12">
+                                <label For="formation">Décision admission</label><br>
+                                <p>{{showDetails.decision_admission}}</p>
+                                <!--<p-dropdown [options]="civiliteList" formControlName="formation"></p-dropdown>-->
+                            </div>
+                        </div>
+                    </form>
+                </p-tabPanel>
+                <p-tabPanel header="Documents d'inscription">
+                    <div class="col-12 grid">
+                        <div class="col-12">
+                            <strong>Mes attestations disponibles:</strong>
+                        </div>
+                        <div class="col-12">
+                            <p-table styleClass="p-datatable-gridlines" [value]="showDetails.documents_administrative"
+                                responsiveLayout="scroll" responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th>
+                                            Date de délivrance
+                                        </th>
+                                        <th>
+                                            Nom du document
+                                        </th>
+                                        <th>
+                                            Lien de téléchargement
+                                        </th>
+                                        <th>
+                                            Note
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData>
+                                    <tr>
+                                        <td>
+                                            {{rowData.date | date:'mediumDate'}}
+                                        </td>
+                                        <td>
+                                            {{rowData.nom}}
+                                        </td>
+                                        <td>
+                                            <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                                        </td>
+                                        <td>
+                                            {{rowData.note}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                    <p
+                        *ngIf="showDetails.documents_administrative==null || showDetails.documents_administrative.length==0">
+                        Aucun document n'a été chargé !
+                    </p>
+                    <div class="col-12">
+                        <button pButton label="Ajouter un document"
+                            (click)="showUploadFile=showDetails;scrollToTop()"></button>
+                    </div>
+                </p-tabPanel>
             </p-tabView>
-            <div class="col-4">
+            <div class="col-12">
                 <button pButton label="Sauvegardez les modifications" (click)="saveDetails()"></button>
-            </div>
-            <div class="col-4">
-                <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
-            </div>
-            <div class="col-4">
-                <button pButton pButton class="p-button-danger" label="Sauvegardez les modifications et fermer"
-                    (click)="saveDetails(true)"></button>
             </div>
         </form>
     </div>
@@ -394,11 +455,20 @@
         </form>
     </div>
 
+    <div class="col-12 grid card" *ngIf="AttribuerProspect">
+        <h1 class="col-12" style="text-align: center;">Attribuer {{AttribuerProspect.user_id.lastname}}
+            {{AttribuerProspect.user_id.firstname}} à :
+        </h1>
+        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="collaborateurList" class="col-12"
+            (onChange)="onChangeAttribuer($event.value)"></p-dropdown>
+    </div>
+
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
-            <h5>Liste des prospects admission</h5>
-
+            <h5 *ngIf="ID.length > 12">Liste des leads de {{PARTENAIRE?.nom}}</h5>
+            <h5 *ngIf="COMMERCIAL">Liste des leads de {{COMMERCIAL.user_id?.lastname}} {{COMMERCIAL.user_id?.firstname}}
+            </h5>
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
@@ -435,16 +505,21 @@
                         emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Dossier Prospect" [options]="filterStatut"
+                    <p-dropdown filter="true" placeholder="Dossier Lead" [options]="filterStatut"
                         (onChange)="dt1.filter($event.value, 'haveDoc','equals')"
                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut du dossier"
                         [style]="{'margin-right':'5px'}">
                     </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                    <p-dropdown filter="true" placeholder="Commercial" [options]="filterCommercial"
+                        (onChange)="dt1.filter($event.value, 'code_commercial','equals')"
+                        emptyFilterMessage="Pas de commercial trouvé" filterPlaceholder="Commercial"
+                        [style]="{'margin-right':'5px'}">
+                    </p-dropdown>
+                    <!--<p-dropdown filter="true" placeholder="Source" [options]="filterSource"
                         (onChange)="dt1.filter($event.value, 'source','startsWith')"
                         emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
                         [style]="{'margin-left':'5px','margin-right':'5px'}">
-                    </p-dropdown>
+                    </p-dropdown>-->
                     <p-dropdown filter="true" placeholder="Decision Admission" [options]="dropdownDecisionAdmission"
                         (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
@@ -610,10 +685,14 @@
                             Non
                         </td>
                         <td>
-                            <i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
-                                (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
+                            <!--<i pTooltip="Documents" tooltipPosition="bottom" class="pi pi-file mr-2"
+                                (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>-->
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                 (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Attribuer à un collaborateur" class="pi pi-user-plus" aria-hidden="true"
+                                (click)="initAttribuer(prospect)">
+
+                            </i>
 
                         </td>
                     </tr>
@@ -624,7 +703,7 @@
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">
         <div *ngIf="selectedProspect">
-            <h5>Informations Prospect</h5>
+            <h5>Informations Lead</h5>
             <p>Civilité: {{selectedProspect?.user_id?.civilite}}</p>
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
@@ -654,9 +733,12 @@
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
 
             <h5>Source </h5>
-            <p>Source de prospect: {{ selectedProspect?.source }}</p>
+            <p>Source du lead: {{ selectedProspect?.source }}</p>
             <p>Nom de la commerciale ou partenaire: {{infoCommercial?.user_id?.lastname}}
                 {{infoCommercial?.user_id?.firstname}}
+            </p>
+            <p>
+                Nom du Partenaire : {{infoPartenaire?.nom}}
             </p>
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 

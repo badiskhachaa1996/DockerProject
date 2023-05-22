@@ -171,7 +171,7 @@ export class AdmissionService {
 
   getPopulateByUserid(user_id) {
     let url = this.apiUrl + "getPopulateByUserid/" + user_id
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
   }
 
   updateDossier(id, statut_dossier) {
@@ -213,7 +213,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Liste des prospects alternables récupérés'); }
+        complete: () => { console.log('Liste des leads alternables récupérés'); }
       });
     });
   }
@@ -225,7 +225,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Liste des prospects alternables du commercial récupérés'); }
+        complete: () => { console.log('Liste des leads alternables du commercial récupérés'); }
       });
     });
   }
@@ -237,7 +237,7 @@ export class AdmissionService {
       this.httpClient.get<ProspectAlternable>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable récupéré'); }
+        complete: () => { console.log('Leads alternable récupéré'); }
       });
     });
   }
@@ -249,7 +249,7 @@ export class AdmissionService {
       this.httpClient.post<any[]>(url, obj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable crée'); }
+        complete: () => { console.log('Leads alternable crée'); }
       });
     });
   }
@@ -261,7 +261,7 @@ export class AdmissionService {
       this.httpClient.patch<any[]>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (success) => { resolve(success); },
         error: (error) => { reject(error); },
-        complete: () => { console.log('Prospects alternable modifié'); }
+        complete: () => { console.log('Leads alternable modifié'); }
       });
     });
   }
@@ -307,14 +307,25 @@ export class AdmissionService {
     let registreUrl = this.apiUrl + 'getDataForDashboardPartenaire';
     return this.httpClient.post<{ globalstats: any, activitystats: any }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  getDataForDashboardInternationalBasique() {
+    let registreUrl = this.apiUrl + 'getDataForDashboardInternationalBasique';
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
   getDataForDashboardInternational(data: any) {
     let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
     return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getDataForDashboardPerformance(member: MemberInt, filter: any) {
-    let registreUrl = this.apiUrl + 'getDataForDashboardInternational';
+    let registreUrl = this.apiUrl + 'getDataForDashboardPerformance';
     return this.httpClient.post<any>(registreUrl, { member, filter }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getPopulate(id) {
+    let registreUrl = this.apiUrl + 'getPopulate/' + id;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

@@ -147,6 +147,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   ECOLE: EcoleAdmission
   RENTREE: RentreeAdmission[]
   ngOnInit(): void {
+    console.log(localStorage.getItem('sourceProspect'))
     this.FAService.EAgetByParams(this.form_origin).subscribe(data => {
       if (!data)
         this.router.navigate(['/'])

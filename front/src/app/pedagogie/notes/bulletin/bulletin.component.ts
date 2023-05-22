@@ -87,7 +87,7 @@ export class BulletinComponent implements OnInit {
     semestre: new FormControl('', Validators.required),
     pv: new FormControl('', Validators.required),
   })
-  exInfoDiplome = ""// 1er année 2022-2023
+  exInfoDiplome = "2022-2023"// 1er année 2022-2023
 
   updateDropdownPV() {
     this.dropdownPV = [{ value: "Aucun/Nouveau PV", label: "Aucun/Nouveau PV" }]

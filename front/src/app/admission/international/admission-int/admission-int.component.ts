@@ -11,6 +11,9 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { VenteService } from 'src/app/services/vente.service';
+import { Partenaire } from 'src/app/models/Partenaire';
+import { PartenaireService } from 'src/app/services/partenaire.service';
 
 @Component({
   selector: 'app-admission-int',
@@ -260,8 +263,8 @@ export class AdmissionIntComponent implements OnInit {
   ]
   filterEcole = []
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private PartenaireService: PartenaireService,
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService) { }
 
   prospects: Prospect[];
 
@@ -448,7 +451,7 @@ export class AdmissionIntComponent implements OnInit {
 
 
   })
-
+  initalPayement = []
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -462,11 +465,18 @@ export class AdmissionIntComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
+    this.initalPayement = [...prospect?.payement]
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
     this.scrollToTop()
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
+
+  partenaireOwned: string = null
 
   saveDetails(willClose = false) {
     let bypass: any = this.showDetails.user_id
@@ -509,6 +519,25 @@ export class AdmissionIntComponent implements OnInit {
       _id: this.showDetails._id
 
     }
+
+
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
+    }
+
 
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
@@ -604,7 +633,7 @@ export class AdmissionIntComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -616,21 +645,38 @@ export class AdmissionIntComponent implements OnInit {
     }
   }
 
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString()+ date.getSeconds().toString()
+  }
+
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
+
+
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
     this.infoCommercial = null
+    this.infoPartenaire = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PartenaireService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
@@ -639,7 +685,12 @@ export class AdmissionIntComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
     this.lengthPaiement = prospect?.payement?.length
+    this.initalPayement = [...prospect?.payement]
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
@@ -647,6 +698,22 @@ export class AdmissionIntComponent implements OnInit {
     if (this.lengthPaiement >= this.payementList.length) {
       statut_payement = this.showPaiement.statut_payement;
       phase_candidature = this.showPaiement.phase_candidature;
+    }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showPaiement._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
 
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {

@@ -11,6 +11,10 @@ import jwt_decode from "jwt-decode";
 import { saveAs } from "file-saver";
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { VenteService } from 'src/app/services/vente.service';
+import { Vente } from 'src/app/models/Vente';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-paiements',
   templateUrl: './paiements.component.html',
@@ -263,13 +267,16 @@ export class PaiementsComponent implements OnInit {
     { value: "Programme Français", label: "Programme Français", },
     { value: "Programme Anglais", label: "Programme Anglais", }
   ];
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService,
+    private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private VenteService: VenteService, private PService: PartenaireService, private CService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
   selectedProspect: Prospect = null
 
   token;
+
+  partenaireOwned: string
 
   scrollToTop() {
     var scrollDuration = 250;
@@ -311,6 +318,10 @@ export class PaiementsComponent implements OnInit {
       data.forEach(v => {
         v['modalite'] = this.getModalite(v.payement)
       })
+    })
+    this.CService.getByUserId(this.token.id).subscribe(c => {
+      if (c)
+        this.partenaireOwned = c.partenaire_id
     })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
@@ -428,6 +439,7 @@ export class PaiementsComponent implements OnInit {
     type_form: new FormControl('', Validators.required),
 
   })
+  initalPayement = []
 
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
@@ -445,7 +457,12 @@ export class PaiementsComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    this.initalPayement = [...prospect?.payement]
     this.scrollToTop()
+    if (prospect.code_commercial)
+      this.CService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
 
   saveDetails(willClose = false) {
@@ -483,9 +500,27 @@ export class PaiementsComponent implements OnInit {
       _id: this.showDetails._id
 
     }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
+    }
+
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this
       if (willClose)
         this.showDetails = null
     })
@@ -579,7 +614,7 @@ export class PaiementsComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -590,22 +625,36 @@ export class PaiementsComponent implements OnInit {
       this.payementList[i][type] = event.target.value;
     }
   }
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
+    this.infoPartenaire = null
     this.infoCommercial = null
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
@@ -671,4 +720,6 @@ export class PaiementsComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+
+
 }

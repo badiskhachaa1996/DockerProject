@@ -3,7 +3,7 @@
         <div class="col-12 md:col-6">
             <label>Ecole <span style="color:red"> *</span></label>
             <p-dropdown formControlName="ecole" [options]="ecoleDropdown" autoWidth="false" [style]="{'width':'100%'}"
-                [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
+                (onChange)="onSelectEcole()" [filter]="true" placeholder="Choisissez une ecole"></p-dropdown>
         </div>
 
         <div class="col-12 md:col-6">
@@ -12,20 +12,25 @@
                 [style]="{'width':'100%'}" placeholder="Choisissez une formation"></p-dropdown>
         </div>
         <div class="col-12 md:col-6" *ngIf="prospectDropdown.length!=0">
-            <label>Prospect <span style="color:red"> *</span></label>
+            <label>Lead <span style="color:red"> *</span></label>
             <p-dropdown formControlName="prospect_id" [options]="prospectDropdown" autoWidth="false"
                 [virtualScroll]="true" [itemSize]="30" [filter]="true" [style]="{'width':'100%'}"
-                placeholder="Choisissez un prospect"></p-dropdown>
+                placeholder="Choisissez un lead"></p-dropdown>
         </div>
         <div class="col-12 md:col-6" *ngIf="prospectDropdown.length==0">
-            <label>Prospect</label>
+            <label>Lead</label>
             <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
-            <p>Chargement des prospects en cours ...</p>
+            <p>Chargement des leads en cours ...</p>
         </div>
         <div class="col-12 md:col-6">
             <label>Type de document <span style="color:red"> *</span></label>
             <p-dropdown formControlName="document" [options]="documentDropdown" autoWidth="false"
                 [style]="{'width':'100%'}" placeholder="Choisissez un type de document"></p-dropdown>
+        </div>
+        <div class="col-12">
+            <label>Rentrée scolaire<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="rentree_scolaire" [options]="rentreeDropdown" autoWidth="false"
+                [style]="{'width':'100%'}" placeholder="Choisissez une rentrée scolaire"></p-dropdown>
         </div>
         <div class="col-12">
             <button type="submit" pButton [disabled]="documentForm.invalid" label="Voir le document"></button>
@@ -45,7 +50,7 @@
                         ID Document <p-sortIcon field="custom_id"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="prospect_id">
-                        ID Prospect <p-sortIcon field="prospect_id"> </p-sortIcon>
+                        ID Lead <p-sortIcon field="prospect_id"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="ecole">
                         Ecole <p-sortIcon field="ecole"> </p-sortIcon>
@@ -70,22 +75,22 @@
                         {{ doc.custom_id }}
                     </td>
                     <td>
-                        {{ doc.prospect_id.customid }}
+                        {{ doc?.prospect_id?.customid }}
                     </td>
                     <td>
-                        {{ doc.ecole }}
+                        {{ doc?.ecole?.titre }}
                     </td>
                     <td>
                         {{ doc.type }}
                     </td>
                     <td>
-                        {{ doc.user_id.lastname | uppercase }} {{ doc.user_id.firstname | titlecase }}
+                        {{ doc?.user_id?.lastname | uppercase }} {{ doc?.user_id?.firstname | titlecase }}
                     </td>
                     <td>
                         {{ doc.date | date:'mediumDate' }}
                     </td>
                     <td>
-                        En cours de dévéloppement
+                        <a (click)="downloadFile(doc.filename,doc._id)">Télécharger le document</a>
                     </td>
                 </tr>
             </ng-template>

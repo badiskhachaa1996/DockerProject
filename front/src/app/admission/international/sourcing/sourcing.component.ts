@@ -10,6 +10,8 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { PartenaireService } from 'src/app/services/partenaire.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -225,7 +227,7 @@ export class SourcingComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
   prospects: Prospect[];
 
@@ -323,7 +325,7 @@ export class SourcingComponent implements OnInit {
     this.admissionService.updateV2(data).subscribe(newProspect => {
       this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
-      this.messageService.add({ severity: "success", summary: "Affectation du prospect avec succès" })
+      this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })
   }
 
@@ -533,6 +535,7 @@ export class SourcingComponent implements OnInit {
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
+  infoPartenaire: Partenaire
   expand(prospect: Prospect) {
     this.selectedProspect = prospect
     this.showSideBar = true
@@ -540,6 +543,9 @@ export class SourcingComponent implements OnInit {
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(data => {
         this.infoCommercial = data
+        this.PartenaireService.getById(data.partenaire_id).subscribe(datp => {
+          this.infoPartenaire = datp
+        })
       })
   }
 
@@ -548,7 +554,7 @@ export class SourcingComponent implements OnInit {
     if (confirm('Voulez-vous vraiment supprimer ' + user_id?.lastname + " " + user_id?.firstname + " ?"))
       this.admissionService.delete(prospect._id, user_id._id).subscribe(data => {
         this.prospects.splice(this.prospects.indexOf(prospect), 1)
-        this.messageService.add({ severity: "success", summary: "Prospect supprimé avec succès" })
+        this.messageService.add({ severity: "success", summary: "Lead supprimé avec succès" })
       })
   }
 

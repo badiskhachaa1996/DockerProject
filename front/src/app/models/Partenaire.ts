@@ -1,3 +1,5 @@
+import { MemberInt } from "./memberInt";
+
 export class Partenaire {
 
     constructor(
@@ -30,5 +32,9 @@ export class Partenaire {
         public commissions?: [{ description: string, montant: number }],
         public pathEtatContrat?: string,
         public typeEtatContrat?: string,
+        public typePartenaire?: string,
+        public groupeWhatsApp?: string,
+        public localisation?: string,
+        public manage_by?: MemberInt
     ) { }
 }
