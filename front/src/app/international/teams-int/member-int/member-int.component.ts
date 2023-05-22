@@ -39,7 +39,8 @@ export class MemberIntComponent implements OnInit {
     this.UserService.getAll().subscribe(users => {
       //Imagine tu dois charger toute la DB .........
       users.forEach(user => {
-        this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
+        if (user)
+          this.userList.push({ label: `${user.firstname} ${user.lastname} | ${user.type}`, value: user._id })
       })
     })
   }
