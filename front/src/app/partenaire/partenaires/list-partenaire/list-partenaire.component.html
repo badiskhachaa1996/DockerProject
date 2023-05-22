@@ -11,7 +11,7 @@
     <div class="col-12 grid card" *ngIf="managePartenaire">
         <h4 class="col-12" style="text-align: center;">Partenaire gérer par : </h4>
         <p-dropdown class="col-12" filter="true" placeholder="Choisissez un membre de l'équipe international"
-            [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}"
+            [options]="internationalList" autoWidth="false" [style]="{'width':'100%'}" filter="true"
             [(ngModel)]="managePartenaire.manage_by._id" (onChange)="onSelectManage($event.value)"
             emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Phase">
         </p-dropdown>
