@@ -13,37 +13,44 @@ import { FormulaireIcbsService } from 'src/app/services/other/formulaire-icbs.se
 export class FormulaireIcbsComponent implements OnInit {
 
   occupations = [
-    { label: 'Employees', value: "Employees" },
+    { label: 'Employee', value: "Employee" },
+    { label: 'Looking for a job', value: "Looking for a job" },
     { label: 'Student', value: "Student" },
     { label: 'High school student ', value: "High school student " },
-    { label: 'Looking for a job', value: "Looking for a job" },
   ]
 
   languages = [
     { label: 'English', value: 'English' },
+    { label: 'German', value: 'German' },
     { label: 'French', value: 'French' },
     { label: 'Arabic', value: 'Arabic' },
-    { label: 'German', value: 'German' },
-    { label: 'Chinese', value: 'Chinese' },
+    { label: 'Spanish', value: 'Spanish' },
   ]
+
+  // données du bouton radio pour le choix du type de test
+  testTypes: any[] = [];
 
   separateDialCode = false;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
-  preferredCountries: CountryISO[] = [CountryISO.France, CountryISO.Tunisia];
+  preferredCountries: CountryISO[] = [CountryISO.UnitedArabEmirates];
 
   get phone() { return this.RegisterForm.get('phone'); }
   RegisterForm = new FormGroup({
     name: new FormControl('', Validators.required),
     age: new FormControl(null, Validators.required),
     phone: new FormControl('', Validators.required),
+    whatsapp: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     occupation: new FormControl('', Validators.required),
     field: new FormControl(''),
     langue: new FormControl('', Validators.required),
-  })
+    testType:new FormControl('', Validators.required),
+  });
+
   ETAT = "DEBUT"
+
   saveFormulaire() {
     let data = { ...this.RegisterForm.value, date_creation: new Date() }
     this.RegisterForm.reset()
@@ -54,9 +61,14 @@ export class FormulaireIcbsComponent implements OnInit {
       }
     })
   }
+  
   constructor(private FICBSService: FormulaireIcbsService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
+    this.testTypes = [
+      { name: 'On campus', key: 'A' },
+      { name: 'Online', key: 'B' },
+    ];
   }
 
 }

@@ -26,10 +26,38 @@ const schema = new mongoose.Schema({
                 { type: String },
         }
     },
+    whatsapp: {
+        type: {
+            countryCode
+                :
+                { type: String },
+            dialCode
+                :
+                { type: String },
+            e164Number
+                :
+                { type: String },
+            internationalNumber
+                :
+                { type: String },
+            nationalNumber
+                :
+                { type: String },
+            number
+                :
+                { type: String },
+        }
+    },
     email: { type: String },
     occupation: { type: String },
     field: { type: String },
     langue: { type: String },
+    testType: { 
+        type: { 
+            name: { type: String },
+            key: { type: String },
+        },
+        required: false },
     date_creation: { type: Date, default: Date.now }
 });
 
