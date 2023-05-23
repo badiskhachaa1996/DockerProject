@@ -122,7 +122,8 @@ export class ListPartenaireComponent implements OnInit {
     this.onInitFormModifPartenaire()
     this.MIService.MIgetAll().subscribe(data => {
       data.forEach(d => {
-        this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
+        if (d.user_id)
+          this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
       })
     })
   }

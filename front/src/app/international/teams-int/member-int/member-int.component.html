@@ -145,19 +145,19 @@
                 <ng-template pTemplate="body" let-member>
                     <tr>
                         <td>
-                            {{ member.custom_id }}
+                            {{ member?.custom_id }}
                         </td>
                         <td>
-                            {{ member.user_id.firstname }} {{ member.user_id.lastname | uppercase }}
+                            {{ member?.user_id?.firstname }} {{ member?.user_id?.flastname | uppercase }}
                         </td>
                         <td>
-                            {{ member.user_id.email }}
+                            {{ member?.user_id?.femail }}
                         </td>
                         <td>
-                            {{ member.user_id.phone }}
+                            {{ member?.user_id?.fphone }}
                         </td>
                         <td>
-                            {{ member.numero_whatapp }}
+                            {{ member?.numero_whatapp }}
                         </td>
                         <td>
                             {{ member?.team_id?.nom }}
