@@ -22,6 +22,9 @@
                         <th pSortableColumn="phone.nationalNumber" scope="col" style="text-align: center;">
                             Phone <p-sortIcon field="phone.nationalNumber"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="whatsapp.nationalNumber" scope="col" style="text-align: center;">
+                            Whatsapp <p-sortIcon field="whatsapp.nationalNumber"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="email" scope="col" style="text-align: center;">
                             Email Adress <p-sortIcon field="email"></p-sortIcon>
                         </th>
@@ -33,6 +36,9 @@
                         </th>
                         <th pSortableColumn="langue" scope="col" style="text-align: center;">
                             Langue <p-sortIcon field="langue"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="testType" scope="col" style="text-align: center;">
+                            Test type <p-sortIcon field="testType"></p-sortIcon>
                         </th>
                         <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                             Date of addition <p-sortIcon field="date_creation"></p-sortIcon>
@@ -54,6 +60,9 @@
                             {{resultat.phone.nationalNumber}}
                         </td>
                         <td>
+                            {{resultat.whatsapp.nationalNumber}}
+                        </td>
+                        <td>
                             {{resultat.email}}
                         </td>
                         <td>
@@ -64,6 +73,9 @@
                         </td>
                         <td>
                             {{resultat.langue}}
+                        </td>
+                        <td>
+                            {{resultat.testType.name}}
                         </td>
                         <td>
                             {{resultat.date_creation | date: 'mediumDate'}}
