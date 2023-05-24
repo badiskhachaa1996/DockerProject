@@ -3,7 +3,7 @@
     <div class="col-2">
 
     </div>
-    <form class="p-fluid p-formgrid grid md:col-8 col-12 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm"
+    <form class="p-fluid p-formgrid grid md:col-8 col-12 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm" style="font-family: 'Montserrat', sans-serif;"
         *ngIf="ETAT=='DEBUT'">
         <!--<div class="col-12">
             <h1>Event title</h1>
@@ -83,7 +83,7 @@
 <div class="grid" *ngIf="ETAT!='DEBUT'">
     <div class="col-2"></div>
     <div class="col-8">
-        <div class="card" style="text-align: center; font-weight: lighter;">
+        <div class="card" style="text-align: center; font-family: 'Montserrat', sans-serif; color: #666666; padding: 50px">
             <h2>Thank you {{leadData.name}}!</h2>
             <h4>
                 You are one step closer into learning a new language and boosting your career.
