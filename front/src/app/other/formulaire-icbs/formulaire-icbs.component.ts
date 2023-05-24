@@ -30,13 +30,14 @@ export class FormulaireIcbsComponent implements OnInit {
   // données du bouton radio pour le choix du type de test
   testTypes: any[] = [];
 
+  leadData = {};
+
   separateDialCode = false;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.UnitedArabEmirates];
-
-  get phone() { return this.RegisterForm.get('phone'); }
+  
   RegisterForm = new FormGroup({
     name: new FormControl('', Validators.required),
     age: new FormControl(null, Validators.required),
@@ -49,15 +50,19 @@ export class FormulaireIcbsComponent implements OnInit {
     testType:new FormControl('', Validators.required),
   });
 
+  get phone() { return this.RegisterForm.get('phone'); }
+  get whatsapp() { return this.RegisterForm.get('whatsapp'); }
+
   ETAT = "DEBUT"
 
   saveFormulaire() {
     let data = { ...this.RegisterForm.value, date_creation: new Date() }
-    this.RegisterForm.reset()
+    this.RegisterForm.reset();
+    this.leadData = data;
     this.FICBSService.create(data).subscribe(data => {
       if (data) {
         this.ToastService.add({ severity: 'success', summary: 'Le formulaire a été envoyé' })
-        this.ETAT = 'FIN'
+        this.ETAT = 'FIN';
       }
     })
   }

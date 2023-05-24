@@ -31,8 +31,8 @@
         ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
                 [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
                 formControlName="phone"> </ngx-intl-tel-input>
-            <p style="color:red" *ngIf="phone.invalid && (phone.touched || phone.dirty)">The phone number is
-                invalid, please respect the format</p>
+            <p style="color:red" *ngIf="phone?.invalid && phone?.touched">
+                The phone number is invalid, please respect the format</p>
         </div>
         <div class="field md:col-6 col-12">
             <label>Valid whatsapp number <span style="color:red"> *</span></label><br>
@@ -44,8 +44,8 @@
         ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
                 [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="whatsapp"
                 formControlName="whatsapp"> </ngx-intl-tel-input>
-            <p style="color:red" *ngIf="phone.invalid && (phone.touched || phone.dirty)">The phone number is
-                invalid, please respect the format</p>
+            <div style="color:red" *ngIf="whatsapp.invalid && whatsapp.touched">The whatsapp number is
+                invalid, please respect the format</div>
         </div>
         <div class="field md:col-6 col-12">
             <label>Email Address <span style="color:red"> *</span></label>
@@ -75,14 +75,24 @@
         </div>
         
         <div class="field col-12">
-            <button pButton type="submit" label="Add" [disabled]="RegisterForm.invalid"></button>
+            <button pButton type="submit" label="SUBMIT" [disabled]="RegisterForm.invalid"></button>
         </div>
     </form>
-    <div class="grid md:col-8 col-12 card" *ngIf="ETAT!='DEBUT'">
-        <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
-            Votre candidature a été envoyé !</h2>
-        <div class="col-12 flex justify-content-center flex-wrap card-container">
-            <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+</div>
+
+<div class="grid" *ngIf="ETAT!='DEBUT'">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card" style="text-align: center; font-weight: lighter;">
+            <h2>Thank you {{leadData.name}}!</h2>
+            <h4>
+                You are one step closer into learning a new language and boosting your career.
+                We will be contacting you soon to confirm your FREE test timing.
+            </h4>
+            <h4>
+                If you can't make it to our campus,there is always a chance to pass the test online for free as well! We can't wait to meet you!
+            </h4>
         </div>
     </div>
+    <div class="col-2"></div>
 </div>
