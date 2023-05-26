@@ -301,6 +301,8 @@ import { ActualiteComponent } from './international/actualite/actualite.componen
 import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
 import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
 import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
+import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-admission-dubai.component';
+import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 
 
 @NgModule({
@@ -611,7 +613,9 @@ import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-i
     ActualiteComponent,
     DashboardCommercialComponent,
     FormulaireIcbsComponent,
-    ResultatsFormulaireIcbsComponent
+    ResultatsFormulaireIcbsComponent,
+    FormAdmissionDubaiComponent,
+    FormAdmissionDubaiResultsComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

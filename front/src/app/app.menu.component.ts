@@ -368,6 +368,22 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Admission Dubai',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: "Nouvelle demande admission",
+                                            icon: 'pi pi-pencil',
+                                            routerLink: ['/admission/dubai-form']
+                                        },
+                                        {
+                                            label: "Liste des demandes d'admission",
+                                            icon: 'pi pi-file-excel',
+                                            routerLink: ['/admission/dubai-form-results']
+                                        },
+                                    ]
+                                },
+                                {
                                     label: 'Dashboard',
                                     icon: 'pi pi-users',
                                     routerLink: ['/gestion-preinscriptions']
