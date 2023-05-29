@@ -160,7 +160,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
     if (sem == "Annuel")
         sem = /./i
     Note.find({ classe_id: req.params.classe_id, semestre: sem }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
-        console.log(notes[0])
+        //console.log(notes[0])
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
         let listMatiereNOM = []
@@ -172,23 +172,25 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
         let listEtudiantID = []
         let dicEtudiant = {}
         let listExamen = []
+        console.log(req.params.classe_id,sem)
         notes.forEach(n => {
+
             if (n.examen_id && !listExamen.includes(n.examen_id._id))
                 listExamen.push(n.examen_id._id)
 
             if (n.examen_id && n.examen_id.matiere_id) {
+                if (n.examen_id && n.examen_id._id.toString() == "6449283244a6406b6b9e1a5a")
+                    console.log(n)
                 if (!Array.isArray(n.examen_id.matiere_id))
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
-                    if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
+                    if (n.etudiant_id && n.etudiant_id.classe_id ) {//&& mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)
 
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname.toUpperCase() + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
-                    } else {
-                        console.log(mid)
                     }
                 })
             }
@@ -218,7 +220,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 if (!dicAppreciation[e_id])
                     dicAppreciation[e_id] = {}
                 listMatiereNOM.forEach(m_nom => {
-                    m_nom.replace('.','_')
+                    m_nom.replace('.', '_')
                     if (!listNotesEtudiantsCoeff[e_id][m_nom])
                         listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0, Appreciation: [] }
                     if (!dicAppreciation[e_id][m_nom])
