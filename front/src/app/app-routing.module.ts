@@ -198,6 +198,7 @@ import { DashboardCommercialComponent } from './commercial/dashboard-commercial/
 import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
 import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-admission-dubai.component';
+import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 
 const routes: Routes = [
     {
@@ -381,8 +382,7 @@ const routes: Routes = [
             { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
 
             // dubai admission form
-            { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
-            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiComponent },
+            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
@@ -415,6 +415,7 @@ const routes: Routes = [
     { path: 'mp-oublie', component: MpOublieComponent },
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
+    { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
 
 ]
 

@@ -7,8 +7,12 @@ const admissionFormDubaiSchema = mongoose.Schema({
     {
         type:
         {
-            country_code:   { type: String },
-            phone_number:   { type: String },
+            countryCode: { type: String },
+            dialCode: { type: String },
+            e164Number: { type: String },
+            internationalNumber: { type: String },
+            nationalNumber: { type: String },
+            number: { type: String },
         },
         required: false
     },
@@ -16,8 +20,12 @@ const admissionFormDubaiSchema = mongoose.Schema({
     {
         type:
         {
-            country_code:   { type: String },
-            phone_number:   { type: String },
+            countryCode: { type: String },
+            dialCode: { type: String },
+            e164Number: { type: String },
+            internationalNumber: { type: String },
+            nationalNumber: { type: String },
+            number: { type: String },
         },
         required: false
     },
@@ -25,7 +33,7 @@ const admissionFormDubaiSchema = mongoose.Schema({
     country_of_residence:   { type: String, required: false },
     last_diploma:           { type: String, required: false },
     chosen_program:         { type: String, required: false },
-    Intake :                { type: String, required: false },
+    intake :                { type: String, required: false },
 });
 
 const AdmissionFormDubai = mongoose.model('admission_form_dubai', admissionFormDubaiSchema);
