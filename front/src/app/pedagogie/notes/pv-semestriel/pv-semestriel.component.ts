@@ -128,6 +128,34 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
     }
   }
 
+  regeneratePV() {
+    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(dataNew => {
+      this.cols = dataNew.cols
+      this.dataPV = dataNew.data
+      this.dataPV.forEach((data, index) => {
+        if ((!data.appreciation || data.appreciation == "")) {
+          let note = this.calculMoyenne(data.notes)
+          if (note < 10)
+            data.appreciation = "Doit faire ses preuves"
+          else if ((note > 10 && note < 12) || note == 10)
+            data.appreciation = "Passable"
+          else if ((note > 12 && note < 14) || note == 12)
+            data.appreciation = "Assez Bien"
+          else if ((note > 14 && note < 16) || note == 14)
+            data.appreciation = "Bien"
+          else if ((note > 16 && note < 18) || note == 16)
+            data.appreciation = "Très Bien"
+          else if (note > 18 || note == 18)
+            data.appreciation = "Excellent"
+          else
+            data.appreciation = ""
+          this.dataPV[index] = data
+        }
+      })
+      this.messageService.add({ severity: 'success', summary: "Création d'un nouveau PV" })
+    })
+  }
+
   exportPDF() {
     var element = document.getElementById('pvTable');
     let height = 400
