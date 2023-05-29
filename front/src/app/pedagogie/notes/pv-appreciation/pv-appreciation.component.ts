@@ -71,7 +71,7 @@ export class PvAppreciationComponent implements OnInit {
                   d.appreciation_module[col.module] = "Bien"
                 else if (note > 16 && note < 18 || note == 16)
                   d.appreciation_module[col.module] = "Très Bien"
-                else if (note > 18|| note == 18)
+                else if (note > 18 || note == 18)
                   d.appreciation_module[col.module] = "Excellent"
                 else
                   d.appreciation_module[col.module] = ""
@@ -123,7 +123,7 @@ export class PvAppreciationComponent implements OnInit {
               d.appreciation_module[col.module] = "Bien"
             else if ((note > 16 && note < 18) || note == 16)
               d.appreciation_module[col.module] = "Très Bien"
-            else if (note > 18|| note==18)
+            else if (note > 18 || note == 18)
               d.appreciation_module[col.module] = "Excellent"
             else
               d.appreciation_module[col.module] = ""
@@ -131,7 +131,7 @@ export class PvAppreciationComponent implements OnInit {
         })
         pv.pv_annuel_data[index] = d
       })
-      
+
       this.PVID = pv._id
       this.cols = pv.pv_annuel_cols
       this.dataPV = pv.pv_annuel_data
@@ -156,6 +156,42 @@ export class PvAppreciationComponent implements OnInit {
       this.hideForPDF = false
       //element.style.transform = '';
     });
+  }
+
+  regeneratePV() {
+    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+      this.cols = data.cols
+      this.dataPV = data.data
+      this.messageService.add({ severity: 'success', summary: "Création d'un nouveau PV avec succès" })
+      this.dataPV.forEach((d, index) => {
+        if (!d.appreciation_module) {
+          d.appreciation_module = {}
+        }
+        this.cols.forEach(col => {
+          //console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
+          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+            let note = parseInt(d.notes[col.module])
+            //console.log(note)
+            if (note < 10)
+              d.appreciation_module[col.module] = "Doit faire ses preuves"
+            else if (note > 10 && note < 12 || note == 10)
+              d.appreciation_module[col.module] = "Passable"
+            else if (note > 12 && note < 14 || note == 12)
+              d.appreciation_module[col.module] = "Assez Bien"
+            else if (note > 14 && note < 16 || note == 14)
+              d.appreciation_module[col.module] = "Bien"
+            else if (note > 16 && note < 18 || note == 16)
+              d.appreciation_module[col.module] = "Très Bien"
+            else if (note > 18 || note == 18)
+              d.appreciation_module[col.module] = "Excellent"
+            else
+              d.appreciation_module[col.module] = ""
+          }
+
+        })
+        this.dataPV[index] = d
+      })
+    })
   }
 
 }
