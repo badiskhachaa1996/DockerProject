@@ -136,6 +136,7 @@ const factureCommissionController = require('./controllers/factureCommissionCont
 const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
 const teamsIntController = require('./controllers/teamsIntController')
 const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
+const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const { User } = require("./models/user");
 
@@ -341,6 +342,8 @@ app.use("/soc/stage", stageController);
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
+app.use('/soc/admission-dubai', admissionFormDubaiController);
+
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))

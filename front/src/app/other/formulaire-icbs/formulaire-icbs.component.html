@@ -3,7 +3,7 @@
     <div class="col-2">
 
     </div>
-    <form class="p-fluid p-formgrid grid md:col-8 col-12 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm"
+    <form class="p-fluid p-formgrid grid md:col-8 col-12 card" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm" style="font-family: Montserrat;"
         *ngIf="ETAT=='DEBUT'">
         <!--<div class="col-12">
             <h1>Event title</h1>
@@ -28,14 +28,27 @@
                 [searchCountryField]="[
           SearchCountryField.Iso2,
           SearchCountryField.Name
-        ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
+        ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
                 [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
                 formControlName="phone"> </ngx-intl-tel-input>
-            <p style="color:red" *ngIf="phone.invalid && (phone.touched || phone.dirty)">The phone number is
-                invalid, please respect the format</p>
+            <p style="color:red" *ngIf="phone?.invalid && phone?.touched">
+                The phone number is invalid, please respect the format</p>
         </div>
         <div class="field md:col-6 col-12">
-            <label>Email Adress <span style="color:red"> *</span></label>
+            <label>Valid whatsapp number <span style="color:red"> *</span></label><br>
+            <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                [searchCountryField]="[
+          SearchCountryField.Iso2,
+          SearchCountryField.Name
+        ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
+                [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="whatsapp"
+                formControlName="whatsapp"> </ngx-intl-tel-input>
+            <div style="color:red" *ngIf="whatsapp.invalid && whatsapp.touched">The whatsapp number is
+                invalid, please respect the format</div>
+        </div>
+        <div class="field md:col-6 col-12">
+            <label>Email Address <span style="color:red"> *</span></label>
             <input pInputText formControlName="email" type="email" placeholder="Ex: john.smith@gmail.com" />
         </div>
 
@@ -44,7 +57,7 @@
             <p-dropdown placeholder="Choose a occupation" [options]="occupations"
                 formControlName="occupation"></p-dropdown>
         </div>
-        <div class="field md:col-6 col-12" *ngIf="RegisterForm.value.occupation=='Employees'">
+        <div class="field md:col-6 col-12" *ngIf="RegisterForm.value.occupation=='Employee'">
             <label>In which field are you working ? <span style="color:red"> *</span></label>
             <input pInputText formControlName="field" type="text" placeholder="Ex: IT" />
         </div>
@@ -52,15 +65,34 @@
             <label>Which language do you prefer to learn ? <span style="color:red"> *</span></label>
             <p-dropdown placeholder="Choose a language" [options]="languages" formControlName="langue"></p-dropdown>
         </div>
+        
         <div class="field col-12">
-            <button pButton type="submit" label="Ajouter" [disabled]="RegisterForm.invalid"></button>
+            <label>Will you be able to join us on campus or you prefer to pass the test online ? <span style="color:red"> *</span></label>
+            <div *ngFor="let testType of testTypes" class="field-checkbox">
+                <p-radioButton [inputId]="testType.key" [value]="testType" formControlName="testType"></p-radioButton>
+                <label [for]="testType.key" class="ml-2">{{ testType.name }}</label>
+            </div>
+        </div>
+        
+        <div class="field col-12">
+            <button pButton type="submit" label="SUBMIT" [disabled]="RegisterForm.invalid"></button>
         </div>
     </form>
-    <div class="grid md:col-8 col-12 card" *ngIf="ETAT!='DEBUT'">
-        <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
-            Votre candidature a été envoyé !</h2>
-        <div class="col-12 flex justify-content-center flex-wrap card-container">
-            <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+</div>
+
+<div class="grid" *ngIf="ETAT!='DEBUT'">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <div class="card" style="text-align: center; font-family: Montserrat; color: #666666; padding: 50px">
+            <h2>Thank you {{leadData.name}}!</h2>
+            <h4>
+                You are one step closer into learning a new language and boosting your career.
+                We will be contacting you soon to confirm your FREE test timing.
+            </h4>
+            <h4>
+                If you can't make it to our campus,there is always a chance to pass the test online for free as well! We can't wait to meet you!
+            </h4>
         </div>
     </div>
+    <div class="col-2"></div>
 </div>

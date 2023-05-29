@@ -197,6 +197,7 @@ import { ActualiteComponent } from './international/actualite/actualite.componen
 import { DashboardCommercialComponent } from './commercial/dashboard-commercial/dashboard-commercial.component';
 import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
 import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
+import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-admission-dubai.component';
 
 const routes: Routes = [
     {
@@ -378,6 +379,10 @@ const routes: Routes = [
             { path: 'admission/formations', component: FormationAdmissionComponent, canActivate: [AuthGuardService] },
             { path: 'admission/ecoles', component: EcoleAdmissionComponent, canActivate: [AuthGuardService] },
             { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
+
+            // dubai admission form
+            { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
+            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiComponent },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
