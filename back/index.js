@@ -349,6 +349,7 @@ app.use('/soc/supportMarketing', require('./controllers/SupportMarketingControll
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
 app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
+app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

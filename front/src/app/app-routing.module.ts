@@ -198,6 +198,8 @@ import { DashboardCommercialComponent } from './commercial/dashboard-commercial/
 import { FormulaireIcbsComponent } from './other/formulaire-icbs/formulaire-icbs.component';
 import { ResultatsFormulaireIcbsComponent } from './other/resultats-formulaire-icbs/resultats-formulaire-icbs.component';
 import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-admission-dubai.component';
+import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
+import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
 
 const routes: Routes = [
     {
@@ -371,6 +373,9 @@ const routes: Routes = [
             { path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementAcompteComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/derogation/:ecole/:prospect_id/:formation/:rentree', component: GenDocDerogationComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/lettre-acceptation/:ecole/:prospect_id/:formation/:rentree', component: GenDocLettreAcceptationComponent, canActivate: [AuthGuardService] },
+            /* Module CRM */
+            { path: 'crm/leads/ajout', component: AjoutLeadcrmComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/leads/liste', component: ListLeadcrmComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

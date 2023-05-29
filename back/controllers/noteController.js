@@ -172,7 +172,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
         let listEtudiantID = []
         let dicEtudiant = {}
         let listExamen = []
-        console.log(req.params.classe_id,sem)
         notes.forEach(n => {
 
             if (n.examen_id && !listExamen.includes(n.examen_id._id))
@@ -184,7 +183,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 if (!Array.isArray(n.examen_id.matiere_id))
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
-                    if (n.etudiant_id && n.etudiant_id.classe_id ) {//&& mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)
+                    if (n.etudiant_id && n.etudiant_id.classe_id) {//&& mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)
 
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)

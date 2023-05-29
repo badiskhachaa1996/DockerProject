@@ -597,9 +597,9 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['resultat-qff']
                                 },
                                 {
-                                    label:'Questionnaire ICBS Event title',
+                                    label: 'Questionnaire ICBS Event title',
                                     icon: 'pi pi-question-circle',
-                                    routerLink:['resultats-icbs']
+                                    routerLink: ['resultats-icbs']
                                 }
                             ]
                         },
@@ -692,6 +692,158 @@ export class AppMenuComponent implements OnInit {
                                 { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
 
                             ],
+                        },
+                        {
+                            label: 'CRM',
+                            icon: 'pi pi-database',
+                            items: [
+                                {
+                                    label: "Insertion",
+                                    icon: 'pi pi-user-plus',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un lead',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['crm/leads/ajout']
+                                        }, {
+                                            label: 'Importer',
+                                            icon: 'pi pi-database',
+                                            routerLink: ['']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: "Liste des leads",
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Tout les leads',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['crm/leads/liste']
+                                        }, {
+                                            label: 'Leads non attribués',
+                                            icon: 'pi pi-user-edit',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Leads non attribués',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: "Qualification",
+                                    icon: 'pi pi-star',
+                                    items: [
+                                        {
+                                            label: 'Les leads non qualifiés',
+                                            icon: 'pi pi-star-fill',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Les leads préqualifiés',
+                                            icon: 'pi pi-star',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Les ventes',
+                                            icon: 'pi pi-chart-line',
+                                            routerLink: ['']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: "Communication",
+                                    icon: 'pi pi-share-alt',
+                                    items: [
+                                        {
+                                            label: 'Facebook',
+                                            icon: 'pi pi-facebook',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Instagram',
+                                            icon: 'pi pi-instagram',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'WhatsApp',
+                                            icon: 'pi pi-whatsapp',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'ChatBot',
+                                            icon: 'pi pi-comments',
+                                            routerLink: ['']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: "Target",
+                                    icon: 'pi pi-flag',
+                                    items: []
+                                },
+                                {
+                                    label: "Mes taches",
+                                    icon: 'pi pi-briefcase',
+                                    items: []
+                                },
+                                {
+                                    label: "Support Commercial",
+                                    icon: 'pi pi-comment',
+                                    items: [
+                                        {
+                                            label: 'Mails Type',
+                                            icon: 'pi pi-envelope',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Discours',
+                                            icon: 'pi pi-comment',
+                                            routerLink: ['']
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: "Pipeline",
+                                    icon: 'pi pi-filter',
+                                    items: []
+                                },
+                                {
+                                    label: "Configuration",
+                                    icon: 'pi pi-cog',
+                                    items: [
+                                        {
+                                            label: 'Gestion des membres',
+                                            icon: 'pi pi-facebook',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Gestion des équipes',
+                                            icon: 'pi pi-instagram',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Gestion des produits',
+                                            icon: 'pi pi-whatsapp',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Gestion des sources',
+                                            icon: 'pi pi-comments',
+                                            routerLink: ['']
+                                        }, {
+                                            label: 'Gestion des opérations',
+                                            icon: 'pi pi-comments',
+                                            routerLink: ['']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: "Dashboard",
+                                    icon: 'pi pi-tablet',
+                                    items: [{
+                                        label: 'Equipe',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['']
+                                    }, {
+                                        label: 'Ma performance',
+                                        icon: 'pi pi-chart-bar',
+                                        routerLink: ['']
+                                    },]
+                                },
+                            ]
                         },
                         {
                             label: "Intuns",
