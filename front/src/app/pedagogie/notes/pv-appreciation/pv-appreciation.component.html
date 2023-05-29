@@ -84,6 +84,8 @@
                         pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
                     <button type="button" pButton pRipple icon="pi pi-save" (click)="savePv()" class="mr-2"
                         pTooltip="Sauvegarder dans IMS" tooltipPosition="bottom"></button>
+                    <button type="button" pButton pRipple icon="pi pi-refresh" (click)="regeneratePV()" class="mr-2"
+                        pTooltip="Regenérer un PV" tooltipPosition="bottom"></button>
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
                 </div>
