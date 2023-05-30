@@ -34,6 +34,7 @@ const admissionFormDubaiSchema = mongoose.Schema({
     last_diploma:           { type: String, required: false },
     chosen_program:         { type: String, required: false },
     intake :                { type: String, required: false },
+    date:                   { type: Date, required: false },
 });
 
 const AdmissionFormDubai = mongoose.model('admission_form_dubai', admissionFormDubaiSchema);

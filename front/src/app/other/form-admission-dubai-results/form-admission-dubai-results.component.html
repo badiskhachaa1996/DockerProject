@@ -1,1 +1,114 @@
-<p>form-admission-dubai-results works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-table #dt1 [value]="admissionDatas" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['full_name','email_address','nationality','country_of_residence']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search Keyword" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Full name
+                            </div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Email address
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Phone
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Whatsapp
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nationality
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Country of residence
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Last diploma
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Chosen program
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Intake
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Date
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-admission>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{admission.full_name}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{admission.email_address}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.phone.dialCode}} {{admission.phone.number}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.whatsapp.dialCode}} {{admission.whatsapp.number}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.nationality}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.country_of_residence}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.last_diploma}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.chosen_program}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.intake}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{admission.date | date: 'dd/MM/yyyy'}}
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="10">Aucune demande d'admission.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="10">Chargement des données...</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+        </div>
+    </div>
+</div>

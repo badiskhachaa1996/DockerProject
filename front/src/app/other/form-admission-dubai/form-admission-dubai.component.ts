@@ -152,6 +152,7 @@ export class FormAdmissionDubaiComponent implements OnInit {
     const formValue = this.formAdmission.value;
     const admissionData = new AdmissionFormDubai;
 
+    admissionData.full_name = formValue.full_name;
     admissionData.email_address = formValue.email_address;
     admissionData.phone = formValue.phone;
     admissionData.whatsapp = formValue.whatsapp;
@@ -163,6 +164,7 @@ export class FormAdmissionDubaiComponent implements OnInit {
 
     admissionData.chosen_program = formValue.chosen_program;
     admissionData.intake = formValue.intake.name;
+    admissionData.date = new Date();
 
     // pour utiliser formData dans le html à la soumission du formulaire
     this.formData = admissionData;
