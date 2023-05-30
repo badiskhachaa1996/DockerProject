@@ -619,7 +619,7 @@ import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.co
     FormAdmissionDubaiComponent,
     FormAdmissionDubaiResultsComponent,
     AjoutLeadcrmComponent,
-    ListLeadcrmComponent
+    ListLeadcrmComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
