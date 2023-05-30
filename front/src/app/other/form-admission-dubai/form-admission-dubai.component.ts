@@ -72,7 +72,6 @@ export class FormAdmissionDubaiComponent implements OnInit {
         items: [
           { label: 'General French', value: 'General French' },
           { label: 'TCF Preparation', value: 'TCF Preparation' },
-          { label: 'New York', value: 'New York' },
           { label: 'TCF Canada Preparation', value: 'TCF Canada Preparation' }
         ]
       },

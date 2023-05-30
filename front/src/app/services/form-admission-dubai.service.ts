@@ -18,7 +18,7 @@ export class FormAdmissionDubaiService {
     const url = `${this.endPoint}/post-dubai-admission`;
 
     return new Promise<AdmissionFormDubai>((resolve, reject) => {
-      this.httpClient.post<AdmissionFormDubai>(url, admissionFormDubai, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.post<AdmissionFormDubai>(url, admissionFormDubai, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
         next: (response) => { resolve(response); },
         error: (error) => { reject(error); },
         complete: () => { console.log("Requête de création exécuté") }
