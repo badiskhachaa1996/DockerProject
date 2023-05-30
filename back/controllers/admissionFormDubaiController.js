@@ -13,14 +13,14 @@ app.post("/post-dubai-admission", (req, res) => {
 });
 
 // méthode de recuperation de la liste des admissions
-app.get("/get-admissions", (req, res) => {
+app.get("/get-dubai-admissions", (req, res) => {
     AdmissionFormDubai.find()
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Unable to get the list of admissions'}) });
 });
 
-// méthode de recuperation de la liste des admissions
-app.get("/get-admission/:id", (req, res) => {
+// méthode de recuperation d'une admission via son id'
+app.get("/get-dubai-admission/:id", (req, res) => {
     const { id } = req.params;
     AdmissionFormDubai.findOne({_id: id})
     .then((response) => { res.status(200).send(response); })

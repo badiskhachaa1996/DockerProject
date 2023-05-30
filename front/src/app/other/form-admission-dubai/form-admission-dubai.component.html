@@ -1,1 +1,106 @@
-<p>form-admission-dubai works!</p>
+<div class="grid">
+    <!-- formulaire de demande d'admission -->
+    <div class="col-12" *ngIf="showFormAdmission">
+        <div class="card">
+            <h2 class="header">New admission</h2>
+            
+            <form class="card p-fluid p-formgrid grid" [formGroup]="formAdmission" (ngSubmit)="onAdd()">
+                <small class="required">all fields marked with an asterix* are mandatory</small>
+                <div class="field col-12">
+                    <label htmlFor="full_name">Full name <span class="required">*</span></label>
+                    <input pInputText id="full_name" type="text" formControlName="full_name" />
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="email">Valid email address <span class="required">*</span></label>
+                    <input pInputText id="email" type="email" formControlName="email_address"/>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="phone_number">Phone number <span class="required">*</span></label>
+                    <ngx-intl-tel-input 
+                        [cssClass]="'custom'" 
+                        [preferredCountries]="preferredCountries"
+                        [enableAutoCountrySelect]="false" 
+                        [enablePlaceholder]="true" 
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false" 
+                        [selectedCountryISO]="CountryISO.UnitedArabEmirates"
+                        [maxLength]="15"
+                        [phoneValidation]="true" 
+                        [separateDialCode]="separateDialCode"
+                        [numberFormat]="PhoneNumberFormat.National"
+                        name="phone"
+                        formControlName="phone">
+                    </ngx-intl-tel-input>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="whatssapp_number">Whatsapp number <span class="required">*</span></label>
+                    <ngx-intl-tel-input 
+                        [cssClass]="'custom'" 
+                        [preferredCountries]="preferredCountries"
+                        [enableAutoCountrySelect]="false" 
+                        [enablePlaceholder]="true" 
+                        [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                        [selectFirstCountry]="false" 
+                        [selectedCountryISO]="CountryISO.UnitedArabEmirates"
+                        [maxLength]="15"
+                        [phoneValidation]="true" 
+                        [separateDialCode]="separateDialCode"
+                        [numberFormat]="PhoneNumberFormat.National"
+                        name="whatsapp"
+                        formControlName="whatsapp">
+                    </ngx-intl-tel-input>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="nationalities">Nationality <span class="required">*</span></label>
+                    <p-dropdown [options]="nationalities" filter="true" placeholder="Select your nationality" [showClear]="true" formControlName="nationality"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="countries">Country of residence <span class="required">*</span></label>
+                    <p-dropdown [options]="countries" filter="true" placeholder="Select your country" [showClear]="true" formControlName="country_of_residence"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="diplomas">Last diploma obtained <span class="required">*</span></label>
+                    <p-dropdown [options]="diplomas" filter="true" placeholder="Select your last diploma" [showClear]="true" formControlName="last_diploma" (onChange)="onShowOther($event)"></p-dropdown>
+                </div>
+                <div class="field col-12" *ngIf="showOther">
+                    <label htmlFor="other">If other specify</label>
+                    <input pInputText id="other" type="text" formControlName="other"/>
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="chosen_program">Chosen Program <span class="required">*</span></label>
+                    <p-dropdown [options]="chosenProgramList" placeholder="Select a program" [group]="true" filter="true" [showClear]="true" formControlName="chosen_program">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="fiel col-12">
+                    <h6 for="intake">Intake <span class="required">*</span></h6>
+                    <div *ngFor="let intake of intakes" class="field-checkbox">
+                        <p-radioButton [inputId]="intake.key" [value]="intake" formControlName="intake"></p-radioButton>
+                        <label [for]="intake.key" class="ml-2">{{ intake.name }}</label>
+                    </div>
+                </div>
+                
+                <div class="field col-12">
+                    <button pButton label="SUBMIT" type="submit" [disabled]="formAdmission.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Après soumission du formulaire -->
+    <div class="col-12" *ngIf="!showFormAdmission">
+        <div class="card afterCard">
+            <h3>Thank you {{ formData?.full_name }}</h3>
+            <p>
+                Your admission request has been received, you will be contacted as soon as possible.
+            </p>
+        </div>
+    </div>
+</div>
