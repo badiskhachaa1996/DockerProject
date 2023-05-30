@@ -19,20 +19,58 @@ export class LeadCRM {
         public statut?: string,
         public niveau_fr?: string,
         public niveau_en?: string,
+        public date_creation?: Date,
         public custom_id?: string,
-        public date_contact?: Date,
-        public contact_by?: string,
-        public canal?: string,
-        public suite_contact?: string,
-        public note?: string,
-        public produit?: string,
-        public date_paiement?: Date,
-        public montant_paye?: string,
-        public modalite_paiement?: string,
-        public date_envoie?: Date,
-        public objet_mail?: string,
+        //Contact
+        public contacts?: {
+            date_contact?: Date,
+            contact_by?: any,
+            canal?: string,
+            suite_contact?: string,
+            note?: string,
+            _id?: string,
+        }[],
+        //Ventes
+        public ventes?: {
+            date_paiement?: Date,
+            montant_paye?: string,
+            modalite_paiement?: string,
+            note?: string,
+            _id?: string,
+        }[],
+        //Mailing
+        public mailing?: {
+            date_envoie?: Date,
+            objet_mail?: string,
+            note?: string,
+            _id?: string,
+        }[],
         public send_mail?: string,
+
+        //Qualification
+        public produit?: string[],
+        public criteres_qualification?: string[],
         public decision_qualification?: string,
+        public note_qualification?: string,
+
+        //Affectation
+        public affected_date?: Date,
+        public affected_to_member?: any,
+
+        //Choix Prospects
+        public rythme?: string,
+        public ecole?: string,
+        public formation?: string,
+        public campus?: string,
+        public eduhorizon?: string,
+        public note_choix?: string,
+
+        public documents?: {
+            _id?: string,
+            nom?: string,
+            path?: string,
+        }[],
+        public _id?: string
     ) { }
 
 }

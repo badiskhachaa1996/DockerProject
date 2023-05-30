@@ -146,16 +146,16 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th SortableColumn="nom" scope="col" style="text-align: center;">
+                        <th pSortableColumn="nom" scope="col" style="text-align: center;">
                             Nom du Document <p-sortIcon field="nom"></p-sortIcon>
                         </th>
-                        <th SortableColumn="description" scope="col" style="text-align: center;">
+                        <th pSortableColumn="description" scope="col" style="text-align: center;">
                             Description du Document <p-sortIcon field="description"></p-sortIcon>
                         </th>
                         <th>
                             Lien
                         </th>
-                        <th SortableColumn="date_creation" scope="col" style="text-align: center;">
+                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                             Date de l'ajout <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
                         <th *ngIf="isAdminPartenaire">
@@ -217,10 +217,10 @@
                         <th>
                             Logo
                         </th>
-                        <th SortableColumn="nom" scope="col" style="text-align: center;">
+                        <th pSortableColumn="nom" scope="col" style="text-align: center;">
                             Nom du Brand <p-sortIcon field="nom"></p-sortIcon>
                         </th>
-                        <th SortableColumn="description" scope="col" style="text-align: center;">
+                        <th pSortableColumn="description" scope="col" style="text-align: center;">
                             Présentation <p-sortIcon field="description"></p-sortIcon>
                         </th>
                         <th>

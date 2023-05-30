@@ -1,16 +1,516 @@
-<p-table [columns]="cols" [value]="leads" responsiveLayout="scroll">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col | titlecase}}
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr>
-            <td *ngFor="let col of columns">
-                {{rowData[col]}}
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
+<input type="file" (change)="FileUpload($event)" id="selectedFile" #selectedFile style="display: none;" pInputFile />
+<div class="grid">
+    <div class="card col-12" *ngIf="showFollow">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showFollow = null"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">Suivre le lead :
+            {{ showFollow.prenom }} {{ showFollow.nom | uppercase }}
+        </h3>
+        <p-tabView class="col-12">
+            <p-tabPanel header="Contact">
+                <div class="col-12">
+                    <button pButton label="Ajouter un contact" (click)="onAddContact()"></button>
+                </div>
+                <p-table #dtcontact dataKey="_id" [value]="showFollow.contacts" class="col-12"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="date_contact" style="text-align: center;"> Contacté le <p-sortIcon
+                                    field="date_contact">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="contact_by" style="text-align: center;"> Contacté par <p-sortIcon
+                                    field="contact_by">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="canal" style="text-align: center;"> Canal <p-sortIcon
+                                    field="canal"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="suite_contact" style="text-align: center;"> Suite Contact <p-sortIcon
+                                    field="suite_contact"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="note" style="text-align: center;"> Note <p-sortIcon
+                                    field="note"></p-sortIcon>
+                            </th>
+
+                            <th style="text-align: center;">
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-contact let-ri="rowIndex">
+                        <tr [pEditableRow]="contact">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="contact.date_contact"
+                                            (onChange)="onUpdateDate('contacts',ri,'date_contact',$event.target.value)">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{contact?.date_contact | date:'mediumDate'}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="memberList" [(ngModel)]="contact.contact_by"
+                                            placeholder="Choisissez un membre"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{contact.contact_by}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="canalList" [(ngModel)]="contact.canal"
+                                            placeholder="Choisissez un canal"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{contact.canal}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="suiteContactList" [(ngModel)]="contact.suite_contact"
+                                            placeholder="Choisissez un état"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{contact.suite_contact}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <textarea pInputTextarea [(ngModel)]="contact.note"></textarea>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{contact.note}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le contact" tooltipPosition="bottom" class="pi pi-trash"
+                                    aria-hidden="true" (click)="deleteContact(ri)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+            <p-tabPanel header="Document Prospects">
+                <div class="col-12">
+                    <button pButton label="Ajouter un document" (click)="onAddDocuments()"></button>
+                </div>
+                <p-table #dtdocuments dataKey="_id" [value]="showFollow.documents" class="col-12"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="nom" style="text-align: center;"> Nom du document <p-sortIcon
+                                    field="nom">
+                                </p-sortIcon>
+                            </th>
+                            <th>
+                                Lien Document
+                            </th>
+
+                            <th style="text-align: center;">
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-document let-ri="rowIndex">
+                        <tr [pEditableRow]="document">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="document.nom">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{document.nom}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td *ngIf="document.path">
+                                <a (click)="downloadFile(ri)">Télécharger le document</a>
+                            </td>
+                            <td *ngIf="!document.path">
+                                <a (click)="uploadFile(ri)">Uploader le document</a>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                    aria-hidden="true" (click)="deleteFile(ri)"> </i>
+                                <i *ngIf="document.path" pTooltip="Uploader le document" tooltipPosition="bottom"
+                                    class="pi pi-cloud-upload" aria-hidden="true" (click)="uploadFile(ri)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+            <p-tabPanel header="Mailing">
+                <div class="col-12">
+                    <button pButton label="Ajouter un mail" (click)="onAddMail()"></button>
+                </div>
+                <p-table #dtmail dataKey="_id" [value]="showFollow.mailing" class="col-12"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="date_envoie" style="text-align: center;"> Date de l'envoi
+                                <p-sortIcon field="date_envoie">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="objet_mail" style="text-align: center;">
+                                Objet mail
+                                <p-sortIcon field="objet_mail">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="note" style="text-align: center;">
+                                Note
+                                <p-sortIcon field="note">
+                                </p-sortIcon>
+                            </th>
+                            <th style="text-align: center;">
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-mail let-ri="rowIndex">
+                        <tr [pEditableRow]="mail">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="mail.date_envoie"
+                                            (onChange)="onUpdateDate('mailing',ri,'date_envoie',$event.target.value)">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{mail?.date_envoie | date:'mediumDate'}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="produitList" [(ngModel)]="mail.objet_mail"
+                                            autoWidth="false" [style]="{'width':'100%'}"
+                                            placeholder="Choisissez un objet"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{mail?.objet_mail}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <textarea pInputTextarea [(ngModel)]="mail.note"></textarea>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{mail.note}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le mail" tooltipPosition="bottom" class="pi pi-trash"
+                                    aria-hidden="true" (click)="deleteMail(ri)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+            <p-tabPanel header="Choix Prospect">
+                <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
+                    <div class="field col-12 md:col-6">
+                        <label>Rythme</label>
+                        <p-dropdown [options]="rythmeList" formControlName="rythme" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un rythme"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Ecole</label>
+                        <p-dropdown [options]="ecoleList" formControlName="ecole" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez une ecole"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Formation</label>
+                        <p-dropdown [options]="formationList" formControlName="formation" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez une formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Campus</label>
+                        <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un campus"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Produit Eduhorizons</label>
+                        <p-dropdown [options]="ehList" formControlName="eduhorizon" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un produit"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Note</label>
+                        <textarea pInputTextarea formControlName="note_choix"></textarea>
+                    </div>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Qualification">
+                <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
+                    <div class="field col-12 md:col-6">
+                        <label>Produit</label>
+                        <p-multiSelect [options]="produitList" formControlName="produit" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un produit"></p-multiSelect>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Critères de qualification valides</label>
+                        <p-multiSelect [options]="critereList" formControlName="criteres_qualification"
+                            autoWidth="false" [style]="{'width':'100%'}"
+                            placeholder="Choisissez un critère"></p-multiSelect>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Décision qualification</label>
+                        <p-dropdown [options]="decisionList" formControlName="decision_qualification" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez une decision"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Note</label>
+                        <textarea pInputTextarea formControlName="note_qualification"></textarea>
+                    </div>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Ventes">
+                <div class="col-12">
+                    <button pButton label="Ajouter un paiement" (click)="onAddPaiement()"></button>
+                </div>
+                <p-table #dtvente dataKey="_id" [value]="showFollow.ventes" class="col-12"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="date_paiement" style="text-align: center;"> Date de Paiement
+                                <p-sortIcon field="date_paiement">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="montant_paye" style="text-align: center;">
+                                Montant payé
+                                <p-sortIcon field="montant_paye">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="modalite_paiement" style="text-align: center;">
+                                Modalite de paiement
+                                <p-sortIcon field="modalite_paiement"> </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="note" style="text-align: center;">
+                                Note
+                                <p-sortIcon field="note"> </p-sortIcon>
+                            </th>
+                            <th style="text-align: center;">
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                        <tr [pEditableRow]="paiement">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="paiement.date_paiement"
+                                            (onChange)="onUpdateDate('paiements',ri,'date_paiement',$event.target.value)">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{paiement?.date_paiement | date:'mediumDate'}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-inputNumber [(ngModel)]="paiement.montant_paye" mode="currency"
+                                            currency="EUR" locale="fr-FR"></p-inputNumber>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{paiement.montant_paye}}€ &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.modalite_paiement"
+                                            placeholder="Choisissez une modalite"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{paiement.modalite_paiement}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <textarea pInputTextarea [(ngModel)]="paiement.note"></textarea>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{paiement.note}} &nbsp;
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
+                                    aria-hidden="true" (click)="deletePaiement(ri)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+        </p-tabView>
+        <div class="col-12 grid">
+            <div class="col-12">
+                <button pButton label="Sauvegardez les modifications" (click)="onUpdateFollow()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="card col-12">
+        <h5>Liste des leads CRM</h5>
+
+        <p-toast></p-toast>
+        <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
+            [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
+                        (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
+                        (onChange)="dt1.filter($event.value, 'source', 'equals');"
+                        emptyFilterMessage="Pas de source trouvé"
+                        filterPlaceholder="Choisissez une source"></p-dropdown>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
+                        (onChange)="dt1.filter($event.value, 'operation', 'equals');"
+                        emptyFilterMessage="Pas d'opération trouvé"
+                        filterPlaceholder="Choisissez une operation"></p-dropdown>
+                </div>
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAffecte" filter="true"
+                        (onChange)="dt1.filter($event.value, 'affected_to', 'equals');"
+                        emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Choisissez un membre"></p-dropdown>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterQualification" filter="true"
+                        (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
+                        emptyFilterMessage="Pas de qualification trouvé"
+                        filterPlaceholder="Choisissez une qualification"></p-dropdown>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPaiement" filter="true"
+                        (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
+                        emptyFilterMessage="Pas de modalité trouvé"
+                        filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                        Date d'insertion <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="custom_id" scope="col" style="text-align: center;">
+                        ID <p-sortIcon field="custom_id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="operation" scope="col" style="text-align: center;">
+                        Opération <p-sortIcon field="operation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="source" scope="col" style="text-align: center;">
+                        Source Lead <p-sortIcon field="source"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="prenom" scope="col" style="text-align: center;">
+                        Prénom & NOM <p-sortIcon field="prenom"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="pays_residence" scope="col" style="text-align: center;">
+                        Pays de résidence <p-sortIcon field="pays_residence"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="email" scope="col" style="text-align: center;">
+                        Adresse Mail <p-sortIcon field="email"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="numero_phone" scope="col" style="text-align: center;">
+                        Numéro de téléphone <p-sortIcon field="numero_phone"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="numero_whatsapp" scope="col" style="text-align: center;">
+                        Numéro WhatsApp <p-sortIcon field="numero_whatsapp"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="produit" scope="col" style="text-align: center;">
+                        Produit <p-sortIcon field="produit"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="affected_to" scope="col" style="text-align: center;">
+                        Affecté à <p-sortIcon field="affected_to"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
+                        Decision Qualification <p-sortIcon field="decision_qualification"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="modalite_paiement" scope="col" style="text-align: center;">
+                        Paiement <p-sortIcon field="modalite_paiement"></p-sortIcon>
+                    </th>
+                    <th>
+                        Documents Prospect
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-lead>
+                <tr>
+                    <td>
+                        {{lead.date_creation | date:'mediumDate'}}
+                    </td>
+                    <td>
+                        {{lead.custom_id}}
+                    </td>
+                    <td>
+                        {{lead.operation}}
+                    </td>
+                    <td>
+                        {{lead.source}}
+                    </td>
+                    <td>
+                        {{lead.prenom | titlecase}} {{lead.nom | uppercase}}
+                    </td>
+                    <td>
+                        {{lead.pays_residence}}
+                    </td>
+                    <td>
+                        {{lead.email}}
+                    </td>
+                    <td>
+                        {{lead.indicatif_phone}} {{lead.numero_phone}}
+                    </td>
+                    <td>
+                        {{lead.indicatif_whatsapp}} {{lead.numero_whatsapp}}
+                    </td>
+                    <td>
+                        {{lead.produit}}
+                    </td>
+                    <td>
+                        {{lead.affected_to}}
+                    </td>
+                    <td>
+                        {{lead.decision_qualification}}
+                    </td>
+                    <td>
+                        {{lead.modalite_paiement}}
+                    </td>
+                    <td>
+                        {{lead?.documents?.length}}
+                    </td>
+                    <td>
+                        <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
+                            (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
+                        <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                            (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
+
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
