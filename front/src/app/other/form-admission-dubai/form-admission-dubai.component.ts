@@ -170,11 +170,11 @@ export class FormAdmissionDubaiComponent implements OnInit {
 
     this.formAdmissionDubaiService.postDubaiAdmission(admissionData)
     .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Admission', detail: 'Your admission request has been taken into account' });
+      this.messageService.add({ severity: 'success', summary: 'Admission', detail: 'Your admission request has been received, you will be contacted as soon as possible.' });
       this.formAdmission.reset();
       this.showFormAdmission = false;
     })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Admission', detail: 'Unable to consider your admission request' }) });
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Admission', detail: 'Unable to consider your admission request.' }) });
   }
 
 }
