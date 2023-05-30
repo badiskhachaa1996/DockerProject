@@ -1,5 +1,44 @@
 <p-toast></p-toast>
 <div class="grid">
+    <!-- partie ajout de document -->
+    <div class="col-12" *ngIf="showUploadFile!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadFile = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                showUploadFile.user_id?.firstname }} {{
+                showUploadFile.user_id?.lastname | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadAdminFileForm">
+                <div class="field col-6">
+                    <label>Date de délivrance</label>
+                    <input type="date" formControlName="date" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Nom du Fichier</label>
+                    <input type="text" formControlName="nom" pInputText />
+                </div>
+                <div class="field col-6">
+                    <label>Note :</label>
+                    <textarea pInputTextarea formControlName="note"></textarea>
+                </div>
+                <div class="field col-6">
+                    <label>Traité par :</label>
+                    <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
+                        optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+
+            </form>
+        </div>
+    </div>
     <!-- partie Modification des informations du prospect -->
     <div class="col-12 card" *ngIf="showDetails">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDetails = null"
@@ -129,6 +168,10 @@
                     <p *ngIf="ListDocuments==null || ListDocuments.length==0">
                         Aucun document n'a été chargé !
                     </p>
+                    <div class="col-12">
+                        <button pButton label="Ajouter un document"
+                            (click)="showUploadFile=showDetails;scrollToTop()"></button>
+                    </div>
                 </p-tabPanel>
                 <p-tabPanel header="Phase consulaire">
                     <div class="p-fluid p-formgrid grid">
@@ -242,10 +285,6 @@
                         *ngIf="showDetails.documents_administrative==null || showDetails.documents_administrative.length==0">
                         Aucun document n'a été chargé !
                     </p>
-                    <div class="col-12">
-                        <button pButton label="Ajouter un document"
-                            (click)="showUploadFile=showDetails;scrollToTop()"></button>
-                    </div>
                 </p-tabPanel>
             </p-tabView>
             <div class="col-12">
@@ -312,31 +351,7 @@
             </div>
         </div>
     </div>
-    <!-- partie ajout de document -->
-    <div class="col-12" *ngIf="showUploadFile!=null && showDetails">
-        <div class="card">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                (click)="showUploadFile = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
-                showUploadFile.user_id?.firstname }} {{
-                showUploadFile.user_id?.lastname | uppercase }}
-            </h3>
 
-            <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
-                <div class="field col-12">
-                    <label>Type de document</label>
-                    <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
-                </div>
-                <div class="field col-12">
-                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
-                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-                        maxFileSize="10000000" [auto]="true" #fileInput>
-                    </p-fileUpload>
-                </div>
-
-            </form>
-        </div>
-    </div>
 
     <div class="col-12 card" *ngIf="showDocuments">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showDocuments = null"
@@ -598,7 +613,7 @@
                         <th pSortableColumn="validated_cf" scope="col" style="text-align: center;">
                             Confirmation CF<p-sortIcon field="validated_cf"></p-sortIcon>
                         </th>
-                        <th SortableColumn="phase_candidature" scope="col" style="text-align: center;">
+                        <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
                             Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
                         </th>
                         <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">

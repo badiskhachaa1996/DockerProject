@@ -20,21 +20,63 @@ const schema = mongoose.Schema({
     statut: { type: String, required: false },
     niveau_fr: { type: String, required: false },
     niveau_en: { type: String, required: false },
-    
+    date_creation: { type: Date, default: Date.now },
     custom_id: { type: String, required: false },
-    date_contact: { type: Date, required: false },
-    contact_by: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
-    canal: { type: String, required: false },
-    suite_contact: { type: String, required: false },
-    note: { type: String, required: false },
-    produit: { type: String, required: false },
-    date_paiement: { type: Date, required: false },
-    montant_paye: { type: String, required: false },
-    modalite_paiement: { type: String, required: false },
-    date_envoie: { type: Date, required: false },
-    objet_mail: { type: String, required: false },
-    send_mail: { type: String, required: false },
+    //Contact
+    contacts: {
+        type: [{
+            date_contact: { type: Date, required: false },
+            contact_by: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+            canal: { type: String, required: false },
+            suite_contact: { type: String, required: false },
+            note: { type: String, required: false },
+        }], default: []
+    },
+    //Ventes
+    ventes: {
+        type: [{
+            date_paiement: { type: Date, required: false },
+            montant_paye: { type: String, required: false },
+            modalite_paiement: { type: String, required: false },
+            note: { type: String }
+        }], default: []
+    },
+    //Mailing
+    mailing: {
+        type: [{
+            date_envoie: { type: Date, required: false },
+            objet_mail: { type: String, required: false },
+            note: { type: String }
+        }], default: []
+
+    },
+    send_mail: { type: String, required: false }, //Surement Optionnel
+
+    //Qualification
+    produit: { type: [String], required: false, default: [] },
+    criteres_qualification: { type: [String], required: false, default: [] },
     decision_qualification: { type: String, required: false },
+    note_qualification: { type: String, required: false },
+
+    //Affectation
+    affected_date: { type: Date, required: false },
+    affected_to_member: { type: mongoose.Schema.Types.ObjectId, ref: 'memberCRM', required: false },
+
+    //Choix Prospects
+    rythme: { type: String, required: false },
+    ecole: { type: String, required: false },
+    formation: { type: String, required: false },
+    campus: { type: String, required: false },
+    eduhorizon: { type: String, required: false },
+    note_choix: { type: String, required: false },
+
+    //Documents
+    documents: {
+        type: [{
+            nom: { type: String, required: false },
+            path: { type: String, required: false },
+        }], default: []
+    }
 });
 
 const LeadCRM = mongoose.model('leadCRM', schema);

@@ -89,7 +89,7 @@
                         <button pButton
                             pTooltip="Merci d'enregistrer les appréciations des étudiants de ce Module avant la fin du semestre"
                             label="Enregistrer les notes et saisir les appréciations du Module" icon="pi pi-send"
-                            (click)="showAppreciation=examSelected;updateDropdown(examSelected);validationNotes()"
+                            (click)="showAppreciation=examSelected;updateDropdown(examSelected);validationNotes();scrollToTop()"
                             style="margin-right: 3px;"></button>
                     </div>
                 </ng-template>

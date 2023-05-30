@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { environment } from 'src/environments/environment';
@@ -66,14 +66,14 @@ export class AjoutLeadcrmComponent implements OnInit {
     source: new FormControl(''),
     operation: new FormControl(''),
     civilite: new FormControl(''),
-    nom: new FormControl(''),
-    prenom: new FormControl(''),
+    nom: new FormControl('', Validators.required),
+    prenom: new FormControl('', Validators.required),
     pays_residence: new FormControl(''),
     email: new FormControl(''),
     indicatif_phone: new FormControl(''),
     numero_phone: new FormControl(''),
-    date_naissance: new FormControl(''),
-    nationalite: new FormControl(''),
+    date_naissance: new FormControl('', Validators.required),
+    nationalite: new FormControl('', Validators.required),
     indicatif_whatsapp: new FormControl(''),
     numero_whatsapp: new FormControl(''),
     indicatif_telegram: new FormControl(''),
@@ -84,13 +84,34 @@ export class AjoutLeadcrmComponent implements OnInit {
     niveau_en: new FormControl(''),
   })
 
-
+  prospects = []
 
   onAdd() {
-    this.LCS.create({ ...this.addForm.value }).subscribe(data => {
+    this.LCS.create({ ...this.addForm.value, date_creation: new Date(), custom_id: this.generateID() }).subscribe(data => {
       this.addForm.reset()
       this.ToastService.add({ severity: "success", summary: "Ajout d'un nouveau lead" })
     })
+    this.LCS.getAll().subscribe(data => {
+      this.prospects = data
+    })
+  }
+
+  generateID() {
+    let prenom = this.addForm.value.prenom.substring(0, 1)
+    let nom = this.addForm.value.nom.substring(0, 1)
+    let code_pays = this.addForm.value.nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[this.addForm.value.nationalite] && code[this.addForm.value.nationalite] != undefined) {
+        code_pays = code[this.addForm.value.nationalite]
+      }
+    })
+    let dn = new Date(this.addForm.value.date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = (this.prospects.length + 1).toString()
+    nb = nb.substring(nb.length - 3)
+    return (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
   }
 
   constructor(private LCS: LeadcrmService, private ToastService: MessageService) { }

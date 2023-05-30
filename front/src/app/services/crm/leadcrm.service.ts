@@ -30,4 +30,14 @@ export class LeadcrmService {
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  uploadFile(formData: FormData) {
+    let registreUrl = this.apiUrl + "uploadFile"
+    return this.httpClient.post<LeadCRM>(registreUrl, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  downloadFile(_id: string, file_id: string, path: string) {
+    let registreUrl = this.apiUrl + "downloadFile/" + _id + "/" + file_id + "/" + path
+    return this.httpClient.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }
