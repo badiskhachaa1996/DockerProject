@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import * as XLSX from 'xlsx';
-let parseString = require('xml2js').parseString;
+//let parseString = require('xml2js').parseString;
 @Component({
   selector: 'app-import-crm',
   templateUrl: './import-crm.component.html',
@@ -58,9 +58,9 @@ export class ImportCrmComponent implements OnInit {
     reader.onload = (event) => {
       const data = reader.result;
       console.log(data)
-      parseString(data, function (err, result) {
+      /*parseString(data, function (err, result) {
         console.dir(result);
-      });
+      });*/
     }
     reader.readAsText(event.files[0]);
 
