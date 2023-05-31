@@ -178,7 +178,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 listExamen.push(n.examen_id._id)
 
             if (n.examen_id && n.examen_id.matiere_id) {
-                if (n.examen_id && n.examen_id._id.toString() == "6449283244a6406b6b9e1a5a")
+                if (n.examen_id && n.examen_id._id.toString() == "")//63da60b4e6c18e6cbdf66ff3
                     console.log(n)
                 if (!Array.isArray(n.examen_id.matiere_id))
                     n.examen_id.matiere_id = [n.examen_id.matiere_id]
@@ -201,7 +201,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
             })
         })
 
-        Examen.find({ _id: { $nin: listExamen }, classe_id: req.params.classe_id, semestre: sem }).populate('matiere_id').populate({ path: "formateur_id", populate: { path: "user_id" } }).then(examens => {
+        Examen.find({ _id: { $nin: listExamen }, classe_id: {$in:[req.params.classe_id]}, semestre: sem }).populate('matiere_id').populate({ path: "formateur_id", populate: { path: "user_id" } }).then(examens => {
             req.params.source = "PV"
             if (req.params.source == "PV" && examens)
                 examens.forEach(ex => {
@@ -271,6 +271,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                     })
                 })
             })
+
             listEtudiantID.forEach(e_id => {
                 listMoyenneEtudiants[e_id] = {}
                 listMatiereNOM.forEach(m_nom => {
@@ -279,6 +280,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                         listMoyenneEtudiants[e_id][m_nom] = listNotesEtudiantsCoeff[e_id][m_nom]['Total']
                 })
             })
+            console.log(listNotesEtudiantsCoeff)
             listMatiereNOM.forEach(m_nom => {
                 listMoyenne[m_nom] = []
                 listEtudiantID.forEach(e_id => {
@@ -329,7 +331,7 @@ function avgDic(myDic) {
     return summ / ArrayLen;
 }
 function compare(a, b) {
-    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration Réseaux et Services/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i]
+    let listModule = [/Culture Générale et Expression/i, /anglaise/i, /Mathématiques pour l’informatique/i, /^Culture économique, juridique et managériale$/i, /^Culture économique, juridique et managériale appliquée$/i, /Support et mise à disposition de services informatiques/i, /Administration Réseaux et Services/i, /Administration des systèmes et des réseaux/i, /Conception et développement d'applications/i, /Cybersécurité des services informatique/i, /E1/i,/E2/i,/E3/i,/E4/i,/E41/i,/E42/i,/E5/i,/E6/i,]
     let aInList = -1
     let bInList = -1
     listModule.forEach((val, index) => {

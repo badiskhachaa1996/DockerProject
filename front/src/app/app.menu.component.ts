@@ -809,23 +809,23 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         {
                                             label: 'Gestion des membres',
-                                            icon: 'pi pi-facebook',
-                                            routerLink: ['']
+                                            icon: 'pi pi-user',
+                                            routerLink: ['crm/member']
                                         }, {
                                             label: 'Gestion des équipes',
-                                            icon: 'pi pi-instagram',
-                                            routerLink: ['']
+                                            icon: 'pi pi-users',
+                                            routerLink: ['crm/teams']
                                         }, {
                                             label: 'Gestion des produits',
-                                            icon: 'pi pi-whatsapp',
+                                            icon: 'pi pi-briefcase',
                                             routerLink: ['']
                                         }, {
                                             label: 'Gestion des sources',
-                                            icon: 'pi pi-comments',
+                                            icon: 'pi pi-map-marker',
                                             routerLink: ['']
                                         }, {
                                             label: 'Gestion des opérations',
-                                            icon: 'pi pi-comments',
+                                            icon: 'pi pi-tablet',
                                             routerLink: ['']
                                         },
                                     ]

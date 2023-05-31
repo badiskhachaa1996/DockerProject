@@ -306,6 +306,8 @@ import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
 import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
 import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
+import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
+import { MemberCrmComponent } from './crm/teams-crm/member-crm/member-crm.component';
 
 
 @NgModule({
@@ -622,6 +624,8 @@ import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
     ListLeadcrmComponent,
     LeadsNonAttribuesComponent,
     MesLeadsComponent,
+    TeamsCrmComponent,
+    MemberCrmComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
