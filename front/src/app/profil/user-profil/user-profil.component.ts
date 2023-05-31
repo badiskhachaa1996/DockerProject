@@ -23,8 +23,6 @@ import { Conge } from 'src/app/models/Conge';
 import { PlatformLocation } from '@angular/common';
 import { AbscenceCollaborateur } from 'src/app/models/AbscenceCollaborateur';
 import { JustificatifCollaborateurService } from 'src/app/services/justificatif-collaborateur.service';
-import { InTime } from 'src/app/models/InTime';
-import { IntimeService } from 'src/app/services/intime.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -106,11 +104,6 @@ export class UserProfilComponent implements OnInit {
     { label: 'Toute la journée' }
   ]
 
-  //Pour voir son compte rendu d'activité
-  showPresenceList: boolean = false;
-  presences: InTime[] = [];
-  from: string;
-  to: string;
   hideCRAEtc = false
 
   changeStatut(event) {
@@ -307,7 +300,7 @@ export class UserProfilComponent implements OnInit {
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService, private inTimeService: IntimeService) { }
+    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService) { }
 
   ngOnInit(): void {
 
@@ -599,7 +592,7 @@ export class UserProfilComponent implements OnInit {
         .catch((error) => { 
           this.messageService.add({ severity: 'success', summary: "Justificatif pris en compte" }); 
           this.justificationForm.reset();  
-         });
+        });
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); });
 
@@ -609,17 +602,4 @@ export class UserProfilComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
     }
   }
-
-  //Methode de recuperation des presences
-  onGetPresences()
-  {
-    // Recuperation de la liste des présences
-    this.inTimeService.getAllByUserId(this.userConnectedNow._id)
-    .then((response: InTime[]) => {
-      this.presences = response;
-      this.showPresenceList = true;
-    })
-    .catch((error) => { console.log(error); })
-  }
-
 }
