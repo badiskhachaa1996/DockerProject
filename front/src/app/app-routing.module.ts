@@ -204,6 +204,7 @@ import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-
 import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
 import { MemberCrmComponent } from './crm/teams-crm/member-crm/member-crm.component';
+import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
 
 const routes: Routes = [
     {
@@ -382,6 +383,7 @@ const routes: Routes = [
             { path: 'crm/mes-leads/:id', component: MesLeadsComponent, canActivate: [AuthGuardService] },
             { path: 'crm/teams', component: TeamsCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/member', component: MemberCrmComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/import', component: ImportCrmComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },

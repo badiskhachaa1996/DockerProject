@@ -708,7 +708,7 @@ export class AppMenuComponent implements OnInit {
                                         }, {
                                             label: 'Importer',
                                             icon: 'pi pi-database',
-                                            routerLink: ['']
+                                            routerLink: ['crm/import']
                                         },
                                     ]
                                 },
