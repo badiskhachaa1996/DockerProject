@@ -8,12 +8,15 @@ import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
-  selector: 'app-list-leadcrm',
-  templateUrl: './list-leadcrm.component.html',
-  styleUrls: ['./list-leadcrm.component.scss']
+  selector: 'app-mes-leads',
+  templateUrl: './mes-leads.component.html',
+  styleUrls: ['./mes-leads.component.scss']
 })
-export class ListLeadcrmComponent implements OnInit {
+export class MesLeadsComponent implements OnInit {
+
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -73,10 +76,12 @@ export class ListLeadcrmComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService) { }
+  ID = this.route.snapshot.paramMap.get('id');
+
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAll().subscribe(data => {
+    this.LCS.getAllByID(this.ID).subscribe(data => {
       this.leads = data
     })
     this.FAService.EAgetAll().subscribe(data => {

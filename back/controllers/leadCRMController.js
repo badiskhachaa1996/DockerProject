@@ -21,6 +21,18 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.get("/getAllByID/:id", (req, res, next) => {
+    LeadCRM.find({ affected_to_member: req.params.id })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllNonAffecte", (req, res, next) => {
+    LeadCRM.find({ affected_to_member: null })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 
 app.put("/update", (req, res) => {
     LeadCRM.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {

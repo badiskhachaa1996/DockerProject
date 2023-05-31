@@ -305,6 +305,8 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
+import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
+import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 
 
 @NgModule({
@@ -620,6 +622,8 @@ import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.co
     FormAdmissionDubaiResultsComponent,
     AjoutLeadcrmComponent,
     ListLeadcrmComponent,
+    LeadsNonAttribuesComponent,
+    MesLeadsComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

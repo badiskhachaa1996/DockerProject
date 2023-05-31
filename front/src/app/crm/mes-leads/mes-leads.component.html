@@ -368,27 +368,8 @@
             </div>
         </div>
     </div>
-    <div class="card col-12" *ngIf="showAffect">
-        <form class="p-fluid p-formgrid grid" [formGroup]="affectForm">
-            <div class="field col-12 md:col-6">
-                <label>Affecter le :</label>
-                <input type="date" pInputText formControlName="affected_date">
-            </div>
-            <div class="field col-12 md:col-6">
-                <label>Affecter à :</label>
-                <p-dropdown [options]="memberList" formControlName="affected_to_member" autoWidth="false"
-                    [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
-            </div>
-            <div class="col-12 grid">
-                <div class="col-12">
-                    <button pButton label="Sauvegardez les modifications" (click)="onUpdateAffect()"></button>
-                </div>
-            </div>
-
-        </form>
-    </div>
     <div class="card col-12">
-        <h5>Liste des leads CRM</h5>
+        <h5>Liste de mes leads CRM</h5>
 
         <p-toast></p-toast>
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
@@ -525,8 +506,8 @@
                     <td>
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
-                            (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
+                        <!--<i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                            (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>-->
 
                     </td>
                 </tr>

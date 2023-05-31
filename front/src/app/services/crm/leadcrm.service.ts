@@ -29,6 +29,17 @@ export class LeadcrmService {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllByID(id: string) {
+    let registreUrl = this.apiUrl + "getAllByID/" + id;
+    return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  getAllNonAffecte() {
+    let registreUrl = this.apiUrl + "getAllNonAffecte";
+    return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 
   uploadFile(formData: FormData) {
     let registreUrl = this.apiUrl + "uploadFile"
