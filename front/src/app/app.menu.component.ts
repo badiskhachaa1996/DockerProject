@@ -130,9 +130,9 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-users',
                             items: [
                                 {
-                                    label: 'Gestion des ressources humaines',
+                                    label: '/',
                                     icon: 'pi pi-fw pi-list',
-                                    routerLink: ['/gestion-des-ressources-humaines'],
+                                    routerLink: ['/'],
 
                                 },
                             ]
@@ -1728,9 +1728,9 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-users',
                             items: [
                                 {
-                                    label: 'Gestion des ressources humaines',
+                                    label: '/',
                                     icon: 'pi pi-fw pi-list',
-                                    routerLink: ['/gestion-des-ressources-humaines'],
+                                    routerLink: ['/'],
 
                                 },
                             ]

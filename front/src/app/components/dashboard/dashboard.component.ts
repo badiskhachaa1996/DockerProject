@@ -34,8 +34,6 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { Dashboard } from 'src/app/models/Dashboard';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
-import { IntimeService } from 'src/app/services/intime.service';
-import { InTime } from 'src/app/models/InTime';
 import { info } from 'console';
 import { ProjectService } from 'src/app/services/project.service';
 import { Tache } from 'src/app/models/project/Tache';
@@ -231,23 +229,6 @@ export class  DashboardComponent implements OnInit {
     },
   ];
 
-
-  //Partie checkin checkout
-  isCheck: boolean = false;
-  isCheckOut: boolean = false;
-  statut: string;
-  dailyCheck: InTime;
-  showFormDailyActivityDetails: boolean = false;
-  formDailyActivityDetails: FormGroup;
-  today: Date = new Date();
-  showButtonsValidateCra: boolean = false; // permet d'afficher les boutons qui s'affiche au click pour remplir le cra
-  taskForUser: Tache[] = [];
-  showTaskForUser: boolean = false; // permet d'afficher les tâches de l'utilisateur qui sont en cours
-  showFormEarlyDeparture: boolean = false; // permet d'afficher le formulaire de compte rendu de depart anticipé
-  formEarlyDeparture: FormGroup; // formulaire pour faire un compte rendu de depart anticipé
-  clonedTaches: { [s: string]: Tache; } = {}; // pour le tableau éditable des taches
-  initialNumberOfHours: number; // Nombre d'heure d'une tâche avant modification
-
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
@@ -255,7 +236,7 @@ export class  DashboardComponent implements OnInit {
     private router: Router, private route: ActivatedRoute, private noteService: NoteService,
     private formateurService: FormateurService, private paySer: PaymentService,
     private dashboardService: DashboardService, private http: HttpClient,
-    private inTimeService: IntimeService, private messageService: MessageService,
+    private messageService: MessageService,
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private EIService: EtudiantsIntunsService
@@ -350,15 +331,6 @@ export class  DashboardComponent implements OnInit {
         })
       }
     );
-
-    //Verification du checkin
-    this.onIsCheck();
-
-    //Initialisation du formulaire de tache
-    this.onInitFormDailyActivityDetails();
-
-    // initialisation du formulaire de depart
-    this.onInitFormEarlyDeparture();
   }
 
   SCIENCE() {
@@ -449,271 +421,6 @@ export class  DashboardComponent implements OnInit {
     }
 
   }
-
-
-  /** check area */
-
-  //Verification du checkin
-  onIsCheck() {
-    let today = new Date().toLocaleDateString();
-    let todayReplaced = '';
-
-    for (let i = 0; i < today.length; i++) {
-      if (today[i] === '/') {
-        todayReplaced += '-';
-      }
-      else {
-        todayReplaced += today[i];
-      }
-
-    }
-
-    this.inTimeService.getByDateByUserId(this.token.id, todayReplaced)
-      .then((response: InTime) => {
-        if (response) {
-          this.dailyCheck = response;
-          this.statut = this.dailyCheck.statut;
-          this.isCheck = true;
-          if (response.out_date != null) {
-            this.isCheckOut = true;
-          } 
-          // Si l'utilisateur n'a pas effectué son check out, faire un calcule pour voir le temps passé au travail
-          else {
-            let dateOne = new Date();
-            let dateTwo = new Date(this.dailyCheck?.in_date);
-            // console.log(this.dailyCheck.in_date, dateTwo.getHours(), this.user.pays_adresse)
-
-            // console.log(dateOne.getHours() - dateTwo.getHours());
-          }
-        }
-        else {
-          this.statut = 'Check in non effectué';
-          this.isCheck = false;
-        }
-      })
-      .catch((error) => { console.log(error) })
-  }
-
-
-  //Methode de check in
-  onCheckIn() {
-    const inTime = new InTime();
-
-    inTime.user_id = this.token.id;
-    inTime.in_ip_adress = null;
-
-    let today = new Date().toLocaleDateString();
-    let todayReplaced = '';
-
-    for (let i = 0; i < today.length; i++) {
-      if (today[i] === '/') {
-        todayReplaced += '-';
-      }
-      else {
-        todayReplaced += today[i];
-      }
-
-    }
-
-    inTime.date_of_the_day = todayReplaced;
-    inTime.in_date = new Date();
-    inTime.out_date = null;
-    inTime.statut = 'Au travail';
-    inTime.isCheckable = true;
-    inTime.craIsValidate = false;
-
-    this.inTimeService.postJustArrived(inTime)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
-        this.onIsCheck();
-      })
-      .catch((error) => { console.log(error) });
-  }
-
-
-  //Initialiser le formulaire 
-  onInitFormDailyActivityDetails() {
-    this.formDailyActivityDetails = this.formBuilder.group({
-      task: ['', Validators.required],
-      number_of_hour: ['', Validators.required],
-    });
-  }
-
-  // toggle the form daily activity
-  onToggleFormDailyActivityDetail(): void {
-    this.showFormDailyActivityDetails = !this.showFormDailyActivityDetails;
-  }
-
-  // méthode de validation du cra via le formulaire
-  onValidateCraByForm() {
-    const formValue = this.formDailyActivityDetails.value;
-    // ajout du nombre d'heure
-    if (this.dailyCheck.number_of_hour == null) {
-      this.dailyCheck.number_of_hour = 0;
-      this.dailyCheck.number_of_hour += formValue.number_of_hour;
-    } else {
-      this.dailyCheck.number_of_hour += formValue.number_of_hour;
-    }
-
-    this.dailyCheck.activity_details.push(`${formValue.number_of_hour}h • ${formValue.task}`);
-    this.dailyCheck.statut = `En attente du checkout`;
-    this.dailyCheck.isCheckable = false;
-
-    // mention Tunis
-    if (this.user.pays_adresse != 'Tunisie') {
-      this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
-    }
-    else {
-      this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
-    }
-
-
-    // modification du dailycheck en bd
-    this.inTimeService.patchCheck(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-        // this.showFormDailyActivityDetails = false;
-        this.showTaskForUser = false;
-        // this.showButtonsValidateCra = false;
-        this.formDailyActivityDetails.reset();
-        this.onIsCheck();
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
-  }
-
-  // toggle sur l'affichage des tâches de l'utilisateur
-  onToggleShowTaskForUser(): void {
-    this.showTaskForUser = !this.showTaskForUser;
-  }
-
-  // méthode de recuperation de la liste des tâches en cours de l'utilisateur connecté
-  onGetTaskInProgressForUser(): void {
-    this.projectService.getTasksInProgressByIdUser(this.token.id)
-      .then((response) => {
-        this.taskForUser = [];
-        this.taskForUser = response;
-      })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
-  }
-
-  // au clic du bouton de modification
-  onRowEditInit(tache: Tache) {
-    this.initialNumberOfHours = tache.number_of_hour;
-    this.clonedTaches[tache._id] = { ...tache };
-  }
-
-  // méthode de validation du cra via la liste des tâches en cours
-  onRowEditSave(tache: Tache) {
-    // ajout du nombre d'heure passée sur la tâche au daily check
-    let numberOfHourAfterValidation = this.initialNumberOfHours - tache.number_of_hour;
-
-    if (this.dailyCheck.number_of_hour == null) {
-      this.dailyCheck.number_of_hour = 0;
-      this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
-    } else {
-      this.dailyCheck.number_of_hour += numberOfHourAfterValidation;
-    }
-
-    // ajout de la tache au daily check
-    this.dailyCheck.activity_details.push(`${numberOfHourAfterValidation}h - ${tache.percent}% • ${tache.libelle}`);
-
-    // mention Tunis
-    if (this.user.pays_adresse != 'Tunisie') {
-      this.dailyCheck.number_of_hour >= 7 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
-    }
-    else {
-      this.dailyCheck.number_of_hour >= 8 ? this.dailyCheck.craIsValidate = true : this.dailyCheck.craIsValidate = false;
-    }
-
-    // envoi du projet modifié en base de données
-    this.projectService.putTask(tache)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Activité', detail: response.success });
-
-        this.dailyCheck.statut = `En attente du checkout`;
-        // modification du daily check en bd
-        this.inTimeService.patchCheck(this.dailyCheck)
-          .then((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-            this.showFormDailyActivityDetails = false;
-            // this.showTaskForUser = false;
-            // this.showButtonsValidateCra = false;
-            this.formDailyActivityDetails.reset();
-            this.onIsCheck();
-          })
-          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
-      })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Tâche', detail: error.error }); });
-
-    // après la validation
-    delete this.clonedTaches[tache._id];
-    // this.messageService.add({ severity: 'success', summary: 'Tâche', detail: 'Votre tâche a été mis à jour' });
-  }
-
-  // a l'annulation de la modif
-  onRowEditCancel(tache: Tache, index: number) {
-    // recuperation de la liste des taches en cours de l'utilisateur
-    this.onGetTaskInProgressForUser();
-    delete this.clonedTaches[tache._id];
-  }
-
-
-  // méthode checkout récupère l'heure du checkout
-  onCheckOut(): void {
-    this.dailyCheck.isCheckable = false;
-    this.dailyCheck.craIsValidate = true;
-
-    this.inTimeService.patchCheckOut(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-        this.showButtonsValidateCra = false;
-        this.showFormDailyActivityDetails = false;
-        this.showTaskForUser = false;
-        this.onIsCheck();
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); })
-  }
-
-
-  // méthode de création du formulaire de départ anticipé
-  onInitFormEarlyDeparture(): void
-  {
-    this.formEarlyDeparture = this.formBuilder.group({
-      motif: ['', Validators.required],
-      tasks: ['' , Validators.required],
-    });
-  }
-
-
-  // méthode de départ anticipé
-  onEarlyDeparture(): void
-  {
-    // récupération des données du formulaire
-    let formValue = this.formEarlyDeparture.value;
-    
-    // mis à jour du dailyCheck
-    this.dailyCheck.early_departure   = formValue.motif;
-    this.dailyCheck.activity_details  = formValue.tasks;
-    this.dailyCheck.craIsValidate = true;
-    this.dailyCheck.statut = 'Départ anticipé';
-
-    // calcule du temps passé au travail
-    let beginDate = new Date(this.dailyCheck.in_date);
-    let date = new Date();
-    this.dailyCheck.number_of_hour = date.getHours() - beginDate.getHours();
-
-    // envoi dans la base de données
-    this.inTimeService.patchCheck(this.dailyCheck)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Check', detail: response.success });
-      this.formEarlyDeparture.reset();
-      this.showFormEarlyDeparture = false;
-      this.onIsCheck();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Check', detail: error.error }); });
-  }
-  /** end check area */
-
 
   clickFile() {
     document.getElementById('selectedFile').click();

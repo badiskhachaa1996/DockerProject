@@ -212,7 +212,6 @@ import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
-import { GrhComponent } from './rh/grh/grh.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
@@ -537,7 +536,6 @@ import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
     GestionEquipeComponent,
     DetailEquipeComponent,
     DemandeConseillerComponent,
-    GrhComponent,
     UsersSettingsComponent,
     AnalyseDoublonComponent,
     GestionEtudiantsComponent,

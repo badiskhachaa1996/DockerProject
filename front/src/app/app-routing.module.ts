@@ -115,7 +115,6 @@ import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equi
 import { ResponsableCommercialGuard } from './dev-components/guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
-import { GrhComponent } from './rh/grh/grh.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
@@ -321,9 +320,7 @@ const routes: Routes = [
             { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
 
-            /*** RH paths */
-
-            { path: 'gestion-des-ressources-humaines', component: GrhComponent },
+            // TODO: RH paths
 
             /** end */
             { path: 'resultats-icbs', component: ResultatsFormulaireIcbsComponent },
