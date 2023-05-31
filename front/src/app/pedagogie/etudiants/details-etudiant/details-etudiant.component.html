@@ -108,9 +108,15 @@
 
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="[]"
             [rows]="10" [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
+            <ng-template pTemplate="caption">
+                <p-dropdown filter="true" placeholder="Module" [options]="filterModule" (onChange)="dt1.filter($event.value, 'seance_id.matiere_id','equals')"
+                    emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Module"
+                    [style]="{'margin':'5px'}">
+                </p-dropdown>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Module </th>
+                    <th pSortableColumn="seance_id.matiere_id">Module <p-sortIcon field="seance_id.matiere_id"></p-sortIcon> </th>
                     <th pSortableColumn="_id">Date de la seance <p-sortIcon field="_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="seance_id">Seance<p-sortIcon field="seance_id">

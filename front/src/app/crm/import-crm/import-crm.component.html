@@ -1,0 +1,21 @@
+<div class="grid">
+    <div class="col-12 card grid" *ngIf="!upload">
+        <!--Choix du type du fichier XML ou XLS-->
+        <h5 class="col-12" style="text-align: center;">Importation de leads dans le CRM</h5>
+        <div class="col-6">
+            <label>Format XLS</label>
+            <p-fileUpload (uploadHandler)="fileUploadXLS($event)" mode="basic" chooseLabel="Ajouter un Excel"
+                customUpload="true" fileLimit="1" accept=".xls,.xlsx,.txt" maxFileSize="10000000" [auto]="true" #fileInput>
+            </p-fileUpload>
+        </div>
+        <div class="col-6">
+            <label>Format XML</label>
+            <p-fileUpload (uploadHandler)="fileUploadXML($event)" mode="basic" chooseLabel="Ajouter un XML"
+                customUpload="true" fileLimit="1" accept=".xml" maxFileSize="10000000" [auto]="true" #fileInput>
+            </p-fileUpload>
+        </div>
+    </div>
+</div>
+
+<!-- Envoyer les données au back et affiché un tableau AJOUT de LEAD et un autre UPDATE de LEAD -->
+<!-- Permettre la modification des donnés avant validation -->
