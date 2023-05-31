@@ -723,11 +723,11 @@ export class AppMenuComponent implements OnInit {
                                         }, {
                                             label: 'Leads non attribués',
                                             icon: 'pi pi-user-edit',
-                                            routerLink: ['']
+                                            routerLink: ['crm/leads/liste-non-attribue']
                                         }, {
-                                            label: 'Leads non attribués',
+                                            label: 'Mes Leads',
                                             icon: 'pi pi-user',
-                                            routerLink: ['']
+                                            routerLink: ['crm/mes-leads/6474bd8044e14520f9dd5f38']
                                         },
                                     ]
                                 },

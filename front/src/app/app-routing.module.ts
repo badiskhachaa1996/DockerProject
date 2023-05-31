@@ -200,6 +200,8 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
+import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
+import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 
 const routes: Routes = [
     {
@@ -374,6 +376,8 @@ const routes: Routes = [
             /* Module CRM */
             { path: 'crm/leads/ajout', component: AjoutLeadcrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/leads/liste', component: ListLeadcrmComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/leads/liste-non-attribue', component: LeadsNonAttribuesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/mes-leads/:id', component: MesLeadsComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
