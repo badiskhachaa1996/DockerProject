@@ -51,4 +51,9 @@ export class LeadcrmService {
     return this.httpClient.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  insertDB(data: { toInsert: LeadCRM[], toUpdate: LeadCRM[] }) {
+    let registreUrl = this.apiUrl + "insertDB"
+    return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }
