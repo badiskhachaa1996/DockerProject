@@ -33,8 +33,248 @@
 </div>
 
 
-<div *ngIf="isAdmin">
-    <!-- Partie RH -->
+<!-- Checking area -->
+<div class="grid" *ngIf="isAdmin">
+    <div class="col-12">
+        <div class="card" style="text-align: center">
+            <h4>Bienvenue Sall Idrissa</h4>
+            <h6>
+                Date: 26 Mai 2023 <br>
+                Heure: 13h30
+            </h6>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <!-- info user -->
+        <div class="card">
+            <div class="grid">
+                <div class="col-6 md:col-3">
+                    <button pButton pRipple label="Check in" class="p-button-primary mb-2"></button> <br>
+                    <button pButton pRipple label="Pause" class="p-button-warning mb-2"></button> <br>
+                    <button pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button> <br>
+                    <button pButton pRipple label="Check out" class="p-button-danger"></button>
+                </div>
+                <div class="col-6 md:col-3">
+                    <h6>Vous êtes arrivé au <br> travail à: <strong>09h00</strong></h6>
+                    <h6>Temps passé au <br> travail: <strong>4h</strong></h6>
+                    <h6>Temps passé en <br> pause: <strong>1h</strong></h6>
+                    <h6>Taux de remplissage du <br> CRA: <strong>69%</strong></h6>
+                </div>
+                <div class="col-6 md:col-3 flex align-items-center justify-content-center">
+                    <h5 style="text-align: center;">
+                        Statut actuelle <br>
+                        <span style="color: green;">Disponible •</span>
+                    </h5>
+                </div>
+                <div class="col-6 md:col-3" style="text-align: center">
+                    <img src="https://picsum.photos/200/300" alt="Nom et prénom de l'utilisateur" width="100" height="100">
+                    <h6 style="font-style: italic;">Consultant informatique</h6>
+                    <h6>Département: <i>Pédagogie</i></h6>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Tabs avec les cra etc -->
+        <div class="card">
+            <p-tabView>
+                <p-tabPanel header="Les actualités">
+                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date</th>
+                                <th>Titre de l'actualité</th>
+                                <th>Contenu de l'actualité</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-actualite>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="3">Aucune information pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="3">Chargement des informations, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+                <p-tabPanel header="CRA">
+                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;"></button>
+                    <div style="clear: both;"></div>
+                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Durée</th>
+                                <th>Tâche</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-actualite>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="3">Aucun CRA pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="3">Chargement des CRA, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+                <p-tabPanel header="Suivre mon assiduité">
+                    <div class="grid">
+                        <div class="col-6">
+                            <div>
+                                <label htmlFor="">Choisissez un mois et une année</label> <br>
+                                <input pInputText type="month">
+                            </div>
+                            <h6>Nombre de jours de congés: <strong>8 jrs</strong></h6>
+                            <h6>Nombre de jours en absences: <strong>8 jrs</strong></h6>
+                            
+                        </div>
+                        <div class="col-6 flex justify-content-center align-items-center">
+                            <h6>Taux d'assiduité: <strong>90 %</strong></h6>
+                        </div>
+                        
+                    </div>
+                    
+                </p-tabPanel>
+
+                <p-tabPanel header="Mes demandes">
+                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;"></button>
+                    <div style="clear: both;"></div>
+                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-actualite>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>
+                                    <button pButton pRipple label="Modifier" class="p-button-success p-button-outlined mb-2"></button>
+                                    <button pButton pRipple label="Supprimer" class="p-button-danger p-button-outlined ml-2 mb-2"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="4">Vous n'avez émis aucune demande pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="4">Chargement de vos demandes, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+                <p-tabPanel header="Mes documents">
+                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date de délivrance</th>
+                                <th>Nom du document</th>
+                                <th>Lien de téléchargement</th>
+                                <th>Note</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-actualite>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="4">Vous n'avez aucun document pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="4">Chargement de vos documents, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+                <p-tabPanel header="Demande de congé / autorisation">
+                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date de la demande</th>
+                                <th>Type</th>
+                                <th>Période</th>
+                                <th>Nombre de jours</th>
+                                <th>Motif</th>
+                                <th>Justificatif</th>
+                                <th>Note</th>
+                                <th>Statut de la demande</th>
+                                <th>Note décideur</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-actualite>
+                            <tr>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>test</td>
+                                <td>
+                                    <button pButton pRipple label="Modifier" class="p-button-success p-button-outlined mb-2"></button>
+                                    <button pButton pRipple label="Supprimer" class="p-button-danger p-button-outlined ml-2 mb-2"></button>
+                                    <button pButton pRipple label="Charger un justificatif" class="p-button-help p-button-outlined ml-2 mb-2"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="10">Vous n'avez émis aucune demande pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="10">Chargement de vos demandes, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+
+    </div>
     
 </div>
 

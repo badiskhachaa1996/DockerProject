@@ -127,13 +127,32 @@ export class AppMenuComponent implements OnInit {
                         },
                         {
                             label: 'Ressources humaines',
-                            icon: 'pi pi-fw pi-users',
+                            icon: 'pi pi-users',
                             items: [
                                 {
-                                    label: '/',
-                                    icon: 'pi pi-fw pi-list',
-                                    routerLink: ['/'],
-
+                                    label: 'Les collaborateurs',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/rh/collaborateurs'],
+                                },
+                                {
+                                    label: 'Gestion des congés, autorisations et absences',
+                                    icon: 'pi pi-calendar',
+                                    routerLink: ['/rh/conges-autorisations'],
+                                },
+                                {
+                                    label: 'Actualité et notifications',
+                                    icon: 'pi pi-tags',
+                                    routerLink: ['/rh/actualite-notifications'],
+                                },
+                                {
+                                    label: 'Gestion des demandes et reclamation',
+                                    icon: 'pi pi-check-square',
+                                    routerLink: ['/rh/demandes-reclamations'],
+                                },
+                                {
+                                    label: 'DashBoard',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['/rh/dashboard'],
                                 },
                             ]
                         },

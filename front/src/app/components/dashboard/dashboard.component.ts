@@ -229,6 +229,10 @@ export class  DashboardComponent implements OnInit {
     },
   ];
 
+  //* Check in variables
+
+  //* end check in variables
+
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
