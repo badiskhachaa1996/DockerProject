@@ -1,0 +1,263 @@
+<p-toast></p-toast>
+<div class="grid">
+    <!-- Ajout d'un collaborateurs -->
+    <div class="col-12" *ngIf="showFormAdd">
+        <div class="card">
+            <div class="add-button-div">
+                <i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormAdd = false;"></i>
+            </div>
+            <div class="clear-float"></div>
+            <h2 class="header">Ajout d'un collaborateur</h2>
+
+            <form class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="matricule">Matricule</label>
+					<input pInputText id="matricule" type="text" placeholder="Numéro matricule du collaborateur" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="date_demarrage">Date de démarrage</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <label htmlFor="civilite">Civilité</label>
+                    <p-dropdown [options]="civiliteList" placeholder="Mr, Mme..."></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label htmlFor="lastname">Nom</label>
+					<input pInputText id="lastname" type="text" placeholder="ex: Sall" />
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label htmlFor="firstname">Prénom</label>
+					<input pInputText id="firstname" type="text" placeholder="ex: Idrissa" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="date_naissance">Date de naissance</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_naissance"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="email_travail">Email travail</label>
+					<input pInputText id="email_travail" type="email" placeholder="ex: i.sall@intedgroup.com" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="email_perso">Email personnelle</label>
+					<input pInputText id="email_perso" type="email" placeholder="ex: i.sall@gmail.com" />
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="phone_perso">Numéro de téléphone personnelle</label>
+					<input pInputText id="phone_perso" type="tel" placeholder="ex: 0767978236" />
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="adresse">Adresse</label>
+                    <textarea pInputTextarea placeholder="ex: 15 rue de la délivrance, 75003 Paris/ France" autoResize rows="4" cols="30"></textarea>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="localisation">Localisation</label>
+                    <p-dropdown [options]="localisationList" placeholder="Paris, Tunis..."></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="poste">Nom du poste</label>
+					<input pInputText id="poste" type="text" placeholder="ex: Consultant informatique" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="service">Service</label>
+                    <p-dropdown [options]="serviceList" placeholder="Pédagogie, Informatique, Commercial..."></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="anciennete">Ancienneté</label>
+					<input pInputText id="anciennete" type="number" placeholder="ex: 12 jours" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="type_contrat">Type de contrat</label>
+                    <p-dropdown [options]="contratList" placeholder="CDD, CDI, Alternant..."></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="statut">Statut</label>
+                    <p-dropdown [options]="statutList" placeholder="Actif, Démission..."></p-dropdown>
+                </div>
+
+                <button pButton pRipple label="Ajouter" class="p-button-primary mb-2"></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des collaborateurs -->
+    <div class="col-12">
+        <div class="card">
+            <h2 class="header">Liste des collaborateurs</h2>
+            <div class="add-button-div">
+                <button pButton pRipple type="button" label="Ajouter un collaborateur" (click)="showFormAdd = true;" class="p-button-outlined p-button-primary mb-2"></button>
+            </div>
+            <div class="clear-float"></div>
+
+            <p-table #dt1 [value]="" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Rechercher un collaborateur" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Matricule
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Date de démarrage
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Civilité
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom et prénom
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Date de naissance
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Email travail
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Email personnelle
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Téléphone personnelle
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Adresse
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Localisation
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom du poste
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Mention
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Service
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Ancienneté
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Type de contrat
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Statut
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-customer>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{customer.name}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.date | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{customer.name}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.date | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{customer.name}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.date | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{customer.name}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.date | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{customer.name}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.date | date: 'MM/dd/yyyy'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{customer.balance | currency:'USD':'symbol'}}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+                            <button pButton pRipple type="button" label="Ajouter une compétence" class="p-button-outlined p-button-info mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Modifier" class="p-button-outlined p-button-success mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Job description" class="p-button-outlined p-button-info mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Insérer un document" class="p-button-outlined p-button-danger mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="Supprimer" class="p-button-outlined p-button-warning mr-2 mb-2"></button>
+                            <button pButton pRipple type="button" label="CRA" class="p-button-outlined p-button-help mr-2 mb-2"></button>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="17">Aucun collaborateurs trouvé.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="17">Chargement des données, merci de patienter...</td>
+					</tr>
+				</ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

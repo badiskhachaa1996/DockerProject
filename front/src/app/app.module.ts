@@ -304,6 +304,11 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
+import { CollaborateursComponent } from './rh/collaborateurs/collaborateurs.component';
+import { CongesAutorisationsComponent } from './rh/conges-autorisations/conges-autorisations.component';
+import { ActualiteNotificationsComponent } from './rh/actualite-notifications/actualite-notifications.component';
+import { DemandesReclamationsComponent } from './rh/demandes-reclamations/demandes-reclamations.component';
+import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
 import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
 import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
@@ -623,6 +628,11 @@ import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
     FormAdmissionDubaiResultsComponent,
     AjoutLeadcrmComponent,
     ListLeadcrmComponent,
+    CollaborateursComponent,
+    CongesAutorisationsComponent,
+    ActualiteNotificationsComponent,
+    DemandesReclamationsComponent,
+    DashboardRhComponent,
     LeadsNonAttribuesComponent,
     MesLeadsComponent,
     TeamsCrmComponent,
