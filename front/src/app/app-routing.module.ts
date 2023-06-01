@@ -200,6 +200,11 @@ import { FormAdmissionDubaiComponent } from './other/form-admission-dubai/form-a
 import { FormAdmissionDubaiResultsComponent } from './other/form-admission-dubai-results/form-admission-dubai-results.component';
 import { AjoutLeadcrmComponent } from './crm/leadcrm/ajout-leadcrm/ajout-leadcrm.component';
 import { ListLeadcrmComponent } from './crm/leadcrm/list-leadcrm/list-leadcrm.component';
+import { CollaborateursComponent } from './rh/collaborateurs/collaborateurs.component';
+import { CongesAutorisationsComponent } from './rh/conges-autorisations/conges-autorisations.component';
+import { ActualiteNotificationsComponent } from './rh/actualite-notifications/actualite-notifications.component';
+import { DemandesReclamationsComponent } from './rh/demandes-reclamations/demandes-reclamations.component';
+import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
 
 const routes: Routes = [
     {
@@ -318,7 +323,12 @@ const routes: Routes = [
             { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
 
-            // TODO: RH paths
+            // RH paths
+            { path: 'rh/collaborateurs', component: CollaborateursComponent },
+            { path: 'rh/conges-autorisations', component: CongesAutorisationsComponent },
+            { path: 'rh/actualite-notifications', component: ActualiteNotificationsComponent },
+            { path: 'rh/demandes-reclamations', component: DemandesReclamationsComponent },
+            { path: 'rh/dashboard', component: DashboardRhComponent },
 
             /** end */
             { path: 'resultats-icbs', component: ResultatsFormulaireIcbsComponent },
