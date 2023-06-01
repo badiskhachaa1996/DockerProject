@@ -9,11 +9,12 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 @Component({
-  selector: 'app-list-leadcrm',
-  templateUrl: './list-leadcrm.component.html',
-  styleUrls: ['./list-leadcrm.component.scss']
+  selector: 'app-leads-non-attribues',
+  templateUrl: './leads-non-attribues.component.html',
+  styleUrls: ['./leads-non-attribues.component.scss']
 })
-export class ListLeadcrmComponent implements OnInit {
+export class LeadsNonAttribuesComponent implements OnInit {
+
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -76,7 +77,7 @@ export class ListLeadcrmComponent implements OnInit {
   constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAll().subscribe(data => {
+    this.LCS.getAllNonAffecte().subscribe(data => {
       this.leads = data
     })
     this.FAService.EAgetAll().subscribe(data => {
@@ -280,7 +281,7 @@ export class ListLeadcrmComponent implements OnInit {
     _id: new FormControl('', Validators.required),
     affected_date: new FormControl(''),
     affected_to_member: new FormControl(''),
-    affected_to_team: new FormControl(''),
+    //affected_to_team: new FormControl(''),
   })
 
   initAffect(lead: LeadCRM) {

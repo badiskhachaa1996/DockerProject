@@ -36,13 +36,14 @@ export class DetailsEtudiantComponent implements OnInit {
   ListeSeance: any[];
   barDataAJ: any;
   barDataHorAJ: any;
-  annee_scolaire  = "2022-2023"
+  annee_scolaire = "2022-2023"
   nb_absences = 0;
   nb_absencesNJ = 0;
   nb_presences = 0;
   showPDF = false
   isNotEtudiant = false
   colorBande = "#ffffff"
+  filterModule = [{ label: "Tous les modules", value: null }]
   dropdownTimes = [
     { label: "Passé", value: "A suivi avec assiduité la formation intitulée:" },
     { label: "Présent", value: "Suit avec assiduité la formation intitulée:" }
@@ -180,6 +181,7 @@ export class DetailsEtudiantComponent implements OnInit {
             this.matiereService.getAll().subscribe(data => {
               data.forEach(m => {
                 this.matiereDic[m._id] = m
+                this.filterModule.push({ value: m._id, label: `${m.abbrv} - ${m.nom}` })
               });
             })
             this.PresenceService.updateAbsences(this.EtudiantDetail.user_id).subscribe(seances => {

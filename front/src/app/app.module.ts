@@ -309,6 +309,11 @@ import { CongesAutorisationsComponent } from './rh/conges-autorisations/conges-a
 import { ActualiteNotificationsComponent } from './rh/actualite-notifications/actualite-notifications.component';
 import { DemandesReclamationsComponent } from './rh/demandes-reclamations/demandes-reclamations.component';
 import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
+import { LeadsNonAttribuesComponent } from './crm/leads-non-attribues/leads-non-attribues.component';
+import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
+import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
+import { MemberCrmComponent } from './crm/teams-crm/member-crm/member-crm.component';
+import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
 
 
 @NgModule({
@@ -628,6 +633,11 @@ import { DashboardRhComponent } from './rh/dashboard-rh/dashboard-rh.component';
     ActualiteNotificationsComponent,
     DemandesReclamationsComponent,
     DashboardRhComponent,
+    LeadsNonAttribuesComponent,
+    MesLeadsComponent,
+    TeamsCrmComponent,
+    MemberCrmComponent,
+    ImportCrmComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

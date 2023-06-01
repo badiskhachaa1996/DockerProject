@@ -727,7 +727,7 @@ export class AppMenuComponent implements OnInit {
                                         }, {
                                             label: 'Importer',
                                             icon: 'pi pi-database',
-                                            routerLink: ['']
+                                            routerLink: ['crm/import']
                                         },
                                     ]
                                 },
@@ -742,11 +742,11 @@ export class AppMenuComponent implements OnInit {
                                         }, {
                                             label: 'Leads non attribués',
                                             icon: 'pi pi-user-edit',
-                                            routerLink: ['']
+                                            routerLink: ['crm/leads/liste-non-attribue']
                                         }, {
-                                            label: 'Leads non attribués',
+                                            label: 'Mes Leads',
                                             icon: 'pi pi-user',
-                                            routerLink: ['']
+                                            routerLink: ['crm/mes-leads/6474bd8044e14520f9dd5f38']
                                         },
                                     ]
                                 },
@@ -828,23 +828,23 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         {
                                             label: 'Gestion des membres',
-                                            icon: 'pi pi-facebook',
-                                            routerLink: ['']
+                                            icon: 'pi pi-user',
+                                            routerLink: ['crm/member']
                                         }, {
                                             label: 'Gestion des équipes',
-                                            icon: 'pi pi-instagram',
-                                            routerLink: ['']
+                                            icon: 'pi pi-users',
+                                            routerLink: ['crm/teams']
                                         }, {
                                             label: 'Gestion des produits',
-                                            icon: 'pi pi-whatsapp',
+                                            icon: 'pi pi-briefcase',
                                             routerLink: ['']
                                         }, {
                                             label: 'Gestion des sources',
-                                            icon: 'pi pi-comments',
+                                            icon: 'pi pi-map-marker',
                                             routerLink: ['']
                                         }, {
                                             label: 'Gestion des opérations',
-                                            icon: 'pi pi-comments',
+                                            icon: 'pi pi-tablet',
                                             routerLink: ['']
                                         },
                                     ]
