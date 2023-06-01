@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x2="urn:schemas-microsoft-com:office:excel2" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+ <x:ExcelWorkbook>
+  <x:ActiveSheet>0</x:ActiveSheet>
+ </x:ExcelWorkbook>
+ <o:DocumentProperties>
+  <o:Author>Haytham ELKADHI</o:Author>
+  <o:Created>2015-06-05T18:19:34Z</o:Created>
+  <o:LastSaved>2023-05-31T14:52:06Z</o:LastSaved>
+ </o:DocumentProperties>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <ss:Alignment ss:Vertical="Bottom" />
+   <ss:Font ss:Color="#000000" ss:FontName="Calibri" ss:Size="11" />
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Feuil1">
+  <ss:Names />
+  <ss:Table ss:DefaultRowHeight="14.4" ss:DefaultColumnWidth="46.5" ss:ExpandedRowCount="10" ss:ExpandedColumnCount="17">
+   <Column ss:Index="1" ss:Span="9" ss:AutoFitWidth="0" ss:Width="98.25" />
+   <Column ss:Index="11" ss:AutoFitWidth="0" ss:Width="99.75" />
+   <Column ss:Index="12" ss:Span="1" ss:AutoFitWidth="0" ss:Width="98.25" />
+   <Column ss:Index="14" ss:AutoFitWidth="0" ss:Width="135.75" />
+   <Column ss:Index="15" ss:Span="2" ss:AutoFitWidth="0" ss:Width="98.25" />
+   <Row ss:Index="1">
+    <Cell><Data ss:Type="String">Source Lead</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Operation</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Civilité</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Nom du Lead *</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Prénom du Lead *</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Pays de Résidence</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Email du Lead</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Nationalité </Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Date de naissance </Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Indicatif</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Numéro WhatsApp</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Indicatif2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Numéro Telegram</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Dernier niveau académique</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Statut Actuel</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Niveau en Français</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Niveau en Anglais</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="2">
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 1</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="3">
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 2</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="4">
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 3</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="5">
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 4</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="6">
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 5</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="7">
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 6</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="8">
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 7</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="9">
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 8</Data>
+    </Cell>
+   </Row>
+   <Row ss:Index="10">
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+    <Cell><Data ss:Type="String">Test 9</Data>
+    </Cell>
+   </Row>
+  </ss:Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3" />
+    <Footer x:Margin="0.3" />
+    <PageMargins x:Top="0.75" x:Bottom="0.75" x:Left="0.7" x:Right="0.7" />
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo />
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>13</ActiveRow>
+     <ActiveCol>13</ActiveCol>
+     <RangeSelection>R14C14</RangeSelection>
+    </Pane>
+   </Panes>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

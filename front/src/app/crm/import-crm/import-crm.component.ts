@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { environment } from 'src/environments/environment';
 import * as XLSX from 'xlsx';
-let parseString = require('xml2js').parseString;
 @Component({
   selector: 'app-import-crm',
   templateUrl: './import-crm.component.html',
@@ -81,13 +81,13 @@ export class ImportCrmComponent implements OnInit {
   leadsDefault: LeadCRM[] = []
   leadsToCreate: LeadCRM[] = []
   errorToCreate: {
-    source: { error: string, warning: null }, operation: { error: string, warning: null }, civilite: { error: string, warning: null }, nom: { error: string, warning: null }, prenom: { error: string, warning: null }, pays_residence: { error: string, warning: null }, email: { error: string, warning: null }, nationalite: { error: string, warning: null }, date_naissance: { error: string, warning: null }, indicatif_whatsapp: { error: string, warning: null },
-    numero_whatsapp: { error: string, warning: null }, indicatif_telegram: { error: string, warning: null }, numero_telegram: { error: string, warning: null }, dernier_niveau_academique: { error: string, warning: null }, statut: { error: string, warning: null }, niveau_fr: { error: string, warning: null }, niveau_en: { error: string, warning: null }
+    source: { error: string, warning: string }, operation: { error: string, warning: string }, civilite: { error: string, warning: string }, nom: { error: string, warning: string }, prenom: { error: string, warning: string }, pays_residence: { error: string, warning: string }, email: { error: string, warning: string }, nationalite: { error: string, warning: string }, date_naissance: { error: string, warning: string }, indicatif_whatsapp: { error: string, warning: string },
+    numero_whatsapp: { error: string, warning: string }, indicatif_telegram: { error: string, warning: string }, numero_telegram: { error: string, warning: string }, dernier_niveau_academique: { error: string, warning: string }, statut: { error: string, warning: string }, niveau_fr: { error: string, warning: string }, niveau_en: { error: string, warning: string }
   }[] = []
   leadsToUpdate: LeadCRM[] = []
   errorToUpdate: {
-    source: { error: string, warning: null }, operation: { error: string, warning: null }, civilite: { error: string, warning: null }, nom: { error: string, warning: null }, prenom: { error: string, warning: null }, pays_residence: { error: string, warning: null }, email: { error: string, warning: null }, nationalite: { error: string, warning: null }, date_naissance: { error: string, warning: null }, indicatif_whatsapp: { error: string, warning: null },
-    numero_whatsapp: { error: string, warning: null }, indicatif_telegram: { error: string, warning: null }, numero_telegram: { error: string, warning: null }, dernier_niveau_academique: { error: string, warning: null }, statut: { error: string, warning: null }, niveau_fr: { error: string, warning: null }, niveau_en: { error: string, warning: null }
+    source: { error: string, warning: string }, operation: { error: string, warning: string }, civilite: { error: string, warning: string }, nom: { error: string, warning: string }, prenom: { error: string, warning: string }, pays_residence: { error: string, warning: string }, email: { error: string, warning: string }, nationalite: { error: string, warning: string }, date_naissance: { error: string, warning: string }, indicatif_whatsapp: { error: string, warning: string },
+    numero_whatsapp: { error: string, warning: string }, indicatif_telegram: { error: string, warning: string }, numero_telegram: { error: string, warning: string }, dernier_niveau_academique: { error: string, warning: string }, statut: { error: string, warning: string }, niveau_fr: { error: string, warning: string }, niveau_en: { error: string, warning: string }
   }[] = []
   dicLeads = {}
 
@@ -128,7 +128,7 @@ export class ImportCrmComponent implements OnInit {
                 if (data['Prénom du Lead *']) r.prenom = data['Prénom du Lead *'];
                 if (data['Pays de Résidence']) r.pays_residence = data['Pays de Résidence'];
                 if (data['Email du Lead']) r.email = data['Email du Lead'];
-                console.log(data['Date de naissance'])
+                if (data['Nationalité ']) r.nationalite = data['Nationalité '];
                 if (data['Date de naissance']) r.date_naissance = new Date(data['Date de naissance']);
                 if (data['Indicatif']) r.indicatif_whatsapp = data['Indicatif'];
                 if (data['Numéro WhatsApp']) r.numero_whatsapp = data['Numéro WhatsApp'];
@@ -139,6 +139,13 @@ export class ImportCrmComponent implements OnInit {
                 if (data['Niveau en Français']) r.niveau_fr = data['Niveau en Français'];
                 if (data['Niveau en Anglais']) r.niveau_en = data['Niveau en Anglais'];
                 this.leadsToUpdate.push(r)
+                Object.keys(r).forEach(key => {
+                  this.errorToUpdate.push({
+                    source: { error: null, warning: null }, operation: { error: null, warning: null }, civilite: { error: null, warning: null }, nom: { error: null, warning: null }, prenom: { error: null, warning: null }, pays_residence: { error: null, warning: null }, email: { error: null, warning: null }, nationalite: { error: null, warning: null }, date_naissance: { error: null, warning: null }, indicatif_whatsapp: { error: null, warning: null },
+                    numero_whatsapp: { error: null, warning: null }, indicatif_telegram: { error: null, warning: null }, numero_telegram: { error: null, warning: null }, dernier_niveau_academique: { error: null, warning: null }, statut: { error: null, warning: null }, niveau_fr: { error: null, warning: null }, niveau_en: { error: null, warning: null }
+                  })
+                  this.onChangeUpdate(this.leadsToUpdate.length - 1, key, r[key])
+                })
               } else {
                 let r = {
                   source: null, operation: null, civilite: null, nom: null, prenom: null, pays_residence: null, email: null, nationalite: null, date_naissance: null, indicatif_whatsapp: null,
@@ -150,6 +157,7 @@ export class ImportCrmComponent implements OnInit {
                 if (data['Nom du Lead *']) r.nom = data['Nom du Lead *'];
                 if (data['Prénom du Lead *']) r.prenom = data['Prénom du Lead *'];
                 if (data['Pays de Résidence']) r.pays_residence = data['Pays de Résidence'];
+                if (data['Nationalité ']) r.nationalite = data['Nationalité '];
                 if (data['Email du Lead']) r.email = data['Email du Lead'];
                 if (data['Date de naissance']) r.date_naissance = new Date(data['Date de naissance']);
                 if (data['Indicatif']) r.indicatif_whatsapp = data['Indicatif'];
@@ -161,6 +169,13 @@ export class ImportCrmComponent implements OnInit {
                 if (data['Niveau en Français']) r.niveau_fr = data['Niveau en Français'];
                 if (data['Niveau en Anglais']) r.niveau_en = data['Niveau en Anglais'];
                 this.leadsToCreate.push(r)
+                Object.keys(r).forEach(key => {
+                  this.errorToCreate.push({
+                    source: { error: null, warning: null }, operation: { error: null, warning: null }, civilite: { error: null, warning: null }, nom: { error: null, warning: null }, prenom: { error: null, warning: null }, pays_residence: { error: null, warning: null }, email: { error: null, warning: null }, nationalite: { error: null, warning: null }, date_naissance: { error: null, warning: null }, indicatif_whatsapp: { error: null, warning: null },
+                    numero_whatsapp: { error: null, warning: null }, indicatif_telegram: { error: null, warning: null }, numero_telegram: { error: null, warning: null }, dernier_niveau_academique: { error: null, warning: null }, statut: { error: null, warning: null }, niveau_fr: { error: null, warning: null }, niveau_en: { error: null, warning: null }
+                  })
+                  this.onChangeCreate(this.leadsToCreate.length - 1, key, r[key])
+                })
               }
             })
             this.upload = true
@@ -176,7 +191,7 @@ export class ImportCrmComponent implements OnInit {
     reader.readAsBinaryString(file);
   }
 
-  fileUploadXML(event: { files: File[] }) {
+  /*fileUploadXML(event: { files: File[] }) {
     const reader = new FileReader();
     reader.onload = (event) => {
       const data = reader.result;
@@ -187,7 +202,7 @@ export class ImportCrmComponent implements OnInit {
     }
     reader.readAsText(event.files[0]);
 
-  }
+  }*/
 
   addLead() {
     this.leadsToCreate.push(
@@ -199,8 +214,10 @@ export class ImportCrmComponent implements OnInit {
   }
   deleteAdded(index) {
     this.leadsToCreate.splice(index, 1)
+    this.errorToCreate.splice(index, 1)
   }
   deleteUpdated(index) {
+    this.leadsToUpdate.splice(index, 1)
     this.leadsToUpdate.splice(index, 1)
   }
 
@@ -236,31 +253,185 @@ export class ImportCrmComponent implements OnInit {
 
   onChangeCreate(index, attribute, value) {
     if (attribute == 'date_naissance') {
-      if (!this.isValid(value))
-        this.errorToCreate[index][attribute] = { error: 'La date n\'est pas correct', warning: null }
-      else {
-        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      if (new FormControl(value, Validators.required).valid) {
+        if (!this.isValid(value))
+          this.errorToCreate[index][attribute] = { error: 'La date n\'est pas correct', warning: null }
+        else
+          this.errorToCreate[index][attribute] = { error: null, warning: null }
+      } else {
+        this.errorToCreate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
       }
     } else if (attribute == "email") {
+      if (new FormControl(value, [Validators.email, Validators.required]).invalid)
+        this.errorToCreate[index][attribute] = { error: 'Email non conforme', warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
 
     } else if (attribute == "source") {
-
+      let list = []
+      this.sourceDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "operation") {
-
+      let list = []
+      this.operationDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "pays_residence") {
-
+      let list = []
+      this.paysDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "dernier_niveau_academique") {
-
+      let list = []
+      this.nivDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "statut") {
-
+      let list = []
+      this.statutList.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "niveau_fr") {
-
+      let list = []
+      this.niveauFR.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
     } else if (attribute == "niveau_en") {
-
+      let list = []
+      this.niveauEN.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "nationalite" || attribute == "prenom" || attribute == "nom") {
+      if (new FormControl(value, Validators.required).valid)
+        this.errorToCreate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToCreate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
     }
+  }
+
+  onChangeUpdate(index, attribute, value) {
+    if (attribute == 'date_naissance') {
+      if (new FormControl(value, Validators.required).valid) {
+        if (!this.isValid(value))
+          this.errorToUpdate[index][attribute] = { error: 'La date n\'est pas correct', warning: null }
+        else
+          this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      } else {
+        this.errorToUpdate[index][attribute] = { error: 'Le champ est requis pour pouvoir générer l\'ID', warning: null }
+      }
+    } else if (attribute == "email") {
+      if (new FormControl(value, [Validators.email, Validators.required]).valid)
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: 'Email non conforme', warning: null }
+
+    } else if (attribute == "source") {
+      let list = []
+      this.sourceDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "operation") {
+      let list = []
+      this.operationDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "pays_residence") {
+      let list = []
+      this.paysDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "dernier_niveau_academique") {
+      let list = []
+      this.nivDropdown.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "statut") {
+      let list = []
+      this.statutList.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "niveau_fr") {
+      let list = []
+      this.niveauFR.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "niveau_en") {
+      let list = []
+      this.niveauEN.forEach(val => { list.push(val.value) })
+      if (list.includes(value))
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: null, warning: 'Le texte ne correponds pas à un élément de la liste déroulante' }
+    } else if (attribute == "nationalite" || attribute == "prenom" || attribute == "nom") {
+      if (new FormControl(value, Validators.required).valid)
+        this.errorToUpdate[index][attribute] = { error: null, warning: null }
+      else
+        this.errorToUpdate[index][attribute] = { error: 'Le champ est requisF', warning: null }
+    }
+  }
+
+  canValidate() {
+    let nberror = 0
+    let nbwarning = 0
+    this.errorToCreate.forEach(val => {
+      let temp = Object.keys(val)
+      temp.forEach(k => {
+        if (val[k].error != null) {
+          nberror += 1
+        }
+        if (val[k].warning != null) {
+          nbwarning += 1
+        }
+      })
+    })
+    this.errorToUpdate.forEach(val => {
+      let temp = Object.keys(val)
+      temp.forEach(k => {
+        if (val[k].error != null) {
+          nberror += 1
+        }
+        if (val[k].warning != null) {
+          nbwarning += 1
+        }
+      })
+    })
+    return { nberror, nbwarning }
   }
 
   isValid(d) {
     return new Date(d).getTime() === new Date(d).getTime()
+  }
+  downloadFile(file) {
+    let link = document.createElement("a");
+    link.download = file;
+    link.href = "assets/document/" + file;
+    link.click();
   }
 }

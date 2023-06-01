@@ -2,7 +2,7 @@
     <div class="col-12 card grid" *ngIf="!upload">
         <!--Choix du type du fichier XML ou XLS-->
         <h2 class="col-12" style="text-align: center;">Importation de leads dans le CRM</h2>
-        <div class="col-6 grid">
+        <div class="col-12 grid">
             <h3 class="col-12">Format XLS</h3> <!--<i class="pi pi-file-excel" aria-hidden="true"></i>-->
             <p-fileUpload class="col-6" (uploadHandler)="fileUploadXLS($event)" mode="basic"
                 chooseLabel="Ajouter un Excel" customUpload="true" fileLimit="1" accept=".xls,.xlsx,.txt"
@@ -10,17 +10,18 @@
                 [style]="{'width':'100%','background-color':'green','border':'green'}" #fileInput>
             </p-fileUpload>
             <p-button class="col-6" [style]="{'width':'100%','background-color':'green','border':'green'}"
-                icon="pi pi-download" autoWidth="false" label="Télécharger la template XLS"></p-button>
+                (click)="downloadFile('Template_Import_Lead_CRM.xlsx')" icon="pi pi-download" autoWidth="false"
+                label="Télécharger la template XLS"></p-button>
         </div>
-        <div class="col-6 grid ">
+        <!--<div class="col-6 grid ">
             <h3 class="col-12">Format XML</h3>
             <p-fileUpload (uploadHandler)="fileUploadXML($event)" mode="basic" chooseLabel="Ajouter un XML"
                 autoWidth="false" [style]="{'width':'100%'}" class="col-6 " customUpload="true" fileLimit="1"
                 accept=".xml" maxFileSize="10000000" [auto]="true" #fileInput>
             </p-fileUpload>
             <p-button class="col-6" [style]="{'width':'100%'}" autoWidth="false" icon="pi pi-download"
-                label="Télécharger la template XML"></p-button>
-        </div>
+                (click)="downloadFile('Template_Import_Lead_CRM.xml')" label="Télécharger la template XML"></p-button>
+        </div>-->
     </div>
     <div class="col-12 card grid" *ngIf="upload">
         <div class="col-12 grid" *ngIf="leadsToCreate.length>0">
@@ -55,6 +56,9 @@
                         </th>
                         <th pSortableColumn="pays_residence">
                             Pays de Résidence <p-sortIcon field="pays_residence"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nationalite">
+                            Nationalité <p-sortIcon field="nationalite"></p-sortIcon>
                         </th>
                         <th pSortableColumn="email">
                             Email du lead <p-sortIcon field="email"></p-sortIcon>
@@ -91,9 +95,9 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
                                         [options]="sourceDropdown" [editable]="true" autoWidth="false"
-                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
-                                        [(ngModel)]="lead.source" emptyFilterMessage="Pas de source trouvé"
-                                        filterPlaceholder="Source">
+                                        (onChange)="onChangeCreate(ri,'source',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.source"
+                                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -107,9 +111,9 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
                                         [editable]="true" [options]="operationDropdown" autoWidth="false"
-                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
-                                        [(ngModel)]="lead.operation" emptyFilterMessage="Pas d'operation trouvé"
-                                        filterPlaceholder="Operation">
+                                        (onChange)="onChangeCreate(ri,'operation',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.operation"
+                                        emptyFilterMessage="Pas d'operation trouvé" filterPlaceholder="Operation">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -135,7 +139,9 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText [(ngModel)]="lead.nom" type="text" placeholder="Ex: Smith" />
+                                    <input pInputText [(ngModel)]="lead.nom"
+                                        (blur)="onChangeCreate(ri,'nom',$event.target.value)" type="text"
+                                        placeholder="Ex: Smith" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.nom}}&nbsp;
@@ -145,7 +151,9 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText [(ngModel)]="lead.prenom" type="text" placeholder="Ex: John" />
+                                    <input pInputText [(ngModel)]="lead.prenom"
+                                        (blur)="onChangeCreate(ri,'prenom',$event.target.value)" type="text"
+                                        placeholder="Ex: John" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.prenom}}&nbsp;
@@ -157,6 +165,7 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
                                         [editable]="true" [options]="paysDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'pays_residence',$event.value)"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.pays_residence"
                                         emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays">
                                     </p-dropdown>
@@ -169,7 +178,23 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
+                                        [editable]="true" [options]="nationaliteDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'nationalite',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.nationalite"
+                                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nationalite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.email" type="text"
+                                        (blur)="onChangeCreate(ri,'email',$event.target.value)"
                                         placeholder="Ex: m.hue@estya.com" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -180,7 +205,8 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance">
+                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance"
+                                        (blur)="onChangeCreate(ri,'date_naissance',$event.target.value)">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
@@ -218,6 +244,7 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
                                         [editable]="true" [options]="nivDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'dernier_niveau_academique',$event.value)"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.dernier_niveau_academique"
                                         emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau academique">
                                     </p-dropdown>
@@ -233,6 +260,7 @@
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
                                         [editable]="true" [options]="statutList" autoWidth="false"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.statut"
+                                        (onChange)="onChangeCreate(ri,'statut',$event.value)"
                                         emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut">
                                     </p-dropdown>
                                 </ng-template>
@@ -246,6 +274,7 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
                                         [editable]="true" [options]="niveauFR" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'niveau_fr',$event.value)"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_fr"
                                         emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
                                     </p-dropdown>
@@ -260,6 +289,7 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
                                         [editable]="true" [options]="niveauEN" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'niveau_en',$event.value)"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_en"
                                         emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
                                     </p-dropdown>
@@ -302,6 +332,9 @@
                         <th pSortableColumn="pays_residence">
                             Pays de Résidence <p-sortIcon field="pays_residence"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="nationalite">
+                            Nationalité <p-sortIcon field="nationalite"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="email">
                             Email du lead <p-sortIcon field="email"></p-sortIcon>
                         </th>
@@ -337,9 +370,9 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
                                         [options]="sourceDropdown" [editable]="true" autoWidth="false"
-                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
-                                        [(ngModel)]="lead.source" emptyFilterMessage="Pas de source trouvé"
-                                        filterPlaceholder="Source">
+                                        (onChange)="onChangeUpdate(ri,'source',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.source"
+                                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -353,9 +386,9 @@
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
                                         [editable]="true" [options]="operationDropdown" autoWidth="false"
-                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
-                                        [(ngModel)]="lead.operation" emptyFilterMessage="Pas d'operation trouvé"
-                                        filterPlaceholder="Operation">
+                                        (onChange)="onChangeUpdate(ri,'operation',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.operation"
+                                        emptyFilterMessage="Pas d'operation trouvé" filterPlaceholder="Operation">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -381,7 +414,9 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText [(ngModel)]="lead.nom" type="text" placeholder="Ex: Smith" />
+                                    <input pInputText [(ngModel)]="lead.nom"
+                                        (blur)="onChangeUpdate(ri,'nom',$event.target.value)" type="text"
+                                        placeholder="Ex: Smith" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.nom}}&nbsp;
@@ -391,7 +426,9 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText [(ngModel)]="lead.prenom" type="text" placeholder="Ex: John" />
+                                    <input pInputText [(ngModel)]="lead.prenom"
+                                        (blur)="onChangeUpdate(ri,'prenom',$event.target.value)" type="text"
+                                        placeholder="Ex: John" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.prenom}}&nbsp;
@@ -402,9 +439,10 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
-                                        [editable]="true" [options]="paysDropdown" autoWidth="false"
-                                        [style]="{'width':'100%'}" [(ngModel)]="lead.pays_residence"
-                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays">
+                                        (onChange)="onChangeUpdate(ri,'pays_residence',$event.value)" [editable]="true"
+                                        [options]="paysDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.pays_residence" emptyFilterMessage="Pas de pays trouvé"
+                                        filterPlaceholder="Pays">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -415,7 +453,23 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
+                                        (onChange)="onChangeUpdate(ri,'nationalite',$event.value)" [editable]="true"
+                                        [options]="nationaliteDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.nationalite" emptyFilterMessage="Pas de nationalité trouvé"
+                                        filterPlaceholder="Nationalité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nationalite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.email" type="text"
+                                        (blur)="onChangeUpdate(ri,'email',$event.target.value)"
                                         placeholder="Ex: m.hue@estya.com" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -426,7 +480,8 @@
                         <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance">
+                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance"
+                                        (blur)="onChangeUpdate(ri,'date_naissance',$event.target.value)">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
@@ -463,6 +518,7 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        (onChange)="onChangeUpdate(ri,'dernier_niveau_academique',$event.value)"
                                         [editable]="true" [options]="nivDropdown" autoWidth="false"
                                         [style]="{'width':'100%'}" [(ngModel)]="lead.dernier_niveau_academique"
                                         emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau academique">
@@ -477,9 +533,10 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
-                                        [editable]="true" [options]="statutList" autoWidth="false"
-                                        [style]="{'width':'100%'}" [(ngModel)]="lead.statut"
-                                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut">
+                                        (onChange)="onChangeUpdate(ri,'statut',$event.value)" [editable]="true"
+                                        [options]="statutList" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.statut" emptyFilterMessage="Pas de statut trouvé"
+                                        filterPlaceholder="Statut">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -491,9 +548,10 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
-                                        [editable]="true" [options]="niveauFR" autoWidth="false"
-                                        [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_fr"
-                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
+                                        (onChange)="onChangeUpdate(ri,'niveau_fr',$event.value)" [editable]="true"
+                                        [options]="niveauFR" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.niveau_fr" emptyFilterMessage="Pas de niveau trouvé"
+                                        filterPlaceholder="Niveau">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -505,9 +563,10 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
-                                        [editable]="true" [options]="niveauEN" autoWidth="false"
-                                        [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_en"
-                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
+                                        (onChange)="onChangeUpdate(ri,'niveau_en',$event.value)" [editable]="true"
+                                        [options]="niveauEN" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.niveau_en" emptyFilterMessage="Pas de niveau trouvé"
+                                        filterPlaceholder="Niveau">
                                     </p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
@@ -523,10 +582,9 @@
                 </ng-template>
             </p-table>
         </div>
+        {{canValidate()|json}}
         <p-button class="col-12" label="Enregister les leads dans IMS" icon="pi pi-save" iconPos="left"
-            [style]="{'width':'100%'}" autoWidth="false" (click)="saveLeads()"></p-button>
+            [style]="{'width':'100%'}" autoWidth="false"
+            (click)="saveLeads()"></p-button><!-- disabled]="canValidate().nberror!=0" -->
     </div>
 </div>
-
-<!-- Envoyer les données au back et affiché un tableau AJOUT de LEAD et un autre UPDATE de LEAD -->
-<!-- Permettre la modification des donnés avant validation -->

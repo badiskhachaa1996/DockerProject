@@ -114,6 +114,7 @@ export class AjoutLeadcrmComponent implements OnInit {
     return (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
   }
 
+
   constructor(private LCS: LeadcrmService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
