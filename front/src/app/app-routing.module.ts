@@ -213,6 +213,7 @@ import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
 import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-qualifies.component';
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
+import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
 
 const routes: Routes = [
     {
@@ -393,12 +394,16 @@ const routes: Routes = [
             { path: 'crm/leads/ajout', component: AjoutLeadcrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/leads/liste', component: ListLeadcrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/leads/liste-non-attribue', component: LeadsNonAttribuesComponent, canActivate: [AuthGuardService] },
-            { path: 'crm/mes-leads/:id', component: MesLeadsComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/mes-leads/liste/:id', component: MesLeadsComponent, canActivate: [AuthGuardService] },
             { path: 'crm/teams', component: TeamsCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/member', component: MemberCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/import', component: ImportCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/leads/non-qualifies', component: LeadsNonQualifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/leads/pre-qualifies', component: LeadsPrequalifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/leads/qualifies', component: LeadsQualifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/mes-leads/non-qualifies/:id', component: LeadsNonQualifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/mes-leads/pre-qualifies/:id', component: LeadsPrequalifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/mes-leads/qualifies/:id', component: LeadsQualifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/ventes', component: VentesCRMComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },

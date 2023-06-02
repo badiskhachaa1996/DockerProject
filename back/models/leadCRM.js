@@ -55,7 +55,7 @@ const schema = mongoose.Schema({
     //Qualification
     produit: { type: [String], required: false, default: [] },
     criteres_qualification: { type: [String], required: false, default: [] },
-    decision_qualification: { type: String, required: false },
+    decision_qualification: { type: String, required: false, default: "Non qualifié" },
     note_qualification: { type: String, required: false },
 
     //Affectation

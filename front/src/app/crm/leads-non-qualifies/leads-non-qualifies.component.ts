@@ -8,13 +8,14 @@ import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-leads-non-qualifies',
   templateUrl: './leads-non-qualifies.component.html',
   styleUrls: ['./leads-non-qualifies.component.scss']
 })
 export class LeadsNonQualifiesComponent implements OnInit {
-
+  ID = this.route.snapshot.paramMap.get('id');
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -43,7 +44,12 @@ export class LeadsNonQualifiesComponent implements OnInit {
   filterAffecte = [
     { label: 'Tous les membres', value: null }
   ]
-
+  filterProduit = [
+    { label: 'Tous les produits', value: null },
+    { label: 'WIP', value: 'WIP' },
+    { label: 'WIP2', value: 'WIP2' },
+    { label: 'WIP3', value: 'WIP3' },
+  ]
   filterQualification = [
     { label: 'Tous les qualifications', value: null },
     { label: 'En attente de traitement', value: 'En attente de traitement' },
@@ -74,12 +80,17 @@ export class LeadsNonQualifiesComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAll().subscribe(data => {
-      this.leads = data
-    })
+    if (!this.ID)
+      this.LCS.getAllNonQualifies().subscribe(data => {
+        this.leads = data
+      })
+    else
+      this.LCS.getAllNonQualifiesByID(this.ID).subscribe(data => {
+        this.leads = data
+      })
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(f => {
         this.ecoleList.push({ label: f.titre, value: f._id })
@@ -275,28 +286,6 @@ export class LeadsNonQualifiesComponent implements OnInit {
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
   ]
-  //Affect Form
-  showAffect: LeadCRM = null
-  affectForm = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    affected_date: new FormControl(''),
-    affected_to_member: new FormControl(''),
-    affected_to_team: new FormControl(''),
-  })
-
-  initAffect(lead: LeadCRM) {
-    this.affectForm.patchValue({ ...lead })
-    this.showAffect = lead
-  }
-
-  onUpdateAffect() {
-    this.LCS.update({ ...this.affectForm.value }).subscribe(data => {
-      this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
-      this.affectForm.reset()
-      this.showAffect = null
-      this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
-    })
-  }
 
   scrollToTop() {
     var scrollDuration = 250;

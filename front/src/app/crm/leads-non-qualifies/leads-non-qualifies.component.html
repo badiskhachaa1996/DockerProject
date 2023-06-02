@@ -221,7 +221,7 @@
                     </ng-template>
                 </p-table>
             </p-tabPanel>
-            <p-tabPanel header="Choix Prospect">
+            <!--<p-tabPanel header="Choix Prospect">
                 <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
                     <div class="field col-12 md:col-6">
                         <label>Rythme</label>
@@ -253,7 +253,7 @@
                         <textarea pInputTextarea formControlName="note_choix"></textarea>
                     </div>
                 </form>
-            </p-tabPanel>
+            </p-tabPanel>-->
             <p-tabPanel header="Qualification">
                 <form class="p-fluid p-formgrid grid" [formGroup]="followForm">
                     <div class="field col-12 md:col-6">
@@ -278,7 +278,7 @@
                     </div>
                 </form>
             </p-tabPanel>
-            <p-tabPanel header="Ventes">
+            <!--<p-tabPanel header="Ventes">
                 <div class="col-12">
                     <button pButton label="Ajouter un paiement" (click)="onAddPaiement()"></button>
                 </div>
@@ -360,7 +360,7 @@
                         </tr>
                     </ng-template>
                 </p-table>
-            </p-tabPanel>
+            </p-tabPanel>-->
         </p-tabView>
         <div class="col-12 grid">
             <div class="col-12">
@@ -368,27 +368,8 @@
             </div>
         </div>
     </div>
-    <div class="card col-12" *ngIf="showAffect">
-        <form class="p-fluid p-formgrid grid" [formGroup]="affectForm">
-            <div class="field col-12 md:col-6">
-                <label>Affecter le :</label>
-                <input type="date" pInputText formControlName="affected_date">
-            </div>
-            <div class="field col-12 md:col-6">
-                <label>Affecter à :</label>
-                <p-dropdown [options]="memberList" formControlName="affected_to_member" autoWidth="false"
-                    [style]="{'width':'100%'}" placeholder="Choisissez un membre"></p-dropdown>
-            </div>
-            <div class="col-12 grid">
-                <div class="col-12">
-                    <button pButton label="Sauvegardez les modifications" (click)="onUpdateAffect()"></button>
-                </div>
-            </div>
-
-        </form>
-    </div>
     <div class="card col-12">
-        <h5>Liste des leads CRM</h5>
+        <h5>Liste des leads CRM Non Qualifiés</h5>
 
         <p-toast></p-toast>
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
@@ -412,21 +393,10 @@
                         (onChange)="dt1.filter($event.value, 'operation', 'equals');"
                         emptyFilterMessage="Pas d'opération trouvé"
                         filterPlaceholder="Choisissez une operation"></p-dropdown>
-                </div>
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAffecte" filter="true"
-                        (onChange)="dt1.filter($event.value, 'affected_to_member', 'equals');"
-                        emptyFilterMessage="Pas de membre trouvé" filterPlaceholder="Choisissez un membre"></p-dropdown>
-
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterQualification" filter="true"
-                        (onChange)="dt1.filter($event.value, 'decision_qualification', 'equals');"
-                        emptyFilterMessage="Pas de qualification trouvé"
-                        filterPlaceholder="Choisissez une qualification"></p-dropdown>
-
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterPaiement" filter="true"
-                        (onChange)="dt1.filter($event.value, 'modalite_paiement', 'equals');"
-                        emptyFilterMessage="Pas de modalité trouvé"
-                        filterPlaceholder="Choisissez une modalité de paiement"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterProduit" filter="true"
+                        (onChange)="dt1.filter($event.value, 'produit', 'equals');"
+                        emptyFilterMessage="Pas de produit trouvé"
+                        filterPlaceholder="Choisissez un produit"></p-dropdown>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -458,21 +428,7 @@
                     <th pSortableColumn="numero_whatsapp" scope="col" style="text-align: center;">
                         Numéro WhatsApp <p-sortIcon field="numero_whatsapp"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="produit" scope="col" style="text-align: center;">
-                        Produit <p-sortIcon field="produit"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="affected_to_member" scope="col" style="text-align: center;">
-                        Affecté à <p-sortIcon field="affected_to_member"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="decision_qualification" scope="col" style="text-align: center;">
-                        Decision Qualification <p-sortIcon field="decision_qualification"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="modalite_paiement" scope="col" style="text-align: center;">
-                        Paiement <p-sortIcon field="modalite_paiement"></p-sortIcon>
-                    </th>
-                    <th>
-                        Documents Prospect
-                    </th>
+
                     <th>
                         Action
                     </th>
@@ -508,25 +464,9 @@
                         {{lead.indicatif_whatsapp}} {{lead.numero_whatsapp}}
                     </td>
                     <td>
-                        {{lead.produit}}
-                    </td>
-                    <td>
-                        {{lead.affected_to_member}}
-                    </td>
-                    <td>
-                        {{lead.decision_qualification}}
-                    </td>
-                    <td>
-                        {{lead.modalite_paiement}}
-                    </td>
-                    <td>
-                        {{lead?.documents?.length}}
-                    </td>
-                    <td>
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"
-                            (click)="initAffect(lead);scrollToTop()" aria-hidden="true"></i>
+
 
                     </td>
                 </tr>
