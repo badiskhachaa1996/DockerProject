@@ -136,6 +136,7 @@ const intunsEtudiantsController = require('./controllers/intunsEtudiantsControll
 const teamsIntController = require('./controllers/teamsIntController')
 const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
+const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const { User } = require("./models/user");
 
@@ -342,6 +343,7 @@ app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
+app.use('/soc/check', dailyCheckController);
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
