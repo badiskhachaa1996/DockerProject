@@ -107,7 +107,7 @@ export class ExterneSkillsnetComponent implements OnInit {
   }
 
   onUpdateExterne() {
-    this.AuthService.update({ ...this.formUpdateExterne.value }).subscribe(newUser => {
+    this.AuthService.update({ ...this.formUpdateExterne.value, phone: this.formUpdateExterne.value.phone.internationalNumber }).subscribe(newUser => {
       if (this.includesId(newUser._id) != -1 && this.externes[this.includesId(newUser._id)])
         this.externes[this.includesId(newUser._id)].user_id = newUser
       this.formUpdateExterne.reset()
