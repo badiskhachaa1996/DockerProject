@@ -210,6 +210,9 @@ import { MesLeadsComponent } from './crm/mes-leads/mes-leads.component';
 import { TeamsCrmComponent } from './crm/teams-crm/teams-crm.component';
 import { MemberCrmComponent } from './crm/teams-crm/member-crm/member-crm.component';
 import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
+import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-qualifies.component';
+import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
+import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 
 const routes: Routes = [
     {
@@ -394,6 +397,9 @@ const routes: Routes = [
             { path: 'crm/teams', component: TeamsCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/member', component: MemberCrmComponent, canActivate: [AuthGuardService] },
             { path: 'crm/import', component: ImportCrmComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/leads/non-qualifies', component: LeadsNonQualifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/leads/pre-qualifies', component: LeadsPrequalifiesComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/ventes', component: VentesCRMComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
