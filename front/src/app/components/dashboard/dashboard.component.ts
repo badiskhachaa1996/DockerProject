@@ -248,6 +248,9 @@ export class  DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+
+    console.log(new Date(Date.now()))
+
     this.token = jwt_decode(localStorage.getItem('token'));
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
