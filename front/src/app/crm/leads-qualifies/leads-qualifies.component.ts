@@ -8,13 +8,19 @@ import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { Prospect } from 'src/app/models/Prospect';
+import { User } from 'src/app/models/User';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
+import { ActivatedRoute } from '@angular/router';
 @Component({
-  selector: 'app-list-leadcrm',
-  templateUrl: './list-leadcrm.component.html',
-  styleUrls: ['./list-leadcrm.component.scss']
+  selector: 'app-leads-qualifies',
+  templateUrl: './leads-qualifies.component.html',
+  styleUrls: ['./leads-qualifies.component.scss']
 })
-export class ListLeadcrmComponent implements OnInit {
+export class LeadsQualifiesComponent implements OnInit {
+  ID = this.route.snapshot.paramMap.get('id');
+
 
   filterPays = [
     { label: 'Tous les pays', value: null }
@@ -43,7 +49,12 @@ export class ListLeadcrmComponent implements OnInit {
   filterAffecte = [
     { label: 'Tous les membres', value: null }
   ]
-
+  filterProduit = [
+    { label: 'Tous les produits', value: null },
+    { label: 'WIP', value: 'WIP' },
+    { label: 'WIP2', value: 'WIP2' },
+    { label: 'WIP3', value: 'WIP3' },
+  ]
   filterQualification = [
     { label: 'Tous les qualifications', value: null },
     { label: 'En attente de traitement', value: 'En attente de traitement' },
@@ -74,30 +85,59 @@ export class ListLeadcrmComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private TeamCRMService: TeamsCrmService) { }
+  filterEcole = [
+    { label: 'Toutes les écoles', value: null }
+
+  ]
+
+  filterCampus = [
+    { label: 'Toutes les campus', value: null },
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Congo Brazzaville', value: 'Congo Brazzaville' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Malte', value: 'Malte' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
+
+  filterFormation = [
+    { label: 'Toutes les formations', value: null }
+  ]
+
+
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
+    private ProspectService: AdmissionService, private TeamCRMService: TeamsCrmService, private route: ActivatedRoute) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
-    this.LCS.getAll().subscribe(data => {
-      this.leads = data
-    })
+    if (!this.ID)
+      this.LCS.getAllQualifies().subscribe(data => {
+        this.leads = data
+      })
+    else
+      this.LCS.getAllQualifiesByID(this.ID).subscribe(data => {
+        this.leads = data
+      })
     this.FAService.EAgetAll().subscribe(data => {
       data.forEach(f => {
         this.ecoleList.push({ label: f.titre, value: f._id })
+        this.filterEcole.push({ label: f.titre, value: f._id })
       })
     })
     this.FAService.FAgetAll().subscribe(data => {
       data.forEach(d => {
         this.formationList.push({ label: d.nom, value: d._id })
+        this.filterFormation.push({ label: d.nom, value: d._id })
       })
     })
+    this.filterPays = this.filterPays.concat(environment.pays)
     this.TeamCRMService.MIgetAll().subscribe(data => {
       data.forEach(val => {
-        this.memberList.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
         this.filterAffecte.push({ label: `${val.user_id.firstname} ${val.user_id.lastname.toUpperCase()}`, value: val._id })
       })
 
     })
-    this.filterPays = this.filterPays.concat(environment.pays)
+
   }
 
   //Follow Form
@@ -137,7 +177,7 @@ export class ListLeadcrmComponent implements OnInit {
   }
 
   //Contact
-  memberList = []
+  memberList = [{ label: "Jean Pierre Test", value: new mongoose.Types.ObjectId("6474bd8044e14520f9dd5f38").toString() }]
   canalList = [
     { label: "Facebook", value: "Facebook" },
     { label: "WhatsApp", value: "WhatsApp" },
@@ -282,28 +322,6 @@ export class ListLeadcrmComponent implements OnInit {
     { label: 'Pré-qualifié', value: 'Pré-qualifié' },
     { label: 'Qualifié', value: 'Qualifié' },
   ]
-  //Affect Form
-  showAffect: LeadCRM = null
-  affectForm = new FormGroup({
-    _id: new FormControl('', Validators.required),
-    affected_date: new FormControl(''),
-    affected_to_member: new FormControl(''),
-    affected_to_team: new FormControl(''),
-  })
-
-  initAffect(lead: LeadCRM) {
-    this.affectForm.patchValue({ ...lead })
-    this.showAffect = lead
-  }
-
-  onUpdateAffect() {
-    this.LCS.update({ ...this.affectForm.value }).subscribe(data => {
-      this.leads.splice(this.leads.indexOf(this.showAffect), 1, data)
-      this.affectForm.reset()
-      this.showAffect = null
-      this.ToastService.add({ severity: "success", summary: "Affectation du lead avec succès" })
-    })
-  }
 
   scrollToTop() {
     var scrollDuration = 250;
@@ -317,4 +335,90 @@ export class ListLeadcrmComponent implements OnInit {
       }
     }, 15);
   }
+  //Envoyer à l'admission
+  formTransfertUser = new FormGroup({
+    civilite: new FormControl(''),
+    firstname: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    phone: new FormControl(''),
+    indicatif: new FormControl(''),
+    email_perso: new FormControl('', Validators.required),
+    role: new FormControl('user'),
+    pays_adresse: new FormControl(''),
+    ville_adresse: new FormControl(''),
+    rue_adresse: new FormControl(''),
+    numero_adresse: new FormControl(''),
+    postal_adresse: new FormControl(''),
+    nationnalite: new FormControl('', Validators.required),
+    _id: new FormControl('')
+  })
+  formTransfertProspect = new FormGroup({
+    user_id: new FormControl(''),
+    date_naissance: new FormControl(''),
+    numero_whatsapp: new FormControl(''),
+    validated_academic_level: new FormControl(''),
+    statut_actuel: new FormControl(''),
+    campus_choix_1: new FormControl(''),
+    formation: new FormControl(''),
+    rythme_formation: new FormControl(''),
+    date_creation: new FormControl(''),
+    type_form: new FormControl(''),
+    indicatif_whatsapp: new FormControl(''),
+    customid: new FormControl(''),
+    payement: new FormControl(''), // TODO
+    origin: new FormControl('CRM'),
+    source: new FormControl(''),
+    rentree_scolaire: new FormControl(''), //TODO
+    languages_fr: new FormControl(''),
+    languages_en: new FormControl(''),
+    numero_telegram: new FormControl(''),
+    indicatif_telegram: new FormControl(''),
+    documents_administrative: new FormControl(''), //TODO
+  })
+  showTransfer: LeadCRM = null
+  initTransferToSM(lead: LeadCRM) {
+    this.showTransfer = lead
+    let id_string = new mongoose.Types.ObjectId().toString()
+    this.formTransfertProspect.patchValue({
+      date_naissance: new Date(lead.date_naissance),
+      numero_whatsapp: lead.numero_whatsapp,
+      validated_academic_level: lead.dernier_niveau_academique,
+      statut_actuel: lead.statut,
+      campus_choix_1: lead.campus,
+      formation: lead.formation,
+      rythme_formation: lead.rythme,
+      date_creation: new Date(lead.date_creation),
+      type_form: lead.ecole,
+      indicatif_whatsapp: lead.indicatif_whatsapp,
+      customid: "CRM" + lead.custom_id,
+      origin: 'CRM',
+      source: lead.source,
+      languages_fr: lead.niveau_fr,
+      languages_en: lead.niveau_en,
+      numero_telegram: lead.numero_telegram,
+      indicatif_telegram: lead.indicatif_telegram,
+      documents_administrative: lead.documents, //TODO
+      user_id: id_string
+    })
+    this.formTransfertUser.patchValue({
+      civilite: lead.civilite,
+      firstname: lead.prenom,
+      lastname: lead.nom,
+      phone: lead.numero_phone,
+      indicatif: lead.indicatif_phone,
+      email_perso: lead.email,
+      role: 'user',
+      pays_adresse: lead.pays_residence,
+      nationnalite: lead.nationalite,
+      _id: id_string
+    })
+  }
+  TransferToSM() {
+    this.ProspectService.create({ newProspect: { ...this.formTransfertProspect }, newUser: { ...this.formTransfertUser } }).subscribe(data => {
+      //Déplacer les documents
+      this.ToastService.add({ severity: 'success', summary: "Transfert vers le module international" })
+      this.showTransfer = null
+    })
+  }
+
 }

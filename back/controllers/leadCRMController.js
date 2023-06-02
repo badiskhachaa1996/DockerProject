@@ -16,13 +16,49 @@ app.post("/create", (req, res) => {
 })
 
 app.get("/getAll", (req, res, next) => {
-    LeadCRM.find()
+    LeadCRM.find().populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllNonQualifies", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Non qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllPreQualifies", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Pré-qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllQualifies", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Qualifié' }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllNonQualifiesByID/:id", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Non qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllPreQualifiesByID/:id", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Pré-qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/getAllQualifiesByID/:id", (req, res, next) => {
+    LeadCRM.find({ decision_qualification: 'Qualifié', affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/getAllByID/:id", (req, res, next) => {
-    LeadCRM.find({ affected_to_member: req.params.id })
+    LeadCRM.find({ affected_to_member: req.params.id }).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -40,7 +76,7 @@ app.put("/update", (req, res) => {
             console.error(err); res.status(500).send(err);
         }
         else
-            LeadCRM.findById(req.body._id)
+            LeadCRM.findById(req.body._id).populate({ path: 'affected_to_member', populate: { path: 'user_id' } })
                 .then((formFromDb) => { res.status(200).send(formFromDb); })
                 .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });

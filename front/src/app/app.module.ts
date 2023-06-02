@@ -317,6 +317,7 @@ import { ImportCrmComponent } from './crm/import-crm/import-crm.component';
 import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-qualifies.component';
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
+import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
 
 
 @NgModule({
@@ -644,6 +645,7 @@ import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
     LeadsNonQualifiesComponent,
     LeadsPrequalifiesComponent,
     VentesCRMComponent,
+    LeadsQualifiesComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

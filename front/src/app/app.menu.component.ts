@@ -746,7 +746,7 @@ export class AppMenuComponent implements OnInit {
                                         }, {
                                             label: 'Mes Leads',
                                             icon: 'pi pi-user',
-                                            routerLink: ['crm/mes-leads/6474bd8044e14520f9dd5f38']
+                                            routerLink: ['crm/mes-leads/liste/6474bd8044e14520f9dd5f38']
                                         },
                                     ]
                                 },
@@ -757,11 +757,15 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Les leads non qualifiés',
                                             icon: 'pi pi-star-fill',
-                                            routerLink: ['']
+                                            routerLink: ['crm/leads/non-qualifies']
                                         }, {
                                             label: 'Les leads préqualifiés',
                                             icon: 'pi pi-star',
-                                            routerLink: ['']
+                                            routerLink: ['crm/leads/pre-qualifies']
+                                        }, {
+                                            label: 'Les leads qualifiés',
+                                            icon: 'pi pi-star',
+                                            routerLink: ['crm/leads/qualifies']
                                         }, {
                                             label: 'Les ventes',
                                             icon: 'pi pi-chart-line',
