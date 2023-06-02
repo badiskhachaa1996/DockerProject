@@ -91,4 +91,13 @@ app.post("/uploadFile", uploadConfig.single('file'), (req, res, next) => {
     res.status(201).send({ message: "C'est bon" });
 });
 
+app.post("/insertDB", (req, res) => {
+    LeadCRM.insertMany(req.body.toInsert).then(docs => {
+        req.body.toUpdate.forEach(val => {
+            LeadCRM.findByIdAndUpdate(val._id, { ...val }).exec()
+        })
+        res.send(docs)
+    })
+})
+
 module.exports = app;

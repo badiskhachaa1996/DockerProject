@@ -298,7 +298,10 @@ export class FirstConnectionComponent implements OnInit {
             })
             this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
 
-
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.ss.connected()
+              this.router.navigate(["/"]);
+            });
 
 
           }, (error) => {

@@ -1,21 +1,620 @@
 <div class="grid">
     <div class="col-12 card grid" *ngIf="!upload">
         <!--Choix du type du fichier XML ou XLS-->
-        <h5 class="col-12" style="text-align: center;">Importation de leads dans le CRM</h5>
-        <div class="col-6">
-            <label>Format XLS</label>
-            <p-fileUpload (uploadHandler)="fileUploadXLS($event)" mode="basic" chooseLabel="Ajouter un Excel"
-                customUpload="true" fileLimit="1" accept=".xls,.xlsx,.txt" maxFileSize="10000000" [auto]="true" #fileInput>
+        <h2 class="col-12" style="text-align: center;">Importation de leads dans le CRM</h2>
+        <div class="col-12 grid">
+            <h3 class="col-12">Format XLS</h3> <!--<i class="pi pi-file-excel" aria-hidden="true"></i>-->
+            <p-fileUpload class="col-6" (uploadHandler)="fileUploadXLS($event)" mode="basic"
+                chooseLabel="Ajouter un Excel" customUpload="true" fileLimit="1" accept=".xls,.xlsx,.txt"
+                maxFileSize="10000000" [auto]="true" autoWidth="false"
+                [style]="{'width':'100%','background-color':'green','border':'green'}" #fileInput>
             </p-fileUpload>
+            <p-button class="col-6" [style]="{'width':'100%','background-color':'green','border':'green'}"
+                (click)="downloadFile('Template_Import_Lead_CRM.xlsx')" icon="pi pi-download" autoWidth="false"
+                label="Télécharger la template XLS"></p-button>
         </div>
-        <div class="col-6">
-            <label>Format XML</label>
+        <!--<div class="col-6 grid ">
+            <h3 class="col-12">Format XML</h3>
             <p-fileUpload (uploadHandler)="fileUploadXML($event)" mode="basic" chooseLabel="Ajouter un XML"
-                customUpload="true" fileLimit="1" accept=".xml" maxFileSize="10000000" [auto]="true" #fileInput>
+                autoWidth="false" [style]="{'width':'100%'}" class="col-6 " customUpload="true" fileLimit="1"
+                accept=".xml" maxFileSize="10000000" [auto]="true" #fileInput>
             </p-fileUpload>
+            <p-button class="col-6" [style]="{'width':'100%'}" autoWidth="false" icon="pi pi-download"
+                (click)="downloadFile('Template_Import_Lead_CRM.xml')" label="Télécharger la template XML"></p-button>
+        </div>-->
+    </div>
+    <div class="col-12 card grid" *ngIf="upload">
+        <div class="col-12 grid" *ngIf="leadsToCreate.length>0">
+            <h4 class="col-12">Listes des Leads à ajouter</h4>
+
+            <p-table dt1 [value]="leadsToCreate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="10"
+                [pageLinks]="5" [paginator]="true" [totalRecords]="leadsToCreate?.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <div style="justify-content: right;">
+                        <p-button class="col-12" label="Ajouter un lead supplémentaire" icon="pi pi-plus" iconPos="left"
+                            (click)="addLead()"></p-button>
+                    </div>
+
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr style="background-color: red;">
+                        <th pSortableColumn="source">
+                            Source <p-sortIcon field="source"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="operation">
+                            Operation <p-sortIcon field="operation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="civilite">
+                            Civilité <p-sortIcon field="civilite"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom">
+                            Nom du Lead <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prenom">
+                            Prénom du Lead <p-sortIcon field="prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="pays_residence">
+                            Pays de Résidence <p-sortIcon field="pays_residence"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nationalite">
+                            Nationalité <p-sortIcon field="nationalite"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email">
+                            Email du lead <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_naissance">
+                            Date de naissance <p-sortIcon field="date_naissance"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero_whatsapp">
+                            WhatsApp <p-sortIcon field="numero_whatsapp"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero_telegram">
+                            Telegram <p-sortIcon field="numero_telegram"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dernier_niveau_academique">
+                            Dernier Niveau Académique <p-sortIcon field="dernier_niveau_academique"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut">
+                            Statut Actuel <p-sortIcon field="statut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="niveau_fr">
+                            Niveau Français <p-sortIcon field="niveau_fr"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="niveau_en">
+                            Niveau Anglais <p-sortIcon field="niveau_en"></p-sortIcon>
+                        </th>
+
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-lead let-ri="rowIndex">
+                    <tr [pEditableRow]="lead">
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['source'].error!=null,'uareorangenow':errorToCreate[ri]['source'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
+                                        [options]="sourceDropdown" [editable]="true" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'source',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.source"
+                                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.source}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['operation'].error!=null,'uareorangenow':errorToCreate[ri]['operation'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
+                                        [editable]="true" [options]="operationDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'operation',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.operation"
+                                        emptyFilterMessage="Pas d'operation trouvé" filterPlaceholder="Operation">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.operation}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['civilite'].error!=null,'uareorangenow':errorToCreate[ri]['civilite'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une civilité"
+                                        [editable]="true" [options]="civiliteDropdown" autoWidth="false"
+                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.civilite" emptyFilterMessage="Pas de civilité trouvé"
+                                        filterPlaceholder="Civilité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.civilite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['nom'].error!=null,'uareorangenow':errorToCreate[ri]['nom'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.nom"
+                                        (blur)="onChangeCreate(ri,'nom',$event.target.value)" type="text"
+                                        placeholder="Ex: Smith" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nom}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['prenom'].error!=null,'uareorangenow':errorToCreate[ri]['prenom'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.prenom"
+                                        (blur)="onChangeCreate(ri,'prenom',$event.target.value)" type="text"
+                                        placeholder="Ex: John" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.prenom}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['pays_residence'].error!=null,'uareorangenow':errorToCreate[ri]['pays_residence'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
+                                        [editable]="true" [options]="paysDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'pays_residence',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.pays_residence"
+                                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.pays_residence}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['nationalite'].error!=null,'uareorangenow':errorToCreate[ri]['nationalite'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
+                                        [editable]="true" [options]="nationaliteDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'nationalite',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.nationalite"
+                                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nationalite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['email'].error!=null,'uareorangenow':errorToCreate[ri]['email'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.email" type="text"
+                                        (blur)="onChangeCreate(ri,'email',$event.target.value)"
+                                        placeholder="Ex: m.hue@estya.com" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.email}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['date_naissance'].error!=null,'uareorangenow':errorToCreate[ri]['date_naissance'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance"
+                                        (blur)="onChangeCreate(ri,'date_naissance',$event.target.value)">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.indicatif_whatsapp" type="tel"
+                                        placeholder="Ex: +33" />
+                                    <input pInputText [(ngModel)]="lead.numero_whatsapp" type="tel"
+                                        placeholder="Ex: 0683898989" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.indicatif_whatsapp}}&nbsp;{{lead?.numero_whatsapp}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.indicatif_telegram" type="tel"
+                                        placeholder="Ex: +33" />
+                                    <input pInputText [(ngModel)]="lead.numero_telegram" type="tel"
+                                        placeholder="Ex: 0683898989" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.indicatif_telegram}}&nbsp;{{lead?.numero_telegram}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['dernier_niveau_academique'].error!=null,'uareorangenow':errorToCreate[ri]['dernier_niveau_academique'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        [editable]="true" [options]="nivDropdown" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'dernier_niveau_academique',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.dernier_niveau_academique"
+                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau academique">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.dernier_niveau_academique}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['statut'].error!=null,'uareorangenow':errorToCreate[ri]['statut'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
+                                        [editable]="true" [options]="statutList" autoWidth="false"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.statut"
+                                        (onChange)="onChangeCreate(ri,'statut',$event.value)"
+                                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Statut">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.statut}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['niveau_fr'].error!=null,'uareorangenow':errorToCreate[ri]['niveau_fr'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        [editable]="true" [options]="niveauFR" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'niveau_fr',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_fr"
+                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.niveau_fr}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['niveau_en'].error!=null,'uareorangenow':errorToCreate[ri]['niveau_en'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        [editable]="true" [options]="niveauEN" autoWidth="false"
+                                        (onChange)="onChangeCreate(ri,'niveau_en',$event.value)"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.niveau_en"
+                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.niveau_en}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimer cette ligne" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deleteAdded(ri)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
+        <div class="col-12 grid" *ngIf="leadsToUpdate.length>0">
+            <h4 class="col-12">Listes des Leads Mis à jour</h4>
+            <p-table dt1 [value]="leadsToUpdate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="10"
+                [pageLinks]="5" [paginator]="true" [totalRecords]="leadsToUpdate?.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr style="background-color: red;">
+                        <th pSortableColumn="source">
+                            Source <p-sortIcon field="source"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="operation">
+                            Operation <p-sortIcon field="operation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="civilite">
+                            Civilité <p-sortIcon field="civilite"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom">
+                            Nom du Lead <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prenom">
+                            Prénom du Lead <p-sortIcon field="prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="pays_residence">
+                            Pays de Résidence <p-sortIcon field="pays_residence"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nationalite">
+                            Nationalité <p-sortIcon field="nationalite"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email">
+                            Email du lead <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_naissance">
+                            Date de naissance <p-sortIcon field="date_naissance"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero_whatsapp">
+                            WhatsApp <p-sortIcon field="numero_whatsapp"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="numero_telegram">
+                            Telegram <p-sortIcon field="numero_telegram"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dernier_niveau_academique">
+                            Dernier Niveau Académique <p-sortIcon field="dernier_niveau_academique"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut">
+                            Statut Actuel <p-sortIcon field="statut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="niveau_fr">
+                            Niveau Français <p-sortIcon field="niveau_fr"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="niveau_en">
+                            Niveau Anglais <p-sortIcon field="niveau_en"></p-sortIcon>
+                        </th>
+
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-lead let-ri="rowIndex">
+                    <tr [pEditableRow]="lead">
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['source'].error!=null,'uareorangenow':errorToUpdate[ri]['source'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
+                                        [options]="sourceDropdown" [editable]="true" autoWidth="false"
+                                        (onChange)="onChangeUpdate(ri,'source',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.source"
+                                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.source}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['operation'].error!=null,'uareorangenow':errorToUpdate[ri]['operation'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
+                                        [editable]="true" [options]="operationDropdown" autoWidth="false"
+                                        (onChange)="onChangeUpdate(ri,'operation',$event.value)" optionValue="value"
+                                        optionLabel="value" [style]="{'width':'100%'}" [(ngModel)]="lead.operation"
+                                        emptyFilterMessage="Pas d'operation trouvé" filterPlaceholder="Operation">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.operation}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['civilite'].error!=null,'uareorangenow':errorToUpdate[ri]['civilite'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une civilité"
+                                        [editable]="true" [options]="civiliteDropdown" autoWidth="false"
+                                        optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.civilite" emptyFilterMessage="Pas de civilité trouvé"
+                                        filterPlaceholder="Civilité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.civilite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['nom'].error!=null,'uareorangenow':errorToUpdate[ri]['nom'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.nom"
+                                        (blur)="onChangeUpdate(ri,'nom',$event.target.value)" type="text"
+                                        placeholder="Ex: Smith" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nom}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['prenom'].error!=null,'uareorangenow':errorToUpdate[ri]['prenom'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.prenom"
+                                        (blur)="onChangeUpdate(ri,'prenom',$event.target.value)" type="text"
+                                        placeholder="Ex: John" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.prenom}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['pays_residence'].error!=null,'uareorangenow':errorToUpdate[ri]['pays_residence'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
+                                        (onChange)="onChangeUpdate(ri,'pays_residence',$event.value)" [editable]="true"
+                                        [options]="paysDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.pays_residence" emptyFilterMessage="Pas de pays trouvé"
+                                        filterPlaceholder="Pays">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.pays_residence}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['nationalite'].error!=null,'uareorangenow':errorToUpdate[ri]['nationalite'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
+                                        (onChange)="onChangeUpdate(ri,'nationalite',$event.value)" [editable]="true"
+                                        [options]="nationaliteDropdown" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.nationalite" emptyFilterMessage="Pas de nationalité trouvé"
+                                        filterPlaceholder="Nationalité">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.nationalite}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['email'].error!=null,'uareorangenow':errorToUpdate[ri]['email'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.email" type="text"
+                                        (blur)="onChangeUpdate(ri,'email',$event.target.value)"
+                                        placeholder="Ex: m.hue@estya.com" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.email}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['date_naissance'].error!=null,'uareorangenow':errorToUpdate[ri]['date_naissance'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="date" pInputText [(ngModel)]="lead.date_naissance"
+                                        (blur)="onChangeUpdate(ri,'date_naissance',$event.target.value)">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.indicatif_whatsapp" type="tel"
+                                        placeholder="Ex: +33" />
+                                    <input pInputText [(ngModel)]="lead.numero_whatsapp" type="tel"
+                                        placeholder="Ex: 0683898989" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.indicatif_whatsapp}}&nbsp;{{lead?.numero_whatsapp}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText [(ngModel)]="lead.indicatif_telegram" type="tel"
+                                        placeholder="Ex: +33" />
+                                    <input pInputText [(ngModel)]="lead.numero_telegram" type="tel"
+                                        placeholder="Ex: 0683898989" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.indicatif_telegram}}&nbsp;{{lead?.numero_telegram}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['dernier_niveau_academique'].error!=null,'uareorangenow':errorToUpdate[ri]['dernier_niveau_academique'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        (onChange)="onChangeUpdate(ri,'dernier_niveau_academique',$event.value)"
+                                        [editable]="true" [options]="nivDropdown" autoWidth="false"
+                                        [style]="{'width':'100%'}" [(ngModel)]="lead.dernier_niveau_academique"
+                                        emptyFilterMessage="Pas de niveau trouvé" filterPlaceholder="Niveau academique">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.dernier_niveau_academique}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['statut'].error!=null,'uareorangenow':errorToUpdate[ri]['statut'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
+                                        (onChange)="onChangeUpdate(ri,'statut',$event.value)" [editable]="true"
+                                        [options]="statutList" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.statut" emptyFilterMessage="Pas de statut trouvé"
+                                        filterPlaceholder="Statut">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.statut}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['niveau_fr'].error!=null,'uareorangenow':errorToUpdate[ri]['niveau_fr'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        (onChange)="onChangeUpdate(ri,'niveau_fr',$event.value)" [editable]="true"
+                                        [options]="niveauFR" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.niveau_fr" emptyFilterMessage="Pas de niveau trouvé"
+                                        filterPlaceholder="Niveau">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.niveau_fr}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['niveau_en'].error!=null,'uareorangenow':errorToUpdate[ri]['niveau_en'].warning!=null}">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
+                                        (onChange)="onChangeUpdate(ri,'niveau_en',$event.value)" [editable]="true"
+                                        [options]="niveauEN" autoWidth="false" [style]="{'width':'100%'}"
+                                        [(ngModel)]="lead.niveau_en" emptyFilterMessage="Pas de niveau trouvé"
+                                        filterPlaceholder="Niveau">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{lead?.niveau_en}}&nbsp;
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimer cette ligne" tooltipPosition="bottom" class="pi pi-trash"
+                                aria-hidden="true" (click)="deleteUpdated(ri)"> </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p *ngIf="canValidate().nberror!=0" style="color: red;" class="col-12">Des erreurs empêche une insertion
+            fonctionnel des leads, Vérifiez les cases rouges.</p>
+        <p *ngIf="canValidate().nbwarning!=0" style="color: orange;" class="col-12">Des cases comportent des
+            informations non conformes par rapport aux listes prédéfinis sur IMS, ce n'est pas bloquant mais cela
+            faussera les statistiques ou les documents générés.</p>
+        <p-button class="col-12" label="Enregister les leads dans IMS" icon="pi pi-save" iconPos="left"
+            [style]="{'width':'100%'}" autoWidth="false" [disabled]="canValidate().nberror!=0"
+            (click)="saveLeads()"></p-button><!-- disabled]="canValidate().nberror!=0" -->
     </div>
 </div>
-
-<!-- Envoyer les données au back et affiché un tableau AJOUT de LEAD et un autre UPDATE de LEAD -->
-<!-- Permettre la modification des donnés avant validation -->
