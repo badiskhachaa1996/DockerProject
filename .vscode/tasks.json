@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "front",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build - front",
+			"detail": "ng build"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "back",
+			"problemMatcher": [],
+			"label": "npm: start - back",
+			"detail": "npm start -- 2805"
+		}
+	]
+}

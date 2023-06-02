@@ -90,7 +90,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-lead let-ri="rowIndex">
                     <tr [pEditableRow]="lead">
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['source'].error!=null,'uareorangenow':errorToCreate[ri]['source'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
@@ -106,7 +107,8 @@
                             </p-cellEditor>
 
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['operation'].error!=null,'uareorangenow':errorToCreate[ri]['operation'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
@@ -121,7 +123,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['civilite'].error!=null,'uareorangenow':errorToCreate[ri]['civilite'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une civilité"
@@ -136,7 +139,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['nom'].error!=null,'uareorangenow':errorToCreate[ri]['nom'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.nom"
@@ -148,7 +152,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['prenom'].error!=null,'uareorangenow':errorToCreate[ri]['prenom'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.prenom"
@@ -160,7 +165,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['pays_residence'].error!=null,'uareorangenow':errorToCreate[ri]['pays_residence'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
@@ -175,7 +181,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['nationalite'].error!=null,'uareorangenow':errorToCreate[ri]['nationalite'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
@@ -190,7 +197,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['email'].error!=null,'uareorangenow':errorToCreate[ri]['email'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.email" type="text"
@@ -202,7 +210,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['date_naissance'].error!=null,'uareorangenow':errorToCreate[ri]['date_naissance'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input type="date" pInputText [(ngModel)]="lead.date_naissance"
@@ -239,7 +248,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['dernier_niveau_academique'].error!=null,'uareorangenow':errorToCreate[ri]['dernier_niveau_academique'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -254,7 +264,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['statut'].error!=null,'uareorangenow':errorToCreate[ri]['statut'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
@@ -269,7 +280,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['niveau_fr'].error!=null,'uareorangenow':errorToCreate[ri]['niveau_fr'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -284,7 +296,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToCreate[ri]['niveau_en'].error!=null,'uareorangenow':errorToCreate[ri]['niveau_en'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -365,7 +378,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-lead let-ri="rowIndex">
                     <tr [pEditableRow]="lead">
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['source'].error!=null,'uareorangenow':errorToUpdate[ri]['source'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une source"
@@ -381,7 +395,8 @@
                             </p-cellEditor>
 
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['operation'].error!=null,'uareorangenow':errorToUpdate[ri]['operation'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une operation"
@@ -396,7 +411,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['civilite'].error!=null,'uareorangenow':errorToUpdate[ri]['civilite'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une civilité"
@@ -411,7 +427,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['nom'].error!=null,'uareorangenow':errorToUpdate[ri]['nom'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.nom"
@@ -423,7 +440,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['prenom'].error!=null,'uareorangenow':errorToUpdate[ri]['prenom'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.prenom"
@@ -435,7 +453,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['pays_residence'].error!=null,'uareorangenow':errorToUpdate[ri]['pays_residence'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un pays"
@@ -450,7 +469,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['nationalite'].error!=null,'uareorangenow':errorToUpdate[ri]['nationalite'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez une nationalité"
@@ -465,7 +485,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['email'].error!=null,'uareorangenow':errorToUpdate[ri]['email'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText [(ngModel)]="lead.email" type="text"
@@ -477,7 +498,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['date_naissance'].error!=null,'uareorangenow':errorToUpdate[ri]['date_naissance'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input type="date" pInputText [(ngModel)]="lead.date_naissance"
@@ -514,7 +536,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['dernier_niveau_academique'].error!=null,'uareorangenow':errorToUpdate[ri]['dernier_niveau_academique'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -529,7 +552,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['statut'].error!=null,'uareorangenow':errorToUpdate[ri]['statut'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un statut"
@@ -544,7 +568,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['niveau_fr'].error!=null,'uareorangenow':errorToUpdate[ri]['niveau_fr'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -559,7 +584,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td pEditableColumn>
+                        <td pEditableColumn
+                            [ngClass]="{'uarerednow':errorToUpdate[ri]['niveau_en'].error!=null,'uareorangenow':errorToUpdate[ri]['niveau_en'].warning!=null}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown appendTo="body" filter="true" placeholder="Choisissez un niveau"
@@ -582,9 +608,13 @@
                 </ng-template>
             </p-table>
         </div>
-        {{canValidate()|json}}
+        <p *ngIf="canValidate().nberror!=0" style="color: red;" class="col-12">Des erreurs empêche une insertion
+            fonctionnel des leads, Vérifiez les cases rouges.</p>
+        <p *ngIf="canValidate().nbwarning!=0" style="color: orange;" class="col-12">Des cases comportent des
+            informations non conformes par rapport aux listes prédéfinis sur IMS, ce n'est pas bloquant mais cela
+            faussera les statistiques ou les documents générés.</p>
         <p-button class="col-12" label="Enregister les leads dans IMS" icon="pi pi-save" iconPos="left"
-            [style]="{'width':'100%'}" autoWidth="false"
+            [style]="{'width':'100%'}" autoWidth="false" [disabled]="canValidate().nberror!=0"
             (click)="saveLeads()"></p-button><!-- disabled]="canValidate().nberror!=0" -->
     </div>
 </div>
