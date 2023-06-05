@@ -56,11 +56,22 @@ const ticket_schema = new mongoose.Schema({
         type: String,
         default: "ESTYANOPEPE10120000001"
     },
-    etudiant_id:{
+    etudiant_id: {
         type: mongoose.Schema.Types.ObjectId,
-        default:null,
+        default: null,
         ref: "etudiant"
-    }
+    },
+
+    //Documents
+    documents: {
+        type: [{
+            nom: { type: String, required: false },
+            path: { type: String, required: false },
+        }], default: []
+    },
+    priorite: {
+        type: String
+    }, note: { type: String }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Ticket = mongoose.model("ticket", ticket_schema);

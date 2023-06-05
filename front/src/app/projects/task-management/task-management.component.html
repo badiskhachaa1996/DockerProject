@@ -186,7 +186,7 @@
 			<button pButton label="Nouveau projet" icon="pi pi-plus" style="float: right;" (click)="showFormAddProject = true"></button>
 			<h5>Projets</h5>
 			<p-table #dt1 [value]="projects" dataKey="_id" editMode="row"
-					 [rows]="10" [rowHover]="true" [paginator]="true"
+					 [rows]="8" [rowHover]="true" [paginator]="true"
 					 [globalFilterFields]="['libelle','percent','creator_id?.lastname','creator_id?.firstname', 'creator_id?.email', 'creator_id?.email_perso']"
 					 responsiveLayout="scroll">
 

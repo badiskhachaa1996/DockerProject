@@ -195,7 +195,7 @@
                     (click)="showFormAddMatiere = true; showFormModifMatiere = false;"></button>
             </div>
             <h5>Liste des modules</h5>
-            <p-table #dt1 rowExpandMode="single" [value]="matieres" dataKey="_id" [rows]="10" [rowHover]="true"
+            <p-table #dt1 rowExpandMode="single" [value]="matieres" dataKey="_id" [rows]="8" [rowHover]="true"
                 [totalRecords]="matieres.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['nom','abbrv','remarque','semestre','niveau']" responsiveLayout="scroll" [scrollable]="true" scrollDirection="both">
 

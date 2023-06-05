@@ -214,7 +214,7 @@
             </div>
 
             <p-table [value]="stages" dataKey="_id" #dt1 [rowHover]="true" [totalRecords]="stages.length" 
-                    [paginator]="true" [rows]="10" [pageLinks]="5" responsiveLayout="scroll"
+                    [paginator]="true" [rows]="8" [pageLinks]="5" responsiveLayout="scroll"
                     [globalFilterFields]="['student_id.user_id.lastname', 'student_id.user_id.firstname', 'enterprise_id.r_sociale', 'commercial_id.lastname', 'commercial_id.firstname', 'commercial_id.lastname', 'gratification', 'tutor_id.user_id.firstname', 'tutor_id.user_id.lastname']">
 
 				<ng-template pTemplate="caption">

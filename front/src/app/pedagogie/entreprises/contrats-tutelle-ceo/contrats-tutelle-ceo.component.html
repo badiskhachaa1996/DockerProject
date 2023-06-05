@@ -22,7 +22,7 @@
 			<p-table #dt1 [value]="contracts"
                 [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
-                [rows]="10">
+                [rows]="8">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">

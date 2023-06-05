@@ -34,7 +34,7 @@
                     <button type="button" pButton label="DataTable" (click)="op2.toggle($event)" class="p-button-success"></button>
                     <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '450px'}">
                         <ng-template pTemplate>
-                            <p-table [value]="products" rowExpandMode="single" [(selection)]="selectedProduct" [paginator]="true" [rows]="10" (onRowSelect)="op2.hide()" responsiveLayout="scroll">
+                            <p-table [value]="products" rowExpandMode="single" [(selection)]="selectedProduct" [paginator]="true" [rows]="8" (onRowSelect)="op2.hide()" responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>

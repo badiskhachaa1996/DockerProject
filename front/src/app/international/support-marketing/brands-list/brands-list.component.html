@@ -133,7 +133,7 @@
             <h5>Liste des supports Marketing de {{showSupportMarketing.nom}}</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="SMs"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="SMs"
                 [paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['nom', 'description']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -200,7 +200,7 @@
             <h5>Liste des brands</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="brands"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="brands"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
                 [globalFilterFields]="['nom', 'description', 'partenaire_id.nom']" responsiveLayout="scroll"
                 styleClass="p-datatable-gridlines">

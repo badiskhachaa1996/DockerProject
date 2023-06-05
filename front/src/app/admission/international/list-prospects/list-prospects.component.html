@@ -396,7 +396,7 @@
             <h5>Liste des leads</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="prospects"
                 [paginator]="true" [pageLinks]="5" selectionMode="single"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">

@@ -105,6 +105,64 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon : 'pi pi-plus',
+                                            routerLink:['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets',
+                                            icon : 'pi pi-inbox',
+                                            routerLink:['/ticketing/gestion/mes-tickets']
+                                        },
+                                        {
+                                            label: 'Tickets assigné à moi',
+                                            icon : 'pi pi-user',
+                                            routerLink:['/ticketing/gestion/assignes']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Suivi des tickets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Tickets non assignés',
+                                            icon : 'pi pi-clock',
+                                            routerLink:['/ticketing/suivi/non-assignes']
+                                        },
+                                        {
+                                            label: 'Tickets assignés',
+                                            icon : 'pi pi-inbox',
+                                            routerLink:['/ticketing/gestion/attente-de-traitement']
+                                        },
+                                        {
+                                            label: 'Tickets traités',
+                                            icon : 'pi pi-check-circle',
+                                            routerLink:['/ticketing/gestion/traites']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Configuration',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/admin/gestion-services'],
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    routerLink: [],
+                                },
+                            ]
+                        },
+                        {
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [

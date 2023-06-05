@@ -17,7 +17,7 @@
 
             <p-table #dt1 [value]="etudiantConnectedFromLastWeek" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso', 'campus._id']"
-                [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantConnectedFromLastWeek.length">
+                [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantConnectedFromLastWeek.length">
                 <ng-template pTemplate="caption">
 
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"

@@ -123,7 +123,7 @@
 </div>
 <div class="card" *ngIf="offre">
 	<h5>Liste des matchings potentiels sur {{offre.missionName}} de {{offre.entreprise_name}}</h5>
-	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="10"
+	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="8"
 		[rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
 		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 

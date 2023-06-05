@@ -52,7 +52,7 @@
                 <button pButton label="Ajouter une équipe" (click)="showFormAddEquipe = true;"></button>
             </div>
             <h5>Liste des équipes de conseillers</h5>
-            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="team" styleClass="" [paginator]="true"
+            <p-table #dt1 dataKey="id" [rows]="8" [rowHover]="true" [value]="team" styleClass="" [paginator]="true"
                 [pageLinks]="5" [globalFilterFields]="['owner_id.lastname','owner_id.firstname']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

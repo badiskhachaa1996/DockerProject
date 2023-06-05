@@ -177,7 +177,7 @@
                 (click)="showFormAddFacture = true;"></button>
 
             <h5>Liste des factures</h5>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="factures"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" rowExpandMode="single" [value]="factures"
                 [paginator]="true" [pageLinks]="5" [globalFilterFields]="['produit', 'statutCommission']"
                 [totalRecords]="factures.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

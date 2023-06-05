@@ -43,7 +43,7 @@
             <button pButton pRipple label="Ajouter un profile" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddProfile = true" style="float: right"></button>
 
             <h5>Liste des profiles</h5>
-			<p-table #dt1 [value]="profiles" dataKey="_id" [rows]="10" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
+			<p-table #dt1 [value]="profiles" dataKey="_id" [rows]="8" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
@@ -138,7 +138,7 @@
             <button pButton pRipple label="Ajouter une compétence à ce profile" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddCompetence = true" style="float: right"></button>
 
             <h5>Liste des competences pour {{ profileSelected.libelle }}</h5>
-			<p-table #dt1 [value]="competences" dataKey="_id" [rows]="10" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
+			<p-table #dt1 [value]="competences" dataKey="_id" [rows]="8" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">

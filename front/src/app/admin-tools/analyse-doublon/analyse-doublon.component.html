@@ -72,7 +72,7 @@
         </div>
         <h5>Gestion des doublons avec IMS</h5>
         <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [globalFilterFields]="['data[0].email','data[0]?.firstname','data[0]?.lastname']"
+            [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [globalFilterFields]="['data[0].email','data[0]?.firstname','data[0]?.lastname']"
             [totalRecords]="doublonEmailIMS.length">
 
             <ng-template pTemplate="caption">
@@ -164,7 +164,7 @@
         </div>
         <h5>Gestion des doublons avec Email perso</h5>
         <p-table [value]="doublonEmailPerso" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
             [totalRecords]="doublonEmailPerso.length">
             <ng-template pTemplate="header">
                 <tr>
@@ -250,7 +250,7 @@
         </div>
         <h5>Gestion des utilisateurs avec le même email</h5>
         <p-table [value]="sameEmailPersoIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
             [totalRecords]="sameEmailPersoIMS.length">
             <ng-template pTemplate="header">
                 <tr>

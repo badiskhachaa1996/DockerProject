@@ -318,6 +318,9 @@ import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
+import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
+import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
+import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
 
 
 @NgModule({
@@ -646,6 +649,9 @@ import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.c
     LeadsPrequalifiesComponent,
     VentesCRMComponent,
     LeadsQualifiesComponent,
+    AjoutTicketComponent,
+    MesTicketsComponent,
+    TicketsAssignesComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

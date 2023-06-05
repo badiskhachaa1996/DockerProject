@@ -1,0 +1,40 @@
+<div class="col-12 card grid">
+    <h4 class="col-12" style="text-align: center;">Créer un ticket </h4>
+    <form [formGroup]="TicketForm" (ngSubmit)="onAdd()" class="p-fluid p-formgrid grid col-12">
+        <div class="field col-12 md:col-4">
+            <label For="service">Service <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
+                (change)="onSelectService()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="sujet">Sujet <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id"
+                placeholder="Choisissez un sujet"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="sujet">Priorité <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="prioriteDropdown" formControlName="priorite"
+                placeholder="Choisissez une priorité"></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label For="description">Description du ticket <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize
+                rows="3" cols="30"></textarea>
+        </div>
+        <div class="field col-12">
+            <label>Pièce Jointe:</label>
+            <p-fileUpload (uploadHandler)="onUpload($event)" mode="basic" customUpload="true" maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false"
+                [auto]="true">
+            </p-fileUpload>
+            <div>
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-12">
+            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Créer le ticket" type="submit"
+                [disabled]="TicketForm.invalid"></button>
+        </div>
+    </form>
+</div>
