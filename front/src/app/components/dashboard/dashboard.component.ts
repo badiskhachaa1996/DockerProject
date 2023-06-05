@@ -43,12 +43,14 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
 import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns.service';
+import { DailyCheck } from 'src/app/models/DailyCheck';
+import { DailyCheckService } from 'src/app/services/daily-check.service';
 
 
 @Component({
   templateUrl: './dashboard.component.html',
 })
-export class  DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   paysList = environment.pays;
   user: User;
   classe: Classe[] = [];
@@ -230,7 +232,9 @@ export class  DashboardComponent implements OnInit {
   ];
 
   //* Check in variables
-
+  userConnected: User;
+  dailyCheck: DailyCheck;
+  today: Date = new Date();
   //* end check in variables
 
   constructor(
@@ -243,14 +247,11 @@ export class  DashboardComponent implements OnInit {
     private messageService: MessageService,
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
-    private EIService: EtudiantsIntunsService
+    private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService
   ) { }
 
 
   ngOnInit() {
-
-    console.log(new Date(Date.now()))
-
     this.token = jwt_decode(localStorage.getItem('token'));
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
@@ -338,6 +339,17 @@ export class  DashboardComponent implements OnInit {
         })
       }
     );
+
+    //* Partie dédié au check
+    // recuperation de l'utilisateur connecté
+    this.UserService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.userConnected = response;
+        // verification du check in journalier
+        this.onCheckDailyCheck(response._id);
+      },
+      error: (error) => { console.log(error) },
+    });
   }
 
   SCIENCE() {
@@ -556,4 +568,60 @@ export class  DashboardComponent implements OnInit {
     })
 
   }
+
+  //* Check methods
+  // verification et recuperation du dailyCheck
+  onCheckDailyCheck(id: string): void {
+    this.dailyCheckService.getCheckByUserId(id)
+      .then((response) => {
+        if (response == null) {
+          this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
+        }
+        this.dailyCheck = response;
+      })
+      .catch((error) => { console.error(error) });
+  }
+
+  // méthode de checkin
+  onCheckIn(): void {
+    const check = new DailyCheck();
+    check.user_id = this.user._id;
+    check.today = new Date();
+    check.check_in = new Date();
+    check.isInPause = false;
+
+    this.dailyCheckService.postCheckIn(check)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
+  }
+
+  // méthode de pause
+  onPause(): void {
+    this.dailyCheck.pause.push({in: new Date()});
+    this.dailyCheck.isInPause = true;
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bonne pause' });
+
+        // recuperation du check journalier
+        this.dailyCheckService.getCheckByUserId(response.user_id)
+          .then((response) => {
+            this.dailyCheck = response;
+          })
+          .catch((error) => { console.error(error) });
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
+  }
+
+  // méthode de fin de la pause
+  onStopPause(): void
+  {
+    
+  }
+
+  //* end
 }
