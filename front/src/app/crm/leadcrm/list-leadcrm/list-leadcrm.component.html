@@ -511,7 +511,8 @@
                         {{lead.produit}}
                     </td>
                     <td>
-                        {{lead.affected_to_member}}
+                        {{lead?.affected_to_member?.user_id?.firstname | titlecase}}
+                        {{lead?.affected_to_member?.user_id?.lastname | uppercase}}
                     </td>
                     <td>
                         {{lead.decision_qualification}}
