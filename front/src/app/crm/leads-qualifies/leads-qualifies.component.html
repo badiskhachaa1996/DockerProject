@@ -1,5 +1,168 @@
 <input type="file" (change)="FileUpload($event)" id="selectedFile" #selectedFile style="display: none;" pInputFile />
 <div class="grid">
+    <div class="card col-12" *ngIf="showTransfer">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showTransfer = null"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">Transférer le lead vers le module International
+        </h3>
+        <p-tabView class="col-12">
+            <p-tabPanel header="Informations Personelle">
+                <form class="p-fluid p-formgrid grid" [formGroup]="formTransfertUser">
+                    <div class="field col-12 md:col-12">
+                        <label For="libelle">Civilité <span style="color:red"> *</span></label>
+                        <p-dropdown formControlName="civilite" [options]="civiliteList"
+                            placeholder="Choisissez une civilite"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="nom">Nom <span style="color:red"> *</span></label>
+                        <input pInputText id="nom" type="text" formControlName="lastname" placeholder="Nom" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="prenom">Prénom <span style="color:red"> *</span></label>
+                        <input pInputText id="prenom" formControlName="firstname" type="text" placeholder="Prénom" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="indicatif">Indicatif </label>
+                        <input pInputText id="indicatif" type="text" formControlName="indicatif"
+                            placeholder="Indicatif" />
+                    </div>
+                    <div class="field col-12 md:col-8">
+                        <label For="phone">Numéro de téléphone</label>
+                        <input pInputText id="phone" type="tel" formControlName="phone"
+                            placeholder="Numéro de téléphone" />
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label For="email">Adresse email Personelle<span style="color:red"> *</span></label>
+                        <input pInputText id="email" type="email" formControlName="email_perso"
+                            placeholder="Adresse email" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="adresse">Numéro de rue</label>
+                        <input pInputText id="adresse" type="text" formControlName="numero_adresse"
+                            placeholder="EX:20" />
+                    </div>
+                    <div class="field col-12 md:col-8">
+                        <label For="adresse">Adresse postale</label>
+                        <input pInputText id="adresse" type="text" formControlName="rue_adresse"
+                            placeholder="Adresse postale" />
+
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="code_postale">Code postale </label>
+                        <input pInputText id="code_postale" formControlName="postal_adresse" type="text"
+                            placeholder="Code postale" />
+
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="ville">Ville </label>
+                        <input pInputText id="ville" type="text" formControlName="ville_adresse" placeholder="Ville" />
+
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="pays">Pays </label>
+                        <p-dropdown placeholder="Choisissez un pays" filter="true" formControlName="pays_adresse"
+                            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [options]="paysDropdown"
+                            autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="pays">Nationalité </label>
+                        <p-dropdown placeholder="Choisissez une nationalité" filter="true" formControlName="nationnalite"
+                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                            [options]="nationaliteDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Informations du Lead">
+                <form class="p-fluid p-formgrid grid" [formGroup]="formTransfertProspect">
+                    <div class="field col-12 md:col-6">
+                        <label>Date de naissance <span style="color: red;"> * </span></label>
+                        <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy">
+
+                        </p-calendar>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Dernier niveau académique</label>
+                        <p-dropdown placeholder="Choisissez un niveau" formControlName="validated_academic_level"
+                            [options]="nivDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label>Indicatif WhatsApp</label>
+                        <input pInputText id="lastname" formControlName="indicatif_whatsapp" type="number"
+                            placeholder="Ex: +33" />
+                    </div>
+                    <div class="field col-12 md:col-8">
+                        <label>Numéro WhatsApp</label>
+                        <input pInputText id="lastname" formControlName="numero_whatsapp" type="number"
+                            placeholder="Ex: 683121415" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label>Statut Actuel</label>
+                        <p-dropdown placeholder="Choisissez un statut" formControlName="statut_actuel"
+                            [options]="statutList" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Niveau en Français</label>
+                        <p-dropdown placeholder="Choisissez un niveau" formControlName="languages_fr"
+                            [options]="niveauFR" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Niveau en Anglais</label>
+                        <p-dropdown placeholder="Choisissez un niveau" formControlName="languages_en"
+                            [options]="niveauEN" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Campus</label>
+                        <p-dropdown [options]="campusList" formControlName="campus_choix_1" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un campus"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Formation</label>
+                        <p-dropdown [options]="formationList" formControlName="formation" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez une formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Rythme de Formation</label>
+                        <p-dropdown [options]="rythmeList" formControlName="rythme_formation" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez un rythme"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Ecole</label>
+                        <p-dropdown [options]="ecoleList" formControlName="type_form" autoWidth="false"
+                            [style]="{'width':'100%'}" placeholder="Choisissez une ecole"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Source Lead</label>
+                        <p-dropdown filter="true" placeholder="Choisissez une source" [options]="sourceDropdown"
+                            autoWidth="false" optionValue="value" optionLabel="value" [style]="{'width':'100%'}"
+                            formControlName="source" emptyFilterMessage="Pas de source trouvé"
+                            filterPlaceholder="Source">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label>Indicatif</label>
+                        <input pInputText id="lastname" formControlName="indicatif_telegram" type="tel"
+                            placeholder="Ex: +33" />
+                    </div>
+                    <div class="field col-12 md:col-8">
+                        <label>Numéro Telegram</label>
+                        <input pInputText id="lastname" formControlName="numero_telegram" type="tel"
+                            placeholder="Ex: 683121415" />
+                    </div>
+                </form>
+            </p-tabPanel>
+        </p-tabView>
+        <div class="col-12">
+            <button pButton type="submit" (click)="TransferToSM()" [disabled]="formTransfertUser.invalid && formTransfertProspect.invalid"
+                label="Transférer le lead"></button>
+        </div>
+    </div>
     <div class="card col-12" *ngIf="showFollow">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showFollow = null"
             aria-hidden="true"> </i>
@@ -498,6 +661,9 @@
                         {{lead.indicatif_whatsapp}} {{lead.numero_whatsapp}}
                     </td>
                     <td>
+                        {{lead.produit}}
+                    </td>
+                    <td>
                         {{lead.rythme}}
                     </td>
                     <td>
@@ -505,9 +671,6 @@
                     </td>
                     <td>
                         {{lead.formation}}
-                    </td>
-                    <td>
-                        {{lead.campus}}
                     </td>
                     <td>
                         {{lead.campus}}
@@ -521,7 +684,7 @@
                     <td>
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Envoyer à Admission" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
+                        <i pTooltip="Envoyer à Admission" tooltipPosition="bottom" class="pi pi-send mr-2"
                             (click)="initTransferToSM(lead);scrollToTop()" aria-hidden="true"></i>
 
                     </td>

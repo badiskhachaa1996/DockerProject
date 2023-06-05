@@ -85,5 +85,9 @@ export class LeadcrmService {
     let registreUrl = this.apiUrl + "getAllQualifies/" + id;
     return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  moveFiles({ prospect_id, lead_id }) {
+    let registreUrl = this.apiUrl + "moveFiles/" + prospect_id + "/" + lead_id;
+    return this.httpClient.get<LeadCRM[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
 }
