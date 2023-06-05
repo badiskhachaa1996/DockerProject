@@ -136,4 +136,25 @@ app.post("/insertDB", (req, res) => {
     })
 })
 
+app.get('/moveFiles/:prospect_id/:lead_id', (req, res) => {
+    if (!fs.existsSync('storage/prospect/admin/' + req.params.prospect_id + '/')) {
+        fs.mkdirSync('storage/prospect/admin/' + req.params.prospect_id + '/', { recursive: true });
+    }
+    LeadCRM.findById(req.params.lead_id).then(lead => {
+        console.log(lead.documents)
+        lead.documents.forEach(val => {
+            let oldPath = `storage/leadCRM/${val._id}/${req.params.lead_id}/${val.path}`
+            let newPath = 'storage/prospect/admin/' + req.params.prospect_id + '/' + val.path
+
+            fs.rename(oldPath, newPath, function (err) {
+                if (err) {
+                    console.error(err)
+                }
+            })
+        })
+        res.send(lead.documents)
+    })
+
+})
+
 module.exports = app;

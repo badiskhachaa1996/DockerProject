@@ -20,12 +20,55 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LeadsQualifiesComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
-
-
+  civiliteList: any = [
+    { label: 'Monsieur', value: 'Monsieur' },
+    { label: 'Madame', value: 'Monsieur' },
+    { label: 'Autre', value: 'Monsieur' },
+  ];
+  sourceDropdown = [
+    { value: 'Facebook' },
+    { value: 'WhatsApp' },
+    { value: 'Appel Telephonique' },
+    { value: 'Mail' },
+    { value: 'Visite au site' },
+    { value: 'Online Meeting' },
+    { value: 'Marketing' },
+    { value: 'Recyclage' },
+  ]
   filterPays = [
     { label: 'Tous les pays', value: null }
   ]
-
+  nationaliteDropdown = environment.nationalites
+  paysDropdown = environment.pays
+  statutList =
+    [
+      { label: 'Etudiant', value: 'Etudiant' },
+      { label: 'Salarié', value: 'Salarié' },
+      { label: 'Au chômage', value: 'Au chômage' },
+      { label: 'Autre', value: 'Autre' },
+    ];
+  niveauFR =
+    [
+      { label: "Langue maternelle", value: "Langue maternelle" },
+      { label: "J’ai une attestation de niveau (TCF DALF DELF..)", value: "J’ai une attestation de niveau (TCF DALF DELF..)" },
+      { label: "Aucun de ces choix", value: "Aucun de ces choix" },
+    ]
+  niveauEN =
+    [
+      { label: "Langue maternelle", value: "Langue maternelle" },
+      { label: "Avancé", value: "Avancé" },
+      { label: "Intermédiaire", value: "Intermédiaire" },
+      { label: "Basique", value: "Basique" },
+      { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
+    ]
+  nivDropdown = [
+    { label: 'Pré-bac', value: 'Pré-bac' },
+    { label: 'Bac +1', value: 'Bac +1' },
+    { label: 'Bac +2', value: 'Bac +2' },
+    { label: 'Bac +3', value: 'Bac +3' },
+    { label: 'Bac +4', value: 'Bac +4' },
+    { label: 'Bac +5', value: 'Bac +5' },
+  ];
   filterSource = [
     { label: 'Toutes les sources', value: null },
     { label: 'Facebook', value: 'Facebook' },
@@ -414,8 +457,23 @@ export class LeadsQualifiesComponent implements OnInit {
     })
   }
   TransferToSM() {
-    this.ProspectService.create({ newProspect: { ...this.formTransfertProspect }, newUser: { ...this.formTransfertUser } }).subscribe(data => {
+    let payement = []
+    let documents_administrative = []
+    this.showTransfer.documents.forEach(val => {
+      documents_administrative.push({ date: new Date(), nom: val.nom, path: val.path })
+    })
+    this.showTransfer.ventes.forEach(val => {
+      let date = new Date()
+      let id = (payement.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+      payement.push({ type: val.modalite_paiement, montant: val.montant_paye, date: val.date_paiement, ID: id })
+    })
+    console.log({ newProspect: { ...this.formTransfertProspect.value, payement, documents_administrative }, newUser: { ...this.formTransfertUser.value } })
+    this.ProspectService.create({ newProspect: { ...this.formTransfertProspect.value }, newUser: { ...this.formTransfertUser.value } }).subscribe(data => {
       //Déplacer les documents
+      console.log(data)
+      this.LCS.moveFiles({ prospect_id: data.prospect._id, lead_id: this.showTransfer._id }).subscribe(data=>{
+        this.ToastService.add({ severity: 'success', summary: "Transfert des fichiers vers le module international" })
+      })
       this.ToastService.add({ severity: 'success', summary: "Transfert vers le module international" })
       this.showTransfer = null
     })
