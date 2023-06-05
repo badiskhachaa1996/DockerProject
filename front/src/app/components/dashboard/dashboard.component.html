@@ -37,10 +37,10 @@
 <div class="grid" *ngIf="isAdmin">
     <div class="col-12">
         <div class="card" style="text-align: center">
-            <h4>Bienvenue Sall Idrissa</h4>
+            <h4>Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h4>
             <h6>
-                Date: 26 Mai 2023 <br>
-                Heure: 13h30
+                Date: {{today | date:'dd MMMM yyyy'}} <br>
+                Heure: {{today | date:'HH:mm'}}
             </h6>
         </div>
     </div>
@@ -50,13 +50,14 @@
         <div class="card">
             <div class="grid">
                 <div class="col-6 md:col-3">
-                    <button pButton pRipple label="Check in" class="p-button-primary mb-2"></button> <br>
-                    <button pButton pRipple label="Pause" class="p-button-warning mb-2"></button> <br>
+                    <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2"></button> <br>
+                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause" class="p-button-warning mb-2"></button> <br></span>
+                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()" label="Fin de la pause" class="p-button-warning mb-2"></button> <br></span>
                     <button pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button> <br>
                     <button pButton pRipple label="Check out" class="p-button-danger"></button>
                 </div>
                 <div class="col-6 md:col-3">
-                    <h6>Vous êtes arrivé au <br> travail à: <strong>09h00</strong></h6>
+                    <h6>Vous êtes arrivé au <br> travail à: <strong>{{dailyCheck?.check_in | date: 'HH:mm'}}</strong></h6>
                     <h6>Temps passé au <br> travail: <strong>4h</strong></h6>
                     <h6>Temps passé en <br> pause: <strong>1h</strong></h6>
                     <h6>Taux de remplissage du <br> CRA: <strong>69%</strong></h6>
