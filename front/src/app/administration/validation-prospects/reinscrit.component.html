@@ -436,7 +436,7 @@
     <div class="card">
         <h5>Liste des inscriptions de l'admission en attente de validation</h5>
 
-        <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['type_form','user_id.email_perso', 'statut_actuel', 'validated_academic_level', 'programme','user_id.lastname','user_id.firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
@@ -767,7 +767,7 @@
         <p-toast></p-toast>
         <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['diplome','filiere.titre', 'user_id.email_perso', 'classe_id','user_id.lastname','user_id.firstname','user_id.email','custom_id']"
-            [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
+            [rows]="8" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">

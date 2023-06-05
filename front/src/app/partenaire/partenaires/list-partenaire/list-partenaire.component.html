@@ -261,7 +261,7 @@
                 <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
             </div>
             <h5>Liste des partenaires</h5>
-            <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="10" [rowHover]="true"
+            <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="8" [rowHover]="true"
                 [totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5" [expandedRowKeys]="expandedRows"
                 rowExpandMode="single"
                 [globalFilterFields]="['nom','email','site','ville','Pays','etat_contrat','contribution','statut_anciennete','user_id.lastname','user_id.firstname']"

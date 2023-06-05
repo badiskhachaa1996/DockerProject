@@ -59,7 +59,7 @@
             <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"  *ngIf="type"
                 (click)="AddActivite = true;"></button>
         </div>
-        <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"
             [paginator]="true" [pageLinks]="5" [globalFilterFields]="['titre', 'description']" responsiveLayout="scroll"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">

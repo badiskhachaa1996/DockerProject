@@ -24,7 +24,7 @@
             <p-toast></p-toast>
             <p-table #dt1 [value]="prospects" dataKey="_id" [globalFilterFields]="['_id', 'user_id.lastname', 'user_id.firstname']"
                      responsiveLayout="scroll"
-                     [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10">
+                     [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="8">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">

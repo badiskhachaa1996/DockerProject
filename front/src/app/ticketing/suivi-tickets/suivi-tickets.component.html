@@ -230,7 +230,7 @@
                     style="margin-left: 2px;"></button>
             </div>
             <h5>Mes tickets</h5>
-            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" dataKey="_id" [rows]="10" rowExpandMode="single"
+            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" dataKey="_id" [rows]="8" rowExpandMode="single"
                 [rowHover]="true" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['customid','description']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

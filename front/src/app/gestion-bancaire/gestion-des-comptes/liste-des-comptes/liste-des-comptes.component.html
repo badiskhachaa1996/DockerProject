@@ -2,7 +2,7 @@
 	<div class="col-12">
 		<div class="card">
 			<h5>Liste des comptes bancaires</h5>
-			<p-table #dt1 value="accounts" datakey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+			<p-table #dt1 value="accounts" datakey="_id" [rows]="8" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">

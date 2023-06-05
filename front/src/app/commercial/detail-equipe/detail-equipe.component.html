@@ -27,7 +27,7 @@
                 <button pButton label="Affecter un étudiant à un conseiller" (click)="showFormAddDemande = true;"></button>
             </div>
             <h5>Liste des affectation de l'équipe de {{ team.owner_id.firstname | titlecase }} {{ team.owner_id.lastname | uppercase }}</h5>
-            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="affectationList" styleClass="" [paginator]="true"
+            <p-table #dt1 dataKey="id" [rows]="8" [rowHover]="true" [value]="affectationList" styleClass="" [paginator]="true"
                 [pageLinks]="5" [globalFilterFields]="['student_id.lastname','student_id.firstname','conseiller_id.lastname','conseiller_id.firstname']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

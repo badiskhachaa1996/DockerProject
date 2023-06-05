@@ -680,7 +680,7 @@
                 classeForBGenerateBulletin.titre }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
+                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="8" [pageLinks]="5"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -774,7 +774,7 @@
             </p>
 
             <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="8" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -856,7 +856,7 @@
             </div>
 
             <h5>Notes par étudiants</h5>
-            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [pageLinks]="5"
+            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [pageLinks]="5"
                 [paginator]="true"
                 [globalFilterFields]="['etudiant_id.user_id.lastname', 'examen_id.libelle','examen_id.matiere_id.abbrv','etudiant_id.user_id.firstname']"
                 responsiveLayout="scroll" rowExpandMode="single" [totalRecords]="notes.length"

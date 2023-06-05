@@ -4,9 +4,9 @@
 		<div class="card">
 			<h5>Liste des années scolaires</h5>
 			<p-table #dt1 *ngIf="anneeScolaires" [value]="anneeScolaires"
-                     dataKey="_id" [rows]="10" 
+                     dataKey="_id" [rows]="8" 
                      [rowHover]="true" rowExpandMode="single"
-                     [paginator]="true" [pageLinks]="5" [rows]="10" [paginator]="true" [responsive]="true" [totalRecords]="anneeScolaires.length"
+                     [paginator]="true" [pageLinks]="5" [rows]="8" [paginator]="true" [responsive]="true" [totalRecords]="anneeScolaires.length"
                      [filterDelay]="0" [globalFilterFields]="['libelle','etat']"
                      responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

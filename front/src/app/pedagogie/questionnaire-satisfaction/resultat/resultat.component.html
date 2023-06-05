@@ -17,7 +17,7 @@
 <div class="col-12">
     <div class="card">
         <h5>Liste des résultats du questionnaire de satisfaction</h5>
-        <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="10" [rowHover]="true"
+        <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="8" [rowHover]="true"
             [totalRecords]="resultats.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll"
             (onFilter)="onFilter($event)">

@@ -214,6 +214,9 @@ import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
+import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
+import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
+import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
 
 const routes: Routes = [
     {
@@ -409,6 +412,10 @@ const routes: Routes = [
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
+            /*Ticketing V2*/
+            { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             /* Configuration Formulaire Admission */
             { path: 'admission/formations', component: FormationAdmissionComponent, canActivate: [AuthGuardService] },
             { path: 'admission/ecoles', component: EcoleAdmissionComponent, canActivate: [AuthGuardService] },

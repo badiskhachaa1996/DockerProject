@@ -724,4 +724,35 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
         .catch((error) => { res.status(400).send(error); })
 });
 
+const multer = require('multer');
+const fs = require("fs")
+var mime = require('mime-types')
+const path = require('path');
+const st = multer.diskStorage({
+    destination: (req, file, callback) => {
+        let storage = `storage/ticket/${req.body._id}/principale/`;
+
+        if (!fs.existsSync(storage)) {
+            fs.mkdirSync(storage, { recursive: true });
+        }
+        callback(null, storage);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.originalname}`);
+    }
+});
+
+const uploadConfig = multer({ storage: st });
+app.post('/addFile', uploadConfig.single('file'), (req, res) => {
+    const file = req.file;
+
+    if (!file) {
+        const error = new Error('Aucun fichier choisis');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.status(201).send({ message: "C'est bon" });
+})
+
 module.exports = app;

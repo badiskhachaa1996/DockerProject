@@ -133,7 +133,7 @@
                 *ngIf="!isPovPartenaire" (click)="showFormAddVente = true;"></button>
 
             <h5>Liste des ventes</h5>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single" [value]="ventes"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" rowExpandMode="single" [value]="ventes"
                 [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['produit', 'statutCommission','prospect_id.user_id.lastname','prospect_id.user_id.firstname','prospect_id.customid']"
                 [totalRecords]="ventes.length" responsiveLayout="scroll" styleClass="p-datatable-gridlines">

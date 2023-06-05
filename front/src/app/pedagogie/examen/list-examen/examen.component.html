@@ -70,7 +70,7 @@
             </p>
 
             <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
-                [globalFilterFields]="['etudiant_f','etudiant_l', 'id','appreciation']" [rows]="10" [pageLinks]="10"
+                [globalFilterFields]="['etudiant_f','etudiant_l', 'id','appreciation']" [rows]="8" [pageLinks]="10"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="tableauNotes.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -268,7 +268,7 @@
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef']"
-                [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length"
+                [rows]="8" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length"
                 styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">

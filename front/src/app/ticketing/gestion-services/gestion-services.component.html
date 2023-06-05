@@ -73,7 +73,7 @@
             </div>
 			<h5>Liste des services</h5>
 			<p-table #dt1 *ngIf="services" [value]="services" selectionMode="single"
-                     dataKey="_id" [rows]="10" [(selection)]="currentService" (onRowSelect)="onRowSelect($event)"
+                     dataKey="_id" [rows]="8" [(selection)]="currentService" (onRowSelect)="onRowSelect($event)"
                      (onRowUnselect)="onRowUnselect($event)"
                      [rowHover]="true" [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['label']"
@@ -157,7 +157,7 @@
             </div>
 			<h5>{{currentService.label}}: Liste des sujets</h5>
 			<p-table #dt1 *ngIf="sujetShow" [value]="sujetShow" rowExpandMode="single"
-                     dataKey="_id" [rows]="10" 
+                     dataKey="_id" [rows]="8" 
                      [rowHover]="true" [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['label']"
                      responsiveLayout="scroll" styleClass="p-datatable-gridlines">
