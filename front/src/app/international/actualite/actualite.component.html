@@ -55,8 +55,8 @@
     </div>
     <div class="grid col-12 card">
         <h5 class="col-9">Liste des actualités</h5>
-        <div class="col-3 grid" >
-            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"  *ngIf="type"
+        <div class="col-3 grid">
+            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité" *ngIf="type && AccessLevel!='Spectateur'"
                 (click)="AddActivite = true;"></button>
         </div>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"
@@ -80,7 +80,7 @@
                     <th pSortableColumn="description" scope="col" style="text-align: center;">
                         Contenu de l'actualité <p-sortIcon field="description"></p-sortIcon>
                     </th>
-                    <th *ngIf="type">
+                    <th *ngIf="type && AccessLevel!='Spectateur'">
                         Action
                     </th>
                 </tr>
@@ -96,7 +96,7 @@
                     <td>
                         {{actualite?.description}}
                     </td>
-                    <td *ngIf="type">
+                    <td *ngIf="type && AccessLevel!='Spectateur'">
                         <i pTooltip="Envoyer par email" tooltipPosition="bottom" class="pi pi-envelope mr-2"
                             aria-hidden="true" (click)="showEmail=actualite"></i>
                         <i pTooltip="Supprimer l'actualité" tooltipPosition="bottom" class="pi pi-trash mr-2"
