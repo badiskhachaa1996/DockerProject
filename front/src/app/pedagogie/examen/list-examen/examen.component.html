@@ -1,5 +1,25 @@
 <p-toast></p-toast>
 <div class="grid">
+    <div class="col-12 card" *ngIf="editSemestre">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+            (click)="editSemestre = null;" aria-hidden="true">
+        </i>
+        <h3>Modification du semestre de {{editSemestre.libelle}}</h3>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <label>Semestre<span style="color:red">*</span>:</label><br>
+
+                <p-dropdown [options]="dropdownSemestre" placeholder="Choisissez un semestre"
+                    [(ngModel)]="editSemestre.semestre">
+                </p-dropdown>
+
+            </div>
+            <div>
+                <button pButton type="submit" label="Modifier le semestre" (click)="onCorrection()"></button>
+
+            </div>
+        </div>
+    </div>
     <!-- Import Excel pour note-->
     <div class="col-12" *ngIf="importExcel">
         <div class="card">
@@ -267,7 +287,7 @@
             <h3>Evaluations</h3>
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef']"
+                [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef','semestre']"
                 [rows]="8" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length"
                 styleClass="p-datatable-gridlines">
 
@@ -314,6 +334,8 @@
                         </th>
                         <th pSortableColumn="libelle">Libellé <p-sortIcon field="libelle"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="semestre">Semestre <p-sortIcon field="semestre"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
                         <th>Action </th>
                     </tr>
@@ -342,6 +364,7 @@
                             </span>
                         </td>
                         <td>{{ examen.libelle }}</td>
+                        <td>{{examen.semestre}}</td>
                         <td *ngIf="!isArr(examen.date)">{{ examen.date | date:'dd/MM/YYYY' }}</td>
                         <td *ngIf="isArr(examen.date) && examen.date[1]">{{ examen.date[0] | date:'dd/MM/YYYY' }} - {{
                             examen.date[1] | date:'dd/MM/YYYY' }}</td>
@@ -364,6 +387,10 @@
                                 (click)="loadEtudiantsForNote(examen);scrollToTop()"></i>
                             <i class="pi pi-download ml-1" pTooltip="Télécharger les notes" tooltipPosition="bottom"
                                 (click)="exportExel(examen)"></i>
+                            <i class="pi pi-cog" pTooltip="Modifier et Corriger le semestre" tooltipPosition="bottom"
+                                (click)="correctionSemestre(examen)">
+
+                            </i>
                         </td>
 
                     </tr>

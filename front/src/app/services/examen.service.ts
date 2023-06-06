@@ -86,4 +86,9 @@ export class ExamenService {
 
   }
 
+  correctionSemestre(examen_id, semestre) {
+    let url = this.apiUrl + "correctionSemestre/" + examen_id + "/" + semestre
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

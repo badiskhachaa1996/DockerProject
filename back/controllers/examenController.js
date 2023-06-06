@@ -89,7 +89,7 @@ app.put("/updateById/:id", (req, res, next) => {
             note_max: req.body.note_max,
             coef: req.body.coef,
             libelle: req.body.libelle,
-            canEdit:req.body.canEdit
+            canEdit: req.body.canEdit
         })
         .then((examenUpdated) => { res.status(200).send(examenUpdated); })
         .catch((error) => { res.status(400).send(error.message); });
@@ -145,7 +145,7 @@ app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
                     cols.module.push(mid.nom)
                 if (!cols.eval[mid.nom])
                     cols.eval[mid.nom] = [s.libelle]
-                else if (cols.eval[mid.nom].includes(s.libelle)==false)
+                else if (cols.eval[mid.nom].includes(s.libelle) == false)
                     cols.eval[mid.nom].push(s.libelle)
 
             })
@@ -182,6 +182,14 @@ app.delete('/delete/:id', (req, res) => {
             })
         else
             res.status(500).send(err)
+    })
+})
+
+app.get('/correctionSemestre/:examen_id/:semestre', (req, res) => {
+    Examen.findByIdAndUpdate(req.params.examen_id, { semestre: req.params.semestre }, { new: true }).then(examen => {
+        Note.updateMany({ examen_id: req.params.examen_id }, { semestre: req.params.semestre }, { new: true }).then(notes => {
+            res.send({ examen, notes })
+        })
     })
 })
 

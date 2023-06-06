@@ -226,6 +226,7 @@ const routes: Routes = [
             { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
             { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
             { path: 'notes', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'notesDev', component: NotesComponent, canActivate: [AdminGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
