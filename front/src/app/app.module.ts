@@ -321,6 +321,7 @@ import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.c
 import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
 import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
 import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
+import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.component';
 
 
 @NgModule({
@@ -652,8 +653,9 @@ import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-a
     AjoutTicketComponent,
     MesTicketsComponent,
     TicketsAssignesComponent,
+    AddAgentC
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService,DatePipe,
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
     MenuService, ConfigService,
   {

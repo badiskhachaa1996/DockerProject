@@ -1,0 +1,91 @@
+<div class="card grid col-12">
+    <h4 class="col-12" style="text-align: center;">Insérer un agent</h4>
+    <div class="col-12" style="text-align: center;">
+        <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+            obligatoires</small><br>
+    </div>
+    <form class="p-fluid p-formgrid grid" [formGroup]="addForm" (ngSubmit)="onAdd()">
+        <div class="field col-12">
+            <label>Civilité</label>
+            <p-dropdown optionValue="value" optionLabel="value" placeholder="Choisissez une civilité"
+                formControlName="civilite" [options]="civiliteDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label>Nom<span style="color: red;"> * </span></label>
+            <input pInputText formControlName="nom" type="text" placeholder="Ex: Smith" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Prénom <span style="color: red;"> * </span></label>
+            <input pInputText formControlName="prenom" type="text" placeholder="Ex: John" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label>Adresse Email Ecole</label>
+            <input pInputText id="lastname" formControlName="email" type="text"
+                placeholder="Ex: email@intedgroup.com" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label For="adresse">Adresse postale</label>
+            <input pInputText id="adresse" type="text" formControlName="rue_adresse" placeholder="Adresse postale" />
+
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="code_postale">Code postale </label>
+            <input pInputText id="code_postale" formControlName="postal_adresse" type="text"
+                placeholder="Code postale" />
+
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="ville">Ville </label>
+            <input pInputText id="ville" type="text" formControlName="ville_adresse" placeholder="Ville" />
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <label>Pays</label>
+            <p-dropdown placeholder="Choisissez un pays" filter="true" formControlName="pays_adresse"
+                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [options]="paysDropdown"
+                autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Indicatif</label>
+            <input pInputText id="lastname" formControlName="indicatif" type="tel" placeholder="Ex: +33" />
+        </div>
+        <div class="field col-12 md:col-8">
+            <label>Numéro de téléphone</label>
+            <input pInputText id="lastname" formControlName="phone" type="tel" placeholder="Ex: 683121415" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="phone">Mention<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="mention" [options]="mentionList"
+                placeholder="Choisissez une mention"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="service">Service <span style="color:red"> *</span></label>
+            <p-dropdown [options]="serviceList" placeholder="Choisissez un service"
+                formControlName="service_id"></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <p-table #dtcontact dataKey="_id" [value]="roles_list" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Module</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-role>
+                    <tr>
+                        
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="col-12">
+            <button pButton type="submit" label="Ajouter un lead"></button>
+        </div>
+    </form>
+</div>

@@ -69,6 +69,11 @@ export class ExamenComponent implements OnInit {
     { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
   ]
+
+  dropdownSemestre = [
+    { label: 'Semestre 1', value: 'Semestre 1' },
+    { label: 'Semestre 2', value: 'Semestre 2' },
+  ]
   showAppreciation = false
 
   formAppreciation = this.formBuilder.group({
@@ -761,6 +766,18 @@ export class ExamenComponent implements OnInit {
   deleteNote(note: Note) {
     this.NotesService.delete(note._id).subscribe(data => {
       this.notes.splice(this.notes.indexOf(note), 1)
+    })
+  }
+  editSemestre: Examen = null
+
+  correctionSemestre(examen: Examen) {
+    this.editSemestre = examen
+  }
+
+  onCorrection() {
+    this.examenService.correctionSemestre(this.editSemestre._id, this.editSemestre.semestre).subscribe(data => {
+      this.editSemestre = null
+      this.messageService.add({ severity: "success", summary: "Semestre modifié pour l'examen et les notes", detail: "Rechargez la page pour voir les modifications" })
     })
   }
 }
