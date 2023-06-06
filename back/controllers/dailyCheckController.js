@@ -25,7 +25,16 @@ app.get("get-user-checks/:userId", (req, res) => {
 app.get("/get-check/:id", (req, res) => {
     const { id } = req.params;
 
-    DailyCheck.find({ _id: id }).populate('user_id')
+    DailyCheck.findOne({ _id: id }).populate('user_id')
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs'}) });
+});
+
+// recuperation d'une presence via son user id
+app.get("/get-check-by-user-id/:id", (req, res) => {
+    const { id } = req.params;
+
+    DailyCheck.findOne({ user_id: id }).populate('user_id')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs'}) });
 });

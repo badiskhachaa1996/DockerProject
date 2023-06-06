@@ -8,7 +8,7 @@ import { DailyCheck } from '../models/DailyCheck';
 })
 export class DailyCheckService {
 
-  endPoint: string = `${environment.origin}/check`;
+  endPoint: string = `${environment.origin}check`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -18,7 +18,7 @@ export class DailyCheckService {
     const url = `${this.endPoint}/get-checks`;
 
     return new Promise<DailyCheck[]>((resolve, reject) => {
-      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de recuperation de la liste des présences exécuté') }
@@ -32,7 +32,7 @@ export class DailyCheckService {
     const url = `${this.endPoint}/get-user-checks/${userId}`;
 
     return new Promise<DailyCheck[]>((resolve, reject) => {
-      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de recuperation de la liste des présences de l\'utilisateur exécuté') }
@@ -46,10 +46,24 @@ export class DailyCheckService {
     const url = `${this.endPoint}/get-check/${id}`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
-      this.httpClient.get<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.get<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de recuperation de la liste des présences de l\'utilisateur exécuté') }
+      });
+    });
+  }
+
+  // recuperation d'une presence via son id
+  getCheckByUserId(id: string): Promise<DailyCheck>
+  {
+    const url = `${this.endPoint}/get-check-by-user-id/${id}`;
+
+    return new Promise<DailyCheck>((resolve, reject) => {
+      this.httpClient.get<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la présences de l\'utilisateur exécuté') }
       });
     });
   }
@@ -60,7 +74,7 @@ export class DailyCheckService {
     const url = `${this.endPoint}/post-check-in`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
-      this.httpClient.post<DailyCheck>(url, dailyCheck, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.post<DailyCheck>(url, dailyCheck, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de check in exécuté') }
@@ -74,7 +88,7 @@ export class DailyCheckService {
     const url = `${this.endPoint}/patch-check-in`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
-      this.httpClient.patch<DailyCheck>(url, dailyCheck, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.patch<DailyCheck>(url, dailyCheck, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
         complete: () => { console.log('requête de mise à jour du check in exécuté') }
