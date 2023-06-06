@@ -43,8 +43,7 @@ export class AuthService {
   }
 
   // recuperation des users pour la cv thèque
-  getAllForCV()
-  {
+  getAllForCV() {
     let url = `${this.apiUrl}get-all-for-cv`;
 
     return new Promise((resolve, reject) => {
@@ -55,10 +54,9 @@ export class AuthService {
       });
     });
   }
- 
+
   // recuperation des salarié pour la partie project
-  getAllSalarie(): Promise<User[]>
-  {
+  getAllSalarie(): Promise<User[]> {
     let url = `${this.apiUrl}get-all-salarie`;
 
     return new Promise<User[]>((resolve, reject) => {
@@ -162,6 +160,10 @@ export class AuthService {
     let loginUrl = this.apiUrl + "getAllAgent/";
     return this.http.get<User[]>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
+  getAllAgentPopulate() {
+    let loginUrl = this.apiUrl + "getAllAgentPopulate";
+    return this.http.get<User[]>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
   getAllCommercial() {
     let loginUrl = this.apiUrl + "getAllCommercial/";
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
@@ -198,7 +200,7 @@ export class AuthService {
 
   verifPassword(tbObj: any) {
     let url = this.apiUrl + "verifyUserPassword";
-    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })});
+    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   updatePwd(id: string, pwd) {
@@ -304,32 +306,35 @@ export class AuthService {
   }
 
   // méthode d'envoi de mail pour la recuperation du mot de passe externe
-  sendRecoveryPasswordEmail(email: string): Promise<any>
-  {
+  sendRecoveryPasswordEmail(email: string): Promise<any> {
     const url = `${this.apiUrl}send-recovery-password-mail`;
 
     return new Promise<any>((resolve, reject) => {
-      this.http.post<any>(url, {email: email}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
-        next: (response: any) => {resolve(response);},
-        error: (error: any) => {reject(error)},
-        complete: () => {console.log('Email envoyé')}
+      this.http.post<any>(url, { email: email }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error: any) => { reject(error) },
+        complete: () => { console.log('Email envoyé') }
       });
     });
   }
 
 
   // méthode de recuperation du mot de passe (modification)
-  recoveryPassword(userId: string, password: string): Promise<any>
-  {
+  recoveryPassword(userId: string, password: string): Promise<any> {
     const url = `${this.apiUrl}recovery-password`;
 
     return new Promise<any>((resolve, reject) => {
-      this.http.patch<any>(url, {userId: userId, password: password}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
-        next: (response: any) => {resolve(response);},
-        error: (err: any) => {reject(err)},
-        complete: () => {console.log('Mot de passe modifié')}
+      this.http.patch<any>(url, { userId: userId, password: password }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (err: any) => { reject(err) },
+        complete: () => { console.log('Mot de passe modifié') }
       });
     });
+  }
+
+  create(user: User) {
+    let url = `${this.apiUrl}create`;
+    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

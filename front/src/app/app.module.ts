@@ -322,6 +322,8 @@ import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.comp
 import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
 import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
 import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.component';
+import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
+import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
 
 
 @NgModule({
@@ -653,7 +655,9 @@ import { AddAgentComponent as AddAgentC } from './agents/add-agent/add-agent.com
     AjoutTicketComponent,
     MesTicketsComponent,
     TicketsAssignesComponent,
-    AddAgentC
+    AddAgentC,
+    UpdateAgentComponent,
+    ListAgentV2Component
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
