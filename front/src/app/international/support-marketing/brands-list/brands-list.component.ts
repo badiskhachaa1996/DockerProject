@@ -11,6 +11,7 @@ import jwt_decode from "jwt-decode";
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { SupportMarketing } from 'src/app/models/SupportMarketing';
 import { saveAs } from "file-saver";
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-brands-list',
   templateUrl: './brands-list.component.html',
@@ -19,7 +20,7 @@ import { saveAs } from "file-saver";
 export class BrandsListComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   constructor(private route: ActivatedRoute, private SMService: SupportMarketingService, private ToastService: MessageService, private PService: PartenaireService,
-    private CService: CommercialPartenaireService) { }
+    private CService: CommercialPartenaireService, private UserService: AuthService) { }
 
   //Partie Brands
 
@@ -45,6 +46,17 @@ export class BrandsListComponent implements OnInit {
       })
     }
     else this.isAdminPartenaire = true;
+    if (this.isAdminPartenaire) {
+      this.UserService.getPopulate(this.token.id).subscribe(a => {
+        a.roles_list.forEach(val => {
+          if (val.module == "Partenaire")
+            if (val.role == "Spectateur")
+              this.isAdminPartenaire = false
+        })
+        if (this.token.role == "Admin")
+          this.isAdminPartenaire = true
+      })
+    }
     this.SMService.BgetAll().subscribe(data => {
       this.brands = data
     })
