@@ -109,7 +109,7 @@ const user_schema = new mongoose.Schema({
         type: [{
             module: { type: String },
             role: { type: String },
-        }]
+        }], default: []
     }
 
 });

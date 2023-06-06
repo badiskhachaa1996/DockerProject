@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
@@ -7,18 +8,19 @@ import { ServService } from 'src/app/services/service.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-add-agent',
-  templateUrl: './add-agent.component.html',
-  styleUrls: ['./add-agent.component.scss']
+  selector: 'app-update-agent',
+  templateUrl: './update-agent.component.html',
+  styleUrls: ['./update-agent.component.scss']
 })
-export class AddAgentComponent implements OnInit {
+export class UpdateAgentComponent implements OnInit {
+  ID = this.route.snapshot.paramMap.get('id');
   civiliteDropdown = [
     { value: 'Monsieur' },
     { value: 'Madame' },
     { value: 'Autre' },
   ]
   paysDropdown = environment.pays
-  roles_list: { role: string, module: string, _id: string }[] = []
+  roles_list: { role?: string, module?: string, _id?: string }[] = []
 
   dropdownModule = [
     { value: "Admission", label: "Admission" },
@@ -65,16 +67,17 @@ export class AddAgentComponent implements OnInit {
     phone: new FormControl(''),
     mention: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
+    _id: new FormControl('', Validators.required)
   })
 
   onAdd() {
-    this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list, role: "Agent" }).subscribe(data => {
-      this.ToastService.add({ summary: 'Création de l\'agent avec succès', severity: 'success' })
-      this.addForm.reset()
-      this.roles_list = []
+    console.log({ ...this.addForm.value, roles_list: this.roles_list })
+    this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list }).subscribe(data => {
+      this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
+      this.router.navigate(['/agent/list'])
     })
   }
-  constructor(private UserService: AuthService, private ToastService: MessageService, private ServiceS: ServService) { }
+  constructor(private UserService: AuthService, private ToastService: MessageService, private ServiceS: ServService, private route: ActivatedRoute, private router: Router) { }
   addRole() {
     this.roles_list.push({ role: null, module: null, _id: new mongoose.Types.ObjectId().toString() })
   }
@@ -85,7 +88,14 @@ export class AddAgentComponent implements OnInit {
   ngOnInit(): void {
     this.ServiceS.getAll().subscribe(services => {
       services.forEach(val => { this.serviceList.push({ label: val.label, value: val._id }) })
+      this.UserService.getPopulate(this.ID).subscribe(data => {
+        let { service_id }: any = data
+        this.addForm.patchValue({ ...data, service_id: service_id._id })
+        this.roles_list = data.roles_list
+      })
     })
+
   }
+
 
 }
