@@ -39,10 +39,11 @@ export class AddAgentComponent implements OnInit {
   ]
 
   addForm = new FormGroup({
-
-  })
-  onAdd(){
     
+  })
+
+  onAdd() {
+
   }
   constructor() { }
   addRole() {
