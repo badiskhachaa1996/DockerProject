@@ -5,7 +5,7 @@
             <div class="field col-12 md:col-4">
                 <label For="service">Service <span style="color: red;"> * </span></label>
                 <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
-                    (change)="onSelectService()"></p-dropdown>
+                    (onChange)="onSelectService()"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label For="sujet">Sujet <span style="color: red;"> * </span></label>
@@ -69,11 +69,12 @@
                 <th pSortableColumn="customid" style="text-align:center"> ID Ticket <p-sortIcon field="customid">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon
-                        field="date_creation">
+                <th pSortableColumn="date_ajout" style="text-align:center"> Date de création <p-sortIcon
+                        field="date_ajout">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="user_id" style="text-align:center"> Crée par <p-sortIcon field="user_id">
+                <th pSortableColumn="createur_id.lastname" style="text-align:center"> Crée par <p-sortIcon
+                        field="user_id">
                     </p-sortIcon>
                 </th>
                 <th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon field="service">
@@ -103,13 +104,13 @@
                     {{ticket.customid}}
                 </td>
                 <td>
-                    {{ticket.date_creation | date:'mediumDate'}}
+                    {{ticket.date_ajout | date:'mediumDate'}}
                 </td>
                 <td>
-                    {{ticket?.user_id?.firstname | titlecase}} {{ticket?.user_id?.lastname | uppercase}}
+                    {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname | uppercase}}
                 </td>
                 <td>
-                    {{ticket?.service_id?.label}}
+                    {{ticket?.sujet_id?.service_id?.label}}
                 </td>
                 <td>
                     {{ticket?.sujet_id?.label}}

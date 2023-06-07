@@ -37,7 +37,10 @@ export class TicketService {
 
   //Update le ticket et son premier Message
   update(ticket) {
-    let registreUrl = this.apiUrl + "update/" + ticket.id;
+    let id = ticket.id
+    if (!id)
+      id = ticket._id
+    let registreUrl = this.apiUrl + "update/" + id;
     return this.http.post<any>(registreUrl, ticket, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -55,6 +58,8 @@ export class TicketService {
     let registreUrl = this.apiUrl + "getAll";
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+
 
   getQueue() {
     let registreUrl = this.apiUrl + "getQueue";
@@ -147,4 +152,22 @@ export class TicketService {
 
   }
 
+  getAllNonAssigne() {
+    let registreUrl = this.apiUrl + "getAllNonAssigne";
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllRefuse() {
+    let registreUrl = this.apiUrl + "getAllRefuse";
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllTraite() {
+    let registreUrl = this.apiUrl + "getAllTraite";
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getAllAttenteDeTraitement() {
+    let registreUrl = this.apiUrl + "getAllAttenteDeTraitement";
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }

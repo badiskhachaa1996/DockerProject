@@ -1,1 +1,117 @@
-<p>list-tickets-traite works!</p>
+<div class="grid col-12">
+    <h5 class="col-12">Les Tickets Refusés</h5>
+    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets" [paginator]="true"
+        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12 card"
+        [globalFilterFields]="['customid', 'prenom', 'nom','email']" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Recherche" />
+
+                <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
+                    (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
+                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
+
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
+                    (onChange)="dt1.filter($event.value, 'source', 'equals');" emptyFilterMessage="Pas de source trouvé"
+                    filterPlaceholder="Choisissez une source"></p-dropdown>
+
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
+                    (onChange)="dt1.filter($event.value, 'operation', 'equals');"
+                    emptyFilterMessage="Pas d'opération trouvé"
+                    filterPlaceholder="Choisissez une operation"></p-dropdown>-->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="customid" style="text-align:center"> ID Ticket <p-sortIcon field="customid">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon
+                        field="date_creation">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="createur_id" style="text-align:center"> Crée par <p-sortIcon field="createur_id">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon field="service">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="sujet" style="text-align:center"> Sujet <p-sortIcon field="sujet">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="priorite" style="text-align:center"> Priorité <p-sortIcon field="priorite">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="date_ajout" style="text-align:center"> Délai d'attente <p-sortIcon
+                        field="date_ajout">
+                    </p-sortIcon>
+                </th>
+                <th style="text-align:center">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ticket let-expanded="expanded" let-ri="rowIndex">
+            <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="doublon"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
+                <td>
+                    {{ticket.customid}}
+                </td>
+                <td>
+                    {{ticket.date_ajout | date:'mediumDate'}}
+                </td>
+                <td>
+                    {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname | uppercase}}
+                </td>
+                <td>
+                    {{ticket?.sujet_id?.service_id?.label}}
+                </td>
+                <td>
+                    {{ticket?.sujet_id?.label}}
+                </td>
+                <td>
+                    {{ticket.priorite}}
+                </td>
+                <td>
+                    {{getAttente(ticket.date_ajout)}}
+                </td>
+                <td>
+                    <i pTooltip="Affectér ce ticket" style="margin-left: 2%; cursor: pointer;" class="pi pi-send"
+                        (click)="initAffecter(ticket)" aria-hidden="true"></i>
+
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-rowData>
+            <tr>
+                <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+            <tr>
+                <th> Description </th>
+                <th> Pièces jointes </th> <!--TODO-->
+                <th> Date de traitement </th>
+                <th> Note du Service qui traite </th>
+                <th> Pièces jointes du Service </th> <!--TODO-->
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+            <tr>
+                <td>{{ticket.description}}</td>
+                <td>{{ticket.document}}</td>
+                <td>{{ticket.date_affec_accep}}</td>
+                <td>{{ticket.note}}</td>
+                <td>{{ticket.documents_service}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </tr>
+    </ng-template>
+    </p-table>
+
+</div>

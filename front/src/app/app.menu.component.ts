@@ -139,7 +139,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/ticketing/suivi/non-assignes']
                                         },
                                         {
-                                            label: 'Tickets assignés',
+                                            label: 'Tickets assignés - En attente de traitement',
                                             icon: 'pi pi-inbox',
                                             routerLink: ['/ticketing/suivi/attente-de-traitement']
                                         },

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
 import { AuthService } from 'src/app/services/auth.service';
@@ -7,11 +7,12 @@ import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
 
 @Component({
-  selector: 'app-ticket-non-assignes',
-  templateUrl: './ticket-non-assignes.component.html',
-  styleUrls: ['./ticket-non-assignes.component.scss']
+  selector: 'app-list-tickets-en-attente-de-traitement',
+  templateUrl: './list-tickets-en-attente-de-traitement.component.html',
+  styleUrls: ['./list-tickets-en-attente-de-traitement.component.scss']
 })
-export class TicketNonAssignesComponent implements OnInit {
+export class ListTicketsEnAttenteDeTraitementComponent implements OnInit {
+
   constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService, private ServService: ServService) { }
   tickets = []
   ticketUpdate: Ticket;
@@ -24,7 +25,7 @@ export class TicketNonAssignesComponent implements OnInit {
   })
   filterService = []
   ngOnInit(): void {
-    this.TicketService.getAllNonAssigne().subscribe(data => {
+    this.TicketService.getAllAttenteDeTraitement().subscribe(data => {
       this.tickets = data
     })
     this.UserService.getAllAgent().subscribe(data => {

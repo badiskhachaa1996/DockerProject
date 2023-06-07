@@ -304,13 +304,15 @@ app.get("/getAccAff/:id", (req, res) => {
 
 //Update d'un ticket
 app.post("/update/:id", (req, res) => {
+    console.log(req.body)
+    console.log(req.params.id)
     Ticket.findByIdAndUpdate(req.params.id,
         {
-            sujet_id: req.body.sujet_id,
-            description: req.body.description
+            ...req.body
         }, { new: true }, (err, ticket) => {
             if (err) {
-                res.send(err)
+                console.error(err)
+                res.status(500).send(err)
             }
             res.send(ticket);
         })
@@ -720,6 +722,30 @@ app.get("/getCountTicketUserTraite/:id", (req, res) => {
 //Requête de récupération du nombre de ticket crée par un user traité
 app.get("/getCountTicketUserQueue/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id, statut: 'Queue d\'entrée' })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.get("/getAllNonAssigne", (req, res) => {
+    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.get("/getAllRefuse", (req, res) => {
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.get("/getAllTraite", (req, res) => {
+    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.get("/getAllAttenteDeTraitement", (req, res) => {
+    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
