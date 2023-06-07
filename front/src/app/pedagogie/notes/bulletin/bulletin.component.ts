@@ -45,7 +45,8 @@ export class BulletinComponent implements OnInit {
     this.askGroupeSemestrePV = false
     this.GroupeService.getPopulate(this.route.snapshot.paramMap.get('classe_id')).subscribe(classe => {
       this.GROUPE = classe
-      this.EtuService.getAllByClasseId(this.route.snapshot.paramMap.get('classe_id')).subscribe(etudiants => {
+      //getAllByClasseID serait mieux
+      this.EtuService.getAll().subscribe(etudiants => {
         this.etudiantFromClasse = etudiants
         this.etudiantFromClasse.forEach(etudiant => {
           if (etudiant.custom_id == this.route.snapshot.paramMap.get('etudiant_id')) {
