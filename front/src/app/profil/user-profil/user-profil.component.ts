@@ -125,7 +125,6 @@ export class UserProfilComponent implements OnInit {
   public ToggleUpdate() {
     this.toggleUpdate = !this.toggleUpdate
     this.toggleUpdatepwd = false
-    window.scrollTo(1000, 0)
     this.civiliteList.forEach((civ) => {
       if (civ.value == this.userco.civilite) {
         if (this.InfoUser && this.InfoUser.date_naissance)
@@ -410,7 +409,7 @@ export class UserProfilComponent implements OnInit {
     //Patie dediée à la demande de conge
     //Recuperation de l'utilisateur connecté actuellement
     this.AuthService.getInfoById(this.decodeToken.id).subscribe(
-      ((response) => { this.userConnectedNow = response ;}),
+      ((response) => { this.userConnectedNow = response; }),
       ((error) => { console.log(error) })
     );
 
@@ -485,21 +484,33 @@ export class UserProfilComponent implements OnInit {
   }
 
 
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+
   //Partie dedié a la gestion des demandes de congé
   //Methode de recuperation de la liste des demandes de congés de l'utilisateur
-  onGetConges()
-  {
+  onGetConges() {
     this.congeService.getByUserIdBetweenPopulate(this.userConnectedNow._id)
-    .then((response: any) => {
-      this.conges = response;
-      this.showCongeList = true;
-    })
-    .catch((error) => {  console.log(error); this.messageService.add({ severity: 'error', summary: 'problème interne', detail: "Veuillez contacter un administrateur s'il vous PlatformLocation, ou faites un ticket au service IMS" }); });
+      .then((response: any) => {
+        this.conges = response;
+        this.showCongeList = true;
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'problème interne', detail: "Veuillez contacter un administrateur s'il vous PlatformLocation, ou faites un ticket au service IMS" }); });
   }
 
   //Methode de demande de congés
-  onNewConges()
-  {
+  onNewConges() {
     const formValue = this.formNewDemande.value;
     const conge = new Conge();
 
@@ -509,59 +520,54 @@ export class UserProfilComponent implements OnInit {
     conge.date_fin = formValue['date_fin'];
     conge.statut = 'En attente',
 
-    this.congeService.postNewHolidays(conge)
-    .then((response) => {
-      this.formNewDemande.reset();
-      this.showFormNewDemande = false;
+      this.congeService.postNewHolidays(conge)
+        .then((response) => {
+          this.formNewDemande.reset();
+          this.showFormNewDemande = false;
 
-      this.messageService.add({ severity: 'success', summary: 'Demande de congé envoyé en attente de valisation par votre referent' });
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
+          this.messageService.add({ severity: 'success', summary: 'Demande de congé envoyé en attente de valisation par votre referent' });
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
   }
 
   //Methode de recuperation de la liste des congé d'un service pour un responsable
-  onGetCongesForMyService()
-  {
+  onGetCongesForMyService() {
     this.congeService.getAllBetweenPopulateForService(this.userConnectedNow._id)
-    .then((response: any) => {
-      this.conges = response;
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
+      .then((response: any) => {
+        this.conges = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
   }
 
   //Valider une demande de congés
-  onValidateConge(id: string)
-  {
+  onValidateConge(id: string) {
     this.congeService.patchValidateHolidays(id)
-    .then((response) => { 
-      this.messageService.add({ severity: 'success', summary: "Demande de congés validé" }); 
-      this.onGetCongesForMyService();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: "Demande de congés validé" });
+        this.onGetCongesForMyService();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
   }
 
   //Refuser une demande de congés
-  onRefuseConge(id: string)
-  {
+  onRefuseConge(id: string) {
     this.congeService.patchRefuseHolidays(id)
-    .then((response) => { 
-      this.messageService.add({ severity: 'warning', summary: "Demande de congés Réfusé" }); 
-      this.onGetCongesForMyService();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+      .then((response) => {
+        this.messageService.add({ severity: 'warning', summary: "Demande de congés Réfusé" });
+        this.onGetCongesForMyService();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
   }
 
   //Upload du fichier de justification
   onUpload(event: any) {
-    if(event.target.files.length > 0)
-    {
-        this.uploadedFiles = event.target.files[0];
+    if (event.target.files.length > 0) {
+      this.uploadedFiles = event.target.files[0];
     }
   }
 
   //Methode de declaration d'une nouvelle abscence
-  onNewAbscence()
-  {
+  onNewAbscence() {
     const absence = new AbscenceCollaborateur();
 
     //Recuperation des données du formualaire
@@ -570,36 +576,35 @@ export class UserProfilComponent implements OnInit {
     absence.date_of_abscence = this.abscenceCollaborateurService.onReplaceDate(formValue['date_of_abscence']);
     absence.motif = formValue['motif'];
     absence.periode = formValue['periode'].label
-    
+
     //Recuperation du fichier s'il existe
-    if(this.uploadedFiles)
-    {
+    if (this.uploadedFiles) {
       absence.file_name = this.uploadedFiles.name;
       let formData = new FormData();
       formData.append('id', this.userConnectedNow._id);
       formData.append('file', this.uploadedFiles);
-      
+
       //Enregistrement de l'absence
       this.abscenceCollaborateurService.postAbscence(absence)
-      .then((absence) => {
-        this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" });
-        
-        //Envoi du document en base de données
-        this.abscenceCollaborateurService.postJustificatif(formData)
-        .then((justificatif) => { 
-                  
-        })
-        .catch((error) => { 
-          this.messageService.add({ severity: 'success', summary: "Justificatif pris en compte" }); 
-          this.justificationForm.reset();  
-        });
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); });
+        .then((absence) => {
+          this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" });
 
-    }else{
+          //Envoi du document en base de données
+          this.abscenceCollaborateurService.postJustificatif(formData)
+            .then((justificatif) => {
+
+            })
+            .catch((error) => {
+              this.messageService.add({ severity: 'success', summary: "Justificatif pris en compte" });
+              this.justificationForm.reset();
+            });
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); });
+
+    } else {
       this.abscenceCollaborateurService.postAbscence(absence)
-      .then((response) => { this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" }); this.justificationForm.reset(); })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+        .then((response) => { this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" }); this.justificationForm.reset(); })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
     }
   }
 }
