@@ -198,6 +198,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                       res.status(201).send(entrepriseSaved);
                     })
                     .catch((error) => {
+                      console.log(error);
                       res
                         .status(400)
                         .send("Impossible de créer une nouvelle entreprise");

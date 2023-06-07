@@ -235,6 +235,10 @@ export class DashboardComponent implements OnInit {
   userConnected: User;
   dailyCheck: DailyCheck;
   today: Date = new Date();
+  workingTiming: number; // temps passé au travail
+  workingHours: string; // heure passé au travail
+  workingMinutes: string; // heure passé au travail
+  pauseTiming: number; // temps passé en pause
   //* end check in variables
 
   constructor(
@@ -252,6 +256,7 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
+
     this.token = jwt_decode(localStorage.getItem('token'));
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
@@ -578,6 +583,21 @@ export class DashboardComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
         }
         this.dailyCheck = response;
+        // calcule du temps passé au travail
+        this.workingTiming = (Date.now() - new Date(this.dailyCheck.check_in).getTime())/(1000*60);
+        if(this.workingTiming <= 60)
+        {
+          this.workingTiming = Math.floor(this.workingTiming);
+        } else {
+          this.workingTiming = this.workingTiming / 60;
+          console.log(this.workingTiming);
+          let workingTiminStringy = this.workingTiming.toString();
+          let workingTiminSplited = workingTiminStringy.split('.');
+
+          this.workingHours = workingTiminSplited[0];
+          this.workingMinutes = workingTiminSplited[1].substring(0, 2);
+        }
+
       })
       .catch((error) => { console.error(error) });
   }
@@ -620,7 +640,23 @@ export class DashboardComponent implements OnInit {
   // méthode de fin de la pause
   onStopPause(): void
   {
-    
+    // taille du tableau de check
+    const pLength = this.dailyCheck.pause.length;
+    this.dailyCheck.pause[pLength - 1].out = new Date();
+    this.dailyCheck.isInPause = false;
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bon retour au travail' });
+
+        // recuperation du check journalier
+        this.dailyCheckService.getCheckByUserId(response.user_id)
+          .then((response) => {
+            this.dailyCheck = response;
+          })
+          .catch((error) => { console.error(error) });
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
   }
 
   //* end

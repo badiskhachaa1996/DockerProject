@@ -25,7 +25,7 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Non', value: false },
   ];
 
-  commercials: any = [{ label: 'Choisir le commercial référent', value: null }];
+  commercials: any[] = [{ label: 'Choisir le commercial référent', value: null }];
 
   civiliteList = environment.civilite;
 
@@ -101,12 +101,12 @@ export class AddEntrepriseComponent implements OnInit {
       // telecopie: [''],
       OPCO: [''],
       // organisme_prevoyance: [''],
-      commercial: [''],
+      commercial: [this.commercials[0].value],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: ['', Validators.required],
       prenom_rep: ['', Validators.required],
-      email_rep: ['', [Validators.required, Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      email_rep: ['', [Validators.required, Validators.email]],
       indicatif_rep: [''],
       phone_rep: [''],
     })
@@ -180,7 +180,6 @@ export class AddEntrepriseComponent implements OnInit {
     entreprise.OPCO = opco;
     entreprise.commercial_id = commercial_id;
     
-    console.log(entreprise);
 
     let representant = new User(
       null,
