@@ -27,7 +27,12 @@ export class User {
         public date_creation?: Date,
         public departement?: string,
         public mention?: string,
-        public campus?: string
+        public campus?: string,
+        public roles_list?: {
+            _id?: string,
+            module?: string,
+            role?: string,
+        }[]
     ) { }
 
 

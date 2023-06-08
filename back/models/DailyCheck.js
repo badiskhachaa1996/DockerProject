@@ -11,5 +11,6 @@ const dailyCheckSchema = mongoose.Schema({
     check_out: { type: Date, required: false },
 });
 
+
 const DailyCheck = mongoose.model('daily_check', dailyCheckSchema);
 module.exports = { DailyCheck }

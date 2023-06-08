@@ -182,7 +182,7 @@
 			<button pButton type="button" label="Lister les activités en cours" icon="pi pi-plus" style="float: right;" (click)="showTacheInProgress = true;"></button>
 
 			<h5>Vos activités finis</h5>
-			<p-table #dt1 [value]="tachesFinished" dataKey="_id" [rows]="10" [loading]="loading" 
+			<p-table #dt1 [value]="tachesFinished" dataKey="_id" [rows]="8" [loading]="loading" 
 					 [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['libelle', 'project_id.libelle', 'date_limite']" 
 					 responsiveLayout="scroll">
 				<ng-template pTemplate="caption">

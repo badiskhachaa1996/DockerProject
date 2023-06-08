@@ -535,7 +535,7 @@
         <h5>Liste des leads CRM Qualifiés</h5>
 
         <p-toast></p-toast>
-        <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="leads" [paginator]="true"
             [pageLinks]="5" selectionMode="single" [globalFilterFields]="['custom_id', 'prenom', 'nom','email']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">

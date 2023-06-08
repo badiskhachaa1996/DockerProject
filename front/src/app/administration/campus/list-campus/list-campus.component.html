@@ -60,7 +60,7 @@
 		<div class="card">
 			<h5>Liste des campus</h5>
 			<p-table #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single"
-                     dataKey="_id" [rows]="10" 
+                     dataKey="_id" [rows]="8" 
                      [rowHover]="true" [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['libelle','email','site','ville','pays']"
                      responsiveLayout="scroll" styleClass="p-datatable-gridlines">

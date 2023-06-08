@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
 import { ActualiteInt } from 'src/app/models/ActualiteInt';
+import { User } from 'src/app/models/User';
 import { ActiviteIntService } from 'src/app/services/activite-int.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
@@ -32,6 +33,8 @@ export class ActualiteComponent implements OnInit {
     date_creation: new FormControl(new Date())
   })
   type = this.route.snapshot.paramMap.get('type');
+
+  AccessLevel = "Spectateur"
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.activiteService.getAll().subscribe(data => {
@@ -41,7 +44,15 @@ export class ActualiteComponent implements OnInit {
       data.forEach(p => {
         this.partenaireList.push({ label: p.nom, value: p.email })
       })
-
+    })
+    this.AuthService.getById(this.token.id).subscribe(user => {
+      let data: User = user
+      data.roles_list.forEach(val => {
+        if (val.module == "Partenaire")
+          this.AccessLevel = val.role
+      })
+      if (user.role == 'Admin')
+      this.AccessLevel = 'Admin'
     })
   }
 

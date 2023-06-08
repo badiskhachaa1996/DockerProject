@@ -45,6 +45,8 @@ import { EtudiantIntuns } from 'src/app/models/intuns/EtudiantIntuns';
 import { EtudiantsIntunsService } from 'src/app/services/intuns/etudiants-intuns.service';
 import { DailyCheck } from 'src/app/models/DailyCheck';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
+import * as moment from 'moment';
+import { TabView } from 'primeng/tabview';
 
 
 @Component({
@@ -235,10 +237,11 @@ export class DashboardComponent implements OnInit {
   userConnected: User;
   dailyCheck: DailyCheck;
   today: Date = new Date();
-  workingTiming: number; // temps passé au travail
-  workingHours: string; // heure passé au travail
-  workingMinutes: string; // heure passé au travail
-  pauseTiming: number; // temps passé en pause
+  workingTiming: number; // temps passé au travail en minute
+  workingHour: number = 0; // temps passé au travail
+  workingMinute: number = 0; // temps passé au travail
+  pauseTiming: number; // temps passé en pause en minute
+  selectedTabIndex: number = 0; // Index actuel du tableau d'affichage des données RH
   //* end check in variables
 
   constructor(
@@ -583,21 +586,33 @@ export class DashboardComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
         }
         this.dailyCheck = response;
+
+        // verification sur les boutons
+
+
+        // calcule du temps passé en pause
+        this.pauseTiming = 0;
+        this.dailyCheck?.pause.forEach((p) => {
+          if(p.out)
+          {
+            this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+          } else {
+            this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+          }
+        })
+
         // calcule du temps passé au travail
-        this.workingTiming = (Date.now() - new Date(this.dailyCheck.check_in).getTime())/(1000*60);
-        if(this.workingTiming <= 60)
+        this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
+        // Retrait du temps passé en pause
+        this.workingTiming = this.workingTiming - this.pauseTiming;
+        if(this.workingTiming < 60)
         {
-          this.workingTiming = Math.floor(this.workingTiming);
+          this.workingHour = 0;
+          this.workingMinute = this.workingTiming;
         } else {
-          this.workingTiming = this.workingTiming / 60;
-          console.log(this.workingTiming);
-          let workingTiminStringy = this.workingTiming.toString();
-          let workingTiminSplited = workingTiminStringy.split('.');
-
-          this.workingHours = workingTiminSplited[0];
-          this.workingMinutes = workingTiminSplited[1].substring(0, 2);
+          this.workingHour = Math.floor(this.workingTiming / 60);
+          this.workingMinute = this.workingTiming % 60;
         }
-
       })
       .catch((error) => { console.error(error) });
   }
@@ -628,11 +643,7 @@ export class DashboardComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bonne pause' });
 
         // recuperation du check journalier
-        this.dailyCheckService.getCheckByUserId(response.user_id)
-          .then((response) => {
-            this.dailyCheck = response;
-          })
-          .catch((error) => { console.error(error) });
+        this.onCheckDailyCheck(response.user_id);
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
@@ -650,14 +661,24 @@ export class DashboardComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Pause', detail: 'Bon retour au travail' });
 
         // recuperation du check journalier
-        this.dailyCheckService.getCheckByUserId(response.user_id)
-          .then((response) => {
-            this.dailyCheck = response;
-          })
-          .catch((error) => { console.error(error) });
+        this.onCheckDailyCheck(response.user_id);
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
   }
 
+  // methôde de checkout
+  onCheckOut(): void 
+  {
+    this.dailyCheck.check_out = new Date();
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
+
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+  }
   //* end
 }

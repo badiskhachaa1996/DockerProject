@@ -105,6 +105,79 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/mes-tickets']
+                                        },
+                                        {
+                                            label: 'Tickets assigné à moi',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/ticketing/gestion/assignes']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Suivi des tickets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Tickets non assignés',
+                                            icon: 'pi pi-clock',
+                                            routerLink: ['/ticketing/suivi/non-assignes']
+                                        },
+                                        {
+                                            label: 'Tickets assignés',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/attente-de-traitement']
+                                        },
+                                        {
+                                            label: 'Tickets traités',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/gestion/traites']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Configuration',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/admin/gestion-services'],
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    routerLink: [],
+                                },
+                            ]
+                        }, {
+                            label: 'Gestion des agents V2',
+                            icon: 'pi pi-users',
+                            items: [
+                                {
+                                    label: 'Ajouter un agent',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/agent/ajout']
+                                },
+                                {
+                                    label: 'Liste des agents',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/agent/list']
+                                },
+                            ]
+                        },
+                        {
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -1625,7 +1698,8 @@ export class AppMenuComponent implements OnInit {
 
                             ]
 
-                        },
+                        },/*
+                        
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -1668,6 +1742,8 @@ export class AppMenuComponent implements OnInit {
                                 }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
                         },
+                        */
+
                         {
                             label: 'Skillsnet',
                             icon: 'pi pi-star',
@@ -2274,7 +2350,7 @@ export class AppMenuComponent implements OnInit {
 
                                     ]
 
-                                },
+                                },/*
                                 {
                                     label: 'Partenaires',
                                     icon: 'pi pi-share-alt',
@@ -2316,7 +2392,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/dashboard/partenaire']
                                         }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
-                                },
+                                },*/
                                 {
                                     label: 'Skillsnet',
                                     icon: 'pi pi-star',
@@ -3079,7 +3155,7 @@ export class AppMenuComponent implements OnInit {
                                             ]
                                         },
                                     ]
-                                },
+                                },/*
                                 {
                                     label: 'Partenaires',
                                     icon: 'pi pi-share-alt',
@@ -3121,7 +3197,7 @@ export class AppMenuComponent implements OnInit {
                                             , routerLink: ['/dashboard/partenaire']
                                         }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
-                                },
+                                },*/
                                 {
                                     label: 'Skillsnet',
                                     icon: 'pi pi-star',
@@ -3376,7 +3452,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },
+                        },/*
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -3418,7 +3494,7 @@ export class AppMenuComponent implements OnInit {
                                     , routerLink: ['/dashboard/partenaire']
                                 }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
-                        }, {
+                        },*/ {
                             label: 'International',
                             icon: 'pi pi-globe',
                             items: [
@@ -3747,6 +3823,91 @@ export class AppMenuComponent implements OnInit {
                     ]
                 }
                 /*end menus externes */
+                //WIP Nouveau Menu avec roles_list : 
+                let services_list = []
+                let service_dic = {}
+                response.roles_list.forEach(val => {
+                    if (!service_dic[val.module])
+                        service_dic[val.module] = val.role
+                })
+                services_list = Object.keys(service_dic)
+
+                if (services_list.includes('Partenaire')) {
+                    if (service_dic['Partenaire'] != "Spectateur") {
+                        this.items.push(
+                            {
+                                label: 'Partenaires',
+                                icon: 'pi pi-share-alt',
+                                items: [
+                                    {
+                                        label: 'Insérer un Partenaire',
+                                        icon: 'pi pi pi-user-plus',
+                                        routerLink: ['/partenaireInscription']
+                                    },
+                                    {
+                                        label: 'Liste des partenaires',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/admin/partenaire']
+                                    },
+                                    {
+                                        label: 'Support Marketing',
+                                        icon: 'pi pi-briefcase'
+                                        , routerLink: ['/international/brands']
+                                    },
+                                    {
+                                        label: 'Gestion des commissions',
+                                        icon: 'pi pi-credit-card',
+                                        items: [
+                                            {
+                                                label: "Ventes",
+                                                icon: 'pi pi-shopping-cart',
+                                                routerLink: ['/commissions/ventes']
+                                            },
+                                            {
+                                                label: "Réglement",
+                                                icon: 'pi pi-shopping-cart',
+                                                routerLink: ['/commissions/reglement']
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-chart-line'
+                                        , routerLink: ['/dashboard/partenaire']
+                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
+                                ]
+                            },
+                        )
+                    } else {
+                        this.items.push(
+                            {
+                                label: 'Partenaires',
+                                icon: 'pi pi-share-alt',
+                                items: [
+                                    {
+                                        label: 'Liste des partenaires',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/admin/partenaire']
+                                    },
+                                    {
+                                        label: 'Support Marketing',
+                                        icon: 'pi pi-briefcase'
+                                        , routerLink: ['/international/brands']
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-chart-line'
+                                        , routerLink: ['/dashboard/partenaire']
+                                    }, {
+                                        label: "Actualités",
+                                        icon: 'pi pi-exclamation-circle',
+                                        routerLink: ['/international/actualite']
+                                    },
+                                ]
+                            },
+                        )
+                    }
+                }
             },
             error: (error: any) => {
                 console.log(error);

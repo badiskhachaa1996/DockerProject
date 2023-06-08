@@ -104,7 +104,13 @@ const user_schema = new mongoose.Schema({
         required: false,
     },
     equipe_id: { type: mongoose.Schema.Types.ObjectId, ref: "team" },
-    campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" }
+    campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
+    roles_list: {
+        type: [{
+            module: { type: String },
+            role: { type: String },
+        }], default: []
+    }
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

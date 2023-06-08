@@ -342,15 +342,20 @@
             </form>
         </div>
     </div>
-
+    <p-toast></p-toast>
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
-        <div class="card">
-            <h5>Liste des leads Sourcing</h5>
+        <div class="card grid">
+            <h5 class="col-8">Liste des leads Sourcing</h5>
+            <div class="col-4" style="text-align: right;">
+                <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
+                </button>
+            </div>
 
-            <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [value]="prospects"
-                [paginator]="true" [pageLinks]="5" selectionMode="single"
+
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="prospects"
+                [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 

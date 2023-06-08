@@ -27,7 +27,7 @@
         <div class="col-12 grid" *ngIf="leadsToCreate.length>0">
             <h4 class="col-12">Listes des Leads à ajouter</h4>
 
-            <p-table dt1 [value]="leadsToCreate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="10"
+            <p-table dt1 [value]="leadsToCreate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="8"
                 [pageLinks]="5" [paginator]="true" [totalRecords]="leadsToCreate?.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -322,7 +322,7 @@
         </div>
         <div class="col-12 grid" *ngIf="leadsToUpdate.length>0">
             <h4 class="col-12">Listes des Leads Mis à jour</h4>
-            <p-table dt1 [value]="leadsToUpdate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="10"
+            <p-table dt1 [value]="leadsToUpdate" class="col-12" dataKey="email" responsiveLayout="scroll" [rows]="8"
                 [pageLinks]="5" [paginator]="true" [totalRecords]="leadsToUpdate?.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">

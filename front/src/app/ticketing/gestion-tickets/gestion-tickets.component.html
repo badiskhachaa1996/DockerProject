@@ -233,7 +233,7 @@
 			</div>
 			<h5>File d'attente des tickets</h5>
 			<p-toast></p-toast>
-			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList" dataKey="_id" [rows]="10" [rowHover]="true"
+			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList" dataKey="_id" [rows]="8" [rowHover]="true"
 				[paginator]="true" [pageLinks]="5" rowExpandMode="single"
 				[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
 				[value]="queueList" (sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedRows"
@@ -437,7 +437,7 @@
 <div class="col-12">
 	<div class="card">
 		<h5>Mes tickets en cours de traitement</h5>
-		<p-table #dt2 *ngIf="AccAffList" pDroppable="QueueToAccAff" dataKey="_id" [rows]="10"
+		<p-table #dt2 *ngIf="AccAffList" pDroppable="QueueToAccAff" dataKey="_id" [rows]="8"
 			(onDrop)="dragQueueToAccAff($event)" [rowHover]="true" [totalRecords]="AccAffList.length" [paginator]="true"
 			[pageLinks]="5" rowExpandMode="single"
 			[globalFilterFields]="['customid','description','etudiant_id?.classe_id?.diplome_id?.domaine','etudiant_id?.ecole_id?.libelle']"
@@ -749,7 +749,7 @@
 	<div class="card">
 		<h5 *ngIf="token['role']!='Admin'">Les tickets de mon service</h5>
 		<h5 *ngIf="token['role']=='Admin'">Les tickets de tous les services</h5>
-		<p-table #dt3 *ngIf="AccAffList" [value]="allTickets" dataKey="_id" [rows]="10" [rowHover]="true"
+		<p-table #dt3 *ngIf="AccAffList" [value]="allTickets" dataKey="_id" [rows]="8" [rowHover]="true"
 			rowExpandMode="single" [paginator]="true" [pageLinks]="5" [totalRecords]="allTickets.length"
 			(sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']"
 			responsiveLayout="scroll" [expandedRowKeys]="expandedAll" styleClass="p-datatable-gridlines">

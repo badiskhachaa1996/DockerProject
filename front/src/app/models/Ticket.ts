@@ -2,10 +2,10 @@ export class Ticket {
 
     constructor(
         public _id?: string,
-        public createur_id?: string,
-        public sujet_id?: string,
+        public createur_id?: any,
+        public sujet_id?: any,
         public date_ajout?: Date,
-        public agent_id?: string,
+        public agent_id?: any,
         public statut?: string,
         public date_affec_accep?: Date,
         public temp_traitement?: string,
@@ -17,7 +17,14 @@ export class Ticket {
         public date_revert?: Date,
         public user_revert?: string,
         public customid?: string,
-        public etudiant_id?: string
+        public etudiant_id?: any,
+        public documents?: {
+            _id?: string,
+            nom?: string,
+            path?: string,
+        }[],
+        public priorite?: string,
+        public note?: string,
     ) { }
 
 

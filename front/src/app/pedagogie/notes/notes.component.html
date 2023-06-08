@@ -680,7 +680,7 @@
                 classeForBGenerateBulletin.titre }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
+                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="8" [pageLinks]="5"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -774,7 +774,7 @@
             </p>
 
             <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="8" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -856,7 +856,7 @@
             </div>
 
             <h5>Notes par étudiants</h5>
-            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [pageLinks]="5"
+            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [pageLinks]="5"
                 [paginator]="true"
                 [globalFilterFields]="['etudiant_id.user_id.lastname', 'examen_id.libelle','examen_id.matiere_id.abbrv','etudiant_id.user_id.firstname']"
                 responsiveLayout="scroll" rowExpandMode="single" [totalRecords]="notes.length"
@@ -864,7 +864,7 @@
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown filter="true" [options]="dropdownClasse"
-                            (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')" optionLabel="libelle"
+                            (onChange)="dt1.filter($event.value, 'classe_id', 'equals')" optionLabel="libelle"
                             emptyFilterMessage="Pas de classe trouvé"></p-dropdown>
                         <p-dropdown filter="true" [options]="filterCampus"
                             (onChange)="dt1.filter($event.value, 'classe_id.diplome_id.campus_id._id', 'equals')"
@@ -882,15 +882,15 @@
                         <th pSortableColumn="etudiant_id.user_id.firstname">Prénom & Nom<p-sortIcon
                                 field="etudiant_id.user_id.firstname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="examen_id.matiere_id.abbrv"> Module <p-sortIcon
-                                field="examen_id.matiere_id.abbrv"></p-sortIcon>
+                        <th pSortableColumn="examen_id.matiere_id.[0].nom"> Module <p-sortIcon
+                                field="examen_id.matiere_id.[0].nom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="formateur_id"> Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
+                        <th pSortableColumn="examen_id.formateur_id.user_id.firstname"> Formateur <p-sortIcon field="examen_id.formateur_id.user_id.firstname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="examen_id.libelle"> Evaluation <p-sortIcon field="examen_id.libelle">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="examen_id.type"> Type d'evaluation <p-sortIcon field="examen_id.type">
+                        <th pSortableColumn="examen_id.semestre"> Semestre <p-sortIcon field="examen_id.semestre">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="note_val"> Note <p-sortIcon field="note_val"></p-sortIcon>
@@ -914,7 +914,7 @@
                             {{ note.etudiant_id?.user_id?.lastname }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ note.examen_id?.matiere_id?.abbrv }}
+                            {{ note.examen_id?.matiere_id[0].nom }}
                         </td>
                         <td>
                             {{ note.examen_id?.formateur_id?.user_id?.firstname }}
@@ -924,7 +924,7 @@
                             {{ note.examen_id?.libelle }}
                         </td>
                         <td style="min-width: 10rem;">
-                            {{ note.examen_id?.type }}
+                            {{ note.semestre }} {{ note.examen_id?.semestre }}
                         </td>
                         <td style="min-width: 10rem;">
                             {{ note.note_val | number : '0.2-9' }}

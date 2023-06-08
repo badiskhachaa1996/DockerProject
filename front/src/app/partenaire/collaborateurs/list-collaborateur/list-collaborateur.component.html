@@ -66,7 +66,7 @@
         </div>
         <div class="col-12">
             <h3>Tableau Commissions</h3>
-            <p-table #dt2 dataKey="_id" [rows]="10" [value]="gestionCommercial.commissions" [paginator]="true"
+            <p-table #dt2 dataKey="_id" [rows]="8" [value]="gestionCommercial.commissions" [paginator]="true"
                 editMode="row" [pageLinks]="5" [globalFilterFields]="['montant', 'description']"
                 [totalRecords]="gestionCommercial.commissions.length" responsiveLayout="scroll"
                 styleClass="p-datatable-gridlines">
@@ -237,7 +237,7 @@
                 (click)="showFormAddCommercial = true; showFormUpdateCommercial = false;"></button>
 
             <h5>Liste des commercials</h5>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single"
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" rowExpandMode="single"
                 [value]="commercialPartenaires" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['code_commercial_partenaire', 'statut']"
                 [totalRecords]="commercialPartenaires.length" responsiveLayout="scroll"

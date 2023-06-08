@@ -1,0 +1,121 @@
+<div class="card grid col-12">
+    <h4 class="col-12" style="text-align: center;">Mettre à jour cette agent</h4>
+    <div class="col-12" style="text-align: center;">
+        <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+            obligatoires</small><br>
+    </div>
+    <form class="p-fluid p-formgrid grid" [formGroup]="addForm">
+        <div class="field col-12">
+            <label>Civilité</label>
+            <p-dropdown optionValue="value" optionLabel="value" placeholder="Choisissez une civilité"
+                formControlName="civilite" [options]="civiliteDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label>Nom<span style="color: red;"> * </span></label>
+            <input pInputText formControlName="lastname" type="text" placeholder="Ex: Smith" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Prénom <span style="color: red;"> * </span></label>
+            <input pInputText formControlName="firstname" type="text" placeholder="Ex: John" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label>Adresse Email Ecole <span style="color: red;"> * </span></label>
+            <input pInputText id="lastname" formControlName="email" type="text"
+                placeholder="Ex: email@intedgroup.com" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label For="adresse">Adresse postale</label>
+            <input pInputText id="adresse" type="text" formControlName="rue_adresse" placeholder="Adresse postale" />
+
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="code_postale">Code postale </label>
+            <input pInputText id="code_postale" formControlName="postal_adresse" type="text"
+                placeholder="Code postale" />
+
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="ville">Ville </label>
+            <input pInputText id="ville" type="text" formControlName="ville_adresse" placeholder="Ville" />
+        </div>
+
+        <div class="field col-12 md:col-4">
+            <label>Pays</label>
+            <p-dropdown placeholder="Choisissez un pays" filter="true" formControlName="pays_adresse"
+                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [options]="paysDropdown"
+                autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label>Indicatif</label>
+            <input pInputText id="lastname" formControlName="indicatif" type="tel" placeholder="Ex: +33" />
+        </div>
+        <div class="field col-12 md:col-8">
+            <label>Numéro de téléphone</label>
+            <input pInputText id="lastname" formControlName="phone" type="tel" placeholder="Ex: 683121415" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="phone">Mention<span style="color:red"> *</span></label>
+            <p-dropdown formControlName="mention" [options]="mentionList"
+                placeholder="Choisissez une mention"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="service">Service <span style="color:red"> *</span></label>
+            <p-dropdown [options]="serviceList" placeholder="Choisissez un service"
+                formControlName="service_id"></p-dropdown>
+        </div>
+    </form>
+    <div class="col-12 grid">
+        <p-table #dtrole dataKey="_id" [value]="roles_list" class="col-12" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Module</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-role let-ri="rowIndex">
+                <tr [pEditableRow]="role">
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="dropdownModule" [(ngModel)]="role.module"
+                                    placeholder="Choisissez une module de IMS"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{role.module}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td pEditableColumn>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown [options]="dropdownRole" [(ngModel)]="role.role"
+                                    placeholder="Choisissez un niveau d'accès pour ce module"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{role.role}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer cette accès" tooltipPosition="bottom" class="pi pi-trash ml-2"
+                            aria-hidden="true" (click)="deleteRole(ri)"> </i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="col-12">
+            <button pButton type="button" (click)="addRole()" label="Ajouter un niveau d'accès"></button>
+        </div>
+    </div>
+    <div class="col-12">
+        <button [disabled]="addForm.invalid" pButton type="submit" label="Mettre à jour l'agent"
+            (click)="onAdd()"></button>
+    </div>
+
+</div>

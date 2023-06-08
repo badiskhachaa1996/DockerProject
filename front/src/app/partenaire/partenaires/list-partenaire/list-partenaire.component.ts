@@ -108,15 +108,16 @@ export class ListPartenaireComponent implements OnInit {
   { label: "En cours", value: "En cours" },
   { label: "Signé", value: "Signé" },
   { label: "Annulé", value: "Annulé" },]
-
+  AccessLevel = "Spectateur"
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute,
     private router: Router, private UserService: AuthService, private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private MIService: TeamsIntService) { }
 
   ngOnInit(): void {
     //this.getPartenaireList();
-    let tkn = jwt_decode(localStorage.getItem("token"))
+    let tkn: any = jwt_decode(localStorage.getItem("token"))
     this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
+
     this.updateList();
     this.filterPays = [{ label: 'Tous les pays', value: null }].concat(this.paysList)
     this.onInitFormModifPartenaire()
@@ -125,6 +126,15 @@ export class ListPartenaireComponent implements OnInit {
         if (d.user_id)
           this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
       })
+    })
+    this.UserService.getById(tkn.id).subscribe(user => {
+      let data: User = user
+      data.roles_list.forEach(val => {
+        if (val.module == "Partenaire")
+          this.AccessLevel = val.role
+      })
+      if (tkn.role == 'Admin')
+        this.AccessLevel = 'Admin'
     })
   }
 

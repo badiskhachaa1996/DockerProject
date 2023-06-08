@@ -6,12 +6,15 @@ import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from "file-saver";
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -229,7 +232,7 @@ export class SourcingComponent implements OnInit {
 
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
 
-  prospects: Prospect[];
+  prospects: any[];
 
   selectedProspect: Prospect = null
 
@@ -245,8 +248,9 @@ export class SourcingComponent implements OnInit {
       }
     }, 15);
   }
-
+  token;
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem("token"))
     this.filterPays = this.filterPays.concat(environment.pays)
     this.admissionService.getAllSourcing().subscribe(data => {
       this.prospects = data
@@ -365,6 +369,78 @@ export class SourcingComponent implements OnInit {
 
 
   })
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.prospects.forEach(p => {
+      let t = {}
+      t['Date Inscr.'] = p?.date_creation
+      t['ID Lead'] = p?.customid
+      t['Source'] = p?.source
+      t['Prenom'] = p?.user_id?.firstname
+      t['NOM'] = p?.user_id?.lastname
+      t['Pays de residence'] = p?.user_id.pays_adresse
+      let email = ""
+      if (p?.user_id?.email)
+        email = p?.user_id?.email
+      if (p?.user_id?.email_perso)
+        email = p?.user_id?.email_perso
+      t['Adresse Email'] = email
+      t['Numéro de téléphone'] = p?.user_id?.indicatif + p?.user_id?.phone
+      t['Campus'] = p.campus_choix_1
+      t['formation'] = p.formation
+      t['Rentrée Scolaire'] = p.rentree_scolaire
+      t['Initial/Alternant'] = p.rythme_formation
+      t['Programme'] = p.programme
+      t['Etat de dossier'] = p.statut_dossier
+      t['Decision Orientation'] = p.decision_orientation
+      t['Decision Admission'] = p.decision_admission
+      t['Dossier Lead'] = p.haveDoc
+      t['Statut Paiement'] = p.statut_payement
+      t['Visa'] = p.avancement_visa
+      t['Phase de Candidature'] = p.phase_candidature
+      
+      t['Date de naissance'] = p.date_naissance
+
+      t['Nationalite'] = p?.user_id?.nationnalite
+
+
+      t['Ecole demande'] = p?.type_form
+
+      t['2eme choix'] = p.campus_choix_2
+      t['3eme choix'] = p.campus_choix_3
+
+
+
+      t['Dernier niveau academique'] = p.validated_academic_level
+      t['Num WhatsApp'] = p.indicatif_whatsapp + " " + p.numero_whatsapp
+      t['Statut pro actuel'] = p.statut_actuel
+      t['Langues'] = p.languages
+      t['Experiences pro'] = p.professional_experience
+      t['Nom du garant'] = p?.nomGarant?.toUpperCase()
+      t['Prenom du garant'] = p?.prenomGarant
+      t['Nom de l\'agence'] = p?.nomAgence
+      t['Code du commercial'] = p?.code_commercial
+      t['Autre'] = p.other
+      t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
+
+      t['Phase complémentaire'] = p.phase_complementaire
+
+      t['Att Traité par'] = p.traited_by
+
+      t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "sourcing" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
+  }
 
   initDetails(prospect: Prospect) {
     this.showDetails = prospect

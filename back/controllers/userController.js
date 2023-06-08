@@ -573,6 +573,18 @@ app.get("/getAllAgent/", (req, res) => {
     });
 });
 
+app.get("/getAllAgentPopulate", (req, res) => {
+  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id')
+
+    .then((result) => {
+      res.send(result.length > 0 ? result : []);
+    })
+    .catch((err) => {
+      res.status(404).send(error);
+      console.error(err);
+    });
+});
+
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id", (req, res) => {
   User.findById(req.params.id, (err, user) => {
@@ -1351,5 +1363,14 @@ app.patch("/recovery-password", (req, res) => {
       res.status(500).json({ errMsg: "Impossible de mettre à jour votre mot de passe, veuillez contacter un administrateur", });
     });
 });
+
+app.get('/create', (req, res) => {
+  let user = new User({ ...req.body })
+  user.save().then(data => {
+    res.send(data)
+  }, error => {
+    res.status(500).send(error)
+  })
+})
 
 module.exports = app;

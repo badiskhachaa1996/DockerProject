@@ -1,0 +1,74 @@
+
+<div class="grid col-12 card">
+    <h5 class="col-12">Liste des agents</h5>
+    <p-table #dt1 [value]="agents" dataKey="_id" responsiveLayout="scroll" class="col-12"
+        [globalFilterFields]="['lastname', 'email', 'firstname', 'site_web']" [rows]="8" [paginator]="true"
+        [totalRecords]="agents.length" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="caption">
+            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                placeholder="Recherche" />
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="civilite" scope="col" style="text-align: center;">
+                    Civilité <p-sortIcon field="civilite"></p-sortIcon>
+                </th>
+                <th pSortableColumn="lastname" scope="col" style="text-align: center;">
+                    Nom <p-sortIcon field="lastname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="firstname" scope="col" style="text-align: center;">
+                    Prénom <p-sortIcon field="firstname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="email" scope="col" style="text-align: center;">
+                    Adresse Email Ecole <p-sortIcon field="email"></p-sortIcon>
+                </th>
+                <th pSortableColumn="mention" scope="col" style="text-align: center;">
+                    Mention <p-sortIcon field="mention"></p-sortIcon>
+                </th>
+                <th pSortableColumn="service_id" scope="col" style="text-align: center;">
+                    Service <p-sortIcon field="service_id"></p-sortIcon>
+                </th>
+                <th>
+                    Accès<br>
+                    Module : Role
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-agent>
+            <tr>
+                <td>
+                    {{agent.civilite}}
+                </td>
+                <td>
+                    {{agent.lastname}}
+                </td>
+                <td>
+                    {{agent.firstname}}
+                </td>
+                <td>
+                    {{agent.email}}
+                </td>
+                <td>
+                    {{agent.mention}}
+                </td>
+                <td>
+                    {{agent?.service_id?.label}}
+                </td>
+                <td>
+                    <ng-container *ngFor="let role of agent.roles_list">
+                        {{role.module}} : {{role.role}}<br>
+                    </ng-container>
+                </td>
+                <td>
+                    <i pTooltip="Mettre à jour cette agent" tooltipPosition="bottom" class="pi pi-cog ml-2"
+                        aria-hidden="true" (click)="update(agent)"> </i>
+                    <i pTooltip="Supprimer cette agent" tooltipPosition="bottom" class="pi pi-trash ml-2"
+                        aria-hidden="true" (click)="delete(agent)"> </i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

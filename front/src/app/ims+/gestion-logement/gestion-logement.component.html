@@ -74,7 +74,7 @@
 			<h3>Gestion des Réservations en attentes</h3>
 			<p-table #dt1 [value]="reservationWaiting" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
-					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
+					[rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
 				
 				<ng-template pTemplate="caption">
 					<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -154,7 +154,7 @@
 			<h3>Réservations validées</h3>
 			<p-table #dt1 [value]="reservationsValidated" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
-					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
+					[rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
 				
 				<ng-template pTemplate="caption">
 					<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"

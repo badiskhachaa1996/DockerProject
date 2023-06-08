@@ -114,7 +114,7 @@
             style="margin-right: 3px;"></button>
     </div>
     <h5>Liste des événements</h5>
-    <p-table #dt1 rowExpandMode="single" [value]="events" dataKey="_id" [rows]="10" [rowHover]="true"
+    <p-table #dt1 rowExpandMode="single" [value]="events" dataKey="_id" [rows]="8" [rowHover]="true"
         [globalFilterFields]="['nom', 'type','description']" styleClass="p-datatable-gridlines" [paginator]="true"
         [pageLinks]="5" responsiveLayout="scroll">
 
@@ -193,7 +193,7 @@
             <tr>
                 <td colspan="7">
                     <div class="p-3">
-                        <p-table #dt2 rowExpandMode="single" [value]="event.list_inscrit" dataKey="_id" [rows]="10"
+                        <p-table #dt2 rowExpandMode="single" [value]="event.list_inscrit" dataKey="_id" [rows]="8"
                             [rowHover]="true" [globalFilterFields]="['lastname', 'firstname','email']"
                             styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
                             responsiveLayout="scroll">

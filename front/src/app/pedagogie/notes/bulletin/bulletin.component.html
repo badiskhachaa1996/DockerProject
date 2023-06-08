@@ -38,7 +38,7 @@
             GROUPE.abbrv }} - {{ SEMESTRE }}</h3>
 
         <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
+            [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="8" [pageLinks]="5"
             [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">

@@ -214,7 +214,12 @@ import { LeadsNonQualifiesComponent } from './crm/leads-non-qualifies/leads-non-
 import { LeadsPrequalifiesComponent } from './crm/leads-prequalifies/leads-prequalifies.component';
 import { VentesCRMComponent } from './crm/ventes-crm/ventes-crm.component';
 import { LeadsQualifiesComponent } from './crm/leads-qualifies/leads-qualifies.component';
-
+import { MesTicketsComponent } from './ticketing/mes-tickets/mes-tickets.component';
+import { AjoutTicketComponent } from './ticketing/ajout-ticket/ajout-ticket.component';
+import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-assignes.component';
+import { AddAgentComponent as AddAgentV2Component } from './agents/add-agent/add-agent.component';
+import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
+import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -223,6 +228,7 @@ const routes: Routes = [
             { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
             { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
             { path: 'notes', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'notesDev', component: NotesComponent, canActivate: [AdminGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService] },
             { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
@@ -409,6 +415,14 @@ const routes: Routes = [
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/etudiants', component: EtudiantsIntunsComponent, canActivate: [AuthGuardService] },
+            /*Ticketing V2*/
+            { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
+            /* Gestion Agent V2 */
+            { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
+            { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },
+            { path: 'agent/update/:id', component: UpdateAgentComponent, canActivate: [AuthGuardService] },
             /* Configuration Formulaire Admission */
             { path: 'admission/formations', component: FormationAdmissionComponent, canActivate: [AuthGuardService] },
             { path: 'admission/ecoles', component: EcoleAdmissionComponent, canActivate: [AuthGuardService] },

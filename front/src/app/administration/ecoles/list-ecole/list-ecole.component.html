@@ -80,7 +80,7 @@
 		<div class="card">
 			<h5>Liste des écoles</h5>
 			<p-table #dt1 *ngIf="ecoles" [value]="ecoles"
-                     dataKey="_id" [rows]="10" rowExpandMode="single" [rows]="10"
+                     dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8"
                      [rowHover]="true" [paginator]="true" [pageLinks]="5" [totalRecords]="ecoles.length"
                      [globalFilterFields]="['libelle','email','site']"
                      responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">

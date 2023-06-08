@@ -268,7 +268,7 @@
                 (click)="showFormAddCV = true" style="float: right"></button>
 
             <h5>Cv thèque Intedgroup</h5>
-            <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+            <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
                 styleClass="p-datatable-gridlines" [paginator]="true"
                 [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
                 responsiveLayout="scroll">

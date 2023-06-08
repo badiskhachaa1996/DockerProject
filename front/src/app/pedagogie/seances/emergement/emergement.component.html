@@ -247,7 +247,7 @@
             "dd/MM"}}
         </h3>
         <p-table #dt1 *ngIf="tableauPresence" [columns]="cols" [value]="tableauPresence" rowExpandMode="single"
-            [rows]="10" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tableauPresence.length"
+            [rows]="8" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tableauPresence.length"
             [globalFilterFields]="['etudiant']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
