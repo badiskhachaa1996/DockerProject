@@ -483,5 +483,18 @@ export class UserProfilComponent implements OnInit {
     }, 15);
   }
 
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
 
 }
