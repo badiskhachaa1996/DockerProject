@@ -43,11 +43,20 @@ export class TicketsAssignesComponent implements OnInit {
       })
     })
   }
+  isDecline: Ticket;
+  formDecline = new FormGroup({
+    justificatif: new FormControl('', Validators.required)
+  })
+  initDecline(ticket) {
+    this.isDecline = ticket
+  }
 
-  decline(ticket, ri) {
-    if (confirm()) {
-      this.tickets.splice(ri, 1)
-    }
+  decline() {
+    this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "Refusé", date_revert: new Date(), user_revert: this.isDecline.agent_id, agent_id: null, isAffected: null }).subscribe(data => {
+      this.formDecline.reset()
+      this.tickets.splice(this.tickets.indexOf(this.isDecline), 1, data)
+      this.isDecline = null
+    })
   }
 
   onTraiter(ticket, index) {
