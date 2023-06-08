@@ -62,8 +62,8 @@
                 <div class="field col-12">
                     <label>Prénom & Nom <span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="user_id" [options]="userList" placeholder="Choisissez une personne"
-                        [virtualScroll]="true" itemSize="30" emptyFilterMessage="Personne n'a été trouvé" (onChange)="generateID()"
-                        filterPlaceholder="Nom & Prénom" filter="true">
+                        [virtualScroll]="true" itemSize="30" emptyFilterMessage="Personne n'a été trouvé"
+                        (onChange)="generateID()" filterPlaceholder="Nom & Prénom" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
@@ -73,8 +73,9 @@
 
                 <div class="field col-6">
                     <label>Equipe <span style="color: red;"> * </span></label>
-                    <p-dropdown formControlName="team_id" [options]="teamsList" placeholder="Choisissez une équipe" (onChange)="generateID()"
-                        emptyFilterMessage="Pas de equipe trouvé" filterPlaceholder="Equipe" filter="true">
+                    <p-dropdown formControlName="team_id" [options]="teamsList" placeholder="Choisissez une équipe"
+                        (onChange)="generateID()" emptyFilterMessage="Pas de equipe trouvé" filterPlaceholder="Equipe"
+                        filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
@@ -139,7 +140,7 @@
                         </th>
                         <th pSortableColumn="team_id.role">Role<p-sortIcon field="team_id.role"></p-sortIcon>
                         </th>
-                        <th>Action </th>
+                        <th *ngIf="AccessLevel=='Super-Admin'">Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-member>
@@ -168,7 +169,7 @@
                         <td>
                             {{ member?.role }}
                         </td>
-                        <td>
+                        <td *ngIf="AccessLevel=='Super-Admin'">
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(member);scrollToTop()"
                                 pTooltip="Modifier le membre" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(member);"

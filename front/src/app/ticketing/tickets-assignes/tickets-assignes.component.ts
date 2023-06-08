@@ -5,7 +5,7 @@ import { subscribeOn } from 'rxjs';
 import { Ticket } from 'src/app/models/Ticket';
 import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
-
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-tickets-assignes',
   templateUrl: './tickets-assignes.component.html',
@@ -33,8 +33,10 @@ export class TicketsAssignesComponent implements OnInit {
     { label: 'En suspension', value: "En suspension" },
     { label: 'Traité', value: "Traité" },
   ]
+  token;
   ngOnInit(): void {
-    this.TicketService.getAll().subscribe(data => {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
       this.tickets = data
     })
     this.ServService.getAll().subscribe(data => {

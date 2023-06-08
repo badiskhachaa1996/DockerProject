@@ -5,7 +5,7 @@ import { MemberInt } from 'src/app/models/memberInt';
 import { TeamsInt } from 'src/app/models/TeamsInt';
 import { AuthService } from 'src/app/services/auth.service';
 import { TeamsIntService } from 'src/app/services/teams-int.service';
-
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-teams-int',
   templateUrl: './teams-int.component.html',
@@ -14,11 +14,22 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 export class TeamsIntComponent implements OnInit {
   teams: TeamsInt[] = []
   selectedTeam: TeamsInt
-  constructor(private TeamsIntService: TeamsIntService, private MessageService: MessageService) { }
-
+  constructor(private TeamsIntService: TeamsIntService, private MessageService: MessageService, private UserService: AuthService) { }
+  AccessLevel = "Spectateur"
+  token;
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
     this.TeamsIntService.TIgetAll().subscribe(data => {
       this.teams = data
+    })
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "International")
+            this.AccessLevel = role.role
+        })
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
     })
   }
 

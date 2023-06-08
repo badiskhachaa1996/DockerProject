@@ -785,7 +785,8 @@
                         <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                             Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="action" scope="col" style="text-align: center;">
+                        <th *ngIf="AccessLevel!='Spectateur'" pSortableColumn="action" scope="col"
+                            style="text-align: center;">
                             Action
                         </th>
                     </tr>
@@ -863,7 +864,7 @@
                         <td>
                             {{ prospect.rentree_scolaire }}
                         </td>
-                        <td>
+                        <td *ngIf="AccessLevel!='Spectateur'">
                             <i pTooltip="Traiter le dossier" tooltipPosition="bottom" class="pi pi-cog mr-2"
                                 (click)="initTraitement(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Paiement" tooltipPosition="bottom" class="pi pi-credit-card mr-2"

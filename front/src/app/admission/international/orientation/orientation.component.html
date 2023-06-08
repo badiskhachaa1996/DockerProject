@@ -524,7 +524,8 @@
                         <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                             Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="action" scope="col" style="text-align: center;">
+                        <th *ngIf="AccessLevel!='Spectateur'" pSortableColumn="action" scope="col"
+                            style="text-align: center;">
                             Action
                         </th>
                     </tr>
@@ -598,7 +599,7 @@
                         <td>
                             {{ prospect.rentree_scolaire }}
                         </td>
-                        <td>
+                        <td *ngIf="AccessLevel!='Spectateur'">
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit  mr-2"
                                 (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Traiter la demande" tooltipPosition="bottom" class="pi pi-cog"

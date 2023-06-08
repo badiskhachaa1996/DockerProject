@@ -13,6 +13,7 @@ import { CommercialPartenaireService } from 'src/app/services/commercial-partena
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-orientation',
@@ -221,8 +222,9 @@ export class OrientationComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
   filterEcole = []
-
-  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private PartenaireService: PartenaireService) { }
+  AccessLevel = "Spectateur"
+  constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
+    private PartenaireService: PartenaireService, private UserService: AuthService) { }
 
   prospects: Prospect[];
 
@@ -292,6 +294,21 @@ export class OrientationComponent implements OnInit {
         this.dropdownEcole.push({ label: d.titre, value: d.url_form })
         this.filterEcole.push({ label: d.titre, value: d.url_form })
       })
+    })
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "International")
+            this.AccessLevel = role.role
+        })
+      if (this.AccessLevel == 'Agent') {
+        let moduleList = []
+        data.roles_list.forEach(role => { moduleList.push(role.module) })
+        if (!moduleList.includes('Orientation'))
+          this.AccessLevel = "Spectateur"; console.log('Accès Agent détécté mais pas Orientation')
+      }
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
     })
   }
 

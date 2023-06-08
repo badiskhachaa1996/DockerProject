@@ -13,6 +13,7 @@ import { TeamsIntService } from 'src/app/services/teams-int.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-consulaire',
@@ -264,8 +265,9 @@ export class ConsulaireComponent implements OnInit {
   ]
 
   filterEcole = [{ value: null, label: 'Toutes les écoles"' },]
-
-  constructor(private PartenaireService: PartenaireService,private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  AccessLevel = "Spectateur"
+  constructor(private PartenaireService: PartenaireService, private messageService: MessageService, private admissionService: AdmissionService, 
+    private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private UserService: AuthService) { }
 
   prospects: Prospect[];
 
@@ -329,7 +331,21 @@ export class ConsulaireComponent implements OnInit {
         this.filterEcole.push({ label: d.titre, value: d.url_form })
       })
     })
-
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "International")
+            this.AccessLevel = role.role
+        })
+      if (this.AccessLevel == 'Agent') {
+        let moduleList = []
+        data.roles_list.forEach(role => { moduleList.push(role.module) })
+        if (!moduleList.includes('Orientation'))
+          this.AccessLevel = "Spectateur"; console.log('Accès Agent détécté mais pas Orientation')
+      }
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
+    })
   }
 
   //Partie Traitement

@@ -726,6 +726,12 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
         .catch((error) => { res.status(400).send(error); })
 });
 
+app.get("/getAllAssigne/:id", (req, res) => {
+    Ticket.find({ agent_id: req.params.id }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
 app.get("/getAllNonAssigne", (req, res) => {
     Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
         .then((ticket) => { res.status(200).send(ticket); })
