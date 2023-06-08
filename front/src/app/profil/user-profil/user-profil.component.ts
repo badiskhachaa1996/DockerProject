@@ -125,7 +125,6 @@ export class UserProfilComponent implements OnInit {
   public ToggleUpdate() {
     this.toggleUpdate = !this.toggleUpdate
     this.toggleUpdatepwd = false
-    window.scrollTo(1000, 0)
     this.civiliteList.forEach((civ) => {
       if (civ.value == this.userco.civilite) {
         if (this.InfoUser && this.InfoUser.date_naissance)
@@ -410,7 +409,7 @@ export class UserProfilComponent implements OnInit {
     //Patie dediée à la demande de conge
     //Recuperation de l'utilisateur connecté actuellement
     this.AuthService.getInfoById(this.decodeToken.id).subscribe(
-      ((response) => { this.userConnectedNow = response ;}),
+      ((response) => { this.userConnectedNow = response; }),
       ((error) => { console.log(error) })
     );
 
@@ -483,7 +482,6 @@ export class UserProfilComponent implements OnInit {
       }
     }, 15);
   }
-
 
 
 }

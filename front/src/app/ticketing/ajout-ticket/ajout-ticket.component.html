@@ -4,7 +4,7 @@
         <div class="field col-12 md:col-4">
             <label For="service">Service <span style="color: red;"> * </span></label>
             <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
-                (change)="onSelectService()"></p-dropdown>
+                (onChange)="onSelectService()"></p-dropdown>
         </div>
         <div class="field col-12 md:col-4">
             <label For="sujet">Sujet <span style="color: red;"> * </span></label>

@@ -45,7 +45,8 @@ export class BulletinComponent implements OnInit {
     this.askGroupeSemestrePV = false
     this.GroupeService.getPopulate(this.route.snapshot.paramMap.get('classe_id')).subscribe(classe => {
       this.GROUPE = classe
-      this.EtuService.getAllByClasseId(this.route.snapshot.paramMap.get('classe_id')).subscribe(etudiants => {
+      //getAllByClasseID serait mieux
+      this.EtuService.getAllEtudiantPopulate().subscribe(etudiants => {
         this.etudiantFromClasse = etudiants
         this.etudiantFromClasse.forEach(etudiant => {
           if (etudiant.custom_id == this.route.snapshot.paramMap.get('etudiant_id')) {
@@ -138,6 +139,7 @@ export class BulletinComponent implements OnInit {
   configureBulletin(etu) {
     this.dropdownEcoles = []
     this.ETUDIANT = etu
+    console.log(etu)
     this.CFAService.getAll().subscribe(ecoles => {
       ecoles.forEach(ecol => {
         if (ecol == etu.ecole_id)
@@ -225,14 +227,18 @@ export class BulletinComponent implements OnInit {
         dicCoeff[col.module] = col.coeff
         listModule.push(col.module)
       })
+      console.log(0)
       this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"", appreciation_annuel:"" }
+        console.log(this.ETUDIANT)
         if (pv.email == this.ETUDIANT.user_id.email) {
+          console.log(1)
           this.APPRECIATION_GENERALE = pv.appreciation
           if (pv.appreciation_annuel && this.route.snapshot.paramMap.get('semestre') == "Annuel")
             this.APPRECIATION_GENERALE = pv.appreciation_annuel
+          console.log(2)
           listModule.forEach(n => {
             let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
-
+            console.log(3)
             if (!t.appreciation_module) {
               t.appreciation_module = {}
             }

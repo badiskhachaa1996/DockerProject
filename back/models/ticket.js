@@ -20,7 +20,7 @@ const ticket_schema = new mongoose.Schema({
     statut: {
         type: String,
         required: true,
-        default: "Queue d'entrée"
+        default: "En attente de traitement"
     },
     date_affec_accep: {
         type: Date

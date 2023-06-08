@@ -110,6 +110,9 @@ const user_schema = new mongoose.Schema({
             module: { type: String },
             role: { type: String },
         }], default: []
+    },
+    service_list: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "service" }], default: []
     }
 
 });

@@ -1,54 +1,54 @@
-<div class="grid col-12">
-    <div class="col-12 card grid" *ngIf="ticketUpdate">
-        <h4 class="col-12" style="text-align: center;">Modifier un ticket </h4>
-        <form [formGroup]="TicketForm" (ngSubmit)="onSubmitUpdate()" class="p-fluid p-formgrid grid col-12">
-            <div class="field col-12 md:col-4">
-                <label For="service">Service <span style="color: red;"> * </span></label>
-                <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
-                    (onChange)="onSelectService()"></p-dropdown>
-            </div>
-            <div class="field col-12 md:col-4">
-                <label For="sujet">Sujet <span style="color: red;"> * </span></label>
-                <p-dropdown [options]="sujetDropdown" formControlName="sujet_id"
-                    placeholder="Choisissez un sujet"></p-dropdown>
-            </div>
-            <div class="field col-12 md:col-4">
-                <label For="sujet">Priorité <span style="color: red;"> * </span></label>
-                <p-dropdown [options]="prioriteDropdown" formControlName="priorite"
-                    placeholder="Choisissez une priorité"></p-dropdown>
-            </div>
-            <div class="field col-12">
-                <label For="description">Description du ticket <span style="color: red;"> * </span></label>
-                <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize
-                    rows="3" cols="30"></textarea>
-            </div>
-            <!--<div class="field col-12">
-                <label>Pièce Jointe:</label>
-                <p-fileUpload (uploadHandler)="onUpload($event)" mode="basic" customUpload="true" maxFileSize="1000000"
-                    [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
-                </p-fileUpload>
+<div class="grid mb-2">
+    <div class="col-4">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
                 <div>
-                    <ul *ngIf="uploadedFiles.length">
-                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-                    </ul>
+                    <span class="block text-500 font-medium mb-3">Nombre de tickets </span>
+                    <div class="text-900 font-medium text-xl">{{ tickets.length }}</div>
                 </div>
-            </div>-->
-            <div class="col-12">
-                <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Enregister les modifications"
-                    type="submit" [disabled]="TicketForm.invalid"></button>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-folder-open text-blue-500 text-xl"></i>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
-    <h5 class="col-12">Mes Tickets</h5>
+    <div class="col-4">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Durée moyenne de traitement </span>
+                    <div class="text-900 font-medium text-xl">{{ getMoyenneTraitement() }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-folder-open text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid col-12 card" *ngIf="TicketAffecter">
+    <h5 class="col-12">Affecter un agent à ce ticket</h5>
+    <div class="col-12">
+        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" formControlName="service_id"
+            placeholder="Choisissez un membre" (onChange)="onAffectation($event.value)"></p-dropdown>
+    </div>
+</div>
+<div class="grid col-12 card">
+    <h5 class="col-12">Les Tickets Traités</h5>
     <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets" [paginator]="true"
-        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12 card"
+        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
         [globalFilterFields]="['customid', 'prenom', 'nom','email']" responsiveLayout="scroll"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
                 <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                     placeholder="Recherche" />
-
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterService" filter="true"
+                    (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'equals');"
+                    placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
+                    filterPlaceholder="Choisissez un service"></p-dropdown>
                 <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                     (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                     emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
@@ -69,12 +69,11 @@
                 <th pSortableColumn="customid" style="text-align:center"> ID Ticket <p-sortIcon field="customid">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="date_ajout" style="text-align:center"> Date de création <p-sortIcon
-                        field="date_ajout">
+                <th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon
+                        field="date_creation">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="createur_id.lastname" style="text-align:center"> Crée par <p-sortIcon
-                        field="user_id">
+                <th pSortableColumn="createur_id" style="text-align:center"> Crée par <p-sortIcon field="createur_id">
                     </p-sortIcon>
                 </th>
                 <th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon field="service">
@@ -86,7 +85,8 @@
                 <th pSortableColumn="priorite" style="text-align:center"> Priorité <p-sortIcon field="priorite">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="statut" style="text-align:center"> Etat de traitement <p-sortIcon field="statut">
+                <th pSortableColumn="date_fin_traitement" style="text-align:center"> Délai de traitement <p-sortIcon
+                        field="date_fin_traitement">
                     </p-sortIcon>
                 </th>
                 <th style="text-align:center">Action</th>
@@ -119,13 +119,11 @@
                     {{ticket.priorite}}
                 </td>
                 <td>
-                    {{ticket.statut}}
+                    {{getTraitement(ticket.date_fin_traitement, ticket.date_ajout)}}
                 </td>
                 <td>
-                    <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-cog"
-                        (click)="onUpdate(ticket)" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete(ticket._id,ri)" aria-hidden="true"></i>
+                    <i pTooltip="Affecter ce ticket" style="margin-left: 2%; cursor: pointer;" class="pi pi-send"
+                        (click)="initAffecter(ticket)" aria-hidden="true"></i>
 
                 </td>
             </tr>

@@ -1373,4 +1373,16 @@ app.get('/create', (req, res) => {
   })
 })
 
+app.get('/getAllByServiceFromList/:service_id', (req, res) => {
+  User.find({ service_list: { $in: [req.params.service_id] } }).then((usersFromDb) => {
+    if (usersFromDb)
+      res.status(200).send(usersFromDb);
+    else
+      res.status(200).send([]);
+  })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
+})
+
 module.exports = app;

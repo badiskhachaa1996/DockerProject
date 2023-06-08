@@ -139,26 +139,31 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/ticketing/suivi/non-assignes']
                                         },
                                         {
-                                            label: 'Tickets assignés',
+                                            label: 'Tickets assignés - En attente de traitement',
                                             icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/attente-de-traitement']
+                                            routerLink: ['/ticketing/suivi/attente-de-traitement']
                                         },
                                         {
                                             label: 'Tickets traités',
                                             icon: 'pi pi-check-circle',
-                                            routerLink: ['/ticketing/gestion/traites']
+                                            routerLink: ['/ticketing/suivi/traite']
+                                        },
+                                        {
+                                            label: 'Tickets refusés',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/refuse']
                                         },
                                     ]
                                 },
                                 {
                                     label: 'Configuration',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/admin/gestion-services'],
+                                    routerLink: ['/ticketing/configuration'],
                                 },
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
-                                    routerLink: [],
+                                    routerLink: ['ticketing/dashboard'],
                                 },
                             ]
                         }, {

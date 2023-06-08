@@ -220,6 +220,11 @@ import { TicketsAssignesComponent } from './ticketing/tickets-assignes/tickets-a
 import { AddAgentComponent as AddAgentV2Component } from './agents/add-agent/add-agent.component';
 import { UpdateAgentComponent } from './agents/update-agent/update-agent.component';
 import { ListAgentComponent as ListAgentV2Component } from './agents/list-agent/list-agent.component';
+import { TicketNonAssignesComponent } from './ticketing/ticket-non-assignes/ticket-non-assignes.component';
+import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list-tickets-traite.component';
+import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
+import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
+import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -418,7 +423,12 @@ const routes: Routes = [
             /*Ticketing V2*/
             { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/attente-de-traitement', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/traite', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
             { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },

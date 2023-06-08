@@ -1,0 +1,163 @@
+<div class="grid col-12">
+    <div class="col-12 card" *ngIf="addService">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="addService = false"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">
+            Ajout d'un service
+        </h3>
+        <form [formGroup]="ServiceForm" (ngSubmit)="onAdd()" class="p-fluid p-formgrid grid col-12">
+            <div class="field col-12 md:col-12">
+                <label For="service">Nom du service <span style="color: red;"> * </span></label>
+                <input type="text" formControlName="label" pInputText>
+            </div>
+            <div class="col-12">
+                <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Ajouter le service" type="submit"
+                    [disabled]="ServiceForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 card" *ngIf="addSujet">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="addSujet = null"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">
+            Ajout d'un sujet à {{addSujet.label}}
+        </h3>
+        <p-table class="col-12" [value]="sujetList">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="label" style="text-align:center">
+                        Nom <p-sortIcon field="label"> </p-sortIcon>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sujet let-ri="rowIndex">
+                <tr>
+                    <td>
+                        {{sujet.label}}
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer ce sujet du service" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-trash" (click)="removeSujet(sujet,ri)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <form [formGroup]="SujetForm" (ngSubmit)="onAddSujet()" class="p-fluid p-formgrid grid col-12">
+            <div class="field col-12 md:col-12">
+                <label For="service">Nom du sujet <span style="color: red;"> * </span></label>
+                <input type="text" formControlName="label" pInputText>
+            </div>
+            <div class="col-12">
+                <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Ajouter le sujet" type="submit"
+                    [disabled]="SujetForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 card" *ngIf="addMemberOfService">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="addMemberOfService = null" aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">
+            Ajout des membres à {{addMemberOfService.label}}
+        </h3>
+        <p-table class="col-12" [value]="memberList">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="firstname" style="text-align:center">
+                        Prénom & Nom <p-sortIcon field="firstname"> </p-sortIcon>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user let-ri="rowIndex">
+                <tr>
+                    <td>
+                        {{user.firstname|titlecase}} {{user.lastname|uppercase}}
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer ce membre du service" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-trash" (click)="removeMember(user,ri)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="p-fluid p-formgrid grid col-12">
+            <div class="field col-12 md:col-12">
+                <label For="service">Nom du membre <span style="color: red;"> * </span></label>
+                <p-dropdown [options]="memberDropdown" placeholder="Choisissez un membre" autoWidth="false"
+                    [style]="{'width':'100%'}" (onChange)="onAddMember($event.value)"></p-dropdown>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="col-8">Liste des services</h5>
+    <div class="col-4" style="text-align: right;">
+        <button pButton icon="pi pi-file" label="Ajouter un service" (click)="initAddService()" type="button"
+            style="margin-left: 2px;">
+        </button>
+    </div>
+    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="services" [paginator]="true"
+        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12 card"
+        [globalFilterFields]="['label', 'prenom', 'nom','email']" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Recherche" />
+
+                <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
+                    (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
+                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
+
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
+                    (onChange)="dt1.filter($event.value, 'source', 'equals');" emptyFilterMessage="Pas de source trouvé"
+                    filterPlaceholder="Choisissez une source"></p-dropdown>
+
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
+                    (onChange)="dt1.filter($event.value, 'operation', 'equals');"
+                    emptyFilterMessage="Pas d'opération trouvé"
+                    filterPlaceholder="Choisissez une operation"></p-dropdown>-->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="label" style="text-align:center"> Nom du service <p-sortIcon field="label">
+                    </p-sortIcon>
+                </th>
+                <th>
+                    Sujets
+                </th>
+                <th>
+                    Membres concernés par le service
+                </th>
+                <th style="text-align:center">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-service let-expanded="expanded" let-ri="rowIndex">
+            <tr>
+                <td>
+                    {{service.label}}
+                </td>
+                <td>
+                    {{sujetDic[service._id]}}
+                </td>
+                <td>
+                    {{memberDic[service._id]}}
+                </td>
+                <td>
+                    <i pTooltip="Gérer les membres" style="margin-right: 3%; cursor: pointer;" class="pi pi-users"
+                        (click)="AddMember(service)" aria-hidden="true"></i>
+
+                    <i pTooltip="Gérer les sujets" style="margin-right: 3%; cursor: pointer;" class="pi pi-comments"
+                        (click)="AddSujet(service)" aria-hidden="true"></i>
+
+                    <i pTooltip="Supprimer un service" style="cursor: pointer;" class="pi pi-trash"
+                        (click)="deleteService(service,ri)" aria-hidden="true"></i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
