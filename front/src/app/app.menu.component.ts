@@ -148,6 +148,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-check-circle',
                                             routerLink: ['/ticketing/suivi/traite']
                                         },
+                                        {
+                                            label: 'Tickets refusés',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/refuse']
+                                        },
                                     ]
                                 },
                                 {
