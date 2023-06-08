@@ -121,7 +121,7 @@
             <div class="col-3" style="margin-bottom:20% ;">
                 <h4><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
                 <p style="font-size: 2vh;">
-                    <strong>{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}} {{
+                    <strong><!--{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}}--> {{
                         ETUDIANT.user_id?.lastname | uppercase }} {{
                         ETUDIANT.user_id?.firstname | titlecase }} </strong> <br>
                     Né(e) le {{ ETUDIANT.date_naissance | date:'dd/MM/yyyy' }} <br>

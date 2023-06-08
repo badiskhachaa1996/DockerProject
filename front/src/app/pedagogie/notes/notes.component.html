@@ -387,7 +387,7 @@
 
                 <div style="float: right; margin-top: 80px;">
                     <p>
-                        <strong>{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}} {{
+                        <strong><!--{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}--> {{
                             users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
                             users[etudiantToGenerateBulletin.user_id]?.firstname | titlecase }} </strong> <br>
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
@@ -542,7 +542,7 @@
 
                 <div style="float: right; margin-top: 80px;">
                     <p>
-                        <strong>{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}{{
+                        <strong><!--{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}-->{{
                             users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
                             users[etudiantToGenerateBulletin.user_id]?.firstname | uppercase }} </strong> <br>
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
