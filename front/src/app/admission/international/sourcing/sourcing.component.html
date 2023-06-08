@@ -347,7 +347,7 @@
     <div class="col-12">
         <div class="card grid">
             <h5 class="col-8">Liste des leads Sourcing</h5>
-            <div class="col-4" style="text-align: right;">
+            <div class="col-4" style="text-align: right;" *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                 <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
@@ -497,7 +497,7 @@
                         <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                             Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="action" scope="col" style="text-align: center;">
+                        <th *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'" pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
                         </th>
                     </tr>
@@ -587,7 +587,7 @@
                         <td>
                             {{ prospect.rentree_scolaire }}
                         </td>
-                        <td>
+                        <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                             <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"
                                 (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"

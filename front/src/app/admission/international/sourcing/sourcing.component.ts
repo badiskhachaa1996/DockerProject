@@ -15,6 +15,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -230,10 +231,10 @@ export class SourcingComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService) { }
+  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private UserService: AuthService) { }
 
   prospects: any[];
-
+  AccessLevel = "Spectateur"
   selectedProspect: Prospect = null
 
   scrollToTop() {
@@ -296,6 +297,15 @@ export class SourcingComponent implements OnInit {
         this.dropdownEcole.push({ label: d.titre, value: d.url_form })
         //this.filterEcole.push({ label: d.titre, value: d.url_form })
       })
+    })
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "International")
+            this.AccessLevel = role.role
+        })
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
     })
   }
 
@@ -400,7 +410,7 @@ export class SourcingComponent implements OnInit {
       t['Statut Paiement'] = p.statut_payement
       t['Visa'] = p.avancement_visa
       t['Phase de Candidature'] = p.phase_candidature
-      
+
       t['Date de naissance'] = p.date_naissance
 
       t['Nationalite'] = p?.user_id?.nationnalite

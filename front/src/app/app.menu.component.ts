@@ -3913,6 +3913,471 @@ export class AppMenuComponent implements OnInit {
                         )
                     }
                 }
+                if (services_list.includes('Ticketing')) {
+                    let role = service_dic['Ticketing']
+                    if (role == "Super Admin") {
+                        this.items.push({
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets envoyé',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/mes-tickets']
+                                        },
+                                        {
+                                            label: 'Tickets assigné à moi',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/ticketing/gestion/assignes']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Suivi des tickets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Tickets non assignés',
+                                            icon: 'pi pi-clock',
+                                            routerLink: ['/ticketing/suivi/non-assignes']
+                                        },
+                                        {
+                                            label: 'Tickets assignés - En attente de traitement',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/suivi/attente-de-traitement']
+                                        },
+                                        {
+                                            label: 'Tickets traités',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/traite']
+                                        },
+                                        {
+                                            label: 'Tickets refusés',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/refuse']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Configuration',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/ticketing/configuration'],
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['ticketing/dashboard'],
+                                },
+                            ]
+                        })
+                    } else if (role == "Admin") {
+                        this.items.push({
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets envoyé',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/mes-tickets']
+                                        },
+                                        {
+                                            label: 'Tickets assigné à moi',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/ticketing/gestion/assignes']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Suivi des tickets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    items: [
+                                        {
+                                            label: 'Tickets non assignés',
+                                            icon: 'pi pi-clock',
+                                            routerLink: ['/ticketing/suivi/non-assignes']
+                                        },
+                                        {
+                                            label: 'Tickets assignés - En attente de traitement',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/suivi/attente-de-traitement']
+                                        },
+                                        {
+                                            label: 'Tickets traités',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/traite']
+                                        },
+                                        {
+                                            label: 'Tickets refusés',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: ['/ticketing/suivi/refuse']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['ticketing/dashboard'],
+                                },
+                            ]
+                        })
+                    } else if (role == "Agent") {
+                        this.items.push({
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets envoyé',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/mes-tickets']
+                                        },
+                                        {
+                                            label: 'Tickets assigné à moi',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['/ticketing/gestion/assignes']
+                                        },
+                                    ]
+                                }
+                            ]
+                        })
+                    } else {
+                        this.items.push({
+                            label: 'Ticketing V2',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un ticket',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/ticketing/gestion/ajout']
+                                        },
+                                        {
+                                            label: 'Mes tickets envoyé',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: ['/ticketing/gestion/mes-tickets']
+                                        }
+                                    ]
+                                }
+                            ]
+                        })
+                    }
+                }
+                if (services_list.includes('International')) {
+                    let role = service_dic['International']
+                    if (role == "Super Admin")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source',
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads',
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire',
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    },
+                                    {
+                                        label: 'Gestion de l\'équipe',
+                                        icon: 'pi pi-briefcase',
+                                        items: [
+                                            {
+                                                label: 'Gestion des membres',
+                                                icon: 'pi pi-user',
+                                                routerLink: ['/international/member']
+                                            },
+                                            {
+                                                label: 'Gestion de l\'équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/international/teams']
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        label: 'Gestion de l\'année scolaire',
+                                        icon: 'pi pi-calendar',
+                                        items: [
+                                            {
+                                                label: 'Formations disponibles',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/admission/formations']
+                                            },
+                                            {
+                                                label: 'Ecoles',
+                                                icon: 'pi pi-building',
+                                                routerLink: ['/admission/ecoles']
+                                            },
+                                            {
+                                                label: 'Rentrées Scolaire',
+                                                icon: 'pi pi-calendar',
+                                                routerLink: ['/admission/rentree']
+                                            },
+                                        ]
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            }
+                        )
+                    else if (role == "Admin")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source',
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads',
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire',
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    },
+                                    {
+                                        label: 'Gestion de l\'équipe',//LECTURE
+                                        icon: 'pi pi-briefcase',
+                                        items: [
+                                            {
+                                                label: 'Gestion des membres',
+                                                icon: 'pi pi-user',
+                                                routerLink: ['/international/member']
+                                            },
+                                            {
+                                                label: 'Gestion de l\'équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/international/teams']
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        label: 'Gestion de l\'année scolaire',//LECTURE
+                                        icon: 'pi pi-calendar',
+                                        items: [
+                                            {
+                                                label: 'Formations disponibles',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/admission/formations']
+                                            },
+                                            {
+                                                label: 'Ecoles',
+                                                icon: 'pi pi-building',
+                                                routerLink: ['/admission/ecoles']
+                                            },
+                                            {
+                                                label: 'Rentrées Scolaire',
+                                                icon: 'pi pi-calendar',
+                                                routerLink: ['/admission/rentree']
+                                            },
+                                        ]
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            },
+                        )
+
+                    else if (role == "Agent")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source', //Lecture
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads', //Orientation
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads', //Admission
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire', //Orientation
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            },
+                        )
+                    else
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Source', //Lecture
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads', //Lecture
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire', //Lecture
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    },
+
+                                    {
+                                        label: 'Gestion de l\'équipe',//Lecture
+                                        icon: 'pi pi-briefcase',
+                                        items: [
+                                            {
+                                                label: 'Gestion des membres',
+                                                icon: 'pi pi-user',
+                                                routerLink: ['/international/member']
+                                            },
+                                            {
+                                                label: 'Gestion de l\'équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/international/teams']
+                                            },
+                                        ]
+                                    },
+                                ],
+                            },
+                        )
+                }
             },
             error: (error: any) => {
                 console.log(error);
