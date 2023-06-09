@@ -768,11 +768,23 @@ app.get("/getAllMine/:id", (req, res) => {
 });
 
 app.post('/getStats', (req, res) => {
-    //delete req.body.service_id
     console.log(req.body)
-    Ticket.find(req.body)
-        .then((ticket) => { res.status(200).send(ticket); })
-        .catch((error) => { res.status(400).send(error); })
+    if (req.body.service_id && !req.body.sujet_id) {
+        Sujet.find({ service_id: req.body.service_id }).then(data => {
+            let temp = []
+            data.forEach(val => { temp.push(val._id) })
+            req.body.sujet_id = { $in: temp }
+            delete req.body.service_id
+            Ticket.find(req.body)
+                .then((ticket) => { res.status(200).send(ticket); })
+                .catch((error) => { res.status(400).send(error); })
+        })
+    } else {
+        delete req.body.service_id
+        Ticket.find(req.body)
+            .then((ticket) => { res.status(200).send(ticket); })
+            .catch((error) => { res.status(400).send(error); })
+    }
 })
 
 const multer = require('multer');
