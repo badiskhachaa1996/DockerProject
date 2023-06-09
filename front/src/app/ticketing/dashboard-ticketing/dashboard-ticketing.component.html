@@ -1,36 +1,38 @@
-<div class="grid">
-    <div class="md:col-2 col-12 grid card">
+<div class="grid card">
+    <div class="md:col-2 col-12 grid">
         <h2 class="col-12" style="text-align: center;">Filtre</h2>
         <div class="col-12">
             <label>Service:</label><br>
             <p-dropdown [(ngModel)]="serviceSelected" [options]="serviceList"
-                (onChange)="onChangeService($event.value)" autoWidth="false" [style]="{'width':'100%'}">
+                (onChange)="onChangeService($event.value);onChangeFilter()" autoWidth="false" filter="true"
+                [style]="{'width':'100%'}">
 
             </p-dropdown>
         </div>
         <div class="col-12">
             <label>Sujet:</label><br>
-            <p-dropdown [(ngModel)]="sujetSelect" [options]="sujetList" autoWidth="false" [style]="{'width':'100%'}">
+            <p-dropdown [(ngModel)]="sujetSelect" [options]="sujetList" (onChange)="onChangeFilter()" autoWidth="false"
+                filter="true" [style]="{'width':'100%'}">
 
             </p-dropdown>
         </div>
         <div class="col-12">
             <label>Agent:</label><br>
-            <p-dropdown [(ngModel)]="agentSelect" [options]="agentList" autoWidth="false" [style]="{'width':'100%'}">
+            <p-dropdown [(ngModel)]="agentSelect" [options]="agentList" (onChange)="onChangeFilter()" autoWidth="false"
+                filter="true" [style]="{'width':'100%'}">
 
             </p-dropdown>
         </div>
         <div class="col-12">
             <label>Période:</label><br>
-            <p-dropdown [(ngModel)]="periodeSelected" [options]="periodeList" autoWidth="false" [style]="{'width':'100%'}">
-
-            </p-dropdown>
+            <p-calendar [(ngModel)]="periodeSelected" autoWidth="false" showButtonBar="true" [style]="{'width':'100%'}"
+                selectionMode="range" [readonlyInput]="true" (onClose)="onChangeFilter()"></p-calendar>
         </div>
     </div>
-    <div class="md:col-10 col-12 grid card">
+    <div class="md:col-10 col-12 grid">
         <h2 class="col-12" style="text-align: center;">Les indicateurs</h2>
         <div class="md:col-6 col-12 grid">
-            <div class="col-12 mb-2">
+            <div class="col-12 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -44,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -58,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -72,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -86,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -101,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -115,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -130,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -144,7 +146,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 mb-2">
+            <div class="col-6 ">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -162,7 +164,7 @@
         </div>
         <div class="md:col-6 col-12 grid">
             <!--<h3>Graph de répartition des tickets selon l'état de traitement</h3>-->
-            <p-chart class="col-12" type="pie" [data]="dataChart" [options]="chartOptions" ></p-chart>
+            <p-chart #chart class="col-12" type="pie" [data]="dataChart" [options]="chartOptions"></p-chart>
         </div>
     </div>
 
