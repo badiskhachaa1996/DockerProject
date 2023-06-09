@@ -329,6 +329,7 @@ import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tick
 import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list-tickets-traite.component';
 import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
+import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 
 
 @NgModule({
@@ -667,7 +668,8 @@ import { ConfigurationComponent } from './ticketing/configuration/configuration.
     ListTicketsEnAttenteDeTraitementComponent,
     ListTicketsTraiteComponent,
     ListTicketsRefuseComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    DashboardTicketingComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

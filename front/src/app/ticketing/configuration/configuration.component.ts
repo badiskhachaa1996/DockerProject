@@ -176,6 +176,7 @@ export class ConfigurationComponent implements OnInit {
       this.memberList.splice(ri, 1)
       this.memberDropdown.push(this.memberDropdown.indexOf({ label: `${data.lastname} ${data.firstname}`, value: data }))
       this.UserService.getAllAgent().subscribe(data => {
+        this.memberDic = {}
         data.forEach(user => {
           if (user.service_list)
             user.service_list.forEach(service => {

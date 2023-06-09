@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import jwt_decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
 import { TicketService } from 'src/app/services/ticket.service';
@@ -22,7 +23,8 @@ export class MesTicketsComponent implements OnInit {
     _id: new FormControl('', Validators.required)
   })
   ngOnInit(): void {
-    this.TicketService.getAll().subscribe(data => {
+    let token: any = jwt_decode(localStorage.getItem('token'))
+    this.TicketService.getAllMine(token.id).subscribe(data => {
       this.tickets = data
     })
   }
