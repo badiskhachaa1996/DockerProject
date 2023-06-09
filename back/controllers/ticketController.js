@@ -55,7 +55,8 @@ app.post("/create", (req, res) => {
                     description: req.body.description,
                     date_ajout: d,
                     customid: id,
-                    etudiant_id: req.body.etudiant_id
+                    etudiant_id: req.body.etudiant_id,
+                    priorite: req.body.priorite
                 });
 
                 ticket.save((err, doc) => {
@@ -754,6 +755,16 @@ app.get("/getAllAttenteDeTraitement", (req, res) => {
     Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
+});
+//Récupérer tous les tickets d'un User
+app.get("/getAllMine/:id", (req, res) => {
+    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            console.error(err);
+        })
 });
 
 const multer = require('multer');

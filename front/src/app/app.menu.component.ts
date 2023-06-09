@@ -163,7 +163,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
-                                    routerLink: ['ticketing/dashboard'],
+                                    routerLink: ['/ticketing/dashboard'],
                                 },
                             ]
                         }, {
@@ -3975,7 +3975,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
-                                    routerLink: ['ticketing/dashboard'],
+                                    routerLink: ['/ticketing/dashboard'],
                                 },
                             ]
                         })
@@ -4034,7 +4034,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
-                                    routerLink: ['ticketing/dashboard'],
+                                    routerLink: ['/ticketing/dashboard'],
                                 },
                             ]
                         })

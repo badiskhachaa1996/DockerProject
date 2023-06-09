@@ -86,7 +86,7 @@
         <div class="p-fluid p-formgrid grid col-12">
             <div class="field col-12 md:col-12">
                 <label For="service">Nom du membre <span style="color: red;"> * </span></label>
-                <p-dropdown [options]="memberDropdown" placeholder="Choisissez un membre" autoWidth="false"
+                <p-dropdown [options]="memberDropdown" placeholder="Choisissez un membre" autoWidth="false" [filter]="true"
                     [style]="{'width':'100%'}" (onChange)="onAddMember($event.value)"></p-dropdown>
             </div>
         </div>

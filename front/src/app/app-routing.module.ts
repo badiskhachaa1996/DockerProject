@@ -225,6 +225,7 @@ import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list
 import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
 import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
+import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -429,6 +430,7 @@ const routes: Routes = [
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
             { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },

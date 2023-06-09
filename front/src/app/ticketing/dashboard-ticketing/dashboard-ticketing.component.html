@@ -1,0 +1,169 @@
+<div class="grid">
+    <div class="md:col-2 col-12 grid card">
+        <h2 class="col-12" style="text-align: center;">Filtre</h2>
+        <div class="col-12">
+            <label>Service:</label><br>
+            <p-dropdown [(ngModel)]="serviceSelected" [options]="serviceList"
+                (onChange)="onChangeService($event.value)" autoWidth="false" [style]="{'width':'100%'}">
+
+            </p-dropdown>
+        </div>
+        <div class="col-12">
+            <label>Sujet:</label><br>
+            <p-dropdown [(ngModel)]="sujetSelect" [options]="sujetList" autoWidth="false" [style]="{'width':'100%'}">
+
+            </p-dropdown>
+        </div>
+        <div class="col-12">
+            <label>Agent:</label><br>
+            <p-dropdown [(ngModel)]="agentSelect" [options]="agentList" autoWidth="false" [style]="{'width':'100%'}">
+
+            </p-dropdown>
+        </div>
+        <div class="col-12">
+            <label>Période:</label><br>
+            <p-dropdown [(ngModel)]="periodeSelected" [options]="periodeList" autoWidth="false" [style]="{'width':'100%'}">
+
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="md:col-10 col-12 grid card">
+        <h2 class="col-12" style="text-align: center;">Les indicateurs</h2>
+        <div class="md:col-6 col-12 grid">
+            <div class="col-12 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.total }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-bars text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets assignés </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.assignes }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-bookmark-fill text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets non assignés </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.non_assignes }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-bookmark text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets en attente </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.en_attente }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-spin pi-spinner text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets en cours de traitement
+                            </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.en_traitement }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-briefcase text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets suspendus </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.refuse }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-replay text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Nombre des tickets traités
+                            </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.traite }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-check text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Délais moyen d'attente </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.attente_moyenne }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-clock text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 mb-2">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span class="block text-500 font-medium mb-3">Délais moyen de traitement
+                            </span>
+                            <div class="text-900 font-medium text-xl">{{ stats.traitement_moyen }}</div>
+                        </div>
+                        <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                            [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                            <i class="pi pi-clock text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md:col-6 col-12 grid">
+            <!--<h3>Graph de répartition des tickets selon l'état de traitement</h3>-->
+            <p-chart class="col-12" type="pie" [data]="dataChart" [options]="chartOptions" ></p-chart>
+        </div>
+    </div>
+
+</div>
