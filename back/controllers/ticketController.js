@@ -767,6 +767,14 @@ app.get("/getAllMine/:id", (req, res) => {
         })
 });
 
+app.post('/getStats', (req, res) => {
+    //delete req.body.service_id
+    console.log(req.body)
+    Ticket.find(req.body)
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+})
+
 const multer = require('multer');
 const fs = require("fs")
 var mime = require('mime-types')
