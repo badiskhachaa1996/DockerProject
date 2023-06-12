@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="field col-12">
-                    <label For="Fonction">Fonction <span style="color: red">*</span></label>
+                    <label For="Fonction">Fonction</label>
                     <input pInputText id="fonction" type="text" placeholder="Chef Marketing"
                         formControlName="fonction" />
                 </div>
@@ -75,25 +75,20 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="Ancienneté">Ancienneté <span style="color: red">*</span></label>
+                    <label For="Ancienneté">Ancienneté</label>
                     <input pInputText id="anciennete" type="text" placeholder="5 ans" formControlName="anciennete" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="niveau_formation">Niveau de formation <span style="color: red">*</span></label>
+                    <label For="niveau_formation">Niveau de formation</label>
                     <input pInputText id="niveau_formation" type="text" placeholder="BAC +5"
                         formControlName="niveau_formation" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="Email">Email <span style="color: red">*</span></label>
+                    <label For="Email">Email</label>
                     <input pInputText id="email_perso" type="text" placeholder="email@email.com"
                         formControlName="email_perso" />
-                    <div *ngIf="email_perso.invalid && (email_perso.touched || email_perso.dirty)">
-                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.required">* L'email est
-                            obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.pattern">* Verifiez votre saisie.</span>
-                    </div>
                 </div>
 
                 <!-- <div class="field col-12 md:col-6">
@@ -132,7 +127,7 @@
                 </div> -->
 
                 <div class="field col-12 md:col-6">
-                    <label for="date_naissance">Date de naissance <span style="color: red">*</span></label>
+                    <label for="date_naissance">Date de naissance</label>
                     <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear"></p-calendar>

@@ -68,6 +68,20 @@ export class DailyCheckService {
     });
   }
 
+  // verification du check journalier d'un utilisateur
+  verifCheckByUserId(id: string): Promise<DailyCheck>
+  {
+    const url = `${this.endPoint}/verif-check-by-user-id/${id}`;
+
+    return new Promise<DailyCheck>((resolve, reject) => {
+      this.httpClient.get<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de verification de la présences de l\'utilisateur exécuté') }
+      });
+    });
+  }
+
   // méthode de check in
   postCheckIn(dailyCheck: DailyCheck): Promise<DailyCheck>
   {

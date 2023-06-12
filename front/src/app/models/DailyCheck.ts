@@ -4,7 +4,7 @@ export class DailyCheck
     (
         public _id?: string,
         public user_id?: string,
-        public today?: Date,
+        public today?: string,
         public check_in?: Date,
         public pause?: any[],
         public isInPause?: boolean,

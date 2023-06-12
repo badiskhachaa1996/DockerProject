@@ -26,6 +26,7 @@ import jwt_decode from "jwt-decode";
 })
 export class StageComponent implements OnInit {
 
+  collaborateur: User;
   stages: Stage[];
   stageToUpdate: Stage;
 
@@ -62,6 +63,14 @@ export class StageComponent implements OnInit {
   ngOnInit(): void {
     // décodage du token
     this.token = jwt_decode(localStorage.getItem('token'));
+    // recuperation de la personne connecté
+    // recuperation de l'utilisateur actuellement connecté
+    this.userService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.collaborateur = response;
+      },
+      error: (error) => { console.log(error) },
+    });
 
     this.messageService.add({severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages'});
     this.stages               = [];
@@ -285,6 +294,7 @@ export class StageComponent implements OnInit {
     stage.other_advantages = formValue.other_advantages;
     stage.status = 'Crée';
     stage.school_year = formValue.school_year;
+    stage.add_by = this.collaborateur._id;
     
 
     this.stageService.postStage(stage)

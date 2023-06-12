@@ -898,6 +898,29 @@
                 </ng-template>
             </p-table>
         </div>
+
+        <!-- personne qui a ajouté le contrat -->
+        <div class="p-2">
+            <h6 style="font-weight: bold">Ajouté par</h6>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{contrat.add_by?.lastname}}</td>
+                        <td>{{contrat.add_by?.firstname}}</td>
+                        <td>{{contrat.add_by?.email}}</td>
+                        <td>{{contrat.add_by?.indicatif}}{{contrat.add_by?.phone}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
         </td>
         </tr>
         </ng-template>

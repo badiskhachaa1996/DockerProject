@@ -29,6 +29,7 @@ app.get("/get-stages", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(500).json({error: error, errorMsg: 'Impossible de récupérer la liste des stages'}) });
 });
@@ -44,6 +45,7 @@ app.get("/get-stage/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer le stage'}) });
 });
@@ -59,6 +61,7 @@ app.get("/get-stage-by-student-id/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cet étudiant'}) });
 });
@@ -74,6 +77,7 @@ app.get("/get-stage-by-enterprise-id/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cette entreprise'}) });
 });
