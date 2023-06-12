@@ -716,6 +716,7 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
     ?.populate("code_commercial")
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
+    ?.populate('add_by')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -752,6 +753,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
     ?.populate("code_commercial")
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
+    ?.populate('add_by')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -773,6 +775,7 @@ app.get("/getAllContrats/", (req, res, next) => {
     ?.populate("code_commercial")
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
+    ?.populate('add_by')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -795,6 +798,7 @@ app.get("/contrats-by-ceo/:id", (req, res) => {
     ?.populate("code_commercial")
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
+    ?.populate('add_by')
     .then((response) => {
       res
         .status(200)

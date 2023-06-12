@@ -29,6 +29,7 @@ import { error } from 'console';
 export class ListeContratsComponent implements OnInit {
 
   token;
+  collaborateur: User; // collaborateur actuellement connecté
   Professionnalisation: boolean;
   ListeContrats: ContratAlternance[] = []
   tuteurInfoPerso: any;
@@ -205,6 +206,14 @@ export class ListeContratsComponent implements OnInit {
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
+    // recuperation de l'utilisateur actuellement connecté
+    this.authService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.collaborateur = response;
+      },
+      error: (error) => { console.log(error) },
+    });
+
     this.campusService.getAll().subscribe(campus => {
       campus.forEach(c => {
         this.filtreCampus.push({ label: c.libelle, value: c._id })
@@ -389,7 +398,7 @@ export class ListeContratsComponent implements OnInit {
       niv: new FormControl(''),
       coeff_hier: new FormControl(''),
       form: new FormControl(this.formationList[0].value, Validators.required),
-      code_commercial: new FormControl('', Validators.required),
+      code_commercial: new FormControl(''),
       professionnalisation: new FormControl(''),
       anne_scolaire: new FormControl(),
       ecole: new FormControl('', Validators.required),
@@ -471,7 +480,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {

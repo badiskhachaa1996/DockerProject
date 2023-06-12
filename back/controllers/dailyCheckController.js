@@ -3,6 +3,19 @@ const app = express();
 app.disable("x-powered-by");
 const { DailyCheck } = require('../models/DailyCheck');
 
+
+// verification du check journalier
+app.get("/verif-check-by-user-id/:id", (req, res) => {
+    const { id } = req.params;
+
+    // formatage de la date du jour
+    let today = new Date().toLocaleDateString();
+
+    DailyCheck.findOne({ user_id: id, today: today, check_out: null }).populate('user_id')
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs'}) });
+});
+
 // recuperation de la liste des présences de tous les utilisateurs
 app.get("/get-checks", (req, res) => {
     DailyCheck.find().populate('user_id')

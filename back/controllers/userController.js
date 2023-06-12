@@ -1385,4 +1385,16 @@ app.get('/getAllByServiceFromList/:service_id', (req, res) => {
     });
 })
 
+// méthode de mise à jour du statut du collaborateur
+app.put('/path-user-statut', (req, res) => {
+  const {statut} = req.body;
+  const {id} = req.body;
+
+  User.findOneAndUpdate({_id: id}, {statut: statut})
+  .then((response) => {
+    res.status(201).send(response);
+  })
+  .catch((error) => { res.status(400).send(error); });
+});
+
 module.exports = app;
