@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
+import mongoose from 'mongoose';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
@@ -33,14 +34,15 @@ export class AjoutTicketComponent implements OnInit {
   onAdd() {
     let documents = []
     if (this.uploadedFiles[0]) {
-      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name })
+      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
     }
     this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
       this.TicketForm.reset()
       if (this.uploadedFiles[0]) {
         let formData = new FormData()
-        formData.append('id', data._id)
+        formData.append('ticket_id', data.doc._id)
+        formData.append('document_id', documents[0]._id)
         formData.append('file', this.uploadedFiles[0])
         formData.append('path', this.uploadedFiles[0].name)
         this.TicketService.addFile(formData).subscribe(data => {

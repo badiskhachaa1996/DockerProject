@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
+import { AuthService } from 'src/app/services/auth.service';
 import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
-
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-list-tickets-refuse',
   templateUrl: './list-tickets-refuse.component.html',
@@ -13,8 +14,8 @@ import { TicketService } from 'src/app/services/ticket.service';
 export class ListTicketsRefuseComponent implements OnInit {
 
 
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService) { }
-  tickets = []
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private UserService: AuthService) { }
+  tickets: Ticket[] = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
@@ -23,7 +24,7 @@ export class ListTicketsRefuseComponent implements OnInit {
     priorite: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
-  filterService = []
+  filterService = [{ label: 'Tous les services', value: null }]
   ngOnInit(): void {
     this.TicketService.getAllRefuse().subscribe(data => {
       this.tickets = data
@@ -47,17 +48,57 @@ export class ListTicketsRefuseComponent implements OnInit {
   }
 
   TicketAffecter = null
+  dropdownMember = []
   initAffecter(ticket) {
     this.TicketAffecter = ticket
+    this.UserService.getAllByServiceFromList(ticket.service_id._id).subscribe(data => {
+      this.dropdownMember = []
+      data.forEach(u => {
+        this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
+      })
+    })
   }
 
-  onAffectation(id) {
-    console.log(id)
-    this.TicketService.update({ _id: this.TicketAffecter._id, agent_id: id }).subscribe(data => {
+  memberSelected: string;
+  onAffectation() {
+    this.TicketService.update({ _id: this.TicketAffecter._id, agent_id: this.memberSelected }).subscribe(data => {
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
     })
   }
 
+  downloadFile(index, ri: Ticket) {
+    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+  deleteFile(index, ri: Ticket) {
+    ri.documents.splice(index, 1)
+    this.TicketService.update({ _id: ri._id, documents: ri.documents }).subscribe(data => {
+
+      this.ToastService.add({ severity: 'success', summary: 'Documents supprimé' })
+    })
+  }
+
+  downloadFileService(index, ri: Ticket) {
+    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+
+  deleteFileService(index, ri: Ticket) {
+    ri.documents_service.splice(index, 1)
+    this.TicketService.update({ _id: ri._id, documents_service: ri.documents_service }).subscribe(data => {
+      this.ToastService.add({ severity: 'success', summary: 'Documents supprimé' })
+    })
+  }
 }

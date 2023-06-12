@@ -15,8 +15,11 @@
 <div class="grid col-12 card" *ngIf="TicketAffecter">
     <h5 class="col-12">Affecter un agent à ce ticket</h5>
     <div class="col-12">
-        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" formControlName="service_id"
-            placeholder="Choisissez un membre" (onChange)="onAffectation($event.value)"></p-dropdown>
+        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" [(ngModel)]="memberSelected"
+            placeholder="Choisissez un membre"></p-dropdown>
+    </div>
+    <div class="col-12">
+        <p-button (onClick)="onAffectation()" label="Affecter cette agent"></p-button>
     </div>
 </div>
 <div class="grid col-12 card">
@@ -79,7 +82,7 @@
         <ng-template pTemplate="body" let-ticket let-expanded="expanded" let-ri="rowIndex">
             <tr>
                 <td>
-                    <button type="button" pButton pRipple [pRowToggler]="doublon"
+                    <button type="button" pButton pRipple [pRowToggler]="ticket"
                         class="p-button-text p-button-rounded p-button-plain"
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                     </button>
@@ -112,28 +115,79 @@
                 </td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="rowexpansion" let-rowData>
+        <ng-template pTemplate="rowexpansion" let-ticket>
             <tr>
-                <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="header">
+                <td colspan="9">
+                    <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
             <tr>
                 <th> Description </th>
-                <th> Pièces jointes </th> <!--TODO-->
                 <th> Date de traitement </th>
                 <th> Note du Service qui traite </th>
-                <th> Pièces jointes du Service </th> <!--TODO-->
             </tr>
         </ng-template>
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.document}}</td>
                 <td>{{ticket.date_affec_accep}}</td>
                 <td>{{ticket.note}}</td>
-                <td>{{ticket.documents_service}}</td>
             </tr>
         </ng-template>
     </p-table>
+    </td>
+
+    </tr>
+    <tr>
+        <td colspan="10">
+            <h5>Documents</h5>
+            <p-table dataKey="_id" [value]="ticket.documents" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+    <tr>
+        <th> Nom </th>
+        <th>Lien </th> <!--TODO-->
+        <th> Action </th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+        <tr>
+            <td>{{document.path}}</td>
+            <td>
+                <a (click)="downloadFile(idx,ticket)">Télécharger le document</a>
+            </td>
+            <td>
+                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                    (click)="deleteFile(idx,ticket)"> </i>
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+    </td>
+    </tr>
+    <tr>
+        <td colspan="10">
+            <h5>Documents du service</h5>
+            <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+    <tr>
+        <th> Nom </th>
+        <th>Lien </th> <!--TODO-->
+        <th> Action </th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+        <tr>
+            <td>{{document.path}}</td>
+            <td>
+                <a (click)="downloadFileService(idx,ticket)">Télécharger le document</a>
+            </td>
+            <td>
+                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                    (click)="deleteFileService(idx,ticket)"> </i>
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+    </td>
     </tr>
     </ng-template>
     </p-table>
