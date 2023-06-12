@@ -56,7 +56,8 @@ app.post("/create", (req, res) => {
                     date_ajout: d,
                     customid: id,
                     etudiant_id: req.body.etudiant_id,
-                    priorite: req.body.priorite
+                    priorite: req.body.priorite,
+                    documents: req.body.documents
                 });
 
                 ticket.save((err, doc) => {
@@ -305,8 +306,6 @@ app.get("/getAccAff/:id", (req, res) => {
 
 //Update d'un ticket
 app.post("/update/:id", (req, res) => {
-    console.log(req.body)
-    console.log(req.params.id)
     Ticket.findByIdAndUpdate(req.params.id,
         {
             ...req.body
@@ -740,19 +739,19 @@ app.get("/getAllNonAssigne", (req, res) => {
 });
 
 app.get("/getAllRefuse", (req, res) => {
-    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllTraite", (req, res) => {
-    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllAttenteDeTraitement", (req, res) => {
-    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
@@ -793,7 +792,7 @@ var mime = require('mime-types')
 const path = require('path');
 const st = multer.diskStorage({
     destination: (req, file, callback) => {
-        let storage = `storage/ticket/${req.body._id}/principale/`;
+        let storage = `storage/ticket/${req.body.ticket_id}/${req.body.document_id}`;
 
         if (!fs.existsSync(storage)) {
             fs.mkdirSync(storage, { recursive: true });
@@ -817,5 +816,110 @@ app.post('/addFile', uploadConfig.single('file'), (req, res) => {
 
     res.status(201).send({ message: "C'est bon" });
 })
+
+const st2 = multer.diskStorage({
+    destination: (req, file, callback) => {
+        let storage = `storage/ticket/service/${req.body.ticket_id}/${req.body.document_id}`;
+
+        if (!fs.existsSync(storage)) {
+            fs.mkdirSync(storage, { recursive: true });
+        }
+        callback(null, storage);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.originalname}`);
+    }
+});
+
+const uploadConfig2 = multer({ storage: st2 });
+app.post('/addFileService', uploadConfig2.single('file'), (req, res) => {
+    const file = req.file;
+
+    if (!file) {
+        const error = new Error('Aucun fichier choisis');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.status(201).send({ message: "C'est bon" });
+})
+
+app.get("/downloadFile/:_id/:file_id/:name", (req, res, next) => {
+    let pathFile = `storage/ticket/${req.params._id}/${req.params.file_id}/${req.params.name}`;
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+});
+
+app.get("/downloadFileService/:_id/:file_id/:name", (req, res, next) => {
+    let pathFile = `storage/ticket/service/${req.params._id}/${req.params.file_id}/${req.params.name}`;
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+});
+
+const stF = multer.diskStorage({
+    destination: (req, file, callback) => {
+        let storage = `storage/ticket/${req.body.ticket_id}/${req.body.document_id}`;
+
+        if (!fs.existsSync(storage)) {
+            fs.mkdirSync(storage, { recursive: true });
+        }
+        callback(null, storage);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.originalname}`);
+    }
+});
+
+const upF = multer({ storage: stF });
+app.post("/uploadFile", upF.single('file'), (req, res, next) => {
+    const file = req.file;
+
+    if (!file) {
+        const error = new Error('Aucun fichier choisis');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.status(201).send({ message: "C'est bon" });
+});
+
+const stFS = multer.diskStorage({
+    destination: (req, file, callback) => {
+        let storage = `storage/ticket/service/${req.body.ticket_id}/${req.body.document_id}`;
+
+        if (!fs.existsSync(storage)) {
+            fs.mkdirSync(storage, { recursive: true });
+        }
+        callback(null, storage);
+    },
+    filename: (req, file, callback) => {
+        callback(null, `${file.originalname}`);
+    }
+});
+
+const upFS = multer({ storage: stFS });
+app.post("/uploadFileService", upFS.single('file'), (req, res, next) => {
+    const file = req.file;
+
+    if (!file) {
+        const error = new Error('Aucun fichier choisis');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.status(201).send({ message: "C'est bon" });
+});
+
+
 
 module.exports = app;

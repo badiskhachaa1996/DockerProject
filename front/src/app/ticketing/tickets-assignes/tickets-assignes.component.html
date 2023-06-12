@@ -25,11 +25,18 @@
         </div>
         <div class="field col-12 md:col-12">
             <label For="sujet">Etat de Traitement <span style="color: red;"> * </span></label>
-            <p-dropdown [options]="etatDropdown" formControlName="statut"
-                placeholder="Choisissez un etat"></p-dropdown>
+            <p-dropdown [options]="etatDropdown" formControlName="statut" placeholder="Choisissez un etat"></p-dropdown>
         </div>
         <div class="field col-12">
-            <h5>En dévéloppement TODO Listes des pièces jointes + Ajout</h5>
+            <label>Pièce Jointe du Service:</label>
+            <p-fileUpload (uploadHandler)="onUpload($event)" mode="basic" customUpload="true" maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false"
+                [auto]="true">
+            </p-fileUpload>
+            <div>
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </div>
         </div>
         <div class="col-12">
             <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Traiter le ticket" type="submit"
@@ -74,7 +81,9 @@
                     (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'equals');"
                     placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
                     filterPlaceholder="Choisissez un service"></p-dropdown>
-
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
+                    (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
+                    emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
                 <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                     (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                     emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
@@ -111,6 +120,7 @@
                 <th pSortableColumn="priorite" style="text-align:center"> Priorité <p-sortIcon field="priorite">
                     </p-sortIcon>
                 </th>
+
                 <th pSortableColumn="statut" style="text-align:center"> Etat de traitement <p-sortIcon field="statut">
                     </p-sortIcon>
                 </th>
@@ -120,7 +130,7 @@
         <ng-template pTemplate="body" let-ticket let-expanded="expanded" let-ri="rowIndex">
             <tr>
                 <td>
-                    <button type="button" pButton pRipple [pRowToggler]="doublon"
+                    <button type="button" pButton pRipple [pRowToggler]="ticket"
                         class="p-button-text p-button-rounded p-button-plain"
                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                     </button>
@@ -150,32 +160,87 @@
                     <i pTooltip="Traiter" style="margin-left: 2%; cursor: pointer;" class="pi pi-cog"
                         (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
                     <i pTooltip="Refuser" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban"
-                        (click)="decline(ticket,ri)" aria-hidden="true"></i>
+                        (click)="initDecline(ticket)" aria-hidden="true"></i>
                 </td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="rowexpansion" let-rowData>
+        <ng-template pTemplate="rowexpansion" let-ticket>
             <tr>
-                <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
-                    <ng-template pTemplate="header">
+                <td colspan="9">
+                    <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
             <tr>
                 <th> Description </th>
-                <th> Pièces jointes </th> <!--TODO-->
                 <th> Date de traitement </th>
+                <th> Délai de traitement </th>
                 <th> Note du Service qui traite </th>
-                <th> Pièces jointes du Service </th> <!--TODO-->
             </tr>
         </ng-template>
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.document}}</td>
                 <td>{{ticket.date_affec_accep}}</td>
+                <td>
+                    {{getTraitement(ticket.date_affec_accep)}}
+                </td>
                 <td>{{ticket.note}}</td>
-                <td>{{ticket.documents_service}}</td>
             </tr>
         </ng-template>
     </p-table>
+    </td>
+
+    </tr>
+    <tr>
+        <td colspan="10">
+            <h5>Documents</h5>
+            <p-table dataKey="_id" [value]="ticket.documents" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+    <tr>
+        <th> Nom </th>
+        <th>Lien </th> <!--TODO-->
+        <th> Action </th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+        <tr>
+            <td>{{document.path}}</td>
+            <td>
+                <a (click)="downloadFile(idx,ticket)">Télécharger le document</a>
+            </td>
+            <td>
+                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                    (click)="deleteFile(idx,ticket)"> </i>
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+    </td>
+    </tr>
+    <tr>
+        <td colspan="10">
+            <h5>Documents du service</h5>
+            <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+    <tr>
+        <th> Nom </th>
+        <th>Lien </th> <!--TODO-->
+        <th> Action </th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+        <tr>
+            <td>{{document.path}}</td>
+            <td>
+                <a (click)="downloadFileService(idx,ticket)">Télécharger le document</a>
+            </td>
+            <td>
+                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2" aria-hidden="true"
+                    (click)="deleteFileService(idx,ticket)"> </i>
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+    </td>
     </tr>
     </ng-template>
     </p-table>
