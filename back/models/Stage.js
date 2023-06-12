@@ -18,6 +18,8 @@ const stageSchema = mongoose.Schema({
     convention:         { type: String, required: false }, // document lié au stage
     avenant:            { type: String, required: false }, // document lié au stage
     attestation:        { type: String, required: false }, // document lié au stage
+    attestation:        { type: String, required: false }, // document lié au stage
+    add_by: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
 });
 
 const Stage = mongoose.model('stage', stageSchema);

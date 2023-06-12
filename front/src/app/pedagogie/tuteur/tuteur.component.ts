@@ -151,18 +151,18 @@ export class TuteurComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: [''],
       phone: ['', Validators.pattern("^[0-9+]+$")],
-      fonction: ['', Validators.required],
+      fonction: [''],
       entreprise: ['', Validators.required],
-      anciennete: ['', Validators.required],
-      niveau_formation: ['', Validators.required],
-      email_perso: ['', [Validators.required, Validators.email]],
+      anciennete: [''],
+      niveau_formation: [''],
+      email_perso: ['', Validators.email],
       // numero_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
       // rue_adresse: ['', [Validators.pattern('[^0-9]+')]],
       // postal_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
       // ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
       // pays_adresse: [this.paysList[76]],
       // nationnalite: [this.nationList[0].value],
-      date_naissance: ['', Validators.required]
+      date_naissance: ['']
     })
 
   }
@@ -173,18 +173,13 @@ export class TuteurComponent implements OnInit {
   get lastname() { return this.addTuteurForm.get('lastname'); };
   get indicatif() { return this.addTuteurForm.get('indicatif'); };
   get phone() { return this.addTuteurForm.get('phone'); };
-  get fonction() { return this.addTuteurForm.get('fonction').value; };
   get entreprise() { return this.addTuteurForm.get('entreprise').value.value; };
-  get anciennete() { return this.addTuteurForm.get('anciennete').value; };
-  get niveau_formation() { return this.addTuteurForm.get('niveau_formation').value; };
-  get email_perso() { return this.addTuteurForm.get('email_perso'); };
   // get numero_adresse() { return this.addTuteurForm.get('numero_adresse'); };
   // get rue_adresse() { return this.addTuteurForm.get('rue_adresse'); };
   // get postal_adresse() { return this.addTuteurForm.get('postal_adresse'); };
   // get ville_adresse() { return this.addTuteurForm.get('ville_adresse'); };
   // get pays_adresse() { return this.addTuteurForm.get('pays_adresse'); };
   // get nationnalite() { return this.addTuteurForm.get('nationnalite'); };
-  get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
 
   //méthode d'ajout du tuteur
   onAddTuteur() {

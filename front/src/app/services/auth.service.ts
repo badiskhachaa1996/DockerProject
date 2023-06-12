@@ -342,4 +342,18 @@ export class AuthService {
     return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  // méthode de mise à jour du statut de l'utilisateur
+  pathUserStatut(statut: string, id: string): Promise<User>
+  {
+    const url = `${this.apiUrl}path-user-statut`;
+
+    return new Promise<User>((resolve, reject) => {
+      this.http.put(url, {statut: statut, id: id}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: User) => {resolve(response)},
+        error: (error) => { reject(error)},
+        complete: () => { console.log('Requête de mise à jour du statut effectué')}
+      });
+    });
+  }
+
 }

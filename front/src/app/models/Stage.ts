@@ -18,5 +18,6 @@ export class Stage {
         public convention?:             string, // document lié au stage
         public avenant?:                string, // document lié au stage
         public attestation?:            string, // document lié au stage
+        public add_by?:                 string,
     ){}
 }

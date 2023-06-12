@@ -106,7 +106,7 @@ export class AddEntrepriseComponent implements OnInit {
       civilite_rep: [this.civiliteList[0]],
       nom_rep: ['', Validators.required],
       prenom_rep: ['', Validators.required],
-      email_rep: ['', [Validators.required, Validators.email]],
+      email_rep: ['', Validators.email],
       indicatif_rep: [''],
       phone_rep: [''],
     })
