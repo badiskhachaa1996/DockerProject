@@ -226,6 +226,7 @@ import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
 import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
+import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -397,6 +398,7 @@ const routes: Routes = [
             { path: 'international/generation-documents', component: GenerationDocComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/inscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocInscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/preinscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocPreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'international/generation-documents/paiement/:ecole/:prospect_id/:formation/:rentree', component: PaiementComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/paiement-preinscription/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementPreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/paiement-preinscription-acompte/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementPreinscriptionAcompteComponent, canActivate: [AuthGuardService] },
             { path: 'international/generation-documents/paiement-acompte/:ecole/:prospect_id/:formation/:rentree', component: GenDocPaiementAcompteComponent, canActivate: [AuthGuardService] },
