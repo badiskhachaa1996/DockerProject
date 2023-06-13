@@ -330,6 +330,7 @@ import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list
 import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
+import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
 
 
 @NgModule({
@@ -669,7 +670,8 @@ import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/das
     ListTicketsTraiteComponent,
     ListTicketsRefuseComponent,
     ConfigurationComponent,
-    DashboardTicketingComponent
+    DashboardTicketingComponent,
+    PaiementComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
