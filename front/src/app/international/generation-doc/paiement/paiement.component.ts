@@ -30,8 +30,14 @@ export class PaiementComponent implements OnInit {
     { label: 'Chèque', value: 'Chèque' },
     { label: 'Compensation', value: 'Compensation' },
   ]
-
-  
+  extra = "-"
+  dropdownExtra = [
+    { label: '-', value: '-' },
+    { label: 'en', value: 'en' },
+    { label: 'au', value: 'au' },
+    { label: 'aux', value: 'aux' },
+    { label: 'à', value: 'à' },
+  ]
 
 
   ecole_id: any = this.route.snapshot.paramMap.get('ecole');
@@ -42,6 +48,7 @@ export class PaiementComponent implements OnInit {
   frais_preinscription = "550"
   date_limite_arrivee = new Date()
   ville = "Paris"
+
 
   user: User
   prospect: Prospect

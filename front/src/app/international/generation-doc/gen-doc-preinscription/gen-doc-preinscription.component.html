@@ -3,7 +3,7 @@
     <div *ngIf="ecole?.url_form=='int_education'" id="body" class="col-6">
         <div class="page-container" id="page-container">
             <div class="page-inner-content">
-                <div class="header">
+                <div class="header banner-int">
                     <style>
                         .page-title {
                             text-align: center;
@@ -12,11 +12,11 @@
                             line-height: 1.5;
                         }
                     </style>
-                    <h1 class="page-title"><br><br>ATTESTATION DE PREINSCRIPTION</h1>
+                    <h1 class="page-title"><br><br>ATTESTATION DE PRÉINSCRIPTION</h1>
                 </div>
                 <div class="content-container">
                     <p id="intro-file" class="intro-file">
-                        Nous soussignons le service admission de l’école INT Education, établissement d'enseignement
+                        Nous attestons le service admission de l’école INT Education, établissement d'enseignement
                         supérieur privé, association loi 1901 enregistrée le 28 janvier 1991 sous le numéro W751098589,
                         immatriculée dans la base rectorale des établissements de l’académie de Paris sous le numéro UAI
                         0755084U, attestons que :
@@ -24,15 +24,16 @@
                     <div class="owner-file">
                         <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
                             titlecase}}.</h2>
-                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} - {{user?.pays_adresse}}</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
                     </div>
                     <div id="outro-file" class="outro-file">
                         <p>Est bien admis(e) et préinscrit(e) au sein de notre établissement à
                             {{ville|titlecase}} pour la
                             rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
                             date: 'shortDate'}}.</p>
-                        <p>L’étudiant(e) suivra en présentiel la 1re année de la formation {{formation?.nom}}.,
-                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong>. et accréditée par
+                        <p>L’étudiant(e) suivra en présentiel la formation {{formation?.nom}},
+                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau 5 et accréditée
+                            par
                             {{formation?.certificateur}}.</p>
                         <p>La durée de la formation est de {{formation?.duree}} mois.</p>
                         <p>La date limite d’arrivée : <span class="underlined">{{date_limite_arrivee | date:
@@ -51,8 +52,10 @@
                     </div>
                     <div class="date-sign-file">
                         <p id="certificate-date">Paris, le 3 mai 2023</p>
-                        <p><strong>Département ADMISSION</strong></p>
-                        <img id="school-signature" src="/assets/images/generation-documents/int-education/signature-int.png" class="signature-image" />
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/int-education/signature.png"
+                            class="signature-image" />
                     </div>
                 </div>
                 <div class="footer-file">
@@ -63,10 +66,225 @@
                     <p id="school-siret">SIRET 453 183 394 000 49</p>
                     <div id="school-adress" class="adress-school">
                         <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
-                        <p>Campus Marne : 6 allée Hendrik Lorentz 77420 Champs sur Marne</p>
-                        <p>Campus Montpellier : 1 Place Charles De Gaulle 34170 Castelnau-le-Lez</p>
                     </div>
-                    <img id="school-qr" src="/assets/images/generation-documents/int-education/qr-certificate.png" class="qr-file" />
+                    <img id="school-qr" src="/assets/images/generation-documents/int-education/qr-certificate.png"
+                        class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='adg'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-adg">
+                    <style>
+                        .page-title {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+                    <h1 class="page-title"><br><br>ATTESTATION DE PRÉINSCRIPTION</h1>
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons le service admission de l’école ADG EDUCATION, établissement d'enseignement
+                        supérieur privé, association loi 1901 enregistrée le 28 janvier 1991 sous le numéro W751098589,
+                        immatriculée dans la base rectorale des établissements de l’académie de Paris sous le numéro UAI
+                        0756031Y, attestons que :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}.</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>Est bien admis(e) et préinscrit(e) au sein de notre établissement à
+                            {{ville|titlecase}} pour la
+                            rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
+                            date: 'shortDate'}}.</p>
+                        <p>L’étudiant(e) suivra en présentiel la formation {{formation?.nom}},
+                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau 5 et accréditée
+                            par
+                            {{formation?.certificateur}}.</p>
+                        <p>La durée de la formation est de {{formation?.duree}} mois.</p>
+                        <p>La date limite d’arrivée : <span class="underlined">{{date_limite_arrivee | date:
+                                'shortDate'}}</span></p>
+                        <p class="underlined">L’étudiant(e) est sélectionné(e) suite à l’appréciation de son projet
+                            académique et le
+                            remplissage des critères exigés par l’équipe pédagogique.</p>
+                        <p>L’étudiant(e) a bien réglé la somme de 550 € au titre des frais de dossier <span
+                                class="underlined">non remboursable</span> hormis
+                            les
+                            frais de sa formation qui coûte <strong>{{formation?.tarif}}€ par an</strong>.</p>
+                        <p>L’inscription de l’étudiant(e) ne sera définitive qu’à l’obtention de son visa d’entrée sur
+                            le
+                            territoire français.</p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/adg/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">ADG EDUCATION</span> »</h3>
+                    <p id="school-details"> Tél. :+33 1 89 19 55 25 - email : contact@adgeducation.com - site Internet :
+                        www.adgeducation.com</p>
+                    <p id="school-siret">SIRET 520 041 906 000 48</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/adg/qr.png" class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='espic'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-espic">
+                    <style>
+                        .page-title {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+                    <h1 class="page-title"><br><br>ATTESTATION DE PRÉINSCRIPTION</h1>
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons le service admission de l’école ESPIC, établissement d'enseignement supérieur
+                        privé, association loi 1901 enregistrée le 28 janvier 1991 sous le numéro W751098589,
+                        immatriculée dans la base rectorale des établissements de l’académie de Paris sous le numéro UAI
+                        0756340J, attestons que :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}.</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>Est bien admis(e) et préinscrit(e) au sein de notre établissement à
+                            {{ville|titlecase}} pour la
+                            rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
+                            date: 'shortDate'}}.</p>
+                        <p>L’étudiant(e) suivra en présentiel la formation {{formation?.nom}},
+                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau 5 et accréditée
+                            par
+                            {{formation?.certificateur}}.</p>
+                        <p>La durée de la formation est de {{formation?.duree}} mois.</p>
+                        <p>La date limite d’arrivée : <span class="underlined">{{date_limite_arrivee | date:
+                                'shortDate'}}</span></p>
+                        <p class="underlined">L’étudiant(e) est sélectionné(e) suite à l’appréciation de son projet
+                            académique et le
+                            remplissage des critères exigés par l’équipe pédagogique.</p>
+                        <p>L’étudiant(e) a bien réglé la somme de 550 € au titre des frais de dossier <span
+                                class="underlined">non remboursable</span> hormis
+                            les
+                            frais de sa formation qui coûte <strong>{{formation?.tarif}}€ par an</strong>.</p>
+                        <p>L’inscription de l’étudiant(e) ne sera définitive qu’à l’obtention de son visa d’entrée sur
+                            le
+                            territoire français.</p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/espic/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">ESPIC</span> »</h3>
+                    <p id="school-details"> Tél. :+33 1 73 43 58 85 - email : contact@espic.com - site Internet :
+                        www.espic.com</p>
+                    <p id="school-siret">SIRET 852 925 122 000 24</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/espic/qr.png" class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='studinfo'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-studinfo">
+                    <style>
+                        .page-title {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+                    <h1 class="page-title"><br><br>ATTESTATION DE PRÉINSCRIPTION</h1>
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons le service admission de l’école STUDINFO, établissement d'enseignement supérieur
+                        privé, association loi 1901 enregistrée le 28 janvier 1991 sous le numéro W751098589,
+                        immatriculée dans la base rectorale des établissements de l’académie de Paris sous le numéro UAI
+                        0756390N, attestons que :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}.</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>Est bien admis(e) et préinscrit(e) au sein de notre établissement à
+                            {{ville|titlecase}} pour la
+                            rentrée scolaire principale de septembre 2023 qui débutera le {{rentree?.date_commencement |
+                            date: 'shortDate'}}.</p>
+                        <p>L’étudiant(e) suivra en présentiel la formation {{formation?.nom}},
+                            enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau 5 et accréditée
+                            par
+                            {{formation?.certificateur}}.</p>
+                        <p>La durée de la formation est de {{formation?.duree}} mois.</p>
+                        <p>La date limite d’arrivée : <span class="underlined">{{date_limite_arrivee | date:
+                                'shortDate'}}</span></p>
+                        <p class="underlined">L’étudiant(e) est sélectionné(e) suite à l’appréciation de son projet
+                            académique et le
+                            remplissage des critères exigés par l’équipe pédagogique.</p>
+                        <p>L’étudiant(e) a bien réglé la somme de 550 € au titre des frais de dossier <span
+                                class="underlined">non remboursable</span> hormis
+                            les
+                            frais de sa formation qui coûte <strong>{{formation?.tarif}}€ par an</strong>.</p>
+                        <p>L’inscription de l’étudiant(e) ne sera définitive qu’à l’obtention de son visa d’entrée sur
+                            le
+                            territoire français.</p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/studinfo/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">STUDINFO </span> »</h3>
+                    <p id="school-details">Tél. : +33 1 73 43 58 82 - email : contact@espic.com - site Internet :
+                        www.espic.com</p>
+                    <p id="school-siret">SIRET 904 502 663 000 27</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/studinfo/qr.png" class="qr-file" />
                 </div>
             </div>
         </div>
@@ -90,13 +308,18 @@
                 <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
                 <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
             </div>
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-4">
                 <label>Civilite</label><br>
                 <input type="text" pInputText [(ngModel)]="user.civilite" />
             </div>
-            <div class="col-12 md:col-6">
-                <label>Ville</label><br>
+            <div class="col-12 md:col-4">
+                <label>Campus</label><br>
                 <input type="text" pInputText [(ngModel)]="ville" />
+            </div>
+            <div class="col-12 md:col-4">
+                <label>Néé le {{prospect?.date_naissance | date: 'shortDate'}} ... {{user.pays_adresse}}</label><br>
+                <p-dropdown [options]="dropdownExtra" [(ngModel)]="extra" [editable]="true"
+                    placeholder="Choisissez un mot"></p-dropdown>
             </div>
         </div>
         <div class="col-12 grid" *ngIf="formation">
@@ -116,7 +339,7 @@
                 <label>Durée de la formation</label><br>
                 <input type="text" pInputText [(ngModel)]="formation.duree" />
             </div>
-    
+
             <div class="col-12 md:col-6">
                 <label>Tarif de la formation</label><br>
                 <input type="text" pInputText [(ngModel)]="formation.tarif" />
