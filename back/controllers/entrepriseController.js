@@ -99,7 +99,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
              *  Si l'utilisateur existe déjà on attribut son id au directeur_id de l'entreprise
              *  et un mail lui est envoyé pour lui dire qu'une nouvelle entreprise est ajouté en son nom pour son espace
              */
-            if (userFromDb) {
+            if (userFromDb && userFromDb.email_perso != null && userFromDb.email_perso != '') {
               entreprise.directeur_id = userFromDb._id;
               entreprise
                 .save()
@@ -144,74 +144,94 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                * Si l'utilisateur saisie n'existe pas dans la base de données alors on le créer et un mail avec ses identifiants lui sont envoyés
                */
               //Création des accès pour les CEO
-              let Ceo_Pwd =
-                representant.firstname.substring(0, 3) +
-                "@" +
-                (Math.random() + 1).toString(16).substring(7).replace(" ", "");
-              representant.password = bcrypt.hashSync(Ceo_Pwd, 8);
+              if (representant.email_perso && representant.email_perso != null && representant.email_perso != '') {
 
-              representant
-                .save()
-                .then((userCreated) => {
-                  entreprise.directeur_id = userCreated._id;
-                  entreprise
-                    .save()
-                    .then((entrepriseSaved) => {
-                      // création du mail à envoyer
-                      let Ceo_htmlmail =
-                        "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
-                        Ceo_Pwd +
-                        "</strong></p>" +
-                        '<p ><span style="color: rgb(36, 36, 36);font-weight: bolder;"> Activer votre compte et valider votre email en cliquant sur' +
-                        ' <a href="' +
-                        origin[0] +
-                        "/#/validation-email/" +
-                        userCreated.email_perso +
-                        "\">J'active mon compte IMS</a></span></p> " +
-                        '<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l\'adresse mail <a href="mailto:contact@intedgroup.com">contact@intedgroup.com</a></p>' +
-                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
-                        " <p>Cordialement.</p>";
 
-                      let Ceo_mailOptions = {
-                        from: "ims@intedgroup.com",
-                        to: userCreated.email_perso,
-                        subject: "Votre acces [IMS] ",
-                        html: Ceo_htmlmail,
-                        // attachments: [{
-                        //     filename: 'Image1.png',
-                        //     path: 'assets/Image1.png',
-                        //     cid: 'Image1' //same cid value as in the html img src
-                        // }]
-                      };
+                let Ceo_Pwd =
+                  representant.firstname.substring(0, 3) +
+                  "@" +
+                  (Math.random() + 1).toString(16).substring(7).replace(" ", "");
+                representant.password = bcrypt.hashSync(Ceo_Pwd, 8);
 
-                      // envoi du mail
-                      transporterINTED.sendMail(
-                        Ceo_mailOptions,
-                        function (error, info) {
-                          if (error) {
-                            console.error(error);
+                representant
+                  .save()
+                  .then((userCreated) => {
+                    entreprise.directeur_id = userCreated._id;
+                    entreprise
+                      .save()
+                      .then((entrepriseSaved) => {
+                        // création du mail à envoyer
+                        let Ceo_htmlmail =
+                          "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
+                          Ceo_Pwd +
+                          "</strong></p>" +
+                          '<p ><span style="color: rgb(36, 36, 36);font-weight: bolder;"> Activer votre compte et valider votre email en cliquant sur' +
+                          ' <a href="' +
+                          origin[0] +
+                          "/#/validation-email/" +
+                          userCreated.email_perso +
+                          "\">J'active mon compte IMS</a></span></p> " +
+                          '<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l\'adresse mail <a href="mailto:contact@intedgroup.com">contact@intedgroup.com</a></p>' +
+                          "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                          " <p>Cordialement.</p>";
+
+                        let Ceo_mailOptions = {
+                          from: "ims@intedgroup.com",
+                          to: userCreated.email_perso,
+                          subject: "Votre acces [IMS] ",
+                          html: Ceo_htmlmail,
+                          // attachments: [{
+                          //     filename: 'Image1.png',
+                          //     path: 'assets/Image1.png',
+                          //     cid: 'Image1' //same cid value as in the html img src
+                          // }]
+                        };
+
+                        // envoi du mail
+                        transporterINTED.sendMail(
+                          Ceo_mailOptions,
+                          function (error, info) {
+                            if (error) {
+                              console.error(error);
+                            }
                           }
-                        }
-                      );
+                        );
 
-                      // envoi de la reponse du serveur
-                      res.status(201).send(entrepriseSaved);
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                      res
-                        .status(400)
-                        .send("Impossible de créer une nouvelle entreprise");
-                    });
-                })
-                .catch((error) => {
-                  res
-                    .status(400)
-                    .send("Impossible de créer un nouvel utilisateur");
-                });
+                        // envoi de la reponse du serveur
+                        res.status(201).send(entrepriseSaved);
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                        res
+                          .status(400)
+                          .send("Impossible de créer une nouvelle entreprise");
+                      });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    res
+                      .status(400)
+                      .send("Impossible de créer un nouvel utilisateur");
+                  });
+              } else {
+                entreprise.directeur_id = null;
+                entreprise
+                  .save()
+                  .then((entrepriseSaved) => {
+                    // envoi de la reponse du serveur
+                    res.status(201).send(entrepriseSaved);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    res
+                      .status(400)
+                      .send("Impossible de créer une nouvelle entreprise");
+                  });
+              }
             }
           })
           .catch((error) => {
+            console.error(error)
             res
               .status(500)
               .send("Impossible de vérifier l'existence de l'utilisateur");
@@ -219,7 +239,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res
         .status(500)
         .send("Impossible de verifier l'existence de l'entreprise");

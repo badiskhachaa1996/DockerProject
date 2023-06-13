@@ -13,7 +13,7 @@ const entrepriseSchema = mongoose.Schema({
     convention: { type: String, required: false },
     idcc: { type: String, required: false },
     indicatif_ent: { type: Number, required: false },
-    phone_ent: { type: Number, required: false },
+    phone_ent: { type: String, required: false },
     adresse_ent: { type: String, required: false },
     code_postale_ent: { type: Number, required: false },
     ville_ent: { type: String, required: false },

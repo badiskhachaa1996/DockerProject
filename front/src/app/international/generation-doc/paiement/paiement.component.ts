@@ -31,6 +31,8 @@ export class PaiementComponent implements OnInit {
     { label: 'Compensation', value: 'Compensation' },
   ]
 
+  
+
 
   ecole_id: any = this.route.snapshot.paramMap.get('ecole');
   prospect_id: any = this.route.snapshot.paramMap.get('prospect_id');
