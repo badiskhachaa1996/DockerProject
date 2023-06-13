@@ -37,8 +37,19 @@
     padding: 5mm 15mm;
 }
 
-.header {
+.banner-int{
     background: url(/assets/images/generation-documents/int-education/heade-int-bg.png) center center no-repeat;
+}
+.banner-adg{
+    background: url(/assets/images/generation-documents/adg/header.png) center center no-repeat;
+}
+.banner-espic{
+    background: url(/assets/images/generation-documents/espic/header.png) center center no-repeat;
+}
+.banner-espic{
+    background: url(/assets/images/generation-documents/studinfo/header.png) center center no-repeat;
+}
+.header {
     background-size: cover;
     height: 45mm;
     padding-left: 20mm;
