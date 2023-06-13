@@ -227,44 +227,41 @@ export class BulletinComponent implements OnInit {
         dicCoeff[col.module] = col.coeff
         listModule.push(col.module)
       })
-      console.log(0)
       this.PV.pv_annuel_data.forEach(pv => {//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{}, appreciation:"", appreciation_annuel:"" }
-        console.log(this.ETUDIANT)
         if (pv.email == this.ETUDIANT.user_id.email) {
-          console.log(1)
           this.APPRECIATION_GENERALE = pv.appreciation
           if (pv.appreciation_annuel && this.route.snapshot.paramMap.get('semestre') == "Annuel")
             this.APPRECIATION_GENERALE = pv.appreciation_annuel
-          console.log(2)
-          listModule.forEach(n => {
-            let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
-            console.log(3)
-            if (!t.appreciation_module) {
-              t.appreciation_module = {}
-            }
-            if (!t.appreciation_module[n]) {
-              if ((!t.appreciation_module[n] || t.appreciation_module[n] == "") && (t.appreciation_module[n] || t.appreciation_module[n] == 0)) {
-                let note = parseInt(t.note_etudiant)
-                if (note < 10)
-                  t.appreciation_module[n] = "Doit faire ses preuves"
-                else if ((note > 10 && note < 12) || note == 10)
-                  t.appreciation_module[n] = "Passable"
-                else if ((note > 12 && note < 14) || note == 12)
-                  t.appreciation_module[n] = "Assez Bien"
-                else if ((note > 14 && note < 16) || note == 14)
-                  t.appreciation_module[n] = "Bien"
-                else if ((note > 16 && note < 18) || note == 16)
-                  t.appreciation_module[n] = "Très Bien"
-                else if (note > 18 || note == 18)
-                  t.appreciation_module[n] = "Excellent"
-                else
-                  t.appreciation_module[n] = ""
+          if (this.NOTES.length == 0)
+            listModule.forEach(n => {
+              let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
+              console.log(3)
+              if (!t.appreciation_module) {
+                t.appreciation_module = {}
               }
-            } else {
-              t.appreciation_module[n] = pv.appreciation_module[n]
-            }
-            this.NOTES.push(t)
-          })
+              if (!t.appreciation_module[n]) {
+                if ((!t.appreciation_module[n] || t.appreciation_module[n] == "") && (t.appreciation_module[n] || t.appreciation_module[n] == 0)) {
+                  let note = parseInt(t.note_etudiant)
+                  if (note < 10)
+                    t.appreciation_module[n] = "Doit faire ses preuves"
+                  else if ((note > 10 && note < 12) || note == 10)
+                    t.appreciation_module[n] = "Passable"
+                  else if ((note > 12 && note < 14) || note == 12)
+                    t.appreciation_module[n] = "Assez Bien"
+                  else if ((note > 14 && note < 16) || note == 14)
+                    t.appreciation_module[n] = "Bien"
+                  else if ((note > 16 && note < 18) || note == 16)
+                    t.appreciation_module[n] = "Très Bien"
+                  else if (note > 18 || note == 18)
+                    t.appreciation_module[n] = "Excellent"
+                  else
+                    t.appreciation_module[n] = ""
+                }
+              } else {
+                t.appreciation_module[n] = pv.appreciation_module[n]
+              }
+              this.NOTES.push(t)
+            })
           if ((!this.APPRECIATION_GENERALE || this.APPRECIATION_GENERALE == "")) {
             let note = this.calculMoyenne()
             if (note < 10)
