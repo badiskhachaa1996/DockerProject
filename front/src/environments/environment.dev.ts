@@ -420,6 +420,11 @@ export const environment = {
     { id: 2, value: 'Madame', label: 'Mme' },
     { id: 3, value: 'Autre', label: 'Autre' },
   ],
+  civiliteEN: [
+    { id: 1, value: 'Mr', label: 'Mr' },
+    { id: 2, value: 'Ms', label: 'Ms' },
+    { id: 3, value: 'Other', label: 'Other' },
+  ],
 
   profil: [
     { value: 'Salarié', label: 'Salarié' },
