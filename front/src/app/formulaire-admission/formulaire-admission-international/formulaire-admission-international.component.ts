@@ -199,8 +199,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         "End",
       ];
 
-      this.nationList = environment.nationalites;
-      this.paysList = environment.pays;
+      this.nationList = environment.nationalities;
+      this.paysList = environment.paysEnglish;
       this.civiliteList = environment.civiliteEN;
     }
     else {
