@@ -227,6 +227,11 @@ import { ConfigurationComponent } from './ticketing/configuration/configuration.
 import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tickets-en-attente-de-traitement/list-tickets-en-attente-de-traitement.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
+import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
+import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
+import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
+import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
+import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -444,6 +449,12 @@ const routes: Routes = [
 
             // dubai admission form
             { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent },
+            //Accès Prospect V2
+            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent },
+            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent },
+            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent },
+            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent },
+            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

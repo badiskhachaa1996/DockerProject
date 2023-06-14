@@ -1,9 +1,9 @@
 <p-toast></p-toast>
 <div></div>
 <div class="col-12 md:col-8 md:col-offset-2 flex justify-content-center flex-wrap card-container">
-    <div class="card">
-        <img *ngIf="form_origin=='eduhorizons'" src="\assets\images\eh.png" alt="logo eduhorizons" style="width: 10%;"
-            class="m-2">
+    <div class="card" *ngIf="ECOLE && ECOLE.langue=='Français'">
+        <img *ngIf=" form_origin=='eduhorizons'" src=" \assets\images\eh.png" alt="logo eduhorizons"
+        style="width: 10%;" class="m-2">
         <img *ngIf="form_origin=='espic'" src="\assets\images\logoESPIC.png" alt="logo ESPIC" style="width: 10%;"
             class="m-2">
         <img *ngIf="form_origin=='adg'" src="\assets\images\logo_adg.png" alt="logo adg" style="width: 10%;"
@@ -23,6 +23,10 @@
         <img *ngIf="form_origin=='btech'" src="\assets\images\logo_btech.png" alt="logo btech" style="width: 10%;"
             class="m-2">
         <img *ngIf="form_origin=='inteducation'" src="\assets\images\int_education_logo.png" alt="logo int education"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="form_origin=='icbsdubai'" src="\assets\images\logo-icbs-dubai.png" alt="logo icbsdubai"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="form_origin=='icbsmalte'" src="\assets\images\ilogo-icbs-malte.png" alt="logo icbsmalte"
             style="width: 10%;" class="m-2">
 
 
@@ -267,32 +271,13 @@
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12">
-                                <h6>Veuillez choisir votre campus de destination <span style="color: red;">*</span>
-                                </h6>
-                                <p-message severity="info" text="Le 1er choix sera le plus pertinents"></p-message>
-                            </div>
 
-                            <div class="field col-12 md:col-4">
-                                <p-dropdown [options]="campusDropdown" optionLabel="value" (onChange)="choixCampus()"
+                            <div class="field col-12">
+                                <p-dropdown [options]="campusDropdown" optionLabel="value"
                                     formControlName="campusChoix1">
                                 </p-dropdown>
                             </div>
-                            <div class="field col-12 md:col-4">
-                                <p-dropdown [options]="campusDropdown" optionLabel="value"
-                                    formControlName="campusChoix2">
-                                </p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <p-dropdown [options]="campusDropdown" optionLabel="value"
-                                    formControlName="campusChoix3">
-                                </p-dropdown>
-                            </div>
 
-                            <div class="field col-12" *ngIf="VerifCampus()">
-                                <p-message severity="error"
-                                    text="Vous ne pouvez pas choisir le même campus plusieurs fois"></p-message>
-                            </div>
                             <div class="field col-12 md:col-12">
                                 <label>Choix de la rentrée <span style="color: red;"> * </span></label>
                                 <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
@@ -358,7 +343,7 @@
                         <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
                         </button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
+                            [disabled]="programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
@@ -564,7 +549,7 @@
                     </p>
                 </div>
                 <div class="col-12">
-                    <button pButton type="button" label="{{btnTextBack}}"(click)="redirectAgent()"></button>
+                    <button pButton type="button" label="{{btnTextBack}}" (click)="redirectAgent()"></button>
                 </div>
             </div>
         </form>
