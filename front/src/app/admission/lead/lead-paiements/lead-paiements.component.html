@@ -1,0 +1,62 @@
+<div class="grid card col-12">
+    <p-fieldset legend="Paiement et documents administratives" *ngIf="PROSPECT" style="width: 100%;">
+        <div class="col-12 grid">
+            <div class="col-6">
+                <strong>Effectuer un paiement:</strong>
+            </div>
+    
+            <p class="col-6"><a
+                    href="https://elitechgroupe-my.sharepoint.com/:w:/g/personal/h_elkadhi_intedgroup_com/EYxI2p3lWoBMmXcePJ3cYIMB9Y0-S8ej4gvAlEpUvo8jZQ?e=EL4GsT">Lien
+                    en cours de dévéloppement</a></p>
+        </div>
+        <div class="col-12 grid">
+            <div class="col-6">
+                <strong>Montant payé:</strong>
+                <ul>
+                    <li *ngFor="let pay of PROSPECT.payement">
+                        <span>{{pay.type}} : {{pay.montant}}€</span>
+                    </li>
+                </ul>
+            </div>
+    
+            <p class="col-6"><strong>Reste à payer :</strong> {{resteAPayer}}€</p>
+        </div>
+        <div class="col-12 grid">
+            <div class="col-12">
+                <strong>Mes attestations disponibles:</strong>
+            </div>
+            <div class="col-12">
+                <p-table styleClass="p-datatable-gridlines" [value]="PROSPECT.documents_administrative"
+                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th>
+                                Date de délivrance
+                            </th>
+                            <th>
+                                Nom du document
+                            </th>
+                            <th>
+                                Lien de téléchargement
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{rowData.date | date:'mediumDate'}}
+                            </td>
+                            <td>
+                                {{rowData.nom}}
+                            </td>
+                            <td>
+                                <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+    
+        </div>
+    </p-fieldset>
+</div>

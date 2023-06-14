@@ -331,6 +331,11 @@ import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
 import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
 import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
+import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
+import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
+import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
+import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
+import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
 
 
 @NgModule({
@@ -671,7 +676,12 @@ import { PaiementComponent } from './international/generation-doc/paiement/paiem
     ListTicketsRefuseComponent,
     ConfigurationComponent,
     DashboardTicketingComponent,
-    PaiementComponent
+    PaiementComponent,
+    LeadInformationsPersonnelComponent,
+    LeadProgrammeComponent,
+    LeadSuiviComponent,
+    LeadPaiementsComponent,
+    LeadDossierComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -12,14 +12,27 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 export class EcoleAdmissionComponent implements OnInit {
 
   ecoles: EcoleAdmission[] = []
+  langueList = [
+    { label: 'Français', value: 'Français' },
+    { label: 'English', value: 'English' },
+  ]
   selectedEcole: EcoleAdmission
   constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService) { }
-
+  campusList = [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Congo Brazzaville', value: 'Congo Brazzaville' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Malte', value: 'Malte' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
   ngOnInit(): void {
     this.FAService.EAgetAll().subscribe(data => {
+      console.log(data)
       this.ecoles = data
     })
-    this.FAService.FAgetAll().subscribe(data=>{
+    this.FAService.FAgetAll().subscribe(data => {
       this.formationsList = data
     })
   }
@@ -31,6 +44,8 @@ export class EcoleAdmissionComponent implements OnInit {
     email: new FormControl(''),
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
+    campus: new FormControl([], Validators.required),
+    langue: new FormControl('Français')
   })
 
   initUpdate(rowData: EcoleAdmission) {
@@ -53,6 +68,8 @@ export class EcoleAdmissionComponent implements OnInit {
     email: new FormControl(''),
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
+    campus: new FormControl([], Validators.required),
+    langue: new FormControl('Français')
   })
 
   addForm = false

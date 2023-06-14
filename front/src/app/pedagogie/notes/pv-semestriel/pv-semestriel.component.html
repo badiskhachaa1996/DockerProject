@@ -78,8 +78,15 @@
                 </tr>
                 <tr>
                     <th class="text-center" colspan="6">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols">
-                        {{col.coeff}}
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols"  [pEditableColumn]="col.coeff" pEditableColumnField="coeff">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="number" [(ngModel)]="col.coeff">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{col.coeff}}
+                            </ng-template>
+                        </p-cellEditor>
                     </th>
                 </tr>
             </ng-template>
@@ -181,8 +188,15 @@
                 </tr>
                 <tr>
                     <th class="text-center" colspan="6">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of cols">
-                        {{col.coeff}}
+                    <th class="text-center" *ngFor="let col of cols" [pEditableColumn]="col.coeff" pEditableColumnField="coeff">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="number" [(ngModel)]="col.coeff">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{col.coeff}}
+                            </ng-template>
+                        </p-cellEditor>
                     </th>
                     <th class="text-center">
                         {{totalCoeff()}}

@@ -166,6 +166,10 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         console.log(this.RENTREE, this.ECOLE, this.programEnDropdown, this.programeFrDropdown)
 
       })
+      this.campusDropdown = []
+      data.campus.forEach(c => {
+        this.campusDropdown.push({ label: c, value: c })
+      })
     })
 
     this.defaultDropdown = this.programeFrDropdown
