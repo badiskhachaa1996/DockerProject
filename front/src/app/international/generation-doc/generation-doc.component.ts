@@ -45,7 +45,7 @@ export class GenerationDocComponent implements OnInit {
         this.formationDropdown.push({ label: f.nom, value: f._id })
       })
     })
-    this.AService.getAllSourcing().subscribe(data => {
+    this.AService.getAll().subscribe(data => {
       this.prospectDropdown = []
       data.forEach(p => {
         let { user_id }: any = p
