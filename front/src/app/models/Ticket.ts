@@ -25,6 +25,11 @@ export class Ticket {
         }[],
         public priorite?: string,
         public note?: string,
+        public documents_service?: {
+            _id?: string,
+            nom?: string,
+            path?: string,
+        }[],
     ) { }
 
 

@@ -29,180 +29,205 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Création d'une entreprise </h4>
-            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
-                    <br>
-                    <div>
-                        <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
-                    </div>
-                    <br>
-                    <form [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
-                        <div *ngIf="ActiveIndex==0">
-                            <div style="color: black; font-weight: normal">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12">
-                                        <label for="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
-                                        <input pInputText id="raison_sociale" type="text" formControlName="r_sociale" placeholder="Nom de l'entreprise " />
-                                    </div>
-                                    <!-- <div class="field col-12 md:col-6">
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <br>
+            <div>
+                <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
+            </div>
+            <br>
+            <form [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
+                <div *ngIf="ActiveIndex==0">
+                    <div style="color: black; font-weight: normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label for="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
+                                <input pInputText id="raison_sociale" type="text" formControlName="r_sociale"
+                                    placeholder="Nom de l'entreprise " />
+                            </div>
+                            <!-- <div class="field col-12 md:col-6">
                                         <label For="forme_juridique">Forme juridique </label>
                                         <input pInputText id="forme_juridique" type="text" formControlName="fm_juridique" placeholder="Forme juridique" />
                                     </div> -->
 
-                                    <div class="field col-12">
-                                        <label For="activite">Activité de l'entreprise <span style="color: red;"> * </span></label>
-                                        <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"  formControlName="activite" placeholder="Description des activités de l'entreprise"></textarea>
-                                    </div>
+                            <div class="field col-12">
+                                <label For="activite">Activité de l'entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"
+                                    formControlName="activite"
+                                    placeholder="Description des activités de l'entreprise"></textarea>
+                            </div>
 
-                                    <!-- <div class="field col-12 md:col-4">
+                            <!-- <div class="field col-12 md:col-4">
                                         <label For="type_entreprise">Type d'entreprise </label>
                                         <input pInputText id="type_entreprise" type="text" formControlName="type_ent" placeholder="Type d'entreprise" />
                                     </div> -->
-                                    <div class="field col-12 md:col-6">
-                                        <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
-                                        <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie" formControlName="categorie"></p-multiSelect>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="isInterne">Entreprise Interne ? <span style="color: red;"> * </span></label>
-                                        <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
-                                    </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
+                                <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
+                                    formControlName="categorie"></p-multiSelect>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="isInterne">Entreprise Interne ? <span style="color: red;"> * </span></label>
+                                <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
+                            </div>
 
-                                    <div class="field col-12 md:col-8">
-                                        <label For="crc">Caisse de retraite complémentaire</label>
-                                        <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
-                                    </div>
+                            <div class="field col-12 md:col-8">
+                                <label For="crc">Caisse de retraite complémentaire</label>
+                                <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
+                            </div>
 
-                                    <div class="field col-12 md:col-4">
-                                        <label For="nb_salarie">Nombre de salariés</label>
-                                        <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
-                                    </div>
-        
-                                    <div class="field col-12 md:col-8">
-                                        <label For="convention">Convention collective</label>
-                                        <input pInputText id="convention" type="text" formControlName="convention" placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="idcc">Code IDCC</label>
-                                        <input pInputText type="number" formControlName="idcc" placeholder="0000" />
-                                    </div>
-                                    <div class="field col-4 md:col-4">
-                                        <label For="indicatif_ent">Indicatif <span style="color: red;"> * </span></label>
-                                        <input pInputText type="tel" formControlName="indicatif_ent" placeholder="+33" />
-                                    </div>
-                                    <div class="field col-8 md:col-8">
-                                        <label For="phone_ent">Téléphone <small>(entreprise)</small> <span style="color: red;"> * </span></label>
-                                        <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800"/>
-                                    </div>
-        
-                                    <!--Adresse du siège social-->
-                                    <h3 class="field col-12">Adresse du siège social</h3>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="adresse_ss">Adresse <span style="color: red;"> * </span></label>
-                                        <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent" placeholder="Numero et Nom de la rue" />
-                                    </div>
-                                    <div class="field col-12 md:col-3">
-                                        <label For="postal_ss">Code postal <span style="color: red;"> * </span></label>
-                                        <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent" placeholder="75001"/>
-                                    </div>
-                                    <div class="field col-12 md:col-3">
-                                        <label For="ville_ss">Ville <span style="color: red;"> * </span></label>
-                                        <input pInputText id="ville_ss" type="text" formControlName="ville_ent" placeholder="Paris" />
-                                    </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="nb_salarie">Nombre de salariés</label>
+                                <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
+                            </div>
 
-                                    <!--Adresse d’exécution du contrat -->
-                                    <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="adresse_ec">Adresse</label>
-                                        <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec" placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
-                                    </div>
-                                    <div class="field col-12 md:col-3">
-                                        <label For="postal_ec">Code postal</label>
-                                        <input pInputText id="postal_ec" type="text" formControlName="postal_ec" placeholder="75001" />    
-                                    </div>
-                                    <div class="field col-12 md:col-3">
-                                        <label For="ville_ec">Ville</label>
-                                        <input pInputText id="ville_ec" type="text" formControlName="ville_ec" placeholder="Paris" />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="siret">SIRET</label>
-                                        <input pInputText id="siret" maxlength=15 minlength=15 type="number"  formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="ape_naf">Code NAF</label>
-                                        <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf" placeholder="CODE NAF" />
-                                    </div>
+                            <div class="field col-12 md:col-8">
+                                <label For="convention">Convention collective</label>
+                                <input pInputText id="convention" type="text" formControlName="convention"
+                                    placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="idcc">Code IDCC</label>
+                                <input pInputText type="number" formControlName="idcc" placeholder="0000" />
+                            </div>
+                            <div class="field col-4 md:col-4">
+                                <label For="indicatif_ent">Indicatif <span style="color: red;"> * </span></label>
+                                <input pInputText type="tel" formControlName="indicatif_ent" placeholder="+33" />
+                            </div>
+                            <div class="field col-8 md:col-8">
+                                <label For="phone_ent">Téléphone <small>(entreprise)</small> <span style="color: red;">
+                                        * </span></label>
+                                <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800" />
+                            </div>
 
-                                    <!-- <div class="field col-12 md:col-4">
+                            <!--Adresse du siège social-->
+                            <h3 class="field col-12">Adresse du siège social</h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ss">Adresse <span style="color: red;"> * </span></label>
+                                <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent"
+                                    placeholder="Numero et Nom de la rue" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ss">Code postal <span style="color: red;"> * </span></label>
+                                <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent"
+                                    placeholder="75001" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ss">Ville <span style="color: red;"> * </span></label>
+                                <input pInputText id="ville_ss" type="text" formControlName="ville_ent"
+                                    placeholder="Paris" />
+                            </div>
+
+                            <!--Adresse d’exécution du contrat -->
+                            <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ec">Adresse</label>
+                                <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec"
+                                    placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ec">Code postal</label>
+                                <input pInputText id="postal_ec" type="text" formControlName="postal_ec"
+                                    placeholder="75001" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ec">Ville</label>
+                                <input pInputText id="ville_ec" type="text" formControlName="ville_ec"
+                                    placeholder="Paris" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="siret">SIRET</label>
+                                <input pInputText id="siret" maxlength=15 minlength=15 type="number"
+                                    formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="ape_naf">Code NAF</label>
+                                <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf"
+                                    placeholder="CODE NAF" />
+                            </div>
+
+                            <!-- <div class="field col-12 md:col-4">
                                         <label For="tva">Numéro TVA </label>
                                         <input pInputText id="tva" type="text" formControlName="num_tva" placeholder="Numéro TVA" />
                                     </div>   -->
-        
-                                    <!-- <div class="field col-12 md:col-6">
+
+                            <!-- <div class="field col-12 md:col-6">
                                         <label For="lastname">Télécopie</label>
                                         <input pInputText id="telecopie" type="text" formControlName="telecopie" placeholder="Télécopie" />
                                     </div> -->
-        
-                                    <div class="field col-12 md:col-4">
-                                        <label For="OPCO">OPCO</label>
-                                        <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
-                                    </div>
-                                    <!-- <div class="field col-12 ">
+
+                            <div class="field col-12 md:col-4">
+                                <label For="OPCO">OPCO</label>
+                                <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
+                            </div>
+                            <!-- <div class="field col-12 ">
                                         <label For="organisme_prevoyance">Organisme de prevoyance</label>
                                         <input pInputText id="organisme_prevoyance" type="text" formControlName="organisme_prevoyance" placeholder="Organisme de prevoyance"/>
                                     </div> -->
 
-                                    <div class="field col-12 md:col-8">
-                                        <label For="commercial">Commercial referent</label>
-                                        <p-dropdown [options]="commercials" filter="true" placeholder="Commercial auprès de l'entreprise" [showClear]="true" formControlName="commercial"></p-dropdown>
-                                    </div>
-            
-                                    <div class="field col-6">
-                                        <button pButton type="button" label="Suivant"
-                                            (click)="nextPage();"></button>
-                                    </div>
-                                </div>
+                            <div class="field col-12 md:col-8">
+                                <label For="commercial">Commercial referent</label>
+                                <p-dropdown [options]="commercials" filter="true"
+                                    placeholder="Commercial auprès de l'entreprise" [showClear]="true"
+                                    formControlName="commercial"></p-dropdown>
                             </div>
-                        </div> 
 
-                        <div *ngIf="ActiveIndex==1">
-                            <div style="color: black;font-weight:normal">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-4">
-                                        <label For="civilite">Civilité</label>
-                                        <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite_rep" optionDisabled="actif"></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="lastname">Nom <span style="color: red">*</span></label>
-                                        <input pInputText id="lastname" type="text" formControlName="nom_rep" placeholder="Nom du dirigeant" />
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="firstname">Prénom <span style="color: red">*</span></label>
-                                        <input pInputText id="firstname" type="text" formControlName="prenom_rep" placeholder="Prenom du dirigeant" />
-                                    </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label For="email">Email du représentant</label>
-                                        <input pInputText id="email" type="email" formControlName="email_rep" placeholder="Email du dirigeant"/>
-                                    </div>
-                                    <div class="field col-3 md:col-4">
-                                        <label For="indicatif">Indicatif</label>
-                                        <input pInputText id="indicatif" type="tel" formControlName="indicatif_rep" placeholder="+01"/>
-                                    </div>
-                                    <div class="field col-9 md:col-8">
-                                        <label For="phone">Téléphone</label>
-                                        <input pInputText id="phone" type="tel" formControlName="phone_rep" placeholder="0188880050" />
-                                    </div>
-                                    <div class="field col-6">
-                                        <button pButton type="button" label="Précédent" style="float: left;" (click)="previousPage()"></button>
-                                    </div>
-                                    <div class="field col-6" *ngIf="userConnected.role != 'Watcher'">
-                                        <button pButton type="submit" label="Terminer" style="float: right;"></button>
-                                    </div>
-                                    <div class="field col-6" *ngIf="userConnected.role == 'Watcher'">
-                                        <button pButton type="submit" [disabled]="true" label="Terminer" style="float: right;"></button>
-                                    </div>
-                                </div>
+                            <div class="field col-6">
+                                <button pButton type="button" label="Suivant" (click)="nextPage();"></button>
                             </div>
-                        </div>   
-                    </form>    
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="ActiveIndex==1">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label For="civilite">Civilité</label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite_rep"
+                                    optionDisabled="actif"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="lastname">Nom </label>
+                                <input pInputText id="lastname" type="text" formControlName="nom_rep"
+                                    placeholder="Nom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="firstname">Prénom </label>
+                                <input pInputText id="firstname" type="text" formControlName="prenom_rep"
+                                    placeholder="Prenom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="email">Email du représentant</label>
+                                <input pInputText id="email" type="email" formControlName="email_rep"
+                                    placeholder="Email du dirigeant" />
+                            </div>
+                            <div class="field col-3 md:col-4">
+                                <label For="indicatif">Indicatif</label>
+                                <input pInputText id="indicatif" type="tel" formControlName="indicatif_rep"
+                                    placeholder="+01" />
+                            </div>
+                            <div class="field col-9 md:col-8">
+                                <label For="phone">Téléphone</label>
+                                <input pInputText id="phone" type="tel" formControlName="phone_rep"
+                                    placeholder="0188880050" />
+                            </div>
+                            <div class="field col-6">
+                                <button pButton type="button" label="Précédent" style="float: left;"
+                                    (click)="previousPage()"></button>
+                            </div>
+                            <div class="field col-6" *ngIf="userConnected.role != 'Watcher'">
+                                <button pButton type="submit" label="Terminer" style="float: right;"></button>
+                            </div>
+                            <div class="field col-6" *ngIf="userConnected.role == 'Watcher'">
+                                <button pButton type="submit" [disabled]="true" label="Terminer"
+                                    style="float: right;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
             <a routerLink="/entreprises" style="float: right;"><i class="pi pi-caret-right"></i> Voir les
                 entreprises</a>

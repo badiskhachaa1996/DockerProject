@@ -3,7 +3,7 @@
     <div *ngIf="ecole?.url_form=='int_education'" id="body" class="col-6">
         <div class="page-container" id="page-container">
             <div class="page-inner-content">
-                <div class="header">
+                <div class="header banner-int">
                     <style>
                         .centered-text {
                             text-align: center;
@@ -13,38 +13,39 @@
                         }
                     </style>
 
-                    <p class="centered-text"><br><br>Reçu de Paiement<br>(Frais de préinscription)</p>
+                    <p class="centered-text"><br><br>ATTESTATION DE PAIEMENT</p>
 
                 </div>
                 <div class="content-container">
                     <p id="intro-file" class="intro-file">
-                        Nous attestons avoir reçu la somme de 550 € comme de dossier de dossier de l’étudiant(e) :
+                        Nous attestons avoir reçu la somme de {{frais_preinscription}} € pour le règlement des frais de
+                        dossier :
                     </p>
                     <div class="owner-file">
                         <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
                             titlecase}}</h2>
-                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} - {{user?.pays_adresse}}</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
                     </div>
                     <div id="outro-file" class="outro-file">
-                        <p>Formation choisie : {{formation?.nom}}
-
-                            <br> Campus : {{ville|titlecase}}
-                            <br> <br> <strong> Détails de paiement : </strong>
-
-                            <br> 550 euros par {{modalite}}
+                        <p>
+                            <strong>Modalité de paiement :</strong> {{modalite}}<br>
+                            <strong>Formation:</strong> {{formation?.nom}} <br>
+                            <strong>Campus choisi :</strong> {{ville|titlecase}}
                         </p>
 
 
-                        <p><strong><br><br>*NB : Ce paiement est non remboursable en cas de non-obtention de visa,
-                                d’annulation de dossier ou de dépassement de délai de dépôt chez Campus France.</strong>
+                        <p style="text-decoration: underline;">
+                            <br><br>
+                            * Les frais de dossier ne sont pas remboursables en cas de non-obtention de visa,
+                            d’annulation de candidature ou de dépassement de délai de dépôt chez Campus France.
                         </p>
                         <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
                     </div>
                     <div class="date-sign-file">
                         <p id="certificate-date">Paris, le 3 mai 2023</p>
-                        <p><strong>Département ADMISSION</strong></p>
-                        <img id="school-signature"
-                            src="/assets/images/generation-documents/int-education/signature-int.png"
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/int-education/signature.png"
                             class="signature-image" />
                     </div>
                 </div>
@@ -56,10 +57,198 @@
                     <p id="school-siret">SIRET 453 183 394 000 49</p>
                     <div id="school-adress" class="adress-school">
                         <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
-                        <p>Campus Marne : 6 allée Hendrik Lorentz 77420 Champs sur Marne</p>
-                        <p>Campus Montpellier : 1 Place Charles De Gaulle 34170 Castelnau-le-Lez</p>
                     </div>
                     <img id="school-qr" src="/assets/images/generation-documents/int-education/qr-certificate.png"
+                        class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='adg'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-adg">
+                    <style>
+                        .centered-text {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+
+                    <p class="centered-text"><br><br>ATTESTATION DE PAIEMENT</p>
+
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons avoir reçu la somme de {{frais_preinscription}} € pour le règlement des frais de
+                        dossier :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>
+                            <strong>Modalité de paiement :</strong> {{modalite}}<br>
+                            <strong>Formation:</strong> {{formation?.nom}} <br>
+                            <strong>Campus choisi :</strong> {{ville|titlecase}}
+                        </p>
+
+
+                        <p style="text-decoration: underline;">
+                            <br><br>
+                            * Les frais de dossier ne sont pas remboursables en cas de non-obtention de visa,
+                            d’annulation de candidature ou de dépassement de délai de dépôt chez Campus France.
+                        </p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/adg/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">ADG EDUCATION</span> »</h3>
+                    <p id="school-details"> Tél. :+33 1 89 19 55 25 - email : contact@adgeducation.com - site Internet :
+                        www.adgeducation.com</p>
+                    <p id="school-siret">SIRET 520 041 906 000 48</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/adg/qr.png" class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='espic'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-espic">
+                    <style>
+                        .centered-text {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+
+                    <p class="centered-text"><br><br>ATTESTATION DE PAIEMENT</p>
+
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons avoir reçu la somme de {{frais_preinscription}} € pour le règlement des frais de
+                        dossier :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>
+                            <strong>Modalité de paiement :</strong> {{modalite}}<br>
+                            <strong>Formation:</strong> {{formation?.nom}} <br>
+                            <strong>Campus choisi :</strong> {{ville|titlecase}}
+                        </p>
+
+
+                        <p style="text-decoration: underline;">
+                            <br><br>
+                            * Les frais de dossier ne sont pas remboursables en cas de non-obtention de visa,
+                            d’annulation de candidature ou de dépassement de délai de dépôt chez Campus France.
+                        </p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/espic/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">ESPIC</span> »</h3>
+                    <p id="school-details"> Tél. :+33 1 73 43 58 85 - email : contact@espic.com - site Internet :
+                        www.espic.com</p>
+                    <p id="school-siret">SIRET 852 925 122 000 24</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/espic/qr.png"
+                        class="qr-file" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="ecole?.url_form=='studinfo'" id="body" class="col-6">
+        <div class="page-container" id="page-container">
+            <div class="page-inner-content">
+                <div class="header banner-studinfo">
+                    <style>
+                        .centered-text {
+                            text-align: center;
+                            font-size: 20px;
+                            /* Adjust the value as needed */
+                            line-height: 1.5;
+                        }
+                    </style>
+
+                    <p class="centered-text"><br><br>ATTESTATION DE PAIEMENT</p>
+
+                </div>
+                <div class="content-container">
+                    <p id="intro-file" class="intro-file">
+                        Nous attestons avoir reçu la somme de {{frais_preinscription}} € pour le règlement des frais de
+                        dossier :
+                    </p>
+                    <div class="owner-file">
+                        <h2>{{user?.civilite | titlecase}} {{user?.lastname | uppercase}} {{user?.firstname |
+                            titlecase}}</h2>
+                        <h2>Né(e) le {{prospect?.date_naissance | date: 'shortDate'}} {{extra}} {{user?.pays_adresse}}</h2>
+                    </div>
+                    <div id="outro-file" class="outro-file">
+                        <p>
+                            <strong>Modalité de paiement :</strong> {{modalite}}<br>
+                            <strong>Formation:</strong> {{formation?.nom}} <br>
+                            <strong>Campus choisi :</strong> {{ville|titlecase}}
+                        </p>
+
+
+                        <p style="text-decoration: underline;">
+                            <br><br>
+                            * Les frais de dossier ne sont pas remboursables en cas de non-obtention de visa,
+                            d’annulation de candidature ou de dépassement de délai de dépôt chez Campus France.
+                        </p>
+                        <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                    </div>
+                    <div class="date-sign-file">
+                        <p id="certificate-date">Paris, le 3 mai 2023</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img id="school-signature" src="/assets/images/generation-documents/studinfo/signature.png"
+                            class="signature-image" />
+                    </div>
+                </div>
+                <div class="footer-file">
+                    <h3>« <span id="school-name">STUDINFO </span> »</h3>
+                    <p id="school-details">Tél. : +33 1 73 43 58 82 - email : contact@espic.com - site Internet : www.espic.com</p>
+                    <p id="school-siret">SIRET 904 502 663 000 27</p>
+                    <div id="school-adress" class="adress-school">
+                        <p>Campus Paris : 25 Rue Coquillière, 75001 Paris, France</p>
+                    </div>
+
+                    <img id="school-qr" src="/assets/images/generation-documents/studinfo/qr.png"
                         class="qr-file" />
                 </div>
             </div>
@@ -85,22 +274,31 @@
             <label>Date de naissance {{prospect?.date_naissance | date: 'shortDate'}}</label><br>
             <p-calendar [(ngModel)]="prospect.date_naissance" dateFormat="dd/mm/yy"></p-calendar>
         </div>
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-4">
             <label>Civilite</label><br>
             <input type="text" pInputText [(ngModel)]="user.civilite" />
         </div>
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-4">
             <label>Campus</label><br>
             <input type="text" pInputText [(ngModel)]="ville" />
+        </div>
+        <div class="col-12 md:col-4">
+            <label>Néé le {{prospect?.date_naissance | date: 'shortDate'}} ... {{user.pays_adresse}}</label><br>
+            <p-dropdown [options]="dropdownExtra" [(ngModel)]="extra" [editable]="true"
+                placeholder="Choisissez un mot"></p-dropdown>
         </div>
 
     </div>
     <div class="col-12 grid" *ngIf="formation">
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-4">
             <label>Nom de la formation</label><br>
             <input type="text" pInputText [(ngModel)]="formation.nom" />
         </div>
-        <div class="col-12 md:col-6">
+        <div class="col-12 md:col-4">
+            <label>Montant des frais</label><br>
+            <input type="number" pInputText [(ngModel)]="accompte" />
+        </div>
+        <div class="col-12 md:col-4">
             <label>Modalité de paiement</label><br>
             <p-dropdown [options]="modaliteList" [(ngModel)]="modalite"
                 placeholder="Choisissez la modalité de paiement"></p-dropdown>

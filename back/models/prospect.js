@@ -283,6 +283,10 @@ const prospect_schema = new mongoose.Schema({
     documents_administrative: {
         type: [{ date: Date, nom: String, path: String, traited_by: String, note: String }],
         default: []
+    },
+    modalite: {
+        type: String,
+        default: "Inconnu"
     }
 });
 

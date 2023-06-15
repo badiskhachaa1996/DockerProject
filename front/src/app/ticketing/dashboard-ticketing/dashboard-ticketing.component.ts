@@ -152,8 +152,8 @@ export class DashboardTicketingComponent implements OnInit {
 
   onChangeFilter() {
     let filter: any = {}
-    /*if (this.serviceSelected && !this.sujetSelect == null)
-      filter.sujet_id = { $in: this.serviceSelected }*/
+    if (this.serviceSelected && this.sujetSelect == null)
+      filter.service_id = this.serviceSelected
     if (this.sujetSelect)
       filter.sujet_id = this.sujetSelect
     if (this.agentSelect)
@@ -162,15 +162,6 @@ export class DashboardTicketingComponent implements OnInit {
       filter.date_ajout = { $gt: new Date(this.periodeSelected[0]) }
     else if (this.periodeSelected.length == 2)
       filter.date_ajout = { $gt: new Date(this.periodeSelected[0]), $lt: new Date(this.periodeSelected[1]) }
-    if (this.serviceSelected && !this.sujetSelect == null) {
-      let temp = []
-      this.SujetService.getAllByServiceID(this.serviceSelected).subscribe(data => {
-        data.forEach(val => {
-          temp.push(val._id)
-        })
-        filter.sujet_id = { $in: temp }
-      })
-    }
     this.TicketService.getStats(filter).subscribe((data: Ticket[]) => {
       this.stats = {
         total: data.length,

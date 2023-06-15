@@ -26,6 +26,7 @@
                     <textarea pInputTextarea placeholder="20 Rue du Président 14000 Caen"
                         formControlName="adresse"></textarea>
                 </div>
+
                 <div class="field col-6">
                     <label>Adresse mail de contact</label>
                     <input pInputText type="text" placeholder="contact@ecole.com" formControlName="email" />
@@ -35,6 +36,17 @@
                     <input pInputText type="text" placeholder="https://ims.intedgroup.com/#/"
                         formControlName="site_web" />
                 </div>
+
+                <div class="field col-6">
+                    <label>Langue du Formulaire </label>
+                    <p-selectButton formControlName="langue" [options]="langueList"></p-selectButton>
+                </div>
+                <div class="field col-6">
+                    <label>Campus </label>
+                    <p-multiSelect formControlName="campus" [options]="campusList"
+                        placeholder="Choissisez les campus"></p-multiSelect>
+                </div>
+
                 <div>
                     <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
                 </div>
@@ -69,6 +81,7 @@
                     <textarea pInputTextarea placeholder="20 Rue du Président 14000 Caen"
                         formControlName="adresse"></textarea>
                 </div>
+
                 <div class="field col-6">
                     <label>Adresse mail de contact</label>
                     <input pInputText type="text" placeholder="contact@ecole.com" formControlName="email" />
@@ -77,6 +90,15 @@
                     <label>Site Web </label>
                     <input pInputText type="text" placeholder="https://ims.intedgroup.com/#/"
                         formControlName="site_web" />
+                </div>
+                <div class="field col-6">
+                    <label>Campus </label>
+                    <p-multiSelect formControlName="campus" [options]="campusList"
+                        placeholder="Choissisez les campus"></p-multiSelect>
+                </div>
+                <div class="field col-6">
+                    <label>Langue du Formulaire </label>
+                    <p-selectButton formControlName="langue" [options]="langueList"></p-selectButton>
                 </div>
                 <div>
                     <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
@@ -138,6 +160,9 @@
                         <th pSortableColumn="adresse">Adresse<p-sortIcon field="adresse">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="campus">Campus<p-sortIcon field="campus">
+                            </p-sortIcon>
+                        </th>
                         <th pSortableColumn="email">Adresse email de contact<p-sortIcon field="email">
                             </p-sortIcon>
                         </th>
@@ -156,6 +181,9 @@
                         </td>
                         <td>
                             {{ ecole.adresse }}
+                        </td>
+                        <td>
+                            {{ ecole.campus }}
                         </td>
                         <td>
                             {{ ecole.email }}

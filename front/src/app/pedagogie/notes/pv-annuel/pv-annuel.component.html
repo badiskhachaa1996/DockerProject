@@ -2,8 +2,8 @@
     <div class="card" *ngFor="let semestre of SemestreList">
         <h5 *ngIf="classe">Liste des PVs {{semestre}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
-        <p-table #dt1 *ngIf="pvAnnuel[semestre]" [value]="pvAnnuel[semestre]" dataKey="_id" responsiveLayout="scroll" id="dt1"
-            [totalRecords]="pvAnnuel[semestre].length" styleClass="p-datatable-gridlines">
+        <p-table #dt1 *ngIf="pvAnnuel[semestre]" [value]="pvAnnuel[semestre]" dataKey="_id" responsiveLayout="scroll"
+            id="dt1" [totalRecords]="pvAnnuel[semestre].length" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
@@ -78,8 +78,15 @@
                 </tr>
                 <tr>
                     <th class="text-center" colspan="5">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols">
-                        {{col.coeff}}
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols" [pEditableColumn]="col.coeff" pEditableColumnField="coeff">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="number" [(ngModel)]="col.coeff">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{col.coeff}}
+                            </ng-template>
+                        </p-cellEditor>
                     </th>
                 </tr>
             </ng-template>
@@ -216,7 +223,7 @@
                             </th>
                         </ng-container>
                     </ng-container>
-                   <!-- <ng-container *ngIf="colsAnnuel">
+                    <!-- <ng-container *ngIf="colsAnnuel">
                         <th class="text-center" *ngFor="let col of colsAnnuel">
                             {{col.coeff}}
                         </th>

@@ -16,6 +16,7 @@ import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -49,9 +50,9 @@ export class SourcingComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
 
         this.expandRow(this.showUploadFile)
-        this.prospects.forEach(p => {
+        this.prospects[this.showUploadFile.type_form].forEach(p => {
           if (p._id == this.showUploadFile._id) {
-            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(p)].haveDoc = true
             //this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
           }
         })
@@ -117,7 +118,7 @@ export class SourcingComponent implements OnInit {
       (error) => { console.error(error) }
     );
     this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
-      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+      this.prospects[prospect.type_form][this.prospects[prospect.type_form].indexOf(prospect)].etat_traitement = "Vu"
     })
   }
 
@@ -234,6 +235,8 @@ export class SourcingComponent implements OnInit {
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private UserService: AuthService) { }
 
   prospects: any[];
+  dicEcole = {}
+  ecoleList: EcoleAdmission[] = []
   AccessLevel = "Spectateur"
   selectedProspect: Prospect = null
 
@@ -253,9 +256,6 @@ export class SourcingComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.filterPays = this.filterPays.concat(environment.pays)
-    this.admissionService.getAllSourcing().subscribe(data => {
-      this.prospects = data
-    })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -293,9 +293,17 @@ export class SourcingComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(d => {
-        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-        //this.filterEcole.push({ label: d.titre, value: d.url_form })
+      this.admissionService.getAllSourcing().subscribe(dataP => {
+        this.prospects = dataP
+        data.forEach(d => {
+          this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+          this.ecoleList.push(d)
+          this.dicEcole[d.url_form] = d
+        })
+        Object.keys(this.dicEcole).forEach((val, idx) => {
+          if (!dataP[val])
+            this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
       })
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
@@ -337,7 +345,7 @@ export class SourcingComponent implements OnInit {
     if (data.agent_sourcing_id || data.team_sourcing_id)
       data.phase_candidature = "En phase d'orientation scolaire"
     this.admissionService.updateV2(data).subscribe(newProspect => {
-      this.prospects.splice(this.prospects.indexOf(this.showAffectation), 1, newProspect)
+      this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
       this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })
@@ -380,10 +388,10 @@ export class SourcingComponent implements OnInit {
 
   })
 
-  exportExcel() {
+  exportExcel(url_form) {
     let dataExcel = []
     //Clean the data
-    this.prospects.forEach(p => {
+    this.prospects[url_form].forEach(p => {
       let t = {}
       t['Date Inscr.'] = p?.date_creation
       t['ID Lead'] = p?.customid
@@ -508,7 +516,7 @@ export class SourcingComponent implements OnInit {
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this.prospects[this.showDetails.type_form].splice(this.prospects[this.showDetails.type_form].indexOf(this.showDetails), 1, data)
       if (willClose)
         this.showDetails = null
     })
@@ -639,7 +647,7 @@ export class SourcingComponent implements OnInit {
     let { user_id }: any = prospect
     if (confirm('Voulez-vous vraiment supprimer ' + user_id?.lastname + " " + user_id?.firstname + " ?"))
       this.admissionService.delete(prospect._id, user_id._id).subscribe(data => {
-        this.prospects.splice(this.prospects.indexOf(prospect), 1)
+        this.prospects[prospect.type_form].splice(this.prospects[prospect.type_form].indexOf(prospect), 1)
         this.messageService.add({ severity: "success", summary: "Lead supprimé avec succès" })
       })
   }

@@ -14,6 +14,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 
 @Component({
   selector: 'app-orientation',
@@ -49,9 +50,9 @@ export class OrientationComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
 
         this.expandRow(this.showUploadFile)
-        this.prospects.forEach(p => {
+        this.prospects[this.showUploadFile.type_form].forEach(p => {
           if (p._id == this.showUploadFile._id) {
-            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(p)].haveDoc = true
             //this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
           }
         })
@@ -117,7 +118,7 @@ export class OrientationComponent implements OnInit {
       (error) => { console.error(error) }
     );
     this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
-      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+      this.prospects[prospect.type_form][this.prospects[prospect.type_form].indexOf(prospect)].etat_traitement = "Vu"
     })
   }
 
@@ -222,11 +223,13 @@ export class OrientationComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
   filterEcole = []
+  dicEcole = {}
+  ecoleList: EcoleAdmission[] = []
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
     private PartenaireService: PartenaireService, private UserService: AuthService) { }
 
-  prospects: Prospect[];
+  prospects = {}
 
   selectedProspect: Prospect = null
 
@@ -248,16 +251,6 @@ export class OrientationComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.filterPays = this.filterPays.concat(environment.pays)
-    this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
-      if (member)
-        this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(data => {
-          this.prospects = data
-        })
-      else
-        this.admissionService.getAllOrientation().subscribe(data => {
-          this.prospects = data
-        })
-    })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -290,10 +283,37 @@ export class OrientationComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(d => {
-        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-        this.filterEcole.push({ label: d.titre, value: d.url_form })
+      this.TeamsIntService.MIgetByUSERID(this.token.id).subscribe(member => {
+        if (member)
+          this.admissionService.getAllAffected(member.team_id._id, member._id).subscribe(dataP => {
+            this.prospects = dataP
+            data.forEach(d => {
+              this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+              this.filterEcole.push({ label: d.titre, value: d.url_form })
+              this.ecoleList.push(d)
+              this.dicEcole[d.url_form] = d
+            })
+            Object.keys(this.dicEcole).forEach((val, idx) => {
+              if (!dataP[val])
+                this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+            })
+          })
+        else
+          this.admissionService.getAllOrientation().subscribe(dataP => {
+            this.prospects = dataP
+            data.forEach(d => {
+              this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+              this.filterEcole.push({ label: d.titre, value: d.url_form })
+              this.ecoleList.push(d)
+              this.dicEcole[d.url_form] = d
+            })
+            Object.keys(this.dicEcole).forEach((val, idx) => {
+              if (!dataP[val])
+                this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+            })
+          })
       })
+
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
       if (data.roles_list)
@@ -352,7 +372,7 @@ export class OrientationComponent implements OnInit {
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
+      this.prospects[data.type_form].splice(this.prospects[data.type_form].indexOf(this.showTraitement), 1, data)
       if (willClose) {
         this.showTraitement = null
         this.traitementForm.reset()
@@ -484,7 +504,7 @@ export class OrientationComponent implements OnInit {
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this.prospects[data.type_form].splice(this.prospects[data.type_form].indexOf(this.showDetails), 1, data)
       if (willClose)
         this.showDetails = null
     })

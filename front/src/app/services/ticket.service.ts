@@ -152,6 +152,12 @@ export class TicketService {
 
   }
 
+  addFileService(formdata: FormData) {
+    let registreUrl = this.apiUrl + "addFile";
+    return this.http.post<Ticket[]>(registreUrl, formdata, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
   getAllNonAssigne() {
     let registreUrl = this.apiUrl + "getAllNonAssigne";
     return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -185,6 +191,26 @@ export class TicketService {
     let registreUrl = this.apiUrl + "getStats";
     return this.http.post<any>(registreUrl, filter, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
+  }
+
+  uploadFileService(formData: FormData) {
+    let registreUrl = this.apiUrl + "uploadFileService"
+    return this.http.post<Ticket>(registreUrl, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  downloadFileService(_id: string, file_id: string, path: string) {
+    let registreUrl = this.apiUrl + "downloadFileService/" + _id + "/" + file_id + "/" + path
+    return this.http.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  uploadFile(formData: FormData) {
+    let registreUrl = this.apiUrl + "uploadFile"
+    return this.http.post<Ticket>(registreUrl, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  downloadFile(_id: string, file_id: string, path: string) {
+    let registreUrl = this.apiUrl + "downloadFile/" + _id + "/" + file_id + "/" + path
+    return this.http.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }
