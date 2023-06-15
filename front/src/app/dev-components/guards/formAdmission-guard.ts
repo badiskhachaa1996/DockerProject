@@ -22,7 +22,7 @@ export class FormAdmissionGuard implements CanActivate {
             route.params.ecole.toLowerCase() == "estya" || route.params.ecole.toLowerCase() == "eduhorizons" ||
             route.params.ecole.toLowerCase() == "adg" || route.params.ecole.toLowerCase() == "studinfo" ||
             route.params.ecole.toLowerCase() == "intunivesity" || route.params.ecole.toLowerCase() == "estya-dubai" ||
-            route.params.ecole.toLowerCase() == "icbsmalte" || route.params.ecole.toLowerCase() == "medasup" || route.params.ecole.toLowerCase() == "btech" ||
+            route.params.ecole.toLowerCase() == "icbsmalta" || route.params.ecole.toLowerCase() == "medasup" || route.params.ecole.toLowerCase() == "btech" ||
             route.params.ecole.toLowerCase() == "inteducation") {
             return true
         }

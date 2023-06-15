@@ -336,6 +336,7 @@ import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-pro
 import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
 import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
 import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
+import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 
 
 @NgModule({
@@ -681,7 +682,8 @@ import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier
     LeadProgrammeComponent,
     LeadSuiviComponent,
     LeadPaiementsComponent,
-    LeadDossierComponent
+    LeadDossierComponent,
+    VersionNonIframeComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

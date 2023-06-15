@@ -148,6 +148,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       this.programeFrDropdown = this.defaultDropdown
   }
   changeLanguage(langue) {
+    this.ECOLE.langue = langue
     if (langue == "English") {
       this.typeFormationDropdown = [
         { value: "Initial" },
@@ -266,7 +267,12 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       if (!data)
         this.router.navigate(['/'])
       this.ECOLE = data
-      this.changeLanguage(data.langue)
+      if (!this.route.snapshot.paramMap.get('lang'))
+        this.changeLanguage(data.langue)
+      else if (this.route.snapshot.paramMap.get('lang') == 'fr')
+        this.changeLanguage('Français')
+      else if (this.route.snapshot.paramMap.get('lang') == 'en')
+        this.changeLanguage('English')
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         this.RENTREE = dataEcoles
         data.formations.forEach(f => {
@@ -278,7 +284,6 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         dataEcoles.forEach(rentre => {
           this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
         })
-        console.log(this.RENTREE, this.ECOLE, this.programEnDropdown, this.programeFrDropdown)
 
       })
       this.campusDropdown = []

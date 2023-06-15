@@ -382,9 +382,8 @@
                             <i *ngIf="!isFormateur && !examen.canEdit" class="pi pi-lock-open ml-1"
                                 pTooltip="Autorisez le formateur a modifié" tooltipPosition="bottom"
                                 (click)="allowEdit(examen)"></i>
-                            <i *ngIf="!isFormateur || examen.canEdit" class="pi pi-file-excel ml-1"
-                                pTooltip="Attribuer des notes" tooltipPosition="bottom"
-                                (click)="loadEtudiantsForNote(examen);scrollToTop()"></i>
+                            <i *ngIf="!isFormateur" class="pi pi-file-excel ml-1" pTooltip="Attribuer des notes"
+                                tooltipPosition="bottom" (click)="loadEtudiantsForNote(examen);scrollToTop()"></i> <!-- || examen.canEdit-->
                             <i class="pi pi-download ml-1" pTooltip="Télécharger les notes" tooltipPosition="bottom"
                                 (click)="exportExel(examen)"></i>
                             <i class="pi pi-cog" pTooltip="Modifier et Corriger le semestre" tooltipPosition="bottom"
