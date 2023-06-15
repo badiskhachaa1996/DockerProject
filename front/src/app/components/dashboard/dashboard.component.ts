@@ -709,7 +709,8 @@ export class DashboardComponent implements OnInit {
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-
+        // remise à zero du temps de pause
+        this.pauseTiming = 0;
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
       })
