@@ -380,7 +380,14 @@ app.get("/getAllSourcing", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
