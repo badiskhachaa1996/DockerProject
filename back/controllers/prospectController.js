@@ -426,13 +426,28 @@ app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
         })
         .catch((error) => { res.status(500).send(error.message); });*/
 });
-
+function getModalite(listPayement) {
+    let str = listPayement[0].type
+    listPayement.forEach((paiement, index) => {
+        if (index != 0 && paiement.type)
+            str = str + "," + paiement.type
+    })
+    return str
+}
 //Recuperation de la liste des prospect pour le tableau Paiement
 app.get("/getAllPaiement", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, "payement.0": { $exists: true } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                val['modalite'] = getModalite(val.payement)
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -442,7 +457,14 @@ app.get("/getAllOrientation", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ team_sourcing_id: { $ne: null } }, { agent_sourcing_id: { $ne: null } }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -452,7 +474,14 @@ app.get("/getAllAdmission", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ decision_orientation: "Validé" }, { decision_orientation: "Changement de campus" }, { decision_orientation: "Changement de formation" }, { decision_orientation: "Changement de destination" }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -1004,7 +1033,14 @@ app.post("/send-creation-link", (req, res) => {
 app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
     Prospect.find({ $or: [{ agent_sourcing_id: req.params.agent_id }, { team_sourcing_id: req.params.team_id }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 })

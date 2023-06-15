@@ -304,7 +304,6 @@ export class SourcingComponent implements OnInit {
           if (!dataP[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
-        console.log(this.ecoleList, this.dicEcole)
       })
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
