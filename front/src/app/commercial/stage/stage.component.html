@@ -15,7 +15,9 @@
             <form [formGroup]="formAdd" (ngSubmit)="onAdd()">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12">
-                        <label for="student_id">Étudiant<span style="color: red;">*</span></label>
+                        <label for="student_id"
+                            >Étudiant<span style="color: red">*</span></label
+                        >
                         <p-dropdown
                             formControlName="student_id"
                             id="student_id"
@@ -25,18 +27,22 @@
                     </div>
 
                     <div class="field md:col-6 col-12">
-                        <label for="enterprise_id">Entreprise<span style="color: red;">*</span></label>
+                        <label for="enterprise_id"
+                            >Entreprise<span style="color: red">*</span></label
+                        >
                         <p-dropdown
                             formControlName="enterprise_id"
                             id="enterprise_id"
                             [options]="enterprises"
                             filter="true"
-                            (onChange)="onLoadTutors($event)"
+                            (onChange)="onLoadTutors($event.value)"
                         ></p-dropdown>
                     </div>
 
                     <div class="field md:col-6 col-12">
-                        <label for="tutor_id">Tuteur<span style="color: red;">*</span></label>
+                        <label for="tutor_id"
+                            >Tuteur<span style="color: red">*</span></label
+                        >
                         <p-dropdown
                             formControlName="tutor_id"
                             id="tutor_id"
@@ -46,7 +52,11 @@
                     </div>
 
                     <div class="field md:col-6 col-12">
-                        <label for="begin_date">Date de debut<span style="color: red;">*</span></label>
+                        <label for="begin_date"
+                            >Date de debut<span style="color: red"
+                                >*</span
+                            ></label
+                        >
                         <input
                             pInputText
                             formControlName="begin_date"
@@ -56,7 +66,9 @@
                     </div>
 
                     <div class="field md:col-6 col-12">
-                        <label for="end_date">Date de fin<span style="color: red;">*</span></label>
+                        <label for="end_date"
+                            >Date de fin<span style="color: red">*</span></label
+                        >
                         <input
                             pInputText
                             formControlName="end_date"
@@ -67,7 +79,9 @@
 
                     <div class="field md:col-3 col-12">
                         <label for="schedules_per_week"
-                            >Horaires/ semaines<span style="color: red;">*</span></label
+                            >Horaires/ semaines<span style="color: red"
+                                >*</span
+                            ></label
                         >
                         <input
                             pInputText
@@ -88,7 +102,11 @@
                     </div>
 
                     <div class="field col-12">
-                        <label for="mission_tasks">Tâche de la mission<span style="color: red;">*</span></label>
+                        <label for="mission_tasks"
+                            >Tâche de la mission<span style="color: red"
+                                >*</span
+                            ></label
+                        >
                         <textarea
                             pInputTextarea
                             formControlName="mission_tasks"
@@ -98,7 +116,11 @@
                     </div>
 
                     <div class="field md:col-5 col-12">
-                        <label for="gratification">Gratification<span style="color: red;">*</span></label>
+                        <label for="gratification"
+                            >Gratification<span style="color: red"
+                                >*</span
+                            ></label
+                        >
                         <input
                             pInputText
                             formControlName="gratification"
@@ -109,7 +131,9 @@
 
                     <div class="field md:col-7 col-12">
                         <label for="payment_modality"
-                            >Modalités de paiements<span style="color: red;">*</span></label
+                            >Modalités de paiements<span style="color: red"
+                                >*</span
+                            ></label
                         >
                         <input
                             pInputText
@@ -130,7 +154,11 @@
                     </div>
 
                     <div class="field col-12">
-                        <label for="school_year">Année-scolaire<span style="color: red;">*</span></label>
+                        <label for="school_year"
+                            >Année-scolaire<span style="color: red"
+                                >*</span
+                            ></label
+                        >
                         <p-multiSelect
                             class="p-dropdown-clearable"
                             [options]="anneeScolaires"
@@ -198,7 +226,7 @@
                             id="enterprise_id"
                             [options]="enterprises"
                             filter="true"
-                            (onChange)="onLoadTutors($event)"
+                            (onChange)="onLoadTutors($event.value)"
                         ></p-dropdown>
                     </div>
 
@@ -214,22 +242,30 @@
 
                     <div class="field md:col-6 col-12">
                         <label for="begin_date">Date de debut</label>
-                        <input
-                            pInputText
+                        <p-calendar
+                            [monthNavigator]="true"
+                            [yearNavigator]="true"
+                            [required]="true"
+                            [showOnFocus]="false"
+                            [showIcon]="true"
+                            placeHolder="26/05/1998"
+                            dateFormat="dd/mm/yy"
                             formControlName="begin_date"
-                            id="begin_date"
-                            type="date"
-                        />
+                        ></p-calendar>
                     </div>
 
                     <div class="field md:col-6 col-12">
                         <label for="end_date">Date de fin</label>
-                        <input
-                            pInputText
+                        <p-calendar
+                            [monthNavigator]="true"
+                            [yearNavigator]="true"
+                            [required]="true"
+                            [showOnFocus]="false"
+                            [showIcon]="true"
+                            placeHolder="26/05/1998"
+                            dateFormat="dd/mm/yy"
                             formControlName="end_date"
-                            id="begin_date"
-                            type="date"
-                        />
+                        ></p-calendar>
                     </div>
 
                     <div class="field md:col-3 col-12">

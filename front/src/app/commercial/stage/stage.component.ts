@@ -193,7 +193,7 @@ export class StageComponent implements OnInit {
     // recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe({
       next: (response) => {
-        this.enterprises = [{ label: '--Veuillez choisir une entreprise--', value: null }];
+        this.enterprises = [];
         response.forEach((entreprise: Entreprise) => {
           this.enterprises.push({ label: entreprise.r_sociale, value: entreprise._id });
         });
@@ -240,25 +240,35 @@ export class StageComponent implements OnInit {
 
 
   // méthode de chargement de la liste des tuteurs d'une entreprise
-  onLoadTutors(event: any): void {
-    this.tuteurs = [{ label: '--Veuillez choisir le tuteur--', value: null }];
+  onLoadTutors(event: any, idTuteur: string = null): void {
+    this.tuteurs = [];
     // recuperation du ceo de l'entreprise
-    this.entrepriseService.getByIdPopulate(event.value).subscribe({
+    this.entrepriseService.getByIdPopulate(event).subscribe({
       next: (entreprise: Entreprise) => {
-        this.tuteurService.getAllByEntrepriseId(event.value).subscribe({
+        this.tuteurService.getAllByEntrepriseId(event).subscribe({
           next: (response: Tuteur[]) => {
-            if (entreprise.directeur_id) {
-              let { directeur_id }: any = entreprise;
-              let enterpriseCeoData = { label: `${directeur_id.firstname} ${directeur_id.lastname}`, value: directeur_id._id }
-              this.tuteurs.push(enterpriseCeoData);
-              // affectation de l'id du ceo à la variable actualDirectorId
-              this.actualDirectorId = directeur_id._id;
-            }
+            let { directeur_id }: any = entreprise;
+            let enterpriseCeoData = { label: `${directeur_id.firstname} ${directeur_id.lastname}`, value: directeur_id._id }
+            this.tuteurs.push(enterpriseCeoData);
+            // affectation de l'id du ceo à la variable actualDirectorId
+            this.actualDirectorId = directeur_id._id;
             response.forEach((tuteur: Tuteur) => {
               let { user_id }: any = tuteur;
-              let tutorData = { label: `${user_id?.firstname} ${user_id?.lastname}`, value: tuteur._id };
+              let tutorData = { label: `${user_id.firstname} ${user_id.lastname}`, value: tuteur._id };
               this.tuteurs.push(tutorData);
             });
+
+            // remplissage du formulaire de modif avec l'id du tuteur
+            if (idTuteur != null) {
+              this.tuteurs.forEach((tuteur: any) => {
+                if(idTuteur == tuteur.value)
+                {
+                  this.formUpdate.patchValue({
+                    tutor_id: tuteur,
+                  });
+                }
+              });
+            }
           },
           error: (error) => { this.messageService.add({ severity: 'error', summary: 'Tuteurs', detail: 'Impossible de récupérer la liste des tuteurs, veuillez contacter un administrateur' }); }
         });
@@ -309,16 +319,25 @@ export class StageComponent implements OnInit {
   onPatchFormUpdate(stage: Stage): void {
     this.stageToUpdate = stage;
     let { student_id }: any = stage;
+
     let { enterprise_id }: any = stage;
     let { tutor_id }: any = stage;
+    let { director_id }: any = stage;
+
+    if (tutor_id != null) {
+      this.onLoadTutors(enterprise_id._id, tutor_id.user_id._id);
+    } else {
+      this.onLoadTutors(enterprise_id._id, director_id._id);
+    }
+
     let { commercial_id }: any = stage;
 
     this.formUpdate.patchValue({
       student_id: { label: `${student_id.user_id?.firstname} ${student_id.user_id?.lastname}`, value: student_id._id },
-      // enterprise_id: { label: enterprise_id.r_sociale, value: enterprise_id._id },
+      enterprise_id: { label: enterprise_id.r_sociale, value: enterprise_id._id },
       // tutor_id: { label: `${tutor_id.user_id?.firstname} ${tutor_id.user_id?.lastname}`, value: tutor_id._id },
-      // begin_date: stage.begin_date,
-      // end_date: stage.end_date,
+      begin_date: new Date(stage.begin_date),
+      end_date: new Date(stage.end_date),
       schedules_per_week: stage.schedules_per_week,
       commercial_id: { label: `${commercial_id?.firstname} ${commercial_id?.lastname}`, value: commercial_id?._id },
       mission_tasks: stage.mission_tasks,
