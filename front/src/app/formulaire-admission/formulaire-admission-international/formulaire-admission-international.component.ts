@@ -155,8 +155,8 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       ];
       this.programList =
         [
-          { value: "French program" },
-          { value: "English program" },
+          { value: "French Program" },
+          { value: "English Program" },
         ];
       this.niveauFR =
         [
