@@ -25,7 +25,7 @@
             style="width: 10%;" class="m-2">
         <img *ngIf="form_origin=='icbsdubai'" src="\assets\images\logo-icbs-dubai.png" alt="logo icbsdubai"
             style="width: 10%;" class="m-2">
-        <img *ngIf="form_origin=='icbsmalte'" src="\assets\images\ilogo-icbs-malte.png" alt="logo icbsmalte"
+        <img *ngIf="form_origin=='icbsmalte'" src="\assets\images\logo-icbs-malte.png" alt="logo icbsmalte"
             style="width: 10%;" class="m-2">
 
 
@@ -827,38 +827,39 @@
                         <div class="p-fluid p-formgrid grid">
 
                             <div class="field col-12">
-                                <p-dropdown [options]="campusDropdown" optionLabel="value"
+                                <label>Campus <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="campusDropdown" optionLabel="value" placeholder="Choose your campus"
                                     formControlName="campusChoix1">
                                 </p-dropdown>
                             </div>
 
                             <div class="field col-12 md:col-12">
-                                <label>Back-to-school choice <span style="color: red;"> * </span></label>
+                                <label>Academic Year <span style="color: red;"> * </span></label>
                                 <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
-                                    placeholder="Choose your back-to-school date" (onChange)="choixRentree()">
+                                    placeholder="Choose your academic year" (onChange)="choixRentree()">
                                 </p-dropdown>
                             </div>
 
                             <div class="field col-12 md:col-4">
-                                <label>Choice of school program <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="programList" optionLabel="value" formControlName="programme">
+                                <label>Language of program <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"  placeholder="Choose your language of program">
                                 </p-dropdown>
                             </div>
                             <div class="field col-12 md:col-8"
                                 *ngIf="RegisterForm.value.programme.value=='English Program'">
-                                <label For="formation">Choice of course <span style="color: red;"> *</span></label>
+                                <label For="formation">Fields of studies <span style="color: red;"> *</span></label>
                                 <p-dropdown [options]="programEnDropdown" placeholder="Choose an English program"
                                     formControlName="formation"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-8"
                                 *ngIf="RegisterForm.value.programme.value=='French Program'">
-                                <label For="programme_fr">Choice of course <span style="color: red;"> *
+                                <label For="programme_fr">Fields of studies <span style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="programeFrDropdown" placeholder="Choose a French program"
                                     formControlName="formation"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-12">
-                                <label For="rythme">Pace of training <span style="color: red;"> *
+                                <label For="rythme">Type of training <span style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="typeFormationDropdown" optionLabel="value"
                                     formControlName="rythme_formation"></p-dropdown>

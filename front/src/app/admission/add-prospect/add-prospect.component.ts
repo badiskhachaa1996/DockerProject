@@ -81,15 +81,15 @@ export class AddProspectComponent implements OnInit {
         data.forEach(e => {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
           this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
-          this.sourceList = this.sourceList.concat([
-            { label: "Equipe communication", value: "Equipe communication" },
-            { label: "Bureau Congo", value: "Bureau Congo" },
-            { label: "Bureau Maroc", value: "Bureau Maroc" },
-            { label: "Collaborateur interne", value: "Collaborateur interne" },
-            { label: "Report", value: "Report" },
-            { label: "IGE", value: "IGE" }
-          ])
         })
+        this.sourceList = this.sourceList.concat([
+          { label: "Equipe communication", value: "Equipe communication" },
+          { label: "Bureau Congo", value: "Bureau Congo" },
+          { label: "Bureau Maroc", value: "Bureau Maroc" },
+          { label: "Collaborateur interne", value: "Collaborateur interne" },
+          { label: "Report", value: "Report" },
+          { label: "IGE", value: "IGE" }
+        ])
       })
     }
 
