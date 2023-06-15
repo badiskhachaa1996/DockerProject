@@ -439,9 +439,9 @@ export class ListeContratsComponent implements OnInit {
   }
 
 
-  loadTuteur(idENT, idTuteur = null) {
+  loadTuteur(event: any, tuteurId = null) {
     this.dropdownTuteurList = []
-
+    let idENT = event;
     // recuperation de l'entreprise pour avoir le nom du directeur
     this.entrepriseService.getByIdPopulate(idENT).subscribe(
       ((entreprise) => {
@@ -458,12 +458,19 @@ export class ListeContratsComponent implements OnInit {
                 tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
                 this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
               }
-              if (idTuteur && idTuteur == tut._id) {
-                this.formUpdateCa.patchValue({ tuteur_id: idTuteur, entreprise_id: idENT })
-              }
-
             })
-
+            if(tuteurId != null)
+            {
+              this.dropdownTuteurList.forEach((tuteur) => {
+                if(tuteur.value == tuteurId)
+                {
+                  this.formUpdateCa.patchValue({
+                    tuteur_id: {label: tuteur.label, value: tuteur.value}
+                  });
+                }
+              });
+            }
+            
           }, (eror) => { console.error(eror) })
       }),
       ((error) => { console.log(error); })
@@ -522,9 +529,21 @@ export class ListeContratsComponent implements OnInit {
     let bypass_alternant: any = contrat.alternant_id
     let bypass_formation: any = contrat.formation
     let bypass_commercial: any = contrat.code_commercial
+    let bypass_entreprise: any = contrat.entreprise_id;
+
+    let bypass_tuteur: any;
+    if(contrat.tuteur_id == null)
+    {
+      bypass_tuteur = contrat.directeur_id;
+      this.loadTuteur(bypass_entreprise._id, bypass_tuteur._id);
+    } else {
+      bypass_tuteur = contrat.tuteur_id;
+      this.loadTuteur(bypass_entreprise._id, bypass_tuteur.user_id._id);
+    }
+    
+
     this.formUpdateCa.patchValue({
-      // entreprise_id: contrat.tuteur_id.entreprise_id,
-      // tuteur_id: contrat.tuteur_id._id,
+      entreprise_id: {label: bypass_entreprise.r_social, value: bypass_entreprise._id},
       debut_contrat: new Date(contrat.debut_contrat),
       fin_contrat: new Date(contrat.fin_contrat),
       horaire: contrat.horaire,

@@ -62,7 +62,7 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur($event.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -265,7 +265,7 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur($event.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
