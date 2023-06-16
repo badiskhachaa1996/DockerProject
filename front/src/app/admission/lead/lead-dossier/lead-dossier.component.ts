@@ -21,6 +21,29 @@ export class LeadDossierComponent implements OnInit {
       })
   }
 
+  downloadFile(doc){
+
+  }
+
+  uploadFile(doc_name) {
+
+  }
+
+  delete(doc) {
+    this.ProspectService.deleteFile(this.PROSPECT._id,`${doc.name}/${doc.path}`)
+  }
+
+  addDoc() {
+    this.documents.push({ date: new Date(), nom: '', path: '' })
+  }
+
+  uploadOtherFile(doc: { date: Date, nom: String, path: String }) {
+
+  }
+  deleteOther(doc: { date: Date, nom: String, path: String }) {
+
+  }
+
 
 
 }

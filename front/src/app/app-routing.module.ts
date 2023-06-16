@@ -449,13 +449,13 @@ const routes: Routes = [
             { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
 
             // dubai admission form
-            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent },
+            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent, canActivate: [AuthGuardService] },
             //Accès Prospect V2
-            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent },
-            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent },
-            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent },
-            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent },
-            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent },
+            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

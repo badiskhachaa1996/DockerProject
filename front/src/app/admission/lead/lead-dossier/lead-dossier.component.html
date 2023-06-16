@@ -1,7 +1,7 @@
-<!--<div class="card grid">
-    <p-table [value]="['']" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8" [rowHover]="true"
-        class="col-12" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-        responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
+<div class="card grid">
+    <h3 class="col-12">Dcouments Requis</h3>
+    <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
                 <th>Document</th>
@@ -9,95 +9,17 @@
                 <th>Action</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-product>
+        <ng-template pTemplate="body" let-doc>
             <tr>
-                <td>CV</td>
-                <td>Télécharger le document</td>
+                <td>{{doc.nom}}</td>
                 <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
+                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
                 </td>
-            </tr>
-            <tr>
-                <td>Lettre de motivation</td>
-                <td>Télécharger le document</td>
                 <td>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
+                        (click)="uploadFile(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Passeport / Pièce d'identité</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Diplôme baccalauréat ou équivalent</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Dernier diplôme supérieur obtenu</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Relevé de note baccalauréat</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Relevé de note du deux derniers années (1er année)</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>Relevé de note du deux derniers années (2ème année)</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>TCF / Deif / Daif (pour les pays non francophones)</td>
-                <td>Télécharger le document</td>
-                <td>
-                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile('CV')" style="margin-left: 2%;" aria-hidden="true"></i>
-                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
-                        (click)="delete('CV')" aria-hidden="true"></i>
+                        (click)="delete(doc)" aria-hidden="true"></i>
                 </td>
             </tr>
         </ng-template>
@@ -130,4 +52,4 @@
             </tr>
         </ng-template>
     </p-table>
-</div>-->
+</div>

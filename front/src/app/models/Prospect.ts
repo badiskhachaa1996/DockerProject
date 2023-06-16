@@ -84,7 +84,9 @@ export class Prospect {
         public note_dossier_cf?: string,
         public note_consulaire?: string,
         public documents_administrative?: [{ date: Date, nom: string, path: string, traited_by: string, note: string }],
-        public modalite?: string
+        public modalite?: string,
+        public documents_dossier?: [{ date: Date, nom: string, path: string }],
+        public documents_autre?: [{ date: Date, nom: string, path: string }],
     ) { }
 
 }
