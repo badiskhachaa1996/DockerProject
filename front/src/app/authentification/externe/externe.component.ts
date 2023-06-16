@@ -19,7 +19,7 @@ import { MpOublieComponent } from '../mp-oublie/mp-oublie.component';
 })
 export class ExterneComponent implements OnInit {
   logo = "assets/images/logo-ims.png"
-  showLoginPage = false;  
+  showLoginPage = false;
 
   formLogin: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -82,19 +82,20 @@ export class ExterneComponent implements OnInit {
           this.router.navigateByUrl('/formulaire-externe', { skipLocationChange: true })
         } else {
           this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
-            if (pData && pData.token) {
-              localStorage.setItem('ProspectConected', pData.token)
-              localStorage.removeItem('token')
-              this.router.navigate(['/suivre-ma-preinscription'])
-            } else {
-              this.router.navigateByUrl('/#/', { skipLocationChange: true })
-            }
-          }, error => {
-            if (error.status == 404) {
-              this.router.navigateByUrl('/#/', { skipLocationChange: true })
-            } else {
-              console.error(error)
-            }
+            this.router.navigateByUrl('/#/', { skipLocationChange: true })
+            /*if (pData && pData.token) {
+  localStorage.setItem('ProspectConected', pData.token)
+  localStorage.removeItem('token')
+  this.router.navigate(['/suivre-ma-preinscription'])
+} else {
+  this.router.navigateByUrl('/#/', { skipLocationChange: true })
+}
+}, error => {
+if (error.status == 404) {
+  this.router.navigateByUrl('/#/', { skipLocationChange: true })
+} else {
+  console.error(error)
+}*/
           })
         }
       })
