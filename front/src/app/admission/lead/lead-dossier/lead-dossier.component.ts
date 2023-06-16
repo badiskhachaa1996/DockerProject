@@ -69,7 +69,7 @@ export class LeadDossierComponent implements OnInit {
   }
 
   addDoc() {
-    this.PROSPECT.documents_autre.push({ date: new Date(), nom: '', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.PROSPECT.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
 
   uploadOtherFile(event: File[]) {
