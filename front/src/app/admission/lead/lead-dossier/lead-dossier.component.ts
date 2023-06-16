@@ -59,7 +59,7 @@ export class LeadDossierComponent implements OnInit {
   }
 
   delete(doc: { date: Date, nom: string, path: string, _id: string }) {
-    this.PROSPECT.documents_dossier.splice(this.PROSPECT.documents_dossier.indexOf(doc), 1)
+    this.PROSPECT.documents_dossier[this.PROSPECT.documents_dossier.indexOf(doc)].path = null
     this.ProspectService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
       this.ProspectService.updateV2({ documents_dossier: this.PROSPECT.documents_dossier, _id: this.PROSPECT._id }).subscribe(a => {
         console.log(a)
@@ -75,7 +75,7 @@ export class LeadDossierComponent implements OnInit {
   uploadOtherFile(event: File[]) {
     let formData = new FormData()
     formData.append('id', this.PROSPECT._id);
-    formData.append('document', `${this.docToUpload.nom}`);
+    formData.append('document', `${this.docToUpload._id}`);
     formData.append('file', event[0]);
     this.ProspectService.uploadFile(formData, this.PROSPECT._id).subscribe(res => {
       this.ToastService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
@@ -93,10 +93,23 @@ export class LeadDossierComponent implements OnInit {
   }
   deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
     this.PROSPECT.documents_autre.splice(this.PROSPECT.documents_autre.indexOf(doc), 1)
-    this.ProspectService.deleteFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe(p => {
-      this.ProspectService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }).subscribe(a => {
-        console.log(a)
-      })
+    this.ProspectService.updateV2({ documents_autre: this.PROSPECT.documents_autre, _id: this.PROSPECT._id }).subscribe(a => {
+      console.log(a)
+    })
+    this.ProspectService.deleteFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+  }
+
+  downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.ProspectService.downloadFile(this.PROSPECT._id, `${doc._id}/${doc.path}`).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
+    }, (error) => {
+      console.error(error)
     })
   }
 

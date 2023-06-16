@@ -1,8 +1,8 @@
 <div class="col-12">
     <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile style="display: none;"
         accept=".png, .jpg, .jpeg, .jfif" pInputFile />
-        <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther style="display: none;"
-        accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+    <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther
+        style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 </div>
 <div class="card grid" *ngIf="PROSPECT">
     <h3 class="col-12">Documents Requis</h3>
@@ -46,18 +46,27 @@
                 <th>Action</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-doc>
-            <tr>
-                <th>{{doc.nom}}</th>
-                <th>
-                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
-                </th>
-                <th>
+        <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+            <tr [pEditableRow]="doc">
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input type="text" pInputText [(ngModel)]="doc.nom">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{doc.nom}}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>
+                    <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                </td>
+                <td>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
                         (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                         (click)="deleteOther(doc)" aria-hidden="true"></i>
-                </th>
+                </td>
             </tr>
         </ng-template>
     </p-table>
