@@ -735,6 +735,7 @@ app.get("/getFilesInscri/:id", (req, res) => {
 
 app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
     let pathFile = "storage/prospect/" + req.params.id + "/" + req.params.directory + "/" + req.params.filename
+    console.log(pathFile)
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
             return console.error(err);

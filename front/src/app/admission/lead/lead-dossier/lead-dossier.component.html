@@ -1,5 +1,11 @@
-<div class="card grid">
-    <h3 class="col-12">Dcouments Requis</h3>
+<div class="col-12">
+    <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile style="display: none;"
+        accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+        <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther style="display: none;"
+        accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+</div>
+<div class="card grid" *ngIf="PROSPECT">
+    <h3 class="col-12">Documents Requis</h3>
     <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
@@ -17,7 +23,7 @@
                 </td>
                 <td>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadFile(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                         (click)="delete(doc)" aria-hidden="true"></i>
                 </td>
@@ -29,9 +35,10 @@
         <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
             label="Ajouter un autre document"></p-button>
     </div>
-    <p-table [value]="documents" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8" [rowHover]="true"
-        class="col-12" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['libelle','email','site']"
-        responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
+    <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8"
+        [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+        [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+        styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
                 <th>Document</th>
@@ -42,10 +49,12 @@
         <ng-template pTemplate="body" let-doc>
             <tr>
                 <th>{{doc.nom}}</th>
-                <th>{{doc.path}}</th>
+                <th>
+                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                </th>
                 <th>
                     <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
-                        (click)="uploadOtherFile(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
                         (click)="deleteOther(doc)" aria-hidden="true"></i>
                 </th>
