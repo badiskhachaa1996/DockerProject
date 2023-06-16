@@ -11,6 +11,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
 export class LeadDossierComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   PROSPECT: Prospect;
+  documents = []
   constructor(private route: ActivatedRoute, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
