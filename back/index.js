@@ -138,6 +138,8 @@ const formulaireAdmissionController = require('./controllers/formulaireAdmission
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
+const rhControlleur = require('./controllers/rhController');
+
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -344,6 +346,7 @@ app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
+app.use('/soc/rh', rhControlleur);
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
