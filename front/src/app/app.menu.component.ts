@@ -14,6 +14,7 @@ import { User } from './models/User';
 import { METHODS } from 'http';
 import { Etudiant } from './models/Etudiant';
 import { Formateur } from './models/Formateur';
+import { AdmissionService } from './services/admission.service';
 
 @Component({
     selector: 'app-menu',
@@ -36,7 +37,7 @@ export class AppMenuComponent implements OnInit {
     token: any;
     items: MenuItem[];
 
-    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
+    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService, private AdmissionService: AdmissionService) { }
 
     ngOnInit() {
         //Decoder le token
@@ -4377,6 +4378,37 @@ export class AppMenuComponent implements OnInit {
                                 ],
                             },
                         )
+                }
+                if (response.type == "Prospect") {
+                    this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
+                        this.items = [
+                            {
+                                label: "Informations personnelles",
+                                icon: "pi pi-id-card",
+                                routerLink: ['/admission/lead-informations/' + p._id]
+                            },
+                            {
+                                label: "Programme d'étude",
+                                icon: "pi pi-book",
+                                routerLink: ['/admission/lead-programme/' + p._id]
+                            },
+                            {
+                                label: "Mon dossier d'admission",
+                                icon: "pi pi-briefcase",
+                                routerLink: ['/admission/lead-dossier/' + p._id]
+                            },
+                            {
+                                label: "Suivre ma candidature",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-suivi/' + p._id]
+                            },
+                            {
+                                label: "Paiements et documents administratives",
+                                icon: "pi pi-credit-card",
+                                routerLink: ['/admission/lead-paiements/' + p._id]
+                            },
+                        ]
+                    })
                 }
             },
             error: (error: any) => {

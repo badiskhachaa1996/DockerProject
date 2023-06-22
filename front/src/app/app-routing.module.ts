@@ -232,6 +232,7 @@ import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier
 import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
 import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
 import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
+import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -448,20 +449,22 @@ const routes: Routes = [
             { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
 
             // dubai admission form
-            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent },
+            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent, canActivate: [AuthGuardService] },
             //Accès Prospect V2
-            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent },
-            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent },
-            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent },
-            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent },
-            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent },
+            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent, canActivate: [AuthGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
     { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-int-lang/:ecole/:lang', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
     { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },

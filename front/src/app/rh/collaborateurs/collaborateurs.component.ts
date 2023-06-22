@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { User } from 'src/app/models/User';
@@ -17,14 +17,18 @@ export class CollaborateursComponent implements OnInit {
   agents: any[] = [];
   collaborateurToUpdate: Collaborateur;
   collaborateurPersonalData: User; // information personnelles du collaborateur pour la mise à jour des données
+  collaborateurCompetences: any[] = []; // liste des compétences du collaborateur
   formAdd: FormGroup; // ajout du collaborateur
   showFormAdd: boolean = false;
   formUpdate: FormGroup; // mise à jour des infos collaborateur du collaborateur
   showFormUpdate: boolean = false;
   formUpdatePersonalInfo: FormGroup; // mise à jour des informations personnelles du collaborateur
   showFormUpdatePersonalInfo: boolean = false;
+  showCompetenceTable: boolean = false;
+  formAddCompetence: FormGroup;
+  showFormAddCompetence: boolean = false;
 
-  // chargement des données du tableau
+  // chargement des données de tableau
   loading: boolean = false;
 
   // liste de données
@@ -59,6 +63,12 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Monsieur', value: 'Monsieur' },
     { label: 'Madame', value: 'Madame' },
     { label: 'Autre', value: 'Autre' },
+  ];
+
+  levelList: any[] = [
+    { label: 'Basique', value: 'Basique' },
+    { label: 'Intermédiaire', value: 'Intermédiaire' },
+    { label: 'Avancé', value: 'Avancé' },
   ];
 
   constructor(private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder) { }
@@ -113,7 +123,11 @@ export class CollaborateursComponent implements OnInit {
       phone: [''],
       email: [''],
       email_perso: [''],
-      role: [''],
+    });
+
+    // initialisation du formulaire d'ajout de compétences
+    this.formAddCompetence = this.formBuilder.group({
+      competences: this.formBuilder.array([this.onCreateCompetenceField()]),
     });
   }
 
@@ -123,6 +137,14 @@ export class CollaborateursComponent implements OnInit {
     this.rhService.getCollaborateurs()
     .then((response) => { this.collaborateurs = response; })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs'}); });
+  }
+
+  // récupère un collaborateur via son id et attribution de ses compétences
+  onGetCollaborateurCompetence(id: string): void
+  {
+    this.rhService.getCollaborateur(id)
+    .then((response) => { this.collaborateurCompetences  = response.competences; })
+    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer le collaborateur'}); });
   }
 
   // méthode d'ajout du collaborateur
@@ -151,6 +173,7 @@ export class CollaborateursComponent implements OnInit {
       this.onGetCollaborateurs();
       // masque le formulaire de mise à jour
       this.showFormAdd = false;
+      this.formAdd.reset();
     })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: "Ajout impossible"}); });
   }
@@ -173,6 +196,9 @@ export class CollaborateursComponent implements OnInit {
       h_cra: collaborateur.h_cra,
     });
 
+    // masque les autres formulaires
+    this.showFormAdd = false;
+    this.showFormUpdatePersonalInfo = false;
     // affichage du formulaire
     this.showFormUpdate = true;
   }
@@ -197,6 +223,7 @@ export class CollaborateursComponent implements OnInit {
     .then((response) => {
       this.messageService.add({severity: 'success', summary: 'Collaborateur', detail: 'Collaborateur mis à jour avec succès'});
       this.showFormUpdate = false;
+      this.formUpdate.reset();
       // recuperation de la liste des collaborateurs
       this.onGetCollaborateurs();
     })
@@ -212,15 +239,17 @@ export class CollaborateursComponent implements OnInit {
     this.collaborateurPersonalData = user_id;
 
     this.formUpdatePersonalInfo.patchValue({
-      civilite:     { label: user_id?.civilite, value: user_id?.civilite },
+      civilite:     user_id?.civilite,
       firstname:    user_id?.firstname,
       lastname:     user_id?.lastname,
       indicatif:    user_id?.indicatif,
       phone:        user_id?.phone,
       email:        user_id?.email,
       email_perso:  user_id?.email_perso,
-      role:         user_id?.role,
     });
+    // masque le formulaire d'ajout et de modif d'info collaborateur
+    this.showFormAdd = false;
+    this.showFormUpdate = false;
     // affichage du formulaire
     this.showFormUpdatePersonalInfo = true;
   }
@@ -243,9 +272,57 @@ export class CollaborateursComponent implements OnInit {
     .then((response) => {
       this.messageService.add({ severity: 'success', summary: 'Informations personnelles du collaborateur mis à jour avec succès' });
       this.showFormUpdatePersonalInfo = false;
+      this.formUpdatePersonalInfo.reset();
       this.onGetCollaborateurs();
     })
     .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Informations personnelles', detail: 'Impossible de mettre à jour les informations personnelles du collaborateur' }); });
   }
 
+  // pour créer des champs de formulaires à la volée
+  onCreateCompetenceField(): FormGroup
+  {
+    return(
+      this.formBuilder.group({
+        kind: [''],
+        level: ['']
+      })
+    );
+  }
+
+  // récupère les compétences
+  getCompetences(): FormArray
+  {
+    return this.formAddCompetence.get('competences') as FormArray;
+  }
+
+  // ajoute de nouveaux champs au formulaire
+  onAddCompetence(): void
+  {
+    const newCompetenceControl = this.onCreateCompetenceField();
+    this.getCompetences().push(newCompetenceControl);
+  }
+
+  // suppression d'une compétence
+  onDeleteCompetence(i: number): void
+  {
+    this.getCompetences().removeAt(i);
+  }
+
+  // méthode de mise à jour du collaborateur pour lui ajouter des compétences
+  onAddCollaborateurSkills(): void
+  {
+    const formValue = this.formAddCompetence.value;
+
+    // envoi des données en base de données
+    this.rhService.patchCollaborateurSkills(this.collaborateurToUpdate._id, formValue.competences)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétences du collaborateur mis à jour' });
+      this.formAddCompetence.reset();
+      this.showFormAddCompetence = false;
+      // recuperation de la liste des collaborateurs
+      this.onGetCollaborateurs();
+      this.onGetCollaborateurCompetence(response._id);
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+  }
 }

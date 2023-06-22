@@ -19,6 +19,7 @@ const { ProspectAlternable } = require('../models/ProspectAlternable');
 const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
+const { FormationAdmission } = require('../models/formationAdmission');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -315,53 +316,71 @@ app.post("/create", (req, res, next) => {
                                     });
                                 } else if (prospectSaved.type_form == "inteducation") {
 
+                                    FormationAdmission.findOne({ nom: prospectSaved.formation }).then(formation => {
+                                        let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
+                                            "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
+                                            "<div><p>Nous sommes ravis de recevoir votre candidature à notre établissement.   " +
+                                            "  Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec votre mail et le mot de passe suivant :  <strong> " +
+                                            r + "</strong> sur le lien : <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></p></div>" +
+                                            "<div><p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, vous pouvez, dans ce cas, les envoyer directement sur l'adresse électronique : orientation@intedgroup.com .   </p>" +
+                                            `<p>
+                                        Les document nécessaire pour la formation ${prospectSaved.formation} sont :  
+                                        ${formation.criteres}
+                                        Pour vous faciliter l’utilisation de notre plateforme, vous pouvez suivre les étapes ci-après :    
+                                        Vérifiez que vos informations personnelles ont été correctement saisies au niveau de la rubrique « Informations Personnelles »    
+                                        Assurez-vous d’avoir choisi :  le programme d’étude le plus en adéquation avec votre parcours académique.   
+                                        Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme également.   
+                                        Nous demeurons à votre disposition pour tout complément d'information.   
+                                        Bien cordialement.   
+                                        </p><br></div>
+                                        ------------------------------------------------------------------------------------- 
+                                        <div>
+                                        <p>Hello, </p> 
+                                        </div>
+                                        <div>
+                                        <p>We are delighted to receive your application to our institution. </p>
+                                        </div>
+                                        <div>
+                                        <p>
+                                        Your registration request on our platform has been successfully recorded. Please log in with your email and the following password: ${r} on the link: <a href="${origin[0]}/#/validation-email/${userCreated.email_perso}">Activate my IMS account</a>
+If you encounter any difficulties in uploading your documents or have omitted some, you can send them directly to the email address: orientation@intedgroup.com. The documents required for the ${prospectSaved.formation} are: ${formation.criteres} 
+
+To facilitate your use of our platform, you can follow the steps below:  
+
+• Verify that your personal information has been correctly entered in the "Personal Information" section.  
+
+• Ensure that you have chosen the study program that best aligns with your academic background. 
+
+Please note that you can also check the status of your application on the platform. 
+
+We remain at your disposal for any further information. 
+
+ 
+
+Best regards. 
+</p>
+</div>
+                                        `
+                                        let mailOptions = {
+                                            from: "ims@intedgroup.com",
+                                            to: userCreated.email_perso,
+                                            subject: 'Confirmation de préinscription',
+                                            html: htmlmail,
+                                            /* attachments: [{
+                                                 filename: 'EUsign.png',
+                                                 path: 'assets/EUsign.png',
+                                                 cid: 'red' //same cid value as in the html img src
+                                             }] */
+                                        };
+                                        transporterINTED.sendMail(mailOptions, function (error, info) {
+                                            if (error) {
+                                                console.error(error);
+
+                                            }
+                                        });
+                                    })
 
 
-                                    let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
-                                        "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
-                                        "<div><p>Nous sommes ravis de recevoir votre candidature à notre établissement.   " +
-                                        "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong></p></div>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                        "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
-                                        "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
-                                        "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +
-                                        "</li><li> <p>Parcours académique : Cursus antérieur correspondant à la formation choisie. </p></li><li>" +
-                                        "<p>Rupture d'étude : les années précédentes sont justifiées. </p> </li></ul></div><div><p> <br /> </p></div>" +
-                                        "<div><ol start='2'><li><p>Documents demander doivent &ecirc;tre traduit en français et envoyé en format PDF : <br /> </p></li>" +
-                                        "</ol></div><div><ul><li><p>Pièce d'identité (passeport pour les non-résidents) (obligatoire).</p></li><li>" +
-                                        "<p>Dernier dipl&ocirc;me obtenu (obligatoire).</p></li><li><p>Relevés de notes des deux dernières années (obligatoire).</p></li><li>" +
-                                        "<p>Test de français : TCF B2 valide (moins de 2 ans), DELF B2 ou DALF (C1 ou C2) : obligatoire pour les étudiants non Francophones Obligatoire).</p>" +
-                                        "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
-                                        "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
-                                        "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
-                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
-                                        "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
-                                        "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"
-
-
-
-                                    let mailOptions = {
-                                        from: "admission@adgeducation.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
-                                        html: htmlmail,
-                                        /* attachments: [{
-                                             filename: 'EUsign.png',
-                                             path: 'assets/EUsign.png',
-                                             cid: 'red' //same cid value as in the html img src
-                                         }] */
-                                    };
-                                    transporterAdg.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-
-                                        }
-
-
-                                    });
                                 }
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
@@ -716,6 +735,7 @@ app.get("/getFilesInscri/:id", (req, res) => {
 
 app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
     let pathFile = "storage/prospect/" + req.params.id + "/" + req.params.directory + "/" + req.params.filename
+    console.log(pathFile)
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
             return console.error(err);
