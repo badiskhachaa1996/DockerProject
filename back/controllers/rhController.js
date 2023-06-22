@@ -122,13 +122,20 @@ app.delete('/delete-collaborateur/:id', (req, res) => {
 // ajout de compétence
 app.patch('/add-collaborateur-skills', (req, res) => {
     const {id} = req.body;
+    
     Collaborateur.findOne({_id: id})
     .then((collaborateur) => {
-        collaborateur.skills.push({...req.body.skills});
+        if(collaborateur.competences.length > 0)
+        {
+            collaborateur.competences.push(...req.body.skills);
+        } else {
+            collaborateur.competences = req.body.skills;
+        }
+
         // envoi des données en bd
-        Collaborateur.updateOne({_id: id}, {...collaborateur})
-        .then(() => { res.status(201).send('Collaborateur mis à jour avec succès') })
-        .catch((error) => { res.status(400).send('Impossible de mettre à jour les informations du collaborateur') });
+        Collaborateur.findOneAndUpdate({_id: id}, {...collaborateur})
+        .then((response) => { res.status(201).send(response) })
+        .catch((error) => { console.log(error); res.status(400).send('Impossible de mettre à jour les informations du collaborateur') });
     })
     .catch((error) => { res.status(400).send("Impossible d'ajouter de nouvelles compétences") });
 });

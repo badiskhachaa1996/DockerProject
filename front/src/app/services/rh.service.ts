@@ -134,13 +134,13 @@ export class RhService {
     }
 
     // ajout de compétence
-    patchCollaborateurSkills(id: any, skills: any[]): Promise<any>
+    patchCollaborateurSkills(id: any, skills: any[]): Promise<Collaborateur>
     {
       const url = `${this.endPoint}/add-collaborateur-skills`;
 
-      return new Promise<any>((resolve, reject) => {
+      return new Promise<Collaborateur>((resolve, reject) => {
         this.httpClient.patch(url, {id: id, skills: skills}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
-          next: (response: any) => { resolve(response); },
+          next: (response: Collaborateur) => { resolve(response); },
           error: (error) => { reject(error); },
         });
       });
