@@ -201,8 +201,8 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       }
       return summ / coeffTotal;
     } else {
-      let moy_sem1 = this.calculMoyenne(notes, 'Semestre 1')
-      let moy_sem2 = this.calculMoyenne(notes, 'Semestre 2')
+      let moy_sem1 = this.calculMoyenne(notes['Semestre 1'], 'Semestre 1')
+      let moy_sem2 = this.calculMoyenne(notes['Semestre 2'], 'Semestre 2')
       return (moy_sem1 + moy_sem2)/2
     }
 
