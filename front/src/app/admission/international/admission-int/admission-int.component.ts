@@ -43,6 +43,8 @@ export class AdmissionIntComponent implements OnInit {
     note: new FormControl(""),
     traited_by: new FormControl("", Validators.required),
   })
+  ecoleList = [];
+  dicEcole = {};
   FileUpload(event) {
     if (this.uploadFileForm.value.typeDoc != null && event.files != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
@@ -54,9 +56,9 @@ export class AdmissionIntComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
 
         this.expandRow(this.showUploadFile)
-        this.prospects.forEach(p => {
+        this.prospects[this.showUploadFile.type_form].forEach(p => {
           if (p._id == this.showUploadFile._id) {
-            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(p)].haveDoc = true
             //this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
           }
         })
@@ -85,9 +87,8 @@ export class AdmissionIntComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        console.log(res)
         if (res.documents_administrative)
-          this.prospects[this.prospects.indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
+          this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
         event.target = null;
         this.showUploadFile = null;
 
@@ -160,7 +161,7 @@ export class AdmissionIntComponent implements OnInit {
       (error) => { console.error(error) }
     );
     this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
-      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+      this.prospects[prospect.type_form][this.prospects[prospect.type_form].indexOf(prospect)].etat_traitement = "Vu"
     })
   }
 
@@ -267,7 +268,7 @@ export class AdmissionIntComponent implements OnInit {
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private PartenaireService: PartenaireService,
     private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService, private UserService: AuthService) { }
 
-  prospects: Prospect[];
+  prospects=[];
 
   selectedProspect: Prospect = null
 
@@ -289,9 +290,7 @@ export class AdmissionIntComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllAdmission().subscribe(data => {
-      this.prospects = data
-    })
+
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -324,9 +323,18 @@ export class AdmissionIntComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(d => {
-        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-        this.filterEcole.push({ label: d.titre, value: d.url_form })
+      this.admissionService.getAllAdmission().subscribe(dataP => {
+        this.prospects = dataP
+        data.forEach(d => {
+          this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+          this.filterEcole.push({ label: d.titre, value: d.url_form })
+          this.ecoleList.push(d)
+          this.dicEcole[d.url_form] = d
+        })
+        Object.keys(this.dicEcole).forEach((val, idx) => {
+          if (!dataP[val])
+            this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
       })
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
@@ -413,7 +421,7 @@ export class AdmissionIntComponent implements OnInit {
   saveTraitement(willClose = false) {
     this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
+      this.prospects[this.showTraitement.type_form].splice(this.prospects[this.showTraitement.type_form].indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
       this.traitementForm.reset()
     })
@@ -557,7 +565,7 @@ export class AdmissionIntComponent implements OnInit {
 
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this.prospects[prospect.type_form].splice(this.prospects[prospect.type_form].indexOf(this.showDetails), 1, data)
       if (willClose)
         this.showDetails = null
     })
@@ -663,7 +671,7 @@ export class AdmissionIntComponent implements OnInit {
 
   generateIDPaiement() {
     let date = new Date()
-    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString()+ date.getSeconds().toString()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
   }
 
   deletePayement(i) {
@@ -734,7 +742,7 @@ export class AdmissionIntComponent implements OnInit {
 
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
+      this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
     })
   }

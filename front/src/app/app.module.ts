@@ -329,6 +329,14 @@ import { ListTicketsEnAttenteDeTraitementComponent } from './ticketing/list-tick
 import { ListTicketsTraiteComponent } from './ticketing/list-tickets-traite/list-tickets-traite.component';
 import { ListTicketsRefuseComponent } from './ticketing/list-tickets-refuse/list-tickets-refuse.component';
 import { ConfigurationComponent } from './ticketing/configuration/configuration.component';
+import { DashboardTicketingComponent } from './ticketing/dashboard-ticketing/dashboard-ticketing.component';
+import { PaiementComponent } from './international/generation-doc/paiement/paiement.component';
+import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
+import { LeadProgrammeComponent } from './admission/lead/lead-programme/lead-programme.component';
+import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
+import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
+import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
+import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 
 
 @NgModule({
@@ -667,7 +675,15 @@ import { ConfigurationComponent } from './ticketing/configuration/configuration.
     ListTicketsEnAttenteDeTraitementComponent,
     ListTicketsTraiteComponent,
     ListTicketsRefuseComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    DashboardTicketingComponent,
+    PaiementComponent,
+    LeadInformationsPersonnelComponent,
+    LeadProgrammeComponent,
+    LeadSuiviComponent,
+    LeadPaiementsComponent,
+    LeadDossierComponent,
+    VersionNonIframeComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

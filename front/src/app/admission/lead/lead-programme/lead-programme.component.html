@@ -1,0 +1,19 @@
+<div class="grid card" *ngIf="PROSPECT">
+    <p-fieldset legend="Programme d'étude" class="col-12">
+        <div class="grid" style="color: black;font-weight:normal">
+            <div class="col-12 grid">
+                <p class="col-6"><strong>Formation :</strong><br> {{PROSPECT.formation}}</p>
+                <p class="col-6"><strong>Campus</strong><br> {{PROSPECT.campus_choix_1}}
+                </p>
+            </div>
+        </div>
+    </p-fieldset>
+    <p-fieldset legend="Décision" class="col-12">
+        <div class="grid" style="color: black;font-weight:normal">
+            <div class="col-12 grid">
+                <p class="col-12"><strong>Equipe orientation :</strong><br>
+                    {{PROSPECT.decision_orientation}}</p>
+            </div>
+        </div>
+    </p-fieldset>
+</div>

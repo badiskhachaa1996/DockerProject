@@ -104,9 +104,9 @@ export class AddEntrepriseComponent implements OnInit {
       commercial: [this.commercials[0].value],
 
       civilite_rep: [this.civiliteList[0]],
-      nom_rep: ['', Validators.required],
-      prenom_rep: ['', Validators.required],
-      email_rep: ['', [Validators.required, Validators.email]],
+      nom_rep: [''],
+      prenom_rep: [''],
+      email_rep: ['', Validators.email],
       indicatif_rep: [''],
       phone_rep: [''],
     })
@@ -187,7 +187,7 @@ export class AddEntrepriseComponent implements OnInit {
       nom_rep, 
       indicatif_rep,
       phone_rep,
-      email_rep,
+      null,
       email_rep, 
       null,
       'user',

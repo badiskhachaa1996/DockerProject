@@ -1,6 +1,7 @@
 .header
 {
     text-align: center;
+    font-weight: bold;
 }
 
 .add-button-div
@@ -17,5 +18,12 @@
 {
     color: red;
     font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.obligatory
+{
+    color: red;
     font-weight: bold;
 }

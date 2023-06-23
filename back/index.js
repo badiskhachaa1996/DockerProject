@@ -138,6 +138,8 @@ const formulaireAdmissionController = require('./controllers/formulaireAdmission
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
+const rhControlleur = require('./controllers/rhController');
+
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -220,7 +222,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl === "/soc/user/verifyUserPassword" ||
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
-      req.originalUrl === '/soc/admission-dubai/post-dubai-admission'
+      req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID')
     ) {
       next();
     } else {
@@ -344,6 +347,7 @@ app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
+app.use('/soc/rh', rhControlleur);
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))

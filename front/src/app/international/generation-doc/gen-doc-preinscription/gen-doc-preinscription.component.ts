@@ -29,7 +29,14 @@ export class GenDocPreinscriptionComponent implements OnInit {
   frais_preinscription = "550"
   date_limite_arrivee = new Date()
   ville = "Paris"
-  
+  extra = "-"
+  dropdownExtra = [
+    { label: '-', value: '-' },
+    { label: 'en', value: 'en' },
+    { label: 'au', value: 'au' },
+    { label: 'aux', value: 'aux' },
+    { label: 'à', value: 'à' },
+  ]
   user: User
   prospect: Prospect
   ecole: EcoleAdmission

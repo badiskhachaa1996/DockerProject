@@ -242,6 +242,16 @@ export class DashboardComponent implements OnInit {
   workingMinute: number = 0; // temps passé au travail
   pauseTiming: number; // temps passé en pause en minute
   selectedTabIndex: number = 0; // Index actuel du tableau d'affichage des données RH
+  showFormUpdateStatut: boolean; // permet d'afficher la boîte de dialogue pour modifier le statut
+  formUpdateStatut: FormGroup;
+  statutList: any[] = [
+    { label: 'En congé', value: 'En congé' },
+    { label: 'Disponible', value: 'Disponible' },
+    { label: 'En réunion', value: 'En réunion' },
+    { label: 'Occupé', value: 'Occupé' },
+    { label: 'Absent', value: 'Absent' },
+    { label: 'En pause', value: 'En pause' },
+  ];
   //* end check in variables
 
   constructor(
@@ -350,13 +360,11 @@ export class DashboardComponent implements OnInit {
 
     //* Partie dédié au check
     // recuperation de l'utilisateur connecté
-    this.UserService.getPopulate(this.token.id).subscribe({
-      next: (response) => {
-        this.userConnected = response;
-        // verification du check in journalier
-        this.onCheckDailyCheck(response._id);
-      },
-      error: (error) => { console.log(error) },
+    this.onGetUserConnectedInformation();
+
+    // initialisation du formulaire de mise à jour du statut
+    this.formUpdateStatut = this.formBuilder.group({
+      statut: ['', Validators.required],
     });
   }
 
@@ -578,9 +586,35 @@ export class DashboardComponent implements OnInit {
   }
 
   //* Check methods
+  // recuperation de l'utilisateur connecté
+  onGetUserConnectedInformation(): void
+  {
+    this.UserService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.userConnected = response;
+        // verification du check in journalier
+        this.onCheckDailyCheck(response._id);
+      },
+      error: (error) => { console.log(error) },
+    });
+  }
+
+  // méthode de mise à jour du statut
+  onUpdateStatus(): void
+  {
+    const statut = this.formUpdateStatut.value.statut;
+    this.UserService.pathUserStatut(statut, this.userConnected._id)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
+      this.onGetUserConnectedInformation();
+      this.showFormUpdateStatut = false;
+    })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
+  }
+
   // verification et recuperation du dailyCheck
   onCheckDailyCheck(id: string): void {
-    this.dailyCheckService.getCheckByUserId(id)
+    this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
         if (response == null) {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
@@ -620,8 +654,9 @@ export class DashboardComponent implements OnInit {
   // méthode de checkin
   onCheckIn(): void {
     const check = new DailyCheck();
+
     check.user_id = this.user._id;
-    check.today = new Date();
+    check.today = new Date().toLocaleDateString();
     check.check_in = new Date();
     check.isInPause = false;
 
@@ -674,7 +709,8 @@ export class DashboardComponent implements OnInit {
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-
+        // remise à zero du temps de pause
+        this.pauseTiming = 0;
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
       })

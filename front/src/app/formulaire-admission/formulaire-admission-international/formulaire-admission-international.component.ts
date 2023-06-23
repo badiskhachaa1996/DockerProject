@@ -38,13 +38,18 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     { label: 'Partenaires' },
     { label: 'Dernière étape' },
   ];;
+  langueList = [
+    { label: 'Français', value: 'Français', src: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg' },
+    { label: 'English', value: 'English', src: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg' },
+  ]
   nationList = environment.nationalites;
+  paysList = environment.pays;
+  civiliteList = environment.civilite;
   calendar: any;
   fr = environment.fr;
   ActiveIndex = 0;
   RegisterForm: FormGroup;
-  paysList = environment.pays;
-  civiliteList = environment.civilite;
+
   diplomes = [];
   diplomesOfCampus = [];
   userConnected: User;
@@ -142,16 +147,132 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     } else
       this.programeFrDropdown = this.defaultDropdown
   }
+  changeLanguage(langue) {
+    this.ECOLE.langue = langue
+    if (langue == "English") {
+      this.typeFormationDropdown = [
+        { value: "Initial" },
+        { value: "Alternance" }
+      ];
+      this.programList =
+        [
+          { value: "French Program" },
+          { value: "English Program" },
+        ];
+      this.niveauFR =
+        [
+          { label: "Native language", value: "Native language" },
+          { label: "I have a level certificate (TCF DALF DELF..)", value: "I have a level certificate (TCF DALF DELF..)" },
+          { label: "I don't speak French", value: "I don't speak French" },
+          { label: "None of these choices", value: "None of these choices" },
+        ]
+      this.niveauEN =
+        [
+          { label: "Native language", value: "Native language" },
+          { label: "Advanced", value: "Advanced" },
+          { label: "Intermediate", value: "Intermediate" },
+          { label: "Basic", value: "Basic" },
+          { label: "I don't speak English", value: "I don't speak English" },
+        ]
 
+      this.academicList =
+        [
+          { label: 'Pre-bac', value: 'Pre-bac' },
+          { label: 'Bac +1', value: 'Bac +1' },
+          { label: 'Bac +2', value: 'Bac +2' },
+          { label: 'Bac +3', value: 'Bac +3' },
+          { label: 'Bac +4', value: 'Bac +4' },
+          { label: 'Bac +5', value: 'Bac +5' },
+        ];
+
+      this.statutList =
+        [
+          { label: 'Student', value: 'Student' },
+          { label: 'Employee', value: 'Employee' },
+          { label: 'Unemployed', value: 'Unemployed' },
+          { label: 'Other', value: 'Other' },
+        ];
+      this.formSteps = [
+        "Information",
+        "Background",
+        "School program",
+        "Partners",
+        "End",
+      ];
+
+      this.nationList = environment.nationalities;
+      this.paysList = environment.paysEnglish;
+      this.civiliteList = environment.civiliteEN;
+    }
+    else {
+      this.typeFormationDropdown = [
+        { value: "Initiale" },
+        { value: "Alternance" }
+      ];
+      this.programList =
+        [
+          { value: "Programme Français" },
+          { value: "Programme Anglais" },
+        ];
+      this.niveauFR =
+        [
+          { label: "Langue maternelle", value: "Langue maternelle" },
+          { label: "J’ai une attestation de niveau (TCF DALF DELF..)", value: "J’ai une attestation de niveau (TCF DALF DELF..)" },
+          { label: "Aucun de ces choix", value: "Aucun de ces choix" },
+        ]
+      this.niveauEN =
+        [
+          { label: "Langue maternelle", value: "Langue maternelle" },
+          { label: "Avancé", value: "Avancé" },
+          { label: "Intermédiaire", value: "Intermédiaire" },
+          { label: "Basique", value: "Basique" },
+          { label: "Je ne parle pas l’anglais", value: "Je ne parle pas l’anglais" },
+        ]
+
+      this.academicList =
+        [
+          { label: 'Pré-bac', value: 'Pré-bac' },
+          { label: 'Bac +1', value: 'Bac +1' },
+          { label: 'Bac +2', value: 'Bac +2' },
+          { label: 'Bac +3', value: 'Bac +3' },
+          { label: 'Bac +4', value: 'Bac +4' },
+          { label: 'Bac +5', value: 'Bac +5' },
+        ];
+
+      this.statutList =
+        [
+          { label: 'Etudiant', value: 'Etudiant' },
+          { label: 'Salarié', value: 'Salarié' },
+          { label: 'Au chômage', value: 'Au chômage' },
+          { label: 'Autre', value: 'Autre' },
+        ];
+      this.formSteps = [
+        "Infos",
+        "Parcours",
+        "Programme",
+        "Partenaires",
+        "Fin",
+      ];
+
+      this.nationList = environment.nationalites;
+      this.paysList = environment.pays;
+      this.civiliteList = environment.civilite;
+    }
+  }
   hideCC = false
   ECOLE: EcoleAdmission
   RENTREE: RentreeAdmission[]
   ngOnInit(): void {
-    console.log(localStorage.getItem('sourceProspect'))
     this.FAService.EAgetByParams(this.form_origin).subscribe(data => {
       if (!data)
         this.router.navigate(['/'])
       this.ECOLE = data
+      if (!this.route.snapshot.paramMap.get('lang'))
+        this.changeLanguage(data.langue)
+      else if (this.route.snapshot.paramMap.get('lang') == 'fr')
+        this.changeLanguage('Français')
+      else if (this.route.snapshot.paramMap.get('lang') == 'en')
+        this.changeLanguage('English')
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         this.RENTREE = dataEcoles
         data.formations.forEach(f => {
@@ -163,8 +284,11 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         dataEcoles.forEach(rentre => {
           this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
         })
-        console.log(this.RENTREE, this.ECOLE, this.programEnDropdown, this.programeFrDropdown)
 
+      })
+      this.campusDropdown = []
+      data.campus.forEach(c => {
+        this.campusDropdown.push({ label: c, value: c })
       })
     })
 
@@ -267,7 +391,10 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         this.partenaireFound = p
         this.RegisterForm.patchValue({ code_commercial: p.code_partenaire, nomAgence: p.nom, mailAgence: p.email })
       } else {
-        this.messageService.add({ severity: "info", summary: "Aucun partenaire trouvé avec cette email ou nom", detail: "Vous pouvez continuez si vous inserez le code commercial" })
+        if (this.ECOLE.langue == 'English') {
+          this.messageService.add({ severity: "info", summary: "No partners found with this email or name", detail: "You can continue if you insert the commercial code" })
+        } else
+          this.messageService.add({ severity: "info", summary: "Aucun partenaire trouvé avec cette email ou nom", detail: "Vous pouvez continuez si vous inserez le code commercial" })
       }
     })
   }
@@ -275,9 +402,11 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   verificationCode() {
     this.PartenaireService.getByCode(this.RegisterForm.value.code_commercial).subscribe(p => {
       if (p)
-        this.messageService.add({ severity: "success", summary: "Partenaire trouvé avec succès" })
+        if (this.ECOLE.langue == 'English') this.messageService.add({ severity: "success", summary: "Successful partner" })
+        else this.messageService.add({ severity: "success", summary: "Partenaire trouvé avec succès" })
       else
-        this.messageService.add({ severity: "error", summary: "Aucun partenaire trouvé avec ce code" })
+        if (this.ECOLE.langue == 'English') this.messageService.add({ severity: "error", summary: "No partners found with this code" })
+        else this.messageService.add({ severity: "error", summary: "Aucun partenaire trouvé avec ce code" })
     })
   }
 
@@ -286,7 +415,12 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
       if (dataMail) {
         this.emailExist = true
-        this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        if (this.ECOLE.langue == 'English') {
+          this.messageService.add({ severity: 'error', summary: 'Your email is already in use', detail: "Registration cannot be finalized" });
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        }
+
         return true
       }
     },
@@ -468,11 +602,13 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
               console.error(error)
             }));
 
-            this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-            this.getFilesAccess(response.dataUser._id)
+            if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'success', summary: 'The request for admission was sent', detail: "Check your email for login details" });
+            else this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+            this.getFilesAccess(response.dataUser._id, response.token, response.dataProspect._id)
           })
         } else {
-          this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
+          if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'error', summary: 'Unable to finalize pre-registration', detail: "Your email may already be in use" });
+          else this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)
         }
 
@@ -484,11 +620,14 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     );
   }
 
-  getFilesAccess(ID) {
-    this.admissionService.getTokenByUserId(ID).subscribe(data => {
+  getFilesAccess(ID, token, id) {
+    /*this.admissionService.getTokenByUserId(ID).subscribe(data => {
       localStorage.setItem("ProspectConected", data.token)
       this.router.navigate(["/suivre-ma-preinscription"]);
-    })
+    })*/
+    console.log(token)
+    localStorage.setItem('token', token)
+    this.router.navigate(["/admission/lead-informations/" + id]);
   }
 
 

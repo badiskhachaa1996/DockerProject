@@ -17,6 +17,7 @@ export class GenerationDocComponent implements OnInit {
   documentDropdown = [
     { label: "Inscription", value: "inscription" },
     { label: "Préinscription", value: "preinscription" },
+    { label: "Paiement", value: "paiement" },
     { label: "Paiement préinscription", value: "paiement-preinscription" },
     { label: "Paiement préinscription - acompte", value: "paiement-preinscription-acompte" },
     { label: "Paiement acompte", value: "paiement-acompte" },
@@ -44,7 +45,7 @@ export class GenerationDocComponent implements OnInit {
         this.formationDropdown.push({ label: f.nom, value: f._id })
       })
     })
-    this.AService.getAllSourcing().subscribe(data => {
+    this.AService.getAll().subscribe(data => {
       this.prospectDropdown = []
       data.forEach(p => {
         let { user_id }: any = p

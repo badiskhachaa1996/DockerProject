@@ -1,0 +1,74 @@
+<div class="col-12">
+    <input type="file" (change)="FileUploadPDP($event.target.files)" id="selectedFile" #selectedFile
+        style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+</div>
+<div class="grid card col-12">
+    <p-fieldset legend="Informations personelles" style="width: 100%;">
+        <div class="grid" style="color: black;font-weight:normal" *ngIf="!editInfo">
+            <div class="col-12 md:col-3">
+                <a (click)="clickFile()" pTooltip="Modifier la photo de profil" tooltipPosition="bottom"
+                    style="cursor: pointer;"><img [src]="imageToShow" alt="Profil" width="150" height="150"
+                        style="border-radius: 50px;" /></a>
+            </div>
+            <div class="col-12 md:col-6 grid">
+                <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
+                    {{PROSPECT?.user_id?.firstname|titlecase}}
+                    {{PROSPECT?.user_id?.lastname|uppercase}}</p>
+                <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
+                    {{PROSPECT.date_naissance|date:'dd/MM/YYYY'}}</p>
+                <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br>
+                    {{PROSPECT?.user_id?.nationnalite}}
+                </p>
+                <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br>
+                    {{PROSPECT?.user_id?.phone}}
+                </p>
+            </div>
+            <div class="col-12 md:col-3">
+                <p style="cursor: pointer;"><a (click)="initEditForm()">Modifier mes informations</a></p>
+                <p style="cursor: pointer;"><a (click)="showUpdatePassword=true">Modifier le mot de passe</a>
+                </p>
+            </div>
+        </div>
+        <div class="grid" style="color: black;font-weight:normal" *ngIf="editInfo">
+            <form class="col-12 grid" [formGroup]="editInfoForm">
+                <p class="col-12 md:col-3 text-center"><strong>Prénom & Nom:</strong><br>
+                    <input type="text" pInputText placeholder="Prénom" formControlName="firstname" /><br>
+                    <input type="text" pInputText placeholder="Nom" formControlName="lastname" />
+                </p>
+                <p class="col-12 md:col-3 text-center"><strong>Date de naissance:</strong><br>
+                    <p-calendar formControlName="date_naissance" placeholder="31/12/2000"></p-calendar>
+                </p>
+                <p class="col-12 md:col-3 text-center"><strong>Nationalité:</strong><br> <input type="text" pInputText
+                        placeholder="Française" formControlName="nationnalite" />
+                </p>
+                <p class="col-12 md:col-3 text-center"><strong>Téléphone:</strong><br> <input type="text" pInputText
+                        placeholder="+33 0123456789" formControlName="phone" /></p>
+                <button class="col-12" pButton type="button" (click)="saveInfo()" label="Enregistrer mes informations"
+                    [disabled]="editInfoForm.invalid"></button>
+            </form>
+        </div>
+    </p-fieldset>
+</div>
+<div class="col-12" *ngIf="showUpdatePassword">
+    <div class="card">
+        <h3 style="text-align: center;">Formulaire de modification du mot de passe</h3>
+        <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+            <div class="field col-12">
+                <label For="pwd_actu">Mot de passe actuel</label>
+                <input pInputText id="pwd_actu" type="password" formControlName="passwordactual" />
+            </div>
+            <div class="field col-12">
+                <label For="n_pwd">Nouveau mot de passe</label>
+                <input pInputText id="n_pwd" type="password" formControlName="password" />
+            </div>
+            <div class="field col-12">
+                <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
+                <input pInputText id="confirm_n_pwd" type="password" formControlName="verifypassword">
+            </div>
+            <div class="col-4 md:col-2">
+                <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid"
+                    class="mr-2 mb-2"></button>
+            </div>
+        </form>
+    </div>
+</div>

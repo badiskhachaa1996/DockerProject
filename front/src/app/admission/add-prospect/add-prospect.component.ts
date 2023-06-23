@@ -36,7 +36,7 @@ export class AddProspectComponent implements OnInit {
     { label: "Studinfo", value: "studinfo" },
     { label: "INTUNS", value: "intuns" },
     { label: "Intunivesity", value: "intunivesity" },
-    { label: "ICBS Malte", value: "icbsmalte" },
+    { label: "ICBS Malte", value: "icbsmalta" },
     { label: "INT Education", value: "inteducation" }
   ]
 
@@ -81,15 +81,15 @@ export class AddProspectComponent implements OnInit {
         data.forEach(e => {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
           this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
-          this.sourceList = this.sourceList.concat([
-            { label: "Equipe communication", value: "Equipe communication" },
-            { label: "Bureau Congo", value: "Bureau Congo" },
-            { label: "Bureau Maroc", value: "Bureau Maroc" },
-            { label: "Collaborateur interne", value: "Collaborateur interne" },
-            { label: "Report", value: "Report" },
-            { label: "IGE", value: "IGE" }
-          ])
         })
+        this.sourceList = this.sourceList.concat([
+          { label: "Equipe communication", value: "Equipe communication" },
+          { label: "Bureau Congo", value: "Bureau Congo" },
+          { label: "Bureau Maroc", value: "Bureau Maroc" },
+          { label: "Collaborateur interne", value: "Collaborateur interne" },
+          { label: "Report", value: "Report" },
+          { label: "IGE", value: "IGE" }
+        ])
       })
     }
 
@@ -112,9 +112,9 @@ export class AddProspectComponent implements OnInit {
     source = source.replace('ECOLE', this.RegisterForm.value.ecole)
     localStorage.setItem("sourceProspect", source)
     if (!code)
-      this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole])
+      this.router.navigate(['formulaire-admission-international', this.RegisterForm2.value.ecole])
     else
-      this.router.navigate(['formulaire-admission-int', this.RegisterForm2.value.ecole, code])
+      this.router.navigate(['formulaire-admission-international', this.RegisterForm2.value.ecole, code])
   }
 
   changeSource(source: string) {

@@ -29,6 +29,7 @@ app.get("/get-stages", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(500).json({error: error, errorMsg: 'Impossible de récupérer la liste des stages'}) });
 });
@@ -44,6 +45,7 @@ app.get("/get-stage/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer le stage'}) });
 });
@@ -59,6 +61,7 @@ app.get("/get-stage-by-student-id/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cet étudiant'}) });
 });
@@ -74,6 +77,7 @@ app.get("/get-stage-by-enterprise-id/:id", (req, res) => {
     ?.populate({path: 'tutor_id', populate: {path: 'user_id'}})
     ?.populate('director_id')
     ?.populate('commercial_id')
+    ?.populate('add_by')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer les stages de cette entreprise'}) });
 });
@@ -91,8 +95,8 @@ app.post("/post-stage", (req, res) => {
             .then((enterpriseDirector) => {
                 // création du mail à envoyer
                 const htmlMail = "<p>Bonjour, Un nouveau contrat de stage vient de vous être attribué.</p>" +
-                                 "<p>Merci de verifier le contrat sur <a href=\"https://ims.intedgroup.com\">votre espace IMS</a>.</p>" +
-                                 "<p>Cordialement.</p>";
+                                "<p>Merci de verifier le contrat sur <a href=\"https://ims.intedgroup.com\">votre espace IMS</a>.</p>" +
+                                "<p>Cordialement.</p>";
 
                 const mailOptions = 
                 {
@@ -135,9 +139,9 @@ app.patch("/patch-status", (req, res) => {
     .then((response) => {
         // création du mail à envoyer au commercial referent
         const htmlMail = "<p>Bonjour, le stage numéro <span style=\"color: red\">" + idStage +"</span> vient d'être modifié.</p>" +
-                         "<p>Nouveau statut du stage: <span style=\"color: red\">" + status +"</span>.</p>" +
-                         "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
-                         "<p>Cordialement.</p>";
+                        "<p>Nouveau statut du stage: <span style=\"color: red\">" + status +"</span>.</p>" +
+                        "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
+                        "<p>Cordialement.</p>";
 
         const mailOptions = 
         {
@@ -170,9 +174,9 @@ app.patch("/patch-mission-tasks", (req, res) => {
     .then((response) => {
         // création du mail à envoyer au commercial referent
         const htmlMail = "<p>Bonjour, le stage numéro <span style=\"color: red\">" + idStage +"</span> vient d'être modifié.</p>" +
-                         "<p>La mission du stagiaire a été mis à jour: <span style=\"color: red\">" + missions +"</span>.</p>" +
-                         "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
-                         "<p>Cordialement.</p>";
+                        "<p>La mission du stagiaire a été mis à jour: <span style=\"color: red\">" + missions +"</span>.</p>" +
+                        "<p>Pour retrouver le stage veuillez saisir le numéro du contrat dans le filtre sur <a href=\"https://ims.intedgroup.com/#/stages\">la page des stages</a>.</p>" +
+                        "<p>Cordialement.</p>";
 
         const mailOptions = 
         {

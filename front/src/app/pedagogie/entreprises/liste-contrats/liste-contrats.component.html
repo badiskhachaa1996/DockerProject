@@ -62,7 +62,7 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur($event.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -265,7 +265,7 @@
                             </span></label>
                         <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false [options]="EntrepriseList"
                             dataKey="_id" filter="true" formControlName="entreprise_id"
-                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur(entreprise_id.value)">
+                            [disabled]="token.type == 'CEO Entreprise'" (onChange)="loadTuteur($event.value)">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -894,6 +894,29 @@
                             {{ contrat.cout_dl_help_status != 'Accordé' ? contrat.cout_dl_help_status:
                             contrat.cout_dl_help + '€' }}
                         </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <!-- personne qui a ajouté le contrat -->
+        <div class="p-2">
+            <h6 style="font-weight: bold">Ajouté par</h6>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{contrat.add_by?.lastname}}</td>
+                        <td>{{contrat.add_by?.firstname}}</td>
+                        <td>{{contrat.add_by?.email}}</td>
+                        <td>{{contrat.add_by?.indicatif}}{{contrat.add_by?.phone}}</td>
                     </tr>
                 </ng-template>
             </p-table>

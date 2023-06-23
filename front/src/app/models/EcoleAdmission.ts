@@ -10,6 +10,8 @@ export class EcoleAdmission {
         public site_web?: string,
         public url_form?: string,
         public formations?: FormationAdmission[],
+        public campus?: string[],
+        public langue?: string
     ) { }
 
 }

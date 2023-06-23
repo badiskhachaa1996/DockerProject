@@ -506,180 +506,190 @@
     </div>
 
     <!-- Table d'affichage de la liste des preinscription -->
-    <div class="col-12">
-        <div class="card">
-            <h5>Liste des leads phase de paiements</h5>
+    <div class="col-12 card" *ngIf="ecoleList.length!=0">
+        <p-tabView>
+            <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
+                <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
+                    <h5>Liste des leads phase de paiements de {{ecole.titre}}</h5>
 
-            <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="prospects"
-                [paginator]="true" [pageLinks]="5" selectionMode="single"
-                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','modalite','campus_choix_3','user_id.email_perso','rythme_formation','payement']"
-                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <p-toast></p-toast>
+                    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
+                        [value]="prospects[ecole.url_form]" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                        [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','modalite','campus_choix_3','user_id.email_perso','rythme_formation','payement']"
+                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-                <ng-template pTemplate="caption">
-                    <span class="p-input-icon-left mb-2">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" #filter
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                            class="w-full" />
-                    </span>
-                    <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
-                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
-                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
-                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
-                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
-                        (onChange)="dt1.filter($event.value, 'formation','equals')"
-                        emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
-                        (onChange)="dt1.filter($event.value, 'programme','equals')"
-                        emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
+                        <ng-template pTemplate="caption">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" #filter
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
+                            </span>
+                            <p-dropdown filter="true" placeholder="Pays" [options]="filterPays"
+                                (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                                [style]="{'margin':'5px'}">
+                            </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Campus" [options]="filterCampus"
+                                (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
+                                emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Formation" [options]="filterFormation"
+                                (onChange)="dt1.filter($event.value, 'formation','equals')"
+                                emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Formation"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Anglais/Français" [options]="filterProgramme"
+                                (onChange)="dt1.filter($event.value, 'programme','equals')"
+                                emptyFilterMessage="Pas de programme trouvé" filterPlaceholder="Programme"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
 
-                    <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
-                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
-                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Ecole" [options]="filterEcole"
+                                (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                                emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
 
-                    <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
-                        (onChange)="dt1.filter($event.value, 'source','startsWith')"
-                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
-                        [style]="{'margin-left':'5px','margin-right':'5px'}">
-                    </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Source" [options]="filterSource"
+                                (onChange)="dt1.filter($event.value, 'source','startsWith')"
+                                emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source"
+                                [style]="{'margin-left':'5px','margin-right':'5px'}">
+                            </p-dropdown>
 
-                    <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
-                        (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
-                        emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
-                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
-                        emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Modalité de Paiement" [options]="filterModalite"
-                        (onChange)="dt1.filter($event.value,'modalite','contains')"
-                        emptyFilterMessage="Pas de modalité trouvé" filterPlaceholder="Modalité de Paiement"
-                        [style]="{'margin-right':'5px'}">
-                    </p-dropdown>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem" scope="col"></th>
-                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                            Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="customid" scope="col" style="text-align: center;">
-                            ID Lead <p-sortIcon field="customid"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="source" scope="col" style="text-align: center;">
-                            Source <p-sortIcon field="source"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                            Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
-                            Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
-                            Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="type_form" scope="col" style="text-align: center;">
-                            Ecole <p-sortIcon field="type_form"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="formation" scope="col" style="text-align: center;">
-                            Formation <p-sortIcon field="formation"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="programme" scope="col" style="text-align: center;">
-                            Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
-                        </th>
-                        <th>
-                            Montant payé
-                        </th>
-                        <th>
-                            Modalité de paiement
-                        </th>
-                        <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
-                            Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
-                            Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="action" scope="col" style="text-align: center;">
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-prospect>
-                    <tr>
+                            <p-dropdown filter="true" placeholder="Phase de la candidature" [options]="filterPhase"
+                                (onChange)="dt1.filter($event.value, 'phase_candidature','equals')"
+                                emptyFilterMessage="Pas de phase trouvé" filterPlaceholder="Phase de la candidature"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Rentrée scolaire" [options]="filterRentreeScolaire"
+                                (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                                emptyFilterMessage="Pas de statut trouvé" filterPlaceholder="Rentrée scolaire"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
+                            <p-dropdown filter="true" placeholder="Modalité de Paiement" [options]="filterModalite"
+                                (onChange)="dt1.filter($event.value,'modalite','contains')"
+                                emptyFilterMessage="Pas de modalité trouvé" filterPlaceholder="Modalité de Paiement"
+                                [style]="{'margin-right':'5px'}">
+                            </p-dropdown>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem" scope="col"></th>
+                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                    Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="customid" scope="col" style="text-align: center;">
+                                    ID Lead <p-sortIcon field="customid"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="source" scope="col" style="text-align: center;">
+                                    Source <p-sortIcon field="source"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                                    Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
+                                    Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
+                                    Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="type_form" scope="col" style="text-align: center;">
+                                    Ecole <p-sortIcon field="type_form"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="formation" scope="col" style="text-align: center;">
+                                    Formation <p-sortIcon field="formation"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="programme" scope="col" style="text-align: center;">
+                                    Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
+                                </th>
+                                <th>
+                                    Montant payé
+                                </th>
+                                <th>
+                                    Modalité de paiement
+                                </th>
+                                <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
+                                    Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
+                                    Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="action" scope="col" style="text-align: center;">
+                                    Action
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-prospect>
+                            <tr>
 
-                        <td>
-                            <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="selectedProspect==prospect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)="expand(prospect)"></button>
-                        </td>
+                                <td>
+                                    <button type="button" pButton pRipple
+                                        class="p-button-text p-button-rounded p-button-plain"
+                                        [icon]="selectedProspect==prospect ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                        (click)="expand(prospect)"></button>
+                                </td>
 
-                        <td>
-                            {{prospect.date_creation | date :'mediumDate' }}
-                        </td>
-                        <td>
-                            {{ prospect.customid }}
-                        </td>
+                                <td>
+                                    {{prospect.date_creation | date :'mediumDate' }}
+                                </td>
+                                <td>
+                                    {{ prospect.customid }}
+                                </td>
 
-                        <td>
-                            {{ prospect.source }}
-                        </td>
+                                <td>
+                                    {{ prospect.source }}
+                                </td>
 
-                        <td *ngIf="prospect.user_id">
-                            {{ prospect?.user_id?.firstname | titlecase }}
-                            {{ prospect?.user_id?.lastname | uppercase }}
-                        </td>
-                        <td *ngIf="prospect.user_id">
-                            {{ prospect?.user_id?.pays_adresse }}
-                        </td>
+                                <td *ngIf="prospect.user_id">
+                                    {{ prospect?.user_id?.firstname | titlecase }}
+                                    {{ prospect?.user_id?.lastname | uppercase }}
+                                </td>
+                                <td *ngIf="prospect.user_id">
+                                    {{ prospect?.user_id?.pays_adresse }}
+                                </td>
 
-                        <td>
-                            {{ prospect.campus_choix_1 }}
-                        </td>
-                        <td>
-                            {{ prospect.type_form|titlecase }}
-                        </td>
-                        <td>
-                            {{ prospect.formation | titlecase }}
-                        </td>
-                        <td>
-                            {{ prospect.programme }}
-                        </td>
-                        <td>
-                            {{getMontant(prospect.payement)}}€
-                        </td>
-                        <td>
-                            <!--{{getModalite(prospect.payement)}}--> {{prospect?.modalite}}
-                        </td>
+                                <td>
+                                    {{ prospect.campus_choix_1 }}
+                                </td>
+                                <td>
+                                    {{ prospect.type_form|titlecase }}
+                                </td>
+                                <td>
+                                    {{ prospect.formation | titlecase }}
+                                </td>
+                                <td>
+                                    {{ prospect.programme }}
+                                </td>
+                                <td>
+                                    {{getMontant(prospect.payement)}}€
+                                </td>
+                                <td>
+                                    <!--{{getModalite(prospect.payement)}}--> {{prospect?.modalite}}
+                                </td>
 
-                        <td>
-                            {{ prospect.phase_candidature }}
-                        </td>
-                        <td>
-                            {{ prospect.rentree_scolaire }}
-                        </td>
-                        <td>
-                            <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
-                                (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
+                                <td>
+                                    {{ prospect.phase_candidature }}
+                                </td>
+                                <td>
+                                    {{ prospect.rentree_scolaire }}
+                                </td>
+                                <td>
+                                    <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
+                                        (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
 
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+    <div class="col-12 card" *ngIf="ecoleList.length==0">
+        <h5>Chargement en cours des données...</h5>
+        <p-skeleton width="100%" height="100vh"></p-skeleton>
     </div>
     <!-- Expand SideBar -->
     <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedProspect=null">

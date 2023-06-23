@@ -57,9 +57,9 @@ export class PaiementsComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
 
         this.expandRow(this.showUploadFile)
-        this.prospects.forEach(p => {
+        this.prospects[this.showUploadFile.type_form].forEach(p => {
           if (p._id == this.showUploadFile._id) {
-            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(p)].haveDoc = true
             //this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
           }
         })
@@ -88,7 +88,7 @@ export class PaiementsComponent implements OnInit {
       this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         if (res.documents_administrative)
-          this.prospects[this.prospects.indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
+          this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
         event.target = null;
         this.showUploadFile = null;
 
@@ -162,7 +162,7 @@ export class PaiementsComponent implements OnInit {
       (error) => { console.error(error) }
     );
     this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
-      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+      this.prospects[prospect.type_form][this.prospects[prospect.type_form].indexOf(prospect)].etat_traitement = "Vu"
     })
   }
 
@@ -262,6 +262,8 @@ export class PaiementsComponent implements OnInit {
     { value: 'Septembre 2023', label: 'Septembre 2023' }
   ]
   filterEcole = []
+  ecoleList = []
+  dicEcole = {}
   filterProgramme = [
     { value: null, label: "Toutes les langues" },
     { value: "Programme Français", label: "Programme Français", },
@@ -270,7 +272,7 @@ export class PaiementsComponent implements OnInit {
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService,
     private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private VenteService: VenteService, private PService: PartenaireService, private CService: CommercialPartenaireService) { }
 
-  prospects: Prospect[];
+  prospects = [];
 
   selectedProspect: Prospect = null
 
@@ -313,12 +315,7 @@ export class PaiementsComponent implements OnInit {
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.admissionService.getAllPaiement().subscribe(data => {
-      this.prospects = data
-      data.forEach(v => {
-        v['modalite'] = this.getModalite(v.payement)
-      })
-    })
+
     this.CService.getByUserId(this.token.id).subscribe(c => {
       if (c)
         this.partenaireOwned = c.partenaire_id
@@ -355,10 +352,20 @@ export class PaiementsComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(d => {
-        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-        this.filterEcole.push({ label: d.titre, value: d.url_form })
+      this.admissionService.getAllPaiement().subscribe(dataP => {
+        this.prospects = dataP
+        data.forEach(d => {
+          this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+          this.filterEcole.push({ label: d.titre, value: d.url_form })
+          this.ecoleList.push(d)
+          this.dicEcole[d.url_form] = d
+        })
+        Object.keys(this.dicEcole).forEach((val, idx) => {
+          if (!dataP[val])
+            this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
       })
+
     })
   }
 
@@ -519,7 +526,7 @@ export class PaiementsComponent implements OnInit {
 
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showDetails), 1, data)
+      this.prospects[prospect.type_form].splice(this.prospects[prospect.type_form].indexOf(this.showDetails), 1, data)
       this
       if (willClose)
         this.showDetails = null
@@ -674,7 +681,7 @@ export class PaiementsComponent implements OnInit {
     }
     this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
-      this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
+      this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
     })
   }

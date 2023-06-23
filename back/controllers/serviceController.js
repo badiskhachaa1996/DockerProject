@@ -66,7 +66,7 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-app.post("/deleteById/:id", (req, res) => {
+app.get("/deleteById/:id", (req, res) => {
     //Supprimer un service par ID
     Service.findByIdAndRemove(req.params.id, (err, service) => {
         if (err) {

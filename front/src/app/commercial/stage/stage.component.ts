@@ -26,6 +26,7 @@ import jwt_decode from "jwt-decode";
 })
 export class StageComponent implements OnInit {
 
+  collaborateur: User;
   stages: Stage[];
   stageToUpdate: Stage;
 
@@ -62,13 +63,21 @@ export class StageComponent implements OnInit {
   ngOnInit(): void {
     // décodage du token
     this.token = jwt_decode(localStorage.getItem('token'));
+    // recuperation de la personne connecté
+    // recuperation de l'utilisateur actuellement connecté
+    this.userService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.collaborateur = response;
+      },
+      error: (error) => { console.log(error) },
+    });
 
-    this.messageService.add({severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages'});
-    this.stages               = [];
-    this.students             = [];
-    this.showFormAdd          = false;
-    this.showFormUpdate       = false;
-    this.showFormAddDoc       = false;
+    this.messageService.add({ severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages' });
+    this.stages = [];
+    this.students = [];
+    this.showFormAdd = false;
+    this.showFormUpdate = false;
+    this.showFormAddDoc = false;
     this.showFormUpdateStatus = false;
 
     // initialisation des années scolaires
@@ -114,34 +123,34 @@ export class StageComponent implements OnInit {
 
     // initialisation du formulaire d'ajout de stage
     this.formAdd = this.formBuilder.group({
-      student_id:         ['', Validators.required],
-      enterprise_id:      ['', Validators.required],
-      tutor_id:           ['', Validators.required],
-      begin_date:         ['', Validators.required],
-      end_date:           ['', Validators.required],
+      student_id: ['', Validators.required],
+      enterprise_id: ['', Validators.required],
+      tutor_id: ['', Validators.required],
+      begin_date: ['', Validators.required],
+      end_date: ['', Validators.required],
       schedules_per_week: ['', Validators.required],
-      commercial_id:      [''],
-      mission_tasks:      ['', Validators.required],
-      gratification:      ['', Validators.required],
-      payment_modality:   ['', Validators.required],
-      other_advantages:   [''],
-      school_year:        ['', Validators.required],
+      commercial_id: [''],
+      mission_tasks: ['', Validators.required],
+      gratification: ['', Validators.required],
+      payment_modality: ['', Validators.required],
+      other_advantages: [''],
+      school_year: ['', Validators.required],
     });
 
     // initialisation du formulaire de modification d'un stage
     this.formUpdate = this.formBuilder.group({
-      student_id:         ['', Validators.required],
-      enterprise_id:      ['', Validators.required],
-      tutor_id:           ['', Validators.required],
-      begin_date:         ['', Validators.required],
-      end_date:           ['', Validators.required],
+      student_id: ['', Validators.required],
+      enterprise_id: ['', Validators.required],
+      tutor_id: ['', Validators.required],
+      begin_date: ['', Validators.required],
+      end_date: ['', Validators.required],
       schedules_per_week: ['', Validators.required],
-      commercial_id:      [''],
-      mission_tasks:      ['', Validators.required],
-      gratification:      ['', Validators.required],
-      payment_modality:   ['', Validators.required],
-      other_advantages:   [''],
-      school_year:        ['', Validators.required],
+      commercial_id: [''],
+      mission_tasks: ['', Validators.required],
+      gratification: ['', Validators.required],
+      payment_modality: ['', Validators.required],
+      other_advantages: [''],
+      school_year: ['', Validators.required],
     });
 
     // initialisation du formulaire d'upload de fichier
@@ -157,118 +166,126 @@ export class StageComponent implements OnInit {
 
 
   // méthode de recuperation des classes
-  onGetAllDatas(): void
-  {
+  onGetAllDatas(): void {
     // recuperation de la liste des stages
     this.stageService.getStages()
-    .then((response) => {
-      this.stages = [];
-      response.forEach((stage: Stage) => {
-        this.stages.push(stage);
-      });
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Stages', detail: error.errorMsg }); });
+      .then((response) => {
+        this.stages = [];
+        response.forEach((stage: Stage) => {
+          this.stages.push(stage);
+        });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Stages', detail: error.errorMsg }); });
 
     // recuperation de la liste des étudiants
     this.etudiantService.getAllEtudiantPopulate().subscribe({
       next: (response) => {
-        this.students = [{label: "--Veuillez choisir un étudiant--", value: null}];
+        this.students = [{ label: "--Veuillez choisir un étudiant--", value: null }];
         response.forEach((student: Etudiant) => {
-          let {user_id}: any = student;
-          let studentData = {label: `${user_id.firstname} ${user_id.lastname}`, value: student._id};
+          let { user_id }: any = student;
+          let studentData = { label: `${user_id.firstname} ${user_id.lastname}`, value: student._id };
           this.students.push(studentData);
         });
       },
-      error: (error) => { this.messageService.add({severity: 'error', summary: 'Étudiant', detail: 'Impossible de récupérer la liste des étudiants'}) }
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Étudiant', detail: 'Impossible de récupérer la liste des étudiants' }) }
     });
 
     // recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe({
       next: (response) => {
-        this.enterprises = [{label: '--Veuillez choisir une entreprise--', value: null}];
+        this.enterprises = [];
         response.forEach((entreprise: Entreprise) => {
-          this.enterprises.push({label: entreprise.r_sociale, value: entreprise._id});
+          this.enterprises.push({ label: entreprise.r_sociale, value: entreprise._id });
         });
       },
-      error: (error) => { this.messageService.add({severity: 'error', summary: 'Entreprise', detail: 'Impossible de récupérer la liste des entreprises, veuillez contacter un administrateur'}) },
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: 'Impossible de récupérer la liste des entreprises, veuillez contacter un administrateur' }) },
     });
 
     // recuperation de la liste des commerciaux et remplissage du tableau de filtres commerciales
     this.userService.getAllCommercialV2().subscribe({
       next: (response) => {
-        this.commercialFilters = [{label: 'Tous les commerciaux', value: null}];
+        this.commercialFilters = [{ label: 'Tous les commerciaux', value: null }];
         response.forEach((commercial: User) => {
-          let commercialData = {label: `${commercial.firstname} ${commercial.lastname}`, value: commercial._id};
+          let commercialData = { label: `${commercial.firstname} ${commercial.lastname}`, value: commercial._id };
           this.commercialFilters.push(commercialData);
         });
       },
-      error: (error) => { this.messageService.add({severity: 'error', summary: 'Liste des commerciaux', detail: 'Impossible de récupérer la liste des commerciaux, veuillez contacter un administrateur.'}) },
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Liste des commerciaux', detail: 'Impossible de récupérer la liste des commerciaux, veuillez contacter un administrateur.' }) },
     });
 
     // recuperation de la liste des campus pour les filtres
     this.campusService.getAllPopulate().subscribe({
       next: (response) => {
-        this.campusFilters = [{label: 'Tous les campus', value: null}];
+        this.campusFilters = [{ label: 'Tous les campus', value: null }];
         response.forEach((campus: Campus) => {
-          let campusData = {label: campus.libelle, value: campus._id};
+          let campusData = { label: campus.libelle, value: campus._id };
           this.campusFilters.push(campusData);
         });
       },
-      error: (error) => {this.messageService.add({severity: 'error', summary: 'Liste des campus', detail: 'Impossible de récupérer la liste des campus, veuillez contacter un administrateur.'})},
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Liste des campus', detail: 'Impossible de récupérer la liste des campus, veuillez contacter un administrateur.' }) },
     });
 
     // recuperation de la liste des diplômes
     this.diplomeService.getAll().subscribe({
       next: (response) => {
-        this.certificateFilters = [{label: 'Toutes les formations', value: null}];
+        this.certificateFilters = [{ label: 'Toutes les formations', value: null }];
         response.forEach((diplome: Diplome) => {
-          let certificateData = {label: diplome.titre, value: diplome._id} ;
+          let certificateData = { label: diplome.titre, value: diplome._id };
           this.certificateFilters.push(certificateData);
         });
       },
-      error: (error) => {this.messageService.add({severity: 'error', summary: 'Liste des formations', detail: 'Impossible de récupérer la liste des campus, veuillez contacter un administrateur.'});},
+      error: (error) => { this.messageService.add({ severity: 'error', summary: 'Liste des formations', detail: 'Impossible de récupérer la liste des campus, veuillez contacter un administrateur.' }); },
     });
   }
 
 
   // méthode de chargement de la liste des tuteurs d'une entreprise
-  onLoadTutors(event: any): void
-  {
-    this.tuteurs = [{label: '--Veuillez choisir le tuteur--', value: null}];
+  onLoadTutors(event: any, idTuteur: string = null): void {
+    this.tuteurs = [];
     // recuperation du ceo de l'entreprise
-    this.entrepriseService.getByIdPopulate(event.value).subscribe({
+    this.entrepriseService.getByIdPopulate(event).subscribe({
       next: (entreprise: Entreprise) => {
-        this.tuteurService.getAllByEntrepriseId(event.value).subscribe({
+        this.tuteurService.getAllByEntrepriseId(event).subscribe({
           next: (response: Tuteur[]) => {
-            let {directeur_id}: any = entreprise;
-            let enterpriseCeoData = {label: `${directeur_id.firstname} ${directeur_id.lastname}`, value: directeur_id._id}
+            let { directeur_id }: any = entreprise;
+            let enterpriseCeoData = { label: `${directeur_id.firstname} ${directeur_id.lastname}`, value: directeur_id._id }
             this.tuteurs.push(enterpriseCeoData);
             // affectation de l'id du ceo à la variable actualDirectorId
             this.actualDirectorId = directeur_id._id;
             response.forEach((tuteur: Tuteur) => {
-              let {user_id}: any = tuteur;
-              let tutorData = {label: `${user_id.firstname} ${user_id.lastname}`, value: tuteur._id};
+              let { user_id }: any = tuteur;
+              let tutorData = { label: `${user_id.firstname} ${user_id.lastname}`, value: tuteur._id };
               this.tuteurs.push(tutorData);
             });
+
+            // remplissage du formulaire de modif avec l'id du tuteur
+            if (idTuteur != null) {
+              this.tuteurs.forEach((tuteur: any) => {
+                if(idTuteur == tuteur.value)
+                {
+                  this.formUpdate.patchValue({
+                    tutor_id: tuteur,
+                  });
+                }
+              });
+            }
           },
-          error: (error) => { this.messageService.add({severity: 'error', summary: 'Tuteurs', detail: 'Impossible de récupérer la liste des tuteurs, veuillez contacter un administrateur'}); }
+          error: (error) => { this.messageService.add({ severity: 'error', summary: 'Tuteurs', detail: 'Impossible de récupérer la liste des tuteurs, veuillez contacter un administrateur' }); }
         });
       },
-      error: (error: any) => { this.messageService.add({severity: 'error', summary: 'Entreprise', detail: "Impossible de récupérer l'entreprise sélectionné, veuillez contacter un administrateur"}); }
+      error: (error: any) => { this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: "Impossible de récupérer l'entreprise sélectionné, veuillez contacter un administrateur" }); }
     });
   }
 
 
   // méthode d'ajout d'un stage
-  onAdd(): void
-  {
+  onAdd(): void {
     const formValue = this.formAdd.value;
     const stage = new Stage();
 
     stage.student_id = formValue.student_id;
     stage.enterprise_id = formValue.enterprise_id;
-    if(this.actualDirectorId == formValue.tutor_id)
-    {
+    if (this.actualDirectorId == formValue.tutor_id) {
       stage.tutor_id = null;
       stage.director_id = formValue.tutor_id;
     } else {
@@ -285,35 +302,44 @@ export class StageComponent implements OnInit {
     stage.other_advantages = formValue.other_advantages;
     stage.status = 'Crée';
     stage.school_year = formValue.school_year;
-    
+    stage.add_by = this.collaborateur._id;
+
 
     this.stageService.postStage(stage)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Stage', detail: response.successMsg});
-      this.onGetAllDatas();
-      this.formAdd.reset();
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Stage', detail: error.error.errorMsg}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Stage', detail: response.successMsg });
+        this.onGetAllDatas();
+        this.formAdd.reset();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Stage', detail: error.error.errorMsg }); });
   }
 
 
   // méthode de remplissage du formulaire de mise à jour d'un stage
-  onPatchFormUpdate(stage: Stage): void
-  {
+  onPatchFormUpdate(stage: Stage): void {
     this.stageToUpdate = stage;
-    let {student_id}: any = stage;
-    let {enterprise_id}: any = stage;
-    let {tutor_id}: any = stage;
-    let {commercial_id}: any = stage;
-    
+    let { student_id }: any = stage;
+
+    let { enterprise_id }: any = stage;
+    let { tutor_id }: any = stage;
+    let { director_id }: any = stage;
+
+    if (tutor_id != null) {
+      this.onLoadTutors(enterprise_id._id, tutor_id.user_id._id);
+    } else {
+      this.onLoadTutors(enterprise_id._id, director_id._id);
+    }
+
+    let { commercial_id }: any = stage;
+
     this.formUpdate.patchValue({
-      student_id: {label: `${student_id.user_id?.firstname} ${student_id.user_id?.lastname}`, value: student_id._id},
-      // enterprise_id: { label: enterprise_id.r_sociale, value: enterprise_id._id },
+      student_id: { label: `${student_id.user_id?.firstname} ${student_id.user_id?.lastname}`, value: student_id._id },
+      enterprise_id: { label: enterprise_id.r_sociale, value: enterprise_id._id },
       // tutor_id: { label: `${tutor_id.user_id?.firstname} ${tutor_id.user_id?.lastname}`, value: tutor_id._id },
-      // begin_date: stage.begin_date,
-      // end_date: stage.end_date,
+      begin_date: new Date(stage.begin_date),
+      end_date: new Date(stage.end_date),
       schedules_per_week: stage.schedules_per_week,
-      commercial_id: {label: `${commercial_id?.firstname} ${commercial_id?.lastname}`, value: commercial_id?._id},
+      commercial_id: { label: `${commercial_id?.firstname} ${commercial_id?.lastname}`, value: commercial_id?._id },
       mission_tasks: stage.mission_tasks,
       gratification: stage.gratification,
       payment_modality: stage.payment_modality,
@@ -326,85 +352,79 @@ export class StageComponent implements OnInit {
 
 
   //  méthode de mise à jour d'un stage
-  onUpdate(): void
-  {
+  onUpdate(): void {
     const formValue = this.formUpdate.value;
     const stage = new Stage();
 
-    stage._id                 = this.stageToUpdate._id;
-    stage.student_id          = formValue.student_id;
-    stage.enterprise_id       = formValue.enterprise_id;
-    if(this.actualDirectorId == formValue.tutor_id)
-    {
-      stage.tutor_id    = null;
+    stage._id = this.stageToUpdate._id;
+    stage.student_id = formValue.student_id;
+    stage.enterprise_id = formValue.enterprise_id;
+    if (this.actualDirectorId == formValue.tutor_id) {
+      stage.tutor_id = null;
       stage.director_id = formValue.tutor_id;
     } else {
       stage.director_id = null;
-      stage.tutor_id    = formValue.tutor_id;
+      stage.tutor_id = formValue.tutor_id;
     }
-    stage.begin_date          = formValue.begin_date;
-    stage.end_date            = formValue.end_date;
-    stage.schedules_per_week  = formValue.schedules_per_week;
+    stage.begin_date = formValue.begin_date;
+    stage.end_date = formValue.end_date;
+    stage.schedules_per_week = formValue.schedules_per_week;
     formValue.commercial_id == '' ? stage.commercial_id = null : stage.commercial_id = formValue.commercial_id;
-    stage.mission_tasks       = formValue.mission_tasks;
-    stage.gratification       = formValue.gratification;
-    stage.payment_modality    = formValue.payment_modality;
-    stage.other_advantages    = formValue.other_advantages;
-    stage.status              = this.stageToUpdate.status;
-    stage.school_year         = formValue.school_year;
+    stage.mission_tasks = formValue.mission_tasks;
+    stage.gratification = formValue.gratification;
+    stage.payment_modality = formValue.payment_modality;
+    stage.other_advantages = formValue.other_advantages;
+    stage.status = this.stageToUpdate.status;
+    stage.school_year = formValue.school_year;
 
     this.stageService.putStage(stage)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Stage', detail: response.successMsg});
-      this.onGetAllDatas();
-      this.formUpdate.reset();
-      this.showFormUpdate = false;
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Stage', detail: error.error.errorMsg}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Stage', detail: response.successMsg });
+        this.onGetAllDatas();
+        this.formUpdate.reset();
+        this.showFormUpdate = false;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Stage', detail: error.error.errorMsg }); });
   }
 
 
   // méthode de selection du fichier
-  onSelectFile(event: any): void
-  {
-    if(event.target.files.length > 0)
-    {
+  onSelectFile(event: any): void {
+    if (event.target.files.length > 0) {
       this.doc = event.target.files[0];
     }
   }
 
   // méthode d'upload des fichiers
-  onUploadDoc(): void
-  {
+  onUploadDoc(): void {
     const fileType = this.formAddDoc.value.fileType;
     let formData = new FormData();
-    formData.append('id', this.stageToUpdate._id); 
-    formData.append('file', this.doc); 
+    formData.append('id', this.stageToUpdate._id);
+    formData.append('file', this.doc);
 
-    switch(fileType)
-    {
+    switch (fileType) {
       case 'Attestation de stage':
         this.stageService.uploadAttestation(formData)
-        .then((response) => {
-          this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
-        })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+          })
+          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Convention de stage':
         this.stageService.uploadConvention(formData)
-        .then((response) => {
-          this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
-        })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+          })
+          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Avenant du stage':
         this.stageService.uploadAvenant(formData)
-        .then((response) => {
-          this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
-        })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
+          })
+          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       default:
@@ -414,37 +434,35 @@ export class StageComponent implements OnInit {
   }
 
   // méthode de téléchargement des fichiers
-  onDownloadDoc(docName: string, idStage: string): void
-  {
-    switch(docName)
-    {
+  onDownloadDoc(docName: string, idStage: string): void {
+    switch (docName) {
       case 'convention':
         this.stageService.downloadConvention(idStage)
-        .then((response: Blob) => {
-          let downloadUrl = window.URL.createObjectURL(response);
-          saveAs(downloadUrl, `convention_stage.${response.type.split('/')[1]}`);
-          this.messageService.add({ severity: "success", summary: "Convention de stage", detail: `Téléchargement réussi` });
-        })
-        .catch((error) => { this.messageService.add({ severity: "error", summary: 'Convention de stage', detail: 'Impossible de télécharger le fichier' }); });
+          .then((response: Blob) => {
+            let downloadUrl = window.URL.createObjectURL(response);
+            saveAs(downloadUrl, `convention_stage.${response.type.split('/')[1]}`);
+            this.messageService.add({ severity: "success", summary: "Convention de stage", detail: `Téléchargement réussi` });
+          })
+          .catch((error) => { this.messageService.add({ severity: "error", summary: 'Convention de stage', detail: 'Impossible de télécharger le fichier' }); });
 
         break;
       case 'avenant':
         this.stageService.downloadAvenant(idStage)
-        .then((response: Blob) => {
-          let downloadUrl = window.URL.createObjectURL(response);
-          saveAs(downloadUrl, `attestation_stage.${response.type.split('/')[1]}`);
-          this.messageService.add({ severity: "success", summary: "Attestation de stage", detail: `Téléchargement réussi` });
-        })
-        .catch((error) => { this.messageService.add({ severity: "error", summary: 'Attestation de stage', detail: 'Impossible de télécharger le fichier' }); });
+          .then((response: Blob) => {
+            let downloadUrl = window.URL.createObjectURL(response);
+            saveAs(downloadUrl, `attestation_stage.${response.type.split('/')[1]}`);
+            this.messageService.add({ severity: "success", summary: "Attestation de stage", detail: `Téléchargement réussi` });
+          })
+          .catch((error) => { this.messageService.add({ severity: "error", summary: 'Attestation de stage', detail: 'Impossible de télécharger le fichier' }); });
 
         break;
       case 'attestation':
         this.stageService.downloadAttestation(idStage)
-        .then((response: Blob) => {
-          let downloadUrl = window.URL.createObjectURL(response);
-          saveAs(downloadUrl, `attestation_stage.${response.type.split('/')[1]}`);
-        })
-        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Attestation de stage', detail: 'Impossible de télécharger le fichier' }); });
+          .then((response: Blob) => {
+            let downloadUrl = window.URL.createObjectURL(response);
+            saveAs(downloadUrl, `attestation_stage.${response.type.split('/')[1]}`);
+          })
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Attestation de stage', detail: 'Impossible de télécharger le fichier' }); });
 
         break;
       default:
@@ -454,31 +472,28 @@ export class StageComponent implements OnInit {
 
 
   // méthode d'affichage du formulaire de mise à jour du status
-  onShowFormUpdateStatus(): void
-  {
+  onShowFormUpdateStatus(): void {
     this.showFormUpdateStatus = true;
   }
 
 
   // méthode de modification du statut d'un stage
-  onUpdateStatus(): void
-  {
+  onUpdateStatus(): void {
     const status = this.formUpdateStatus.value.status;
-    let {commercial_id}: any = this.stageToUpdate;
-    
+    let { commercial_id }: any = this.stageToUpdate;
+
     this.stageService.patchStatus(this.stageToUpdate._id, commercial_id?.email, status)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Statut', detail: response.successMsg});
-      this.showFormUpdateStatus = false;
-      this.onGetAllDatas();
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Statut', detail: error.error.errorMsg}); })
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut', detail: response.successMsg });
+        this.showFormUpdateStatus = false;
+        this.onGetAllDatas();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Statut', detail: error.error.errorMsg }); })
   }
 
 
   // méthode de redirection vers la page des assiduités
-  showPresence(id: string): void
-  {
+  showPresence(id: string): void {
     this.router.navigate(["details/" + id]);
   }
 

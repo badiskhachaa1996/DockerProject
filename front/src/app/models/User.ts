@@ -33,7 +33,8 @@ export class User {
             module?: string,
             role?: string,
         }[],
-        public service_list?: any[]
+        public service_list?: any[],
+        public statut?: string,
     ) { }
 
 

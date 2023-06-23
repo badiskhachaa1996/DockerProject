@@ -19,6 +19,7 @@ const { ProspectAlternable } = require('../models/ProspectAlternable');
 const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
+const { FormationAdmission } = require('../models/formationAdmission');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -313,6 +314,73 @@ app.post("/create", (req, res, next) => {
 
 
                                     });
+                                } else if (prospectSaved.type_form == "inteducation") {
+
+                                    FormationAdmission.findOne({ nom: prospectSaved.formation }).then(formation => {
+                                        let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
+                                            "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
+                                            "<div><p>Nous sommes ravis de recevoir votre candidature à notre établissement.   " +
+                                            "  Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec votre mail et le mot de passe suivant :  <strong> " +
+                                            r + "</strong> sur le lien : <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></p></div>" +
+                                            "<div><p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, vous pouvez, dans ce cas, les envoyer directement sur l'adresse électronique : orientation@intedgroup.com .   </p>" +
+                                            `<p>
+                                        Les document nécessaire pour la formation ${prospectSaved.formation} sont :  
+                                        ${formation.criteres}
+                                        Pour vous faciliter l’utilisation de notre plateforme, vous pouvez suivre les étapes ci-après :    
+                                        Vérifiez que vos informations personnelles ont été correctement saisies au niveau de la rubrique « Informations Personnelles »    
+                                        Assurez-vous d’avoir choisi :  le programme d’étude le plus en adéquation avec votre parcours académique.   
+                                        Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme également.   
+                                        Nous demeurons à votre disposition pour tout complément d'information.   
+                                        Bien cordialement.   
+                                        </p><br></div>
+                                        ------------------------------------------------------------------------------------- 
+                                        <div>
+                                        <p>Hello, </p> 
+                                        </div>
+                                        <div>
+                                        <p>We are delighted to receive your application to our institution. </p>
+                                        </div>
+                                        <div>
+                                        <p>
+                                        Your registration request on our platform has been successfully recorded. Please log in with your email and the following password: ${r} on the link: <a href="${origin[0]}/#/validation-email/${userCreated.email_perso}">Activate my IMS account</a>
+If you encounter any difficulties in uploading your documents or have omitted some, you can send them directly to the email address: orientation@intedgroup.com. The documents required for the ${prospectSaved.formation} are: ${formation.criteres} 
+
+To facilitate your use of our platform, you can follow the steps below:  
+
+• Verify that your personal information has been correctly entered in the "Personal Information" section.  
+
+• Ensure that you have chosen the study program that best aligns with your academic background. 
+
+Please note that you can also check the status of your application on the platform. 
+
+We remain at your disposal for any further information. 
+
+ 
+
+Best regards. 
+</p>
+</div>
+                                        `
+                                        let mailOptions = {
+                                            from: "ims@intedgroup.com",
+                                            to: userCreated.email_perso,
+                                            subject: 'Confirmation de préinscription',
+                                            html: htmlmail,
+                                            /* attachments: [{
+                                                 filename: 'EUsign.png',
+                                                 path: 'assets/EUsign.png',
+                                                 cid: 'red' //same cid value as in the html img src
+                                             }] */
+                                        };
+                                        transporterINTED.sendMail(mailOptions, function (error, info) {
+                                            if (error) {
+                                                console.error(error);
+
+                                            }
+                                        });
+                                    })
+
+
                                 }
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
@@ -380,7 +448,14 @@ app.get("/getAllSourcing", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -419,13 +494,28 @@ app.get("/getAllByCommercialUserID/:id", (req, res, next) => {
         })
         .catch((error) => { res.status(500).send(error.message); });*/
 });
-
+function getModalite(listPayement) {
+    let str = listPayement[0].type
+    listPayement.forEach((paiement, index) => {
+        if (index != 0 && paiement.type)
+            str = str + "," + paiement.type
+    })
+    return str
+}
 //Recuperation de la liste des prospect pour le tableau Paiement
 app.get("/getAllPaiement", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, "payement.0": { $exists: true } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                val['modalite'] = getModalite(val.payement)
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -435,7 +525,14 @@ app.get("/getAllOrientation", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ team_sourcing_id: { $ne: null } }, { agent_sourcing_id: { $ne: null } }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -445,7 +542,14 @@ app.get("/getAllAdmission", (req, res, next) => {
 
     Prospect.find({ archived: [false, null], user_id: { $ne: null }, $or: [{ decision_orientation: "Validé" }, { decision_orientation: "Changement de campus" }, { decision_orientation: "Changement de formation" }, { decision_orientation: "Changement de destination" }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -631,6 +735,7 @@ app.get("/getFilesInscri/:id", (req, res) => {
 
 app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
     let pathFile = "storage/prospect/" + req.params.id + "/" + req.params.directory + "/" + req.params.filename
+    console.log(pathFile)
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
             return console.error(err);
@@ -997,7 +1102,14 @@ app.post("/send-creation-link", (req, res) => {
 app.get('/getAllAffected/:agent_id/:team_id', (req, res) => {
     Prospect.find({ $or: [{ agent_sourcing_id: req.params.agent_id }, { team_sourcing_id: req.params.team_id }] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            res.status(201).send(prospectsFromDb)
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
         })
         .catch((error) => { res.status(500).send(error.message); });
 })

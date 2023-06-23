@@ -142,7 +142,7 @@ export class ListEntrepriseComponent implements OnInit {
       civilite_rep: [this.civiliteList[0]],
       nom_rep: [''],
       prenom_rep: [''],
-      email_rep: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      email_rep: [''],
       indicatif_rep: [''],
       phone_rep: [''],
     })
