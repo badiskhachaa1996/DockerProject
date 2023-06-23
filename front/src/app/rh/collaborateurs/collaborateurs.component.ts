@@ -18,6 +18,7 @@ export class CollaborateursComponent implements OnInit {
   collaborateurToUpdate: Collaborateur;
   collaborateurPersonalData: User; // information personnelles du collaborateur pour la mise à jour des données
   collaborateurCompetences: any[] = []; // liste des compétences du collaborateur
+  clonedCollaborateurCompetences: { [s: string]: any } = {};
   formAdd: FormGroup; // ajout du collaborateur
   showFormAdd: boolean = false;
   formUpdate: FormGroup; // mise à jour des infos collaborateur du collaborateur
@@ -27,6 +28,9 @@ export class CollaborateursComponent implements OnInit {
   showCompetenceTable: boolean = false;
   formAddCompetence: FormGroup;
   showFormAddCompetence: boolean = false;
+  showJobDescription: boolean = false;
+  formUpdateJobDescription: FormGroup;
+  showFormUpdateJobDescriptionForm: boolean = false;
 
   // chargement des données de tableau
   loading: boolean = false;
@@ -302,7 +306,7 @@ export class CollaborateursComponent implements OnInit {
     this.getCompetences().push(newCompetenceControl);
   }
 
-  // suppression d'une compétence
+  // suppression d'un champ de compétence
   onDeleteCompetence(i: number): void
   {
     this.getCompetences().removeAt(i);
@@ -323,6 +327,83 @@ export class CollaborateursComponent implements OnInit {
       this.onGetCollaborateurs();
       this.onGetCollaborateurCompetence(response._id);
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+  }
+
+  // méthodes de mise à jour d'une compétence
+  onRowEditInit(competence: any) {
+    this.clonedCollaborateurCompetences[competence._id as string] = { ...competence };
+  }
+
+  onRowEditSave(competence: any) {
+    // méthode de mise à jour de la compétence
+    this.collaborateurToUpdate.competences = this.collaborateurCompetences;
+    this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
+    .then((response) => {
+      this.onGetCollaborateurs();
+      this.onGetCollaborateurCompetence(response._id);
+      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+      delete this.clonedCollaborateurCompetences[competence._id as string];
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+  }
+
+  onRowEditCancel(competence: any, index: number) {
+      this.collaborateurCompetences[index] = this.clonedCollaborateurCompetences[competence._id as string];
+      delete this.clonedCollaborateurCompetences[competence._id as string];
+  }
+
+  // méthode de suppression d'une compétence
+  onDeleteCollaborateurCompetence(id: string): void
+  {
+    this.collaborateurToUpdate.competences = this.collaborateurToUpdate.competences.filter(c => c._id != id);
+
+    this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
+    .then((response) => {
+      this.onGetCollaborateurs();
+      this.onGetCollaborateurCompetence(response._id);
+      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+  }
+
+  // méthode de suppression du collaborateur
+  onRemoveCollaborateur(id: string): void
+  {
+    if(confirm('Voulez vous supprimer ce collaborateur ?'))
+    {
+      this.rhService.deleteCollaborateur(id)
+      .then((response) => {
+        this.onGetCollaborateurs();
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: response });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: error }); });
+    }
+  }
+
+  // initialisation du formulaire de mise à jour de la description du poste
+  onInitFormUpdateJobDescription(): void
+  {
+    // initialisation du formulaire de mise à jour de la description du poste
+    this.formUpdateJobDescription = this.formBuilder.group({
+      description: [this.collaborateurToUpdate?.poste_description, Validators.required],
+    });
+  }
+
+  // mise à jour du poste du collaborateur
+  onUpdateJobDescription(): void
+  {
+    const formValue = this.formUpdateJobDescription.value;
+
+    this.collaborateurToUpdate.poste_description = formValue.description;
+
+    this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
+    .then((response) => {
+      this.onGetCollaborateurs();
+      this.showFormUpdateJobDescriptionForm = false;
+      this.formUpdateJobDescription.reset();
+      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
   }
 }

@@ -110,13 +110,10 @@ app.patch("/upload-collaborateur-document", uploadCollaborateurDocument.single('
 // suppression du collaborateur via son user id
 app.delete('/delete-collaborateur/:id', (req, res) => {
     const {id} = req.params;
-    User.deleteOne({_id: id})
-    .then(() => {
-        Collaborateur.deleteOne({user_id: id})
-        .then(() => { res.status(200).send('Collaborateur supprimé correctement') })
-        .catch((error) => { res.status(500).send("Impossible de supprimer le collaborateur"); })
-    })
-    .catch((error) => { res.status(500).send("Impossible de supprimer l'objet User lié au collaborateur") })
+    
+    Collaborateur.deleteOne({user_id: id})
+    .then(() => { res.status(200).send('Collaborateur supprimé correctement') })
+    .catch((error) => { res.status(500).send("Impossible de supprimer le collaborateur"); })
 });
 
 // ajout de compétence
