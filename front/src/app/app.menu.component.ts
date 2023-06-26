@@ -962,6 +962,21 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/intuns/formations']
                                 }
                             ]
+                        }, {
+                            label: 'Email Type',
+                            icon: 'pi pi-envelope',
+                            items: [
+                                {
+                                    label: 'Configuration des adresses mails',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/mails/configuration']
+                                },
+                                {
+                                    label: 'Liste des mails types',
+                                    icon: 'pi pi-bars',
+                                    routerLink: ['/mails/type']
+                                },
+                            ]
                         }
                     ];
                 }
