@@ -268,7 +268,41 @@
 	</div>
 
 	<!-- Affichage du cra -->
-	<div class="col-12"></div>
+	<div class="col-12" *ngIf="showCra">
+		<div class="card">
+			<p-sidebar [(visible)]="showCra" [fullScreen]="true" [baseZIndex]="10000">
+				<h3 class="header">C.R.A</h3>
+				<p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+					<ng-template pTemplate="header">
+						<tr>
+							<th>Date</th>
+							<th>Tâche</th>
+							<th>Durée</th>
+							<th>Action</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-actualite>
+						<tr>
+							<td>test</td>
+							<td>test</td>
+							<td>test</td>
+							<td>test</td>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="emptymessage">
+						<tr>
+							<td colspan="4">Aucun CRA pour le moment.</td>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="loadingbody">
+						<tr>
+							<td colspan="4">Chargement des CRA, merci de patienter...</td>
+						</tr>
+					</ng-template>
+				</p-table>
+			</p-sidebar>
+		</div>
+	</div>
 
 	<!-- Job description -->
 	<div class="col-12" *ngIf="showJobDescription">
@@ -463,13 +497,13 @@
 							{{collaborateur.contrat_type}} jours
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
-							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" style="color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
-							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs" style="color: #22C55E" (click)="onFillForm(collaborateur)"></i>
-							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
-							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
-							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="color: #F59E0B"></i>
-							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
-							<i class="pi pi-list m-1" pTooltip="CRA" style="color: #A855F7"></i>
+							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
+							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs" style="cursor: pointer; color: #22C55E" (click)="onFillForm(collaborateur)"></i>
+							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles" style="cursor: pointer;" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
+							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
+							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="cursor: pointer; color: #F59E0B"></i>
+							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
+							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7" (click)="showCra = true;"></i>
                         </td>
 					</tr>
 				</ng-template>

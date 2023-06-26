@@ -31,6 +31,7 @@ export class CollaborateursComponent implements OnInit {
   showJobDescription: boolean = false;
   formUpdateJobDescription: FormGroup;
   showFormUpdateJobDescriptionForm: boolean = false;
+  showCra: boolean = false;
 
   // chargement des données de tableau
   loading: boolean = false;

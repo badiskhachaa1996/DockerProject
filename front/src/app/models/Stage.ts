@@ -19,5 +19,7 @@ export class Stage {
         public avenant?:                string, // document lié au stage
         public attestation?:            string, // document lié au stage
         public add_by?:                 string,
+        public added_date?:             Date,
+        public code_commercial?:             Date,
     ){}
 }

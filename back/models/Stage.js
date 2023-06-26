@@ -19,7 +19,9 @@ const stageSchema = mongoose.Schema({
     avenant:            { type: String, required: false }, // document lié au stage
     attestation:        { type: String, required: false }, // document lié au stage
     attestation:        { type: String, required: false }, // document lié au stage
-    add_by: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
+    add_by:             { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
+    added_date:         { type: Date, required: false },
+    code_commercial:    { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
 });
 
 const Stage = mongoose.model('stage', stageSchema);
