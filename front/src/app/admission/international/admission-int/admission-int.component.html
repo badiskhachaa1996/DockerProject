@@ -646,10 +646,10 @@
     </div>
 
     <!-- Table d'affichage de la liste des preinscription -->
-    <div class="col-12 card" *ngIf="ecoleList.length!=0">
-        <p-tabView>
+    <div class="col-12 card grid" *ngIf="ecoleList.length!=0">
+        <p-tabView style="max-width: 100%;">
             <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
-                <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
+                <div *ngIf="prospects && prospects[ecole.url_form]" >
                     <h5>Liste des leads admission de {{ecole.titre}}</h5>
 
                     <p-toast></p-toast>

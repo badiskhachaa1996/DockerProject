@@ -13,9 +13,8 @@ let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a03
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  console.log(argProd);
   if (!argProd.includes("dev") && !argProd.includes("prod")) {
-    dblog = "mongodb://localhost:27017/" + argProd;
+    dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25"];
   } else
@@ -46,7 +45,7 @@ const options = {
   allowEIO3: true,
 };
 const io = require("socket.io")(httpServer, options);
-
+console.log('URL Connection MONGODB:' + dblog)
 mongoose
   .connect(dblog, {
     useCreateIndex: true,
@@ -356,6 +355,7 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
+app.use('/soc/emailType', require('./controllers/emailTypeController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
