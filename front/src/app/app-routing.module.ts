@@ -233,6 +233,9 @@ import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-pai
 import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
 import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
+import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
+import { MailTypeComponent } from './mail-type/mail-type/mail-type.component';
+import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -456,6 +459,11 @@ const routes: Routes = [
             { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent, canActivate: [AuthGuardService] },
             { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent, canActivate: [AuthGuardService] },
             { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent, canActivate: [AuthGuardService] },
+            //Module Mail Type
+            { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
+
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

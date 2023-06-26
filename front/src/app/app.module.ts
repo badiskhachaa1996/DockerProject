@@ -337,7 +337,10 @@ import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.compo
 import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
 import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
-
+import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
+import { MailTypeComponent } from './mail-type/mail-type/mail-type.component';
+import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
+import { EditorModule } from 'primeng/editor';
 
 @NgModule({
   imports: [
@@ -432,6 +435,7 @@ import { VersionNonIframeComponent } from './formulaire-admission/formulaire-adm
     StyleClassModule,
     FullCalendarModule,
     NgxIntlTelInputModule,
+    EditorModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -683,7 +687,10 @@ import { VersionNonIframeComponent } from './formulaire-admission/formulaire-adm
     LeadSuiviComponent,
     LeadPaiementsComponent,
     LeadDossierComponent,
-    VersionNonIframeComponent
+    VersionNonIframeComponent,
+    ConfigurationMailComponent,
+    MailTypeComponent,
+    MailAutoComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
