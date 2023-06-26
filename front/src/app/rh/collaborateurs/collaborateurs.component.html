@@ -200,7 +200,7 @@
 
 			<h2 class="header">Compétences du collaborateur</h2>
 
-			<p-table #dt1 [value]="collaborateurCompetences" dataKey="_id" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['kind', 'level']" responsiveLayout="scroll">
+			<p-table #dt1 [value]="collaborateurCompetences" dataKey="_id" editMode="row" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['kind', 'level']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
@@ -228,17 +228,33 @@
 						</th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-competence>
-					<tr>
+				<ng-template pTemplate="body" let-competence let-editing="editing" let-ri="rowIndex">
+					<tr [pEditableRow]="competence">
 						<td style="min-width: 10rem;">
-							{{competence.kind}}
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<input pInputText type="text" [(ngModel)]="competence.kind">
+								</ng-template>
+								<ng-template pTemplate="output">
+									{{competence.kind}}
+								</ng-template>
+							</p-cellEditor>
 						</td>
 						<td style="min-width: 10rem;">
-							{{competence.level}}
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<p-dropdown [options]="levelList" appendTo="body" [(ngModel)]="competence.level" [style]="{'width':'100%'}"></p-dropdown>
+								</ng-template>
+								<ng-template pTemplate="output">
+									{{competence.level}}
+								</ng-template>
+							</p-cellEditor>
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
-							<i class="pi pi-pencil m-1" pTooltip="Mettre à jour la compétence" style="color: #22C55E"></i>
-							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="color: #EF4444"></i>
+							<button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(competence)" class="p-button-rounded p-button-text"></button>
+							<button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteCollaborateurCompetence(competence._id)"></button>
+							<button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(competence)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+							<button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(competence, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
 						</td>
 					</tr>
 				</ng-template>
@@ -248,6 +264,42 @@
 					</tr>
 				</ng-template>
 			</p-table>
+		</div>
+	</div>
+
+	<!-- Affichage du cra -->
+	<div class="col-12"></div>
+
+	<!-- Job description -->
+	<div class="col-12" *ngIf="showJobDescription">
+		<div class="card">
+			<p-sidebar [(visible)]="showJobDescription" [fullScreen]="true" [baseZIndex]="10000">
+				<!-- formulaire de mise à jour de la description du poste du collaborateur -->
+				<div class="card" *ngIf="showFormUpdateJobDescriptionForm">
+					<div class="add-button-div">
+						<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormUpdateJobDescriptionForm = false;"></i>
+					</div>
+					<div class="clear-float"></div>
+					<h3 class="header">Mettre à jour la description du poste</h3>
+		
+					<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateJobDescription" (ngSubmit)="onUpdateJobDescription()">
+						<div class="field col-12">
+							<label htmlFor="description">Description</label>
+							<textarea pInputTextarea id="description" placeholder="Description du poste" autoResize rows="4" cols="30" formControlName="description"></textarea>
+						</div>
+
+						<button pButton pRipple label="Mettre à jour" type="submit"></button>
+					</form>
+				</div>
+				
+				<div class="add-button-div">
+					<button pButton pRipple type="button" label="Mettre à jour" (click)="showFormUpdateJobDescriptionForm = true" class="p-button-outlined p-button-primary"></button>
+				</div>
+				<div class="clear-float"></div>
+
+                <h3 class="header">Description du poste du collaborateur</h3>
+				<p style="text-align: center">{{ collaborateurToUpdate?.poste_description }}</p>
+            </p-sidebar>
 		</div>
 	</div>
 
@@ -414,9 +466,9 @@
 							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" style="color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
 							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs" style="color: #22C55E" (click)="onFillForm(collaborateur)"></i>
 							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
-							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="color: #3B82F6"></i>
+							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
 							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="color: #F59E0B"></i>
-							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="color: #EF4444"></i>
+							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
 							<i class="pi pi-list m-1" pTooltip="CRA" style="color: #A855F7"></i>
                         </td>
 					</tr>
