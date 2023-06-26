@@ -135,6 +135,7 @@ export class StageComponent implements OnInit {
       payment_modality: ['', Validators.required],
       other_advantages: [''],
       school_year: ['', Validators.required],
+      code_commercial: [''],
     });
 
     // initialisation du formulaire de modification d'un stage
@@ -151,6 +152,7 @@ export class StageComponent implements OnInit {
       payment_modality: ['', Validators.required],
       other_advantages: [''],
       school_year: ['', Validators.required],
+      code_commercial: [''],
     });
 
     // initialisation du formulaire d'upload de fichier
@@ -303,7 +305,8 @@ export class StageComponent implements OnInit {
     stage.status = 'Crée';
     stage.school_year = formValue.school_year;
     stage.add_by = this.collaborateur._id;
-
+    stage.added_date = new Date();
+    stage.code_commercial = formValue.code_commercial;
 
     this.stageService.postStage(stage)
       .then((response) => {
@@ -376,6 +379,7 @@ export class StageComponent implements OnInit {
     stage.other_advantages = formValue.other_advantages;
     stage.status = this.stageToUpdate.status;
     stage.school_year = formValue.school_year;
+    stage.code_commercial = formValue.code_commercial;
 
     this.stageService.putStage(stage)
       .then((response) => {

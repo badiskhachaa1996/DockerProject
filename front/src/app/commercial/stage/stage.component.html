@@ -169,6 +169,14 @@
                         </p-multiSelect>
                     </div>
 
+                    <div class="field col-12">
+                        <label For="code_commercial">Commercial référent</label>
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
+                            [options]="commercialData" dataKey="_id" filter="true"
+                            formControlName="code_commercial">
+                        </p-dropdown>
+                    </div>
+
                     <div class="field">
                         <button
                             pButton
@@ -200,11 +208,6 @@
                     }}
                 </h2>
             </div>
-            <small class="sub-form-small"
-                >*Pour modifier le contrat, vous devez re-sélectionner
-                <strong>l'entreprise</strong>, <strong>le tuteur</strong> et
-                <strong>les dates du contrats</strong></small
-            >
 
             <form [formGroup]="formUpdate" (ngSubmit)="onUpdate()">
                 <div class="p-fluid p-formgrid grid">
@@ -342,6 +345,14 @@
                             id="school_year"
                         >
                         </p-multiSelect>
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="code_commercial">Commercial référent</label>
+                        <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
+                            [options]="commercialData" dataKey="_id" filter="true"
+                            formControlName="code_commercial">
+                        </p-dropdown>
                     </div>
 
                     <div class="field">
@@ -550,6 +561,7 @@
                         <th>Statut</th>
                         <th>Formation</th>
                         <th>Entreprise</th>
+                        <th>Opco</th>
                         <th>École</th>
                         <th>Dates du stage</th>
                         <th>Action</th>
@@ -634,6 +646,7 @@
                             {{ stage.student_id?.classe_id?.diplome_id?.titre }}
                         </td>
                         <td>{{ stage.enterprise_id?.r_sociale }}</td>
+                        <td>{{ stage.enterprise_id?.OPCO }}</td>
                         <td>
                             {{ stage.student_id?.campus?.ecole_id?.libelle }}
                         </td>
@@ -837,6 +850,41 @@
                                 </p-table>
                             </div>
 
+                            <!-- commercial referent -->
+                            <div class="p-2">
+                                <p-table
+                                    responsiveLayout="scroll"
+                                    styleClass="p-datatable-gridlines"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Commercial referent</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Email</th>
+                                            <th>Téléphone</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                {{ stage.code_commercial?.lastname }}
+                                            </td>
+                                            <td>
+                                                {{ stage.code_commercial?.firstname }}
+                                            </td>
+                                            <td>{{ stage.code_commercial?.email }}</td>
+                                            <td>
+                                                {{ stage.code_commercial?.indicatif
+                                                }}{{ stage.code_commercial?.phone }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
                             <!-- Fichier liés au contrat -->
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
@@ -927,7 +975,7 @@
                                 >
                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th>Ajouté par</th>
+                                            <th>Ajouté le {{ stage?.added_date | date : "dd MMMM YYYY" }}, par</th>
                                         </tr>
                                         <tr>
                                             <th>Nom</th>

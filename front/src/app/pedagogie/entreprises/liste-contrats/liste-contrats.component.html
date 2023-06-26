@@ -901,7 +901,7 @@
 
         <!-- personne qui a ajouté le contrat -->
         <div class="p-2">
-            <h6 style="font-weight: bold">Ajouté par</h6>
+            <h6 style="font-weight: bold">Ajouté le {{ contrat?.added_date | date : "dd MMMM YYYY"  }} par</h6>
             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
