@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { EmailType } from 'src/app/models/EmailType';
+import { Mail } from 'src/app/models/Mail';
 import { EmailTypeService } from 'src/app/services/email-type.service';
 
 @Component({
@@ -10,10 +10,10 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
   styleUrls: ['./configuration-mail.component.scss']
 })
 export class ConfigurationMailComponent implements OnInit {
-  emails: EmailType[] = []
+  emails: Mail[] = []
   addEmail = false
-  selectedEmail: EmailType = null
-  updateEmail: EmailType = null
+  selectedEmail: Mail = null
+  updateEmail: Mail = null
   dicSignature = {}
   constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService) { }
 
@@ -56,7 +56,7 @@ export class ConfigurationMailComponent implements OnInit {
     type: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
-  onInitUpdate(email: EmailType) {
+  onInitUpdate(email: Mail) {
     this.formEdit.patchValue({ ...email })
     this.updateEmail = email
   }
@@ -69,7 +69,7 @@ export class ConfigurationMailComponent implements OnInit {
     })
   }
   //Delete
-  onDelete(email: EmailType) {
+  onDelete(email: Mail) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ' + email.email + " ?")) {
       this.EmailTypeService.delete(email._id).subscribe(data => {
         this.emails.splice(this.emails.indexOf(email), 1)
@@ -78,7 +78,7 @@ export class ConfigurationMailComponent implements OnInit {
     }
   }
   //Upload Signature
-  onUploadSignature(email: EmailType) {
+  onUploadSignature(email: Mail) {
     document.getElementById('selectedFile').click();
     this.selectedEmail = email
   }

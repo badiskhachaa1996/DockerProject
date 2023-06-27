@@ -17,6 +17,9 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
+import { MailType } from 'src/app/models/MailType';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -232,7 +235,9 @@ export class SourcingComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private UserService: AuthService) { }
+  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
+    private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
+    private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
 
   prospects: any[];
   dicEcole = {}
@@ -651,6 +656,74 @@ export class SourcingComponent implements OnInit {
         this.messageService.add({ severity: "success", summary: "Lead supprimé avec succès" })
       })
   }
+
+  showEmail = false
+  prospectSendTo: Prospect = null
+  emailTypeSelected: string = null
+  mailDropdown = []
+  mailTypeDropdown = []
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([], Validators.required),
+    send_from: new FormControl('', Validators.required)
+  })
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([], Validators.required),
+    send_from: new FormControl('', Validators.required)
+  })
+  onEmailPerso() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+        this.formEmailPerso.reset()
+        this.formEmailPerso.patchValue({ cc: [this.prospectSendTo?.user_id?.email_perso] })
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  onEmailType() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+        this.formEmailType.reset()
+        this.formEmailType.patchValue({ cc: [this.prospectSendTo?.user_id?.email_perso] })
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  initSendEmail(prospect: Prospect) {
+    this.showEmail = true
+    this.prospectSendTo = prospect
+    this.EmailTypeS.HEgetAllTo(this.prospectSendTo._id).subscribe(data => {
+      this.historiqueEmails = data
+    })
+    this.EmailTypeS.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.mailDropdown.push({ label: val.email, value: val })
+      })
+    })
+    this.formEmailPerso.patchValue({ cc: [prospect?.user_id?.email_perso] })
+    this.EmailTypeS.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
+    this.formEmailType.patchValue({ cc: [prospect?.user_id?.email_perso] })
+  }
+
+  onMailType(event: MailType) {
+    this.formEmailType.patchValue({
+      ...event
+    })
+  }
+  historiqueEmails: HistoriqueEmail[] = []
 
 
 
