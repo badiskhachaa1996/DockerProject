@@ -16,7 +16,6 @@ app.get('/get-agents', (req, res) => {
 
 // création d'un nouveau collaborateur
 app.post('/post-collaborateur', (req, res) => {
-    console.log('ok')
     const collaborateur = new Collaborateur({ ...req.body });
 
     collaborateur.save()
@@ -40,7 +39,7 @@ app.patch('/update-agent-data', (req, res) => {
 
 // récupérer la liste des collaborateurs
 app.get('/get-collaborateurs', (req, res) => {
-    Collaborateur.find().populate('user_id')
+    Collaborateur.find().populate('user_id')?.populate('code_commercial')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).send(error); });
 });
@@ -56,7 +55,7 @@ app.get('/get-collaborateur/:id', (req, res) => {
 // récupérer la liste d'un collaborateur via son user_id
 app.get('/get-collaborateur-by-user-id/:id', (req, res) => {
     const { id } = req.params;
-    Collaborateur.findOne({user_id: id}).populate('user_id')
+    Collaborateur.findOne({user_id: id}).populate('user_id')?.populate('code_commercial')
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).send(error); });
 });

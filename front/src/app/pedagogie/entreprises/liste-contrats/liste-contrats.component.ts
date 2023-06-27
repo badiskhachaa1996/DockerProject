@@ -487,7 +487,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id, new Date())
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
