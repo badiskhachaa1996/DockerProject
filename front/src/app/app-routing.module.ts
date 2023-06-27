@@ -234,7 +234,7 @@ import { LeadInformationsPersonnelComponent } from './admission/lead/lead-inform
 import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
-import { MailTypeComponent } from './mail-type/mail-type/mail-type.component';
+import { MailTypeComponent } from './mail-type/mail/mail.component';
 import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
 const routes: Routes = [
     {

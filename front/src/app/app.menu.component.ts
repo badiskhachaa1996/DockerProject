@@ -972,9 +972,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/mails/configuration']
                                 },
                                 {
-                                    label: 'Liste des mails types',
+                                    label: 'Mails types',
                                     icon: 'pi pi-bars',
                                     routerLink: ['/mails/type']
+                                },
+                                {
+                                    label: 'Mails automatisés',
+                                    icon: 'pi pi-sync',
+                                    routerLink: ['/mails/auto']
                                 },
                             ]
                         }

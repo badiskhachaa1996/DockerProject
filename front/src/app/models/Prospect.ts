@@ -2,7 +2,7 @@ export class Prospect {
 
     constructor(
         public _id?: string,
-        public user_id?: string,
+        public user_id?: any,
         public date_naissance?: Date,
         public numero_whatsapp?: string,
         public validated_academic_level?: string,

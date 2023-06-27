@@ -71,8 +71,9 @@
                 style="margin-right: 3px;"></button>
         </div>
         <h5>Gestion des doublons avec IMS</h5>
-        <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [globalFilterFields]="['data[0].email','data[0]?.firstname','data[0]?.lastname']"
+        <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" [rows]="8" [pageLinks]="10"
+            [paginator]="true" rowExpandMode="single"
+            [globalFilterFields]="['data[0].email','data[0]?.firstname','data[0]?.lastname']"
             [totalRecords]="doublonEmailIMS.length">
 
             <ng-template pTemplate="caption">
@@ -212,7 +213,8 @@
                     <td>{{ user.last_connection | date:'dd/MM/YYYY à HH:mm'}}
                     </td>
                     <td>
-                        <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects/leads"
+                        <i *ngIf="user.type=='Prospect' || !user.type"
+                            pTooltip="Rechercher dans la table prospects/leads"
                             style="margin-left: 2%; cursor: pointer;" class="pi pi-eye"
                             (click)="searchProspect(user._id)" aria-hidden="true"></i>
                         <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
