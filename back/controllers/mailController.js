@@ -214,6 +214,34 @@ app.delete('/HE/delete/:id', (req, res) => {
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.post('/testEmail', (req, res) => {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.office365.com",
+        port: 587,
+        secure: false, // true for 587, false for other ports
+        requireTLS: true,
+        auth: {
+            user: req.body.email,
+            pass: req.body.password
+        },
+    });
+    console.log(req.body)
+    let mailOptions = {
+        from: req.body.email,
+        to: [req.body.to, 'ims@intedgroup.com'],
+        subject: 'Test Email IMS',
+        html: '<p>Ceci est un Test</p>'
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+            res.status(500).send({ r: error.response })
+        } else {
+            res.status(201).send({ r: 'success' })
+        }
+    });
+})
+
 app.post('/sendPerso', (req, res) => {
     Mail.findById(req.body.send_from).then(email => {
         let transporter = nodemailer.createTransport({

@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Mail } from 'src/app/models/Mail';
 import { EmailTypeService } from 'src/app/services/email-type.service';
-
+import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-configuration-mail',
   templateUrl: './configuration-mail.component.html',
@@ -15,11 +17,17 @@ export class ConfigurationMailComponent implements OnInit {
   selectedEmail: Mail = null
   updateEmail: Mail = null
   dicSignature = {}
-  constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService) { }
+  token;
+  user: User;
+  constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService, private UserService: AuthService) { }
 
   ngOnInit(): void {
     this.EmailTypeService.getAll().subscribe(data => {
       this.emails = data
+    })
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      this.user = data
     })
     this.EmailTypeService.getAllSignature().subscribe(data => {
       this.dicSignature = data.files // {id:{ file: string, extension: string }}
@@ -42,12 +50,27 @@ export class ConfigurationMailComponent implements OnInit {
     type: new FormControl('', Validators.required)
   })
   onAdd() {
-    this.EmailTypeService.create({ ...this.formAdd.value }).subscribe(data => {
-      this.emails.push(data)
-      this.addEmail = false
-      this.formAdd.reset()
-      this.ToastService.add({ severity: 'success', summary: 'Ajout de l\'email avec succès' })
+    console.log(this.user)
+    this.EmailTypeService.testEmail({
+      email: this.formAdd.value.email,
+      password: this.formAdd.value.password,
+      to: this.user.email
+    }).subscribe(data => {
+      if (data.r == 'success')
+        this.EmailTypeService.create({ ...this.formAdd.value }).subscribe(data2 => {
+          console.log(data,data2)
+          this.emails.push(data2)
+          this.addEmail = false
+          this.formAdd.reset()
+          this.ToastService.add({ severity: 'success', summary: 'Ajout de l\'email avec succès' })
+        })
+      else
+        this.ToastService.add({ severity: 'error', summary: 'Le mail n\'a pas pu être envoyé' })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Le mail n\'a pas pu être envoyé', detail: error.error })
     })
+
   }
 
   //Update

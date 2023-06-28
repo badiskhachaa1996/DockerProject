@@ -103,8 +103,12 @@ export class EmailTypeService {
     return this.httpClient.get<HistoriqueEmail[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  sendPerso(data: HistoriqueEmail){
+  sendPerso(data: HistoriqueEmail) {
     let registreUrl = this.apiUrl + "sendPerso";
     return this.httpClient.post<HistoriqueEmail>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  testEmail(data: { email: string, password: string, to: string }) {
+    let registreUrl = this.apiUrl + "testEmail";
+    return this.httpClient.post<{ r: string }>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }
