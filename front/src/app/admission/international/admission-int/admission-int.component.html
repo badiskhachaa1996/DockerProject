@@ -438,9 +438,9 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="rowexpansion" let-email>
-                        <ng-container [innerHTML]="email.body">
+                        <div [innerHTML]="email.body">
 
-                        </ng-container>
+                        </div>
                     </ng-template>
                 </p-table>
             </p-tabPanel>
