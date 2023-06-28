@@ -227,7 +227,6 @@ app.post('/sendPerso', (req, res) => {
             },
         });
         let to = req.body.cc
-        to.push(req.body.send_to)
         let mailOptions = {
             from: email.email,
             to,

@@ -110,7 +110,7 @@
                         <tr>
 
                             <td>
-                                <button type="button" pButton pRipple
+                                <button type="button" pButton pRipple [pRowToggler]="email"
                                     class="p-button-text p-button-rounded p-button-plain"
                                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
@@ -130,6 +130,11 @@
                                 {{email.send_from}}
                             </td>
                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-email>
+                        <div [innerHTML]="email.body">
+
+                        </div>
                     </ng-template>
                 </p-table>
             </p-tabPanel>

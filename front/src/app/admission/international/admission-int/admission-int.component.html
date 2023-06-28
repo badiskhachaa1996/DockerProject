@@ -333,7 +333,119 @@
         </div>
     </div>
 
+    <div class="col-12 card" *ngIf="showEmail">
+        <p-tabView>
+            <p-tabPanel header="Email personnalisé">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso" (ngSubmit)="onEmailPerso()">
+                    <div class="field col-12">
+                        <label>Objet: </label>
+                        <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-12">
+                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email de l'envoyeur: </label>
+                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email(s) de(s) destinataire(s): </label>
+                        <p-chips formControlName="cc" separator=","
+                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                    </div>
+                    <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email"></button>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Depuis un mail type">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType" (ngSubmit)="onEmailType()">
+                    <div class="field col-12">
+                        <label>Email Type: </label>
+                        <p-dropdown placeholder="Choisissez un mail type" filter="true"
+                            (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
+                            [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label>Objet: </label>
+                        <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-12">
+                        <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email de l'envoyeur: </label>
+                        <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                            [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email(s) de(s) destinataire(s): </label>
+                        <p-chips formControlName="cc" separator=","
+                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                    </div>
+                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"></button>
+                </form>
+            </p-tabPanel>
+            <p-tabPanel header="Historique des emails">
+                <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="historiqueEmails"
+                    [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem" scope="col"></th>
+                            <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="objet" scope="col" style="text-align: center;">
+                                Objet du mail <p-sortIcon field="objet"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
+                                Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="cc" scope="col" style="text-align: center;">
+                                Envoyé à <p-sortIcon field="cc"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="send_from" scope="col" style="text-align: center;">
+                                Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-email let-expanded="expanded">
+                        <tr>
 
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="email"
+                                    class="p-button-text p-button-rounded p-button-plain"
+                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td>
+                                {{email.date_creation|date:'mediumDate'}}
+                            </td>
+                            <td>
+                                {{email.objet}}
+                            </td>
+                            <td>
+                                {{email?.send_by?.firstname | titlecase}} {{email?.send_by?.lastname | uppercase}}
+                            </td>
+                            <td>
+                                <strong>{{prospectSendTo?.user_id?.email_perso }}</strong> {{cc}}
+                            </td>
+                            <td>
+                                {{email.send_from}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-email>
+                        <div [innerHTML]="email.body">
+
+                        </div>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
     <div class="col-12 card" *ngIf="showPaiement">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPaiement = null"
             aria-hidden="true"> </i>
@@ -649,7 +761,7 @@
     <div class="col-12 card grid" *ngIf="ecoleList.length!=0">
         <p-tabView style="max-width: 100%;">
             <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
-                <div *ngIf="prospects && prospects[ecole.url_form]" >
+                <div *ngIf="prospects && prospects[ecole.url_form]">
                     <h5>Liste des leads admission de {{ecole.titre}}</h5>
 
                     <p-toast></p-toast>
@@ -881,6 +993,8 @@
                                         (click)="initDocument(prospect);scrollToTop()" aria-hidden="true"></i>
                                     <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit"
                                         (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
+                                    <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-envelope mr-2"
+                                        aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
 
                                 </td>
                             </tr>

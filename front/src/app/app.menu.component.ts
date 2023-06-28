@@ -963,7 +963,7 @@ export class AppMenuComponent implements OnInit {
                                 }
                             ]
                         }, {
-                            label: 'Email Type',
+                            label: 'Gestions des emails',
                             icon: 'pi pi-envelope',
                             items: [
                                 {
