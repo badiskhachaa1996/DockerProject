@@ -58,7 +58,7 @@ export class ConfigurationMailComponent implements OnInit {
     }).subscribe(data => {
       if (data.r == 'success')
         this.EmailTypeService.create({ ...this.formAdd.value }).subscribe(data2 => {
-          console.log(data,data2)
+          console.log(data, data2)
           this.emails.push(data2)
           this.addEmail = false
           this.formAdd.reset()
@@ -77,6 +77,7 @@ export class ConfigurationMailComponent implements OnInit {
   formEdit = new FormGroup({
     email: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
   onInitUpdate(email: Mail) {
@@ -112,19 +113,21 @@ export class ConfigurationMailComponent implements OnInit {
       formData.append('id', this.selectedEmail._id)
       formData.append('name', event[0].name)
       formData.append('file', event[0])
-      this.EmailTypeService.uploadSignature(formData).subscribe(() => {
+      this.EmailTypeService.uploadSignature(formData).subscribe((newSignature) => {
         this.ToastService.add({ severity: 'success', summary: 'Signature', detail: 'Mise à jour de la signature avec succès' });
+        this.emails.splice(this.emails.indexOf(this.selectedEmail), 1, newSignature)
         this.EmailTypeService.getAllSignature().subscribe(data => {
-          const reader = new FileReader();
-          reader.readAsDataURL(event[0]);
-          reader.onloadend = () => {
-            if (this.dicSignature[this.selectedEmail._id])
-              this.dicSignature[this.selectedEmail._id].url = reader.result;
-            else {
-              this.dicSignature[this.selectedEmail._id] = {}
-              this.dicSignature[this.selectedEmail._id].url = reader.result;
+          data.ids.forEach(id => {
+            const reader = new FileReader();
+            const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+            let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+              if (id == this.selectedEmail._id)
+                this.dicSignature[id] = { url: reader.result };
             }
-          }
+          })
+
         })
       }, (error) => {
         console.error(error)

@@ -15,6 +15,7 @@ export class MailTypeComponent implements OnInit {
   addEmail = false
   selectedEmail: MailType = null
   updateEmail: MailType = null
+  pieces_jointe = []
   constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
@@ -24,7 +25,7 @@ export class MailTypeComponent implements OnInit {
   }
   //Ajout
   formAdd = new FormGroup({
-    objet: new FormControl('', [Validators.required,Validators.minLength(2)]),
+    objet: new FormControl('', [Validators.required, Validators.minLength(2)]),
     body: new FormControl(),
     type: new FormControl('', Validators.required)
   })
@@ -74,7 +75,7 @@ export class MailTypeComponent implements OnInit {
       nb = "00" + nb
     else if (nb.length > 3)
       nb = nb.substring(0, 3)
-    return objet.substring(0, 2) + this.randomCharGen(3) + nb
+    return (objet.substring(0, 2) + this.randomCharGen(3) + nb).toUpperCase()
   }
 
   randomCharGen(length) {
@@ -88,5 +89,39 @@ export class MailTypeComponent implements OnInit {
     }
     return result;
   }
+  /*
+  downloadAdminFile(path) {
+    this.EmailTypeService.downloadPJ(path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      //saveAs(blob, path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+  FileUploadAdmin(event: { files: [File], target: EventTarget }) {
+
+    if (event.files != null) {
+      this.ToastService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('date', new Date().toString())
+      formData.append('nom', event.files[0].name)
+      formData.append('path', event.files[0].name)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        if (res.documents_administrative)
+          this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
+        event.target = null;
+        this.showUploadFile = null;
+
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }*/
 
 }

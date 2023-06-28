@@ -36,6 +36,48 @@
             <label>Utilisation: </label>
             <input type="text" formControlName="type" pInputText>
         </div>
+        <div class="col-12">
+            <p-table styleClass="p-datatable-gridlines" [value]="pieces_jointe" responsiveLayout="scroll"
+                responsiveLayout="scroll">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>
+                            Date d'upload
+                        </th>
+                        <th>
+                            Nom du document
+                        </th>
+                        <th>
+                            Lien de téléchargement
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{rowData.date | date:'mediumDate'}}
+                        </td>
+                        <td>
+                            {{rowData.nom}}
+                        </td>
+                        <td>
+                            <a (click)="downloadAdminFile(rowData.path)">Télécharger</a>
+                        </td>
+                        <td>
+                            <i>
+
+                            </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p class="col-12" style="text-align: center;" *ngIf="pieces_jointe==null || pieces_jointe.length==0">
+            Aucun document n'a été chargé !
+        </p>
         <button pButton [disabled]="formAdd.invalid" label="Ajouter l'email"></button>
     </form>
 </div>

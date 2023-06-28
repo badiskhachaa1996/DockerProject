@@ -11,9 +11,6 @@ const multer = require("multer");
 const { MailType } = require("../models/MailType");
 const { MailAuto } = require("../models/mailAuto");
 const { HistoriqueEmail } = require("../models/HistoriqueEmail");
-const crypto = require('crypto');
-let superSecretKey = "573648abf72c7b4b74380d36d2d7b699"
-let superSecretIV = crypto.randomBytes(16)
 
 //Partie configurations des emails
 
@@ -105,12 +102,12 @@ app.post("/uploadSignature", upload.single("file"), (req, res, next) => {
         { _id: req.body.id },
         {
             signature_file: file.filename
-        },
+        },{new:true},
         (errUser, user) => {
             if (errUser)
                 console.error(errUser);
             //Renvoie de la photo de profile au Front pour pouvoir l'afficher
-            res.send({ message: "Photo mise à jour" });
+            res.send(user);
         }
     );
 });
@@ -254,19 +251,26 @@ app.post('/sendPerso', (req, res) => {
                 pass: email.password
             },
         });
-        let to = req.body.cc
-        let mailOptions = {
-            from: email.email,
-            to,
-            subject: req.body.objet,
-            html: req.body.body + '<footer> <img src="signature"/></footer>',
-            attachments: [
+        let to = req.body.send_to
+        let html = req.body.body
+        let attachments = null
+        if (email?.signature_file) {
+            html = html + '<footer> <img src="signature"/></footer>'
+            attachments = [
                 {
                     filename: email.signature_file,
                     path: "storage/mail/" + email._id + "/" + email.signature_file,
                     cid: "signature", //same cid value as in the html img src
                 },
-            ],
+            ]
+        }
+        let mailOptions = {
+            from: email.email,
+            to,
+            cc: req.body.cc,
+            subject: req.body.objet,
+            html,
+            attachments
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
