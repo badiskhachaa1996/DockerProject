@@ -7,6 +7,13 @@ export class MailType {
         public body?: string,
         public type?: string,
         public date_creation?: Date,
+        public pieces_jointe?: [
+            {
+                date: Date,
+                nom: string,
+                path: string,
+            }
+        ]
     ) { }
 
 }

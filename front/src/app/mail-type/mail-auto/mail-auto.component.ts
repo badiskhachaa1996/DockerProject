@@ -33,7 +33,7 @@ export class MailAutoComponent implements OnInit {
     })
     this.EmailTypeService.MTgetAll().subscribe(data => {
       data.forEach(e => {
-        this.mailTypeDropdown.push({ label: e.objet, value: e._id })
+        this.mailTypeDropdown.push({ label: e.custom_id + " | " + e.objet, value: e._id })
       })
     })
     this.EmailTypeService.getAll().subscribe(data => {
@@ -44,7 +44,6 @@ export class MailAutoComponent implements OnInit {
   }
   //Ajout
   formAdd = new FormGroup({
-    custom_id: new FormControl('', [Validators.required]),
     condition: new FormControl('', Validators.required),
     mailType: new FormControl('', Validators.required),
     mail: new FormControl('', Validators.required)
@@ -60,7 +59,6 @@ export class MailAutoComponent implements OnInit {
 
   //Update
   formEdit = new FormGroup({
-    custom_id: new FormControl('', [Validators.required]),
     condition: new FormControl('', Validators.required),
     mailType: new FormControl('', Validators.required),
     mail: new FormControl('', Validators.required),

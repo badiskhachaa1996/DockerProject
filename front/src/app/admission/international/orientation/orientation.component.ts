@@ -666,7 +666,6 @@ export class OrientationComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
         this.formEmailPerso.reset()
-        this.formEmailPerso.patchValue({ cc: [this.prospectSendTo?.user_id?.email_perso] })
         this.historiqueEmails.push(data2)
         this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
       })
@@ -678,7 +677,6 @@ export class OrientationComponent implements OnInit {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()
-        this.formEmailType.patchValue({ cc: [this.prospectSendTo?.user_id?.email_perso] })
         this.historiqueEmails.push(data2)
         this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
       })
@@ -696,13 +694,11 @@ export class OrientationComponent implements OnInit {
         this.mailDropdown.push({ label: val.email, value: val })
       })
     })
-    this.formEmailPerso.patchValue({ cc: [prospect?.user_id?.email_perso] })
     this.EmailTypeS.MTgetAll().subscribe(data => {
       data.forEach(e => {
         this.mailTypeDropdown.push({ label: e.objet, value: e })
       })
     })
-    this.formEmailType.patchValue({ cc: [prospect?.user_id?.email_perso] })
   }
 
   onMailType(event: MailType) {

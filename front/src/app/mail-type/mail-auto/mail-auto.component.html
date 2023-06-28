@@ -6,20 +6,17 @@
         : {{updateEmail.custom_id }}
     </h3>
     <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEdit" (ngSubmit)="onUpdate()">
-        <div class="field col-6">
-            <label>ID: </label>
-            <input type="text" formControlName="custom_id" pInputText>
-        </div>
-        <div class="field col-6">
-            <label>Condition de l'envoie: </label>
-            <input type="text" formControlName="condition" pInputText>
-        </div>
-        <div class="field col-6">
+        <div class="field col-12">
             <label>Objet: </label>
             <p-dropdown placeholder="Choisissez un objet" filter="true" formControlName="mailType"
                 [options]="mailTypeDropdown" autoWidth="false" [style]="{'width':'100%'}">
             </p-dropdown>
         </div>
+        <div class="field col-6">
+            <label>Condition de l'envoie: </label>
+            <input type="text" formControlName="condition" pInputText>
+        </div>
+
         <div class="field col-6">
             <label>Adresse mail: </label>
             <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="mail"
@@ -40,20 +37,17 @@
         aria-hidden="true"> </i>
     <h3 style="font-weight: bold; text-align: center;">Ajout d'une automatisation d'email</h3>
     <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onAdd()">
-        <div class="field col-6">
-            <label>ID: </label>
-            <input type="text" formControlName="custom_id" pInputText>
-        </div>
-        <div class="field col-6">
-            <label>Condition de l'envoie: </label>
-            <input type="text" formControlName="condition" pInputText>
-        </div>
-        <div class="field col-6">
+        <div class="field col-12">
             <label>Objet: </label>
             <p-dropdown placeholder="Choisissez un objet" filter="true" formControlName="mailType"
                 [options]="mailTypeDropdown" autoWidth="false" [style]="{'width':'100%'}">
             </p-dropdown>
         </div>
+        <div class="field col-6">
+            <label>Condition de l'envoie: </label>
+            <input type="text" formControlName="condition" pInputText>
+        </div>
+
         <div class="field col-6">
             <label>Adresse mail: </label>
             <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="mail"
@@ -82,9 +76,6 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="custom_id" scope="col" style="text-align: center;">
-                        ID <p-sortIcon field="custom_id"></p-sortIcon>
-                    </th>
                     <th pSortableColumn="mailType.objet" scope="col" style="text-align: center;">
                         Objet <p-sortIcon field="mailType.objet"></p-sortIcon>
                     </th>
@@ -104,9 +95,6 @@
             </ng-template>
             <ng-template pTemplate="body" let-email>
                 <tr>
-                    <td>
-                        {{email?.custom_id}}
-                    </td>
                     <td>
                         {{email?.mailType?.objet}}
                     </td>
