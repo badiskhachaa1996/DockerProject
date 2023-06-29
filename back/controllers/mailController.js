@@ -102,7 +102,7 @@ app.post("/uploadSignature", upload.single("file"), (req, res, next) => {
         { _id: req.body.id },
         {
             signature_file: file.filename
-        },{new:true},
+        }, { new: true },
         (errUser, user) => {
             if (errUser)
                 console.error(errUser);
@@ -241,43 +241,94 @@ app.post('/testEmail', (req, res) => {
 
 app.post('/sendPerso', (req, res) => {
     Mail.findById(req.body.send_from).then(email => {
-        let transporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
-            port: 587,
-            secure: false, // true for 587, false for other ports
-            requireTLS: true,
-            auth: {
-                user: email.email,
-                pass: email.password
-            },
-        });
-        let to = req.body.send_to
-        let html = req.body.body
-        let attachments = null
-        if (email?.signature_file) {
-            html = html + '<footer> <img src="signature"/></footer>'
-            attachments = [
-                {
-                    filename: email.signature_file,
-                    path: "storage/mail/" + email._id + "/" + email.signature_file,
-                    cid: "signature", //same cid value as in the html img src
+        if(!email){
+            console.error(req.body,email)
+            res.status(404).send(email)
+        }else{
+            let transporter = nodemailer.createTransport({
+                host: "smtp.office365.com",
+                port: 587,
+                secure: false, // true for 587, false for other ports
+                requireTLS: true,
+                auth: {
+                    user: email.email,
+                    pass: email.password
                 },
-            ]
-        }
-        let mailOptions = {
-            from: email.email,
-            to,
-            cc: req.body.cc,
-            subject: req.body.objet,
-            html,
-            attachments
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.error(error);
+            });
+            let to = req.body.send_to
+            let html = req.body.body
+            let attachments = null
+            if (email?.signature_file) {
+                html = html + '<footer> <img src="signature"/></footer>'
+                attachments = [
+                    {
+                        filename: email.signature_file,
+                        path: "storage/mail/" + email._id + "/" + email.signature_file,
+                        cid: "signature", //same cid value as in the html img src
+                    },
+                ]
             }
-            res.send(mailOptions)
-        });
+            req.body.pieces_jointes.forEach(data => {
+                attachments.push({
+                    filename: data.path,
+                    path: "storage/mail_pj/" + req.body?.mailTypeSelected?._id + "/" + data._id + "/" + data.path
+                })
+            })
+            let mailOptions = {
+                from: email.email,
+                to,
+                cc: req.body.cc,
+                subject: req.body.objet,
+                html,
+                attachments
+            };
+    
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+                res.send(mailOptions)
+            });
+        }
+
     })
 })
+
+//Sauvegarde de la photo de profile
+const storage2 = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        let id = req.body._id;
+        if (!fs.existsSync("storage/mail_pj/" + id + "/" + req.body.pj_id + "/")) {
+            fs.mkdirSync("storage/mail_pj/" + id + "/" + req.body.pj_id + "/", { recursive: true });
+        }
+        callBack(null, "storage/mail_pj/" + id + "/" + req.body.pj_id + "/");
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`);
+    },
+});
+
+const upload2 = multer({ storage: storage2, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/uploadPJ", upload2.single("file"), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error("No File");
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+
+    res.send({ message: 'success' });
+});
+
+app.get("/downloadPJ/:_id/:pj_id/:path", (req, res) => {
+    let pathFile = "storage/mail_pj/" + req.params._id + "/" + req.params.pj_id + "/" + req.params.path
+    let fileFinal = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+    res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFile)) })
+});
+
 module.exports = app;

@@ -297,6 +297,59 @@
                         <p-chips formControlName="cc" separator=","
                             placeholder="email1@email.com;email2.email.com"></p-chips>
                     </div>
+                    <div class="field col-12">
+                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
+                            style="display: none;" pInputFile />
+                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Date d'upload
+                                    </th>
+                                    <th>
+                                        Nom du document
+                                    </th>
+                                    <th>
+                                        Lien de téléchargement
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                <tr>
+                                    <td>
+                                        {{rowData.date | date:'mediumDate'}}
+                                    </td>
+                                    <td>
+                                        {{rowData.nom}}
+                                    </td>
+                                    <td *ngIf="rowData.path">
+                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                        {{rowData.path}}
+                                    </td>
+                                    <td *ngIf="!rowData.path">
+                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
+                                        </i>
+                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                        </i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="mt-2 col-12" style="text-align: center;">
+                            <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
+                        </div>
+                    </div>
                     <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email"></button>
                 </form>
             </p-tabPanel>
@@ -326,6 +379,59 @@
                         <label>Email(s) de(s) destinataire(s): </label>
                         <p-chips formControlName="cc" separator=","
                             placeholder="email1@email.com;email2.email.com"></p-chips>
+                    </div>
+                    <div class="field col-12">
+                        <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
+                            style="display: none;" pInputFile />
+                        <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                            dataKey="_id" class="col-12" responsiveLayout="scroll">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Date d'upload
+                                    </th>
+                                    <th>
+                                        Nom du document
+                                    </th>
+                                    <th>
+                                        Lien de téléchargement
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                <tr>
+                                    <td>
+                                        {{rowData.date | date:'mediumDate'}}
+                                    </td>
+                                    <td>
+                                        {{rowData.nom}}
+                                    </td>
+                                    <td *ngIf="rowData.path">
+                                        <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                        {{rowData.path}}
+                                    </td>
+                                    <td *ngIf="!rowData.path">
+                                        <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                            class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                            (click)="onUploadPJ(rowData)">
+                                        </i>
+                                        <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                            class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                        </i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="mt-2 col-12" style="text-align: center;">
+                            <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                autoWidth="false" [style]="{'width':'80%'}"></button>
+                        </div>
                     </div>
                     <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"></button>
                 </form>

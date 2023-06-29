@@ -7,7 +7,16 @@ const schema = new mongoose.Schema({
     custom_id: { type: String },
     body: { type: String },
     type: { type: String },
-    date_creation: { type: Date, default: Date.now }
+    date_creation: { type: Date, default: Date.now },
+    pieces_jointe: {
+        type: [
+            {
+                date: Date,
+                nom: String,
+                path: String
+            }
+        ], default: []
+    }
 });
 
 //Creation de la table ecole et export du model Ecole
