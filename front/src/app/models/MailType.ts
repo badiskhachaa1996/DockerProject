@@ -12,6 +12,7 @@ export class MailType {
                 date: Date,
                 nom: string,
                 path: string,
+                _id: string
             }
         ]
     ) { }
