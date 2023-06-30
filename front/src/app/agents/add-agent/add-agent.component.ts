@@ -23,6 +23,12 @@ export class AddAgentComponent implements OnInit {
   dropdownModule = [
     { value: "Admission", label: "Admission" },
     { value: "Partenaire", label: "Partenaire" },
+    { value: "Ticketing", label: "Ticketing" },
+    { value: "CRM", label: "CRM" },
+    { value: "Mailing", label: "Mailing" },
+    { value: "Commerciale", label: "Commerciale" },
+    { value: "International", label: "International" },
+    { value: "Pedagogie", label: "Pedagogie" },
   ]
   dropdownRole = [
     { value: "Agent", label: "Agent" },

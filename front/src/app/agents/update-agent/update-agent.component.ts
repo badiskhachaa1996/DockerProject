@@ -25,12 +25,12 @@ export class UpdateAgentComponent implements OnInit {
   dropdownModule = [
     { value: "Admission", label: "Admission" },
     { value: "Partenaire", label: "Partenaire" },
-  ]
-  dropdownRole = [
-    { value: "Agent", label: "Agent" },
-    { value: "Spectateur", label: "Spectateur" },
-    { value: "Admin", label: "Admin" },
-    { value: "Super-Admin", label: "Super-Admin" },
+    { value: "Ticketing", label: "Ticketing" },
+    { value: "CRM", label: "CRM" },
+    { value: "Mailing", label: "Mailing" },
+    { value: "Commerciale", label: "Commerciale" },
+    { value: "International", label: "International" },
+    { value: "Pedagogie", label: "Pedagogie" },
   ]
 
   mentionList = [

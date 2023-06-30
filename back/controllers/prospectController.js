@@ -446,7 +446,23 @@ app.get("/getAll", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/get100Sourcing", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(500).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             let dic = {}
             prospectsFromDb.forEach(val => {
