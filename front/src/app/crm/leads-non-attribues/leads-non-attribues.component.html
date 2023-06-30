@@ -33,7 +33,7 @@
                                     field="note"></p-sortIcon>
                             </th>
 
-                            <th style="text-align: center;">
+                            <th style="text-align: center;" >
                                 Action
                             </th>
                         </tr>
@@ -474,7 +474,7 @@
                     <th>
                         Documents Prospect
                     </th>
-                    <th>
+                    <th *ngIf="AccessLevel!='Spectateur'">
                         Action
                     </th>
                 </tr>
@@ -523,7 +523,7 @@
                     <td>
                         {{lead?.documents?.length}}
                     </td>
-                    <td>
+                    <td *ngIf="AccessLevel!='Spectateur'">
                         <i pTooltip="Suivre" tooltipPosition="bottom" class="pi pi-briefcase mr-2"
                             (click)="initFollow(lead);scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Affecter" tooltipPosition="bottom" class="pi pi-cog mr-2"

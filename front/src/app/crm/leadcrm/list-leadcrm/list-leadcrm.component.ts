@@ -2,24 +2,25 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
+import jwt_decode from "jwt-decode";
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { TeamsCrmService } from 'src/app/services/crm/teams-crm.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-list-leadcrm',
   templateUrl: './list-leadcrm.component.html',
   styleUrls: ['./list-leadcrm.component.scss']
 })
 export class ListLeadcrmComponent implements OnInit {
-
+  token;
   filterPays = [
     { label: 'Tous les pays', value: null }
   ]
-
+  AccessLevel = "Spectateur"
   filterSource = [
     { label: 'Toutes les sources', value: null },
     { label: 'Facebook', value: 'Facebook' },
@@ -74,7 +75,8 @@ export class ListLeadcrmComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private TeamCRMService: TeamsCrmService) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService,
+    private TeamCRMService: TeamsCrmService, private UserService: AuthService) { }
   leads: LeadCRM[] = []
   ngOnInit(): void {
     this.LCS.getAll().subscribe(data => {
@@ -98,6 +100,16 @@ export class ListLeadcrmComponent implements OnInit {
 
     })
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "CRM")
+            this.AccessLevel = role.role
+        })
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
+    })
   }
 
   //Follow Form
