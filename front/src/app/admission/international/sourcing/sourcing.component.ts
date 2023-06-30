@@ -304,13 +304,13 @@ export class SourcingComponent implements OnInit {
         this.ecoleList.push(d)
         this.dicEcole[d.url_form] = d
       })
-      this.admissionService.get100Sourcing().subscribe(data100 => {
+      /*this.admissionService.get100Sourcing().subscribe(data100 => {
         this.prospects = data100
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!data100[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
-      })
+      })*/
       this.admissionService.getAllSourcing().subscribe(dataP => {
         this.ecoleList = []
         data.forEach(d => { this.ecoleList.push(d) })
