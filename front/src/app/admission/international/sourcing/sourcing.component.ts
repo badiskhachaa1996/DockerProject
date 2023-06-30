@@ -299,18 +299,28 @@ export class SourcingComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      this.admissionService.getAllSourcing().subscribe(dataP => {
-        this.prospects = dataP
-        data.forEach(d => {
-          this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-          this.ecoleList.push(d)
-          this.dicEcole[d.url_form] = d
+      data.forEach(d => {
+        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+        this.ecoleList.push(d)
+        this.dicEcole[d.url_form] = d
+      })
+      this.admissionService.get100Sourcing().subscribe(data100 => {
+        this.prospects = data100
+        Object.keys(this.dicEcole).forEach((val, idx) => {
+          if (!data100[val])
+            this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
+      })
+      this.admissionService.getAllSourcing().subscribe(dataP => {
+        this.ecoleList = []
+        data.forEach(d => { this.ecoleList.push(d) })
+        this.prospects = dataP
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!dataP[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
       })
+
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
       if (data.roles_list)
@@ -663,7 +673,7 @@ export class SourcingComponent implements OnInit {
   emailTypeSelected: string = null
   mailDropdown = []
   mailTypeDropdown = []
-  
+
   formEmailPerso = new FormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
