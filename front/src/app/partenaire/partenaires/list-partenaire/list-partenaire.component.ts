@@ -127,14 +127,14 @@ export class ListPartenaireComponent implements OnInit {
           this.internationalList.push({ label: `${d.user_id.lastname} ${d.user_id.firstname}`, value: d._id })
       })
     })
-    this.UserService.getById(tkn.id).subscribe(user => {
+    this.UserService.getPopulate(tkn.id).subscribe(user => {
       let data: User = user
       data.roles_list.forEach(val => {
         if (val.module == "Partenaire")
           this.AccessLevel = val.role
       })
-      if (tkn.role == 'Admin')
-        this.AccessLevel = 'Admin'
+      if (user.role == 'Admin')
+        this.AccessLevel = 'Super-Admin'
     })
   }
 

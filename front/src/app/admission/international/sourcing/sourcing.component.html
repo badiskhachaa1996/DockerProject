@@ -817,7 +817,7 @@
                                 <td>
                                     {{ prospect.rentree_scolaire }}
                                 </td>
-                                <td>
+                                <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                                     <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"
                                         (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
                                     <i pTooltip="Details" tooltipPosition="bottom" class="pi pi-user-edit mr-2"
