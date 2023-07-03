@@ -29,4 +29,8 @@ export class TargetService {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<Target[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllByMemberID(data: { team_id: string, member_id: string }) {
+    let registreUrl = this.apiUrl + "getAllByMemberID";
+    return this.httpClient.post<Target[]>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }
