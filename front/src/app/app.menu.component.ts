@@ -883,7 +883,21 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Target",
                                     icon: 'pi pi-flag',
-                                    items: []
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['crm/target/configuration']
+                                        }, {
+                                            label: 'My target',
+                                            icon: 'pi pi-user',
+                                            routerLink: ['crm/target/my-target']
+                                        }, {
+                                            label: 'Dashboard Général',
+                                            icon: 'pi pi-chart-pie',
+                                            routerLink: ['crm/target/dashboard']
+                                        }
+                                    ]
                                 },
                                 {
                                     label: "Mes taches",
@@ -4574,7 +4588,21 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Target",
                                             icon: 'pi pi-flag',
-                                            items: []
+                                            items: [
+                                                {
+                                                    label: 'Configuration',
+                                                    icon: 'pi pi-cog',
+                                                    routerLink: ['crm/target/configuration']
+                                                }, {
+                                                    label: 'My target',
+                                                    icon: 'pi pi-user',
+                                                    routerLink: ['crm/target/my-target']
+                                                }, {
+                                                    label: 'Dashboard Général',
+                                                    icon: 'pi pi-chart-pie',
+                                                    routerLink: ['crm/target/dashboard']
+                                                }
+                                            ]
                                         },
                                         {
                                             label: "Mes taches",
@@ -4733,7 +4761,21 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Target",
                                             icon: 'pi pi-flag',
-                                            items: []
+                                            items: [
+                                                {
+                                                    label: 'Configuration',
+                                                    icon: 'pi pi-cog',
+                                                    routerLink: ['crm/target/configuration']
+                                                }, {
+                                                    label: 'My target',
+                                                    icon: 'pi pi-user',
+                                                    routerLink: ['crm/target/my-target']
+                                                }, {
+                                                    label: 'Dashboard Général',
+                                                    icon: 'pi pi-chart-pie',
+                                                    routerLink: ['crm/target/dashboard']
+                                                }
+                                            ]
                                         },
                                         {
                                             label: "Mes taches",
@@ -4856,7 +4898,21 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: "Target",
                                             icon: 'pi pi-flag',
-                                            items: []
+                                            items: [
+                                                {
+                                                    label: 'Configuration',
+                                                    icon: 'pi pi-cog',
+                                                    routerLink: ['crm/target/configuration']
+                                                }, {
+                                                    label: 'My target',
+                                                    icon: 'pi pi-user',
+                                                    routerLink: ['crm/target/my-target']
+                                                }, {
+                                                    label: 'Dashboard Général',
+                                                    icon: 'pi pi-chart-pie',
+                                                    routerLink: ['crm/target/dashboard']
+                                                }
+                                            ]
                                         },
                                         {
                                             label: "Mes taches",

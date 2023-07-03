@@ -341,6 +341,9 @@ import { ConfigurationMailComponent } from './mail-type/configuration-mail/confi
 import { MailTypeComponent } from './mail-type/mail/mail.component';
 import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
 import { EditorModule } from 'primeng/editor';
+import { MyTargetComponent } from './crm/target/my-target/my-target.component';
+import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
+import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 
 @NgModule({
   imports: [
@@ -690,7 +693,10 @@ import { EditorModule } from 'primeng/editor';
     VersionNonIframeComponent,
     ConfigurationMailComponent,
     MailTypeComponent,
-    MailAutoComponent
+    MailAutoComponent,
+    MyTargetComponent,
+    ConfigurationTargetComponent,
+    DashboardTargetComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

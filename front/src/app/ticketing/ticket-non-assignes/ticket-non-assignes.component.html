@@ -15,7 +15,7 @@
 <div class="grid col-12 card" *ngIf="TicketAffecter">
     <h5 class="col-12">Affecter un agent à ce ticket</h5>
     <div class="col-12">
-        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" [(ngModel)]="memberSelected"
+        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" [(ngModel)]="memberSelected" filter="true"
             placeholder="Choisissez un membre"></p-dropdown>
     </div>
     <div class="col-12">

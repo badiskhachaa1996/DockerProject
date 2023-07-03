@@ -236,6 +236,9 @@ import { VersionNonIframeComponent } from './formulaire-admission/formulaire-adm
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
 import { MailTypeComponent } from './mail-type/mail/mail.component';
 import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
+import { MyTargetComponent } from './crm/target/my-target/my-target.component';
+import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
+import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -428,6 +431,9 @@ const routes: Routes = [
             { path: 'crm/mes-leads/pre-qualifies/:id', component: LeadsPrequalifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/mes-leads/qualifies/:id', component: LeadsQualifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/ventes', component: VentesCRMComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/configuration', component: ConfigurationTargetComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/my-target', component: MyTargetComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/dashboard', component: DashboardTargetComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
