@@ -1,0 +1,197 @@
+<p-toast></p-toast>
+<div class="grid col-12">
+    <div class="grid col-12 card" *ngIf="EditTarget">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="EditTarget=null"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Mettre à jour
+            : {{EditTarget.custom_id }}
+        </h3>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEdit" (ngSubmit)="onUpdate()">
+            <div class="field col-12" *ngIf="!formEdit.value.member_id">
+                <label>Equipe CRM: </label>
+                <p-dropdown placeholder="Choisissez une équipe" filter="true" formControlName="equipe_id"
+                    [options]="equipeCRMDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12" *ngIf="!formEdit.value.equipe_id">
+                <label>Membre CRM: </label>
+                <p-dropdown placeholder="Choisissez un membre" filter="true" formControlName="member_id"
+                    [options]="memberCRMDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>Type: </label>
+                <p-dropdown placeholder="Choisissez un type" filter="true" formControlName="type" optionValue="other"
+                    optionLabel="other" [options]="type2Dropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>KPI: </label>
+                <p-inputNumber formControlName="KPI"> </p-inputNumber>
+            </div>
+            <div class="field col-6">
+                <label>Date de Commencement: </label>
+                <input pInputText type="date" formControlName="date_commencement" />
+            </div>
+            <div class="field col-6">
+                <label>Deadline: </label>
+                <input pInputText type="date" formControlName="deadline" />
+            </div>
+            <div class="field col-12">
+                <label>Description: </label>
+                <textarea pInputTextarea formControlName="description"></textarea>
+            </div>
+            <button pButton [disabled]="formEdit.invalid" label="Mettre à jour la target"></button>
+        </form>
+    </div>
+    <div class="grid col-12 card" *ngIf="AddTarget">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="AddTarget=false"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Création d'une target
+        </h3>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onSave()">
+            <div class="field col-12" *ngIf="!formAdd.value.member_id">
+                <label>Equipe CRM: </label>
+                <p-dropdown placeholder="Choisissez une équipe" filter="true" formControlName="equipe_id"
+                    [options]="equipeCRMDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12" *ngIf="!formAdd.value.equipe_id">
+                <label>Membre CRM: </label>
+                <p-dropdown placeholder="Choisissez un membre" filter="true" formControlName="member_id"
+                    [options]="memberCRMDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>Type: </label>
+                <p-dropdown placeholder="Choisissez un type" filter="true" formControlName="type"
+                    [options]="typeDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>KPI: </label>
+                <p-inputNumber formControlName="KPI"> </p-inputNumber>
+            </div>
+            <div class="field col-6">
+                <label>Date de Commencement: </label>
+                <input pInputText type="date" formControlName="date_commencement" />
+            </div>
+            <div class="field col-6">
+                <label>Deadline: </label>
+                <input pInputText type="date" formControlName="deadline" />
+            </div>
+            <div class="field col-12">
+                <label>Description: </label>
+                <textarea pInputTextarea formControlName="description"></textarea>
+            </div>
+            <button pButton [disabled]="formAdd.invalid" label="Ajouter la target"></button>
+        </form>
+    </div>
+    <div class="grid col-12 card">
+        <h5 class="col-9">Liste des targets</h5>
+        <div class="col-3 grid">
+            <button class="col-12" style="float: right;" pButton label="Ajouter une target"
+                (click)="AddTarget = true;"></button>
+        </div>
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="targets" class="col-12"
+            rowExpandMode="single" [pageLinks]="5" [globalFilterFields]="['titre', 'description']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem" scope="col"></th>
+                    <th pSortableColumn="custom_id" scope="col" style="text-align: center;">
+                        ID <p-sortIcon field="custom_id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                        Date <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
+                    <th>
+                        Equipe / Membre
+                    </th>
+                    <th pSortableColumn="type" scope="col" style="text-align: center;">
+                        Type <p-sortIcon field="type"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="kpi" scope="col" style="text-align: center;">
+                        KPI <p-sortIcon field="kpi"></p-sortIcon>
+                    </th>
+                    <th>
+                        Durée
+                    </th>
+                    <th pSortableColumn="date_commencement" scope="col" style="text-align: center;">
+                        Date de commencement <p-sortIcon field="date_commencement"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="deadline" scope="col" style="text-align: center;">
+                        Deadline <p-sortIcon field="deadline"></p-sortIcon>
+                    </th>
+                    <th>
+                        Avancement
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-target let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="target"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td>
+                        {{target?.custom_id}}
+                    </td>
+                    <td>
+                        {{target?.date_creation | date:'mediumDate'}}
+                    </td>
+                    <td>
+                        <ng-container *ngIf="target?.equipe_id">{{target?.equipe_id?.nom}}</ng-container>
+                        <ng-container *ngIf="target?.member_id">
+                            {{target?.member_id?.user_id?.lastname | uppercase}}
+                            {{target?.member_id?.user_id?.firstname | titlecase}}
+                        </ng-container>
+                    </td>
+                    <td>
+                        {{target?.type}}
+                    </td>
+                    <td>
+                        {{target?.KPI}}
+                    </td>
+                    <td>
+                        {{calcDuree(target)}}
+                    </td>
+                    <td>
+                        {{target?.date_commencement | date:'mediumDate'}}
+                    </td>
+                    <td>
+                        {{target?.deadline | date:'mediumDate'}}
+                    </td>
+                    <td>
+                        {{calcAvancement(target)}}
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer la target" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                            (click)="onDelete(target)" aria-hidden="true"></i>
+                        <i pTooltip="Mettre à jour la target" tooltipPosition="bottom" class="pi pi-pencil mr-2"
+                            (click)="onInitUpdate(target)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-target>
+                <tr>
+                    <td colspan="11">
+                        Description: {{target.description}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
