@@ -33,6 +33,13 @@ export class UpdateAgentComponent implements OnInit {
     { value: "Pedagogie", label: "Pedagogie" },
   ]
 
+  dropdownRole = [
+    { value: "Agent", label: "Agent" },
+    { value: "Spectateur", label: "Spectateur" },
+    { value: "Admin", label: "Admin" },
+    { value: "Super-Admin", label: "Super-Admin" },
+  ]
+
   mentionList = [
     { value: 'IGM - Inted Group Marketing', label: 'IGM - Inted Group Marketing' },
     { value: 'IGN - Inted Group Partenaires', label: 'IGN - Inted Group Partenaires' },
@@ -90,7 +97,7 @@ export class UpdateAgentComponent implements OnInit {
       services.forEach(val => { this.serviceList.push({ label: val.label, value: val._id }) })
       this.UserService.getPopulate(this.ID).subscribe(data => {
         let { service_id }: any = data
-        this.addForm.patchValue({ ...data, service_id: service_id._id })
+        this.addForm.patchValue({ ...data, service_id: service_id?._id })
         this.roles_list = data.roles_list
       })
     })

@@ -299,11 +299,7 @@ export class SourcingComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
-      data.forEach(d => {
-        this.dropdownEcole.push({ label: d.titre, value: d.url_form })
-        this.ecoleList.push(d)
-        this.dicEcole[d.url_form] = d
-      })
+
       /*this.admissionService.get100Sourcing().subscribe(data100 => {
         this.prospects = data100
         Object.keys(this.dicEcole).forEach((val, idx) => {
@@ -313,7 +309,11 @@ export class SourcingComponent implements OnInit {
       })*/
       this.admissionService.getAllSourcing().subscribe(dataP => {
         this.ecoleList = []
-        data.forEach(d => { this.ecoleList.push(d) })
+        data.forEach(d => {
+          this.dropdownEcole.push({ label: d.titre, value: d.url_form })
+          this.ecoleList.push(d)
+          this.dicEcole[d.url_form] = d
+        })
         this.prospects = dataP
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!dataP[val])
