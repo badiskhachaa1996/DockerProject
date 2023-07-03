@@ -37,11 +37,13 @@ export class TicketsAssignesComponent implements OnInit {
     if (this.TicketForm.value.statut == 'Traité')
       date_fin_traitement = new Date()
 
-    let documents_service = this.TicketForm.value.documents_service
+    let documents = this.TicketForm.value.documents
+    if (!documents)
+    documents = []
     if (this.uploadedFiles[0]) {
-      documents_service.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
+      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
     }
-    this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents_service }).subscribe(data => {
+    this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents }).subscribe(data => {
       this.TicketForm.reset()
       this.tickets.splice(this.tickets.indexOf(this.ticketTraiter), 1, data)
       this.ticketTraiter = null
@@ -49,7 +51,7 @@ export class TicketsAssignesComponent implements OnInit {
       if (this.uploadedFiles[0]) {
         let formData = new FormData()
         formData.append('ticket_id', data.doc._id)
-        formData.append('document_id', documents_service[documents_service.length-1]._id)
+        formData.append('document_id', documents[documents.length - 1]._id)
         formData.append('file', this.uploadedFiles[0])
         formData.append('path', this.uploadedFiles[0].name)
         this.TicketService.addFileService(formData).subscribe(data => {
