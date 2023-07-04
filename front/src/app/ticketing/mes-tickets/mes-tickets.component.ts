@@ -8,6 +8,7 @@ import { SujetService } from 'src/app/services/sujet.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { saveAs } from "file-saver";
 import mongoose from 'mongoose';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-mes-tickets',
   templateUrl: './mes-tickets.component.html',
@@ -88,23 +89,23 @@ export class MesTicketsComponent implements OnInit {
 
   onSubmitUpdate() {
     let documents = this.TicketForm.value.documents
-    if (this.uploadedFiles[0]) {
-      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
-    }
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+    });
     this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
       this.TicketService.getAllMine(this.token.id).subscribe(data => {
         this.tickets = data
       })
-      if (this.uploadedFiles[0]) {
+      this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
-        formData.append('ticket_id', data._id)
-        formData.append('document_id', documents[documents.length - 1]._id)
-        formData.append('file', this.uploadedFiles[0])
-        formData.append('path', this.uploadedFiles[0].name)
+        formData.append('ticket_id', data.doc._id)
+        formData.append('document_id', documents[idx]._id)
+        formData.append('file', element)
+        formData.append('path', element.name)
         this.TicketService.addFile(formData).subscribe(data => {
-          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès' })
+          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
-      }
+      });
       this.TicketForm.reset()
       this.ticketUpdate = null
       this.ToastService.add({ severity: 'success', summary: "Modification du Ticket avec succès" })
@@ -155,8 +156,9 @@ export class MesTicketsComponent implements OnInit {
   }
 
   uploadedFiles: File[] = []
-  onUpload(event: { files: File[] }) {
-    this.uploadedFiles = event.files
+  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+    this.uploadedFiles.push(event.files[0])
+    fileUpload.clear()
   }
 
   getDelaiTraitrement(ticket: Ticket) {
