@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 
 import { saveAs } from "file-saver";
 import mongoose from 'mongoose';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-tickets-assignes',
   templateUrl: './tickets-assignes.component.html',
@@ -26,6 +27,7 @@ export class TicketsAssignesComponent implements OnInit {
   ticketTraiter: Ticket;
   TicketForm = new FormGroup({
     note: new FormControl(''),
+    documents: new FormControl([]),
     statut: new FormControl(''),
     _id: new FormControl('', Validators.required)
   })
@@ -52,24 +54,24 @@ export class TicketsAssignesComponent implements OnInit {
     let documents = this.TicketForm.value.documents
     if (!documents)
       documents = []
-    if (this.uploadedFiles[0]) {
-      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
-    }
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+    });
     this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents }).subscribe(data => {
       this.TicketForm.reset()
       this.updateTicketList()
       this.ticketTraiter = null
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du Ticket avec succès' })
-      if (this.uploadedFiles[0]) {
+      this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
         formData.append('ticket_id', data.doc._id)
-        formData.append('document_id', documents[documents.length - 1]._id)
-        formData.append('file', this.uploadedFiles[0])
-        formData.append('path', this.uploadedFiles[0].name)
-        this.TicketService.addFileService(formData).subscribe(data => {
-          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès' })
+        formData.append('document_id', documents[idx]._id)
+        formData.append('file', element)
+        formData.append('path', element.name)
+        this.TicketService.addFile(formData).subscribe(data => {
+          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
-      }
+      });
     })
   }
   // En attente de traitement (par défaut) / En cours de traitement / En suspension / Traité  
@@ -204,8 +206,9 @@ export class TicketsAssignesComponent implements OnInit {
   }
 
   uploadedFiles: File[] = []
-  onUpload(event: { files: File[] }) {
-    this.uploadedFiles = event.files
+  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+    this.uploadedFiles.push(event.files[0])
+    fileUpload.clear()
   }
 
   getDelaiTraitrement(ticket: Ticket) {

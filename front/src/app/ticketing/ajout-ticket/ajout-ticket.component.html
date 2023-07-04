@@ -23,12 +23,15 @@
         </div>
         <div class="field col-12">
             <label>Pièce Jointe:</label>
-            <p-fileUpload (uploadHandler)="onUpload($event)" mode="basic" customUpload="true" maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false"
-                [auto]="true">
+            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
             </p-fileUpload>
             <div>
                 <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes <i class="pi pi-trash"
+                            style="float:right; color: red; cursor: pointer;" pTooltip="Supprimer le fichier"
+                            tooltipPosition="bottom" (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))"
+                            aria-hidden="true"> </i> </li>
                 </ul>
             </div>
         </div>
