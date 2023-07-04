@@ -189,4 +189,16 @@ export class MesTicketsComponent implements OnInit {
 
     return `${diff.day}J ${diff.hour}H${diff.min}`;
   }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
 }

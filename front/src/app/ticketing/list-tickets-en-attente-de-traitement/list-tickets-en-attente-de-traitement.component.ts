@@ -41,8 +41,15 @@ export class ListTicketsEnAttenteDeTraitementComponent implements OnInit {
   }
   dropdownMember = []
   TicketAffecter = null
+  formAffectation = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl('', Validators.required),
+    date_limite: new FormControl(''),
+    note_assignation: new FormControl(''),
+  })
   initAffecter(ticket) {
     this.TicketAffecter = ticket
+    this.formAffectation.patchValue({ ...ticket })
     this.UserService.getAllByServiceFromList(ticket.sujet_id.service_id._id).subscribe(data => {
       this.dropdownMember = []
       data.forEach(u => {
@@ -53,7 +60,7 @@ export class ListTicketsEnAttenteDeTraitementComponent implements OnInit {
 
   memberSelected: string;
   onAffectation() {
-    this.TicketService.update({ _id: this.TicketAffecter._id, agent_id: this.memberSelected }).subscribe(data => {
+    this.TicketService.update({ ...this.formAffectation.value }).subscribe(data => {
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
@@ -102,6 +109,19 @@ export class ListTicketsEnAttenteDeTraitementComponent implements OnInit {
     this.TicketService.update({ _id: ri._id, documents_service: ri.documents_service }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Documents supprimé' })
     })
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 
 }

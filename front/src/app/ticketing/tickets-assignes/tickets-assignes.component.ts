@@ -37,6 +37,13 @@ export class TicketsAssignesComponent implements OnInit {
     { label: 'En suspension', value: "En suspension" },
     { label: 'Traité', value: "Traité" },
   ]
+  filterPriorite = [
+    { label: 'Toutes les priorité', value: null },
+    { label: 'Priorité normale', value: "Priorité normale" },
+    { label: 'Basse priorité', value: "Basse priorité" },
+    { label: 'Moyenne priorité', value: "Moyenne priorité" },
+    { label: 'Haute priorité', value: "Haute priorité" },
+  ]
   onUpdate() {
     let date_fin_traitement = null
     if (this.TicketForm.value.statut == 'Traité')

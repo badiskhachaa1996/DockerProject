@@ -1,4 +1,6 @@
 <div class="col-12 card grid" *ngIf="ticketUpdate">
+    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+        (click)="ticketUpdate=null" aria-hidden="true"> </i>
     <h4 class="col-12" style="text-align: center;">Modifier un ticket </h4>
     <form [formGroup]="TicketForm" (ngSubmit)="onSubmitUpdate()" class="p-fluid p-formgrid grid col-12">
         <div class="field col-12 md:col-4">
@@ -88,7 +90,7 @@
             <div class="flex justify-content-between mb-4">
                 <div>
                     <span class="block text-500 font-medium mb-4">Tickets traités</span>
-                    <div class="text-900 font-medium text-xl">{{stats.traite    }}</div>
+                    <div class="text-900 font-medium text-xl">{{stats.traite }}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                     [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
