@@ -119,7 +119,7 @@
                     {{ticket.justificatif}}
                 </td>
                 <td>
-                    {{ticket?.agent_id?.firstname | titlecase}} {{ticket?.agent_id?.lastname | uppercase}}
+                    {{ticket?.user_revert?.firstname | titlecase}} {{ticket?.user_revert?.lastname | uppercase}}
                 </td>
                 <td>
                     <i pTooltip="Affecter ce ticket" style="margin-left: 2%; cursor: pointer;" class="pi pi-send"
@@ -137,6 +137,7 @@
                 <th> Description </th>
                 <th> Date de traitement </th>
                 <th> Note du Service qui traite </th>
+                <th> Motif du refus </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body">
@@ -144,6 +145,7 @@
                 <td>{{ticket.description}}</td>
                 <td>{{ticket.date_affec_accep}}</td>
                 <td>{{ticket.note}}</td>
+                <td>{{ticket.justificatif}}</td>
             </tr>
         </ng-template>
     </p-table>

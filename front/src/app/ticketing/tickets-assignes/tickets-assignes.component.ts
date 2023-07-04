@@ -18,6 +18,11 @@ import mongoose from 'mongoose';
 export class TicketsAssignesComponent implements OnInit {
   constructor(private TicketService: TicketService, private ServService: ServService, private ToastService: MessageService) { }
   tickets = []
+  stats = {
+    en_attente: 0,
+    en_suspension: 0,
+    traite: 0
+  }
   ticketTraiter: Ticket;
   TicketForm = new FormGroup({
     note: new FormControl(''),
@@ -39,13 +44,13 @@ export class TicketsAssignesComponent implements OnInit {
 
     let documents = this.TicketForm.value.documents
     if (!documents)
-    documents = []
+      documents = []
     if (this.uploadedFiles[0]) {
       documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
     }
     this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents }).subscribe(data => {
       this.TicketForm.reset()
-      this.tickets.splice(this.tickets.indexOf(this.ticketTraiter), 1, data)
+      this.updateTicketList()
       this.ticketTraiter = null
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du Ticket avec succès' })
       if (this.uploadedFiles[0]) {
@@ -68,11 +73,20 @@ export class TicketsAssignesComponent implements OnInit {
     { label: 'Traité', value: "Traité" },
   ]
   token;
-  ngOnInit(): void {
-    this.token = jwt_decode(localStorage.getItem('token'));
+
+  updateTicketList() {
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => { //getAllAssigne
       this.tickets = data
+      this.stats = {
+        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'En attente de traitement' ? 1 : 0), 0)),
+        en_suspension: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'En suspension' ? 1 : 0), 0)),
+        traite: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'Traité' ? 1 : 0), 0)),
+      }
     })
+  }
+  ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.updateTicketList()
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
         this.filterService.push({ label: val.label, value: val._id })
@@ -88,7 +102,7 @@ export class TicketsAssignesComponent implements OnInit {
   }
 
   decline() {
-    this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "Refusé", date_revert: new Date(), user_revert: this.isDecline.agent_id, agent_id: null, isAffected: null }).subscribe(data => {
+    this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "En attente de traitement", date_revert: new Date(), user_revert: this.isDecline.agent_id._id, agent_id: null, isAffected: null }).subscribe(data => {
       this.formDecline.reset()
       this.tickets.splice(this.tickets.indexOf(this.isDecline), 1)
       this.isDecline = null
@@ -98,6 +112,33 @@ export class TicketsAssignesComponent implements OnInit {
   onTraiter(ticket, index) {
     this.ticketTraiter = ticket
     this.TicketForm.patchValue({ ...ticket })
+  }
+
+  ticketPriorite: Ticket
+  prioriteForm = new FormGroup({
+    priorite_agent: new FormControl('', Validators.required),
+    _id: new FormControl('', Validators.required),
+  })
+
+  prioriteDropdown: any[] = [
+    { label: 'Priorité normale', value: "Priorité normale" },
+    { label: 'Basse priorité', value: "Basse priorité" },
+    { label: 'Moyenne priorité', value: "Moyenne priorité" },
+    { label: 'Haute priorité', value: "Haute priorité" },
+  ];
+
+  onInitPriorite(ticket, index) {
+    this.ticketPriorite = ticket
+    this.prioriteForm.patchValue({ ...ticket })
+  }
+
+  onUpdatePriorite() {
+    this.TicketService.update({ ...this.prioriteForm.value }).subscribe(data => {
+      this.TicketForm.reset()
+      this.updateTicketList()
+      this.ticketPriorite = null
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour de la priorité du ticket avec succès' })
+    })
   }
 
   getAttente(temp_date) {
@@ -158,6 +199,37 @@ export class TicketsAssignesComponent implements OnInit {
   uploadedFiles: File[] = []
   onUpload(event: { files: File[] }) {
     this.uploadedFiles = event.files
+  }
+
+  getDelaiTraitrement(ticket: Ticket) {
+    let date1 = new Date()
+    if (ticket.statut == 'Traité' && ticket.date_fin_traitement)
+      date1 = new Date(ticket.date_fin_traitement)
+    let date2 = new Date(ticket.date_ajout)
+
+    var diff = {
+      sec: 0,
+      min: null,
+      hour: 0,
+      day: 0
+    }							// Initialisation du retour
+    var tmp = date1.getTime() - date2.getTime();
+
+    tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+    diff.sec = tmp % 60;					// Extraction du nombre de secondes
+
+    tmp = Math.floor((tmp - diff.sec) / 60);	// Nombre de minutes (partie entière)
+    diff.min = tmp % 60;					// Extraction du nombre de minutes
+
+    tmp = Math.floor((tmp - diff.min) / 60);	// Nombre d'heures (entières)
+    diff.hour = tmp % 24;					// Extraction du nombre d'heures
+
+    tmp = Math.floor((tmp - diff.hour) / 24);	// Nombre de jours restants
+    diff.day = tmp;
+    if (diff.min < 10)
+      diff.min = "0" + diff.min.toString()
+
+    return `${diff.day}J ${diff.hour}H${diff.min}`;
   }
 
 }

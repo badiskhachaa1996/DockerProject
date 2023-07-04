@@ -28,6 +28,7 @@ export class ListTicketsRefuseComponent implements OnInit {
   ngOnInit(): void {
     this.TicketService.getAllRefuse().subscribe(data => {
       this.tickets = data
+      console.log(data)
     })
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
@@ -51,7 +52,7 @@ export class ListTicketsRefuseComponent implements OnInit {
   dropdownMember = []
   initAffecter(ticket) {
     this.TicketAffecter = ticket
-    this.UserService.getAllByServiceFromList(ticket.service_id._id).subscribe(data => {
+    this.UserService.getAllByServiceFromList(ticket.sujet_id.service_id._id).subscribe(data => {
       this.dropdownMember = []
       data.forEach(u => {
         this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
