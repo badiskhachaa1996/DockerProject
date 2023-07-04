@@ -148,6 +148,10 @@
                 <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
                     (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
                     emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
+                <p-dropdown [style]="{'margin':'5px'}" [options]="filterPriorite" filter="true"
+                    (onChange)="dt1.filter($event.value, 'statut', 'priorite_agent');"
+                    placeholder="Choisissez une priorité" emptyFilterMessage="Pas de priorité trouvé"
+                    filterPlaceholder="Choisissez une priorité"></p-dropdown>
                 <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
                     (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
                     emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
@@ -172,10 +176,6 @@
                         field="date_ajout">
                     </p-sortIcon>
                 </th>
-                <th pSortableColumn="priorite_agent" style="text-align:center" style="text-align:center">
-                    Priorité assigné <p-sortIcon field="priorite_agent">
-                    </p-sortIcon>
-                </th>
                 <th pSortableColumn="createur_id" style="text-align:center"> Crée par <p-sortIcon field="createur_id">
                     </p-sortIcon>
                 </th>
@@ -188,7 +188,10 @@
                 <th pSortableColumn="priorite" style="text-align:center"> Priorité <p-sortIcon field="priorite">
                     </p-sortIcon>
                 </th>
-
+                <th pSortableColumn="priorite_agent" style="text-align:center" style="text-align:center">
+                    Priorité assigné <p-sortIcon field="priorite_agent">
+                    </p-sortIcon>
+                </th>
                 <th pSortableColumn="statut" style="text-align:center"> Etat de traitement <p-sortIcon field="statut">
                     </p-sortIcon>
                 </th>
@@ -214,9 +217,6 @@
                     {{ticket.date_ajout | date:'mediumDate'}}
                 </td>
                 <td>
-                    {{ticket?.priorite_agent}}
-                </td>
-                <td>
                     {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname | uppercase}}
                 </td>
                 <td>
@@ -227,6 +227,9 @@
                 </td>
                 <td>
                     {{ticket.priorite}}
+                </td>
+                <td>
+                    {{ticket?.priorite_agent}}
                 </td>
                 <td>
                     <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
@@ -249,8 +252,8 @@
                     {{getDelaiTraitrement(ticket)}}
                 </td>
                 <td>
-                    <i pTooltip="Donner une priorité" style="margin-left: 2%; cursor: pointer;" class="pi pi-sort-alt mr-2"
-                        (click)="onInitPriorite(ticket,ri)" aria-hidden="true"></i>
+                    <i pTooltip="Donner une priorité" style="margin-left: 2%; cursor: pointer;"
+                        class="pi pi-sort-alt mr-2" (click)="onInitPriorite(ticket,ri)" aria-hidden="true"></i>
                     <i pTooltip="Traiter" style="margin-left: 2%; cursor: pointer;" class="pi pi-cog mr-2"
                         (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
                     <i pTooltip="Refuser" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban"
@@ -268,16 +271,20 @@
                 <th> Date de traitement </th>
                 <th> Délai de traitement </th>
                 <th> Note du Service qui traite </th>
+                <th> Note d'affectation </th>
+                <th> DDL </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.date_affec_accep}}</td>
+                <td>{{ticket.date_affec_accep| date:'mediumDate'}}</td>
                 <td>
                     {{getTraitement(ticket.date_affec_accep)}}
                 </td>
                 <td>{{ticket.note}}</td>
+                <td>{{ticket.note_assignation}}</td>
+                <td>{{ticket.date_limite | date:'mediumDate'}}</td>
             </tr>
         </ng-template>
     </p-table>
