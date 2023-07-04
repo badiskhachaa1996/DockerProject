@@ -120,7 +120,20 @@
                     {{ticket?.agent_id?.firstname | titlecase}} {{ticket?.agent_id?.lastname | uppercase}}
                 </td>
                 <td>
-                    {{ticket.statut}}
+                                        <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
+                        [value]="'Aucun status définit'">
+                    </p-tag>
+                    <p-tag *ngIf="ticket.statut == 'En attente de traitement'" icon="pi pi-eye-slash" severity="info"
+                        [value]="ticket.statut">
+                    </p-tag>
+                    <p-tag *ngIf="ticket.statut == 'En cours de traitement'" icon="pi pi-eye" severity="warning"
+                        [value]="ticket.statut">
+                    </p-tag>
+                    <p-tag *ngIf="ticket.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
+                        [value]="ticket.statut">
+                    </p-tag>
+                    <p-tag *ngIf="ticket.statut == 'Traité'" icon="pi pi-check-square" severity="success" [value]="ticket.statut">
+                    </p-tag>
                 </td>
                 <td>
                     <i pTooltip="Affecter ce ticket" style="margin-left: 2%; cursor: pointer;" class="pi pi-send"

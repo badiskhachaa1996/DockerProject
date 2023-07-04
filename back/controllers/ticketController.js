@@ -739,7 +739,7 @@ app.get("/getAllNonAssigne", (req, res) => {
 });
 
 app.get("/getAllRefuse", (req, res) => {
-    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('user_revert')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
