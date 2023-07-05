@@ -37,12 +37,24 @@ export class PaiementsComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
+  
+  documentDropdown = [
+    { label: "Inscription", value: "inscription" },
+    { label: "Préinscription", value: "preinscription" },
+    { label: "Paiement", value: "paiement" },
+    { label: "Paiement préinscription", value: "paiement-preinscription" },
+    { label: "Paiement préinscription - acompte", value: "paiement-preinscription-acompte" },
+    { label: "Paiement acompte", value: "paiement-acompte" },
+    { label: "Dérogation", value: "derogation" },
+    { label: "Lettre d'acceptation", value: "lettre-acceptation" },
+  ]
   uploadAdminFileForm: FormGroup = new FormGroup({
     //typeDoc: new FormControl(this.DocTypes[0], Validators.required),
     date: new FormControl(this.convertTime(new Date), Validators.required),
     nom: new FormControl("", Validators.required),
     note: new FormControl(""),
     traited_by: new FormControl("", Validators.required),
+    type: new FormControl(""),
   })
 
   @ViewChild('fileInput') fileInput: FileUpload;
@@ -72,6 +84,17 @@ export class PaiementsComponent implements OnInit {
       });
     }
   }
+  generateCustomID(nom) {
+    let reeldate = new Date();
+
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+
+    nom = nom.substr(0, 2).toUpperCase();
+
+    return 'DOC' + nom + date + random;
+  }
   FileUploadAdmin(event: { files: [File], target: EventTarget }) {
 
     if (this.uploadAdminFileForm.valid && event.files != null) {
@@ -82,6 +105,8 @@ export class PaiementsComponent implements OnInit {
       formData.append('date', this.uploadAdminFileForm.value.date)
       formData.append('note', this.uploadAdminFileForm.value.note)
       formData.append('nom', this.uploadAdminFileForm.value.nom)
+      formData.append('type', this.uploadAdminFileForm.value.type)
+      formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
       formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
       formData.append('path', event.files[0].name)
       formData.append('file', event.files[0])

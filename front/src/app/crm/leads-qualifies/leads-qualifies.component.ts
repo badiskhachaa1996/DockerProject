@@ -456,11 +456,22 @@ export class LeadsQualifiesComponent implements OnInit {
       _id: id_string
     })
   }
+  generateCustomID(nom) {
+    let reeldate = new Date();
+
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+
+    nom = nom.substr(0, 2).toUpperCase();
+
+    return 'DOC' + nom + date + random;
+  }
   TransferToSM() {
     let payement = []
     let documents_administrative = []
     this.showTransfer.documents.forEach(val => {
-      documents_administrative.push({ date: new Date(), nom: val.nom, path: val.path })
+      documents_administrative.push({ date: new Date(), nom: val.nom, path: val.path, custom_id: this.generateCustomID(val.nom) })
     })
     this.showTransfer.ventes.forEach(val => {
       let date = new Date()
@@ -471,7 +482,7 @@ export class LeadsQualifiesComponent implements OnInit {
     this.ProspectService.create({ newProspect: { ...this.formTransfertProspect.value }, newUser: { ...this.formTransfertUser.value } }).subscribe(data => {
       //Déplacer les documents
       console.log(data)
-      this.LCS.moveFiles({ prospect_id: data.prospect._id, lead_id: this.showTransfer._id }).subscribe(data=>{
+      this.LCS.moveFiles({ prospect_id: data.prospect._id, lead_id: this.showTransfer._id }).subscribe(data => {
         this.ToastService.add({ severity: 'success', summary: "Transfert des fichiers vers le module international" })
       })
       this.ToastService.add({ severity: 'success', summary: "Transfert vers le module international" })
