@@ -8,6 +8,8 @@ import { saveAs } from "file-saver";
 import { AdmissionService } from 'src/app/services/admission.service';
 import { GenDocIntService } from 'src/app/services/gen-doc-int.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-doc-checker',
@@ -19,20 +21,25 @@ export class DocCheckerComponent implements OnInit {
   documentForm = new FormGroup({
     input: new FormControl('', Validators.required)
   })
-  documents: DocumentInternational[]
+  documents: any[]
   USER: User
   PROSPECT: Prospect
   imageToShow: any = "../assets/images/avatar.PNG";
   checkID() {
     //Vérifier si c'est un email d'un lead
     this.LeadService.docChecker(this.documentForm.value.input).subscribe(data => {
-      if (data && data.type == "DocInt") {
+      if (data && data.type == "Prospect") {
         console.log("Document trouvé")
         this.ToastService.add({ severity: 'success', summary: "Document trouvé" })
-        this.documents = [data.data]
-        this.LeadService.getPopulate(data.data.prospect_id._id).subscribe(prospect => {
+        console.log(data)
+        data.data.documents_administrative.forEach(d => {
+          if (d.custom_id == this.documentForm.value.input)
+            this.documents = [d]
+        })
+
+        this.LeadService.getPopulate(data.data._id).subscribe(prospect => {
           this.USER = prospect.user_id
-          this.PROSPECT = data.data.prospect_id
+          this.PROSPECT = data.data
           this.AuthService.getProfilePicture(this.USER._id).subscribe((img) => {
             if (img.error) {
               this.imageToShow = "../assets/images/avatar.PNG"
@@ -74,7 +81,7 @@ export class DocCheckerComponent implements OnInit {
 
   }
 
-  constructor(private LeadService: AdmissionService, private GenDocService: GenDocIntService, private ToastService: MessageService, private AuthService: AuthService) { }
+  constructor(private LeadService: AdmissionService, private GenDocService: GenDocIntService, private ToastService: MessageService, private AuthService: AuthService, private FAS: FormulaireAdmissionService) { }
 
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {

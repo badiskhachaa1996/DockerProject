@@ -845,9 +845,12 @@ app.post('/uploadAdminFile/:id', uploadAdmin.single('file'), (req, res, next) =>
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
+        console.log({ ...req.body }, 0)
         Prospect.findById(req.body.id, ((err, newProspect) => {
-            newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note, traited_by: req.body.traited_by, path: req.body.path, nom: req.body.nom })
+            newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note.toString(), traited_by: req.body.traited_by.toString(), path: req.body.path.toString(), nom: req.body.nom.toString(), type: req.body.type.toString(), custom_id: req.body.custom_id.toString() })
             Prospect.findByIdAndUpdate(req.body.id, { documents_administrative: newProspect.documents_administrative }, { new: true }, (err, doc) => {
+                if (err)
+                    console.error(err)
                 res.status(201).json({ dossier: "dossier mise à jour", documents_administrative: newProspect.documents_administrative });
             })
         }))
@@ -1563,9 +1566,9 @@ app.get('/docChecker/:input', (req, res) => {
         if (data)
             res.send({ data, type: "User" })
         else {
-            DocumentInternational.findOne({ custom_id: req.params.input }).populate('prospect_id').populate('user_id').populate('ecole')
-                .then((formFromDb) => { res.status(200).send({ data: formFromDb, type: "DocInt" }); })
-                .catch((error) => { console.error(error); res.status(500).send(error); });
+            Prospect.findOne({ documents_administrative: { $elemMatch: { custom_id: req.params.input } } }).then(doc => {
+                res.send({ data: doc, type: "Prospect" })
+            })
         }
     })
 })

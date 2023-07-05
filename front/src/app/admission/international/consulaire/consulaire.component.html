@@ -226,6 +226,12 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>
+                                        ID
+                                    </th>
+                                    <th>
+                                        Type
+                                    </th>
+                                    <th>
                                         Date de délivrance
                                     </th>
                                     <th>
@@ -244,6 +250,12 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData>
                                 <tr>
+                                    <td>
+                                        {{rowData.custom_id}}
+                                    </td>
+                                    <td>
+                                        {{rowData.type}}
+                                    </td>
                                     <td>
                                         {{rowData.date | date:'mediumDate'}}
                                     </td>
@@ -547,6 +559,11 @@
                         optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
                 </div>
                 <div class="field col-12">
+                    <label>Type de document :</label>
+                    <p-dropdown [options]="documentDropdown" formControlName="type" placeholder="Choisissez un type"
+                        filter="true"></p-dropdown>
+                </div>
+                <div class="field col-12">
                     <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
                         chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
                         accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" [disabled]="uploadAdminFileForm.invalid"
@@ -628,6 +645,12 @@
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th>
+                                ID
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th>
                                 Date de délivrance
                             </th>
                             <th>
@@ -646,6 +669,12 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData>
                         <tr>
+                            <td>
+                                {{rowData.custom_id}}
+                            </td>
+                            <td>
+                                {{rowData.type}}
+                            </td>
                             <td>
                                 {{rowData.date | date:'mediumDate'}}
                             </td>

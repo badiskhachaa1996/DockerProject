@@ -290,6 +290,12 @@
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th>
+                                ID
+                            </th>
+                            <th>
+                                Type
+                            </th>
+                            <th>
                                 Date de délivrance
                             </th>
                             <th>
@@ -308,6 +314,12 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData>
                         <tr>
+                            <td>
+                                {{rowData.custom_id}}
+                            </td>
+                            <td>
+                                {{rowData.type}}
+                            </td>
                             <td>
                                 {{rowData.date | date:'mediumDate'}}
                             </td>
