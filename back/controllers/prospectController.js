@@ -20,6 +20,7 @@ const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
+const { DocumentInternational } = require('../models/documentInternational');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -1554,6 +1555,18 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
 app.get('/getPopulate/:id', (req, res) => {
     Prospect.findById(req.params.id).populate('user_id').then(data => {
         res.send(data)
+    })
+})
+
+app.get('/docChecker/:input', (req, res) => {
+    User.findOne({ email: req.params.input, type: "Prospect" }).then(data => {
+        if (data)
+            res.send({ data, type: "User" })
+        else {
+            DocumentInternational.findOne({ custom_id: req.params.input }).populate('prospect_id').populate('user_id').populate('ecole')
+                .then((formFromDb) => { res.status(200).send({ data: formFromDb, type: "DocInt" }); })
+                .catch((error) => { console.error(error); res.status(500).send(error); });
+        }
     })
 })
 
