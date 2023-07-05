@@ -222,7 +222,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
-      req.originalUrl.startsWith('/soc/RA/getByEcoleID')
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID',
+      req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
       next();
     } else {

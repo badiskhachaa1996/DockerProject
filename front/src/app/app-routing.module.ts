@@ -239,6 +239,7 @@ import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
 import { MyTargetComponent } from './crm/target/my-target/my-target.component';
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
+import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -505,6 +506,7 @@ const routes: Routes = [
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
+    { path: 'document-authentification', component: DocCheckerComponent },
 
 ]
 

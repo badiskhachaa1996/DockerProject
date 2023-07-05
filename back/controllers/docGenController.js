@@ -12,7 +12,7 @@ app.post("/create", (req, res) => {
 
 app.get("/getAll", (req, res, next) => {
     DocumentInternational.find().sort({ date_creation: -1 }).populate('prospect_id').populate('user_id').populate('ecole')
-        .then((formFromDb) => { console.log(formFromDb); res.status(200).send(formFromDb); })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
 

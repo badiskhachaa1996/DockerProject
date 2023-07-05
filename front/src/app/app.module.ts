@@ -344,6 +344,7 @@ import { EditorModule } from 'primeng/editor';
 import { MyTargetComponent } from './crm/target/my-target/my-target.component';
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
+import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 
 @NgModule({
   imports: [
@@ -696,7 +697,8 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
     MailAutoComponent,
     MyTargetComponent,
     ConfigurationTargetComponent,
-    DashboardTargetComponent
+    DashboardTargetComponent,
+    DocCheckerComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
