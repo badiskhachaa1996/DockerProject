@@ -14,31 +14,31 @@
     <div class="col-12 grid">
         <div class="col-4" *ngIf="PROSPECT">
             <img *ngIf="PROSPECT.type_form=='eduhorizons'" src="\assets\images\eh.png" alt="logo eduhorizons"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='espic'" src="\assets\images\logoESPIC.png" alt="logo ESPIC"
-                PROSPECT.type_form class="m-2">
-            <img *ngIf="PROSPECT.type_form=='adg'" src="\assets\images\logo_adg.png" alt="logo adg" PROSPECT.type_form
+                style="max-width: 90%;" class="m-2">
+            <img *ngIf="PROSPECT.type_form=='adg'" src="\assets\images\logo_adg.png" alt="logo adg" style="max-width: 90%;"
                 class="m-2">
             <img *ngIf="PROSPECT.type_form=='estya' || PROSPECT.type_form=='XXX'" src="\assets\images\logo-estya-fr.png" alt="logo estya"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='estya-dubai'" src="\assets\images\estya-dubai-logo.png" alt="logo estya"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='studinfo'" src="\assets\images\studinfo_logo.png" alt="logo studinfo"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='intuns'" src="\assets\images\intuns-logo.png" alt="logo intuns"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='intunivesity'" src="\assets\images\intuniversity-logo.png"
-                alt="logo intuniversity" PROSPECT.type_form class="m-2">
+                alt="logo intuniversity" style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='medasup'" src="\assets\images\logo_medasup.png" alt="logo medasup"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='btech'" src="\assets\images\logo_btech.png" alt="logo btech"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='inteducation'" src="\assets\images\int_education_logo.png"
-                alt="logo int education" PROSPECT.type_form class="m-2">
+                alt="logo int education" style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='icbsdubai'" src="\assets\images\logo-icbs-dubai.png" alt="logo icbsdubai"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
             <img *ngIf="PROSPECT.type_form=='icbsmalta'" src="\assets\images\logo-icbs-malta.png" alt="logo icbsmalta"
-                PROSPECT.type_form class="m-2">
+                style="max-width: 90%;" class="m-2">
         </div>
         <div class="col-4 grid" *ngIf="USER && PROSPECT">
             <p class="col-12"><strong>Nom et prénom</strong> : {{USER.lastname|uppercase}} {{USER.firstname|titlecase}}

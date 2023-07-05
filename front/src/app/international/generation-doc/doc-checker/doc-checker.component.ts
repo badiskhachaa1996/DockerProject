@@ -59,9 +59,12 @@ export class DocCheckerComponent implements OnInit {
         this.LeadService.getByUserId(data.data._id).subscribe(prospect => {
           this.ToastService.add({ severity: 'success', summary: "Prospect trouvé" })
           this.USER = data.data
+          console.log(this.USER)
           this.PROSPECT = prospect
+          this.documents= this.PROSPECT.documents_administrative
           this.AuthService.getProfilePicture(this.USER._id).subscribe((img) => {
-            if (data.error) {
+            console.log(img)
+            if (img.error) {
               this.imageToShow = "../assets/images/avatar.PNG"
             } else {
               const byteArray = new Uint8Array(atob(img.file).split('').map(char => char.charCodeAt(0)));
