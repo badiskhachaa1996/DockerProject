@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
-    accept=".pdf,.jpg,.png,.jpeg" style="display: none;" pInputFile />
+    accept=".jpg,.png,.jpeg" style="display: none;" pInputFile />
 <div class="grid col-12 card" *ngIf="updateEmail">
     <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="updateEmail=null"
         aria-hidden="true"> </i>
@@ -15,6 +15,10 @@
         <div class="field col-6">
             <label>Utilisation: </label>
             <input type="text" formControlName="type" pInputText>
+        </div>
+        <div class="field col-12">
+            <label>Mot de passe: </label>
+            <p-password formControlName="password" [toggleMask]="true"></p-password>
         </div>
         <button pButton [disabled]="formEdit.invalid" label="Mettre à jour l'email"></button>
     </form>
@@ -85,14 +89,14 @@
                         style="max-height: 160px;" />
                     </td>
                     <td *ngIf="!email?.signature_file">
-                        <a (click)="onUploadSignature(email)">Uploader la signature</a>
+                        <a (click)="onUploadSignature(email)" style="cursor: pointer;">Uploader la signature</a>
                     </td>
                     <td>
-                        <i pTooltip="Uploader la signature" tooltipPosition="bottom" class="pi pi-envelope mr-2"
+                        <i pTooltip="Uploader la signature" tooltipPosition="bottom" class="pi pi-envelope mr-2" style="cursor: pointer;"
                             aria-hidden="true" (click)="onUploadSignature(email)"></i>
-                        <i pTooltip="Mettre à jour l'email" tooltipPosition="bottom" class="pi pi-pencil mr-2"
+                        <i pTooltip="Mettre à jour l'email" tooltipPosition="bottom" class="pi pi-pencil mr-2" style="cursor: pointer;"
                             (click)="onInitUpdate(email)" aria-hidden="true"></i>
-                        <i pTooltip="Supprimer l'email" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                        <i pTooltip="Supprimer l'email" tooltipPosition="bottom" class="pi pi-trash mr-2" style="cursor: pointer;"
                             (click)="onDelete(email)" aria-hidden="true"></i>
                     </td>
                 </tr>

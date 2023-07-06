@@ -15,7 +15,10 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
-
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
+import { MailType } from 'src/app/models/MailType';
+import mongoose from 'mongoose';
 @Component({
   selector: 'app-orientation',
   templateUrl: './orientation.component.html',
@@ -227,7 +230,7 @@ export class OrientationComponent implements OnInit {
   ecoleList: EcoleAdmission[] = []
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
-    private PartenaireService: PartenaireService, private UserService: AuthService) { }
+    private PartenaireService: PartenaireService, private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
 
   prospects = {}
 
@@ -641,6 +644,131 @@ export class OrientationComponent implements OnInit {
     if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
   }
+  showEmail = false
+  prospectSendTo: Prospect = null
+  emailTypeSelected: string = null
+  mailDropdown = []
+  mailTypeDropdown = []
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([], Validators.required),
+    send_from: new FormControl('', Validators.required)
+  })
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([], Validators.required),
+    send_from: new FormControl('', Validators.required)
+  })
+  onEmailPerso() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected  }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+        this.formEmailPerso.reset()
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  onEmailType() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected  }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+        this.formEmailType.reset()
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  initSendEmail(prospect: Prospect) {
+    this.showEmail = true
+    this.prospectSendTo = prospect
+    this.EmailTypeS.HEgetAllTo(this.prospectSendTo._id).subscribe(data => {
+      this.historiqueEmails = data
+    })
+    this.EmailTypeS.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.mailDropdown.push({ label: val.email, value: val })
+      })
+    })
+    this.EmailTypeS.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
+  }
+
+
+  onMailType(event: MailType) {
+    this.formEmailType.patchValue({
+      ...event
+    })
+    this.piece_jointes = event.pieces_jointe
+    this.mailTypeSelected = event
+  }
+  mailTypeSelected: MailType
+  historiqueEmails: HistoriqueEmail[] = []
+  piece_jointes = []
+
+  //Gestion des PJs
+  onDeletePJ(ri) {
+    delete this.piece_jointes[ri]
+  }
+
+  uploadFilePJ: {
+    date: Date,
+    nom: string,
+    path: string,
+    _id: string
+  } = null
+
+  onAddPj() {
+    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+  downloadPJFile(pj) {
+    this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      saveAs(blob, pj.path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+  onUploadPJ(uploadFilePJ) {
+    if (uploadFilePJ?.nom && uploadFilePJ.nom != 'Cliquer pour modifier le nom du document ici') {
+      document.getElementById('selectedFile').click();
+      this.uploadFilePJ = uploadFilePJ
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+    }
+
+  }
+
+  FileUploadPJ(event: [File]) {
+    console.log(event)
+    if (event != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('nom', this.uploadFilePJ.nom)
+      formData.append('pj_id', this.uploadFilePJ._id)
+      formData.append('path', event[0].name)
+      formData.append('_id', this.mailTypeSelected?._id)
+      formData.append('file', event[0])
+      this.EmailTypeS.uploadPJ(formData).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.piece_jointes[this.piece_jointes.indexOf(this.uploadFilePJ)].path = event[0].name
+        this.uploadFilePJ = null;
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
 
 
 }

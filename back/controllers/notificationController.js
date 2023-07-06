@@ -6,6 +6,7 @@ const fs = require("fs");
 const { Ticket } = require("../models/ticket");
 const io = require("socket.io");
 const nodemailer = require('nodemailer');
+const { User } = require("../models/user");
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -43,6 +44,25 @@ app.post("/create", (req, res) => {
     });
 
 });
+
+app.post('/createV2', (req, res) => {
+    User.find({ roles_list: { $elemMatch: { module: req.body.module, role: req.body.role } } }).then(users => {
+        users.forEach(u => {
+            const notif = new Notification({
+                ...req.body,
+                date_ajout: Date.now(),
+                user_id: u._id
+            });
+
+
+            notif.save((err, user) => {
+
+            });
+        })
+        res.send(users);
+    })
+
+})
 
 
 //Suppression d'une notification

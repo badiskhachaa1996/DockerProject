@@ -6,6 +6,12 @@ import { MessageService } from 'primeng/api';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import mongoose from 'mongoose';
+import { FileUpload } from 'primeng/fileupload';
+import { SocketService } from 'src/app/services/socket.service';
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
@@ -33,22 +39,26 @@ export class AjoutTicketComponent implements OnInit {
   ];
   onAdd() {
     let documents = []
-    if (this.uploadedFiles[0]) {
-      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
-    }
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+    });
     this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
+
+      let d = new Date()
+      this.Socket.NewNotifV2('Ticketing - Super-Admin', `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`)
+      this.NotificationService.createV2(new Notification(null, null, false, `Un nouveau ticket a été crée pour le service ${this.serviceDic[this.TicketForm.value.service_id]}, dont le ${this.sujetDic[this.TicketForm.value.sujet_id]} le ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} par ${this.USER.lastname} ${this.USER.firstname}`, new Date(), null, this.TicketForm.value.service_id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
       this.TicketForm.reset()
-      if (this.uploadedFiles[0]) {
+      this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
         formData.append('ticket_id', data.doc._id)
-        formData.append('document_id', documents[0]._id)
-        formData.append('file', this.uploadedFiles[0])
-        formData.append('path', this.uploadedFiles[0].name)
+        formData.append('document_id', documents[idx]._id)
+        formData.append('file', element)
+        formData.append('path', element.name)
         this.TicketService.addFile(formData).subscribe(data => {
-          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès' })
+          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
-      }
+      });
     })
   }
   onSelectService() {
@@ -60,17 +70,30 @@ export class AjoutTicketComponent implements OnInit {
     })
   }
   uploadedFiles: File[] = []
-  onUpload(event: { files: File[] }) {
-    this.uploadedFiles = event.files
+  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+    this.uploadedFiles.push(event.files[0])
+    fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private SujetService: SujetService) { }
-
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService,
+    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService) { }
+  serviceDic = {}
+  sujetDic = {}
+  USER: User
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
         this.serviceDropdown.push({ label: val.label, value: val._id })
+        this.serviceDic[val._id] = val.label
       })
+    })
+    this.AuthService.getPopulate(this.token.id).subscribe(data => {
+      this.USER = data
+    })
+    this.SujetService.getAll().subscribe(data => {
+      data.forEach(element => {
+        this.sujetDic[element._id] = element.label
+      });
     })
   }
 

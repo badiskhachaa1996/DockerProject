@@ -1,25 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { EmailType } from 'src/app/models/EmailType';
+import { Mail } from 'src/app/models/Mail';
 import { EmailTypeService } from 'src/app/services/email-type.service';
-
+import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-configuration-mail',
   templateUrl: './configuration-mail.component.html',
   styleUrls: ['./configuration-mail.component.scss']
 })
 export class ConfigurationMailComponent implements OnInit {
-  emails: EmailType[] = []
+  emails: Mail[] = []
   addEmail = false
-  selectedEmail: EmailType = null
-  updateEmail: EmailType = null
+  selectedEmail: Mail = null
+  updateEmail: Mail = null
   dicSignature = {}
-  constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService) { }
+  token;
+  user: User;
+  constructor(private EmailTypeService: EmailTypeService, private ToastService: MessageService, private UserService: AuthService) { }
 
   ngOnInit(): void {
     this.EmailTypeService.getAll().subscribe(data => {
       this.emails = data
+    })
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      this.user = data
     })
     this.EmailTypeService.getAllSignature().subscribe(data => {
       this.dicSignature = data.files // {id:{ file: string, extension: string }}
@@ -42,21 +50,37 @@ export class ConfigurationMailComponent implements OnInit {
     type: new FormControl('', Validators.required)
   })
   onAdd() {
-    this.EmailTypeService.create({ ...this.formAdd.value }).subscribe(data => {
-      this.emails.push(data)
-      this.addEmail = false
-      this.formAdd.reset()
-      this.ToastService.add({ severity: 'success', summary: 'Ajout de l\'email avec succès' })
+    console.log(this.user)
+    this.EmailTypeService.testEmail({
+      email: this.formAdd.value.email,
+      password: this.formAdd.value.password,
+      to: this.user.email
+    }).subscribe(data => {
+      if (data.r == 'success')
+        this.EmailTypeService.create({ ...this.formAdd.value }).subscribe(data2 => {
+          console.log(data, data2)
+          this.emails.push(data2)
+          this.addEmail = false
+          this.formAdd.reset()
+          this.ToastService.add({ severity: 'success', summary: 'Ajout de l\'email avec succès' })
+        })
+      else
+        this.ToastService.add({ severity: 'error', summary: 'Le mail n\'a pas pu être envoyé' })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Le mail n\'a pas pu être envoyé', detail: error.error })
     })
+
   }
 
   //Update
   formEdit = new FormGroup({
     email: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
-  onInitUpdate(email: EmailType) {
+  onInitUpdate(email: Mail) {
     this.formEdit.patchValue({ ...email })
     this.updateEmail = email
   }
@@ -69,7 +93,7 @@ export class ConfigurationMailComponent implements OnInit {
     })
   }
   //Delete
-  onDelete(email: EmailType) {
+  onDelete(email: Mail) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ' + email.email + " ?")) {
       this.EmailTypeService.delete(email._id).subscribe(data => {
         this.emails.splice(this.emails.indexOf(email), 1)
@@ -78,7 +102,7 @@ export class ConfigurationMailComponent implements OnInit {
     }
   }
   //Upload Signature
-  onUploadSignature(email: EmailType) {
+  onUploadSignature(email: Mail) {
     document.getElementById('selectedFile').click();
     this.selectedEmail = email
   }
@@ -89,19 +113,21 @@ export class ConfigurationMailComponent implements OnInit {
       formData.append('id', this.selectedEmail._id)
       formData.append('name', event[0].name)
       formData.append('file', event[0])
-      this.EmailTypeService.uploadSignature(formData).subscribe(() => {
+      this.EmailTypeService.uploadSignature(formData).subscribe((newSignature) => {
         this.ToastService.add({ severity: 'success', summary: 'Signature', detail: 'Mise à jour de la signature avec succès' });
+        this.emails.splice(this.emails.indexOf(this.selectedEmail), 1, newSignature)
         this.EmailTypeService.getAllSignature().subscribe(data => {
-          const reader = new FileReader();
-          reader.readAsDataURL(event[0]);
-          reader.onloadend = () => {
-            if (this.dicSignature[this.selectedEmail._id])
-              this.dicSignature[this.selectedEmail._id].url = reader.result;
-            else {
-              this.dicSignature[this.selectedEmail._id] = {}
-              this.dicSignature[this.selectedEmail._id].url = reader.result;
+          data.ids.forEach(id => {
+            const reader = new FileReader();
+            const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+            let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+              if (id == this.selectedEmail._id)
+                this.dicSignature[id] = { url: reader.result };
             }
-          }
+          })
+
         })
       }, (error) => {
         console.error(error)

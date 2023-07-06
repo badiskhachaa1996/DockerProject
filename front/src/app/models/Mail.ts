@@ -1,4 +1,4 @@
-export class EmailType {
+export class Mail {
 
     constructor(
         public _id?: string,

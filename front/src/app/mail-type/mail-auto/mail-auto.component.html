@@ -1,1 +1,121 @@
-<p>mail-auto works!</p>
+<p-toast></p-toast>
+<div class="grid col-12 card" *ngIf="updateEmail">
+    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="updateEmail=null"
+        aria-hidden="true"> </i>
+    <h3 style="font-weight: bold; text-align: center;">Mettre à jour
+        : {{updateEmail.custom_id }}
+    </h3>
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEdit" (ngSubmit)="onUpdate()">
+        <div class="field col-12">
+            <label>Objet: </label>
+            <p-dropdown placeholder="Choisissez un objet" filter="true" formControlName="mailType"
+                [options]="mailTypeDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Condition de l'envoie: </label>
+            <input type="text" formControlName="condition" pInputText>
+        </div>
+
+        <div class="field col-6">
+            <label>Adresse mail: </label>
+            <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="mail"
+                [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label>Etat: </label>
+            <p-dropdown placeholder="Choisissez un etat" filter="true" formControlName="etat" [options]="etatDropdown"
+                autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <button pButton [disabled]="formEdit.invalid" label="Mettre à jour l'automatisation"></button>
+    </form>
+</div>
+<div class="grid col-12 card" *ngIf="addEmail">
+    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="addEmail=null"
+        aria-hidden="true"> </i>
+    <h3 style="font-weight: bold; text-align: center;">Ajout d'une automatisation d'email</h3>
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onAdd()">
+        <div class="field col-12">
+            <label>Objet: </label>
+            <p-dropdown placeholder="Choisissez un objet" filter="true" formControlName="mailType"
+                [options]="mailTypeDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Condition de l'envoie: </label>
+            <input type="text" formControlName="condition" pInputText>
+        </div>
+
+        <div class="field col-6">
+            <label>Adresse mail: </label>
+            <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="mail"
+                [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+            </p-dropdown>
+        </div>
+        <button pButton [disabled]="formAdd.invalid" label="Ajouter l'automatisation"></button>
+    </form>
+</div>
+<div class="grid col-12">
+    <div class="grid col-12 card">
+        <h5 class="col-9">Liste des emails automatisés</h5>
+        <div class="col-3 grid">
+            <button class="col-12" style="float: right;" pButton label="Ajouter une automatisation"
+                (click)="addEmail = true;"></button>
+        </div>
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="emails" class="col-12"
+            [paginator]="true" [pageLinks]="5" [globalFilterFields]="['custom_id', 'mailType.objet','condition']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="mailType.objet" scope="col" style="text-align: center;">
+                        Objet <p-sortIcon field="mailType.objet"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="condition" scope="col" style="text-align: center;">
+                        Condition <p-sortIcon field="condition"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="mail.email" scope="col" style="text-align: center;">
+                        Adresse mail de l'envoie <p-sortIcon field="mail.email"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="etat" scope="col" style="text-align: center;">
+                        Etat <p-sortIcon field="etat"></p-sortIcon>
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-email>
+                <tr>
+                    <td>
+                        {{email?.mailType?.objet}}
+                    </td>
+                    <td>
+                        {{email?.condition}}
+                    </td>
+                    <td>
+                        {{email?.mail?.email}}
+                    </td>
+                    <td>
+                        {{email?.etat}}
+                    </td>
+                    <td>
+                        <i pTooltip="Mettre à jour l'automatisation" tooltipPosition="bottom" class="pi pi-pencil mr-2"
+                            (click)="onInitUpdate(email)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer l'automatisation" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                            (click)="onDelete(email)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+
+            </ng-template>
+        </p-table>
+    </div>
+</div>

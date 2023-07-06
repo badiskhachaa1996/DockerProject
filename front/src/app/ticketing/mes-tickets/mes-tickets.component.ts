@@ -8,6 +8,7 @@ import { SujetService } from 'src/app/services/sujet.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { saveAs } from "file-saver";
 import mongoose from 'mongoose';
+import { FileUpload } from 'primeng/fileupload';
 @Component({
   selector: 'app-mes-tickets',
   templateUrl: './mes-tickets.component.html',
@@ -32,9 +33,14 @@ export class MesTicketsComponent implements OnInit {
     service_id: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     priorite: new FormControl('', Validators.required),
-    documents: new FormControl([], Validators.required),
+    documents: new FormControl([]),
     _id: new FormControl('', Validators.required)
   })
+  stats = {
+    en_attente: 0,
+    en_suspension: 0,
+    traite: 0
+  }
   token: any;
   filterService = [{ label: 'Tous les services', value: null }]
   filterStatut = [
@@ -48,6 +54,12 @@ export class MesTicketsComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'))
     this.TicketService.getAllMine(this.token.id).subscribe(data => {
       this.tickets = data
+      this.stats = {
+        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'En attente de traitement' ? 1 : 0), 0)),
+        en_suspension: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'En suspension' ? 1 : 0), 0)), // Somme ((Statut de commission équal à Facturé payé ou A la source ou Compensation) *Montant de la commission)  
+        //next?.statut == 'Facture payé' || next?.statut == 'A la source' || next?.statut == 'Compensation'
+        traite: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'Traité' ? 1 : 0), 0)),
+      }
     })
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
@@ -77,23 +89,23 @@ export class MesTicketsComponent implements OnInit {
 
   onSubmitUpdate() {
     let documents = this.TicketForm.value.documents
-    if (this.uploadedFiles[0]) {
-      documents.push({ path: this.uploadedFiles[0].name, name: this.uploadedFiles[0].name, _id: new mongoose.Types.ObjectId().toString() })
-    }
+    this.uploadedFiles.forEach(element => {
+      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+    });
     this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
       this.TicketService.getAllMine(this.token.id).subscribe(data => {
         this.tickets = data
       })
-      if (this.uploadedFiles[0]) {
+      this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
-        formData.append('ticket_id', data._id)
-        formData.append('document_id', documents[documents.length-1]._id)
-        formData.append('file', this.uploadedFiles[0])
-        formData.append('path', this.uploadedFiles[0].name)
+        formData.append('ticket_id', data.doc._id)
+        formData.append('document_id', documents[idx]._id)
+        formData.append('file', element)
+        formData.append('path', element.name)
         this.TicketService.addFile(formData).subscribe(data => {
-          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès' })
+          this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
-      }
+      });
       this.TicketForm.reset()
       this.ticketUpdate = null
       this.ToastService.add({ severity: 'success', summary: "Modification du Ticket avec succès" })
@@ -144,8 +156,51 @@ export class MesTicketsComponent implements OnInit {
   }
 
   uploadedFiles: File[] = []
-  onUpload(event: { files: File[] }) {
-    this.uploadedFiles = event.files
+  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+    this.uploadedFiles.push(event.files[0])
+    fileUpload.clear()
   }
 
+  getDelaiTraitrement(ticket: Ticket) {
+    let date1 = new Date()
+    if (ticket.statut == 'Traité' && ticket.date_fin_traitement)
+      date1 = new Date(ticket.date_fin_traitement)
+    let date2 = new Date(ticket.date_ajout)
+
+    var diff = {
+      sec: 0,
+      min: null,
+      hour: 0,
+      day: 0
+    }							// Initialisation du retour
+    var tmp = date1.getTime() - date2.getTime();
+
+    tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+    diff.sec = tmp % 60;					// Extraction du nombre de secondes
+
+    tmp = Math.floor((tmp - diff.sec) / 60);	// Nombre de minutes (partie entière)
+    diff.min = tmp % 60;					// Extraction du nombre de minutes
+
+    tmp = Math.floor((tmp - diff.min) / 60);	// Nombre d'heures (entières)
+    diff.hour = tmp % 24;					// Extraction du nombre d'heures
+
+    tmp = Math.floor((tmp - diff.hour) / 24);	// Nombre de jours restants
+    diff.day = tmp;
+    if (diff.min < 10)
+      diff.min = "0" + diff.min.toString()
+
+    return `${diff.day}J ${diff.hour}H${diff.min}`;
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
 }

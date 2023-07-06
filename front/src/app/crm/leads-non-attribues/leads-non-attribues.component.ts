@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
+import jwt_decode from "jwt-decode";
 import { LeadCRM } from 'src/app/models/LeadCRM';
 import { LeadcrmService } from 'src/app/services/crm/leadcrm.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { saveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-leads-non-attribues',
   templateUrl: './leads-non-attribues.component.html',
@@ -15,7 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LeadsNonAttribuesComponent implements OnInit {
 
-
+  AccessLevel = "Spectateur"
   filterPays = [
     { label: 'Tous les pays', value: null }
   ]
@@ -74,8 +75,9 @@ export class LeadsNonAttribuesComponent implements OnInit {
     { value: "Virement chèque Paris", label: "Virement chèque Paris" },
   ]
 
-  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService) { }
+  constructor(private LCS: LeadcrmService, private ToastService: MessageService, private FAService: FormulaireAdmissionService, private UserService: AuthService) { }
   leads: LeadCRM[] = []
+  token;
   ngOnInit(): void {
     this.LCS.getAllNonAffecte().subscribe(data => {
       this.leads = data
@@ -91,6 +93,16 @@ export class LeadsNonAttribuesComponent implements OnInit {
       })
     })
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe(data => {
+      if (data.roles_list)
+        data.roles_list.forEach(role => {
+          if (role.module == "CRM")
+            this.AccessLevel = role.role
+        })
+      if (data.role == "Admin")
+        this.AccessLevel = "Super-Admin"
+    })
   }
 
   //Follow Form

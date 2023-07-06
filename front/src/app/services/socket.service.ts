@@ -7,32 +7,36 @@ const io = require("socket.io-client");
 })
 export class SocketService {
 
-  socket = io(environment.origin.replace('/soc',''));
+  socket = io(environment.origin.replace('/soc', ''));
 
   constructor() { }
 
-  AddNewTicket(service_id){
-    this.socket.emit("AddNewTicket",service_id)
+  AddNewTicket(service_id) {
+    this.socket.emit("AddNewTicket", service_id)
   }
 
-  NewMessageByAgent(user_id,service_id){
-    this.socket.emit("NewMessageByAgent",{user_id,service_id})
+  NewNotifV2(channel, text = "") {
+    this.socket.emit("NewNotifV2", channel, text)
   }
 
-  NewMessageByUser(agent_id){
-    this.socket.emit("NewMessageByUser",agent_id)
+  NewMessageByAgent(user_id, service_id) {
+    this.socket.emit("NewMessageByAgent", { user_id, service_id })
   }
 
-  refreshAll(service_id,user_id){
-
-    this.socket.emit("refreshAll",{service_id,user_id})
+  NewMessageByUser(agent_id) {
+    this.socket.emit("NewMessageByUser", agent_id)
   }
 
-  addPresence(){
+  refreshAll(service_id, user_id) {
+
+    this.socket.emit("refreshAll", { service_id, user_id })
+  }
+
+  addPresence() {
     this.socket.emit("addPresence")
   }
 
-  isAuth(b=true){
-    this.socket.emit("isAuth",b)
+  isAuth(b = true) {
+    this.socket.emit("isAuth", b)
   }
 }

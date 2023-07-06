@@ -222,7 +222,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
-      req.originalUrl.startsWith('/soc/RA/getByEcoleID')
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID',
+        req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
       next();
     } else {
@@ -355,14 +356,26 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
-app.use('/soc/emailType', require('./controllers/emailTypeController'))
+app.use('/soc/mail', require('./controllers/mailController'))
+app.use('/soc/target', require('./controllers/targetController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
-    LISTTOJOIN = [user._id, user.service_id ? user.service_id : user.role];
-    socket.join(LISTTOJOIN);
-    console.log("User join: " + LISTTOJOIN);
+    LISTTOJOIN = [user._id, user.role];
+    console.log('imagine')
+    User.findById(user._id).then(userdata => {
+      userdata.roles_list.forEach(s => {
+        LISTTOJOIN.push(s.module, `${s.module} - ${s.role}`)
+      })
+      socket.join(LISTTOJOIN);
+      console.log("NEW USER :", LISTTOJOIN)
+    })
+
   });
+
+  socket.on("NewNotifV2", (channel, text = "") => {
+    io.to(channel).emit("NewNotifV2", text);
+  })
 
   //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
   socket.on("NewNotif", (data) => {

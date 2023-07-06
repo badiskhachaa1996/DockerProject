@@ -109,4 +109,10 @@ export class FormationAdmissionComponent implements OnInit {
     { label: "Français", value: "Programme Français" },
     { label: "Anglais", value: "Programme Anglais" },
   ]
+  formationSelected;
+  showDescriptionBool = false
+  showDescription(formation:FormationAdmission){
+    this.formationSelected = formation,
+    this.showDescriptionBool = true
+  }
 }

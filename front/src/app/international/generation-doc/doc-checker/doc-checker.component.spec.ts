@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MailTypeComponent } from './mail-type.component';
+import { DocCheckerComponent } from './doc-checker.component';
 
-describe('MailTypeComponent', () => {
-  let component: MailTypeComponent;
-  let fixture: ComponentFixture<MailTypeComponent>;
+describe('DocCheckerComponent', () => {
+  let component: DocCheckerComponent;
+  let fixture: ComponentFixture<DocCheckerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MailTypeComponent ]
+      declarations: [ DocCheckerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MailTypeComponent);
+    fixture = TestBed.createComponent(DocCheckerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

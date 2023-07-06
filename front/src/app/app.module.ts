@@ -338,9 +338,13 @@ import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-pai
 import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
 import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
-import { MailTypeComponent } from './mail-type/mail-type/mail-type.component';
+import { MailTypeComponent } from './mail-type/mail/mail.component';
 import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
 import { EditorModule } from 'primeng/editor';
+import { MyTargetComponent } from './crm/target/my-target/my-target.component';
+import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
+import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
+import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 
 @NgModule({
   imports: [
@@ -690,7 +694,11 @@ import { EditorModule } from 'primeng/editor';
     VersionNonIframeComponent,
     ConfigurationMailComponent,
     MailTypeComponent,
-    MailAutoComponent
+    MailAutoComponent,
+    MyTargetComponent,
+    ConfigurationTargetComponent,
+    DashboardTargetComponent,
+    DocCheckerComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

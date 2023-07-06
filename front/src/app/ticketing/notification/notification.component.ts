@@ -70,34 +70,6 @@ export class NotificationComponent implements OnInit {
         });
       })
 
-
-      if (this.token.service_id) {
-        console.log('71')
-        this.NotificationService.getAdmissionNotifi().subscribe(notifadmission => {
-
-          console.log(notifadmission)
-
-          for (let index = 0; index < notifadmission.length; index++) {
-
-
-            console.log(notifadmission[index])
-            this.notifications.push(notifadmission[index])
-          }
-
-          this.NotificationService.viewNotifs(notifadmission)
-            .subscribe(
-              response => {
-                this.NotificationService.reloadNotif({ id: this.token.id })
-                this.appTopBarComponent.setToZero();
-
-
-              },
-              error => {
-                console.error(error);
-              });
-        })
-      }
-
     }
   }
 }
