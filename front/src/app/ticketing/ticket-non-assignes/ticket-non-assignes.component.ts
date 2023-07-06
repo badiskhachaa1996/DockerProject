@@ -6,13 +6,18 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { saveAs } from "file-saver";
+import { SocketService } from 'src/app/services/socket.service';
+import { SujetService } from 'src/app/services/sujet.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
 @Component({
   selector: 'app-ticket-non-assignes',
   templateUrl: './ticket-non-assignes.component.html',
   styleUrls: ['./ticket-non-assignes.component.scss']
 })
 export class TicketNonAssignesComponent implements OnInit {
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService, private ServService: ServService) { }
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService,
+    private ServService: ServService, private Socket: SocketService, private SujetService: SujetService, private NotifService: NotificationService) { }
   tickets = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
@@ -22,6 +27,7 @@ export class TicketNonAssignesComponent implements OnInit {
     priorite: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
+  userDic = {}
   filterService = [{ label: 'Tous les services', value: null }]
   ngOnInit(): void {
     this.TicketService.getAllNonAssigne().subscribe(data => {
@@ -30,6 +36,7 @@ export class TicketNonAssignesComponent implements OnInit {
     this.UserService.getAllAgent().subscribe(data => {
       data.forEach(u => {
         this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
+        this.userDic[u._id] = u
       })
     })
     this.ServService.getAll().subscribe(data => {
@@ -59,6 +66,18 @@ export class TicketNonAssignesComponent implements OnInit {
   memberSelected: string;
   onAffectation() {
     this.TicketService.update({ ...this.formAffectation.value }).subscribe(data => {
+      let d = new Date()
+      let month = (d.getUTCMonth() + 1).toString()
+      if (d.getUTCMonth() + 1 < 10)
+        month = "0" + month
+      let day = (d.getUTCDate()).toString()
+      if (d.getUTCDate() < 10)
+        day = "0" + day
+      let year = d.getUTCFullYear().toString().slice(-2);
+      this.Socket.NewNotifV2(this.formAffectation.value.agent_id, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`)
+      this.TicketService.sendMailAff({ sujet: this.TicketAffecter.sujet_id.label, service: this.TicketAffecter.sujet_id.service_id.label, date: `${day}/${month}/${year}`, agent_email: this.userDic[this.formAffectation.value.agent_id]?.email }).subscribe(() => {
+        this.NotifService.create(new Notification(null, null, false, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`, new Date(), this.formAffectation.value.agent_id, this.TicketAffecter.sujet_id.service_id._id)).subscribe(() => { })
+      })
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })

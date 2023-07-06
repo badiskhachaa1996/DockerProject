@@ -60,8 +60,66 @@ app.post("/create", (req, res) => {
                     documents: req.body.documents
                 });
 
+                let htmlemail = `
+                <p>Bonjour,</p><br>
+
+<p>Nous confirmons la création de votre ticket ${id}, Le sujet de ce ticket est "${sujet.label}". Il a été créé le ${day}/${month}/${year} , dès que le ticket sera traité, vous aurez une notification par email et sur votre compte IMS</p><br>
+
+<p>Cordialement,</p>
+                `
+                let mailOptions = {
+                    from: 'ims@intedgroup.com',
+                    to: u.email,
+                    subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                    html: htmlemail,
+                    attachments: [{
+                        filename: 'signature.png',
+                        path: 'assets/signature.png',
+                        cid: 'red' //same cid value as in the html img src
+                    }]
+                };
+
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
                 ticket.save((err, doc) => {
                     res.send({ message: "Votre ticket a été crée!", doc });
+                    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
+                        console.log(users)
+                        let emailList = []
+                        users.forEach(u => {
+                            emailList.push(u.email)
+                        })
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: emailList,
+                            subject: '[IMS - Ticketing] - Création d\'un ticket ',
+                            html: htmlemail,
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/signature.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
+
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
+                    })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
                         if (sujet.label != "Pédagogie")
                             User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
@@ -919,7 +977,106 @@ app.post("/uploadFileService", upFS.single('file'), (req, res, next) => {
 
     res.status(201).send({ message: "C'est bon" });
 });
+app.post('/sendMailAff', (req, res) => {
+    let htmlemail = `
+    <p>Bonjour</p><br>
+    <p>Nous souhaitons vous notifier qu'un nouveau ticket vous a été assigné pour le service ${req.body.service}. Le sujet du ticket est ${req.body.sujet}. Il vous a été assigné le ${req.body.date}.</p><br>
+    <p>Nous vous invitons à prendre en charge ce ticket dès que possible. Assurez-vous de bien comprendre la nature de la demande, de collecter toutes les informations nécessaires et de suivre les procédures internes pour résoudre le problème ou fournir l'assistance requise.</p><br>
+    <p>Cordialement,</p>
+    `
+    let mailOptions = {
+        from: 'ims@intedgroup.com',
+        to: req.body.agent_email,
+        subject: '[IMS - Ticketing] - Assignation d\'un ticket ',
+        html: htmlemail,
+        attachments: [{
+            filename: 'signature.png',
+            path: 'assets/signature.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+    };
 
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+    });
+})
+
+app.post('/sendMailRefus', (req, res) => {
+    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
+        console.log(users)
+        let emailList = []
+        users.forEach(u => {
+            emailList.push(u.email)
+        })
+        let htmlemail = `
+        <p>Bonjour,</p><br>
+    
+        <p>Nous tenons à vous informer que l'agent ${req.body.agent_name} a refusé le ticket pour le motif suivant : ${req.body.motif}.</p><br>
+        
+        
+        <p>Cordialement,</p><br>
+        `
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: emailList,
+            subject: '[IMS - Ticketing] - Refus d\'un ticket ',
+            html: htmlemail,
+            attachments: [{
+                filename: 'signature.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+        };
+
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+            }
+        });
+    })
+
+})
+
+app.post('/sendMailUpdateStatut', (req, res) => {
+    User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
+        console.log(users)
+        let emailList = [req.body.createur_email]
+        users.forEach(u => {
+            emailList.push(u.email)
+        })
+        let htmlemail = `
+        <p>Bonjour,</p><br>
+        
+        <p>Nous tenons à vous informer que le ticket ${req.body.id} a changé de statut. L'état actuel du ticket est ${req.body.statut}.</p><br>
+        
+        
+        <p>Cordialement</p><br>
+        `
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: emailList,
+            subject: '[IMS - Ticketing] - Changement de statut d\'un ticket ',
+            html: htmlemail,
+            attachments: [{
+                filename: 'signature.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+        };
+
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+            }
+        });
+    })
+
+})
 
 
 module.exports = app;
