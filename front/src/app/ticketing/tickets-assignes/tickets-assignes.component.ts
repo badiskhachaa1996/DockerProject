@@ -14,13 +14,16 @@ import { FileUpload } from 'primeng/fileupload';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { SocketService } from 'src/app/services/socket.service';
+import { Notification } from 'src/app/models/notification';
+import { NotificationService } from 'src/app/services/notification.service';
 @Component({
   selector: 'app-tickets-assignes',
   templateUrl: './tickets-assignes.component.html',
   styleUrls: ['./tickets-assignes.component.scss']
 })
 export class TicketsAssignesComponent implements OnInit {
-  constructor(private TicketService: TicketService, private ServService: ServService, private ToastService: MessageService, private AuthService: AuthService, private Socket: SocketService) { }
+  constructor(private TicketService: TicketService, private ServService: ServService, private ToastService: MessageService,
+    private AuthService: AuthService, private Socket: SocketService, private NotifService: NotificationService) { }
   tickets = []
   USER: User
   stats = {
@@ -64,7 +67,9 @@ export class TicketsAssignesComponent implements OnInit {
     this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents }).subscribe(data => {
       if (this.TicketForm.value.statut != this.ticketTraiter.statut) {
         this.Socket.NewNotifV2('Ticketing - Super-Admin', `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`)
+        this.NotifService.createV2(new Notification(null, null, false, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`, new Date(), null, this.ticketTraiter?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
         this.Socket.NewNotifV2(this.ticketTraiter.createur_id, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`)
+        this.NotifService.create(new Notification(null, null, false, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`, new Date(), this.ticketTraiter.createur_id, this.ticketTraiter?.sujet_id?.service_id?._id)).subscribe(test => { })
         this.AuthService.getPopulate(this.ticketTraiter.createur_id).subscribe(userCreator => {
           this.TicketService.sendMailUpdateStatut({ id: this.ticketTraiter.customid, statut: this.TicketForm.value.statut, createur_email: userCreator.email }).subscribe(() => { })
         })
@@ -129,6 +134,8 @@ export class TicketsAssignesComponent implements OnInit {
     this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "En attente de traitement", date_revert: new Date(), user_revert: this.isDecline.agent_id._id, agent_id: null, isAffected: null }).subscribe(data => {
       this.Socket.NewNotifV2('Ticketing - Super-Admin', `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`)
       this.TicketService.sendMailRefus({ agent_name: `${this.USER.lastname} ${this.USER.firstname}`, motif: this.formDecline.value.justificatif })
+      this.NotifService.createV2(new Notification(null, null, false,  `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`, new Date(), null, this.isDecline?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
+        
       this.formDecline.reset()
 
       this.tickets.splice(this.tickets.indexOf(this.isDecline), 1)
