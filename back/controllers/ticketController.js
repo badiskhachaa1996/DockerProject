@@ -1036,6 +1036,7 @@ app.post('/sendMailRefus', (req, res) => {
             if (error) {
                 console.error(error);
             }
+            res.send(emailList)
         });
     })
 
@@ -1073,6 +1074,7 @@ app.post('/sendMailUpdateStatut', (req, res) => {
             if (error) {
                 console.error(error);
             }
+            res.send(emailList)
         });
     })
 

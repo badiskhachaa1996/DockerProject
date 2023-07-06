@@ -92,17 +92,17 @@ export class DocCheckerComponent implements OnInit {
     }, false);
   }
 
-  downloadFile(filename, id) {
-    this.GenDocService.download(id, filename).subscribe((data) => {
+
+  downloadAdminFile(path) {
+    this.LeadService.downloadFileAdmin(this.PROSPECT._id, path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      saveAs(new Blob([byteArray], { type: data.documentType }), filename)
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(blob, path)
     }, (error) => {
-      if (error?.status == 404 && error?.error?.message == "File not found")
-        this.ToastService.add({ severity: 'error', summary: 'Pas de fichier trouvé' })
-      else
-        this.ToastService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
       console.error(error)
     })
+
   }
 
 }
