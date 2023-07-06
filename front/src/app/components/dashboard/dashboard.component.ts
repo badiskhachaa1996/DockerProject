@@ -252,6 +252,8 @@ export class DashboardComponent implements OnInit {
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
   ];
+  formAddCra: FormGroup;
+  showFormAddCra: boolean = false;
   //* end check in variables
 
   constructor(
@@ -365,6 +367,11 @@ export class DashboardComponent implements OnInit {
     // initialisation du formulaire de mise à jour du statut
     this.formUpdateStatut = this.formBuilder.group({
       statut: ['', Validators.required],
+    });
+
+    // initialisation du formulaire d'ajout de cra
+    this.formAddCra = this.formBuilder.group({
+      cras: this.formBuilder.array([this.onCreateCraField()]),
     });
   }
 
@@ -715,6 +722,57 @@ export class DashboardComponent implements OnInit {
         this.onCheckDailyCheck(response.user_id);
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+  }
+
+  // pour créer des champs de formulaires à la volée pour la partie CRA
+  onCreateCraField(): FormGroup
+  {
+    return(
+      this.formBuilder.group({
+        tache: ['', Validators.required],
+        duration: ['', Validators.required],
+      })
+    );
+  }
+
+  // récupère les compétences
+  getCras(): FormArray
+  {
+    return this.formAddCra.get('cras') as FormArray;
+  }
+
+  // ajoute de nouveaux champs au formulaire
+  onAddCraField(): void
+  {
+    const newCraControl = this.onCreateCraField();
+    this.getCras().push(newCraControl);
+  }
+
+  // suppression d'un champ de compétence
+  onDeleteCraField(i: number): void
+  {
+    this.getCras().removeAt(i);
+  }
+
+  // ajout de CRA
+  onAddCra(): void
+  {
+    const formValue = this.formAddCra.value;
+    // ajout des données formulaire au dailycheck
+   
+      formValue.cras.forEach((cra) => {
+        this.dailyCheck.cra.push({task: cra.tache, number_minutes: cra.duration});
+      });
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+      this.formAddCra.reset();
+      this.showFormAddCra = false;
+      // recuperation du check journalier
+      this.onCheckDailyCheck(response.user_id);
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
   //* end
 }
