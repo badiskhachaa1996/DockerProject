@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AppMainComponent } from './app.main.component';
 
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { ServService } from './services/service.service';
 import { MsalService } from '@azure/msal-angular';
+import { AuthService } from './services/auth.service';
 
 const io = require("socket.io-client");
 
@@ -21,10 +22,10 @@ export class AppTopBarComponent {
 
   logo = "assets/images/logo-ims.png"
   notif = false;
-  Notifications: Notification[] = [];
+  Notifications = 0;
   socket = io(environment.origin.replace('/soc', ''));
 
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService, private msalService: MsalService) { }
+  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService, private msalService: MsalService, private AuthService: AuthService, private ToastService: MessageService) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -34,7 +35,7 @@ export class AppTopBarComponent {
   }
   setToZero() {
 
-    this.Notifications = []
+    this.Notifications = 0
 
   }
   ngOnInit() {
@@ -49,11 +50,7 @@ export class AppTopBarComponent {
         if (serviceName.includes("Admission")) {
           this.NotificationService.getAdmissionNotifi().subscribe(notifAdmission => {
             if (notifAdmission.length != 0) {
-              notifAdmission.forEach(ad_notif => {
-                this.Notifications.push(ad_notif)
-
-              });
-
+              this.Notifications = notifAdmission.length
             }
             else {
               console.log("aucune notif admission trouvé")
@@ -70,7 +67,7 @@ export class AppTopBarComponent {
     }
 
     this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
-      this.Notifications = data;
+      this.Notifications = data.length;
       if (data.length != 0) {
         this.notif = true;
       }
@@ -81,17 +78,30 @@ export class AppTopBarComponent {
       console.error(error)
     })
     this.socket.on("NewNotif", (data) => {
-      this.Notifications.push(data)
+      this.Notifications += 1
       this.notif = true;
+    })
+    this.socket.on("NewNotifV2", (data) => {
+      this.Notifications += 1
+      this.notif = true;
+      this.ToastService.add({ severity: 'info', summary: "Vous avez reçu une nouvelle notification", detail: data })
     })
     this.socket.on("reloadNotif", () => {
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
-        this.Notifications = data;
+        this.Notifications = data.length;
         this.notif = data.length != 0;
 
       }, error => {
         console.error(error)
       })
+    })
+    this.AuthService.getById(temp.id).subscribe((data) => {
+      let userconnected = jwt_decode(data.userToken)["userFromDb"];
+      if (userconnected) {
+        this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
+      }
+    }, (error) => {
+      console.error(error)
     })
   }
 }

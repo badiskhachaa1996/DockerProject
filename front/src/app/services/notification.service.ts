@@ -4,6 +4,7 @@ import { Notification } from '../models/notification';
 import { BehaviorSubject } from 'rxjs';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
+import { User } from '../models/User';
 
 
 
@@ -18,9 +19,14 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  create(notif: any) {
+  create(notif: Notification) {
     let url = this.apiUrl + "create";
     return this.http.post<any>(url, notif, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
+  createV2(notif: Notification, module, role) {
+    let url = this.apiUrl + "createV2";
+    return this.http.post<User[]>(url, { ...notif, module, role }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAll() {
