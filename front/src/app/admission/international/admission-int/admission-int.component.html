@@ -744,10 +744,14 @@
                     <p-dropdown [options]="agentSourcingList" formControlName="traited_by" optionValue="label"
                         optionLabel="label" placeholder="Choisissez un agent" [group]="true" filter="true"></p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-6">
                     <label>Type de document :</label>
                     <p-dropdown [options]="documentDropdown" formControlName="type" placeholder="Choisissez un type"
                         filter="true"></p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>ID :</label>
+                    <input type="text" formControlName="custom_id" pInputText />
                 </div>
                 <div class="field col-12">
                     <p-fileUpload (uploadHandler)="FileUploadAdmin($event)" mode="basic"
@@ -773,7 +777,7 @@
             </div>
             <div class="col-12">
                 <p-table styleClass="p-datatable-gridlines" [value]="showDocuments.documents_administrative"
-                    responsiveLayout="scroll" responsiveLayout="scroll">
+                    dataKey="path" responsiveLayout="scroll" responsiveLayout="scroll">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th>
@@ -801,8 +805,15 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData>
                         <tr>
-                            <td>
-                                {{rowData.custom_id}}
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="rowData.custom_id" (blur)="saveDoc()">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{rowData.custom_id}}
+                                    </ng-template>
+                                </p-cellEditor>
                             </td>
                             <td>
                                 {{rowData.type}}
@@ -831,7 +842,8 @@
             Aucun document n'a été chargé !
         </p>
         <div class="col-12">
-            <button pButton label="Ajouter un document" (click)="showUploadFile=showDocuments;scrollToTop()"></button>
+            <button pButton label="Ajouter un document"
+                (click)="showUploadFile=showDocuments;initAddDocAdmin();scrollToTop()"></button>
         </div>
     </div>
     <!-- Formulaire Traitement -->

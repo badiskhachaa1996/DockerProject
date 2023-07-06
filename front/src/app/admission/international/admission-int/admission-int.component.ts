@@ -57,6 +57,7 @@ export class AdmissionIntComponent implements OnInit {
     note: new FormControl(""),
     traited_by: new FormControl("", Validators.required),
     type: new FormControl(""),
+    custom_id: new FormControl('')
   })
   ecoleList = [];
   dicEcole = {};
@@ -87,6 +88,10 @@ export class AdmissionIntComponent implements OnInit {
     }
   }
   @ViewChild('fileInput') fileInput: FileUpload;
+  initAddDocAdmin() {
+    this.uploadAdminFileForm.patchValue({ custom_id: this.generateCustomID().toUpperCase() })
+    console.log(this.showDocuments.documents_administrative)
+  }
   FileUploadAdmin(event: { files: [File], target: EventTarget }) {
 
     if (this.uploadAdminFileForm.valid && event.files != null) {
@@ -98,7 +103,7 @@ export class AdmissionIntComponent implements OnInit {
       formData.append('note', this.uploadAdminFileForm.value.note)
       formData.append('nom', this.uploadAdminFileForm.value.nom)
       formData.append('type', this.uploadAdminFileForm.value.type)
-      formData.append('custom_id', this.generateCustomID(this.uploadAdminFileForm.value.nom))
+      formData.append('custom_id', this.uploadAdminFileForm.value.custom_id.toUpperCase())
       formData.append('traited_by', this.uploadAdminFileForm.value.traited_by)
       formData.append('path', event.files[0].name)
       formData.append('file', event.files[0])
@@ -127,6 +132,10 @@ export class AdmissionIntComponent implements OnInit {
       console.error(error)
     })
 
+  }
+
+  saveDoc() {
+    this.admissionService.updateV2({ _id: this.showDocuments._id, documents_administrative: this.showDocuments.documents_administrative }).subscribe(() => { })
   }
 
   downloadFile(id, i) {
@@ -765,7 +774,7 @@ export class AdmissionIntComponent implements OnInit {
     })
   }
 
-  showDocuments = null
+  showDocuments: Prospect = null
   initDocument(prospect) {
     this.showDocuments = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -914,7 +923,7 @@ export class AdmissionIntComponent implements OnInit {
     }
   }
 
-  generateCustomID(nom) {
+  generateCustomID(nom = "NEW") {
     let reeldate = new Date();
 
     let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();

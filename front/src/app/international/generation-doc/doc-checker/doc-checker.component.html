@@ -87,7 +87,7 @@
                         {{ doc.date | date:'mediumDate' }}
                     </td>
                     <td>
-                        <a (click)="downloadFile(doc.filename,doc._id)">Télécharger le document</a>
+                        <a (click)="downloadAdminFile(doc.path)">Télécharger le document</a>
                     </td>
                 </tr>
             </ng-template>
