@@ -1,3 +1,10 @@
+<p-dialog header="Description de la formation" [(visible)]="showDescriptionBool" [modal]="true"
+    [style]="{width: '80%'}">
+    <p class="m-0">{{formationSelected?.description}}</p>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="showDescriptionBool=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>
 <div class="grid">
     <div class="col-12 grid" *ngIf="selectedFormation">
         <div class="card col-12">
@@ -48,7 +55,8 @@
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" formControlName="langue">
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues"
+                        formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
@@ -113,7 +121,8 @@
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" formControlName="langue">
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues"
+                        formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
@@ -163,9 +172,9 @@
                         <th pSortableColumn="duree">Durée de la formation<p-sortIcon field="duree">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="description">Description de la formation<p-sortIcon field="duree">
+                        <!--<th pSortableColumn="description">Description de la formation<p-sortIcon field="duree">
                             </p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="criteres">Critères d'admission<p-sortIcon field="criteres">
                             </p-sortIcon>
                         </th>
@@ -198,9 +207,9 @@
                         <td>
                             {{ formation.duree }}
                         </td>
-                        <td>
+                        <!--<td>
                             {{ formation.description }}
-                        </td>
+                        </td>-->
                         <td>
                             {{ formation.criteres }}
                         </td>
@@ -214,6 +223,8 @@
                             {{ formation.deroulement }}
                         </td>
                         <td>
+                            <i style="padding-left: 3%;" class="pi pi-eye" (click)="showDescription(formation)"
+                                pTooltip="Voir la description" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-pencil"
                                 (click)="initUpdate(formation);scrollToTop()" pTooltip="Modifier la formation"
                                 aria-hidden="true" tooltipPosition="bottom"></i>

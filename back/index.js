@@ -13,9 +13,8 @@ let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a03
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
   let argProd = process.argv[2];
-  console.log(argProd);
   if (!argProd.includes("dev") && !argProd.includes("prod")) {
-    dblog = "mongodb://localhost:27017/" + argProd;
+    dblog = "mongodb://127.0.0.1:27017/" + argProd;
   } else if (argProd.includes("dev")) {
     origin = ["https://141.94.71.25"];
   } else
@@ -46,7 +45,7 @@ const options = {
   allowEIO3: true,
 };
 const io = require("socket.io")(httpServer, options);
-
+console.log('URL Connection MONGODB:' + dblog)
 mongoose
   .connect(dblog, {
     useCreateIndex: true,
@@ -138,6 +137,8 @@ const formulaireAdmissionController = require('./controllers/formulaireAdmission
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
+const rhControlleur = require('./controllers/rhController');
+
 const { User } = require("./models/user");
 
 app.use("/", function (req, res, next) {
@@ -221,7 +222,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
-      req.originalUrl.startsWith('/soc/RA/getByEcoleID')
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID',
+        req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
       next();
     } else {
@@ -345,6 +347,7 @@ app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
+app.use('/soc/rh', rhControlleur);
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
@@ -353,13 +356,26 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
+app.use('/soc/mail', require('./controllers/mailController'))
+app.use('/soc/target', require('./controllers/targetController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
-    LISTTOJOIN = [user._id, user.service_id ? user.service_id : user.role];
-    socket.join(LISTTOJOIN);
-    console.log("User join: " + LISTTOJOIN);
+    LISTTOJOIN = [user._id, user.role];
+    console.log('imagine')
+    User.findById(user._id).then(userdata => {
+      userdata.roles_list.forEach(s => {
+        LISTTOJOIN.push(s.module, `${s.module} - ${s.role}`)
+      })
+      socket.join(LISTTOJOIN);
+      console.log("NEW USER :", LISTTOJOIN)
+    })
+
   });
+
+  socket.on("NewNotifV2", (channel, text = "") => {
+    io.to(channel).emit("NewNotifV2", text);
+  })
 
   //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
   socket.on("NewNotif", (data) => {

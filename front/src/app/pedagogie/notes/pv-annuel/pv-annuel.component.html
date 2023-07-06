@@ -264,7 +264,7 @@
                                 </td>
                             </ng-container>
                             <td class="text-center" *ngIf="StpFonctionne[data.email][semestre]">
-                                {{calculMoyenne(StpFonctionne[data.email][semestre],semestre) | number : '0.2-2'}}
+                                {{calculMoyenne(StpFonctionne[data.email][semestre] ,semestre) | number : '0.2-2'}}
                             </td>
                             <td class="text-center" [pEditableColumn]="data.appreciation"
                                 pEditableColumnField="appreciation">
@@ -286,8 +286,8 @@
                                 *ngIf="dataAnnuel[data.email][col.module] || dataAnnuel[data.email][col.module]==''">
                                 {{dataAnnuel[data.email][col.module] | number : '0.2-2'}}
                         </ng-container>-->
-                        <td class="text-center" *ngIf="dataAnnuel[data.email]">
-                            {{calculMoyenne(dataAnnuel[data.email],'Annuel') | number : '0.2-2'}}
+                        <td class="text-center" *ngIf="StpFonctionne[data.email]">
+                            {{calculMoyenne(StpFonctionne[data.email],'Annuel') | number : '0.2-2'}}
                         </td>
                         <td class="text-center" [pEditableColumn]="data.appreciation_annuel"
                             pEditableColumnField="appreciation_annuel">

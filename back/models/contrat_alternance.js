@@ -52,6 +52,7 @@ const contrat_alternanceSch = mongoose.Schema({
   last_status_change_date: { type: Date, required: false },
   remarque: { type: String, required: false },
   livret_apprentissage: { type: String, required: false },
+  added_date:         { type: Date, required: false },
   add_by: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
 });
 

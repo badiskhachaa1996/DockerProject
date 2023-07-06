@@ -213,4 +213,19 @@ export class TicketService {
     return this.http.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  sendMailAff(data) {
+    let registreUrl = this.apiUrl + "sendMailAff"
+    return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  sendMailRefus(data) {
+    let registreUrl = this.apiUrl + "sendMailRefus"
+    return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  sendMailUpdateStatut(data: { createur_email, statut, id }) {
+    let registreUrl = this.apiUrl + "sendMailUpdateStatut"
+    return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

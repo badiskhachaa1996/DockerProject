@@ -281,12 +281,31 @@ const prospect_schema = new mongoose.Schema({
         type: String
     },
     documents_administrative: {
-        type: [{ date: Date, nom: String, path: String, traited_by: String, note: String }],
+        type: [],
         default: []
     },
     modalite: {
         type: String,
         default: "Inconnu"
+    },
+    documents_dossier: {
+        type: [{ date: Date, nom: String, path: String, _id: { type: mongoose.Schema.Types.ObjectId, auto: true } }],
+        default: [
+            { nom: "CV", path: null, date: null },
+            { nom: "Lettre de Motivation", path: null, date: null },
+            { nom: "Passeport / Pièce d'identité", path: null, date: null },
+            { nom: "Diplôme baccaulauréat ou équivalent", path: null, date: null },
+            { nom: "Dernier diplôme supérieur obtenu", path: null, date: null },
+            { nom: "Relevé de note baccaulauréat", path: null, date: null },
+            { nom: "Relevé de note des deux dernier années ( 1er année )", path: null, date: null },
+            { nom: "Relevé de note des deux dernier années ( 2ème année )", path: null, date: null },
+            { nom: "TCF", path: null, date: null }
+        ]
+    },
+    documents_autre: {
+        type: [{ date: Date, nom: String, path: String }],
+        default: [
+        ]
     }
 });
 

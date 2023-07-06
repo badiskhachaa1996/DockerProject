@@ -86,7 +86,7 @@
                         <th pSortableColumn="description">Description<p-sortIcon field="description">
                             </p-sortIcon>
                         </th>
-                        <th ngIf="AccessLevel=='Super-Admin'">Action </th>
+                        <th *ngIf="AccessLevel=='Super-Admin'">Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-team>
@@ -100,7 +100,7 @@
                         <td>
                             {{ team.description }}
                         </td>
-                        <td ngIf="AccessLevel=='Super-Admin'">
+                        <td *ngIf="AccessLevel=='Super-Admin'">
                             <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(team);scrollToTop()"
                                 pTooltip="Modifier l'équipe" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(team);"

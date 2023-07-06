@@ -351,9 +351,11 @@ export class ListeContratsComponent implements OnInit {
       this.authService.getAllCommercial().subscribe(CommercialData => {
 
         this.ListCommercial = CommercialData
+        this.filtreAgent = []
         this.ListCommercial.forEach(comData => {
           comData.nomComplet = comData.firstname + " " + comData.lastname;
           this.dropDownCommecialList.push({ label: comData.nomComplet, value: comData._id })
+          this.filtreAgent.push({ label: comData.nomComplet, value: comData._id })
         })
       })
     })
@@ -459,18 +461,16 @@ export class ListeContratsComponent implements OnInit {
                 this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
               }
             })
-            if(tuteurId != null)
-            {
+            if (tuteurId != null) {
               this.dropdownTuteurList.forEach((tuteur) => {
-                if(tuteur.value == tuteurId)
-                {
+                if (tuteur.value == tuteurId) {
                   this.formUpdateCa.patchValue({
-                    tuteur_id: {label: tuteur.label, value: tuteur.value}
+                    tuteur_id: { label: tuteur.label, value: tuteur.value }
                   });
                 }
               });
             }
-            
+
           }, (eror) => { console.error(eror) })
       }),
       ((error) => { console.log(error); })
@@ -487,7 +487,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id, new Date())
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -532,18 +532,17 @@ export class ListeContratsComponent implements OnInit {
     let bypass_entreprise: any = contrat.entreprise_id;
 
     let bypass_tuteur: any;
-    if(contrat.tuteur_id == null)
-    {
+    if (contrat.tuteur_id == null) {
       bypass_tuteur = contrat.directeur_id;
       this.loadTuteur(bypass_entreprise._id, bypass_tuteur._id);
     } else {
       bypass_tuteur = contrat.tuteur_id;
       this.loadTuteur(bypass_entreprise._id, bypass_tuteur.user_id._id);
     }
-    
+
 
     this.formUpdateCa.patchValue({
-      entreprise_id: {label: bypass_entreprise.r_social, value: bypass_entreprise._id},
+      entreprise_id: { label: bypass_entreprise.r_social, value: bypass_entreprise._id },
       debut_contrat: new Date(contrat.debut_contrat),
       fin_contrat: new Date(contrat.fin_contrat),
       horaire: contrat.horaire,
@@ -565,7 +564,7 @@ export class ListeContratsComponent implements OnInit {
     let code_commercial = []
     contrats.forEach(contrat => {
       let cc: any = contrat.code_commercial
-      if (!code_commercial.includes(cc._id)) {
+      if (cc && !code_commercial.includes(cc._id)) {
         code_commercial.push(cc._id)
         this.filtreAgent.push({ label: cc.firstname + " " + cc.lastname, value: cc._id })
       }
@@ -845,7 +844,7 @@ export class ListeContratsComponent implements OnInit {
     this.showFilterByCampus = true;
   }
 
-  onFilterByEcole(event){
-    
+  onFilterByEcole(event) {
+
   }
 }

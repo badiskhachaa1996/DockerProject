@@ -2,7 +2,7 @@ export class Prospect {
 
     constructor(
         public _id?: string,
-        public user_id?: string,
+        public user_id?: any,
         public date_naissance?: Date,
         public numero_whatsapp?: string,
         public validated_academic_level?: string,
@@ -83,8 +83,10 @@ export class Prospect {
         public consulaire_date?: Date,
         public note_dossier_cf?: string,
         public note_consulaire?: string,
-        public documents_administrative?: [{ date: Date, nom: string, path: string, traited_by: string, note: string }],
-        public modalite?: string
+        public documents_administrative?: [{ date: Date, nom: string, path: string, traited_by: string, note: string, custom_id: string, type: string }],
+        public modalite?: string,
+        public documents_dossier?: [{ date: Date, nom: string, path: string, _id: string }],
+        public documents_autre?: [{ date: Date, nom: string, path: string, _id: string }],
     ) { }
 
 }

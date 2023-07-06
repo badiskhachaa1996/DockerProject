@@ -20,6 +20,7 @@ const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
+const { DocumentInternational } = require('../models/documentInternational');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -446,7 +447,23 @@ app.get("/getAll", (req, res, next) => {
 //Recuperation de la liste des prospect pour le tableau Sourcing
 app.get("/getAllSourcing", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).populate("user_id").populate('agent_id')
+        .then((prospectsFromDb) => {
+            let dic = {}
+            prospectsFromDb.forEach(val => {
+                if (dic[val.type_form])
+                    dic[val.type_form].push(val)
+                else
+                    dic[val.type_form] = [val]
+            })
+            res.status(201).send(dic)
+        })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/get100Sourcing", (req, res, next) => {
+
+    Prospect.find({ archived: [false, null], user_id: { $ne: null }, type_form: { $ne: null } }).limit(500).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             let dic = {}
             prospectsFromDb.forEach(val => {
@@ -735,6 +752,7 @@ app.get("/getFilesInscri/:id", (req, res) => {
 
 app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
     let pathFile = "storage/prospect/" + req.params.id + "/" + req.params.directory + "/" + req.params.filename
+    console.log(pathFile)
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
             return console.error(err);
@@ -827,9 +845,12 @@ app.post('/uploadAdminFile/:id', uploadAdmin.single('file'), (req, res, next) =>
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
+        console.log({ ...req.body }, 0)
         Prospect.findById(req.body.id, ((err, newProspect) => {
-            newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note, traited_by: req.body.traited_by, path: req.body.path, nom: req.body.nom })
+            newProspect.documents_administrative.push({ date: new Date(req.body.date), note: req.body.note.toString(), traited_by: req.body.traited_by.toString(), path: req.body.path.toString(), nom: req.body.nom.toString(), type: req.body.type.toString(), custom_id: req.body.custom_id.toString() })
             Prospect.findByIdAndUpdate(req.body.id, { documents_administrative: newProspect.documents_administrative }, { new: true }, (err, doc) => {
+                if (err)
+                    console.error(err)
                 res.status(201).json({ dossier: "dossier mise à jour", documents_administrative: newProspect.documents_administrative });
             })
         }))
@@ -1537,6 +1558,18 @@ app.post('/getDataForDashboardPartenaire', (req, res) => {
 app.get('/getPopulate/:id', (req, res) => {
     Prospect.findById(req.params.id).populate('user_id').then(data => {
         res.send(data)
+    })
+})
+
+app.get('/docChecker/:input', (req, res) => {
+    User.findOne({ email: req.params.input, type: "Prospect" }).then(data => {
+        if (data)
+            res.send({ data, type: "User" })
+        else {
+            Prospect.findOne({ documents_administrative: { $elemMatch: { custom_id: req.params.input } } }).then(doc => {
+                res.send({ data: doc, type: "Prospect" })
+            })
+        }
     })
 })
 

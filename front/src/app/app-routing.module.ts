@@ -233,6 +233,13 @@ import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-pai
 import { LeadInformationsPersonnelComponent } from './admission/lead/lead-informations-personnel/lead-informations-personnel.component';
 import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
+import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
+import { MailTypeComponent } from './mail-type/mail/mail.component';
+import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
+import { MyTargetComponent } from './crm/target/my-target/my-target.component';
+import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
+import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
+import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -425,6 +432,9 @@ const routes: Routes = [
             { path: 'crm/mes-leads/pre-qualifies/:id', component: LeadsPrequalifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/mes-leads/qualifies/:id', component: LeadsQualifiesComponent, canActivate: [AuthGuardService] },
             { path: 'crm/ventes', component: VentesCRMComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/configuration', component: ConfigurationTargetComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/my-target', component: MyTargetComponent, canActivate: [AuthGuardService] },
+            { path: 'crm/target/dashboard', component: DashboardTargetComponent, canActivate: [AuthGuardService] },
             /* Intuns */
             { path: 'intuns/employabilite', component: EmployabiliteComponent, canActivate: [AuthGuardService] },
             { path: 'intuns/formations', component: FormationsIntunsComponent, canActivate: [AuthGuardService] },
@@ -449,13 +459,18 @@ const routes: Routes = [
             { path: 'admission/rentree', component: RentreeScolaireAdmissionComponent, canActivate: [AuthGuardService] },
 
             // dubai admission form
-            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent },
+            { path: 'admission/dubai-form-results', component: FormAdmissionDubaiResultsComponent, canActivate: [AuthGuardService] },
             //Accès Prospect V2
-            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent },
-            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent },
-            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent },
-            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent },
-            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent },
+            { path: 'admission/lead-programme/:id', component: LeadProgrammeComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-dossier/:id', component: LeadDossierComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent, canActivate: [AuthGuardService] },
+            //Module Mail Type
+            { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
+
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
@@ -491,6 +506,7 @@ const routes: Routes = [
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
+    { path: 'document-authentification', component: DocCheckerComponent },
 
 ]
 

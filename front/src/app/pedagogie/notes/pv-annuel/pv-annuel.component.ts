@@ -201,20 +201,9 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       }
       return summ / coeffTotal;
     } else {
-      let dicModuleCoeff = {}
-      this.colsAnnuel.forEach(col => {
-        dicModuleCoeff[col.module] = col.coeff
-      })
-
-      var i = 0, summ = 0, ArrayDic = Object.keys(notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
-      while (i < ArrayLen) {
-        if (!Number.isNaN(notes[ArrayDic[i]])) {
-          summ = summ + (notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
-          coeffTotal += dicModuleCoeff[ArrayDic[i]]
-        }
-        i++;
-      }
-      return summ / coeffTotal;
+      let moy_sem1 = this.calculMoyenne(notes['Semestre 1'], 'Semestre 1')
+      let moy_sem2 = this.calculMoyenne(notes['Semestre 2'], 'Semestre 2')
+      return (moy_sem1 + moy_sem2)/2
     }
 
   }
@@ -321,7 +310,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       t['Date de Naissance'] = data.date_naissance
       t['Date Inscrit'] = data.date_inscrit
       t['Email'] = data.email
-      
+
       dataExcel.push(t)
     })
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);

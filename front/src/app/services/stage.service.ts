@@ -160,8 +160,8 @@ export class StageService {
     return new Promise<any>((resolve, reject) => {
       this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response: any) => { resolve(response); },
-          error: (error) => { reject(error); },
-          complete: () => { console.log("Attestation de stage envoyé"); }
+        error: (error) => { reject(error); },
+        complete: () => { console.log("Attestation de stage envoyé"); }
       });
     });
   }

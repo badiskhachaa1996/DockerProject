@@ -17,6 +17,10 @@ import { Partenaire } from 'src/app/models/Partenaire';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
+import { MailType } from 'src/app/models/MailType';
+import mongoose from 'mongoose';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -232,7 +236,9 @@ export class SourcingComponent implements OnInit {
     { value: null, label: 'Toutes les rentrées scolaires' },
   ]
 
-  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private UserService: AuthService) { }
+  constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
+    private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
+    private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
 
   prospects: any[];
   dicEcole = {}
@@ -293,18 +299,28 @@ export class SourcingComponent implements OnInit {
       })
     })
     this.FAService.EAgetAll().subscribe(data => {
+
+      /*this.admissionService.get100Sourcing().subscribe(data100 => {
+        this.prospects = data100
+        Object.keys(this.dicEcole).forEach((val, idx) => {
+          if (!data100[val])
+            this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
+        })
+      })*/
       this.admissionService.getAllSourcing().subscribe(dataP => {
-        this.prospects = dataP
+        this.ecoleList = []
         data.forEach(d => {
           this.dropdownEcole.push({ label: d.titre, value: d.url_form })
           this.ecoleList.push(d)
           this.dicEcole[d.url_form] = d
         })
+        this.prospects = dataP
         Object.keys(this.dicEcole).forEach((val, idx) => {
           if (!dataP[val])
             this.ecoleList.splice(this.ecoleList.indexOf(this.dicEcole[val]), 1)
         })
       })
+
     })
     this.UserService.getPopulate(this.token.id).subscribe(data => {
       if (data.roles_list)
@@ -650,6 +666,131 @@ export class SourcingComponent implements OnInit {
         this.prospects[prospect.type_form].splice(this.prospects[prospect.type_form].indexOf(prospect), 1)
         this.messageService.add({ severity: "success", summary: "Lead supprimé avec succès" })
       })
+  }
+
+  showEmail = false
+  prospectSendTo: Prospect = null
+  emailTypeSelected: string = null
+  mailDropdown = []
+  mailTypeDropdown = []
+
+  formEmailPerso = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
+  })
+  formEmailType = new FormGroup({
+    objet: new FormControl('', Validators.required),
+    body: new FormControl('', Validators.required),
+    cc: new FormControl([]),
+    send_from: new FormControl('', Validators.required)
+  })
+  onEmailPerso() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+        this.formEmailPerso.reset()
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  onEmailType() {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+        this.formEmailType.reset()
+        this.historiqueEmails.push(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+  initSendEmail(prospect: Prospect) {
+    this.showEmail = true
+    this.prospectSendTo = prospect
+    this.EmailTypeS.HEgetAllTo(this.prospectSendTo._id).subscribe(data => {
+      this.historiqueEmails = data
+    })
+    this.EmailTypeS.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.mailDropdown.push({ label: val.email, value: val })
+      })
+    })
+    this.EmailTypeS.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
+  }
+
+  onMailType(event: MailType) {
+    this.formEmailType.patchValue({
+      ...event
+    })
+    this.piece_jointes = event.pieces_jointe
+    this.mailTypeSelected = event
+  }
+  mailTypeSelected: MailType
+  historiqueEmails: HistoriqueEmail[] = []
+  piece_jointes = []
+
+  //Gestion des PJs
+  onDeletePJ(ri) {
+    delete this.piece_jointes[ri]
+  }
+
+  uploadFilePJ: {
+    date: Date,
+    nom: string,
+    path: string,
+    _id: string
+  } = null
+
+  onAddPj() {
+    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+  downloadPJFile(pj) {
+    this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      saveAs(blob, pj.path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+  onUploadPJ(uploadFilePJ) {
+    if (uploadFilePJ?.nom && uploadFilePJ.nom != 'Cliquer pour modifier le nom du document ici') {
+      document.getElementById('selectedFile').click();
+      this.uploadFilePJ = uploadFilePJ
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+    }
+
+  }
+
+  FileUploadPJ(event: [File]) {
+    console.log(event)
+    if (event != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('nom', this.uploadFilePJ.nom)
+      formData.append('pj_id', this.uploadFilePJ._id)
+      formData.append('path', event[0].name)
+      formData.append('_id', this.mailTypeSelected?._id)
+      formData.append('file', event[0])
+      this.EmailTypeS.uploadPJ(formData).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.piece_jointes[this.piece_jointes.indexOf(this.uploadFilePJ)].path = event[0].name
+        this.uploadFilePJ = null;
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
   }
 
 

@@ -12,15 +12,59 @@
         </div>
     </div>
 </div>
+<div class="col-12 card grid" *ngIf="ticketUpdate">
+    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+        (click)="ticketUpdate=null" aria-hidden="true"> </i>
+    <h4 class="col-12" style="text-align: center;">Modifier un ticket </h4>
+    <form [formGroup]="TicketForm" (ngSubmit)="onSubmitUpdate()" class="p-fluid p-formgrid grid col-12">
+        <div class="field col-12 md:col-4">
+            <label For="service">Service <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
+                (onChange)="onSelectService()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="sujet">Sujet <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id"
+                placeholder="Choisissez un sujet"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="sujet">Priorité <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="prioriteDropdown" formControlName="priorite"
+                placeholder="Choisissez une priorité"></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label For="description">Description du ticket <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize
+                rows="3" cols="30"></textarea>
+        </div>
+        <div class="col-12">
+            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Enregister les modifications"
+                type="submit" [disabled]="TicketForm.invalid"></button>
+        </div>
+    </form>
+</div>
 <div class="grid col-12 card" *ngIf="TicketAffecter">
     <h5 class="col-12">Affecter un agent à ce ticket</h5>
-    <div class="col-12">
-        <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember" [(ngModel)]="memberSelected"
-            placeholder="Choisissez un membre"></p-dropdown>
-    </div>
-    <div class="col-12">
-        <p-button (onClick)="onAffectation()" label="Affecter cette agent"></p-button>
-    </div>
+    <form [formGroup]="formAffectation" class="p-fluid p-formgrid grid col-12">
+        <div class="field col-6">
+            <label>Agent: </label>
+            <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember"
+                formControlName="agent_id" filter="true" placeholder="Choisissez un membre"></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>DDL: </label>
+            <input pInputText type="date" formControlName="date_limite" />
+        </div>
+        <div class="field col-12">
+            <label For="description">Note de l'affectation <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Bon courage" formControlName="note_assignation" autoResize rows="3"
+                cols="30"></textarea>
+        </div>
+        <div class="col-12">
+            <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onAffectation()"
+                label="Affecter cette agent" [disabled]="TicketAffecter.invalid"></p-button>
+        </div>
+    </form>
 </div>
 <div class="grid col-12 card">
     <h5 class="col-12">Les Tickets Refusés</h5>
@@ -119,11 +163,13 @@
                     {{ticket.justificatif}}
                 </td>
                 <td>
-                    {{ticket?.agent_id?.firstname | titlecase}} {{ticket?.agent_id?.lastname | uppercase}}
+                    {{ticket?.user_revert?.firstname | titlecase}} {{ticket?.user_revert?.lastname | uppercase}}
                 </td>
                 <td>
+                    <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-cog mr-2"
+                        (click)="onUpdate(ticket)" aria-hidden="true"></i>
                     <i pTooltip="Affecter ce ticket" style="margin-left: 2%; cursor: pointer;" class="pi pi-send"
-                        (click)="initAffecter(ticket)" aria-hidden="true"></i>
+                        (click)="initAffecter(ticket); scrollToTop();" aria-hidden="true"></i>
 
                 </td>
             </tr>
@@ -137,13 +183,19 @@
                 <th> Description </th>
                 <th> Date de traitement </th>
                 <th> Note du Service qui traite </th>
+                <th> Motif du refus </th>
+                <th> Note d'affectation </th>
+                <th> DDL </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.date_affec_accep}}</td>
+                <td>{{ticket.date_affec_accep| date:'mediumDate'}}</td>
                 <td>{{ticket.note}}</td>
+                <td>{{ticket.justificatif}}</td>
+                <td>{{ticket.note_assignation}}</td>
+                <td>{{ticket.date_limite | date:'mediumDate'}}</td>
             </tr>
         </ng-template>
     </p-table>

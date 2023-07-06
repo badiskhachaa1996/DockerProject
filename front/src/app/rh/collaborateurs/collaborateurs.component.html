@@ -9,87 +9,345 @@
             <div class="clear-float"></div>
             <h2 class="header">Ajout d'un collaborateur</h2>
 
-            <form class="p-fluid p-formgrid grid">
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAdd" (ngSubmit)="onAdd()">
                 <div class="field col-12 md:col-8">
                     <label htmlFor="matricule">Matricule</label>
-					<input pInputText id="matricule" type="text" placeholder="Numéro matricule du collaborateur" />
+					<input pInputText id="matricule" type="text" placeholder="Numéro matricule du collaborateur" formControlName="matricule"/>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label htmlFor="date_demarrage">Date de démarrage</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage" formControlName="date_demarrage"></p-calendar>
                 </div>
-                <div class="field col-12 md:col-2">
-                    <label htmlFor="civilite">Civilité</label>
-                    <p-dropdown [options]="civiliteList" placeholder="Mr, Mme..."></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-5">
-                    <label htmlFor="lastname">Nom</label>
-					<input pInputText id="lastname" type="text" placeholder="ex: Sall" />
-                </div>
-                <div class="field col-12 md:col-5">
-                    <label htmlFor="firstname">Prénom</label>
-					<input pInputText id="firstname" type="text" placeholder="ex: Idrissa" />
+                <div class="field col-12">
+                    <label>Collaborateur<span class="obligatory">*</span></label>
+                    <p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true" formControlName="user_id"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label htmlFor="date_naissance">Date de naissance</label>
-                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_naissance"></p-calendar>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_naissance" formControlName="date_naissance"></p-calendar>
                 </div>
-                <div class="field col-12 md:col-4">
-                    <label htmlFor="email_travail">Email travail</label>
-					<input pInputText id="email_travail" type="email" placeholder="ex: i.sall@intedgroup.com" />
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label htmlFor="email_perso">Email personnelle</label>
-					<input pInputText id="email_perso" type="email" placeholder="ex: i.sall@gmail.com" />
-                </div>
-                <div class="field col-12">
-                    <label htmlFor="phone_perso">Numéro de téléphone personnelle</label>
-					<input pInputText id="phone_perso" type="tel" placeholder="ex: 0767978236" />
-                </div>
-                <div class="field col-12">
-                    <label htmlFor="adresse">Adresse</label>
-                    <textarea pInputTextarea placeholder="ex: 15 rue de la délivrance, 75003 Paris/ France" autoResize rows="4" cols="30"></textarea>
-                </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-8">
                     <label htmlFor="localisation">Localisation</label>
-                    <p-dropdown [options]="localisationList" placeholder="Paris, Tunis..."></p-dropdown>
+                    <p-dropdown [options]="localisationList" placeholder="Paris, Tunis..." formControlName="localisation"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="poste">Nom du poste</label>
-					<input pInputText id="poste" type="text" placeholder="ex: Consultant informatique" />
+                <div class="field col-12">
+                    <label htmlFor="poste">Intitulé du poste</label>
+					<input pInputText id="poste" type="text" placeholder="ex: Consultant informatique" formControlName="intitule_poste"/>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="service">Service</label>
-                    <p-dropdown [options]="serviceList" placeholder="Pédagogie, Informatique, Commercial..."></p-dropdown>
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="h_cra">Taux horaire</label>
+					<div class="p-inputgroup">
+						<input type="number" id="h_cra" pInputText placeholder="ex: 7" formControlName="h_cra"/>
+						<span class="p-inputgroup-addon">h</span>
+					</div>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="anciennete">Ancienneté</label>
-					<input pInputText id="anciennete" type="number" placeholder="ex: 12 jours" />
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="type_contrat">Type de contrat<span class="obligatory">*</span></label>
+                    <p-dropdown [options]="contratList" placeholder="CDD, CDI, Alternant..." formControlName="contrat_type"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="type_contrat">Type de contrat</label>
-                    <p-dropdown [options]="contratList" placeholder="CDD, CDI, Alternant..."></p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-12">
                     <label htmlFor="statut">Statut</label>
-                    <p-dropdown [options]="statutList" placeholder="Actif, Démission..."></p-dropdown>
+                    <p-dropdown [options]="statutList" placeholder="Actif, Démission..." formControlName="statut"></p-dropdown>
                 </div>
 
-                <button pButton pRipple label="Ajouter" class="p-button-primary mb-2"></button>
+                <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2" [disabled]="formAdd.invalid"></button>
             </form>
         </div>
     </div>
 
-    <!-- Liste des collaborateurs -->
-    <div class="col-12">
+	<!-- Modification d'un collaborateur -->
+	<div class="col-12" *ngIf="showFormUpdate">
         <div class="card">
-            <h2 class="header">Liste des collaborateurs</h2>
             <div class="add-button-div">
-                <button pButton pRipple type="button" label="Ajouter un collaborateur" (click)="showFormAdd = true;" class="p-button-outlined p-button-primary mb-2"></button>
+                <i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormUpdate = false;"></i>
+            </div>
+            <div class="clear-float"></div>
+            <h2 class="header">Modifier les informations du collaborateur</h2>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdate" (ngSubmit)="onUpdate()">
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="matricule">Matricule</label>
+					<input pInputText id="matricule" type="text" placeholder="Numéro matricule du collaborateur" formControlName="matricule"/>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="date_demarrage">Date de démarrage</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_demarrage" formControlName="date_demarrage"></p-calendar>
+                </div>
+                <div class="field col-12">
+                    <label>Collaborateur<span class="obligatory">*</span></label>
+                    <p-dropdown [options]="agents" placeholder="Veuillez choisir l'agent" filter="true" [disabled]="true" formControlName="user_id"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="date_naissance">Date de naissance</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" id="date_naissance" formControlName="date_naissance"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="localisation">Localisation</label>
+                    <p-dropdown [options]="localisationList" placeholder="Paris, Tunis..." formControlName="localisation"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="poste">Intitulé du poste</label>
+					<input pInputText id="poste" type="text" placeholder="ex: Consultant informatique" formControlName="intitule_poste"/>
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="h_cra">Taux horaire</label>
+					<div class="p-inputgroup">
+						<input type="number" id="h_cra" pInputText placeholder="ex: 7" formControlName="h_cra"/>
+						<span class="p-inputgroup-addon">h</span>
+					</div>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="type_contrat">Type de contrat<span class="obligatory">*</span></label>
+                    <p-dropdown [options]="contratList" placeholder="CDD, CDI, Alternant..." formControlName="contrat_type"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label htmlFor="statut">Statut</label>
+                    <p-dropdown [options]="statutList" placeholder="Actif, Démission..." formControlName="statut"></p-dropdown>
+                </div>
+
+                <button pButton pRipple type="submit" label="Mettre à jour" class="p-button-primary mb-2"></button>
+            </form>
+        </div>
+    </div>
+
+	<!-- Modification des informations personnelles du collaborateur -->
+	<div class="col-12" *ngIf="showFormUpdatePersonalInfo">
+		<div class="card">
+			<div class="add-button-div">
+                <i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormUpdatePersonalInfo = false;"></i>
+            </div>
+            <div class="clear-float"></div>
+            <h2 class="header">Modifier les informations personnelles du collaborateur</h2>
+
+			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdatePersonalInfo" (ngSubmit)="onUpdatePersonalData()">
+				<div class="field col-12 md:col-2">
+                    <label>Civilité</label>
+                    <p-dropdown [options]="civiliteList" placeholder="M, Mme..." formControlName="civilite"></p-dropdown>
+                </div>
+				<div class="field col-12 md:col-5">
+                    <label htmlFor="lastname">Nom</label>
+					<input pInputText id="lastname" type="text" placeholder="ex: SAll" formControlName="lastname"/>
+                </div>
+				<div class="field col-12 md:col-5">
+                    <label htmlFor="firstname">Prénom</label>
+					<input pInputText id="firstname" type="text" placeholder="ex: Idrissa" formControlName="firstname"/>
+                </div>
+				<div class="field col-12 md:col-3">
+                    <label htmlFor="indicatif">Indicatif</label>
+					<input pInputText id="indicatif" type="number" placeholder="ex: 0033" formControlName="indicatif"/>
+                </div>
+				<div class="field col-12 md:col-9">
+                    <label htmlFor="phone">Téléphone</label>
+					<input pInputText id="phone" type="number" placeholder="ex: 767978281" formControlName="phone"/>
+                </div>
+				<div class="field col-12 md:col-6">
+                    <label htmlFor="email">Email professionnelle</label>
+					<input pInputText id="email" type="email" placeholder="ex: i.sall@intedgroup.com" formControlName="email"/>
+                </div>
+				<div class="field col-12 md:col-6">
+                    <label htmlFor="email_perso">Email personnelle</label>
+					<input pInputText id="email" type="email_perso" placeholder="ex: i.sall@gmail.com" formControlName="email_perso"/>
+                </div>
+
+				<button pButton pRipple type="submit" label="Mettre à jour" class="p-button-primary mb-2"></button>
+			</form>
+		</div>
+	</div>
+
+	<!-- Formulaire d'ajout de nouvelle compétences -->
+	<div class="col-12" *ngIf="showFormAddCompetence">
+		<div class="card">
+			<div class="add-button-div mb-2">
+                <i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormAddCompetence = false;"></i>
+            </div>
+            <div class="clear-float"></div>
+			<h2 class="header">Ajouter des compétences à {{collaborateurToUpdate?.user_id?.lastname | uppercase}} {{collaborateurToUpdate?.user_id?.firstname}}</h2>
+
+			<form class="p-fluid" [formGroup]="formAddCompetence" (ngSubmit)="onAddCollaborateurSkills()">
+				<div formArrayName="competences" *ngFor="let competence of getCompetences().controls; let i = index; let c = count">
+					<div class="p-formgrid grid" [formGroupName]="i">
+						<div class="field col-12 md:col-5">
+							<input pInputText id="kind" type="text" placeholder="Compétence" formControlName="kind"/>
+						</div>
+						<div class="field col-12 md:col-5">
+							<p-dropdown id="level" [options]="levelList" placeholder="Niveau" formControlName="level"></p-dropdown>
+						</div>
+						<div class="col-12 md:col-2" *ngIf="c > 1">
+							<button pButton pRipple pTooltip="Supprimer la ligne" type="button" icon="pi pi-trash" class="p-button-outlined p-button-danger mb-2" (click)="onDeleteCompetence()"></button>
+						</div>
+					</div>
+				</div>
+				<button pButton pRipple type="button" icon="pi pi-plus" class="p-button-outlined p-button-success mb-2" (click)="onAddCompetence()"></button>
+				
+				<div class="col-2">
+					<button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2"></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Affichage du tableau pour la gestion des compétences -->
+	<div class="col-12" *ngIf="showCompetenceTable">
+		<div class="card">
+			<div class="add-button-div mb-2">
+                <i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showCompetenceTable = false; showFormAddCompetence = false;"></i>
+            </div>
+            <div class="clear-float"></div>
+			<div class="add-button-div">
+                <button pButton pRipple type="button" label="Ajouter une compétence" (click)="showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false; showFormAddCompetence = true;" class="p-button-outlined p-button-primary"></button>
             </div>
             <div class="clear-float"></div>
 
-            <p-table #dt1 [value]="" dataKey="id" [rows]="8" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+			<h2 class="header">Compétences du collaborateur</h2>
+
+			<p-table #dt1 [value]="collaborateurCompetences" dataKey="_id" editMode="row" [rows]="5" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['kind', 'level']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Filtrer les compétences" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Compétence
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Niveau
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-competence let-editing="editing" let-ri="rowIndex">
+					<tr [pEditableRow]="competence">
+						<td style="min-width: 10rem;">
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<input pInputText type="text" [(ngModel)]="competence.kind">
+								</ng-template>
+								<ng-template pTemplate="output">
+									{{competence.kind}}
+								</ng-template>
+							</p-cellEditor>
+						</td>
+						<td style="min-width: 10rem;">
+							<p-cellEditor>
+								<ng-template pTemplate="input">
+									<p-dropdown [options]="levelList" appendTo="body" [(ngModel)]="competence.level" [style]="{'width':'100%'}"></p-dropdown>
+								</ng-template>
+								<ng-template pTemplate="output">
+									{{competence.level}}
+								</ng-template>
+							</p-cellEditor>
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+							<button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(competence)" class="p-button-rounded p-button-text"></button>
+							<button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteCollaborateurCompetence(competence._id)"></button>
+							<button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(competence)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+							<button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(competence, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="3">Aucune compétence trouvé.</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+
+	<!-- Affichage du cra -->
+	<div class="col-12" *ngIf="showCra">
+		<div class="card">
+			<p-sidebar [(visible)]="showCra" [fullScreen]="true" [baseZIndex]="10000">
+				<h3 class="header">C.R.A</h3>
+				<p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+					<ng-template pTemplate="header">
+						<tr>
+							<th>Date</th>
+							<th>Tâche</th>
+							<th>Durée</th>
+							<th>Action</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-actualite>
+						<tr>
+							<td>test</td>
+							<td>test</td>
+							<td>test</td>
+							<td>test</td>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="emptymessage">
+						<tr>
+							<td colspan="4">Aucun CRA pour le moment.</td>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="loadingbody">
+						<tr>
+							<td colspan="4">Chargement des CRA, merci de patienter...</td>
+						</tr>
+					</ng-template>
+				</p-table>
+			</p-sidebar>
+		</div>
+	</div>
+
+	<!-- Job description -->
+	<div class="col-12" *ngIf="showJobDescription">
+		<div class="card">
+			<p-sidebar [(visible)]="showJobDescription" [fullScreen]="true" [baseZIndex]="10000">
+				<!-- formulaire de mise à jour de la description du poste du collaborateur -->
+				<div class="card" *ngIf="showFormUpdateJobDescriptionForm">
+					<div class="add-button-div">
+						<i class="pi pi-times-circle close-icon" pTooltip="Fermer" (click)="showFormUpdateJobDescriptionForm = false;"></i>
+					</div>
+					<div class="clear-float"></div>
+					<h3 class="header">Mettre à jour la description du poste</h3>
+		
+					<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateJobDescription" (ngSubmit)="onUpdateJobDescription()">
+						<div class="field col-12">
+							<label htmlFor="description">Description</label>
+							<textarea pInputTextarea id="description" placeholder="Description du poste" autoResize rows="4" cols="30" formControlName="description"></textarea>
+						</div>
+
+						<button pButton pRipple label="Mettre à jour" type="submit"></button>
+					</form>
+				</div>
+				
+				<div class="add-button-div">
+					<button pButton pRipple type="button" label="Mettre à jour" (click)="showFormUpdateJobDescriptionForm = true" class="p-button-outlined p-button-primary"></button>
+				</div>
+				<div class="clear-float"></div>
+
+                <h3 class="header">Description du poste du collaborateur</h3>
+				<p style="text-align: center">{{ collaborateurToUpdate?.poste_description }}</p>
+            </p-sidebar>
+		</div>
+	</div>
+
+    <!-- Liste des collaborateurs -->
+    <div class="col-12">
+        <div class="card">
+			<div class="add-button-div">
+                <button pButton pRipple type="button" label="Ajouter un collaborateur" (click)="showFormAdd = true; showFormUpdate = false; showFormUpdatePersonalInfo = false;" class="p-button-outlined p-button-primary"></button>
+            </div>
+            <div class="clear-float"></div>
+			
+            <h2 class="header">Liste des collaborateurs</h2>
+
+            <p-table #dt1 [value]="collaborateurs" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email', 'matricule']" responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
@@ -152,6 +410,11 @@
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
+								Taux horaire
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
 								Nom du poste
 							</div>
 						</th>
@@ -175,11 +438,6 @@
 								Type de contrat
 							</div>
 						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Statut
-							</div>
-						</th>
 						<th style="width: 8rem">
 							<div class="flex justify-content-between align-items-center">
 								Action
@@ -187,69 +445,71 @@
 						</th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-customer>
+				<ng-template pTemplate="body" let-collaborateur>
 					<tr>
-						<td style="min-width: 12rem;">
-							{{customer.name}}
+						<td style="min-width: 10rem;">
+							{{collaborateur.matricule}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.date | date: 'MM/dd/yyyy'}}
+							{{collaborateur.date_demarrage | date: 'MM/dd/yyyy'}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
-						</td>
-						<td style="min-width: 12rem;">
-							{{customer.name}}
-						</td>
-						<td style="min-width: 10rem;">
-							{{customer.date | date: 'MM/dd/yyyy'}}
-						</td>
-						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
+							{{collaborateur.user_id?.civilite}}
 						</td>
 						<td style="min-width: 12rem;">
-							{{customer.name}}
+							{{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.date | date: 'MM/dd/yyyy'}}
+							{{collaborateur?.date_naissance | date: 'MM/dd/yyyy'}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
+							{{collaborateur.user_id?.email}}
 						</td>
 						<td style="min-width: 12rem;">
-							{{customer.name}}
+							{{collaborateur.user_id?.email_perso}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.date | date: 'MM/dd/yyyy'}}
+							{{collaborateur.user_id?.indicatif}} {{collaborateur.user_id?.phone}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
+							{{collaborateur.user_id?.numero_adresse}} {{collaborateur.user_id?.rue_adresse}} <br>
+							{{collaborateur.user_id?.postal_adresse}}, {{collaborateur.user_id?.ville_adresse}}/ {{collaborateur.user_id?.pays_adresse}}
 						</td>
 						<td style="min-width: 12rem;">
-							{{customer.name}}
+							{{collaborateur?.localisation}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{collaborateur?.h_cra}}<span *ngIf="collaborateur?.h_cra == 1"> heure</span><span *ngIf="collaborateur?.h_cra > 1"> heures</span>
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.date | date: 'MM/dd/yyyy'}}
+							{{collaborateur?.intitule_poste}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
+							{{'---'}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{customer.balance | currency:'USD':'symbol'}}
+							{{'---'}}
+						</td>
+						<td style="min-width: 10rem;">
+							{{20}} jours
+						</td>
+						<td style="min-width: 10rem;">
+							{{collaborateur.contrat_type}} jours
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
-                            <button pButton pRipple type="button" label="Ajouter une compétence" class="p-button-outlined p-button-info mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" label="Modifier" class="p-button-outlined p-button-success mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" label="Job description" class="p-button-outlined p-button-info mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" label="Insérer un document" class="p-button-outlined p-button-danger mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" label="Supprimer" class="p-button-outlined p-button-warning mr-2 mb-2"></button>
-                            <button pButton pRipple type="button" label="CRA" class="p-button-outlined p-button-help mr-2 mb-2"></button>
+							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
+							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs" style="cursor: pointer; color: #22C55E" (click)="onFillForm(collaborateur)"></i>
+							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles" style="cursor: pointer;" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
+							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
+							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="cursor: pointer; color: #F59E0B"></i>
+							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
+							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7" (click)="showCra = true;"></i>
                         </td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="17">Aucun collaborateurs trouvé.</td>
+						<td colspan="17">Aucun collaborateur trouvé.</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">

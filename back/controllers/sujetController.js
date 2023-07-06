@@ -73,4 +73,13 @@ app.get("/deleteById/:id", (req, res) => {
         res.send(sujet)
     })
 });
+
+app.get("/getPopulate/:id", (req, res) => {
+    //Récupérer un sujet via ID
+    Sujet.findById(eq.params.id).populate('service_id').then((dataSujet) => {
+        res.status(200).send(dataSujet);
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
 module.exports = app;

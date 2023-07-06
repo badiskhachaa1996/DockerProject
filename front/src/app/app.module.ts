@@ -337,7 +337,14 @@ import { LeadSuiviComponent } from './admission/lead/lead-suivi/lead-suivi.compo
 import { LeadPaiementsComponent } from './admission/lead/lead-paiements/lead-paiements.component';
 import { LeadDossierComponent } from './admission/lead/lead-dossier/lead-dossier.component';
 import { VersionNonIframeComponent } from './formulaire-admission/formulaire-admission-international/version-non-iframe/version-non-iframe.component';
-
+import { ConfigurationMailComponent } from './mail-type/configuration-mail/configuration-mail.component';
+import { MailTypeComponent } from './mail-type/mail/mail.component';
+import { MailAutoComponent } from './mail-type/mail-auto/mail-auto.component';
+import { EditorModule } from 'primeng/editor';
+import { MyTargetComponent } from './crm/target/my-target/my-target.component';
+import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
+import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
+import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 
 @NgModule({
   imports: [
@@ -432,6 +439,7 @@ import { VersionNonIframeComponent } from './formulaire-admission/formulaire-adm
     StyleClassModule,
     FullCalendarModule,
     NgxIntlTelInputModule,
+    EditorModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -683,7 +691,14 @@ import { VersionNonIframeComponent } from './formulaire-admission/formulaire-adm
     LeadSuiviComponent,
     LeadPaiementsComponent,
     LeadDossierComponent,
-    VersionNonIframeComponent
+    VersionNonIframeComponent,
+    ConfigurationMailComponent,
+    MailTypeComponent,
+    MailAutoComponent,
+    MyTargetComponent,
+    ConfigurationTargetComponent,
+    DashboardTargetComponent,
+    DocCheckerComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

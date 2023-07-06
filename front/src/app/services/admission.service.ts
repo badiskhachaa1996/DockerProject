@@ -45,7 +45,7 @@ export class AdmissionService {
   //Recuperation d'un prospect via son userId
   getByUserId(user_id: string) {
     let registreurl = this.apiUrl + 'getByUserId/' + user_id;
-    return this.httpClient.get<Prospect>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<Prospect>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getTokenByUserId(user_id: string) {
@@ -57,6 +57,11 @@ export class AdmissionService {
   //recuperation de la liste des admissions
   getAll() {
     let registreUrl = this.apiUrl + 'getAll';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  get100Sourcing() {
+    let registreUrl = this.apiUrl + 'get100Sourcing';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -325,7 +330,12 @@ export class AdmissionService {
 
   getPopulate(id) {
     let registreUrl = this.apiUrl + 'getPopulate/' + id;
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
+  docChecker(input: string) {
+    let registreUrl = this.apiUrl + 'docChecker/' + input;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
 }

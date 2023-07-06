@@ -583,27 +583,27 @@
                 <ng-template pTemplate="caption">
                     <div class="grid flex justify-content-between flex-column sm:flex-row">
                         
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreAgent"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreAgent" filter="true"
                             (onChange)="dt1.filter($event.value, 'code_commercial._id', 'equals'); onFilterByCommercial($event)"
                             filterPlaceholder="Choisissez un commercial"></p-dropdown>
 
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreCampus"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreCampus" filter="true"
                             (onChange)="dt1.filter($event.value, 'alternant_id.campus', 'equals'); onFilterByCampus($event)"
                             filterPlaceholder="Choisissez un campus"></p-dropdown>
 
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreEcole"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreEcole" filter="true"
                             (onChange)="dt1.filter($event.value, 'ecole._id', 'equals');onFilterByEcole($event)"
                             filterPlaceholder="Choisissez une ecole"></p-dropdown>
 
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreFormation"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreFormation" filter="true"
                             (onChange)="dt1.filter($event.value, 'formation._id', 'equals')"
                             filterPlaceholder="Choisissez une classe"></p-dropdown>
 
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreStatus"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreStatus" filter="true"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals')"
                             filterPlaceholder="Choisissez un status"></p-dropdown>
 
-                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreMobility"
+                        <p-dropdown class="col-3" [style]="{'margin':'1px'}" [options]="filtreMobility" filter="true"
                             (onChange)="dt1.filter($event.value, 'cout_mobilite_status', 'equals')"
                             filterPlaceholder="Mobilité internationale"></p-dropdown>
 
@@ -901,7 +901,7 @@
 
         <!-- personne qui a ajouté le contrat -->
         <div class="p-2">
-            <h6 style="font-weight: bold">Ajouté par</h6>
+            <h6 style="font-weight: bold">Ajouté le {{ contrat?.added_date | date : "dd MMMM YYYY"  }} par</h6>
             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
