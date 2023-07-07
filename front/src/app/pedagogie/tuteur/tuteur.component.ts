@@ -10,8 +10,8 @@ import { TuteurService } from 'src/app/services/tuteur.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Entreprise } from 'src/app/models/Entreprise';
-
-
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-tuteur',
   templateUrl: './tuteur.component.html',
@@ -70,16 +70,15 @@ export class TuteurComponent implements OnInit {
   }
 
   // recuperation de la liste des classes
-  getAllClasses()
-  {
+  getAllClasses() {
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
-      if(dataUser) {
+      if (dataUser) {
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent"
         this.isCEO = dataUser.type == "CEO Entreprise"
       }
 
-      if(this.isCEO) {
+      if (this.isCEO) {
         // récupération de l'entreprise du user
         this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
           ((response) => {
@@ -91,9 +90,9 @@ export class TuteurComponent implements OnInit {
               })
             )
           }
-        ))
+          ))
       }
-      else if(!this.isCEO) {
+      else if (!this.isCEO) {
         //récupération des tuteur
         this.tuteurService.getAll().subscribe(
           (dataTuteur) => {
@@ -190,7 +189,7 @@ export class TuteurComponent implements OnInit {
     let phone = this.addTuteurForm.get('phone')?.value;
     let fonction = this.addTuteurForm.get('fonction')?.value;
     let entreprise = null;
-    if(this.isCEO) {
+    if (this.isCEO) {
       entreprise = this.entrepriseId
     } else if (!this.isCEO) {
       entreprise = this.addTuteurForm.get('entreprise')?.value.value;
@@ -273,11 +272,11 @@ export class TuteurComponent implements OnInit {
 
   //récupération du tuteur à modifier
   onFillForm(tuteur: Tuteur) {
-      this.updateTuteurForm.patchValue({
-        fonction: tuteur.fonction,
-        anciennete: tuteur.anciennete,
-        niveau_formation: tuteur.niveau_formation,
-      });
+    this.updateTuteurForm.patchValue({
+      fonction: tuteur.fonction,
+      anciennete: tuteur.anciennete,
+      niveau_formation: tuteur.niveau_formation,
+    });
   }
 
   onUpdateTuteur() {
@@ -303,6 +302,28 @@ export class TuteurComponent implements OnInit {
 
     );
     this.resetUpdateTuteur()
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.tuteurs.forEach(tuteur => {
+      let t = {}
+      t['Nom'] = tuteur.user_id?.lastname
+      t['Prénom'] = tuteur.user_id?.firstname
+      t['Téléphone'] = `${tuteur.user_id?.indicatif} ${tuteur.user_id?.phone}`
+      t['Email'] = tuteur.user_id?.email_perso
+      t['Entreprise'] = this.entreprises[tuteur.user_id?.entreprise]?.r_sociale
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "sourcing" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
   }
 
 
