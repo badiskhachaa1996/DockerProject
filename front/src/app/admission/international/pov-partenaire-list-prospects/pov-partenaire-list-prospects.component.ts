@@ -450,7 +450,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
       })
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value }, "Traitement du dossier Partenaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
@@ -706,7 +706,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
       phase_candidature = this.showPaiement.phase_candidature;
     }
 
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }, "Modification des paiements Partenaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
@@ -745,7 +745,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   }
 
   onChangeAttribuer(code_commercial) {
-    this.admissionService.updateV2({ code_commercial, _id: this.AttribuerProspect._id }).subscribe(data => {
+    this.admissionService.updateV2({ code_commercial, _id: this.AttribuerProspect._id }, "Changement d'attribution Partenaire").subscribe(data => {
       this.prospects.splice(this.prospects.indexOf(this.AttribuerProspect), 1, data)
       this.AttribuerProspect = null
       this.messageService.add({ severity: 'success', summary: "Attribution du lead avec succès" })

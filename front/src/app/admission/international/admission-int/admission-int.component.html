@@ -801,14 +801,18 @@
                             <th>
                                 Note
                             </th>
+                            <th>
+                                Action
+                            </th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-rowData>
+                    <ng-template pTemplate="body" let-rowData let-idx="rowIndex">
                         <tr>
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="rowData.custom_id" (blur)="saveDoc()">
+                                        <input pInputText type="text" [(ngModel)]="rowData.custom_id"
+                                            (blur)="saveDoc()">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{rowData.custom_id}}
@@ -832,6 +836,10 @@
                             </td>
                             <td>
                                 {{rowData.note}}
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer ce fichier" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                    aria-hidden="true" (click)="deletedoc(idx)"> </i>
                             </td>
                         </tr>
                     </ng-template>

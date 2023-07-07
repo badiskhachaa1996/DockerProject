@@ -21,6 +21,7 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
+import { HistoriqueLead } from 'src/app/models/HistoriqueLead';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -360,7 +361,7 @@ export class SourcingComponent implements OnInit {
     }
     if (data.agent_sourcing_id || data.team_sourcing_id)
       data.phase_candidature = "En phase d'orientation scolaire"
-    this.admissionService.updateV2(data).subscribe(newProspect => {
+    this.admissionService.updateV2(data, "Affectation du dossier Sourcing").subscribe(newProspect => {
       this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
       this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
@@ -791,6 +792,26 @@ export class SourcingComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+  listHistorique: HistoriqueLead[] = []
+  leadHistorique: Prospect
+  initHistorique(lead: Prospect) {
+    this.leadHistorique = lead
+    this.admissionService.getAllHistoriqueFromLeadID(lead._id).subscribe(data => {
+      this.listHistorique = data
+    })
+  }
+
+  getDiff(histo: HistoriqueLead) {
+    let keys = Object.keys(histo.lead_after)
+    let r = ""
+    keys.forEach(k => {
+      if (histo.lead_after[k] && histo.lead_before[k] &&(histo.lead_after[k].toString() != histo.lead_before[k].toString()))
+        r = r + `${k} : ${histo.lead_before[k]} -> ${histo.lead_after[k]}\n`
+    })
+    if (r == "")
+      r = "Aucune modification n'a été trouvé, cela veut dire que c'est les données personnelles de l'user et non le dossier qui a été changé"
+    return r
   }
 
 
