@@ -7,10 +7,10 @@
                 style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
                 (click)="showFormAddTuteur = false;" aria-hidden="true"> </i>
             <form class="p-fluid p-formgrid grid" [formGroup]="addTuteurForm" (ngSubmit)="onAddTuteur()">
-                
+
                 <h4 class="col-12" style="text-align: center;">Ajoutez un tuteur</h4>
                 <p class="col-12" style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix
-                     sont obligatoires
+                    sont obligatoires
                 </p>
 
                 <div class="field col-12 md:col-2">
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="field col-12 md:col-5">
-                    <label For="nom">Nom  <span style="color: red">*</span></label>
+                    <label For="nom">Nom <span style="color: red">*</span></label>
                     <input pInputText id="lastname" type="text" placeholder="Smith" formControlName="lastname" />
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                         <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom
@@ -197,12 +197,17 @@
                     (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
                 <button pButton label="Ajouter un tuteur" *ngIf="token.role == 'Watcher'"
                     (click)="showFormAddTuteur = true; showFormModifTuteur = false" disabled></button>
+                <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
+                </button>
             </div>
             <h5>Liste des tuteurs</h5>
-            <p-table #dt1 [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="8" [rowHover]="true"
+            <p-table #dt1
+                [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']"
+                rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="8" [rowHover]="true"
                 [totalRecords]="tuteurs.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
                 responsiveLayout="scroll">
-    
+
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
@@ -225,7 +230,7 @@
                     <tr>
                         <td style="min-width: 12rem;">
                             {{ tuteur.user_id?.lastname }}
-    
+
                         </td>
                         <td style="min-width: 12rem;">
                             {{ tuteur.user_id?.firstname }}
@@ -266,7 +271,7 @@
             <h5>Liste des tuteurs de votre entreprise </h5>
             <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="8" [rowHover]="true"
                 styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
-    
+
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
@@ -298,13 +303,14 @@
                         <td>
                             {{ tuteur.user_id?.email_perso}}
                         </td>
-    
+
                         <td style="text-align: center;">
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; onFillForm(tuteur); showFormAddTuteur = false;"
                                 aria-hidden="true"></i>
-                            <i pTooltip="Lister les alternants du tuteur" tooltipPosition="bottom" class="pi pi-align-justify"
-                                [routerLink]="['/liste-contrats/'+tuteur._id]" aria-hidden="true" style="cursor: pointer; color: green; margin-left: 3px;"></i>
+                            <i pTooltip="Lister les alternants du tuteur" tooltipPosition="bottom"
+                                class="pi pi-align-justify" [routerLink]="['/liste-contrats/'+tuteur._id]"
+                                aria-hidden="true" style="cursor: pointer; color: green; margin-left: 3px;"></i>
                         </td>
                     </tr>
                 </ng-template>
