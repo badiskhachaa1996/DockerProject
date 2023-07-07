@@ -60,7 +60,7 @@
                     <h6>Vous êtes arrivé au <br> travail à: <strong>{{dailyCheck?.check_in | date: 'HH:mm'}}</strong></h6>
                     <h6>Temps passé au <br> travail: <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn</h6>
                     <h6>Temps passé en <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
-                    <h6>Taux de remplissage du <br> CRA: <strong>69%</strong></h6>
+                    <h6>Taux de remplissage du <br> CRA: <strong>{{craPercent}}%</strong></h6>
                 </div>
                 <div class="col-6 md:col-3 flex align-items-center justify-content-center">
                     <h5 style="text-align: center;">
@@ -154,9 +154,9 @@
                         </form>
                     </div>
 
-                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;" (click)="showFormAddCra = true;"></button>
+                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;" (click)="showFormAddCra = true;" *ngIf="dailyCheck != null"></button>
                     <div style="clear: both;"></div>
-                    <p-table [value]="dailyCheck?.cra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
@@ -164,12 +164,33 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-cra>
-                            <tr>
-                                <td>{{ cra.number_minutes }} mn</td>
-                                <td>{{ cra.task }}</td>
+                        <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                            <tr [pEditableRow]="cra">
                                 <td>
-                                    <button pButton pRipple pTooltip="Mettre à jour" icon="pi pi-pencil" class="p-button-rounded p-button-outlined mr-2 mb-2"></button>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" [(ngModel)]="cra.number_minutes">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{cra.number_minutes}} mn
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="cra.task">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{cra.task}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(cra)" class="p-button-rounded p-button-text"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(cra)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(cra, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteCra(cra._id)"></button>
                                 </td>
                             </tr>
                         </ng-template>
