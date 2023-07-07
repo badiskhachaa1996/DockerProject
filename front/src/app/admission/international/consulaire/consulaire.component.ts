@@ -433,7 +433,7 @@ export class ConsulaireComponent implements OnInit {
     this.scrollToTop()
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value },"Traitement du dossier Consulaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
@@ -685,7 +685,7 @@ export class ConsulaireComponent implements OnInit {
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement }).subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement },"Modification des paiements Consulaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
       this.showPaiement = null

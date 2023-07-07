@@ -327,21 +327,9 @@
                                 formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
-                            <label For="campus_choix_1">Campus 1er choix</label>
+                            <label For="campus_choix_1">Campus</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_1"></p-dropdown>
-
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="campus_choix_2">Campus 2ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_2"></p-dropdown>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="campus_choix_3">Campus 3ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_3"></p-dropdown>
-                            <!--<input pInputText formControlName="campus_choix_3" />-->
 
                         </div>
                         <div class="field col-12">
@@ -547,7 +535,41 @@
 
 
     </div>
-
+    <div class="col-12 card" *ngIf="leadHistorique">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="leadHistorique = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="leadHistorique?.user_id" class="text-center" style="font-weight: bold;"> Historique de : {{
+            leadHistorique?.user_id?.firstname }} {{
+            leadHistorique?.user_id?.lastname | uppercase }}
+        </h3>
+        <p-table #dthisto dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="listHistorique"
+            [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" [globalFilterFields]="['detail']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Date et Heure</th>
+                    <th>Detail</th>
+                    <th>Contribution</th>
+                    <th>Agent</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-histo>
+                <tr>
+                    <td>{{histo.date_creation | date:"mediumDate"}}</td>
+                    <td>{{histo.detail}}</td>
+                    <td>{{getDiff(histo)}}</td>
+                    <td>{{histo?.user_id?.lastname|uppercase}} {{histo?.user_id?.firstname|titlecase}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
     <!-- partie ajout de document -->
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
@@ -691,12 +713,6 @@
                                 <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
                                     Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
-                                    Adresse Email <p-sortIcon field="user_id.email_perso"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="user_id.phone" scope="col" style="text-align: center;">
-                                    Numéro de téléphone <p-sortIcon field="user_id.phone"></p-sortIcon>
-                                </th>
                                 <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                                     Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                                 </th>
@@ -733,9 +749,6 @@
                                 <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
                                     Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
-                                    Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
-                                </th>
                                 <th *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'" pSortableColumn="action"
                                     scope="col" style="text-align: center;">
                                     Action
@@ -769,15 +782,6 @@
                                 </td>
                                 <td *ngIf="prospect?.user_id">
                                     {{ prospect?.user_id?.pays_adresse }}
-                                </td>
-                                <td *ngIf="prospect?.user_id?.email_perso">
-                                    {{ prospect?.user_id?.email_perso }}
-                                </td>
-                                <td *ngIf="!prospect?.user_id?.email_perso">
-                                    {{ prospect?.user_id?.email }}
-                                </td>
-                                <td *ngIf="prospect?.user_id">
-                                    {{ prospect?.user_id?.indicatif }} {{ prospect?.user_id?.phone }}
                                 </td>
                                 <td>
                                     {{ prospect.campus_choix_1 }}
@@ -826,9 +830,6 @@
                                 <td>
                                     {{ prospect.phase_candidature }}
                                 </td>
-                                <td>
-                                    {{ prospect.rentree_scolaire }}
-                                </td>
                                 <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                                     <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"
                                         (click)="initAffectation(prospect);scrollToTop()" aria-hidden="true"></i>
@@ -838,6 +839,9 @@
                                         aria-hidden="true" (click)="delete(prospect)"> </i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-envelope mr-2"
                                         aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
+                                    <i pTooltip="Voir l'historique des modifications" tooltipPosition="bottom"
+                                        class="pi pi-align-center mr-2" (click)="initHistorique(prospect);scrollToTop()"
+                                        aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>

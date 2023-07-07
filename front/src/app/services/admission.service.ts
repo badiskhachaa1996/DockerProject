@@ -5,6 +5,7 @@ import { MemberInt } from '../models/memberInt';
 import { Prospect } from '../models/Prospect';
 import { ProspectAlternable } from '../models/ProspectAlternable';
 import { ProspectIntuns } from '../models/ProspectIntuns';
+import { HistoriqueLead } from '../models/HistoriqueLead';
 
 
 @Injectable({
@@ -289,15 +290,22 @@ export class AdmissionService {
     return this.httpClient.post<any>(url, { mail, prospect: prospect._id });
   }
 
-  updateV2(data) {
+  updateV2(data, detail = "") {
     let url = this.apiUrl + "updateV2";
-    return this.httpClient.put<Prospect>(url, data);
+    return this.httpClient.put<Prospect>(url, { ...data, detail });
   }
 
   getAllAffected(team_id = "buffer", agent_id = "buffer") {
     //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
     let registreUrl = this.apiUrl + 'getAllAffected/' + agent_id + "/" + team_id;
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  getAllHistoriqueFromLeadID(id) {
+    //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
+    let registreUrl = this.apiUrl + 'getAllHistoriqueFromLeadID/' + id
+    return this.httpClient.get<HistoriqueLead[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 

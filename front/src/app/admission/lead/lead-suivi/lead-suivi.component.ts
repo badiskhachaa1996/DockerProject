@@ -38,7 +38,7 @@ export class LeadSuiviComponent implements OnInit {
   updateValue(label) {
     let dic = { _id: this.PROSPECT._id }
     dic[label] = this.PROSPECT[label]
-    this.ProspectService.updateV2(dic).subscribe(data => {
+    this.ProspectService.updateV2(dic,"Mis à jour du suivi Lead-suivi").subscribe(data => {
       console.log(label, data[label],dic)
     })
   }

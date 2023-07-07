@@ -21,6 +21,7 @@ const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
 const { DocumentInternational } = require('../models/documentInternational');
+const { HistoriqueLead } = require('../models/HistoriqueLead');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -156,35 +157,8 @@ app.post("/create", (req, res, next) => {
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
-                                if (prospectSaved.type_form == "estya") {
-                                    let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
-                                    temp = temp.replace('eMailduProSpect', userCreated.email_perso)
-                                    temp = temp.replace('oRiGin', origin[0])
 
-                                    temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
-
-                                    let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
-
-                                    let mailOptions = {
-                                        from: "contact@estya.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
-                                        html: htmlmail,
-                                        attachments: [{
-                                            filename: 'Image1.png',
-                                            path: 'assets/Image1.png',
-                                            cid: 'Image1' //same cid value as in the html img src
-                                        }]
-                                    };
-
-                                    transporterEstya.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-                                        }
-                                    });
-
-                                }
-                                else if (prospectSaved.type_form == "eduhorizons") {
+                                if (prospectSaved.type_form == "eduhorizons") {
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong></p>" +
@@ -382,6 +356,63 @@ Best regards.
                                     })
 
 
+                                } else if (prospectSaved.type_form == "estya") {
+                                    let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
+                                    temp = temp.replace('eMailduProSpect', userCreated.email_perso)
+                                    temp = temp.replace('oRiGin', origin[0])
+
+                                    temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
+
+                                    let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
+
+                                    let mailOptions = {
+                                        from: "contact@estya.com",
+                                        to: userCreated.email_perso,
+                                        subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
+                                        html: htmlmail,
+                                        attachments: [{
+                                            filename: 'Image1.png',
+                                            path: 'assets/Image1.png',
+                                            cid: 'Image1' //same cid value as in the html img src
+                                        }]
+                                    };
+
+                                    transporterEstya.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.error(error);
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    if (prospectSaved.type_form == "estya") {
+                                        let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
+                                        temp = temp.replace('eMailduProSpect', userCreated.email_perso)
+                                        temp = temp.replace('oRiGin', origin[0])
+
+                                        temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
+
+                                        let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
+
+                                        let mailOptions = {
+                                            from: "ims@intedgroup.com",
+                                            to: userCreated.email_perso,
+                                            subject: 'Inscription enregistrée',
+                                            html: htmlmail,
+                                            attachments: [{
+                                                filename: 'Image1.png',
+                                                path: 'assets/Image1.png',
+                                                cid: 'Image1' //same cid value as in the html img src
+                                            }]
+                                        };
+
+                                        transporterINTED.sendMail(mailOptions, function (error, info) {
+                                            if (error) {
+                                                console.error(error);
+                                            }
+                                        });
+
+                                    }
                                 }
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
@@ -647,6 +678,23 @@ app.put("/update", (req, res, next) => {
                 .then((userUpdated) => {
                     Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                         .then((prospectsFromDb) => {
+                            let detail = "Mise à jour des informations"
+                            if (req.body.detail)
+                                detail = req.body.detail
+                            let token = jwt.decode(req.header("token"))
+                            //prospectUpdated.user_id = userUpdated
+                            //prospectsFromDb.user_id = userData
+                            let hl = new HistoriqueLead({
+                                lead_before: prospectUpdated,
+                                lead_after: prospectsFromDb,
+                                user_before: userUpdated,
+                                user_after: userData,
+                                lead_id: prospectsFromDb._id,
+                                user_id: token.id,
+                                detail,
+                                date_creation: new Date()
+                            })
+                            hl.save().then(h => { console.log(h) })
                             res.status(201).send(prospectsFromDb)
                         })
                         .catch((error) => { console.error(error); res.status(500).send(error.message); });
@@ -669,8 +717,23 @@ app.put("/updateV2", (req, res, next) => {
             ...req.body
         })
         .then((prospectUpdated) => {
+            console.log('NAN')
             Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                 .then((prospectsFromDb) => {
+                    let detail = "Mise à jour des informations"
+                    if (req.body.detail)
+                        detail = req.body.detail
+                    let token = jwt.decode(req.header("token"))
+                    let hl = new HistoriqueLead({
+                        lead_before: prospectUpdated,
+                        lead_after: prospectsFromDb,
+                        lead_id: prospectsFromDb._id,
+                        user_id: token.id,
+                        detail,
+                        date_creation: new Date()
+                    })
+                    console.log(hl)
+                    hl.save().then(h => { console.log(h) })
                     res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error.message); });
@@ -1570,6 +1633,12 @@ app.get('/docChecker/:input', (req, res) => {
                 res.send({ data: doc, type: "Prospect" })
             })
         }
+    })
+})
+
+app.get('/getAllHistoriqueFromLeadID/:lead_id', (req, res) => {
+    HistoriqueLead.find({ lead_id: req.params.lead_id }).sort({ date_creation: -1 }).populate('lead_id').populate('user_id').then(data => {
+        res.send(data)
     })
 })
 

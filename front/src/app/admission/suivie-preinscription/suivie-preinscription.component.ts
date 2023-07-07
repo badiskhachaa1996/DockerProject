@@ -351,7 +351,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   updateValue(label) {
     let dic = { _id: this.ProspectConnected._id }
     dic[label] = this.ProspectConnected[label]
-    this.admissionService.updateV2(dic).subscribe(data => {
+    this.admissionService.updateV2(dic,"Mis à jour du suivi Suivi").subscribe(data => {
       console.log(data, data[label], "Succès")
     })
   }

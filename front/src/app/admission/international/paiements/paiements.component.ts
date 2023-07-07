@@ -37,7 +37,7 @@ export class PaiementsComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-  
+
   documentDropdown = [
     { label: "Inscription", value: "inscription" },
     { label: "Préinscription", value: "preinscription" },
@@ -704,7 +704,7 @@ export class PaiementsComponent implements OnInit {
       statut_payement = "Oui";
       phase_candidature = "En phase d'orientation consulaire"
     }
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }, "Modification des paiements Paiements").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
       this.showPaiement = null

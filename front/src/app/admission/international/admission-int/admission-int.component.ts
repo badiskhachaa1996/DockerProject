@@ -134,8 +134,13 @@ export class AdmissionIntComponent implements OnInit {
 
   }
 
+  deletedoc(idx) {
+    this.showDocuments.documents_administrative.splice(idx, 1)
+    this.saveDoc()
+  }
+
   saveDoc() {
-    this.admissionService.updateV2({ _id: this.showDocuments._id, documents_administrative: this.showDocuments.documents_administrative }).subscribe(() => { })
+    this.admissionService.updateV2({ _id: this.showDocuments._id, documents_administrative: this.showDocuments.documents_administrative }, "Modification des documents administrative").subscribe(() => { })
   }
 
   downloadFile(id, i) {
@@ -446,7 +451,7 @@ export class AdmissionIntComponent implements OnInit {
     return [year, month, day].join('-');
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value },"Modification des informations Admission").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[this.showTraitement.type_form].splice(this.prospects[this.showTraitement.type_form].indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
@@ -767,7 +772,7 @@ export class AdmissionIntComponent implements OnInit {
       })
     }
 
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }).subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature },"Modification des paiements Admission").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
