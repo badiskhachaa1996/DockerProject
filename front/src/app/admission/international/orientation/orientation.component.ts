@@ -373,7 +373,7 @@ export class OrientationComponent implements OnInit {
     this.traitementForm.patchValue({ validated_cf: prospect.validated_cf == "true" })
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value }, "Traitement du dossier Orientation").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[data.type_form].splice(this.prospects[data.type_form].indexOf(this.showTraitement), 1, data)
       if (willClose) {

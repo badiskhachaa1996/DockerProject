@@ -362,7 +362,6 @@ io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
     LISTTOJOIN = [user._id, user.role];
-    console.log('imagine')
     User.findById(user._id).then(userdata => {
       userdata.roles_list.forEach(s => {
         LISTTOJOIN.push(s.module, `${s.module} - ${s.role}`)

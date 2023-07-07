@@ -547,7 +547,41 @@
 
 
     </div>
-
+    <div class="col-12 card" *ngIf="leadHistorique">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="leadHistorique = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="leadHistorique?.user_id" class="text-center" style="font-weight: bold;"> Historique de : {{
+            leadHistorique?.user_id?.firstname }} {{
+            leadHistorique?.user_id?.lastname | uppercase }}
+        </h3>
+        <p-table #dthisto dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="listHistorique"
+            [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" [globalFilterFields]="['detail']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Date et Heure</th>
+                    <th>Detail</th>
+                    <th>Contribution</th>
+                    <th>Agent</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-histo>
+                <tr>
+                    <td>{{histo.date_creation | date:"mediumDate"}}</td>
+                    <td>{{histo.detail}}</td>
+                    <td>{{getDiff(histo)}}</td>
+                    <td>{{histo?.user_id?.lastname|uppercase}} {{histo?.user_id?.firstname|titlecase}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
     <!-- partie ajout de document -->
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
@@ -838,6 +872,9 @@
                                         aria-hidden="true" (click)="delete(prospect)"> </i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-envelope mr-2"
                                         aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
+                                    <i pTooltip="Voir l'historique des modifications" tooltipPosition="bottom"
+                                        class="pi pi-align-center mr-2" (click)="initHistorique(prospect);scrollToTop()"
+                                        aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
