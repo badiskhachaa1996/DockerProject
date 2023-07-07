@@ -806,11 +806,22 @@ export class SourcingComponent implements OnInit {
     let keys = Object.keys(histo.lead_after)
     let r = ""
     keys.forEach(k => {
-      if (histo.lead_after[k] && histo.lead_before[k] &&(histo.lead_after[k].toString() != histo.lead_before[k].toString()))
+      if (histo.lead_after[k] && histo.lead_before[k] && (histo.lead_after[k].toString() != histo.lead_before[k].toString()))
         r = r + `${k} : ${histo.lead_before[k]} -> ${histo.lead_after[k]}\n`
     })
+    if (histo.user_after && histo.user_before) {
+      let keysUser = Object.keys(histo.user_after)
+      keysUser.forEach(k => {
+        if (histo.user_after[k] && histo.user_before[k] && (histo.user_after[k].toString() != histo.user_before[k].toString()))
+          r = r + `${k} : ${histo.user_before[k]} -> ${histo.user_after[k]}\n`
+      })
+    }
+
     if (r == "")
       r = "Aucune modification n'a été trouvé, cela veut dire que c'est les données personnelles de l'user et non le dossier qui a été changé"
+    r = r.replace('type_form', 'Ecole').replace('firstname', 'Prénom')
+      .replace('lastname', 'Nom').replace('_', ' ').replace('campus choix 1', "Campus")
+
     return r
   }
 

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema({
     lead_before: { type: mongoose.Schema.Types.Mixed },
     lead_after: { type: mongoose.Schema.Types.Mixed },
+    user_before: { type: mongoose.Schema.Types.Mixed },
+    user_after: { type: mongoose.Schema.Types.Mixed },
     lead_id: { type: mongoose.Schema.Types.ObjectId, ref: "prospect", },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", },
     detail: { type: String },
