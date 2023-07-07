@@ -327,21 +327,9 @@
                                 formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
-                            <label For="campus_choix_1">Campus 1er choix</label>
+                            <label For="campus_choix_1">Campus</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_1"></p-dropdown>
-
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="campus_choix_2">Campus 2ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_2"></p-dropdown>
-                        </div>
-                        <div class="field md:col-6 col-12">
-                            <label For="campus_choix_3">Campus 3ème choix</label>
-                            <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
-                                formControlName="campus_choix_3"></p-dropdown>
-                            <!--<input pInputText formControlName="campus_choix_3" />-->
 
                         </div>
                         <div class="field col-12">
@@ -725,12 +713,6 @@
                                 <th pSortableColumn="user_id.pays_adresse" scope="col" style="text-align: center;">
                                     Pays de résidence <p-sortIcon field="user_id.pays_adresse"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
-                                    Adresse Email <p-sortIcon field="user_id.email_perso"></p-sortIcon>
-                                </th>
-                                <th pSortableColumn="user_id.phone" scope="col" style="text-align: center;">
-                                    Numéro de téléphone <p-sortIcon field="user_id.phone"></p-sortIcon>
-                                </th>
                                 <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                                     Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                                 </th>
@@ -767,9 +749,6 @@
                                 <th pSortableColumn="phase_candidature" scope="col" style="text-align: center;">
                                     Phase de Candidature <p-sortIcon field="phase_candidature"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
-                                    Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
-                                </th>
                                 <th *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'" pSortableColumn="action"
                                     scope="col" style="text-align: center;">
                                     Action
@@ -803,15 +782,6 @@
                                 </td>
                                 <td *ngIf="prospect?.user_id">
                                     {{ prospect?.user_id?.pays_adresse }}
-                                </td>
-                                <td *ngIf="prospect?.user_id?.email_perso">
-                                    {{ prospect?.user_id?.email_perso }}
-                                </td>
-                                <td *ngIf="!prospect?.user_id?.email_perso">
-                                    {{ prospect?.user_id?.email }}
-                                </td>
-                                <td *ngIf="prospect?.user_id">
-                                    {{ prospect?.user_id?.indicatif }} {{ prospect?.user_id?.phone }}
                                 </td>
                                 <td>
                                     {{ prospect.campus_choix_1 }}
@@ -859,9 +829,6 @@
                                 </td>
                                 <td>
                                     {{ prospect.phase_candidature }}
-                                </td>
-                                <td>
-                                    {{ prospect.rentree_scolaire }}
                                 </td>
                                 <td *ngIf="AccessLevel=='Super-Admin' || AccessLevel=='Admin'">
                                     <i pTooltip="Affecter le lead" tooltipPosition="bottom" class="pi pi-search mr-2"

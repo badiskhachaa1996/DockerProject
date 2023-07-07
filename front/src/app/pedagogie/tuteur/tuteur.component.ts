@@ -322,7 +322,7 @@ export class TuteurComponent implements OnInit {
     const data: Blob = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
     });
-    FileSaver.saveAs(data, "sourcing" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+    FileSaver.saveAs(data, "tuteur" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
 
