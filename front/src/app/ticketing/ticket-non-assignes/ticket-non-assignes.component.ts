@@ -65,7 +65,7 @@ export class TicketNonAssignesComponent implements OnInit {
   }
   memberSelected: string;
   onAffectation() {
-    this.TicketService.update({ ...this.formAffectation.value }).subscribe(data => {
+    this.TicketService.update({ ...this.formAffectation.value, statut: "En attente de traitement" }).subscribe(data => {
       let d = new Date()
       let month = (d.getUTCMonth() + 1).toString()
       if (d.getUTCMonth() + 1 < 10)

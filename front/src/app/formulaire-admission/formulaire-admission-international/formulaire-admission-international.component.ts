@@ -594,7 +594,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       ((response) => {
         if (response.success) {
           this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
-            console.log(serviceAdmission)
+            console.log(response,serviceAdmission)
 
             this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
               this.NotifService.newNotif(notif)
@@ -604,7 +604,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
             if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'success', summary: 'The request for admission was sent', detail: "Check your email for login details" });
             else this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-            this.getFilesAccess(response.dataUser._id, response.token, response.dataProspect._id)
+            this.getFilesAccess(response.dataUser._id, response.token, response.prospect._id)
           })
         } else {
           if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'error', summary: 'Unable to finalize pre-registration', detail: "Your email may already be in use" });

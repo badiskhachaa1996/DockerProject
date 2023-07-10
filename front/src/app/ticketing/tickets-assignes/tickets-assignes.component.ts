@@ -131,7 +131,10 @@ export class TicketsAssignesComponent implements OnInit {
   }
 
   decline() {
-    this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "En attente de traitement", date_revert: new Date(), user_revert: this.isDecline.agent_id._id, agent_id: null, isAffected: null }).subscribe(data => {
+    let user_revert = this.token.id
+    if (this.isDecline.agent_id.length != 0)
+      user_revert = this.isDecline.agent_id[this.isDecline.agent_id.length - 1]._id
+    this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "En attente de traitement", date_revert: new Date(), user_revert: this.isDecline.agent_id[this.isDecline.agent_id.length - 1]._id, agent_id: null, isAffected: null }).subscribe(data => {
       this.Socket.NewNotifV2('Ticketing - Super-Admin', `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`)
       this.TicketService.sendMailRefus({ agent_name: `${this.USER.lastname} ${this.USER.firstname}`, motif: this.formDecline.value.justificatif }).subscribe(() => { console.log('r') })
       this.NotifService.createV2(new Notification(null, null, false, `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`, new Date(), null, this.isDecline?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
