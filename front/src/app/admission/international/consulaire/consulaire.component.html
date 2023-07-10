@@ -83,12 +83,12 @@
                                 formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
-                            <label For="campus_choix_1">Campus 1er choix</label>
+                            <label For="campus_choix_1">Campus</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_1"></p-dropdown>
 
                         </div>
-                        <div class="field md:col-6 col-12">
+                        <!--<div class="field md:col-6 col-12">
                             <label For="campus_choix_2">Campus 2ème choix</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_2"></p-dropdown>
@@ -98,7 +98,7 @@
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_3"></p-dropdown>
 
-                        </div>
+                        </div>-->
                         <div class="field col-12">
                             <label For="formation">Ecole</label>
                             <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
@@ -1016,9 +1016,9 @@
 
             <h5>Choix académique</h5>
             <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
-            <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
-            <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
-            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
+            <p>Campus: {{ selectedProspect?.campus_choix_1 }}</p>
+            <!--<p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
+            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>-->
             <p>Formation : {{ selectedProspect?.formation }}</p>
             <p>Programme : {{ selectedProspect?.programme }}</p>
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>
