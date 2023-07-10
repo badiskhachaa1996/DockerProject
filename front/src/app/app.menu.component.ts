@@ -115,29 +115,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -3961,29 +3955,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4025,29 +4013,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4084,25 +4066,19 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
                                 }
                             ]
                         })
@@ -4112,20 +4088,14 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        }
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
                         })

@@ -133,7 +133,7 @@
                     {{ticket?.agent_id?.firstname | titlecase}} {{ticket?.agent_id?.lastname | uppercase}}
                 </td>
                 <td>
-                                        <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
+                    <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
                         [value]="'Aucun status définit'">
                     </p-tag>
                     <p-tag *ngIf="ticket.statut == 'En attente de traitement'" icon="pi pi-eye-slash" severity="info"
@@ -145,7 +145,8 @@
                     <p-tag *ngIf="ticket.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
                         [value]="ticket.statut">
                     </p-tag>
-                    <p-tag *ngIf="ticket.statut == 'Traité'" icon="pi pi-check-square" severity="success" [value]="ticket.statut">
+                    <p-tag *ngIf="ticket.statut == 'Traité'" icon="pi pi-check-square" severity="success"
+                        [value]="ticket.statut">
                     </p-tag>
                 </td>
                 <td>
@@ -171,7 +172,7 @@
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.date_affec_accep}}</td>
+                <td>{{ticket.date_fin_traitement|date:'mediumDate'}}</td>
                 <td>{{ticket.note}}</td>
                 <td>{{ticket.note_assignation}}</td>
                 <td>{{ticket.date_limite | date:'mediumDate'}}</td>
@@ -179,7 +180,7 @@
         </ng-template>
     </p-table>
     </td>
-</tr>
+    </tr>
     <tr>
         <td colspan="10">
             <h5>Documents</h5>
