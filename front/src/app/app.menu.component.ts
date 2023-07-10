@@ -38,7 +38,7 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 export class AppMenuComponent implements OnInit {
 
     token: any;
-    items: MenuItem[];
+    items: MenuItem[] = [];
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
