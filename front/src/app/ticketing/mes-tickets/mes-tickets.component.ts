@@ -98,7 +98,8 @@ export class MesTicketsComponent implements OnInit {
       })
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
-        formData.append('ticket_id', data.doc._id)
+        //ERREUR ICI
+        formData.append('ticket_id', this.TicketForm.value._id)
         formData.append('document_id', documents[idx]._id)
         formData.append('file', element)
         formData.append('path', element.name)

@@ -34,7 +34,7 @@ export class TicketsAssignesComponent implements OnInit {
   ticketTraiter: Ticket;
   TicketForm = new FormGroup({
     note: new FormControl(''),
-    documents: new FormControl([]),
+    documents_service: new FormControl([]),
     statut: new FormControl(''),
     _id: new FormControl('', Validators.required)
   })
@@ -58,13 +58,13 @@ export class TicketsAssignesComponent implements OnInit {
     if (this.TicketForm.value.statut == 'Traité')
       date_fin_traitement = new Date()
 
-    let documents = this.TicketForm.value.documents
-    if (!documents)
-      documents = []
+    let documents_service = this.TicketForm.value.documents_service
+    if (!documents_service)
+      documents_service = []
     this.uploadedFiles.forEach(element => {
-      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+      documents_service.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents }).subscribe(data => {
+    this.TicketService.update({ ...this.TicketForm.value, date_fin_traitement, documents_service }).subscribe(data => {
       if (this.TicketForm.value.statut != this.ticketTraiter.statut) {
         this.Socket.NewNotifV2('Ticketing - Super-Admin', `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`)
         this.NotifService.createV2(new Notification(null, null, false, `Le ticket ${this.ticketTraiter.customid} a changé de statut, l'état actuel est ${this.TicketForm.value.statut}`, new Date(), null, this.ticketTraiter?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
@@ -82,8 +82,8 @@ export class TicketsAssignesComponent implements OnInit {
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du Ticket avec succès' })
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
-        formData.append('ticket_id', data.doc._id)
-        formData.append('document_id', documents[idx]._id)
+        formData.append('ticket_id', this.TicketForm.value._id)
+        formData.append('document_id', documents_service[idx]._id)
         formData.append('file', element)
         formData.append('path', element.name)
         this.TicketService.addFile(formData).subscribe(data => {
@@ -133,9 +133,9 @@ export class TicketsAssignesComponent implements OnInit {
   decline() {
     this.TicketService.update({ _id: this.isDecline._id, justificatif: this.formDecline.value.justificatif, isReverted: true, statut: "En attente de traitement", date_revert: new Date(), user_revert: this.isDecline.agent_id._id, agent_id: null, isAffected: null }).subscribe(data => {
       this.Socket.NewNotifV2('Ticketing - Super-Admin', `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`)
-      this.TicketService.sendMailRefus({ agent_name: `${this.USER.lastname} ${this.USER.firstname}`, motif: this.formDecline.value.justificatif }).subscribe(()=>{console.log('r')})
-      this.NotifService.createV2(new Notification(null, null, false,  `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`, new Date(), null, this.isDecline?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
-        
+      this.TicketService.sendMailRefus({ agent_name: `${this.USER.lastname} ${this.USER.firstname}`, motif: this.formDecline.value.justificatif }).subscribe(() => { console.log('r') })
+      this.NotifService.createV2(new Notification(null, null, false, `L'agent ${this.USER.lastname} ${this.USER.firstname} a refusé le ticket pour le motif ${this.formDecline.value.justificatif}`, new Date(), null, this.isDecline?.sujet_id?.service_id?._id), 'Ticketing', "Super-Admin").subscribe(test => { console.log(test) })
+
       this.formDecline.reset()
 
       this.tickets.splice(this.tickets.indexOf(this.isDecline), 1)
@@ -186,9 +186,9 @@ export class TicketsAssignesComponent implements OnInit {
     return `${day}J ${hours}H${minutes}m`
   }
 
-  getTraitement(temp_date) {
-    let date_creation = new Date(temp_date).getTime()
-    let total = new Date().getTime() - date_creation
+  getTraitement(ticket: Ticket) {
+    let date_creation = new Date(ticket.date_ajout).getTime()
+    let total = new Date(ticket.date_fin_traitement).getTime() - date_creation
     let day = Math.floor(total / 86400000)
     total = total % 86400000
     let hours = Math.floor(total / 3600000)
