@@ -15,7 +15,7 @@ import { SujetService } from 'src/app/services/sujet.service';
 export class ListTicketsRefuseComponent implements OnInit {
 
 
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private UserService: AuthService, private SujetService:SujetService) { }
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private UserService: AuthService, private SujetService: SujetService) { }
   tickets: Ticket[] = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
@@ -71,7 +71,7 @@ export class ListTicketsRefuseComponent implements OnInit {
 
   memberSelected: string;
   onAffectation() {
-    this.TicketService.update({ ...this.formAffectation.value }).subscribe(data => {
+    this.TicketService.update({ ...this.formAffectation.value, statut: "En attente de traitement" }).subscribe(data => {
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })

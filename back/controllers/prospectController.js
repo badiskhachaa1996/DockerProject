@@ -385,7 +385,6 @@ Best regards.
 
                                 }
                                 else {
-                                    if (prospectSaved.type_form == "estya") {
                                         let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
                                         temp = temp.replace('eMailduProSpect', userCreated.email_perso)
                                         temp = temp.replace('oRiGin', origin[0])
@@ -413,7 +412,7 @@ Best regards.
                                         });
 
                                     }
-                                }
+                                
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
 
