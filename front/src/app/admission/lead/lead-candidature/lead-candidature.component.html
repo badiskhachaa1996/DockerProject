@@ -185,11 +185,11 @@
                 <button pButton (click)="pageNumber=3" label="Revenir" autoWidth="false"
                     [style]="{'width':'100%'}"></button>
             </div>
-            <div class="col-6" *ngIf="candidature">
+            <div class="col-6" *ngIf="!candidature">
                 <button pButton (click)="pageNumber=5" label="Suivant" autoWidth="false"
                     [style]="{'width':'100%'}"></button>
             </div>
-            <div class="col-6" *ngIf="!candidature">
+            <div class="col-6" *ngIf="candidature">
                 <button pButton (click)="saveCandidature()" label="Valider la candidature" autoWidth="false"
                     [style]="{'width':'100%'}"></button>
             </div>
