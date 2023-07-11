@@ -36,7 +36,7 @@
                         {{pv.nom}}
                     </td>
                     <td>
-                        <i (click)="initRenamePV(pv)" pTooltip="Renommer le pv" style="margin-left: 2%;"
+                        <i (click)="initRenamePV(pv);scrollToTop()" pTooltip="Renommer le pv" style="margin-left: 2%;"
                         tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"></i>
                         <i (click)="loadPV(pv)" pTooltip="Charger le pv" style="margin-left: 2%;"
                             tooltipPosition="bottom" class="pi pi-download" aria-hidden="true"></i>
