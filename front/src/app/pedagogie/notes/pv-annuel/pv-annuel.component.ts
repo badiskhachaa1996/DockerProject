@@ -203,7 +203,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     } else {
       let moy_sem1 = this.calculMoyenne(notes['Semestre 1'], 'Semestre 1')
       let moy_sem2 = this.calculMoyenne(notes['Semestre 2'], 'Semestre 2')
-      return (moy_sem1 + moy_sem2)/2
+      return (moy_sem1 + moy_sem2) / 2
     }
 
   }
@@ -321,6 +321,17 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     });
     FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+  showRenamePV = null
+
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
   }
 
 }

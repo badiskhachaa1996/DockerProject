@@ -158,6 +158,7 @@ export class PvAppreciationComponent implements OnInit {
     });
   }
 
+
   regeneratePV() {
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
       this.cols = data.cols
@@ -193,5 +194,14 @@ export class PvAppreciationComponent implements OnInit {
       })
     })
   }
+  showRenamePV = null
 
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
+  }
 }
