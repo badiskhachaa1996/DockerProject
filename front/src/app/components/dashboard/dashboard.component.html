@@ -50,11 +50,11 @@
         <div class="card">
             <div class="grid">
                 <div class="col-6 md:col-3">
-                    <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2"></button> <br>
-                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause" class="p-button-warning mb-2"></button> <br></span>
-                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()" label="Fin de la pause" class="p-button-warning mb-2"></button> <br></span>
-                    <a href="#departAnticipe" (click)="selectedTabIndex = 5"><button  pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button></a> <br>
-                    <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"></button>
+                    <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2" [disabled]="dailyCheck != null"></button> <br>
+                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause" class="p-button-warning mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()" label="Fin de la pause" class="p-button-warning mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                    <a href="#departAnticipe" (click)="selectedTabIndex = 5" *ngIf="dailyCheck != null && dailyCheck.check_out == null"><button  pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button></a> <br *ngIf="dailyCheck != null && dailyCheck.check_out == null">
+                    <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
                 </div>
                 <div class="col-6 md:col-3">
                     <h6>Vous êtes arrivé au <br> travail à: <strong>{{dailyCheck?.check_in | date: 'HH:mm'}}</strong></h6>
@@ -154,7 +154,7 @@
                         </form>
                     </div>
 
-                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;" (click)="showFormAddCra = true;" *ngIf="dailyCheck != null"></button>
+                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;" (click)="showFormAddCra = true;" *ngIf="dailyCheck != null && !showFormAddCra"></button>
                     <div style="clear: both;"></div>
                     <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
@@ -342,18 +342,23 @@
 
                 <p-tabPanel header="Historique de pointage">
                     <!-- affichage du CRA d'un historique de pointage -->
-                    <h5>CRA du jour sélectionné</h5>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                    <div style="clear: both;"></div>
+
+                    <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
+                            <tr>
+                                <th>Cra du {{historiqueCraSelected.today}}</th>
+                            </tr>
                             <tr>
                                 <th>Durée</th>
                                 <th>Tâche</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-cra>
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
+                                <td>{{cra.number_minutes}}mn</td>
+                                <td>{{cra.task}}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
@@ -370,7 +375,7 @@
 
                     <!-- affichage de l'historique de pointage -->
                     <h5 class="mt-5">Historique de pointage</h5>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
@@ -381,15 +386,15 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-cra>
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
+                                <td>{{cra.today}}</td>
+                                <td>{{cra.check_in | date:'H:mm'}}</td>
+                                <td>{{cra.check_out | date:'H:mm'}}</td>
+                                <td>{{ cra.pause_timing }}mn</td>
+                                <td>{{ cra.taux_cra }}%</td>
                                 <td>
-                                    <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2"></button>
+                                    <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2" (click)="historiqueCraSelected = cra; showDailySelectedCra = true"></button>
                                 </td>
                             </tr>
                         </ng-template>

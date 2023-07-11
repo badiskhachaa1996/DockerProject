@@ -272,35 +272,77 @@
 		<div class="card">
 			<p-sidebar [(visible)]="showCra" [fullScreen]="true" [baseZIndex]="10000">
 				<h3 class="header">C.R.A</h3>
-				<p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<p-table [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
 					<ng-template pTemplate="header">
 						<tr>
-							<th>Date</th>
+							<th>Cra du {{historiqueCraSelected.today}}</th>
+						</tr>
+						<tr>
 							<th>Tâche</th>
 							<th>Durée</th>
-							<th>Action</th>
 						</tr>
 					</ng-template>
-					<ng-template pTemplate="body" let-actualite>
+					<ng-template pTemplate="body" let-cra>
 						<tr>
-							<td>test</td>
-							<td>test</td>
-							<td>test</td>
-							<td>test</td>
+							<td>{{cra.task}}</td>
+							<td>{{cra.number_minutes}}mn</td>
 						</tr>
 					</ng-template>
 					<ng-template pTemplate="emptymessage">
 						<tr>
-							<td colspan="4">Aucun CRA pour le moment.</td>
+							<td colspan="2">Aucun CRA pour le moment.</td>
 						</tr>
 					</ng-template>
 					<ng-template pTemplate="loadingbody">
 						<tr>
-							<td colspan="4">Chargement des CRA, merci de patienter...</td>
+							<td colspan="2">Chargement des CRA, merci de patienter...</td>
 						</tr>
 					</ng-template>
 				</p-table>
 			</p-sidebar>
+		</div>
+	</div>
+
+	<!-- Affichage de la list des CRA de l'utilisateur -->
+	<div class="col-12" *ngIf="showHistoriqueCra">
+		<div class="card">
+			<i class="pi pi-times-circle mb-2" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showHistoriqueCra = false"></i>
+			<div style="clear: both;"></div>
+
+			<p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Date</th>
+						<th>Heure Check in</th>
+						<th>Heure Check out</th>
+						<th>Heures pauses</th>
+						<th>Taux CRA</th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-cra>
+					<tr>
+						<td>{{cra.today}}</td>
+						<td>{{cra.check_in | date:'H:mm'}}</td>
+						<td>{{cra.check_out | date:'H:mm'}}</td>
+						<td>{{cra.pause_timing}}mn</td>
+						<td>{{cra.taux_cra}}%</td>
+						<td>
+							<button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2" (click)="historiqueCraSelected = cra; showCra = true"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="6">Vous n'avez aucun pointage enregistré pour le moment.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="6">Chargement de votre historique, merci de patienter...</td>
+					</tr>
+				</ng-template>
+			</p-table>
 		</div>
 	</div>
 
@@ -503,7 +545,7 @@
 							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
 							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="cursor: pointer; color: #F59E0B"></i>
 							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
-							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7" (click)="showCra = true;"></i>
+							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7" (click)="onGetHistoriqueCra(collaborateur.user_id?._id); showHistoriqueCra = true;"></i>
                         </td>
 					</tr>
 				</ng-template>
