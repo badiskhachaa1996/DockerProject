@@ -3,7 +3,7 @@
         <div class="col-12 grid">
             <label class="col-12">Nom du PV: </label>
             <input class="col-12" pInputText type="text" [(ngModel)]="showRenamePV.nom" autoWidth="false"
-            [style]="{'width':'100%'}" />
+                [style]="{'width':'100%'}" />
         </div>
         <div class="col-12">
             <button pButton label="Sauvegardez le nom" (click)="onRenamePV()" autoWidth="false"
@@ -36,8 +36,8 @@
                         {{pv.nom}}
                     </td>
                     <td>
-                        <i (click)="initRenamePV(pv)" pTooltip="Renommer le pv" style="margin-left: 2%;"
-                        tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"></i>
+                        <i (click)="initRenamePV(pv);scrollToTop()" pTooltip="Renommer le pv" style="margin-left: 2%;"
+                            tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"></i>
                         <i (click)="loadPV(pv,semestre)" pTooltip="Charger le pv" style="margin-left: 2%;"
                             tooltipPosition="bottom" class="pi pi-download" aria-hidden="true"></i>
                         <i (click)="delete(pv)" pTooltip="Supprimer le pv" style="margin-left: 2%;"
@@ -94,7 +94,8 @@
                 </tr>
                 <tr>
                     <th class="text-center" colspan="5">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols" [pEditableColumn]="col.coeff" pEditableColumnField="coeff">
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols" [pEditableColumn]="col.coeff"
+                        pEditableColumnField="coeff">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="col.coeff">
