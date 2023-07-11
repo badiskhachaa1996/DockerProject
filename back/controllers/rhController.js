@@ -9,7 +9,7 @@ const fs = require('fs');
 /** partie collaborateur */
 // recuperation de la liste des agents
 app.get('/get-agents', (req, res) => {
-    User.find({role: 'Agent'})
+    User.find({ $or: [{role: 'Agent'}, {role: 'Admin'}, {role: 'Responsable'}] })
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).send(error); });
 });
