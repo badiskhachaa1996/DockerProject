@@ -787,11 +787,11 @@
                                     {{ prospect.source }}
                                 </td>
 
-                                <td *ngIf="prospect.user_id">
+                                <td>
                                     {{ prospect?.user_id?.firstname | titlecase }}
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
-                                <td *ngIf="prospect.user_id">
+                                <td>
                                     {{ prospect?.user_id?.pays_adresse }}
                                 </td>
                                 <td *ngIf="prospect?.user_id?.email_perso">
@@ -800,7 +800,7 @@
                                 <td *ngIf="!prospect?.user_id?.email_perso">
                                     {{ prospect?.user_id?.email }}
                                 </td>
-                                <td *ngIf="prospect.user_id">
+                                <td>
                                     {{ prospect?.user_id?.indicatif }} {{ prospect?.user_id?.phone }}
                                 </td>
                                 <td>

@@ -2,10 +2,9 @@ const express = require("express");
 const { CandidatureLead } = require("../models/candidatureLead");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
-
+const fs = require("fs");
 app.post("/create", (req, res) => {
-    delete req.body._id
-    let f = new CandidatureLead({ ...req.body })
+    let f = new CandidatureLead({ ...req.body, signature: req.body._id + ".png" })
     f.save()
         .then((FFSaved) => {
             CandidatureLead.findById(FFSaved._id).populate('lead_id').then(newCandidature => {
@@ -16,7 +15,7 @@ app.post("/create", (req, res) => {
                                 console.error(err3);
                             }
                         });
-                    fs.writeFile("storage/signatureCandidature/" + data._id + ".png", req.body.signature, 'base64', function (err2) {
+                    fs.writeFile("storage/signatureCandidature/" + FFSaved._id + ".png", req.body.signature, 'base64', function (err2) {
                         if (err2) {
                             console.error(err2);
                         }
@@ -36,7 +35,7 @@ app.get("/getAll", (req, res, next) => {
 });
 
 app.get('/getByLead/:id', (req, res) => {
-    CandidatureLead.find({ lead_id: res.params.id }).populate('lead_id')
+    CandidatureLead.findOne({ lead_id: req.params.id }).populate('lead_id')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 
@@ -44,9 +43,12 @@ app.get('/getByLead/:id', (req, res) => {
 
 app.put("/update", (req, res) => {
     CandidatureLead.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
-        CandidatureLead.findById(doc._id).populate('lead_id').then(newCandidature => {
-            res.status(201).send(newCandidature)
-        })
+        if (doc)
+            CandidatureLead.findById(doc._id).populate('lead_id').then(newCandidature => {
+                res.status(201).send(newCandidature)
+            })
+        else
+            console.error(err); res.status(404).send({ ...req.body, err });
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 

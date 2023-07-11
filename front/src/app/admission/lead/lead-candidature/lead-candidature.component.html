@@ -66,11 +66,11 @@
             </div>
             <div class="field col-12 md:col-6">
                 <label>Mes points à améliorer</label>
-                <input pInputText type="text" formControlName="toWorkOn" />
+                <textarea pInputTextarea formControlName="toWorkOn"></textarea>
             </div>
             <div class="field col-12">
                 <label>Mes compétences (mon savoir faire)</label>
-                <input pInputText type="text" formControlName="skills" />
+                <textarea pInputTextarea formControlName="skills"></textarea>
             </div>
             <h5 class="col-12" style="text-align: center;">Parcours d'études et expériences professionelles</h5>
             <div class="field col-12 md:col-6">
@@ -92,7 +92,7 @@
             </div>
             <div class="field col-12">
                 <label>Ma vision à mid terme (10 ans)</label>
-                <input pInputText type="text" formControlName="courtterme10" />
+                <textarea pInputTextarea formControlName="courtterme10"></textarea>
             </div>
             <div class="col-6">
                 <button pButton (click)="pageNumber=1" label="Revenir" autoWidth="false"
@@ -155,38 +155,42 @@
                 entrée en formation, votre besoin, votre profil, votre niveau ainsi que votre degré de motivation</p>
             <div class="field col-12">
                 <label>Quelle est votre degré de motivation en arrivant en formation ?</label>
-                <p-slider formControlName="motivations" [min]="0" [max]="5"></p-slider>
+                <p-slider formControlName="motivations" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="field col-12">
                 <label>Qu'attendez-vous de la formation ?</label>
                 <textarea pInputTextarea formControlName="attentes"></textarea>
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12">
                 <label>Quelle est votre degré de motivation en arrivant en formation ?</label>
-                <p-slider formControlName="motivations" [min]="0" [max]="5"></p-slider>
+                <p-slider formControlName="motivations" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="field col-12">
                 <label>Concernant votre niveau actuel dans le domaine de la formation souhaitée ?</label>
-                <input pInputText type="text" formControlName="niveau_actuel" />
+                <p-slider formControlName="niveau_actuel" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="field col-12">
                 <label>Concernant votre compétences digitales ?</label>
-                <input pInputText type="text" formControlName="competences_digitales" />
+                <p-slider formControlName="competences_digitales" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="field col-12">
                 <label>Concernant votre capacité à travailler en équipe ?</label>
-                <input pInputText type="text" formControlName="competences_teams" />
+                <p-slider formControlName="competences_teams" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="field col-12">
                 <label>Concernant votre capacité à travailler en autonomie ?</label>
-                <input pInputText type="text" formControlName="competences_solo" />
+                <p-slider formControlName="competences_solo" [min]="0" [max]="5" [step]="1"></p-slider>
             </div>
             <div class="col-6">
                 <button pButton (click)="pageNumber=3" label="Revenir" autoWidth="false"
                     [style]="{'width':'100%'}"></button>
             </div>
-            <div class="col-6">
+            <div class="col-6" *ngIf="candidature">
                 <button pButton (click)="pageNumber=5" label="Suivant" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="col-6" *ngIf="!candidature">
+                <button pButton (click)="saveCandidature()" label="Valider la candidature" autoWidth="false"
                     [style]="{'width':'100%'}"></button>
             </div>
         </form>

@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     phone: { type: String },
     email: { type: String },
     adresse: { type: String },
-    lead_id: { type: mongoose.Schema.Types.ObjectId, ref: 'prospect', required: false },
+    lead_id: { type: mongoose.Schema.Types.ObjectId, ref: 'prospect', required: true },
     isPMR: { type: Boolean, default: false },
     PMRneedHelp: { type: Boolean, default: false },
     qualites: { type: String },

@@ -21,7 +21,7 @@ export class LeadCandidatureComponent implements OnInit {
   candidature: CandidatureLead
   boolSelect = [
     { label: "Oui", value: true },
-    { label: "Non", valie: false }
+    { label: "Non", value: false }
   ]
   niveauSelect = [
     { label: "Débutant(e)", value: "Débutant(e)" },
@@ -33,6 +33,7 @@ export class LeadCandidatureComponent implements OnInit {
     prenom: new FormControl(''),
     date_naissance: new FormControl(''),
     nationalite: new FormControl(''),
+    phone: new FormControl(''),
     email: new FormControl(''),
     adresse: new FormControl(''),
     lead_id: new FormControl(''),
@@ -79,19 +80,29 @@ export class LeadCandidatureComponent implements OnInit {
   ngOnInit(): void {
     this.LeadService.getPopulate(this.ID).subscribe(p => {
       this.PROSPECT = p
+      this.CandidatureService.getByLead(this.ID).subscribe(c => {
+        if (c) {
+          this.candidature = c
+          this.pageNumber = 0
+        } else {
+          this.initCandidature()
+        }
+      })
     })
-    this.CandidatureService.getByLead(this.ID).subscribe(c => {
-      if (c) {
-        this.candidature = c
-        this.pageNumber = 0
-      } else {
-        this.initCandidature()
-      }
-    })
+
+  }
+  convertDate(date: Date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
   initCandidature() {
     if (this.candidature) {
-      this.formCandidature.patchValue({ ...this.candidature })
+      this.formCandidature.patchValue({ ...this.candidature, date_naissance: this.convertDate(this.candidature.date_naissance) })
     } else {
       let user: User = this.PROSPECT.user_id
       this.formCandidature.patchValue({
@@ -100,20 +111,20 @@ export class LeadCandidatureComponent implements OnInit {
         email: user.email_perso,
         nationalite: user.nationnalite,
         phone: user.indicatif + " " + user.phone,
-        date_naissance: this.PROSPECT.date_naissance,//TODO
+        date_naissance: this.convertDate(this.PROSPECT.date_naissance),//TODO
         formation: this.PROSPECT.formation,
         campus: this.PROSPECT.campus_choix_1,
         rentree_scolaire: this.PROSPECT.rentree_scolaire,
-        isPMR: new FormControl(false),
-        PMRneedHelp: new FormControl(false),
-        niveau: new FormControl("Intermédiaire"),
-        suivicours: new FormControl(false),
-        acceptRythme: new FormControl(false),
-        motivations: new FormControl(2),
-        niveau_actuel: new FormControl(2),
-        competences_digitales: new FormControl(2),
-        competences_teams: new FormControl(2),
-        competences_solo: new FormControl(2),
+        isPMR: false,
+        PMRneedHelp: false,
+        niveau: "Intermédiaire",
+        suivicours: false,
+        acceptRythme: false,
+        motivations: 2,
+        niveau_actuel: 2,
+        competences_digitales: 2,
+        competences_teams: 2,
+        competences_solo: 2,
       })
     }
     this.pageNumber = 1
@@ -134,7 +145,7 @@ export class LeadCandidatureComponent implements OnInit {
           this.pageNumber = 0
         })
       } else {
-        this.CandidatureService.create({ ...this.formCandidature.value, date_creation: new Date(), signature: sign }).subscribe(newCandidature => {
+        this.CandidatureService.create({ ...this.formCandidature.value, date_creation: new Date(), signature: sign, lead_id: this.PROSPECT._id }).subscribe(newCandidature => {
           this.candidature = newCandidature
           this.pageNumber = 0
         })
