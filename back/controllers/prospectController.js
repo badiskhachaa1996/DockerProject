@@ -385,7 +385,6 @@ Best regards.
 
                                 }
                                 else {
-                                    if (prospectSaved.type_form == "estya") {
                                         let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
                                         temp = temp.replace('eMailduProSpect', userCreated.email_perso)
                                         temp = temp.replace('oRiGin', origin[0])
@@ -413,7 +412,7 @@ Best regards.
                                         });
 
                                     }
-                                }
+                                
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
 
@@ -715,7 +714,7 @@ app.put("/updateV2", (req, res, next) => {
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
-        })
+        }, { new: true })
         .then((prospectUpdated) => {
             console.log('NAN')
             Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
@@ -1641,6 +1640,24 @@ app.get('/getAllHistoriqueFromLeadID/:lead_id', (req, res) => {
         res.send(data)
     })
 })
+
+//Mise à jour d'un groupe de prospect
+app.put("/updateMany", (req, res, next) => {
+    let listIds = req.body._id
+    delete req.body._id
+    console.log(listIds)
+    Prospect.updateMany({_id:{ $in: listIds }},
+        {
+            ...req.body
+        }, { new: true })
+        .then(() => {
+            Prospect.find({_id:{ $in: listIds }}).populate("user_id").populate('agent_id').then(prospects=>{
+                res.status(201).send(prospects)
+            })
+
+        })
+        .catch((error) => { res.status(400).send(error.message); })
+});
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user
 

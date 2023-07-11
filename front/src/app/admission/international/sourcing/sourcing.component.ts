@@ -22,6 +22,7 @@ import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
 import { HistoriqueLead } from 'src/app/models/HistoriqueLead';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -239,7 +240,7 @@ export class SourcingComponent implements OnInit {
 
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
     private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
-    private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router) { }
 
   prospects: any[];
   dicEcole = {}
@@ -342,8 +343,8 @@ export class SourcingComponent implements OnInit {
   equipeSourcingList = [{ label: "Aucune", value: null }]
   dropdownFormation = []
   affectationForm: FormGroup = new FormGroup({
-    agent_sourcing_id: new FormControl(''),
-    team_sourcing_id: new FormControl(''),
+    agent_sourcing_id: new FormControl(null),
+    team_sourcing_id: new FormControl(null),
     date_sourcing: new FormControl(new Date()),
     phase_candidature: new FormControl("")
   })
@@ -825,6 +826,47 @@ export class SourcingComponent implements OnInit {
     return r
   }
 
+  selectedLeads: Prospect[] = []
+  showAffectationList = false
+
+  affectationFormList: FormGroup = new FormGroup({
+    agent_sourcing_id: new FormControl(null),
+    team_sourcing_id: new FormControl(null),
+    date_sourcing: new FormControl(new Date()),
+    phase_candidature: new FormControl("")
+  })
+  onRowSelect(event) {
+    if (this.selectedLeads.length != 0) {
+      this.showAffectationList = true
+      this.scrollToTop()
+    }
+
+  }
+
+  saveAffectationList() {
+    let listIds = []
+    this.selectedLeads.forEach(p => {
+      listIds.push(p._id)
+    })
+    let data = {
+      _id: listIds,
+      ...this.affectationFormList.value
+    }
+    if (data.agent_sourcing_id || data.team_sourcing_id)
+      data.phase_candidature = "En phase d'orientation scolaire"
+    this.admissionService.updateMany(data, "Affectation du dossier Sourcing").subscribe(prospects => {
+      prospects.forEach(newProspect => {
+        this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
+      })
+      this.showAffectationList = false
+      this.affectationFormList.reset()
+      this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
+    })
+  }
+
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
+  }
 
 
 }

@@ -358,6 +358,7 @@ app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
 app.use('/soc/mail', require('./controllers/mailController'))
 app.use('/soc/target', require('./controllers/targetController'))
+app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

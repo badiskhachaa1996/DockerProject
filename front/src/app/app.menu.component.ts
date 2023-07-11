@@ -22,7 +22,7 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 @Component({
     selector: 'app-menu',
     template: `
-        <p-panelMenu [model]="items"></p-panelMenu>
+        <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
         <!-- <div class="layout-menu-container">  
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
@@ -38,14 +38,15 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 export class AppMenuComponent implements OnInit {
 
     token: any;
-    items: MenuItem[];
-
+    items: MenuItem[] = [];
+    showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
         private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService) { }
 
     ngOnInit() {
         //Decoder le token
+        this.showMenu = false
         this.token = jwt_decode(localStorage.getItem('token'));
         // Récupération du user connecter
         this.userService.getPopulate(this.token.id).subscribe({
@@ -115,29 +116,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -3961,29 +3956,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4025,29 +4014,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4084,25 +4067,19 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
                                 }
                             ]
                         })
@@ -4112,20 +4089,14 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        }
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
                         })
@@ -4420,6 +4391,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
+                        this.showMenu = false
                         this.items = [
                             {
                                 label: "Informations personnelles",
@@ -4446,7 +4418,13 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
+                            {
+                                label: "Ma Candidature PDF",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-candidature/' + p._id]
+                            },
                         ]
+                        setTimeout(() => this.showMenu = true, 0);
                     })
                 }
                 if (services_list.includes('Mailing')) {
@@ -4499,6 +4477,7 @@ export class AppMenuComponent implements OnInit {
                 if (services_list.includes('CRM')) {
                     let role = service_dic['CRM']
                     this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(member => {
+                        this.showMenu = false
                         if (role == 'Super Admin') {
                             this.items.push(
                                 {
@@ -5003,9 +4982,12 @@ export class AppMenuComponent implements OnInit {
                                 ]
                             },)
                         }
+                        setTimeout(() => this.showMenu = true, 0);
                     })
 
                 }
+                setTimeout(() => this.showMenu = true, 0);
+                //this.showMenu=true
             },
             error: (error: any) => {
                 console.log(error);

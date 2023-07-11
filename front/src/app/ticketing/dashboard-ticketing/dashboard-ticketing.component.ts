@@ -89,7 +89,7 @@ export class DashboardTicketingComponent implements OnInit {
         en_attente: Math.trunc(data.reduce((total, next) => total + (next?.agent_id == null && next.statut != 'Traité' ? 1 : 0), 0)),
         en_traitement: Math.trunc(data.reduce((total, next) => total + (next?.agent_id != null && next.statut != 'Traité' ? 1 : 0), 0)),
         refuse: Math.trunc(data.reduce((total, next) => total + (next?.isReverted == true ? 1 : 0), 0)),
-        traite: Math.trunc(data.reduce((total, next) => total + (next.statut != 'Traité' ? 1 : 0), 0)),
+        traite: Math.trunc(data.reduce((total, next) => total + (next.statut == 'Traité' ? 1 : 0), 0)),
         attente_moyenne: this.getMoyenneAttente(data),
         traitement_moyen: this.getMoyenneTraitement(data)
       }

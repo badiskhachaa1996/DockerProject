@@ -278,9 +278,9 @@
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.date_affec_accep| date:'mediumDate'}}</td>
+                <td>{{ticket.date_fin_traitement| date:'mediumDate'}}</td>
                 <td>
-                    {{getTraitement(ticket.date_affec_accep)}}
+                    {{getTraitement(ticket)}}
                 </td>
                 <td>{{ticket.note}}</td>
                 <td>{{ticket.note_assignation}}</td>

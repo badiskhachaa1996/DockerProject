@@ -81,7 +81,7 @@ export class ListTicketsTraiteComponent implements OnInit {
 
   memberSelected: string;
   onAffectation() {
-    this.TicketService.update({ ...this.formAffectation.value }).subscribe(data => {
+    this.TicketService.update({ ...this.formAffectation.value, statut: "En attente de traitement" }).subscribe(data => {
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
