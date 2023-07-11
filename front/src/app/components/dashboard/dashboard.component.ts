@@ -256,7 +256,10 @@ export class DashboardComponent implements OnInit {
   formAddCra: FormGroup;
   showFormAddCra: boolean = false;
   clonedCras: { [s: string]: any } = {};
-  craPercent: number = 0;
+  craPercent: string = '0';
+  historiqueCra: DailyCheck[] = [];
+  historiqueCraSelected: DailyCheck;
+  showDailySelectedCra: boolean = false;
   //* end check in variables
 
   constructor(
@@ -377,6 +380,14 @@ export class DashboardComponent implements OnInit {
     this.formAddCra = this.formBuilder.group({
       cras: this.formBuilder.array([this.onCreateCraField()]),
     });
+
+    // recuperation de l'historique de pointage d'un collaborateur
+    this.dailyCheckService.getUserChecks(this.token.id)
+    .then((response) => {
+      this.historiqueCra = response;
+      console.log(response);
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   SCIENCE() {
@@ -598,8 +609,7 @@ export class DashboardComponent implements OnInit {
 
   //* Check methods
   // recuperation de l'utilisateur connecté
-  onGetUserConnectedInformation(): void
-  {
+  onGetUserConnectedInformation(): void {
     this.UserService.getPopulate(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
@@ -611,16 +621,15 @@ export class DashboardComponent implements OnInit {
   }
 
   // méthode de mise à jour du statut
-  onUpdateStatus(): void
-  {
+  onUpdateStatus(): void {
     const statut = this.formUpdateStatut.value.statut;
     this.UserService.pathUserStatut(statut, this.userConnected._id)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
-      this.onGetUserConnectedInformation();
-      this.showFormUpdateStatut = false;
-    })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
+        this.onGetUserConnectedInformation();
+        this.showFormUpdateStatut = false;
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
   }
 
   // verification et recuperation du dailyCheck
@@ -632,52 +641,59 @@ export class DashboardComponent implements OnInit {
         }
         this.dailyCheck = response;
 
-        // verification sur les boutons
-
-
-        // calcule du temps passé en pause
-        this.pauseTiming = 0;
-        this.dailyCheck?.pause.forEach((p) => {
-          if(p.out)
-          {
-            this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
-          } else {
-            this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
-          }
-        })
-
-        // calcule du temps passé au travail
-        this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
-        // Retrait du temps passé en pause
-        this.workingTiming = this.workingTiming - this.pauseTiming;
-        if(this.workingTiming < 60)
-        {
+        // verifie s'il y'a eu un checkout
+        if (response.check_out != null) {
+          // remise à zero des temps de travail
+          this.pauseTiming = 0;
+          this.craPercent = '0';
+          this.workingTiming = 0;
           this.workingHour = 0;
-          this.workingMinute = this.workingTiming;
+          this.workingMinute = 0;
+          this.dailyCheck.check_in = null;
+          this.dailyCheck.cra = [];
         } else {
-          this.workingHour = Math.floor(this.workingTiming / 60);
-          this.workingMinute = this.workingTiming % 60;
-        }
+          // calcule du temps passé en pause
+          this.pauseTiming = 0;
+          this.dailyCheck?.pause.forEach((p) => {
+            if (p.out) {
+              this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+            } else {
+              this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+            }
+          })
 
-        /* calcul du pourcentage de remplissage du CRA */
-        // recuperation du collaborateur
-        this.rhService.getCollaborateurByUserId(this.userConnected._id)
-        .then((collaborateur) => {
-          let totalTimeCra = 0;
-
-          this.dailyCheck?.cra.map((cra) => {
-            totalTimeCra += cra.number_minutes;
-          });
-
-          console.log(totalTimeCra);
-          // traduction du temps de minute en heure
-          if(totalTimeCra > 60)
-          {
-            totalTimeCra = totalTimeCra/60;
+          // calcule du temps passé au travail
+          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
+          // Retrait du temps passé en pause
+          this.workingTiming = this.workingTiming - this.pauseTiming;
+          if (this.workingTiming < 60) {
+            this.workingHour = 0;
+            this.workingMinute = this.workingTiming;
+          } else {
+            this.workingHour = Math.floor(this.workingTiming / 60);
+            this.workingMinute = this.workingTiming % 60;
           }
-        })
-        .catch((error) => { this.craPercent = 0; this.messageService.add({severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA'}) });
 
+          /* calcul du pourcentage de remplissage du CRA */
+          // recuperation du collaborateur
+          this.rhService.getCollaborateurByUserId(this.userConnected._id)
+            .then((collaborateur) => {
+              let totalTimeCra = 0;
+
+              this.dailyCheck?.cra.map((cra) => {
+                totalTimeCra += cra.number_minutes;
+              });
+
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+
+              this.craPercent = percent.toString().substring(0, 4)
+
+            })
+            .catch((error) => { this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
+        }
       })
       .catch((error) => { console.error(error) });
   }
@@ -701,7 +717,7 @@ export class DashboardComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({in: new Date()});
+    this.dailyCheck.pause.push({ in: new Date() });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
@@ -715,8 +731,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // méthode de fin de la pause
-  onStopPause(): void
-  {
+  onStopPause(): void {
     // taille du tableau de check
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
@@ -733,15 +748,14 @@ export class DashboardComponent implements OnInit {
   }
 
   // methôde de checkout
-  onCheckOut(): void 
-  {
+  onCheckOut(): void {
     this.dailyCheck.check_out = new Date();
+    this.dailyCheck.taux_cra = this.craPercent;
+    this.dailyCheck.pause_timing = this.pauseTiming;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-        // remise à zero du temps de pause
-        this.pauseTiming = 0;
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
       })
@@ -749,9 +763,8 @@ export class DashboardComponent implements OnInit {
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
-  onCreateCraField(): FormGroup
-  {
-    return(
+  onCreateCraField(): FormGroup {
+    return (
       this.formBuilder.group({
         tache: ['', Validators.required],
         duration: ['', Validators.required],
@@ -760,43 +773,39 @@ export class DashboardComponent implements OnInit {
   }
 
   // récupère les compétences
-  getCras(): FormArray
-  {
+  getCras(): FormArray {
     return this.formAddCra.get('cras') as FormArray;
   }
 
   // ajoute de nouveaux champs au formulaire
-  onAddCraField(): void
-  {
+  onAddCraField(): void {
     const newCraControl = this.onCreateCraField();
     this.getCras().push(newCraControl);
   }
 
   // suppression d'un champ de compétence
-  onDeleteCraField(i: number): void
-  {
+  onDeleteCraField(i: number): void {
     this.getCras().removeAt(i);
   }
 
   // ajout de CRA
-  onAddCra(): void
-  {
+  onAddCra(): void {
     const formValue = this.formAddCra.value;
     // ajout des données formulaire au dailycheck
 
     formValue.cras.forEach((cra) => {
-      this.dailyCheck.cra.push({task: cra.tache, number_minutes: cra.duration});
+      this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
     });
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
-      this.formAddCra.reset();
-      this.showFormAddCra = false;
-      // recuperation du check journalier
-      this.onCheckDailyCheck(response.user_id);
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+        this.formAddCra.reset();
+        this.showFormAddCra = false;
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
 
   // partie modification d'un cra
@@ -807,21 +816,20 @@ export class DashboardComponent implements OnInit {
   onRowEditSave(cra: any) {
 
     this.dailyCheck.cra.forEach((dCra) => {
-      if(dCra._id === cra._id)
-      {
+      if (dCra._id === cra._id) {
         dCra.task = cra.task;
         dCra.number_minutes = cra.number_minutes;
       }
     });
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
-      delete this.clonedCras[cra._id as string];
-      // recuperation du check journalier
-      this.onCheckDailyCheck(response.user_id);
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+        delete this.clonedCras[cra._id as string];
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
   }
 
   onRowEditCancel(cra: any, index: number) {
@@ -829,19 +837,17 @@ export class DashboardComponent implements OnInit {
   }
 
   // suppression d'un cra
-  onDeleteCra(id: string): void
-  {
-    if(confirm("Voulez-vous retirer ce compte rendu"))
-    {
+  onDeleteCra(id: string): void {
+    if (confirm("Voulez-vous retirer ce compte rendu")) {
       this.dailyCheck.cra = this.dailyCheck.cra.filter((cra) => cra._id != id);
 
       this.dailyCheckService.patchCheckIn(this.dailyCheck)
-      .then((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
-        // recuperation du check journalier
-        this.onCheckDailyCheck(response.user_id);
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+        .then((response) => {
+          this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+          // recuperation du check journalier
+          this.onCheckDailyCheck(response.user_id);
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
     }
   }
   //* end
