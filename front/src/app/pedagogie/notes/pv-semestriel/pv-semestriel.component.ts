@@ -229,4 +229,15 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
     FileSaver.saveAs(data, `pv_${this.SEMESTRE}_${this.classe.abbrv}_export_${new Date().toLocaleDateString("fr-FR")}.xlsx`);
 
   }
+
+  showRenamePV = null
+
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
+  }
 }
