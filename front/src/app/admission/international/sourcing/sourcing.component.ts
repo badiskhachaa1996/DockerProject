@@ -22,6 +22,7 @@ import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
 import { HistoriqueLead } from 'src/app/models/HistoriqueLead';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -239,7 +240,7 @@ export class SourcingComponent implements OnInit {
 
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
     private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
-    private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router) { }
 
   prospects: any[];
   dicEcole = {}
@@ -861,6 +862,10 @@ export class SourcingComponent implements OnInit {
       this.affectationFormList.reset()
       this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
     })
+  }
+
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
   }
 
 

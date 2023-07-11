@@ -4418,6 +4418,11 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
+                            {
+                                label: "Ma Candidature PDF",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-candidature/' + p._id]
+                            },
                         ]
                         setTimeout(() => this.showMenu = true, 0);
                     })
@@ -4982,7 +4987,6 @@ export class AppMenuComponent implements OnInit {
 
                 }
                 setTimeout(() => this.showMenu = true, 0);
-                console.log(this.items,services_list)
                 //this.showMenu=true
             },
             error: (error: any) => {

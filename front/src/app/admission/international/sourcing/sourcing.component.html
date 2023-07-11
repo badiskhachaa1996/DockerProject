@@ -29,8 +29,8 @@
         </form>
     </div>
     <div class="col-12 card" *ngIf="showAffectationList">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showAffectationList = null"
-            aria-hidden="true"> </i>
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="showAffectationList = null" aria-hidden="true"> </i>
         <h3 class="text-center" style="font-weight: bold;"> Affecter les leads
         </h3>
         <form class="p-fluid p-formgrid grid" [formGroup]="affectationFormList">
@@ -636,9 +636,10 @@
                     </div>
 
 
-                    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [(selection)]="selectedLeads"
-                        [value]="prospects[ecole.url_form]" [paginator]="true" [pageLinks]="5" selectionMode="single" 
-                        class="col-12" (onRowSelect)="onRowSelect($event)" (onHeaderCheckboxToggle)="onRowSelect($event)"
+                    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
+                        [(selection)]="selectedLeads" [value]="prospects[ecole.url_form]" [paginator]="true"
+                        [pageLinks]="5" selectionMode="single" class="col-12" (onRowSelect)="onRowSelect($event)"
+                        (onHeaderCheckboxToggle)="onRowSelect($event)"
                         [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                         responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
@@ -871,6 +872,9 @@
                                         aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
                                     <i pTooltip="Voir l'historique des modifications" tooltipPosition="bottom"
                                         class="pi pi-align-center mr-2" (click)="initHistorique(prospect);scrollToTop()"
+                                        aria-hidden="true"></i>
+                                    <i pTooltip="Voir la candidature" tooltipPosition="bottom"
+                                        class="pi pi-briefcase mr-2" (click)="goToCandidature(prospect._id)"
                                         aria-hidden="true"></i>
                                 </td>
                             </tr>
