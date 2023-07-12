@@ -385,7 +385,6 @@ export class DashboardComponent implements OnInit {
     this.dailyCheckService.getUserChecks(this.token.id)
     .then((response) => {
       this.historiqueCra = response;
-      console.log(response);
     })
     .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
@@ -642,7 +641,7 @@ export class DashboardComponent implements OnInit {
         this.dailyCheck = response;
 
         // verifie s'il y'a eu un checkout
-        if (response.check_out != null) {
+        if (response?.check_out != null) {
           // remise à zero des temps de travail
           this.pauseTiming = 0;
           this.craPercent = '0';
@@ -663,7 +662,7 @@ export class DashboardComponent implements OnInit {
           })
 
           // calcule du temps passé au travail
-          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
+          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
           // Retrait du temps passé en pause
           this.workingTiming = this.workingTiming - this.pauseTiming;
           if (this.workingTiming < 60) {
