@@ -3,6 +3,8 @@ const { CandidatureLead } = require("../models/candidatureLead");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 const fs = require("fs");
+const path = require('path');
+var mime = require('mime-types')
 app.post("/create", (req, res) => {
     let f = new CandidatureLead({ ...req.body, signature: req.body._id + ".png" })
     f.save()
@@ -26,6 +28,20 @@ app.post("/create", (req, res) => {
 
         })
         .catch((error) => { console.error(error); res.status(500).send(error); });
+})
+
+app.get('/downloadSignature/:id', (req, res) => {
+    let pathFile = "storage/signatureCandidature/" + req.params.id + ".png"
+    let file = fs.readFileSync(
+        pathFile,
+        { encoding: "base64" },
+        (err2) => {
+            if (err2) {
+                return console.error(err2);
+            }
+        }
+    );
+    res.send({ file: file, documentType: mime.contentType(path.extname(pathFile)) });
 })
 
 app.get("/getAll", (req, res, next) => {

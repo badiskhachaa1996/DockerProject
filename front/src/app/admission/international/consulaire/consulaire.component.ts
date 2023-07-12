@@ -507,7 +507,7 @@ export class ConsulaireComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
-    console.log(this.payementList)
+    if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
   }
 
@@ -682,6 +682,7 @@ export class ConsulaireComponent implements OnInit {
     this.showPaiement = prospect
     this.scrollToTop()
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList

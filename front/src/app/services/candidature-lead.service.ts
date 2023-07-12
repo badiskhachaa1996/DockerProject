@@ -29,6 +29,10 @@ export class CandidatureLeadService {
     return this.httpClient.delete<CandidatureLead>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  downloadSignature(id: string) {
+    let registreUrl = this.apiUrl + "downloadSignature/" + id;
+    return this.httpClient.get<{ file: string, documentType: string }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   getAll() {
     let registreUrl = this.apiUrl + "getAll";

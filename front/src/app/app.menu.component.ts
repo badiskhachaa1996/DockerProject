@@ -4986,6 +4986,66 @@ export class AppMenuComponent implements OnInit {
                     })
 
                 }
+                if(services_list.includes('Admission')){
+                    this.items.push(                        {
+                        label: 'Admission',
+                        icon: 'pi pi-fw pi-check-circle',
+                        items: [
+                            {
+                                label: 'Gestions des Leads',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: 'En attente de traitement',
+                                        icon: 'pi pi-spin pi-spinner',
+                                        routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement']
+                                    },
+                                    {
+                                        label: 'Dossiers traités',
+                                        icon: 'pi pi-check-circle',
+                                        routerLink: ['/gestion-preinscriptions-filter/traite']
+                                    },
+                                    {
+                                        label: 'Ajouter un dossier',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                ]
+                            },
+                            {
+                                label: 'Admission Dubai',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: "Nouvelle demande admission",
+                                        icon: 'pi pi-pencil',
+                                        routerLink: ['/admission/dubai-form']
+                                    },
+                                    {
+                                        label: "Liste des demandes d'admission",
+                                        icon: 'pi pi-file-excel',
+                                        routerLink: ['/admission/dubai-form-results']
+                                    },
+                                ]
+                            },
+                            {
+                                label: 'Dashboard',
+                                icon: 'pi pi-users',
+                                routerLink: ['/gestion-preinscriptions']
+                            },
+                            {
+                                label: 'Gestions des leads Intuns',
+                                icon: 'pi pi-user-plus',
+                                routerLink: ['/prospects-intuns']
+                            },
+                            {
+                                label: 'Gestion des participantes pour les événements',
+                                icon: 'pi pi-users',
+                                routerLink: ['/list-events']
+                            }
+                        ],
+                    })
+                }
                 setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true
             },
