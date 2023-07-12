@@ -6,10 +6,12 @@ export class Conge{
         public type_conge?: string,
         public date_debut?: Date,
         public date_fin?: Date,
+        public nombre_de_jours?: Number,
         public motif?: string,
         public justificatif?: string,
         public note?: string,
         public statut?: string,
         public note_decideur?: string,
+       
     ){}
 }
