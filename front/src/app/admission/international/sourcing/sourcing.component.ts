@@ -494,6 +494,7 @@ export class SourcingComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
   }
 

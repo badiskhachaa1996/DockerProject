@@ -696,6 +696,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.lengthPaiement = prospect?.payement?.length
   }
   savePaiement() {
