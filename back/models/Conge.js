@@ -14,12 +14,20 @@ const mongoose = require('mongoose');
  */
 
 const congeSchema = mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-    referent_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-    type_conge: { type: String, required: true },
-    date_debut: { type: String, required: true },
-    date_fin: { type: String, required: true },
-    statut: { type: String, required: false },
+
+    user_id:             { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
+    date_demande:        { type: Date, required: false },
+    type_conge:          { type: String, required: false},
+    date_debut:          { type: Date, required:false},
+    date_fin:            { type: Date, required:false},
+    nombre_jours:        { type: Number,required: false},	
+    motif:               { type: String, required: false},
+    justificatif:        { type: String, required: false},
+    note:                { type: String, required: false},
+    statut:              { type: String, required: false},
+    note_decideur:       { type: String, required: false},
+   	           
+
 });
 
 const Conge = mongoose.model('conge', congeSchema);
