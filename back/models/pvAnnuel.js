@@ -6,7 +6,8 @@ const sch = mongoose.Schema({
     semestre: { type: String },
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe" },
     pv_annuel_data: { type: mongoose.Schema.Types.Mixed },
-    pv_annuel_cols: { type: mongoose.Schema.Types.Mixed }
+    pv_annuel_cols: { type: mongoose.Schema.Types.Mixed },
+    nom: { type: String }
 });
 
 //creation de la table matiere

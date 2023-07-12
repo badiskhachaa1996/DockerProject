@@ -123,7 +123,7 @@ app.post("/registre", (req, res) => {
             attachments: [
               {
                 filename: "signature.png",
-                path: "assets/signature.png",
+                path: "assets/ims-intedgroup-logo.png",
                 cid: "red", //same cid value as in the html img src
               },
             ],

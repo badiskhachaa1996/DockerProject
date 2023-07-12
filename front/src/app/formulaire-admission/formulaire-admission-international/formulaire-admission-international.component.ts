@@ -594,7 +594,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       ((response) => {
         if (response.success) {
           this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
-            console.log(response,serviceAdmission)
+            console.log(response, serviceAdmission)
 
             this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
               this.NotifService.newNotif(notif)
@@ -625,9 +625,15 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
       localStorage.setItem("ProspectConected", data.token)
       this.router.navigate(["/suivre-ma-preinscription"]);
     })*/
-    console.log(token)
-    localStorage.setItem('token', token)
-    this.router.navigate(["/admission/lead-informations/" + id]);
+    if (localStorage.getItem('agent') == null) {
+      console.log(token)
+      localStorage.setItem('token', token)
+      this.router.navigate(["/admission/lead-informations/" + id]);
+    } else {
+      this.messageService.add({ severity: "success", summary: "Le compte lead a bien été crée", detail: "Retour à IMS !" })
+      this.router.navigate(["/"]);
+    }
+
   }
 
 
