@@ -635,6 +635,7 @@ export class DashboardComponent implements OnInit {
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
+        console.log(response);
         if (response == null) {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
         }
@@ -714,7 +715,7 @@ export class DashboardComponent implements OnInit {
     this.dailyCheckService.postCheckIn(check)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
-        this.onCheckDailyCheck(this.user._id);
+        this.onCheckDailyCheck(response.user_id);
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
