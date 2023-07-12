@@ -383,11 +383,10 @@ export class DashboardComponent implements OnInit {
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
-    .then((response) => {
-      this.historiqueCra = response;
-      console.log(response);
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   SCIENCE() {
@@ -642,7 +641,7 @@ export class DashboardComponent implements OnInit {
         this.dailyCheck = response;
 
         // verifie s'il y'a eu un checkout
-        if (response.check_out != null) {
+        if (response?.check_out != null) {
           // remise à zero des temps de travail
           this.pauseTiming = 0;
           this.craPercent = '0';
@@ -663,7 +662,7 @@ export class DashboardComponent implements OnInit {
           })
 
           // calcule du temps passé au travail
-          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
+          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
           // Retrait du temps passé en pause
           this.workingTiming = this.workingTiming - this.pauseTiming;
           if (this.workingTiming < 60) {
@@ -684,15 +683,20 @@ export class DashboardComponent implements OnInit {
                 totalTimeCra += cra.number_minutes;
               });
 
-              // conversion du taux cra du collaborateur en minutes
-              collaborateur.h_cra *= 60;
-              // partie calcule du pourcentage en fonction du totalTimeCra
-              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              if (collaborateur != null) {
+                // conversion du taux cra du collaborateur en minutes
+                collaborateur.h_cra *= 60;
+                // partie calcule du pourcentage en fonction du totalTimeCra
+                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
 
-              this.craPercent = percent.toString().substring(0, 4)
+                this.craPercent = percent.toString().substring(0, 4);
+              } else {
+                this.craPercent = '0';
+                this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' })
+              }
 
             })
-            .catch((error) => { this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
+            .catch((error) => { console.log(error); });
         }
       })
       .catch((error) => { console.error(error) });
