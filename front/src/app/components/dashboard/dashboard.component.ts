@@ -662,7 +662,7 @@ export class DashboardComponent implements OnInit {
           })
 
           // calcule du temps passé au travail
-          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
+          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
           // Retrait du temps passé en pause
           this.workingTiming = this.workingTiming - this.pauseTiming;
           if (this.workingTiming < 60) {
@@ -714,7 +714,7 @@ export class DashboardComponent implements OnInit {
     this.dailyCheckService.postCheckIn(check)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
-        this.onCheckDailyCheck(response.user_id);
+        this.onCheckDailyCheck(this.user._id);
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
@@ -762,6 +762,12 @@ export class DashboardComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
+        // recuperation de l'historique du cra
+        this.dailyCheckService.getUserChecks(this.token.id)
+        .then((response) => {
+          this.historiqueCra = response;
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
   }
