@@ -57,7 +57,7 @@ app.post('/create/:id', (req, res) => {
                 `
                 let attachments = [{
                     filename: 'nop.png',
-                    path: '',
+                    path: 'assets/ims-intedgroup-logo.png',
                     cid: 'red' //same cid value as in the html img src
                 }]
                 let mailOptions = {

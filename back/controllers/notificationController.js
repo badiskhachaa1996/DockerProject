@@ -160,8 +160,8 @@ app.get('/newDocument/:email_etudiant/:document', (req, res) => {
     <footer> <img src="cid:red"/></footer>
     `
     let attachments = [{
-        filename: 'signature_mh.png',
-        path: '/home/ubuntu/ems3/back/assets/signature_mh.png',
+        filename: 'signature.png',
+        path: '/home/ubuntu/ems3/back/assets/ims-intedgroup-logo.png',
         cid: 'red' //same cid value as in the html img src
     }]
     let mailOptions = {
@@ -192,8 +192,8 @@ app.post("/newEtudiantIMS", (req, res) => {
     <footer> <img src="cid:red"/></footer>
     `
     let attachments = [{
-        filename: 'signature_mh.png',
-        path: '/home/ubuntu/ems3/back/assets/signature_mh.png',
+        filename: 'signature.png',
+        path: '/home/ubuntu/ems3/back/assets/ims-intedgroup-logo.png',
         cid: 'red' //same cid value as in the html img src
     }]
     let mailOptions = {
