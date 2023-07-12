@@ -691,7 +691,7 @@ export class DashboardComponent implements OnInit {
               this.craPercent = percent.toString().substring(0, 4)
 
             })
-            .catch((error) => { this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
+            .catch((error) => { console.log(error); this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
         }
       })
       .catch((error) => { console.error(error) });
