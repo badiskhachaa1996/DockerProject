@@ -523,7 +523,7 @@ section h3 {
                   
                 </section>
             </div> 
-            </br></br></br></br></br></br></br></br></br>  <h3>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Signature </h3></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+            </br></br></br></br></br></br></br></br></br>  <h3>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Signature </h3><img src="cid:signature"></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
             <div class="footer-page missing">
                 <p>Groupe IEG</p>
                 <p>CFA ESPIC / ADG / STUDINFO / INT</p>
@@ -540,9 +540,9 @@ section h3 {
       filename: 'candidature.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: 'cm', format: [21, 29.7], orientation: 'portrait' }
     };
-    html2pdf().set(opt).from(html,'string').save();
+    html2pdf().set(opt).from(html, 'string').save();
   }
   saveCandidature() {
     var canvasContents = this.signaturePad.toDataURL();
