@@ -155,31 +155,32 @@
                 entrée en formation, votre besoin, votre profil, votre niveau ainsi que votre degré de motivation</p>
             <div class="field col-12">
                 <label>Quelle est votre degré de motivation en arrivant en formation ?</label>
-                <p-slider formControlName="motivations" [min]="0" [max]="5" [step]="1"></p-slider>
+                <p-selectButton [options]="ratingSelect" formControlName="motivations" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
             </div>
             <div class="field col-12">
                 <label>Qu'attendez-vous de la formation ?</label>
                 <textarea pInputTextarea formControlName="attentes"></textarea>
             </div>
             <div class="field col-12">
-                <label>Quelle est votre degré de motivation en arrivant en formation ?</label>
-                <p-slider formControlName="motivations" [min]="0" [max]="5" [step]="1"></p-slider>
-            </div>
-            <div class="field col-12">
                 <label>Concernant votre niveau actuel dans le domaine de la formation souhaitée ?</label>
-                <p-slider formControlName="niveau_actuel" [min]="0" [max]="5" [step]="1"></p-slider>
+                <p-selectButton [options]="ratingSelect" formControlName="niveau_actuel" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
             </div>
             <div class="field col-12">
                 <label>Concernant votre compétences digitales ?</label>
-                <p-slider formControlName="competences_digitales" [min]="0" [max]="5" [step]="1"></p-slider>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_digitales" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
             </div>
             <div class="field col-12">
                 <label>Concernant votre capacité à travailler en équipe ?</label>
-                <p-slider formControlName="competences_teams" [min]="0" [max]="5" [step]="1"></p-slider>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_teams" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
             </div>
             <div class="field col-12">
                 <label>Concernant votre capacité à travailler en autonomie ?</label>
-                <p-slider formControlName="competences_solo" [min]="0" [max]="5" [step]="1"></p-slider>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_solo" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
             </div>
             <div class="col-6">
                 <button pButton (click)="pageNumber=3" label="Revenir" autoWidth="false"

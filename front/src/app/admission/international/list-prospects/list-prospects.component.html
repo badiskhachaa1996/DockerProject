@@ -98,39 +98,80 @@
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Dossier d'admission">
-                    <ul>
-                        <li *ngFor="let file of ListDocuments; index as i">
-                            <div class="grid">
-
-                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                        pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
-                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
-                                        pTooltip=" Visualiser dans un nouvel onglet">
-                                        {{ ListPiped[i] }}
-                                    </em>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(showDetails._id,i)"></i>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-times"
-                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier"
-                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
-                        Aucun document n'a été chargé !
-                    </p>
                     <div class="col-12">
-                        <button pButton label="Ajouter un document" (click)="showUploadFile=showDetails;scrollToTop()"></button>
+                        <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile
+                            style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                        <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
+                            #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                    </div>
+                    <div class="card grid">
+                        <h3 class="col-12">Documents Requis</h3>
+                        <p-table [value]="showDetails.documents_dossier" #dt1 dataKey="_id" class="col-12"
+                            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Lien</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{doc.nom}}</td>
+                                    <td>
+                                        <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                            (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                            class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <h3 class="col-8">Autre documents</h3>
+                        <div class="col-4">
+                            <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
+                                label="Ajouter un autre document"></p-button>
+                        </div>
+                        <p-table [value]="showDetails.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single"
+                            [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                            styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Lien</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                                <tr [pEditableRow]="doc">
+                                    <td pEditableColumn>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input type="text" pInputText [(ngModel)]="doc.nom">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{doc.nom}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                            *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                            aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                            class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Phase consulaire">
@@ -516,7 +557,7 @@
                             Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
                         </th>
                         <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
-                            Documents d'inscription<p-sortIcon field="haveDoc"></p-sortIcon>
+                            Documents d'admission<p-sortIcon field="haveDoc"></p-sortIcon>
                         </th>
 
                         <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
@@ -585,10 +626,12 @@
                             {{ prospect.programme }}
                         </td>
                         <td *ngIf="prospect.haveDoc">
-                            Oui
+                            <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
+                            </p-tag>
                         </td>
                         <td *ngIf="!prospect.haveDoc">
-                            Non
+                            <p-tag icon="pi pi-times" severity="danger" [value]="'Non'">
+                            </p-tag>
 
                         <td>
                             {{ prospect.decision_orientation }}
