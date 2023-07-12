@@ -525,6 +525,7 @@ export class AdmissionIntComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
@@ -741,6 +742,7 @@ export class AdmissionIntComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
         this.partenaireOwned = commercial.partenaire_id

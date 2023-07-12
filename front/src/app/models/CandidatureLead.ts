@@ -35,6 +35,7 @@ export class CandidatureLead {
         public competences_teams?: number,
         public competences_solo?: number,
         public signature?: string,
-        public date_creation?: Date
+        public date_creation?: Date,
+        public _id?:string
     ) { };
 }
