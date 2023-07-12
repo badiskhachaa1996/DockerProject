@@ -417,7 +417,7 @@ app.post("/create", (req, res, next) => {
                                 let mailOptions = {
                                     from: "ims@intedgroup.com",
                                     to: userCreated.email_perso,
-                                    subject: 'Confirmation de préinscription',
+                                    subject: 'Validation de votre compte étudiant',
                                     html: htmlmail,
                                     attachments: [{
                                         filename: 'signature.png',
@@ -741,6 +741,7 @@ app.put("/updateV2", (req, res, next) => {
                     if (req.body.detail)
                         detail = req.body.detail
                     let token = jwt.decode(req.header("token"))
+                    console.log(token,req.header("token"))
                     let hl = new HistoriqueLead({
                         lead_before: prospectUpdated,
                         lead_after: prospectsFromDb,

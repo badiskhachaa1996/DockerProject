@@ -292,11 +292,14 @@ export class AdmissionService {
 
   updateV2(data, detail = "") {
     let url = this.apiUrl + "updateV2";
-    return this.httpClient.put<Prospect>(url, { ...data, detail });
+    if (localStorage.getItem('token'))
+      return this.httpClient.put<Prospect>(url, { ...data, detail }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    else
+      return this.httpClient.put<Prospect>(url, { ...data, detail });
   }
   updateMany(data, detail = "") {
     let url = this.apiUrl + "updateMany";
-    return this.httpClient.put<Prospect[]>(url, { ...data, detail }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.put<Prospect[]>(url, { ...data, detail },);
   }
   getAllAffected(team_id = "buffer", agent_id = "buffer") {
     //Toujours avec une valeur dans ces params, car si null il va retourner tous les prospects
