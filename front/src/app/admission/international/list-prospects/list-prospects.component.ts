@@ -471,6 +471,7 @@ export class ListProspectsComponent implements OnInit {
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -485,6 +486,7 @@ export class ListProspectsComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
   }
 
@@ -657,6 +659,7 @@ export class ListProspectsComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.lengthPaiement = prospect?.payement?.length
   }
   savePaiement() {

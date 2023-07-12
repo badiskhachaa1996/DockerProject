@@ -489,6 +489,7 @@ export class PaiementsComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.initalPayement = [...prospect?.payement]
     this.scrollToTop()
     if (prospect.code_commercial)
@@ -695,6 +696,7 @@ export class PaiementsComponent implements OnInit {
   initPaiement(prospect) {
     this.showPaiement = prospect
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.lengthPaiementList = prospect.payement.length
   }
   savePaiement() {

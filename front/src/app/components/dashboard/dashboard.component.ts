@@ -383,10 +383,10 @@ export class DashboardComponent implements OnInit {
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
-    .then((response) => {
-      this.historiqueCra = response;
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   SCIENCE() {
@@ -635,63 +635,70 @@ export class DashboardComponent implements OnInit {
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
+        console.log(response);
         if (response == null) {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
-        }
-        this.dailyCheck = response;
-
-        // verifie s'il y'a eu un checkout
-        if (response?.check_out != null) {
-          // remise à zero des temps de travail
-          this.pauseTiming = 0;
-          this.craPercent = '0';
-          this.workingTiming = 0;
-          this.workingHour = 0;
-          this.workingMinute = 0;
-          this.dailyCheck.check_in = null;
-          this.dailyCheck.cra = [];
         } else {
-          // calcule du temps passé en pause
-          this.pauseTiming = 0;
-          this.dailyCheck?.pause.forEach((p) => {
-            if (p.out) {
-              this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
-            } else {
-              this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
-            }
-          })
+          this.dailyCheck = response;
 
-          // calcule du temps passé au travail
-          this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
-          // Retrait du temps passé en pause
-          this.workingTiming = this.workingTiming - this.pauseTiming;
-          if (this.workingTiming < 60) {
+          // verifie s'il y'a eu un checkout
+          if (response?.check_out != null) {
+            // remise à zero des temps de travail
+            this.pauseTiming = 0;
+            this.craPercent = '0';
+            this.workingTiming = 0;
             this.workingHour = 0;
-            this.workingMinute = this.workingTiming;
+            this.workingMinute = 0;
+            this.dailyCheck.check_in = null;
+            this.dailyCheck.cra = [];
           } else {
-            this.workingHour = Math.floor(this.workingTiming / 60);
-            this.workingMinute = this.workingTiming % 60;
-          }
-
-          /* calcul du pourcentage de remplissage du CRA */
-          // recuperation du collaborateur
-          this.rhService.getCollaborateurByUserId(this.userConnected._id)
-            .then((collaborateur) => {
-              let totalTimeCra = 0;
-
-              this.dailyCheck?.cra.map((cra) => {
-                totalTimeCra += cra.number_minutes;
-              });
-
-              // conversion du taux cra du collaborateur en minutes
-              collaborateur.h_cra *= 60;
-              // partie calcule du pourcentage en fonction du totalTimeCra
-              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
-
-              this.craPercent = percent.toString().substring(0, 4)
-
+            // calcule du temps passé en pause
+            this.pauseTiming = 0;
+            this.dailyCheck?.pause.forEach((p) => {
+              if (p.out) {
+                this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+              } else {
+                this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+              }
             })
-            .catch((error) => { this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
+
+            // calcule du temps passé au travail
+            this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+            // Retrait du temps passé en pause
+            this.workingTiming = this.workingTiming - this.pauseTiming;
+            if (this.workingTiming < 60) {
+              this.workingHour = 0;
+              this.workingMinute = this.workingTiming;
+            } else {
+              this.workingHour = Math.floor(this.workingTiming / 60);
+              this.workingMinute = this.workingTiming % 60;
+            }
+
+            /* calcul du pourcentage de remplissage du CRA */
+            // recuperation du collaborateur
+            this.rhService.getCollaborateurByUserId(this.userConnected._id)
+              .then((collaborateur) => {
+                let totalTimeCra = 0;
+
+                this.dailyCheck?.cra.map((cra) => {
+                  totalTimeCra += cra.number_minutes;
+                });
+
+                if (collaborateur != null) {
+                  // conversion du taux cra du collaborateur en minutes
+                  collaborateur.h_cra *= 60;
+                  // partie calcule du pourcentage en fonction du totalTimeCra
+                  let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+
+                  this.craPercent = percent.toString().substring(0, 4);
+                } else {
+                  this.craPercent = '0';
+                  this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' })
+                }
+
+              })
+              .catch((error) => { console.log(error); });
+          }
         }
       })
       .catch((error) => { console.error(error) });
@@ -702,7 +709,6 @@ export class DashboardComponent implements OnInit {
     const check = new DailyCheck();
 
     check.user_id = this.user._id;
-    check.today = new Date().toLocaleDateString();
     check.check_in = new Date();
     check.isInPause = false;
 
@@ -757,6 +763,12 @@ export class DashboardComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
+        // recuperation de l'historique du cra
+        this.dailyCheckService.getUserChecks(this.token.id)
+          .then((response) => {
+            this.historiqueCra = response;
+          })
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
   }
