@@ -144,16 +144,6 @@ export class AdmissionIntComponent implements OnInit {
   saveDoc() {
     this.admissionService.updateV2({ _id: this.showDocuments._id, documents_administrative: this.showDocuments.documents_administrative }, "Modification des documents administrative").subscribe(() => { })
   }
-
-  downloadFile(id, i) {
-    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      saveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
-    }, (error) => {
-      console.error(error)
-    })
-
-  }
   VisualiserFichier(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -301,7 +291,7 @@ export class AdmissionIntComponent implements OnInit {
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private PartenaireService: PartenaireService,
     private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService,
-     private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService) { }
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService) { }
 
   prospects = [];
 
@@ -458,7 +448,7 @@ export class AdmissionIntComponent implements OnInit {
     return [year, month, day].join('-');
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value },"Modification des informations Admission").subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value }, "Modification des informations Admission").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[this.showTraitement.type_form].splice(this.prospects[this.showTraitement.type_form].indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
@@ -760,7 +750,7 @@ export class AdmissionIntComponent implements OnInit {
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
     let phase_candidature = "En phase d'orientation consulaire"
-    if (this.lengthPaiement >= this.payementList.length) {
+    if (this.payementList.length == 0) {
       statut_payement = this.showPaiement.statut_payement;
       phase_candidature = this.showPaiement.phase_candidature;
     }
@@ -781,7 +771,7 @@ export class AdmissionIntComponent implements OnInit {
       })
     }
 
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature },"Modification des paiements Admission").subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }, "Modification des paiements Admission").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[this.showPaiement.type_form].splice(this.prospects[this.showPaiement.type_form].indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
@@ -951,5 +941,95 @@ export class AdmissionIntComponent implements OnInit {
 
   goToCandidature(id) {
     this.router.navigate(['admission/lead-candidature/', id])
+  }
+
+
+  downloadFile(doc: { date: Date, nom: String, path: String }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+  docToUpload: { date: Date, nom: string, path: string, _id: string }
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+    this.docToUpload = doc
+    document.getElementById(id).click();
+  }
+
+  uploadFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload.nom}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_dossier.splice(this.showDetails.documents_dossier.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Affectation du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
+
+  delete(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_dossier[this.showDetails.documents_dossier.indexOf(doc)].path = null
+    this.admissionService.deleteFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe(p => {
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    })
+
+  }
+
+  addDoc() {
+    this.showDetails.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+
+  uploadOtherFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload._id}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+
+      this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Ajout d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+
+  }
+  deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(doc), 1)
+    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+      console.log(a)
+    })
+    this.admissionService.deleteFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+  }
+
+  downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
+    }, (error) => {
+      console.error(error)
+    })
   }
 }

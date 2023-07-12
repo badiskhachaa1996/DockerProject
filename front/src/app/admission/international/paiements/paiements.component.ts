@@ -15,6 +15,7 @@ import { VenteService } from 'src/app/services/vente.service';
 import { Vente } from 'src/app/models/Vente';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
+import mongoose from 'mongoose';
 @Component({
   selector: 'app-paiements',
   templateUrl: './paiements.component.html',
@@ -135,16 +136,93 @@ export class PaiementsComponent implements OnInit {
 
   }
 
-  downloadFile(id, i) {
-    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+  downloadFile(doc: { date: Date, nom: String, path: String }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
 
-      saveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
     }, (error) => {
       console.error(error)
     })
+  }
+  docToUpload: { date: Date, nom: string, path: string, _id: string }
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+    this.docToUpload = doc
+    document.getElementById(id).click();
+  }
 
+  uploadFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload.nom}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_dossier.splice(this.showDetails.documents_dossier.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Affectation du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
+
+  delete(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_dossier[this.showDetails.documents_dossier.indexOf(doc)].path = null
+    this.admissionService.deleteFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe(p => {
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    })
+
+  }
+
+  addDoc() {
+    this.showDetails.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+
+  uploadOtherFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload._id}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+
+      this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Ajout d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+
+  }
+  deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(doc), 1)
+    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+      console.log(a)
+    })
+    this.admissionService.deleteFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+  }
+
+  downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
+    }, (error) => {
+      console.error(error)
+    })
   }
   VisualiserFichier(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {

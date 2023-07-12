@@ -29,6 +29,13 @@ export class LeadCandidatureComponent implements OnInit {
     { label: "Intermédiaire", value: "Intermédiaire" },
     { label: "Confirmé(e)", value: "Confirmé(e)" },
   ]
+  ratingSelect = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 },
+  ]
   formCandidature = new FormGroup({
     nom: new FormControl(''),
     prenom: new FormControl(''),

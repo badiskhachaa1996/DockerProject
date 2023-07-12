@@ -4399,14 +4399,19 @@ export class AppMenuComponent implements OnInit {
                                 routerLink: ['/admission/lead-informations/' + p._id]
                             },
                             {
-                                label: "Programme d'étude",
-                                icon: "pi pi-book",
-                                routerLink: ['/admission/lead-programme/' + p._id]
+                                label: "Ma Candidature PDF",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-candidature/' + p._id]
                             },
                             {
                                 label: "Mon dossier d'admission",
                                 icon: "pi pi-briefcase",
                                 routerLink: ['/admission/lead-dossier/' + p._id]
+                            },
+                            {
+                                label: "Programme d'étude",
+                                icon: "pi pi-book",
+                                routerLink: ['/admission/lead-programme/' + p._id]
                             },
                             {
                                 label: "Suivre ma candidature",
@@ -4418,11 +4423,7 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
-                            {
-                                label: "Ma Candidature PDF",
-                                icon: "pi pi-list",
-                                routerLink: ['/admission/lead-candidature/' + p._id]
-                            },
+
                         ]
                         setTimeout(() => this.showMenu = true, 0);
                     })
