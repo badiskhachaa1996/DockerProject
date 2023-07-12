@@ -18,6 +18,9 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { Router } from '@angular/router';
+import { VenteService } from 'src/app/services/vente.service';
 @Component({
   selector: 'app-consulaire',
   templateUrl: './consulaire.component.html',
@@ -39,7 +42,7 @@ export class ConsulaireComponent implements OnInit {
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-  
+
   documentDropdown = [
     { label: "Inscription", value: "inscription" },
     { label: "Préinscription", value: "preinscription" },
@@ -294,9 +297,9 @@ export class ConsulaireComponent implements OnInit {
 
   filterEcole = [{ value: null, label: 'Toutes les écoles"' },]
   AccessLevel = "Spectateur"
-  constructor(private PartenaireService: PartenaireService, private messageService: MessageService, private admissionService: AdmissionService, 
-    private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, 
-    private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
+  constructor(private PartenaireService: PartenaireService, private messageService: MessageService, private admissionService: AdmissionService,
+    private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private VenteService: VenteService) { }
 
   prospects: Prospect[];
 
@@ -433,7 +436,7 @@ export class ConsulaireComponent implements OnInit {
     this.scrollToTop()
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value },"Traitement du dossier Consulaire").subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value }, "Traitement du dossier Consulaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showTraitement), 1, data)
       this.showTraitement = null
@@ -452,7 +455,8 @@ export class ConsulaireComponent implements OnInit {
     avancement_visa: new FormControl(""),
     note_consulaire: new FormControl(""),
     consulaire_traited_by: new FormControl(null),
-    validated_cf: new FormControl()
+    validated_cf: new FormControl(),
+    avancement_cf: new FormControl(''),
   })
 
   //Partie Details
@@ -487,10 +491,12 @@ export class ConsulaireComponent implements OnInit {
     finance: new FormControl(''),
     type_form: new FormControl('', Validators.required),
     avancement_visa: new FormControl(''),
+    avancement_cf: new FormControl(''),
 
 
   })
-
+  initalPayement = []
+  partenaireOwned: string = null
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -509,6 +515,11 @@ export class ConsulaireComponent implements OnInit {
     this.payementList = prospect?.payement
     if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
+    this.initalPayement = [...prospect?.payement]
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
 
   saveDetails(willClose = false) {
@@ -527,7 +538,6 @@ export class ConsulaireComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
-
     let prospect = {
       formation: this.detailsForm.value.formation,
       campus_choix_1: this.detailsForm.value.campus_choix_1,
@@ -538,6 +548,7 @@ export class ConsulaireComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
       avancement_visa: this.detailsForm.value.avancement_visa,
@@ -545,6 +556,22 @@ export class ConsulaireComponent implements OnInit {
       type_form: this.detailsForm.value.type_form,
       _id: this.showDetails._id
 
+    }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
@@ -642,7 +669,7 @@ export class ConsulaireComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -654,10 +681,20 @@ export class ConsulaireComponent implements OnInit {
     }
   }
 
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
+
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
   }
   showSideBar = false
@@ -686,12 +723,13 @@ export class ConsulaireComponent implements OnInit {
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement },"Modification des paiements Consulaire").subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement }, "Modification des paiements Consulaire").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
     })
   }
+  
 
   showDocuments = null
   initDocument(prospect) {
@@ -801,7 +839,7 @@ export class ConsulaireComponent implements OnInit {
   } = null
 
   onAddPj() {
-    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
   downloadPJFile(pj) {
     this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {

@@ -23,6 +23,8 @@ import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
 import { HistoriqueLead } from 'src/app/models/HistoriqueLead';
 import { Router } from '@angular/router';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { VenteService } from 'src/app/services/vente.service';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -240,7 +242,8 @@ export class SourcingComponent implements OnInit {
 
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
     private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
-    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router) { }
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService,
+    private VenteService: VenteService) { }
 
   prospects: any[];
   dicEcole = {}
@@ -261,9 +264,15 @@ export class SourcingComponent implements OnInit {
     }, 15);
   }
   token;
+  candidatureDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.CandidatureLeadService.getAll().subscribe(candidatures => {
+      candidatures.forEach(v => {
+        this.candidatureDic[v.lead_id._id] = v
+      })
+    })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -398,6 +407,7 @@ export class SourcingComponent implements OnInit {
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),
+    avancement_cf: new FormControl(''),
     logement: new FormControl(''),
     finance: new FormControl(''),
     avancement_visa: new FormControl(''),
@@ -477,7 +487,8 @@ export class SourcingComponent implements OnInit {
     FileSaver.saveAs(data, "sourcing" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
-
+  initalPayement = []
+  partenaireOwned: string = null
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -491,11 +502,16 @@ export class SourcingComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
+    this.initalPayement = [...prospect?.payement]
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
     if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
 
   saveDetails(willClose = false) {
@@ -525,6 +541,7 @@ export class SourcingComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       type_form: this.detailsForm.value.type_form,
       finance: this.detailsForm.value.finance,
@@ -532,6 +549,23 @@ export class SourcingComponent implements OnInit {
       avancement_visa: this.detailsForm.value.avancement_visa,
       _id: this.showDetails._id
 
+    }
+
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
@@ -628,7 +662,7 @@ export class SourcingComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -639,11 +673,20 @@ export class SourcingComponent implements OnInit {
       this.payementList[i][type] = event.target.value;
     }
   }
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
   }
   showSideBar = false
@@ -690,6 +733,7 @@ export class SourcingComponent implements OnInit {
     send_from: new FormControl('', Validators.required)
   })
   onEmailPerso() {
+    console.log(this.formEmailPerso.value.cc)
     this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
@@ -753,7 +797,7 @@ export class SourcingComponent implements OnInit {
   } = null
 
   onAddPj() {
-    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
   downloadPJFile(pj) {
     this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {

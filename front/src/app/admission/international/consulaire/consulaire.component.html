@@ -47,7 +47,7 @@
                             <label For="pays">Pays de résidence</label>
                             <p-dropdown [options]="paysList" formControlName="pays_adresse"></p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-5">
+                        <!--<div class="field col-12 md:col-5">
                             <label For="ville">Ville</label>
                             <input pInputText id="ville" formControlName="ville_adresse" type="text"
                                 placeholder="Paris" />
@@ -66,7 +66,7 @@
                             <label For="postal_adresse">Code postale</label>
                             <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                                 placeholder="94200" />
-                        </div>
+                        </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
                             <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
@@ -145,30 +145,76 @@
             </p-tabPanel>
             <p-tabPanel header="Paiements">
                 <div class="grid">
-                    <label>Montant Payé</label>
-                    <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                        <div class="field col-12 md:col-5">
-                            <label>Type de paiement:</label><br>
-                            <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
-                                placeholder="Choisissez la méthode de paiement"
-                                (onChange)="changeMontant(i,$event,'type')"></p-dropdown>
-                        </div>
-                        <div class="field col-12 md:col-3">
-                            <label>Montant:</label><br>
-                            <input type="number" (change)="changeMontant(i,$event,'montant')"
-                                [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
-                        </div>
-                        <div class="field col-12 md:col-3">
-                            <label>Date du paiement:</label><br>
-                            <input type="date" (change)="changeMontant(i,$event,'date')"
-                                [(value)]="payementList[i]['date']" pInputText>
-                        </div>
-                        <div class="field col-12 md:col-1">
-                            <label>&nbsp;</label><br>
-                            <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
-                                styleClass="p-button-danger"></button>
-                        </div>
-                    </div>
+                    <p-table #dt2 dataKey="ID" [value]="payementList" class="col-12" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="ID" style="text-align: center;"> ID <p-sortIcon field="ID">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="type" style="text-align: center;"> Type de Paiement <p-sortIcon
+                                        field="type">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="montant" style="text-align: center;"> Montant <p-sortIcon
+                                        field="montant"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="date" style="text-align: center;"> Date du réglement <p-sortIcon
+                                        field="date"></p-sortIcon>
+                                </th>
+
+                                <th>
+                                    <div class="flex justify-content-between align-items-center">
+                                        Action
+                                    </div>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-paiement let-ri="rowIndex">
+                            <tr [pEditableRow]="paiement">
+                                <td>
+                                    {{paiement?.ID}}
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <p-dropdown [options]="typePaiement" [(ngModel)]="paiement.type"
+                                                placeholder="Choisissez la méthode de paiement"
+                                                (onChange)="changeMontant(ri,$event,'type')"></p-dropdown>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{paiement.type}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="number" (change)="changeMontant(ri,$event,'montant')"
+                                                [(value)]="paiement.montant" placeholder="20" value="0" pInputText>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{paiement.montant}}€
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="date" pInputText (change)="changeMontant(ri,$event,'date')"
+                                                [(value)]="paiement.date">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{paiement.date | date:mediumDate}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <i pTooltip="Supprimer le paiement" tooltipPosition="bottom" class="pi pi-trash"
+                                        aria-hidden="true" (click)="deletePayement(ri)"> </i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
                     <div class="col-12">
                         <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
                     </div>
@@ -198,7 +244,7 @@
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="formation">Avancement Campus France</label>
-                            <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
+                            <p-dropdown [options]="cflist" formControlName="avancement_cf"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="formation">Logement</label>
@@ -290,10 +336,14 @@
     <div class="col-12 card" *ngIf="showEmail">
         <p-tabView>
             <p-tabPanel header="Email personnalisé">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso" (ngSubmit)="onEmailPerso()">
-                    <div class="field col-12">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
+                    <div class="field col-6">
                         <label>Objet: </label>
                         <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
                     </div>
                     <div class="field col-12">
                         <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
@@ -305,9 +355,9 @@
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
-                        <label>Email(s) de(s) destinataire(s): </label>
+                        <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
                         <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
@@ -335,8 +385,14 @@
                                     <td>
                                         {{rowData.date | date:'mediumDate'}}
                                     </td>
-                                    <td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
+                                    </td>
+                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
                                         <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
@@ -362,11 +418,11 @@
                                 autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
-                    <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email"></button>
+                    <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email" (click)="onEmailPerso()"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Depuis un mail type">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType" (ngSubmit)="onEmailType()">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
                     <div class="field col-12">
                         <label>Email Type: </label>
                         <p-dropdown placeholder="Choisissez un mail type" filter="true"
@@ -374,9 +430,13 @@
                             [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-6">
                         <label>Objet: </label>
                         <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
                     </div>
                     <div class="field col-12">
                         <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
@@ -388,9 +448,9 @@
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
-                        <label>Email(s) de(s) destinataire(s): </label>
+                        <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
                         <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
@@ -418,8 +478,14 @@
                                     <td>
                                         {{rowData.date | date:'mediumDate'}}
                                     </td>
-                                    <td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
+                                    </td>
+                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
                                         <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
@@ -445,7 +511,7 @@
                                 autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
-                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"></button>
+                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email" (click)="onEmailPerso()"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Historique des emails">

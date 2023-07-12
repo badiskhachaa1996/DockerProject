@@ -19,6 +19,8 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
+import { Router } from '@angular/router';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
 @Component({
   selector: 'app-admission-int',
   templateUrl: './admission-int.component.html',
@@ -298,7 +300,8 @@ export class AdmissionIntComponent implements OnInit {
   filterEcole = []
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private PartenaireService: PartenaireService,
-    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService, private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
+    private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService,
+     private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService) { }
 
   prospects = [];
 
@@ -318,11 +321,15 @@ export class AdmissionIntComponent implements OnInit {
       }
     }, 15);
   }
-
+  candidatureDic = {}
   ngOnInit(): void {
     this.filterPays = this.filterPays.concat(environment.pays)
     this.token = jwt_decode(localStorage.getItem('token'));
-
+    this.CandidatureLeadService.getAll().subscribe(candidatures => {
+      candidatures.forEach(v => {
+        this.candidatureDic[v.lead_id._id] = v
+      })
+    })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -470,6 +477,7 @@ export class AdmissionIntComponent implements OnInit {
     statut_payement: new FormControl(""),
     numero_dossier_campus_france: new FormControl(""),
     validated_cf: new FormControl(false),
+    avancement_cf: new FormControl(''),
   })
 
   //Partie Details
@@ -567,6 +575,7 @@ export class AdmissionIntComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
       avancement_visa: this.detailsForm.value.avancement_visa,
@@ -717,8 +726,6 @@ export class AdmissionIntComponent implements OnInit {
             this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
         })
     }
-
-
   }
   showSideBar = false
   infoCommercial: CommercialPartenaire
@@ -887,7 +894,7 @@ export class AdmissionIntComponent implements OnInit {
   } = null
 
   onAddPj() {
-    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
   downloadPJFile(pj) {
     this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
@@ -942,5 +949,7 @@ export class AdmissionIntComponent implements OnInit {
     return 'DOC' + nom + date + random;
   }
 
-
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
+  }
 }
