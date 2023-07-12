@@ -66,8 +66,8 @@ mongoose
                     `
                     emailList = emailList.concat(values)
                     let attachments = [{
-                        filename: 'signature_igpinformatique.png',
-                        path: '/home/ubuntu/ems3/back/assets/signature_igpinformatique.png',
+                        filename: 'signature.png',
+                        path: '/home/ubuntu/ems3/back/assets/ims-intedgroup-logo.png',
                         cid: 'red' //same cid value as in the html img src
                     }]
                     let mailOptions = {

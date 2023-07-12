@@ -6,7 +6,9 @@ export class CandidatureLead {
         public prenom?: string,
         public date_naissance?: Date,
         public nationalite?: string,
+        public phone?: string,
         public email?: string,
+
         public adresse?: string,
         public lead_id?: Prospect,
         public isPMR?: Boolean,

@@ -480,6 +480,7 @@ const routes: Routes = [
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
+    { path: 'formulaire-admission-international/:ecole/:code_commercial', component: VersionNonIframeComponent },
     { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-int-lang/:ecole/:lang', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },

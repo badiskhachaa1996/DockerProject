@@ -74,7 +74,7 @@ app.post("/create", (req, res) => {
                     html: htmlemail,
                     attachments: [{
                         filename: 'signature.png',
-                        path: 'assets/signature.png',
+                        path: 'assets/ims-intedgroup-logo.png',
                         cid: 'red' //same cid value as in the html img src
                     }]
                 };
@@ -108,7 +108,7 @@ app.post("/create", (req, res) => {
                             html: htmlemail,
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'assets/signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
                         };
@@ -134,7 +134,7 @@ app.post("/create", (req, res) => {
                                         priority: 'high',
                                         attachments: [{
                                             filename: 'signature.png',
-                                            path: 'assets/signature.png',
+                                            path: 'assets/ims-intedgroup-logo.png',
                                             cid: 'red' //same cid value as in the html img src
                                         }]
                                     };
@@ -166,7 +166,7 @@ app.post("/create", (req, res) => {
                                     priority: 'high',
                                     attachments: [{
                                         filename: 'signature.png',
-                                        path: 'assets/signature.png',
+                                        path: 'assets/ims-intedgroup-logo.png',
                                         cid: 'red' //same cid value as in the html img src
                                     }]
                                 };
@@ -246,7 +246,7 @@ app.post("/createAdmin", (req, res) => {
                                     priority: 'high',
                                     attachments: [{
                                         filename: 'signature.png',
-                                        path: 'assets/signature.png',
+                                        path: 'assets/ims-intedgroup-logo.png',
                                         cid: 'red' //same cid value as in the html img src
                                     }]
                                 };
@@ -494,7 +494,7 @@ app.post("/AccAff/:id", (req, res) => {
                             html: html2,
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'assets/signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
                         };
@@ -537,7 +537,7 @@ app.post("/changeService/:id", (req, res) => {
                         html: html3,
                         attachments: [{
                             filename: 'signature.png',
-                            path: 'assets/signature.png',
+                            path: 'assets/ims-intedgroup-logo.png',
                             cid: 'red' //same cid value as in the html img src
                         }]
 
@@ -580,7 +580,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             html: html4,
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'assets/signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
 
@@ -617,7 +617,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             html: html5,
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'assets/signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
                         };
@@ -661,7 +661,7 @@ app.post("/revertTicket/:id", (req, res) => {
                     html: htmlemail,
                     attachments: [{
                         filename: 'signature.png',
-                        path: 'assets/signature.png',
+                        path: 'assets/ims-intedgroup-logo.png',
                         cid: 'red' //same cid value as in the html img src
                     }]
                 };
@@ -991,7 +991,7 @@ app.post('/sendMailAff', (req, res) => {
         html: htmlemail,
         attachments: [{
             filename: 'signature.png',
-            path: 'assets/signature.png',
+            path: 'assets/ims-intedgroup-logo.png',
             cid: 'red' //same cid value as in the html img src
         }]
     };
@@ -1026,7 +1026,7 @@ app.post('/sendMailRefus', (req, res) => {
             html: htmlemail,
             attachments: [{
                 filename: 'signature.png',
-                path: 'assets/signature.png',
+                path: 'assets/ims-intedgroup-logo.png',
                 cid: 'red' //same cid value as in the html img src
             }]
         };
@@ -1064,7 +1064,7 @@ app.post('/sendMailUpdateStatut', (req, res) => {
             html: htmlemail,
             attachments: [{
                 filename: 'signature.png',
-                path: 'assets/signature.png',
+                path: 'assets/ims-intedgroup-logo.png',
                 cid: 'red' //same cid value as in the html img src
             }]
         };

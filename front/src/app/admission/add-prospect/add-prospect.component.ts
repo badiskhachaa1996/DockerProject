@@ -111,6 +111,7 @@ export class AddProspectComponent implements OnInit {
     let source = this.RegisterForm2.value.source
     source = source.replace('ECOLE', this.RegisterForm.value.ecole)
     localStorage.setItem("sourceProspect", source)
+    localStorage.setItem('agent', 'oui')
     if (!code)
       this.router.navigate(['formulaire-admission-international', this.RegisterForm2.value.ecole])
     else
