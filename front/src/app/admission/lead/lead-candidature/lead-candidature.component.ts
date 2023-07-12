@@ -464,29 +464,26 @@ export class LeadCandidatureComponent implements OnInit {
                   </div>
              </div>
           </page>
-          <page size="A4">
-              <div class="page-container">
-                  <div class="container">
-                      <div class="section-title">TEST DE POSITIONNEMENT</div>
-                      
-                        <section>
-                            <h3 class="section-question">1. Quel est votre degré de motivation en arrivant en formation ?  <span class="response-short"> ${this.candidature.motivations}/5</span></h3>
-                            <h3 class="section-question">2. Qu'attendez - vous de la formation ? </h3>
-                            <div class="section-answer">${this.candidature.attentes}</div>
-                            <h3 class="section-question">3. Concernant votre niveau actuel dans le domaine de la formation souhaitée ?  <span class="response-short"> ${this.candidature.niveau_actuel}/5</span></h3>
-                            <h3 class="section-question">4. Concernant vos compétences digitales ?  <span class="response-short"> ${this.candidature.competences_digitales}/5</span></h3>
-                            <h3 class="section-question">5. Concernant votre capacité à travailler en équipe ?  <span class="response-short"> ${this.candidature.competences_teams}/5</span></h3>
-                            <h3 class="section-question">6. Concernant votre capacité à travailler en autonomie ?  <span class="response-short"> ${this.candidature.competences_solo}/5</span></h3>
-                        
-                          
-                        </section>
-                      </div> 
-                    <h3>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Signature </h3>
-                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp<img style="max-width: 200px;max-height: 200px;" src="${this.signature}">
-                  </div>
-                  </div>
-          </page>
-      
+          <div class="page-container">
+          <div class="container">
+              <div class="section-title">TEST DE POSITIONNEMENT</div>
+              
+                <section>
+                    <h3 class="section-question">1. Quel est votre degré de motivation en arrivant en formation ?  <span class="response-short"> ${this.candidature.motivations}/5</span></h3>
+                    <h3 class="section-question">2. Qu'attendez - vous de la formation ? </h3>
+                    <div class="section-answer">${this.candidature.attentes}</div>
+                    <h3 class="section-question">3. Concernant votre niveau actuel dans le domaine de la formation souhaitée ?  <span class="response-short"> ${this.candidature.niveau_actuel}/5</span></h3>
+                    <h3 class="section-question">4. Concernant vos compétences digitales ?  <span class="response-short"> ${this.candidature.competences_digitales}/5</span></h3>
+                    <h3 class="section-question">5. Concernant votre capacité à travailler en équipe ?  <span class="response-short"> ${this.candidature.competences_teams}/5</span></h3>
+                    <h3 class="section-question">6. Concernant votre capacité à travailler en autonomie ?  <span class="response-short"> ${this.candidature.competences_solo}/5</span></h3>
+                
+                  
+                </section>
+              </div> 
+            <h3>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Signature </h3>
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp<img style="max-width: 200px;max-height: 200px;" src="${this.signature}">
+          </div>
+          </div>
       </body>
       </html>
           `
