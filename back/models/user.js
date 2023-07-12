@@ -94,7 +94,7 @@ const user_schema = new mongoose.Schema({
     verifedEmail: {
         type: Boolean,
         required: false,
-        default: false
+        default: true
     },
     date_creation: { type: Date, required: false, default: Date.now },
     departement: { type: String },
