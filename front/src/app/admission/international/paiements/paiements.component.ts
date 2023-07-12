@@ -465,6 +465,7 @@ export class PaiementsComponent implements OnInit {
     //Avancement consulaire
     a_besoin_visa: new FormControl(''),
     validated_cf: new FormControl(''),
+    avancement_cf: new FormControl(''),
     logement: new FormControl(''),
     finance: new FormControl(''),
     avancement_visa: new FormControl(''),
@@ -525,6 +526,7 @@ export class PaiementsComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
       avancement_visa: this.detailsForm.value.avancement_visa,

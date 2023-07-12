@@ -306,7 +306,10 @@ const prospect_schema = new mongoose.Schema({
         type: [{ date: Date, nom: String, path: String }],
         default: [
         ]
-    }
+    }, avancement_cf: {
+        type: String,
+        default: "Non"
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

@@ -469,6 +469,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
     statut_payement: new FormControl(""),
     numero_dossier_campus_france: new FormControl(""),
     validated_cf: new FormControl(""),
+    avancement_cf: new FormControl(''),
   })
 
   //Partie Details
@@ -554,6 +555,7 @@ export class PovPartenaireListProspectsComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       numero_dossier_campus_france: this.detailsForm.value.numero_dossier_campus_france,
       avancement_visa: this.detailsForm.value.avancement_visa,

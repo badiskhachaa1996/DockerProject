@@ -412,7 +412,7 @@ app.post("/create", (req, res, next) => {
                                 <p>&nbsp;</p>
                                 <p>Nous demeurons à votre disposition pour tout complément d'information.&nbsp;</p>
                                 <p>Bien cordialement.</p>
-                                <footer> <img src="cid:signature"/></footer>
+                                <footer> <img style="max-width: 300px;max-height: 200px;" src="cid:signature"/></footer>
                                 `
                                 let mailOptions = {
                                     from: "ims@intedgroup.com",

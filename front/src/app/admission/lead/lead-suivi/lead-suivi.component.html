@@ -15,8 +15,8 @@
             </p>
             <p class="col-6"><strong>Avancement Campus France :</strong>
                 <br>
-                <p-dropdown [options]="cfList" [(ngModel)]="PROSPECT.validated_cf" placeholder="Choisissez un état" autoWidth="false" [style]="{'width':'100%'}"
-                    (onChange)="updateValue('validated_cf',$event.value)"></p-dropdown>
+                <p-dropdown [options]="cfList" [(ngModel)]="PROSPECT.avancement_cf" placeholder="Choisissez un état" autoWidth="false" [style]="{'width':'100%'}"
+                    (onChange)="updateValue('avancement_cf',$event.value)"></p-dropdown>
             </p>
             <p class="col-6"><strong>Numéro de dossier Campus France :</strong><br>
                 <input pInputText type="text" placeholder="1A2B3C" (blur)="updateValue('numero_dossier_campus_france')" autoWidth="false" [style]="{'width':'100%'}"
