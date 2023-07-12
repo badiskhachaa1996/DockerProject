@@ -13,7 +13,7 @@ app.get("/verif-check-by-user-id/:id", (req, res) => {
 
     DailyCheck.findOne({ user_id: id, today: today }).populate('user_id')
         .then((response) => { console.log(response); res.status(200).send(response); })
-        .catch((error) => { console.error(error); res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
+        .catch((error) => { console.error(error); res.status(400).send(error) });
 });
 
 // recuperation de la liste des présences de tous les utilisateurs
@@ -56,7 +56,8 @@ app.get("/get-check-by-user-id/:id", (req, res) => {
 // méthode de check in
 app.post("/post-check-in", (req, res) => {
     const dailyCheck = new DailyCheck({ ...req.body });
-
+    dailyCheck.today = new Date().toLocaleDateString();
+    
     dailyCheck.save()
         .then((response) => { res.status(201).send(response); })
         .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de prendre votre check in en considération' }) });

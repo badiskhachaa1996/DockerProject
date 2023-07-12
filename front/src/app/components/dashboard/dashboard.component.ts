@@ -709,7 +709,6 @@ export class DashboardComponent implements OnInit {
     const check = new DailyCheck();
 
     check.user_id = this.user._id;
-    check.today = new Date().toLocaleDateString();
     check.check_in = new Date();
     check.isInPause = false;
 
