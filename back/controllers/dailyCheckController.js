@@ -11,9 +11,9 @@ app.get("/verif-check-by-user-id/:id", (req, res) => {
     // formatage de la date du jour
     let today = new Date().toLocaleDateString();
 
-    DailyCheck.findOne({user_id: id, today: today}).populate('user_id')
+    DailyCheck.findOne({user_id: id, today: today})?.populate('user_id')
     .then((response) => { res.status(200).send(response); })
-    .catch((error) => { res.status(400).json({error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs'}) });
+    .catch((error) => { res.status(400).send(error) });
 });
 
 // recuperation de la liste des présences de tous les utilisateurs
