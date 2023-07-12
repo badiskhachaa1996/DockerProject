@@ -383,10 +383,10 @@ export class DashboardComponent implements OnInit {
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
-    .then((response) => {
-      this.historiqueCra = response;
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   SCIENCE() {
@@ -683,15 +683,20 @@ export class DashboardComponent implements OnInit {
                 totalTimeCra += cra.number_minutes;
               });
 
-              // conversion du taux cra du collaborateur en minutes
-              collaborateur.h_cra *= 60;
-              // partie calcule du pourcentage en fonction du totalTimeCra
-              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              if (collaborateur != null) {
+                // conversion du taux cra du collaborateur en minutes
+                collaborateur.h_cra *= 60;
+                // partie calcule du pourcentage en fonction du totalTimeCra
+                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
 
-              this.craPercent = percent.toString().substring(0, 4)
+                this.craPercent = percent.toString().substring(0, 4);
+              } else {
+                this.craPercent = '0';
+                this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' })
+              }
 
             })
-            .catch((error) => { console.log(error); this.craPercent = '0'; this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' }) });
+            .catch((error) => { console.log(error); });
         }
       })
       .catch((error) => { console.error(error) });
