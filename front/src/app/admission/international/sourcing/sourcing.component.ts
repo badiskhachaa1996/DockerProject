@@ -673,6 +673,34 @@ export class SourcingComponent implements OnInit {
         <p>Cordialement </p>
         `
       }).subscribe(() => { })
+      if (this.showDetails.code_commercial)
+      this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+        if (commercial) {
+          this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+          this.NotifService.create(new Notification(null, null, false,
+            `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+            new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+          this.EmailService.defaultEmail({
+            email: commercial.user_id?.email,
+            objet: '[IMS] Admission - Changement de décision orientation d\'un de vos leads ',
+            mail: `
+            Cher(e) partenaire,
+
+            Nous sommes ravis de vous informer que la décision d'orientation concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
+            
+            Nous sommes convaincus que cette orientation sera bénéfique pour l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} et contribuera à son développement académique et professionnel. Nous tenons à vous remercier pour votre collaboration tout au long de ce processus d'orientation.
+            
+            Si vous avez des questions ou besoin de plus amples informations sur cette décision, n'hésitez pas à nous contacter. Nous sommes là pour soutenir l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} et assurer sa réussite.
+            
+            Nous apprécions grandement notre partenariat et nous sommes impatients de continuer à travailler ensemble pour accompagner les étudiants dans leur parcours éducatif.
+            
+            Cordialement,
+            `
+          }).subscribe(() => { })
+        }
+      })
     }
     if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
       this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
@@ -692,6 +720,34 @@ export class SourcingComponent implements OnInit {
         <p>Cordialement </p>
         `
       }).subscribe(() => { })
+      if (this.showDetails.code_commercial)
+      this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+        if (commercial) {
+          this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+          this.NotifService.create(new Notification(null, null, false,
+            `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+            new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+          this.EmailService.defaultEmail({
+            email: commercial.user_id?.email,
+            objet: '[IMS] Admission - Changement de décision admission d\'un de vos leads ',
+            mail: `
+            Cher(e) partenaire,
+
+            Nous avons le plaisir de vous informer que la décision d'admission concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
+            
+            Cette décision marque une étape importante dans le parcours académique de l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}. Nous croyons fermement en son potentiel et sommes convaincus qu'il/elle apportera une contribution significative à notre établissement.
+            
+            Si vous avez des questions ou avez besoin de plus amples informations concernant cette décision d'admission, n'hésitez pas à nous contacter. Nous sommes là pour vous assister.
+            
+            Nous tenons à vous remercier à nouveau pour votre partenariat précieux et nous sommes impatients de continuer à travailler ensemble pour façonner l'avenir de nos étudiants.
+            
+            Cordialement,
+          `
+          }).subscribe(() => { })
+        }
+      })
     }
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
@@ -703,6 +759,34 @@ export class SourcingComponent implements OnInit {
           this.NotifService.create(new Notification(null, null, false,
             `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
             new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+          if (this.showDetails.code_commercial)
+            this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+              if (commercial) {
+                this.Socket.NewNotifV2(commercial.user_id._id, `L'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} Lead a effecté un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`)
+
+                this.NotifService.create(new Notification(null, null, false,
+                  `L'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} Lead a effecté un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
+                  new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+                this.EmailService.defaultEmail({
+                  email: commercial.user_id?.email,
+                  objet: '[IMS] Admission - Ajout d\'un paiement d\'un de vos leads ',
+                  mail: `
+                  Cher partenaire,
+
+                  Nous avons le plaisir de vous informer que l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a effectué un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}.
+                  
+                  Nous tenons à vous remercier pour votre efficacité et votre professionnalisme dans le traitement de ce paiement. Votre collaboration nous aide à maintenir un processus de paiement fluide et efficace pour nos étudiants.
+                  
+                  Si vous avez des questions ou des préoccupations concernant ce paiement, n'hésitez pas à nous contacter. Nous sommes là pour vous aider et répondre à vos besoins.
+                  
+                  Nous apprécions grandement notre partenariat continu et nous sommes impatients de poursuivre notre collaboration fructueuse à l'avenir.
+                  
+                  Cordialement,
+                `
+                }).subscribe(() => { })
+              }
+            })
         }
       })
     }
