@@ -3995,7 +3995,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-
+                console.log(service_dic)
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
                         this.items.push(
@@ -4104,7 +4104,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push({
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
@@ -4258,7 +4258,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
-                    if (role == "Super Admin")
+                    if (role == "Super-Admin")
                         this.items.push(
                             {
                                 label: 'International',
@@ -4600,7 +4600,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('Mailing')) {
                     let role = service_dic['Mailing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push(
                             {
                                 label: 'Gestions des emails',
@@ -4649,7 +4649,7 @@ export class AppMenuComponent implements OnInit {
                     let role = service_dic['CRM']
                     this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(member => {
                         this.showMenu = false
-                        if (role == 'Super Admin') {
+                        if (role == 'Super-Admin') {
                             this.items.push(
                                 {
                                     label: 'CRM',

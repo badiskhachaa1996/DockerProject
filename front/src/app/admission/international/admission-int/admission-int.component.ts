@@ -21,6 +21,9 @@ import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
 import { Router } from '@angular/router';
 import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
+import { SocketService } from 'src/app/services/socket.service';
 @Component({
   selector: 'app-admission-int',
   templateUrl: './admission-int.component.html',
@@ -291,7 +294,8 @@ export class AdmissionIntComponent implements OnInit {
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private TeamsIntService: TeamsIntService, private PartenaireService: PartenaireService,
     private CommercialService: CommercialPartenaireService, private FAService: FormulaireAdmissionService, private VenteService: VenteService,
-    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService) { }
+    private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService,
+    private NotifService: NotificationService, private EmailService: EmailTypeService, private Socket: SocketService) { }
 
   prospects = [];
 
@@ -575,8 +579,37 @@ export class AdmissionIntComponent implements OnInit {
       _id: this.showDetails._id
 
     }
+    if (this.detailsForm.value.decision_orientation != this.showDetails.decision_orientation) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
 
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
 
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision orientation',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'orientation a été prise. </p>
+        <p>La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+    }
+    if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
+
+    }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          //Ajouter Notif Payement
+
+        }
+      })
+    }
     let listIDS = []
     this.initalPayement.forEach(payement => {
       listIDS.push(payement.ID)
@@ -586,7 +619,6 @@ export class AdmissionIntComponent implements OnInit {
         if (val.ID && listIDS.includes(val.ID) == false) {
           let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
           this.VenteService.create({ ...data }).subscribe(v => {
-            console.log(v)
             this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
           })
         }

@@ -25,6 +25,9 @@ import { HistoriqueLead } from 'src/app/models/HistoriqueLead';
 import { Router } from '@angular/router';
 import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
 import { VenteService } from 'src/app/services/vente.service';
+import { Notification } from 'src/app/models/notification';
+import { SocketService } from 'src/app/services/socket.service';
+import { NotificationService } from 'src/app/services/notification.service';
 @Component({
   selector: 'app-sourcing',
   templateUrl: './sourcing.component.html',
@@ -307,7 +310,7 @@ export class SourcingComponent implements OnInit {
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
     private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
     private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService,
-    private VenteService: VenteService) { }
+    private VenteService: VenteService, private Socket: SocketService, private NotifService: NotificationService) { }
 
   prospects: any[];
   dicEcole = {}
@@ -329,6 +332,7 @@ export class SourcingComponent implements OnInit {
   }
   token;
   candidatureDic = {}
+  memberDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.filterPays = this.filterPays.concat(environment.pays)
@@ -352,6 +356,7 @@ export class SourcingComponent implements OnInit {
         let items = []
         dic[team].forEach(element => {
           items.push({ label: `${element.user_id.lastname} ${element.user_id.firstname}`, value: element._id })
+          this.memberDic[element._id] = element
         })
         this.agentSourcingList.push({
           label: team,
@@ -439,6 +444,38 @@ export class SourcingComponent implements OnInit {
       this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
       this.messageService.add({ severity: "success", summary: "Affectation du lead avec succès" })
+      if (data.agent_sourcing_id) {
+        this.Socket.NewNotifV2(this.memberDic[data?.agent_sourcing_id].user_id._id, `Le lead ${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname} vous a été attribué à la date ${new Date().toLocaleDateString('fr-FR')}`)
+        this.NotifService.create(new Notification(null, null, false,
+          `Le lead ${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname} vous a été attribué à la date ${new Date().toLocaleDateString('fr-FR')}`,
+          new Date(), this.memberDic[data?.agent_sourcing_id].user_id._id, null)).subscribe(test => { })
+        this.admissionService.sendMailAffectation({
+          prospect_name: `${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname}`,
+          date: new Date().toLocaleDateString('fr-FR'),
+          email: this.memberDic[data?.agent_sourcing_id].user_id.email
+        }).subscribe(() => { })
+      } else if (data.team_sourcing_id) {
+        this.TeamsIntService.MIgetAll().subscribe(mbs => {
+          mbs.forEach(m => {
+            if (m.team_id._id == data.team_sourcing_id) {
+              this.Socket.NewNotifV2(m.user_id._id, `Le lead ${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname} vous a été attribué à la date ${new Date().toLocaleDateString('fr-FR')}`)
+              this.NotifService.create(new Notification(null, null, false,
+                `Le lead ${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname} vous a été attribué à la date ${new Date().toLocaleDateString('fr-FR')}`,
+                new Date(), m.user_id._id, null)).subscribe(test => { })
+              this.admissionService.sendMailAffectation({
+                prospect_name: `${this.showAffectation?.user_id?.lastname} ${this.showAffectation?.user_id?.firstname}`,
+                date: new Date().toLocaleDateString('fr-FR'),
+                email: m.user_id.email
+              }).subscribe(() => { })
+            }
+
+          })
+        })
+
+
+      }
+
+
     })
   }
 
