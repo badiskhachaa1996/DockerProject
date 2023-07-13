@@ -12,6 +12,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
@@ -74,19 +75,13 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService,
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router,
     private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService) { }
   serviceDic = {}
   sujetDic = {}
   USER: User
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.ServService.getAll().subscribe(data => {
-      data.forEach(val => {
-        this.serviceDropdown.push({ label: val.label, value: val._id })
-        this.serviceDic[val._id] = val.label
-      })
-    })
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
       this.USER = data
     })
@@ -95,6 +90,26 @@ export class AjoutTicketComponent implements OnInit {
         this.sujetDic[element._id] = element.label
       });
     })
+    if (this.router.url.startsWith('/ticketing-igs')) {
+      //Charger les sujets et services IGS
+      this.ServService.getAll().subscribe(data => {
+        data.forEach(val => {
+          if(val.label.startsWith('IGS')){
+            this.serviceDropdown.push({ label: val.label, value: val._id })
+            this.serviceDic[val._id] = val.label
+          }
+        })
+      })
+    } else {
+      this.ServService.getAll().subscribe(data => {
+        data.forEach(val => {
+          if(!val.label.startsWith('IGS')){
+            this.serviceDropdown.push({ label: val.label, value: val._id })
+            this.serviceDic[val._id] = val.label
+          }
+        })
+      })
+    }
   }
 
 }
