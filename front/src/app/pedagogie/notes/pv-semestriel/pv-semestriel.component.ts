@@ -55,7 +55,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
           this.cols = dataNew.cols
           this.dataPV = dataNew.data
           this.dataPV.forEach((data, index) => {
-            if ((!data.appreciation || data.appreciation == "")) {
+            if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
               let note = this.calculMoyenne(data.notes)
               if (note < 10)
                 data.appreciation = "Doit faire ses preuves"
@@ -105,7 +105,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
       this.dataPV = pv.pv_annuel_data
       this.PVID = pv._id
       this.dataPV.forEach((data, index) => {
-        if ((!data.appreciation || data.appreciation == "")) {
+        if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
           let note = this.calculMoyenne(data.notes)
           if (note < 10)
             data.appreciation = "Doit faire ses preuves"
@@ -133,7 +133,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
       this.cols = dataNew.cols
       this.dataPV = dataNew.data
       this.dataPV.forEach((data, index) => {
-        if ((!data.appreciation || data.appreciation == "")) {
+        if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
           let note = this.calculMoyenne(data.notes)
           if (note < 10)
             data.appreciation = "Doit faire ses preuves"
