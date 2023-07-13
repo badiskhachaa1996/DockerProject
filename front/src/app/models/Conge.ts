@@ -12,6 +12,5 @@ export class Conge{
         public note?: string,
         public statut?: string,
         public note_decideur?: string,
-       
     ){}
 }

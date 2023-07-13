@@ -12,7 +12,7 @@ app.get("/verif-check-by-user-id/:id", (req, res) => {
     let today = new Date().toLocaleDateString();
 
     DailyCheck.findOne({ user_id: id, today: today }).populate('user_id')
-        .then((response) => { console.log(response); res.status(200).send(response); })
+        .then((response) => { res.status(200).send(response); })
         .catch((error) => { console.error(error); res.status(400).send(error) });
 });
 

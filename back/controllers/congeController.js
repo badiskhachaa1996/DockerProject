@@ -4,7 +4,7 @@ app.disable("x-powered-by");
 const { Conge } = require('./../models/Conge');
 const { User } = require("./../models/user");
 
-//Methode de demande de congés
+// méthode de demande de congés
 app.post("/post-conge", (req, res) => {
     const conge = new Conge({ ...req.body });
     //Enregistrement du congé dans la base de données
@@ -34,7 +34,7 @@ app.put("/put-conge",(req,res) =>{
 })
 
 
-//mise-a-jour du statu 
+//mise-a-jour du statut
 app.patch("/answer", (req,res) =>{
     const {answer}= req.body;
     const {id}= req.body;
