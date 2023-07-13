@@ -347,4 +347,25 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     }, 15);
   }
 
+  
+  showAppreciation(note: number, defaultAppreciation: string) {
+    if (defaultAppreciation == "" || defaultAppreciation == "Doit faire ses preuves" || defaultAppreciation == "Passable" || defaultAppreciation == "Assez Bien" || defaultAppreciation == "Bien" || defaultAppreciation == "Très Bien" || defaultAppreciation == "Excellent") {
+      let r = ""
+      if (note < 10)
+        r = "Doit faire ses preuves"
+      else if ((note > 10 && note < 12) || note == 10)
+        r = "Passable"
+      else if ((note > 12 && note < 14) || note == 12)
+        r = "Assez Bien"
+      else if ((note > 14 && note < 16) || note == 14)
+        r = "Bien"
+      else if ((note > 16 && note < 18) || note == 16)
+        r = "Très Bien"
+      else if (note > 18 || note == 18)
+        r = "Excellent"
+      return r
+    } else
+      return defaultAppreciation
+  }
+
 }
