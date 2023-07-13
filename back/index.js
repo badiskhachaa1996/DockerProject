@@ -192,7 +192,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
-      req.originalUrl == "/soc/notification/create" ||
+      req.originalUrl.startsWith("/soc/notification/create") ||
       req.originalUrl.startsWith("/soc/prospect/") ||
       req.originalUrl.startsWith("/soc/service/getByLabel") ||
       req.originalUrl == "/soc/demande-events/create" ||

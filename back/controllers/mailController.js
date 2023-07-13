@@ -241,10 +241,10 @@ app.post('/testEmail', (req, res) => {
 
 app.post('/sendPerso', (req, res) => {
     Mail.findById(req.body.send_from).then(email => {
-        if(!email){
-            console.error(req.body,email)
+        if (!email) {
+            console.error(req.body, email)
             res.status(404).send(email)
-        }else{
+        } else {
             let transporter = nodemailer.createTransport({
                 host: "smtp.office365.com",
                 port: 587,
@@ -282,7 +282,7 @@ app.post('/sendPerso', (req, res) => {
                 html,
                 attachments
             };
-    
+
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.error(error);
@@ -330,5 +330,37 @@ app.get("/downloadPJ/:_id/:pj_id/:path", (req, res) => {
     });
     res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFile)) })
 });
+
+app.post('/defaultEmail', (req, res) => {
+    let transporterINTED = nodemailer.createTransport({
+        host: "smtp.office365.com",
+        port: 587,
+        secure: false, // true for 587, false for other ports
+        requireTLS: true,
+        auth: {
+            user: 'ims@intedgroup.com',
+            pass: 'InTeDGROUP@@0908',
+        },
+    });
+    let mailOptions = {
+        from: 'ims@intedgroup.com',
+        to: req.body.email,
+        subject: req.body.object,
+        html: req.body.mail,
+        attachments: [{
+            filename: 'signature.png',
+            path: 'assets/ims-intedgroup-logo.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+    };
+
+
+    transporterINTED.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({ ...req.body })
+    });
+})
 
 module.exports = app;
