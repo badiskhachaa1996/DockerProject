@@ -119,6 +119,11 @@ export class ConsulaireComponent implements OnInit {
       formData.append('path', event.files[0].name)
       formData.append('file', event.files[0])
       this.admissionService.uploadAdminFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.Socket.NewNotifV2(this.showUploadFile.user_id._id, `Un document est disponibe dans votre espace pour le téléchargement `)
+
+        this.NotifService.create(new Notification(null, null, false,
+          `Un document est disponibe dans votre espace pour le téléchargement `,
+          new Date(), this.showUploadFile.user_id._id, null)).subscribe(test => { })
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         if (res.documents_administrative)
           this.prospects[this.prospects.indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative

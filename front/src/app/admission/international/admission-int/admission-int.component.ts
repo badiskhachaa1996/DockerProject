@@ -118,7 +118,11 @@ export class AdmissionIntComponent implements OnInit {
           this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
         event.target = null;
         this.showUploadFile = null;
+        this.Socket.NewNotifV2(this.showUploadFile.user_id._id, `Un document est disponibe dans votre espace pour le téléchargement `)
 
+        this.NotifService.create(new Notification(null, null, false,
+          `Un document est disponibe dans votre espace pour le téléchargement `,
+          new Date(), this.showUploadFile.user_id._id, null)).subscribe(test => { })
         this.fileInput.clear()
       }, error => {
         console.error(error)

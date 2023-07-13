@@ -655,6 +655,25 @@ export class SourcingComponent implements OnInit {
     this.initalPayement.forEach(payement => {
       listIDS.push(payement.ID)
     })
+    if (this.detailsForm.value.decision_orientation != this.showDetails.decision_orientation) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision orientation',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'orientation a été prise. </p>
+        <p>La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+    }
     if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
       this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
 

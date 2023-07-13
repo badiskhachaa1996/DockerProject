@@ -158,7 +158,7 @@
                         <td>{{note.module}}</td>
                         <td>{{note.formateur}} </td>
                         <td style="text-align: center;">{{ note.coeff }}</td>
-                        <td class="text-center"[pEditableColumn]="note.note_etudiant"
+                        <td class="text-center" [pEditableColumn]="note.note_etudiant"
                             pEditableColumnField="note_etudiant">
                             <p-cellEditor class="text-center">
                                 <ng-template pTemplate="input" class="text-center">
@@ -218,7 +218,7 @@
                         </tr>
                         <tr>
                             <th *ngFor="let semestre of SemestreList">
-                                {{(dicSemestreMoy[semestre])?dicSemestreMoy[semestre]:0| number : '0.1-2' }}
+                                {{dicSemestreMoy[semestre] | number : '0.1-2' }}
                             </th>
                             <th *ngIf="dicSemestreMoy['Annuel']">{{dicSemestreMoy['Annuel']| number : '0.1-2' }}</th>
                             <th style="text-align: left;" [pEditableColumn]="APPRECIATION_GENERALE"
@@ -240,7 +240,27 @@
 
             </div>
             <br>
-            <div class="col-6" style="margin-top:25%">
+            <div class="col-6" style="margin-top:25%" *ngIf="showAnnuel">
+                <p-table styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th colspan="2">Décision du conseil de classe</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Année académique validée</th>
+                            <th *ngIf="dicSemestreMoy['Annuel'] >= 10">X</th>
+                            <th *ngIf="dicSemestreMoy['Annuel'] < 10"></th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Année académique non validée</th>
+                            <th *ngIf="dicSemestreMoy['Annuel'] >= 10"></th>
+                            <th *ngIf="dicSemestreMoy['Annuel'] < 10">X</th>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <p style="font-size: 1.8vh;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+            </div>
+            <div class="col-6" style="margin-top:25%" *ngIf="!showAnnuel">
                 <p-table styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
