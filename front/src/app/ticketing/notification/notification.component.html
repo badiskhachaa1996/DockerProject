@@ -1,10 +1,10 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h4 style="text-align: center;">Notification</h4>
+            <h4 style="text-align: center;">Notifications</h4>
             <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-containe"
                 *ngIf="notifications.length==0 ">
-                <small>Vous n'avez aucune notifications pour le moment.</small>
+                <small>Vous n'avez aucune notification pour le moment.</small>
             </div>
             <div class="card shadow-lg timeline" *ngIf="notifications.length!==0">
                 <ul>
@@ -14,20 +14,22 @@
                             </div>
                             <div class="col">
                                 <div class="time-line-event">
-                                    <span class="timeline-event-title" style="font-weight: bold; font-size: 120%;">{{
+                                    <span class="timeline-event-title" style="font-weight: bold; font-size: 120%;background-color: white;">{{
                                         notif.type }}</span>
 
                                     <div class="timeline-event-time">
                                         {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                     </div>
                                 </div>
-
+                                <br>
                             </div>
 
                         </div>
                     </li>
                 </ul>
             </div>
+            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Supprimer toutes les notifications"
+                type="button" (click)="deleteNotif()"></button>
         </div>
     </div>
 </div>

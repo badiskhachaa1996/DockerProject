@@ -75,6 +75,15 @@ app.get("/deleteById/:id", (req, res) => {
     })
 });
 
+app.delete("/deleteAll/:id", (req, res) => {
+    Notification.deleteMany({ user_id: req.params.id, }, (err, user) => {
+        if (err) {
+            res.send(err)
+        }
+        res.send(user)
+    })
+});
+
 //Modification d'une notification
 app.post("/updateById/:id", (req, res) => {
     Notification.findByIdAndUpdate(req.params.id,
@@ -117,7 +126,7 @@ app.get("/getAllByUserID/:id", (req, res) => {
 
 //Récuperer les 20 notifications dernières d'un user
 app.get("/get20ByUserID/:id", (req, res) => {
-    Notification.find({ user_id: req.params.id, etat: false }).then(Notifications => {
+    Notification.find({ user_id: req.params.id }).then(Notifications => {
         res.status(200).send(Notifications.slice(0, 20))
     })
 });
