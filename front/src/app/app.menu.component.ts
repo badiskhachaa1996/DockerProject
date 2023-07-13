@@ -38,7 +38,18 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 export class AppMenuComponent implements OnInit {
 
     token: any;
-    items: MenuItem[] = [];
+    items: MenuItem[] = [
+        {
+            label: 'Tableau de bord',
+            icon: 'pi pi-fw pi-home',
+            routerLink: ['/'],
+        },
+        {
+            label: 'Signaler un problème technique',
+            icon: 'pi pi-fw pi-exclamation-triangle',
+            routerLink: ['/ticketing-igs'],
+        },
+    ];
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
@@ -62,6 +73,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Développeur',
@@ -1008,6 +1024,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -1242,6 +1263,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -1325,6 +1351,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Ticketing',
@@ -1499,6 +1530,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1554,6 +1590,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1605,6 +1646,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1625,6 +1671,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Ticketing',
@@ -1831,6 +1882,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -1883,6 +1939,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Développeur',
@@ -2002,6 +2063,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tableau de bord',
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
+                                },
+                                {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
                                 },
                                 {
                                     label: 'Développeur',
@@ -2556,6 +2622,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -2805,6 +2876,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -2905,6 +2981,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -2959,6 +3040,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tableau de bord',
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
+                                },
+                                {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
                                 },
                                 {
                                     label: 'Ticketing',
@@ -3144,6 +3230,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -3300,6 +3391,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -3367,6 +3463,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tableau de bord',
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
+                                },
+                                {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
                                 },
                                 {
                                     label: 'Développeur',
@@ -3492,7 +3593,14 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },/*
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        /*
+                        
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -3638,6 +3746,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -3717,9 +3830,15 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Tableau de bord',
                                             icon: 'pi pi-fw pi-home',
                                             routerLink: ['/']
-                                        }
+                                        },
+                                        {
+                                            label: 'Signaler un problème technique',
+                                            icon: 'pi pi-fw pi-exclamation-triangle',
+                                            routerLink: ['/ticketing-igs'],
+                                        },
                                     ]
                                 },
+
                                 {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
@@ -3791,6 +3910,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tableau de bord',
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/']
+                                },
+                                {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
                                 },
                                 {
                                     label: 'Tuteurs',
@@ -5350,6 +5474,9 @@ export class AppMenuComponent implements OnInit {
                         },
                     )
                 }
+                this.items.push({
+
+                })
                 setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true
             },
