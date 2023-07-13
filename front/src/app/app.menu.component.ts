@@ -107,7 +107,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -128,7 +128,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1029,7 +1029,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1268,7 +1268,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1358,7 +1358,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1678,7 +1678,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1887,7 +1887,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1973,7 +1973,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2097,7 +2097,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2627,7 +2627,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2881,7 +2881,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2986,7 +2986,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3047,7 +3047,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3235,7 +3235,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3396,7 +3396,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3497,7 +3497,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3751,7 +3751,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing-igs'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3840,7 +3840,7 @@ export class AppMenuComponent implements OnInit {
                                 },
 
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3924,7 +3924,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-ticket',
                             items: [
 
@@ -4076,7 +4076,7 @@ export class AppMenuComponent implements OnInit {
                     let role = service_dic['Ticketing']
                     if (role == "Super Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4134,7 +4134,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4187,7 +4187,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Agent") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4209,7 +4209,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -5474,9 +5474,6 @@ export class AppMenuComponent implements OnInit {
                         },
                     )
                 }
-                this.items.push({
-
-                })
                 setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true
             },
