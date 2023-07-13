@@ -310,7 +310,7 @@ export class SourcingComponent implements OnInit {
   constructor(private messageService: MessageService, private PartenaireService: PartenaireService, private admissionService: AdmissionService,
     private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
     private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService,
-    private VenteService: VenteService, private Socket: SocketService, private NotifService: NotificationService) { }
+    private VenteService: VenteService, private Socket: SocketService, private NotifService: NotificationService, private EmailService: EmailTypeService) { }
 
   prospects: any[];
   dicEcole = {}
@@ -651,11 +651,42 @@ export class SourcingComponent implements OnInit {
       _id: this.showDetails._id
 
     }
-
     let listIDS = []
     this.initalPayement.forEach(payement => {
       listIDS.push(payement.ID)
     })
+    if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision admission',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'admission a été prise. </p>
+        <p>La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+    }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          //Ajouter Notif Payement
+          this.Socket.NewNotifV2(this.showDetails.user_id._id, `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`)
+
+          this.NotifService.create(new Notification(null, null, false,
+            `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
+            new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+        }
+      })
+    }
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
         if (val.ID && listIDS.includes(val.ID) == false) {
