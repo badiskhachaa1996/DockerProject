@@ -291,7 +291,8 @@
                                             (input)="modified=true">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{data.appreciation}}
+                                        {{showAppreciation(calculMoyenne(StpFonctionne[data.email][semestre]
+                                        ,semestre),data.appreciation)}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
