@@ -4033,6 +4033,21 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
+                                    }, {
+                                        label: 'Ticketing',
+                                        icon: 'pi pi-fw pi-ticket',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un ticket',
+                                                icon: 'pi pi-plus',
+                                                routerLink: ['/ticketing/gestion/ajout']
+                                            },
+                                            {
+                                                label: 'Mes tickets envoyé',
+                                                icon: 'pi pi-inbox',
+                                                routerLink: ['/ticketing/gestion/mes-tickets']
+                                            }
+                                        ]
                                     },
                                     {
                                         label: 'Dashboard',
@@ -4068,7 +4083,22 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            },
+                            }, {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                }
+                            ]
+                        }
                         )
                     }
                 }
@@ -4547,6 +4577,22 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
+                            {
+                                label: 'Ticketing',
+                                icon: 'pi pi-fw pi-ticket',
+                                items: [
+                                    {
+                                        label: 'Ajouter un ticket',
+                                        icon: 'pi pi-plus',
+                                        routerLink: ['/ticketing/gestion/ajout']
+                                    },
+                                    {
+                                        label: 'Mes tickets envoyé',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/ticketing/gestion/mes-tickets']
+                                    }
+                                ]
+                            }
 
                         ]
                         setTimeout(() => this.showMenu = true, 0);
