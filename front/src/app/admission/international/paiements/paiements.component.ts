@@ -16,6 +16,10 @@ import { Vente } from 'src/app/models/Vente';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import mongoose from 'mongoose';
+import { NotificationService } from 'src/app/services/notification.service';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { SocketService } from 'src/app/services/socket.service';
+import { Notification } from 'src/app/models/notification';
 @Component({
   selector: 'app-paiements',
   templateUrl: './paiements.component.html',
@@ -116,6 +120,11 @@ export class PaiementsComponent implements OnInit {
         if (res.documents_administrative)
           this.prospects[this.showUploadFile.type_form][this.prospects[this.showUploadFile.type_form].indexOf(this.showUploadFile)].documents_administrative = res.documents_administrative
         event.target = null;
+        this.Socket.NewNotifV2(this.showUploadFile.user_id._id, `Un document est disponibe dans votre espace pour le téléchargement `)
+
+        this.NotifService.create(new Notification(null, null, false,
+          `Un document est disponibe dans votre espace pour le téléchargement `,
+          new Date(), this.showUploadFile.user_id._id, null)).subscribe(test => { })
         this.showUploadFile = null;
 
         this.fileInput.clear()
@@ -373,7 +382,8 @@ export class PaiementsComponent implements OnInit {
     { value: "Programme Anglais", label: "Programme Anglais", }
   ];
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService,
-    private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private VenteService: VenteService, private PService: PartenaireService, private CService: CommercialPartenaireService) { }
+    private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService, private VenteService: VenteService,
+    private PService: PartenaireService, private CService: CommercialPartenaireService, private NotifService: NotificationService, private EmailService: EmailTypeService, private Socket: SocketService) { }
 
   prospects = [];
 
@@ -617,6 +627,57 @@ export class PaiementsComponent implements OnInit {
     this.initalPayement.forEach(payement => {
       listIDS.push(payement.ID)
     })
+    if (this.detailsForm.value.decision_orientation != this.showDetails.decision_orientation) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision orientation',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'orientation a été prise. </p>
+        <p>La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+    }
+    if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision admission',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'admission a été prise. </p>
+        <p>La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+    }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          //Ajouter Notif Payement
+          this.Socket.NewNotifV2(this.showDetails.user_id._id, `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`)
+
+          this.NotifService.create(new Notification(null, null, false,
+            `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
+            new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+        }
+      })
+    }
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
         if (val.ID && listIDS.includes(val.ID) == false) {
