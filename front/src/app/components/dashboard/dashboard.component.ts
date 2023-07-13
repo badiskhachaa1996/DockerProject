@@ -260,6 +260,16 @@ export class DashboardComponent implements OnInit {
   historiqueCra: DailyCheck[] = [];
   historiqueCraSelected: DailyCheck;
   showDailySelectedCra: boolean = false;
+  congeStatutList: any[] = [
+    { label: 'Congé payé', value: 'Congé payé' },
+    { label: 'Congé sans solde', value: 'Congé sans solde' },
+    { label: 'Absence maladie', value: 'Absence maladie' },
+    { label: 'Télétravail', value: 'Télétravail' },
+    { label: 'Départ anticipé', value: 'Départ anticipé' },
+    { label: 'Autorisation', value: 'Autorisation' },
+    { label: 'Autre motif', value: 'Autre motif' },
+  ];
+  showAddCongeForm: boolean = false;
   //* end check in variables
 
   constructor(

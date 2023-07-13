@@ -294,6 +294,45 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">
+                    <!-- formulaire de demande de congé -->
+                    <div *ngIf="showAddCongeForm">
+                        <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showAddCongeForm = false;"></i>
+                        <div style="float: right"></div>
+                        
+                        <h3 class="text-center">Nouvelle demande de congé</h3>
+                        <form class="p-formgrid grid p-fluid">
+                            <div class="field col-12">
+                                <label>Type de congé</label>
+                                <p-dropdown [options]="congeStatutList" filter="true" placeholder="type du congé" [showClear]="true"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="debut">Début</label>
+                                <p-calendar [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="fin">Fin</label>
+                                <p-calendar [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label htmlFor="nb_jour">Nombre de jours</label>
+                                <input pInputText type="number" id="nb_jour">
+                            </div>
+                            <div class="field col-12 md:col-8">
+                                <label htmlFor="motif">Motif de la demande</label>
+                                <textarea pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
+                            </div>
+                            <div class="field col-12">
+                                <input type="file" pInputText>
+                            </div>
+
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"></button>
+                        </form>
+                    </div>
+                    
+
+                    
+                    <button pButton pRipple label="Nouvelle demande" style="float: right;" class="p-button-outlined mb-2" (click)="showAddCongeForm = true"></button>
+                    <div style="clear: both"></div>
                     <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
