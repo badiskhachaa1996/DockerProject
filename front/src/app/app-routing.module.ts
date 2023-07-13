@@ -450,6 +450,7 @@ const routes: Routes = [
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
             { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },
