@@ -844,13 +844,13 @@ export class ConsulaireComponent implements OnInit {
   formEmailPerso = new FormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
-    cc: new FormControl([], Validators.required),
+    cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
   formEmailType = new FormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
-    cc: new FormControl([], Validators.required),
+    cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
   onEmailPerso() {
