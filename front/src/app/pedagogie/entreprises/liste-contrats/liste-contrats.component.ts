@@ -350,7 +350,7 @@ export class ListeContratsComponent implements OnInit {
       }
       this.authService.getAllCommercialV2().subscribe(CommercialData => {
         this.ListCommercial = CommercialData
-        this.filtreAgent = []
+        this.filtreAgent = [{ value: null, label: "Commerciaux" }]
         this.ListCommercial.forEach(comData => {
           comData.nomComplet = comData.firstname + " " + comData.lastname;
           this.dropDownCommecialList.push({ label: comData.nomComplet, value: comData._id })
