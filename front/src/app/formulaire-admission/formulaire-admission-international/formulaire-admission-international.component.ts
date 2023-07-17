@@ -17,6 +17,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { NotificationService } from 'src/app/services/notification.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { ServService } from 'src/app/services/service.service';
+import { SocketService } from 'src/app/services/socket.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -29,7 +30,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router,
     private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService,
-    private NotifService: NotificationService, private PartenaireService: PartenaireService, private FAService: FormulaireAdmissionService) { }
+    private NotifService: NotificationService, private PartenaireService: PartenaireService, private FAService: FormulaireAdmissionService, private Socket: SocketService) { }
 
   routeItems: MenuItem[] = [
     { label: 'Infos' },
@@ -604,6 +605,16 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
 
             if (this.ECOLE.langue == 'English') this.messageService.add({ severity: 'success', summary: 'The request for admission was sent', detail: "Check your email for login details" });
             else this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+            this.Socket.NewNotifV2('International', `Un nouveau lead a été crée à la date ${new Date().toLocaleDateString('fr-FR')} , Nom du lead ${lastname} ${firstname} , dont ID ${customid} , Ecole choisi ${this.form_origin} , pour la formation ${formation}`)
+            this.NotifService.createV2(new Notification(null, null, false,
+              `Un nouveau lead a été crée à la date ${new Date().toLocaleDateString('fr-FR')} , Nom du lead ${lastname} ${firstname} , dont ID ${customid} , Ecole choisi ${this.form_origin} , pour la formation ${formation}`,
+              new Date(), null, null), 'International', "Super-Admin").subscribe(test => { })
+            this.NotifService.createV2(new Notification(null, null, false,
+              `Un nouveau lead a été crée à la date ${new Date().toLocaleDateString('fr-FR')} , Nom du lead ${lastname} ${firstname} , dont ID ${customid} , Ecole choisi ${this.form_origin} , pour la formation ${formation}`,
+              new Date(), null, null), 'International', "Admin").subscribe(test => { })
+            this.NotifService.createV2(new Notification(null, null, false,
+              `Un nouveau lead a été crée à la date ${new Date().toLocaleDateString('fr-FR')} , Nom du lead ${lastname} ${firstname} , dont ID ${customid} , Ecole choisi ${this.form_origin} , pour la formation ${formation}`,
+              new Date(), null, null), 'International', "Agent").subscribe(test => { })
             this.getFilesAccess(response.dataUser._id, response.token, response.prospect._id)
           })
         } else {

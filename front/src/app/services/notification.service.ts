@@ -26,7 +26,7 @@ export class NotificationService {
 
   createV2(notif: Notification, module, role) {
     let url = this.apiUrl + "createV2";
-    return this.http.post<User[]>(url, { ...notif, module, role }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.post<User[]>(url, { ...notif, module, role });
   }
 
   getAll() {
@@ -42,6 +42,11 @@ export class NotificationService {
   delete(id: string) {
     let registreUrl = this.apiUrl + "deleteById/" + id;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  deleteAll(id: string) {
+    let registreUrl = this.apiUrl + "deleteAll/" + id;
+    return this.http.delete<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getById(id: string) {

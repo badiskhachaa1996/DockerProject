@@ -38,7 +38,18 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 export class AppMenuComponent implements OnInit {
 
     token: any;
-    items: MenuItem[] = [];
+    items: MenuItem[] = [
+        {
+            label: 'Tableau de bord',
+            icon: 'pi pi-fw pi-home',
+            routerLink: ['/'],
+        },
+        {
+            label: 'Signaler un problème technique',
+            icon: 'pi pi-fw pi-exclamation-triangle',
+            routerLink: ['/ticketing-igs'],
+        },
+    ];
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
@@ -62,6 +73,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Développeur',
@@ -91,7 +107,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -112,7 +128,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1008,7 +1024,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1242,7 +1263,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1327,7 +1353,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1499,6 +1530,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1554,6 +1590,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1605,6 +1646,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1627,7 +1673,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1831,7 +1882,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1885,6 +1941,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Développeur',
                             icon: 'pi pi-fw pi-cog',
                             items: [
@@ -1912,7 +1973,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2004,6 +2065,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -2031,7 +2097,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2556,7 +2622,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2805,7 +2876,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2905,7 +2981,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2961,7 +3042,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3144,7 +3230,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3300,7 +3391,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3369,6 +3465,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -3396,7 +3497,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3492,7 +3593,14 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },/*
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        /*
+                        
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -3638,7 +3746,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3717,11 +3830,17 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Tableau de bord',
                                             icon: 'pi pi-fw pi-home',
                                             routerLink: ['/']
-                                        }
+                                        },
+                                        {
+                                            label: 'Signaler un problème technique',
+                                            icon: 'pi pi-fw pi-exclamation-triangle',
+                                            routerLink: ['/ticketing-igs'],
+                                        },
                                     ]
                                 },
+
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3793,6 +3912,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/']
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Tuteurs',
                                     icon: 'pi pi-users',
                                     routerLink: ['/tuteur-ceo']
@@ -3800,7 +3924,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-ticket',
                             items: [
 
@@ -3871,7 +3995,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-
+                console.log(service_dic)
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
                         this.items.push(
@@ -3909,6 +4033,21 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
+                                    }, {
+                                        label: 'Ticketing',
+                                        icon: 'pi pi-fw pi-ticket',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un ticket',
+                                                icon: 'pi pi-plus',
+                                                routerLink: ['/ticketing/gestion/ajout']
+                                            },
+                                            {
+                                                label: 'Mes tickets envoyé',
+                                                icon: 'pi pi-inbox',
+                                                routerLink: ['/ticketing/gestion/mes-tickets']
+                                            }
+                                        ]
                                     },
                                     {
                                         label: 'Dashboard',
@@ -3944,15 +4083,30 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            },
+                            }, {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                }
+                            ]
+                        }
                         )
                     }
                 }
                 if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4010,7 +4164,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4063,7 +4217,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Agent") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4085,7 +4239,7 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4104,7 +4258,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
-                    if (role == "Super Admin")
+                    if (role == "Super-Admin")
                         this.items.push(
                             {
                                 label: 'International',
@@ -4423,6 +4577,22 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
+                            {
+                                label: 'Ticketing',
+                                icon: 'pi pi-fw pi-ticket',
+                                items: [
+                                    {
+                                        label: 'Ajouter un ticket',
+                                        icon: 'pi pi-plus',
+                                        routerLink: ['/ticketing/gestion/ajout']
+                                    },
+                                    {
+                                        label: 'Mes tickets envoyé',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/ticketing/gestion/mes-tickets']
+                                    }
+                                ]
+                            }
 
                         ]
                         setTimeout(() => this.showMenu = true, 0);
@@ -4430,7 +4600,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('Mailing')) {
                     let role = service_dic['Mailing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push(
                             {
                                 label: 'Gestions des emails',
@@ -4479,7 +4649,7 @@ export class AppMenuComponent implements OnInit {
                     let role = service_dic['CRM']
                     this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(member => {
                         this.showMenu = false
-                        if (role == 'Super Admin') {
+                        if (role == 'Super-Admin') {
                             this.items.push(
                                 {
                                     label: 'CRM',

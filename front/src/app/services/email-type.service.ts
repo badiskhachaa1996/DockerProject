@@ -119,4 +119,9 @@ export class EmailTypeService {
     let registreUrl = this.apiUrl + "uploadPJ";
     return this.httpClient.post<{ pieces_jointe }>(registreUrl, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  defaultEmail(data: { email: string, objet: string, mail: string }) {
+    let registreUrl = this.apiUrl + "defaultEmail";
+    return this.httpClient.post<string>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 }
