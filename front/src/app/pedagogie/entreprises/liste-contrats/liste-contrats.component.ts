@@ -348,8 +348,7 @@ export class ListeContratsComponent implements OnInit {
           })
         })
       }
-      this.authService.getAllCommercial().subscribe(CommercialData => {
-
+      this.authService.getAllCommercialV2().subscribe(CommercialData => {
         this.ListCommercial = CommercialData
         this.filtreAgent = []
         this.ListCommercial.forEach(comData => {

@@ -48,7 +48,9 @@ import { DailyCheckService } from 'src/app/services/daily-check.service';
 import * as moment from 'moment';
 import { TabView } from 'primeng/tabview';
 import { RhService } from 'src/app/services/rh.service';
-
+import { CongeService } from 'src/app/services/conge.service';
+import { Conge } from 'src/app/models/Conge';
+import { saveAs } from 'file-saver';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -270,6 +272,14 @@ export class DashboardComponent implements OnInit {
     { label: 'Autre motif', value: 'Autre motif' },
   ];
   showAddCongeForm: boolean = false;
+  showUpdateCongeForm: boolean = false;
+  congeToUpdate: Conge;
+  formAddConge: FormGroup;
+  formUpdateConge: FormGroup;
+  conges: Conge[] = [];
+  expandedRows = {};
+  showOtherTextArea: boolean = false;
+  congeJustifile: any;
   //* end check in variables
 
   constructor(
@@ -283,7 +293,7 @@ export class DashboardComponent implements OnInit {
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
-    private rhService: RhService
+    private rhService: RhService, private congeService: CongeService
   ) { }
 
 
@@ -396,7 +406,27 @@ export class DashboardComponent implements OnInit {
       .then((response) => {
         this.historiqueCra = response;
       })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
+    // initialisation du formulaire d'ajout de congé
+    this.formAddConge = this.formBuilder.group({
+      type: ['', Validators.required],
+      other: [''],
+      debut: ['', Validators.required],
+      fin: ['', Validators.required],
+      nb_jour: ['', Validators.required],
+      motif: ['', Validators.required],
+    });
+
+    // initialisation du formulaire de modification de congé
+    this.formUpdateConge = this.formBuilder.group({
+      type: ['', Validators.required],
+      other: [''],
+      debut: ['', Validators.required],
+      fin: ['', Validators.required],
+      nb_jour: ['', Validators.required],
+      motif: ['', Validators.required],
+    });
   }
 
   SCIENCE() {
@@ -622,6 +652,8 @@ export class DashboardComponent implements OnInit {
     this.UserService.getPopulate(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        // recupere la liste des congés
+        this.onGetConges(this.userConnected._id);
         // verification du check in journalier
         this.onCheckDailyCheck(response._id);
       },
@@ -870,6 +902,140 @@ export class DashboardComponent implements OnInit {
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
     }
+  }
+
+  // recuperation des demandes de congé du user
+  onGetConges(id: string): void {
+    this.congeService.getAllByUserId(id)
+      .then((response) => { this.conges = response; })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" }) });
+  }
+
+  // methode qui affiche ou non le cgamps de saisie pour autres motif
+  onShowOtherTextArea(event: any) {
+    event.value == 'Autre motif' ? this.showOtherTextArea = true : this.showOtherTextArea = false;
+  }
+
+  onSelectFile(event: any) {
+    if (event.target.files.length > 0) {
+      this.congeJustifile = event.target.files[0];
+    }
+  }
+
+  // demande de congé
+  onAskConge(): void {
+    // donnée congés
+    const formValue = this.formAddConge.value;
+
+    const conge = new Conge();
+    conge.user_id = this.user._id;
+    conge.date_demande = new Date();
+
+    conge.type_conge = formValue.type;
+    conge.other_motif = formValue.other;
+
+    conge.date_debut = formValue.debut;
+    conge.date_fin = formValue.fin;
+    conge.nombre_jours = formValue.nb_jour;
+    conge.motif = formValue.motif;
+    conge.statut = 'En attente';
+
+    // envoi des données en bd
+    this.congeService.postConge(conge)
+      .then((response: Conge) => {
+        if (this.congeJustifile != null) {
+          // fichier justificatif
+          let formData = new FormData();
+          formData.append('id', response._id);
+          formData.append('file', this.congeJustifile);
+
+          this.congeService.uploadJustificatif(formData)
+            .then(() => {
+              this.formAddConge.reset();
+              this.showAddCongeForm = false;
+              this.congeJustifile = null;
+              this.showOtherTextArea = false;
+
+              this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande avec justificatif à bien été transmis, vous serez notifier d'une réponse très bientôt" });
+              this.onGetConges(response.user_id);
+            })
+            .catch((error) => { this.messageService.add({ severity: 'warning', summary: 'Justificatif', detail: error.error }) });
+        } else {
+          this.formAddConge.reset();
+          this.showAddCongeForm = false;
+          this.congeJustifile = null;
+          this.showOtherTextArea = false;
+          this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été transmis, vous serez notifier d'une réponse très bientôt" });
+          this.onGetConges(response.user_id);
+        }
+      })
+      .catch((error) => {
+        this.messageService.add({ severity: 'error', summary: 'Demande de congé', detail: "Impossible de transmettre votre demande, veuillez contacter un admin via le service ticketing" });
+      });
+  }
+
+  onDonwloadJustificatif(id: string): void {
+    this.congeService.donwloadJustificatif(id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `jusiticatif.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Justificatif", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Justificatif", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  onDeleteConge(id: string): void {
+    this.congeService.deleteConge(id)
+      .then((response) => {
+        this.messageService.add({ severity: "success", summary: "Congé", detail: "Démandé retirée" });
+        this.onGetConges(this.userConnected._id);
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Congé", detail: "Impossible de de retiter votre demande" }) });
+  }
+
+  // methode pour pre-remplir le formulaire de modification de congé
+  onPachCongeData(conge: Conge): void
+  {
+    this.congeToUpdate = conge;
+    if(conge.type_conge === "Autre motif")
+    {
+      this.showOtherTextArea = true;
+    }
+
+    this.formUpdateConge.patchValue({
+      type: conge.type_conge,
+      other: conge.other_motif,
+      debut: new Date(conge.date_debut),
+      fin: new Date(conge.date_fin),
+      nb_jour: conge.nombre_jours,
+      motif: conge.motif,
+    });
+
+    this.showUpdateCongeForm = true;
+  }
+
+  onUpdateConge(): void
+  {
+    // recuperation des valeurs du formulaire
+    const formValue = this.formUpdateConge.value;
+
+    this.congeToUpdate.type_conge     = formValue.type;
+    this.congeToUpdate.other_motif    = formValue.other;
+
+    this.congeToUpdate.date_debut     = formValue.debut;
+    this.congeToUpdate.date_fin       = formValue.fin;
+    this.congeToUpdate.nombre_jours   = formValue.nb_jour;
+    this.congeToUpdate.motif          = formValue.motif;
+
+    this.congeService.putConge(this.congeToUpdate)
+    .then(() => {
+      this.formUpdateConge.reset();
+      this.showUpdateCongeForm = false;
+      this.showOtherTextArea = false;
+      this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
+      this.onGetConges(this.congeToUpdate.user_id);
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
   //* end
 }
