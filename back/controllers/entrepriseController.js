@@ -737,6 +737,7 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
     ?.populate('add_by')
+    ?.populate('historique_modification.user_id')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -774,6 +775,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
     ?.populate('add_by')
+    ?.populate('historique_modification.user_id')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -796,6 +798,7 @@ app.get("/getAllContrats/", (req, res, next) => {
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
     ?.populate('add_by')
+    ?.populate('historique_modification.user_id')
     .then((CAFromDb) => {
       res.status(200).send(CAFromDb);
     })
@@ -819,6 +822,7 @@ app.get("/contrats-by-ceo/:id", (req, res) => {
     ?.populate("directeur_id")
     ?.populate("entreprise_id")
     ?.populate('add_by')
+    ?.populate('historique_modification.user_id')
     .then((response) => {
       res
         .status(200)

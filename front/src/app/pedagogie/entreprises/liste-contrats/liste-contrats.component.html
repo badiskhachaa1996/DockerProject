@@ -564,6 +564,38 @@
             </div>
         </div>
 
+
+        <!-- permet de voir l'historique des modifications sur le contrat -->
+        <div class="card" *ngIf="showHistoriqueModif">
+
+            <i class="pi pi-times-circle" (click)="showHistoriqueModif = false;" style="color: red; cursor: pointer; font-size: 20px; float: right;"></i>
+            <div style="clear: both;"></div>
+
+            <p-table #dt1 [value]="contratToUpdate.historique_modification"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
+                [rows]="8">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date</th>
+                        <th>Collaborateur</th>
+                        <th>Modifications</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-historique>
+                    <tr>
+                        <td>{{historique.update_date | date: 'short' }}</td>
+                        <td>{{historique.user_id.firstname }} {{historique.user_id.lastname }}</td>
+                        <td>
+                            <ul>
+                                <li *ngFor="let tache of historique.update_description; let i = index">{{tache}}</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
         <div class="card">
             <button *ngIf="token.type != 'CEO Entreprise' && token.role != 'Watcher'" pButton
                 label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()" style="float: right;"></button>
@@ -695,6 +727,9 @@
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
                                 style="text-align: center; color: blue; margin: 2px"
                                 *ngIf="token.type != 'CEO Entreprise'"></i>
+                            <i class="pi pi-list" pTooltip="Historique de modification" aria-hidden="true"
+                                (click)="contratToUpdate = contrat; showHistoriqueModif = true;"
+                                style="text-align: center; color: black; margin: 2px"></i>
                             <br>
                             <!-- contract files -->
                             <i class="pi pi-file" pTooltip="Cerfa" style="cursor: pointer; color: blue; margin: 2px;"
