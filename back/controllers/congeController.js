@@ -25,6 +25,16 @@ app.get("/get-conges-user-id/:user_id", (req, res) => {
 })
 
 
+// recuperation de la liste des congés
+app.get("/get-conges", (req, res) => {
+    const { user_id } = req.params;
+
+    Conge.find()?.populate('user_id')
+        .then((response) => { res.status(200).send(response) })
+        .catch((error) => { res.status(400).send(error) })
+})
+
+
 //mise à jour d'un object conge 
 app.put("/put-conge", (req, res) => {
     const conge = new Conge({ ...req.body });
@@ -47,7 +57,7 @@ app.patch("/answer", (req, res) => {
 })
 
 
-//supression d'une demmande de conge
+//suppression d'une demande de conge
 app.delete("/delete-conge/:id", (req, res) => {
     const { id } = req.params;
 
