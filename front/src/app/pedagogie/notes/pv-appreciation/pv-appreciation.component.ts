@@ -58,7 +58,7 @@ export class PvAppreciationComponent implements OnInit {
             }
             this.cols.forEach(col => {
               //console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
-              if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+              if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "" || d.appreciation_module[col.module] == "Doit faire ses preuves" || d.appreciation_module[col.module] == "Passable" || d.appreciation_module[col.module] == "Assez Bien" || d.appreciation_module[col.module] == "Bien" || d.appreciation_module[col.module] == "Très Bien" || d.appreciation_module[col.module] == "Excellent") && (d.notes[col.module] || d.notes[col.module] == 0)) {
                 let note = parseInt(d.notes[col.module])
                 //console.log(note)
                 if (note < 10)
@@ -111,7 +111,7 @@ export class PvAppreciationComponent implements OnInit {
           d.appreciation_module = {}
         }
         pv.pv_annuel_cols.forEach(col => {
-          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "" || d.appreciation_module[col.module] == "Doit faire ses preuves" || d.appreciation_module[col.module] == "Passable" || d.appreciation_module[col.module] == "Assez Bien" || d.appreciation_module[col.module] == "Bien" || d.appreciation_module[col.module] == "Très Bien" || d.appreciation_module[col.module] == "Excellent") && (d.notes[col.module] || d.notes[col.module] == 0)) {
             let note = parseInt(d.notes[col.module])
             if (note < 10)
               d.appreciation_module[col.module] = "Doit faire ses preuves"
@@ -158,6 +158,7 @@ export class PvAppreciationComponent implements OnInit {
     });
   }
 
+
   regeneratePV() {
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
       this.cols = data.cols
@@ -169,7 +170,7 @@ export class PvAppreciationComponent implements OnInit {
         }
         this.cols.forEach(col => {
           //console.log((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == ""),(d.notes[col.module] ||d.notes[col.module]==0),col.module)
-          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "") && (d.notes[col.module] || d.notes[col.module] == 0)) {
+          if ((!d.appreciation_module[col.module] || d.appreciation_module[col.module] == "" || d.appreciation_module[col.module] == "Doit faire ses preuves" || d.appreciation_module[col.module] == "Passable" || d.appreciation_module[col.module] == "Assez Bien" || d.appreciation_module[col.module] == "Bien" || d.appreciation_module[col.module] == "Très Bien" || d.appreciation_module[col.module] == "Excellent") && (d.notes[col.module] || d.notes[col.module] == 0)) {
             let note = parseInt(d.notes[col.module])
             //console.log(note)
             if (note < 10)
@@ -193,5 +194,26 @@ export class PvAppreciationComponent implements OnInit {
       })
     })
   }
+  showRenamePV = null
 
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
 }

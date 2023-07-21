@@ -45,18 +45,22 @@ export class ListeContratsComponent implements OnInit {
   minDateCalendarC = new Date("01/01/" + this.minYearC)
   maxDateCalendarC = new Date("01/01/" + this.maxYearC)
   listAlternantDD: any = []
+  myListAlternantDD: {};
   formationList = []
+  myFormationList = {}
   RegisterNewCA: FormGroup;
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
   ParmTuteur = this.route.snapshot.paramMap.get('idTuteur');
   formAddNewCA: boolean = false;
   ConnectedEntreprise: any;
   EntrepriseList = [];
+  myEntrepriseList = {};
   TuteursList = [];
   dropdownTuteurList = []
   ListCommercial = [];
 
   dropDownCommecialList = [];
+  myDropDownCommecialList = {};
   dropdownCFA = [];
 
   //partie dedié à la mise à jour 
@@ -161,6 +165,7 @@ export class ListeContratsComponent implements OnInit {
   listeContratsFilteredByCampus: ContratAlternance[] = [];
   campusFiltered: User;
   showFilterByCampus: boolean = false;
+  showHistoriqueModif: boolean = false;
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
@@ -225,6 +230,7 @@ export class ListeContratsComponent implements OnInit {
 
       data.forEach(element => {
         this.formationList.push({ label: element.titre, value: element._id });
+        this.myFormationList[element._id] = element;
       });
       this.onInitFormUpdateCa();
       this.onInitRegisterNewCA();
@@ -233,17 +239,22 @@ export class ListeContratsComponent implements OnInit {
     //Lister toutes les entreprises 
     this.entrepriseService.getAll().subscribe(listEntre => {
       this.EntrepriseList = [];
+      this.myEntrepriseList = {};
       listEntre.forEach(ent => {
         this.EntrepriseList.push({ label: ent.r_sociale, value: ent._id })
+        this.myEntrepriseList[ent._id] = ent;
       })
       // Lister tous les étudiants alternants
       this.etudiantService.getAllAlternants().subscribe(alternantsData => {
-        this.listAlternantDD = []
+        this.listAlternantDD = [];
+        this.myListAlternantDD = {};
         alternantsData.forEach(altdata => {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
           if (altdata.user_id) {
             altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
             this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+
+            this.myListAlternantDD[altdata._id] = `${altdata.user_id?.lastname} ${altdata.user_id?.firstname}`;
           }
         })
       })
@@ -348,14 +359,14 @@ export class ListeContratsComponent implements OnInit {
           })
         })
       }
-      this.authService.getAllCommercial().subscribe(CommercialData => {
-
+      this.authService.getAllCommercialV2().subscribe(CommercialData => {
         this.ListCommercial = CommercialData
-        this.filtreAgent = []
+        this.filtreAgent = [{ value: null, label: "Commerciaux" }]
         this.ListCommercial.forEach(comData => {
           comData.nomComplet = comData.firstname + " " + comData.lastname;
           this.dropDownCommecialList.push({ label: comData.nomComplet, value: comData._id })
           this.filtreAgent.push({ label: comData.nomComplet, value: comData._id })
+          this.myDropDownCommecialList[comData._id] = comData.nomComplet;
         })
       })
     })
@@ -372,6 +383,8 @@ export class ListeContratsComponent implements OnInit {
         this.filtreFormation.push({ label: f.titre_long, value: f._id })
       })
     })
+
+   
   }
 
   showPresence(alternant_id) {
@@ -487,7 +500,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id, new Date())
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires, this.RegisterNewCA.value.ecole, this.RegisterNewCA.get('mob_int')?.value, this.RegisterNewCA.get('cout_mobilite')?.value, this.RegisterNewCA.get('mat_ped')?.value, this.RegisterNewCA.get('cout_mat_ped')?.value, this.RegisterNewCA.get('dl_help')?.value, this.RegisterNewCA.get('cout_dl_help')?.value, null, null, null, null, null, null, null, null, this.collaborateur._id, new Date(), null)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -504,16 +517,97 @@ export class ListeContratsComponent implements OnInit {
 
   //Mise à jour d'un contrat d'alternance
   onUpdateCa() {
-    let annee_scolaires = [];
+    let formValue = this.formUpdateCa.value;
 
-    this.formUpdateCa.get('anne_scolaire')?.value.forEach((annee) => {
-      annee_scolaires.push(annee.label);
-    });
+    // partie historisation des modifications
+    let listModif = [];
 
-    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
-      annee_scolaires, this.formUpdateCa.value.ecole, this.contratToUpdate.cout_mobilite_status, this.contratToUpdate.cout_mobilite, this.contratToUpdate.cout_mat_ped_status, this.contratToUpdate.cout_mat_ped, this.contratToUpdate.cout_dl_help_status, this.contratToUpdate.cout_dl_help, this.contratToUpdate.cerfa, this.contratToUpdate.convention_formation, this.contratToUpdate.resiliation_contrat, this.contratToUpdate.accord_prise_charge, this.contratToUpdate.relance, this.contratToUpdate.last_status_change_date, this.contratToUpdate.remarque, this.contratToUpdate.livret_apprentissage)
+    new Date(this.contratToUpdate.debut_contrat).toLocaleDateString() !== formValue.debut_contrat.toLocaleDateString() ? listModif.push(`Date de debut est passé de ${new Date(this.contratToUpdate.debut_contrat).toLocaleDateString()} à ${formValue.debut_contrat.toLocaleDateString()}`) : false;
+    new Date(this.contratToUpdate.fin_contrat).toLocaleDateString() !== formValue.fin_contrat.toLocaleDateString() ? listModif.push(`Date de fin est passé de ${new Date(this.contratToUpdate.fin_contrat).toLocaleDateString()} à ${formValue.fin_contrat.toLocaleDateString()}`) : false;
+    this.contratToUpdate.horaire !== formValue.horaire ? listModif.push(`Horaire est passé de ${this.contratToUpdate.horaire}h à ${formValue.horaire}h`) : false;
 
-    this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
+    const {_id}: any = this.contratToUpdate.alternant_id;
+    const {formation}: any = this.contratToUpdate;
+    const {tuteur_id}: any = this.contratToUpdate;
+    const {directeur_id}: any = this.contratToUpdate;
+    const {entreprise_id}: any = this.contratToUpdate;
+    
+    _id != formValue.alternant ? listModif.push(`Changement de l'alternant, de ${this.myListAlternantDD[_id]} à ${this.myListAlternantDD[formValue.alternant]}`) : false;
+    formation._id != formValue.form ? listModif.push(`Formation: de ${this.myFormationList[formation._id]} à ${this.myFormationList[formValue.form]}`) : false;
+    
+    if(tuteur_id != null)
+    {
+      tuteur_id._id != formValue.tuteur_id.value ? listModif.push(`Le tuteur a été modifié`) : false;
+    } else if(directeur_id != null)
+    {
+      directeur_id._id != formValue.tuteur_id.value ? listModif.push(`Le tuteur a été modifié`) : false;
+    }
+  
+    entreprise_id._id != formValue.entreprise_id.value ? listModif.push(`Entreprise est passé de ${this.myEntrepriseList[entreprise_id._id].r_sociale} à ${this.myEntrepriseList[formValue.entreprise_id.value].r_sociale}`) : false;
+    this.contratToUpdate.code_commercial != formValue.code_commercial ? listModif.push(`Commercial est passé de ${this.myDropDownCommecialList[this.contratToUpdate.code_commercial]} à ${this.myDropDownCommecialList[formValue.code_commercial]}`) : false;
+    this.contratToUpdate.anne_scolaire != formValue.anne_scolaire ? listModif.push(`L'année scolaire à été mis à jour`) : false;
+    this.contratToUpdate.ecole != formValue.ecole ? listModif.push(`L'école a été modifié`) : false;
+    this.contratToUpdate.cout_mobilite_status != formValue.mob_int ? listModif.push(`Le status de la mobilité internationale a été modifié`) : false;
+    if(this.contratToUpdate.cout_mobilite == null)
+    {
+      formValue.cout_mobilite != '' ? listModif.push(`Le cout de la mobilité internationale a été modifié`) : false;
+    } else {
+      this.contratToUpdate.cout_mobilite != formValue.cout_mobilite ? listModif.push(`Le cout de la mobilité internationale a été modifié`) : false;
+    }
+    
+    this.contratToUpdate.cout_mat_ped_status != formValue.mat_ped ? listModif.push(`Le status du champs matériel pédagogique à été mis à jour`) : false;
+    
+    if(this.contratToUpdate.cout_mat_ped == null)
+    {
+      formValue.cout_mat_ped != '' ? listModif.push(`Le coût du matériel pédagogique a été mis à jour`) : false;
+    } else {
+      this.contratToUpdate.cout_mat_ped != formValue.cout_mat_ped ? listModif.push(`Le coût du matériel pédagogique a été mis à jour`) : false;
+    }
+    
+    this.contratToUpdate.cout_dl_help_status != formValue.dl_help ? listModif.push(`Le status du champs aide au permis à été mis à jour`) : false;
+    
+    if(this.contratToUpdate.cout_dl_help == null)
+    {
+      formValue.cout_dl_help != '' ? listModif.push(`Le coût du champs aide au permis a été mis à jour`) : false;
+    } else {
+      this.contratToUpdate.cout_dl_help != formValue.cout_dl_help ? listModif.push(`Le coût du champs aide au permis a été mis à jour`) : false;
+    }
+
+    console.log(this.contratToUpdate.cout_mobilite, formValue.cout_mobilite);
+    console.log(listModif);
+
+    const historiqueModification = 
+    {
+      user_id: this.collaborateur._id,
+      update_description: listModif,
+      update_date: new Date(),
+    }
+
+    // mise en place des données à envoyer
+    this.contratToUpdate.debut_contrat = formValue.debut_contrat;
+    this.contratToUpdate.fin_contrat = formValue.fin_contrat;
+    this.contratToUpdate.horaire = formValue.horaire;
+    this.contratToUpdate.alternant_id = formValue.alternant;
+    this.contratToUpdate.intitule = formValue.intitule;
+    this.contratToUpdate.classification = formValue.classification;
+    this.contratToUpdate.niveau_formation = formValue.niv;
+    this.contratToUpdate.coeff_hierachique = formValue.coeff_hier;
+    this.contratToUpdate.formation = formValue.form;
+    this.contratToUpdate.tuteur_id = formValue.tuteur_id.value;
+    this.contratToUpdate.directeur_id = '';
+    this.contratToUpdate.entreprise_id = formValue.entreprise_id.value;
+    this.contratToUpdate.code_commercial = formValue.code_commercial;
+    this.contratToUpdate.anne_scolaire = formValue.anne_scolaire;
+    this.contratToUpdate.ecole = formValue.ecole;
+    this.contratToUpdate.cout_mobilite_status = formValue.mob_int;
+    this.contratToUpdate.cout_mobilite = formValue.cout_mobilite;
+    this.contratToUpdate.cout_mat_ped_status = formValue.mat_ped;
+    this.contratToUpdate.cout_mat_ped = formValue.cout_mat_ped;
+    this.contratToUpdate.cout_dl_help_status = formValue.dl_help;
+    this.contratToUpdate.cout_dl_help = formValue.cout_dl_help;
+    this.contratToUpdate.historique_modification.push(historiqueModification);
+
+    this.entrepriseService.updateContratAlternance(this.contratToUpdate).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
       this.showFormUpdateCa = false
       this.ngOnInit()
@@ -525,6 +619,7 @@ export class ListeContratsComponent implements OnInit {
   //Methode pour preparer le formulaire de modification d'un contrat
   onFillFormUpdate(contrat: ContratAlternance) {
     this.contratToUpdate = contrat;
+    console.log(this.contratToUpdate)
     // this.loadTuteur(contrat.tuteur_id.entreprise_id, contrat.tuteur_id._id)
     let bypass_alternant: any = contrat.alternant_id
     let bypass_formation: any = contrat.formation

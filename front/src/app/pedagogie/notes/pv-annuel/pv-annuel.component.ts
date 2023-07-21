@@ -203,7 +203,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     } else {
       let moy_sem1 = this.calculMoyenne(notes['Semestre 1'], 'Semestre 1')
       let moy_sem2 = this.calculMoyenne(notes['Semestre 2'], 'Semestre 2')
-      return (moy_sem1 + moy_sem2)/2
+      return (moy_sem1 + moy_sem2) / 2
     }
 
   }
@@ -321,6 +321,51 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     });
     FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+  showRenamePV = null
+
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  
+  showAppreciation(note: number, defaultAppreciation: string) {
+    if (defaultAppreciation == "" || defaultAppreciation == "Doit faire ses preuves" || defaultAppreciation == "Passable" || defaultAppreciation == "Assez Bien" || defaultAppreciation == "Bien" || defaultAppreciation == "Très Bien" || defaultAppreciation == "Excellent") {
+      let r = ""
+      if (note < 10)
+        r = "Doit faire ses preuves"
+      else if ((note > 10 && note < 12) || note == 10)
+        r = "Passable"
+      else if ((note > 12 && note < 14) || note == 12)
+        r = "Assez Bien"
+      else if ((note > 14 && note < 16) || note == 14)
+        r = "Bien"
+      else if ((note > 16 && note < 18) || note == 16)
+        r = "Très Bien"
+      else if (note > 18 || note == 18)
+        r = "Excellent"
+      return r
+    } else
+      return defaultAppreciation
   }
 
 }

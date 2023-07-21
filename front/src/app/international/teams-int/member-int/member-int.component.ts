@@ -17,7 +17,17 @@ export class MemberIntComponent implements OnInit {
   members: MemberInt[] = []
   selectedMember: MemberInt
   teamsList = []
-  localisationList = environment.pays
+  localisationList = [
+    { label: "Montpellier", value: "Montpellier" },
+    { label: "Paris - Champs sur Marne", value: "Paris - Champs sur Marne" },
+    { label: "Paris - Louvre", value: "Paris - Louvre" },
+    { label: "Maroc", value: "Maroc" },
+    { label: "Tunis", value: "Tunis" },
+    { label: "A distance", value: "A distance" },
+    { label: "Congo", value: "Congo" },
+    { label: "Dubai", value: "Dubai" },
+    { label: "Malte", value: "Malte" },
+  ]
   roleList = [
     { label: "Super Admin", value: "Super Admin" },
     { label: "Admin", value: "Admin" },

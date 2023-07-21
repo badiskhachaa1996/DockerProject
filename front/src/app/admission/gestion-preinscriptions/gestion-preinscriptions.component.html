@@ -198,6 +198,9 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>-->
+            <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                style="margin-left: 2px;">
+            </button>
             <h5>Liste des leads {{infoFiltered}}</h5>
 
             <p-toast></p-toast>
@@ -231,7 +234,8 @@
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
                         [options]="[{value:null,label:'Tous les origines'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
                         (onChange)="dt1.filter($event.value, 'origin','equals')"
-                        emptyFilterMessage="Pas d'origine trouvé" filterPlaceholder="Origine" [style]="{'margin':'5px'}">
+                        emptyFilterMessage="Pas d'origine trouvé" filterPlaceholder="Origine"
+                        [style]="{'margin':'5px'}">
                     </p-dropdown>
 
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Paiement"
@@ -394,9 +398,9 @@
                                 aria-hidden="true"></i>
                             <i pTooltip="Voir le dossier du point de vue d'un lead" tooltipPosition="bottom"
                                 class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
-                            <i *ngIf="token && token.role!='user' && token.role!='Agent'"
-                                pTooltip="Supprimer le lead" tooltipPosition="bottom" class="pi pi-trash"
-                                (click)="deleteProspect(prospect)" aria-hidden="true"></i>
+                            <i *ngIf="token && token.role!='user' && token.role!='Agent'" pTooltip="Supprimer le lead"
+                                tooltipPosition="bottom" class="pi pi-trash" (click)="deleteProspect(prospect)"
+                                aria-hidden="true"></i>
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
@@ -739,7 +743,8 @@
     <div class="col-12" *ngIf="!isPartenaireExterne">
         <div class="card">
             <h5>Liste des leads pour le call center : Alternant</h5>
-            <small style="color: red;">Tous les champs qui sont en couleur rouge, sont des leads qui doivent être appelé dans le call center</small>
+            <small style="color: red;">Tous les champs qui sont en couleur rouge, sont des leads qui doivent être appelé
+                dans le call center</small>
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="alternants" [paginator]="true" [pageLinks]="5" selectionMode="single"
@@ -950,9 +955,9 @@
                             <i pTooltip="Voir le CV du lead" tooltipPosition="bottom" class="pi pi-book"
                                 aria-hidden="true" (click)="onNavigateToCV(prospect?.user_id?._id)"></i>
                             <i pTooltip="Lead appelé" class="pi pi-phone" (click)="prospectCalled"></i>
-                            <i *ngIf="token && token.role!='user' && token.role!='Agent'"
-                                pTooltip="Supprimer le lead" tooltipPosition="bottom" class="pi pi-trash"
-                                (click)="deleteProspect(prospect)" aria-hidden="true"></i>
+                            <i *ngIf="token && token.role!='user' && token.role!='Agent'" pTooltip="Supprimer le lead"
+                                tooltipPosition="bottom" class="pi pi-trash" (click)="deleteProspect(prospect)"
+                                aria-hidden="true"></i>
 
                         </td>
                         <td *ngIf="prospect.enTraitement == true">

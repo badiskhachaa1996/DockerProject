@@ -300,7 +300,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id/:source", (req, res) => {
                 })
             })
             //listMoyenneEtudiants Vide TODO
-            res.send({ data, cols: cols.sort(compare), infos: { listMoyenneEtudiants,notes } })
+            res.send({ data, cols: cols.sort(compare), infos: { listMoyenneEtudiants, notes } })
         })
 
     })
@@ -358,12 +358,14 @@ function compare(a, b) {
 }
 //Sauvegarde d'un PV
 app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
+    let reeldate = new Date();
     let pv = new PVAnnuel({
-        date_creation: new Date(),
+        date_creation: reeldate,
         pv_annuel_cols: req.body.cols,
         pv_annuel_data: req.body.data,
         semestre: req.params.semestre,
-        classe_id: req.params.classe_id
+        classe_id: req.params.classe_id,
+        nom: `PV du ${req.params.semestre} du ${reeldate.getDate().toString()}-${(reeldate.getMonth() + 1).toString()}-${reeldate.getFullYear().toString()}`
     })
     pv.save().then(newPv => {
         res.send(newPv)

@@ -240,6 +240,7 @@ import { MyTargetComponent } from './crm/target/my-target/my-target.component';
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
+import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -449,6 +450,7 @@ const routes: Routes = [
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
             { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },
@@ -466,6 +468,7 @@ const routes: Routes = [
             { path: 'admission/lead-paiements/:id', component: LeadPaiementsComponent, canActivate: [AuthGuardService] },
             { path: 'admission/lead-informations/:id', component: LeadInformationsPersonnelComponent, canActivate: [AuthGuardService] },
             { path: 'admission/lead-suivi/:id', component: LeadSuiviComponent, canActivate: [AuthGuardService] },
+            { path: 'admission/lead-candidature/:id', component: LeadCandidatureComponent, canActivate: [AuthGuardService] },
             //Module Mail Type
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
@@ -478,6 +481,7 @@ const routes: Routes = [
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
+    { path: 'formulaire-admission-international/:ecole/:code_commercial', component: VersionNonIframeComponent },
     { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-int-lang/:ecole/:lang', component: FormulaireAdmissionInternationalComponent },
     { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },

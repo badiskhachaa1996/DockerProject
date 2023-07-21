@@ -47,7 +47,10 @@ import { DailyCheck } from 'src/app/models/DailyCheck';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
 import * as moment from 'moment';
 import { TabView } from 'primeng/tabview';
-
+import { RhService } from 'src/app/services/rh.service';
+import { CongeService } from 'src/app/services/conge.service';
+import { Conge } from 'src/app/models/Conge';
+import { saveAs } from 'file-saver';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -252,6 +255,31 @@ export class DashboardComponent implements OnInit {
     { label: 'Absent', value: 'Absent' },
     { label: 'En pause', value: 'En pause' },
   ];
+  formAddCra: FormGroup;
+  showFormAddCra: boolean = false;
+  clonedCras: { [s: string]: any } = {};
+  craPercent: string = '0';
+  historiqueCra: DailyCheck[] = [];
+  historiqueCraSelected: DailyCheck;
+  showDailySelectedCra: boolean = false;
+  congeStatutList: any[] = [
+    { label: 'Congé payé', value: 'Congé payé' },
+    { label: 'Congé sans solde', value: 'Congé sans solde' },
+    { label: 'Absence maladie', value: 'Absence maladie' },
+    { label: 'Télétravail', value: 'Télétravail' },
+    { label: 'Départ anticipé', value: 'Départ anticipé' },
+    { label: 'Autorisation', value: 'Autorisation' },
+    { label: 'Autre motif', value: 'Autre motif' },
+  ];
+  showAddCongeForm: boolean = false;
+  showUpdateCongeForm: boolean = false;
+  congeToUpdate: Conge;
+  formAddConge: FormGroup;
+  formUpdateConge: FormGroup;
+  conges: Conge[] = [];
+  expandedRows = {};
+  showOtherTextArea: boolean = false;
+  congeJustifile: any;
   //* end check in variables
 
   constructor(
@@ -264,7 +292,8 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService,
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
-    private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService
+    private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
+    private rhService: RhService, private congeService: CongeService
   ) { }
 
 
@@ -365,6 +394,38 @@ export class DashboardComponent implements OnInit {
     // initialisation du formulaire de mise à jour du statut
     this.formUpdateStatut = this.formBuilder.group({
       statut: ['', Validators.required],
+    });
+
+    // initialisation du formulaire d'ajout de cra
+    this.formAddCra = this.formBuilder.group({
+      cras: this.formBuilder.array([this.onCreateCraField()]),
+    });
+
+    // recuperation de l'historique de pointage d'un collaborateur
+    this.dailyCheckService.getUserChecks(this.token.id)
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
+    // initialisation du formulaire d'ajout de congé
+    this.formAddConge = this.formBuilder.group({
+      type: ['', Validators.required],
+      other: [''],
+      debut: ['', Validators.required],
+      fin: ['', Validators.required],
+      nb_jour: ['', Validators.required],
+      motif: ['', Validators.required],
+    });
+
+    // initialisation du formulaire de modification de congé
+    this.formUpdateConge = this.formBuilder.group({
+      type: ['', Validators.required],
+      other: [''],
+      debut: ['', Validators.required],
+      fin: ['', Validators.required],
+      nb_jour: ['', Validators.required],
+      motif: ['', Validators.required],
     });
   }
 
@@ -587,11 +648,12 @@ export class DashboardComponent implements OnInit {
 
   //* Check methods
   // recuperation de l'utilisateur connecté
-  onGetUserConnectedInformation(): void
-  {
+  onGetUserConnectedInformation(): void {
     this.UserService.getPopulate(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        // recupere la liste des congés
+        this.onGetConges(this.userConnected._id);
         // verification du check in journalier
         this.onCheckDailyCheck(response._id);
       },
@@ -600,52 +662,85 @@ export class DashboardComponent implements OnInit {
   }
 
   // méthode de mise à jour du statut
-  onUpdateStatus(): void
-  {
+  onUpdateStatus(): void {
     const statut = this.formUpdateStatut.value.statut;
     this.UserService.pathUserStatut(statut, this.userConnected._id)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
-      this.onGetUserConnectedInformation();
-      this.showFormUpdateStatut = false;
-    })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
+        this.onGetUserConnectedInformation();
+        this.showFormUpdateStatut = false;
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
   }
 
   // verification et recuperation du dailyCheck
   onCheckDailyCheck(id: string): void {
     this.dailyCheckService.verifCheckByUserId(id)
       .then((response) => {
+        console.log(response);
         if (response == null) {
           this.messageService.add({ severity: 'error', summary: 'Check In', detail: "Vous n'avez toujours pas effectué votre Check In" })
-        }
-        this.dailyCheck = response;
-
-        // verification sur les boutons
-
-
-        // calcule du temps passé en pause
-        this.pauseTiming = 0;
-        this.dailyCheck?.pause.forEach((p) => {
-          if(p.out)
-          {
-            this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
-          } else {
-            this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
-          }
-        })
-
-        // calcule du temps passé au travail
-        this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck.check_in)), 'minutes'));
-        // Retrait du temps passé en pause
-        this.workingTiming = this.workingTiming - this.pauseTiming;
-        if(this.workingTiming < 60)
-        {
-          this.workingHour = 0;
-          this.workingMinute = this.workingTiming;
         } else {
-          this.workingHour = Math.floor(this.workingTiming / 60);
-          this.workingMinute = this.workingTiming % 60;
+          this.dailyCheck = response;
+
+          // verifie s'il y'a eu un checkout
+          if (response?.check_out != null) {
+            // remise à zero des temps de travail
+            this.pauseTiming = 0;
+            this.craPercent = '0';
+            this.workingTiming = 0;
+            this.workingHour = 0;
+            this.workingMinute = 0;
+            this.dailyCheck.check_in = null;
+            this.dailyCheck.cra = [];
+          } else {
+            // calcule du temps passé en pause
+            this.pauseTiming = 0;
+            this.dailyCheck?.pause.forEach((p) => {
+              if (p.out) {
+                this.pauseTiming = this.pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+              } else {
+                this.pauseTiming = this.pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+              }
+            })
+
+            // calcule du temps passé au travail
+            this.workingTiming = (moment(new Date()).diff(moment(new Date(this.dailyCheck?.check_in)), 'minutes'));
+            // Retrait du temps passé en pause
+            this.workingTiming = this.workingTiming - this.pauseTiming;
+            if (this.workingTiming < 60) {
+              this.workingHour = 0;
+              this.workingMinute = this.workingTiming;
+            } else {
+              this.workingHour = Math.floor(this.workingTiming / 60);
+              this.workingMinute = this.workingTiming % 60;
+            }
+
+            /* calcul du pourcentage de remplissage du CRA */
+            // recuperation du collaborateur
+            this.rhService.getCollaborateurByUserId(this.userConnected._id)
+              .then((collaborateur) => {
+                let totalTimeCra = 0;
+
+                this.dailyCheck?.cra.map((cra) => {
+                  totalTimeCra += cra.number_minutes;
+                });
+
+                if (collaborateur != null) {
+                  // conversion du taux cra du collaborateur en minutes
+                  collaborateur.h_cra *= 60;
+                  // partie calcule du pourcentage en fonction du totalTimeCra
+                  let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+
+                  this.craPercent = percent.toString().substring(0, 4);
+                } else {
+                  this.craPercent = '0';
+                  this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Vous êtes pas renseigné en tant que collaborateur par le service RH, impossible de calculer votre taux de remplissage CRA' })
+                }
+
+              })
+              .catch((error) => { console.log(error); });
+          }
         }
       })
       .catch((error) => { console.error(error) });
@@ -656,7 +751,6 @@ export class DashboardComponent implements OnInit {
     const check = new DailyCheck();
 
     check.user_id = this.user._id;
-    check.today = new Date().toLocaleDateString();
     check.check_in = new Date();
     check.isInPause = false;
 
@@ -670,7 +764,7 @@ export class DashboardComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({in: new Date()});
+    this.dailyCheck.pause.push({ in: new Date() });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
@@ -684,8 +778,7 @@ export class DashboardComponent implements OnInit {
   }
 
   // méthode de fin de la pause
-  onStopPause(): void
-  {
+  onStopPause(): void {
     // taille du tableau de check
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
@@ -702,19 +795,247 @@ export class DashboardComponent implements OnInit {
   }
 
   // methôde de checkout
-  onCheckOut(): void 
-  {
+  onCheckOut(): void {
     this.dailyCheck.check_out = new Date();
+    this.dailyCheck.taux_cra = this.craPercent;
+    this.dailyCheck.pause_timing = this.pauseTiming;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
-        // remise à zero du temps de pause
-        this.pauseTiming = 0;
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+        // recuperation de l'historique du cra
+        this.dailyCheckService.getUserChecks(this.token.id)
+          .then((response) => {
+            this.historiqueCra = response;
+          })
+          .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+  }
+
+  // pour créer des champs de formulaires à la volée pour la partie CRA
+  onCreateCraField(): FormGroup {
+    return (
+      this.formBuilder.group({
+        tache: ['', Validators.required],
+        duration: ['', Validators.required],
+      })
+    );
+  }
+
+  // récupère les compétences
+  getCras(): FormArray {
+    return this.formAddCra.get('cras') as FormArray;
+  }
+
+  // ajoute de nouveaux champs au formulaire
+  onAddCraField(): void {
+    const newCraControl = this.onCreateCraField();
+    this.getCras().push(newCraControl);
+  }
+
+  // suppression d'un champ de compétence
+  onDeleteCraField(i: number): void {
+    this.getCras().removeAt(i);
+  }
+
+  // ajout de CRA
+  onAddCra(): void {
+    const formValue = this.formAddCra.value;
+    // ajout des données formulaire au dailycheck
+
+    formValue.cras.forEach((cra) => {
+      this.dailyCheck.cra.push({ task: cra.tache, number_minutes: cra.duration });
+    });
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+        this.formAddCra.reset();
+        this.showFormAddCra = false;
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+  }
+
+  // partie modification d'un cra
+  onRowEditInit(cra: any) {
+    this.clonedCras[cra._id as string] = { ...cra };
+  }
+
+  onRowEditSave(cra: any) {
+
+    this.dailyCheck.cra.forEach((dCra) => {
+      if (dCra._id === cra._id) {
+        dCra.task = cra.task;
+        dCra.number_minutes = cra.number_minutes;
+      }
+    });
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+        delete this.clonedCras[cra._id as string];
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+  }
+
+  onRowEditCancel(cra: any, index: number) {
+    delete this.clonedCras[cra._id as string];
+  }
+
+  // suppression d'un cra
+  onDeleteCra(id: string): void {
+    if (confirm("Voulez-vous retirer ce compte rendu")) {
+      this.dailyCheck.cra = this.dailyCheck.cra.filter((cra) => cra._id != id);
+
+      this.dailyCheckService.patchCheckIn(this.dailyCheck)
+        .then((response) => {
+          this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+          // recuperation du check journalier
+          this.onCheckDailyCheck(response.user_id);
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+    }
+  }
+
+  // recuperation des demandes de congé du user
+  onGetConges(id: string): void {
+    this.congeService.getAllByUserId(id)
+      .then((response) => { this.conges = response; })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" }) });
+  }
+
+  // methode qui affiche ou non le cgamps de saisie pour autres motif
+  onShowOtherTextArea(event: any) {
+    event.value == 'Autre motif' ? this.showOtherTextArea = true : this.showOtherTextArea = false;
+  }
+
+  onSelectFile(event: any) {
+    if (event.target.files.length > 0) {
+      this.congeJustifile = event.target.files[0];
+    }
+  }
+
+  // demande de congé
+  onAskConge(): void {
+    // donnée congés
+    const formValue = this.formAddConge.value;
+
+    const conge = new Conge();
+    conge.user_id = this.user._id;
+    conge.date_demande = new Date();
+
+    conge.type_conge = formValue.type;
+    conge.other_motif = formValue.other;
+
+    conge.date_debut = formValue.debut;
+    conge.date_fin = formValue.fin;
+    conge.nombre_jours = formValue.nb_jour;
+    conge.motif = formValue.motif;
+    conge.statut = 'En attente';
+
+    // envoi des données en bd
+    this.congeService.postConge(conge)
+      .then((response: Conge) => {
+        if (this.congeJustifile != null) {
+          // fichier justificatif
+          let formData = new FormData();
+          formData.append('id', response._id);
+          formData.append('file', this.congeJustifile);
+
+          this.congeService.uploadJustificatif(formData)
+            .then(() => {
+              this.formAddConge.reset();
+              this.showAddCongeForm = false;
+              this.congeJustifile = null;
+              this.showOtherTextArea = false;
+
+              this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande avec justificatif à bien été transmis, vous serez notifier d'une réponse très bientôt" });
+              this.onGetConges(response.user_id);
+            })
+            .catch((error) => { this.messageService.add({ severity: 'warning', summary: 'Justificatif', detail: error.error }) });
+        } else {
+          this.formAddConge.reset();
+          this.showAddCongeForm = false;
+          this.congeJustifile = null;
+          this.showOtherTextArea = false;
+          this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été transmis, vous serez notifier d'une réponse très bientôt" });
+          this.onGetConges(response.user_id);
+        }
+      })
+      .catch((error) => {
+        this.messageService.add({ severity: 'error', summary: 'Demande de congé', detail: "Impossible de transmettre votre demande, veuillez contacter un admin via le service ticketing" });
+      });
+  }
+
+  onDonwloadJustificatif(id: string): void {
+    this.congeService.donwloadJustificatif(id)
+      .then((response: Blob) => {
+        let downloadUrl = window.URL.createObjectURL(response);
+        saveAs(downloadUrl, `jusiticatif.${response.type.split('/')[1]}`);
+        this.messageService.add({ severity: "success", summary: "Justificatif", detail: `Téléchargement réussi` });
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Justificatif", detail: `Impossible de télécharger le fichier` }); });
+  }
+
+  onDeleteConge(id: string): void {
+    this.congeService.deleteConge(id)
+      .then((response) => {
+        this.messageService.add({ severity: "success", summary: "Congé", detail: "Démandé retirée" });
+        this.onGetConges(this.userConnected._id);
+      })
+      .catch((error) => { this.messageService.add({ severity: "error", summary: "Congé", detail: "Impossible de de retiter votre demande" }) });
+  }
+
+  // methode pour pre-remplir le formulaire de modification de congé
+  onPachCongeData(conge: Conge): void
+  {
+    this.congeToUpdate = conge;
+    if(conge.type_conge === "Autre motif")
+    {
+      this.showOtherTextArea = true;
+    }
+
+    this.formUpdateConge.patchValue({
+      type: conge.type_conge,
+      other: conge.other_motif,
+      debut: new Date(conge.date_debut),
+      fin: new Date(conge.date_fin),
+      nb_jour: conge.nombre_jours,
+      motif: conge.motif,
+    });
+
+    this.showUpdateCongeForm = true;
+  }
+
+  onUpdateConge(): void
+  {
+    // recuperation des valeurs du formulaire
+    const formValue = this.formUpdateConge.value;
+
+    this.congeToUpdate.type_conge     = formValue.type;
+    this.congeToUpdate.other_motif    = formValue.other;
+
+    this.congeToUpdate.date_debut     = formValue.debut;
+    this.congeToUpdate.date_fin       = formValue.fin;
+    this.congeToUpdate.nombre_jours   = formValue.nb_jour;
+    this.congeToUpdate.motif          = formValue.motif;
+
+    this.congeService.putConge(this.congeToUpdate)
+    .then(() => {
+      this.formUpdateConge.reset();
+      this.showUpdateCongeForm = false;
+      this.showOtherTextArea = false;
+      this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
+      this.onGetConges(this.congeToUpdate.user_id);
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
   //* end
 }

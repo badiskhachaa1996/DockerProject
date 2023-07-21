@@ -55,7 +55,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
           this.cols = dataNew.cols
           this.dataPV = dataNew.data
           this.dataPV.forEach((data, index) => {
-            if ((!data.appreciation || data.appreciation == "")) {
+            if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
               let note = this.calculMoyenne(data.notes)
               if (note < 10)
                 data.appreciation = "Doit faire ses preuves"
@@ -105,7 +105,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
       this.dataPV = pv.pv_annuel_data
       this.PVID = pv._id
       this.dataPV.forEach((data, index) => {
-        if ((!data.appreciation || data.appreciation == "")) {
+        if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
           let note = this.calculMoyenne(data.notes)
           if (note < 10)
             data.appreciation = "Doit faire ses preuves"
@@ -133,7 +133,7 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
       this.cols = dataNew.cols
       this.dataPV = dataNew.data
       this.dataPV.forEach((data, index) => {
-        if ((!data.appreciation || data.appreciation == "")) {
+        if ((!data.appreciation || data.appreciation == "" || data.appreciation == "Doit faire ses preuves" || data.appreciation == "Passable" || data.appreciation == "Assez Bien" || data.appreciation == "Bien" || data.appreciation == "Très Bien" || data.appreciation == "Excellent")) {
           let note = this.calculMoyenne(data.notes)
           if (note < 10)
             data.appreciation = "Doit faire ses preuves"
@@ -228,5 +228,28 @@ export class PvSemestrielComponent implements OnInit, ComponentCanDeactivate {
     });
     FileSaver.saveAs(data, `pv_${this.SEMESTRE}_${this.classe.abbrv}_export_${new Date().toLocaleDateString("fr-FR")}.xlsx`);
 
+  }
+
+  showRenamePV = null
+
+  initRenamePV(pv) {
+    this.showRenamePV = pv
+  }
+  onRenamePV() {
+    this.NoteService.replacePV(this.showRenamePV._id, { nom: this.showRenamePV.nom }).subscribe(data => {
+      this.showRenamePV = null
+    })
+  }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 }

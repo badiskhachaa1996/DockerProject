@@ -48,12 +48,11 @@
             {{Etudiant_userdata.firstname | titlecase}}
         </h4>
         <h4 class="col-12 text-center" style="font-weight: bold;">Né(e) le {{EtudiantDetail.date_naissance|
-            date:'dd/MM/YYYY'}} de
-            pays de naissance
-            {{EtudiantDetail.nationalite}}</h4>
+            date:'dd/MM/YYYY'}}</h4><!-- Nationalité: {{EtudiantDetail.nationalite}} -->
         <h6 class="col-12 text-center">{{PHRASE}}</h6>
         <h5 class="text-center col-10 col-offset-1" style="font-weight: bold;">{{diplome_libelle}}</h5>
-        <h4 class="text-center col-10 col-offset-1" style="font-weight: 500;">Durant l'année universitaire : {{annee_scolaire}}</h4>
+        <h4 class="text-center col-10 col-offset-1" style="font-weight: 500;">Durant l'année universitaire :
+            {{annee_scolaire}}</h4>
         <h6 class="col-12 text-center" *ngIf="dateValue && dateValue[0] && dateValue[1]">Dates: du {{dateValue[0] |
             date:'d/MM/YYYY'}} au {{dateValue[1]| date:'d/MM/YYYY'}} </h6>
         <h6 class="col-12 text-center" *ngIf="!dateValue || !dateValue[0] || !dateValue[1]">&nbsp; </h6>
@@ -109,14 +108,15 @@
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="[]"
             [rows]="8" [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
             <ng-template pTemplate="caption">
-                <p-dropdown filter="true" placeholder="Module" [options]="filterModule" (onChange)="dt1.filter($event.value, 'seance_id.matiere_id','equals')"
-                    emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Module"
-                    [style]="{'margin':'5px'}">
+                <p-dropdown filter="true" placeholder="Module" [options]="filterModule"
+                    (onChange)="dt1.filter($event.value, 'seance_id.matiere_id','equals')"
+                    emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Module" [style]="{'margin':'5px'}">
                 </p-dropdown>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="seance_id.matiere_id">Module <p-sortIcon field="seance_id.matiere_id"></p-sortIcon> </th>
+                    <th pSortableColumn="seance_id.matiere_id">Module <p-sortIcon
+                            field="seance_id.matiere_id"></p-sortIcon> </th>
                     <th pSortableColumn="_id">Date de la seance <p-sortIcon field="_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="seance_id">Seance<p-sortIcon field="seance_id">

@@ -54,6 +54,11 @@ const contrat_alternanceSch = mongoose.Schema({
   livret_apprentissage: { type: String, required: false },
   added_date:         { type: Date, required: false },
   add_by: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
+  historique_modification: { type: [{
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
+    update_description: { type: [String], required: false },
+    update_date: { type: Date, required: false }
+  }], required: false },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

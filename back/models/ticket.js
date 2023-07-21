@@ -50,7 +50,7 @@ const ticket_schema = new mongoose.Schema({
         type: Date
     },
     user_revert: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId, ref: "user",
     },
     customid: {
         type: String,

@@ -192,7 +192,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
-      req.originalUrl == "/soc/notification/create" ||
+      req.originalUrl.startsWith("/soc/notification/create") ||
       req.originalUrl.startsWith("/soc/prospect/") ||
       req.originalUrl.startsWith("/soc/service/getByLabel") ||
       req.originalUrl == "/soc/demande-events/create" ||
@@ -358,11 +358,11 @@ app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
 app.use('/soc/mail', require('./controllers/mailController'))
 app.use('/soc/target', require('./controllers/targetController'))
+app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
     LISTTOJOIN = [user._id, user.role];
-    console.log('imagine')
     User.findById(user._id).then(userdata => {
       userdata.roles_list.forEach(s => {
         LISTTOJOIN.push(s.module, `${s.module} - ${s.role}`)

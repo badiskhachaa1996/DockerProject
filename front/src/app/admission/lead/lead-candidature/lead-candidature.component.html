@@ -1,0 +1,212 @@
+<div class="card col-12 grid">
+    <div class="col-12 grid" *ngIf="pageNumber==0">
+        <h1 style="text-align: center;" class="col-12">Ma candidature</h1>
+        <div class="col-6">
+            <button pButton (click)="initCandidature()" label="Modifier ma candidature" autoWidth="false"
+                [style]="{'width':'100%'}"></button>
+        </div>
+        <div class="col-6">
+            <button pButton (click)="downloadCandidature()" label="Télécharger ma candidature en format PDF"
+                autoWidth="false" [style]="{'width':'100%'}"></button>
+        </div>
+    </div>
+    <div class="col-12 grid" *ngIf="pageNumber==1">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formCandidature">
+            <h3 class="col-12" style="text-align: center;">Coordonnés</h3>
+            <div class="field col-12 md:col-6">
+                <label>Nom</label>
+                <input pInputText type="text" formControlName="nom" placeholder="Ex: Smith" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Prénom</label>
+                <input pInputText type="text" formControlName="prenom" placeholder="Ex: John" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Date de naissance</label>
+                <input pInputText type="date" formControlName="date_naissance" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Nationalité</label>
+                <input pInputText type="text" formControlName="nationalite" placeholder="Ex: Française" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Téléphone</label>
+                <input pInputText type="text" formControlName="phone" placeholder="Ex: +33 612341518" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Email</label>
+                <input pInputText type="text" formControlName="email" placeholder="Ex: example.email@mail.com" />
+            </div>
+            <div class="field col-12">
+                <label>Adresse</label>
+                <textarea pInputTextarea formControlName="adresse"
+                    placeholder="Ex: 20 Place de la république 93160 Noisy Le Grand"></textarea>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Êtes-vous en situation d'handicap ?</label>
+                <p-selectButton [options]="boolSelect" formControlName="isPMR"></p-selectButton>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Avez-vous besoin d'un accompagnement spécifique dans le cadre de votre handicap :</label>
+                <p-selectButton [options]="boolSelect" formControlName="PMRneedHelp"></p-selectButton>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=2" label="Suivant" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 grid" *ngIf="pageNumber==2">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formCandidature">
+            <h3 class="col-12" style="text-align: center;">Projet Professionel</h3>
+            <h5 class="col-12" style="text-align: center;">Skills</h5>
+            <div class="field col-12 md:col-6">
+                <label>Mes qualités</label>
+                <textarea pInputTextarea formControlName="qualites"></textarea>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Mes points à améliorer</label>
+                <textarea pInputTextarea formControlName="toWorkOn"></textarea>
+            </div>
+            <div class="field col-12">
+                <label>Mes compétences (mon savoir faire)</label>
+                <textarea pInputTextarea formControlName="skills"></textarea>
+            </div>
+            <h5 class="col-12" style="text-align: center;">Parcours d'études et expériences professionelles</h5>
+            <div class="field col-12 md:col-6">
+                <label>Mon parcours d'études</label>
+                <textarea pInputTextarea formControlName="parcours"></textarea>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Mes expériences professionelles (stages...)</label>
+                <textarea pInputTextarea formControlName="experiences"></textarea>
+            </div>
+            <h5 class="col-12" style="text-align: center;">Projet Professionel</h5>
+            <div class="field col-12 md:col-6">
+                <label>Ma vision à court terme (3 ans)</label>
+                <textarea pInputTextarea formControlName="courtterme3"></textarea>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Ma vision à court terme (5 ans)</label>
+                <textarea pInputTextarea formControlName="courtterme5"></textarea>
+            </div>
+            <div class="field col-12">
+                <label>Ma vision à mid terme (10 ans)</label>
+                <textarea pInputTextarea formControlName="courtterme10"></textarea>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=1" label="Revenir" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=3" label="Suivant" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 grid" *ngIf="pageNumber==3">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formCandidature">
+            <h3 class="col-12" style="text-align: center;">Vos attentes</h3>
+            <div class="field col-12 md:col-6">
+                <label>Quelle formation souhaiteriez-vous suivre ?</label>
+                <input pInputText type="text" formControlName="formation" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Quelle est le campus choisi ?</label>
+                <input pInputText type="text" formControlName="campus" />
+            </div>
+            <div class="field col-12">
+                <label>Quelle est la rentrée scolaire souhaité ?</label>
+                <input pInputText type="text" formControlName="rentrée_scolaire" />
+            </div>
+            <div class="field col-12">
+                <label>Concernant votre niveau actuel, au regard de la formation souhaitée, diriez-vous que vous
+                    êtes:</label>
+                <p-selectButton [options]="niveauSelect" formControlName="niveau"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Avez-vous déjà suivi des cours de matières professionalisantes ?</label>
+                <p-selectButton [options]="boolSelect" formControlName="suivicours"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Nos formations se déroulent en rythme alterné, ce format vous paraît-il adapté à vos attentes
+                    ?</label>
+                <p-selectButton [options]="boolSelect" formControlName="acceptRythme"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>En fonction de votre situation personnelle, avez-vous des besoins ou des souhaits liés à l'accès
+                    à nos formations ?(Par exemple :handicap, matériel spécifique etc...)</label>
+                <textarea pInputTextarea formControlName="besoins"></textarea>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=2" label="Revenir" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=4" label="Suivant" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 grid" *ngIf="pageNumber==4">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formCandidature">
+            <h3 class="col-12" style="text-align: center;">Test de positionnement</h3>
+            <p class="col-12" style="text-align: center;">Ce test a pour objectif d'étudier et/ou d'affiner avant votre
+                entrée en formation, votre besoin, votre profil, votre niveau ainsi que votre degré de motivation</p>
+            <div class="field col-12">
+                <label>Quelle est votre degré de motivation en arrivant en formation ?</label>
+                <p-selectButton [options]="ratingSelect" formControlName="motivations" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Qu'attendez-vous de la formation ?</label>
+                <textarea pInputTextarea formControlName="attentes"></textarea>
+            </div>
+            <div class="field col-12">
+                <label>Concernant votre niveau actuel dans le domaine de la formation souhaitée ?</label>
+                <p-selectButton [options]="ratingSelect" formControlName="niveau_actuel" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Concernant votre compétences digitales ?</label>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_digitales" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Concernant votre capacité à travailler en équipe ?</label>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_teams" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
+            </div>
+            <div class="field col-12">
+                <label>Concernant votre capacité à travailler en autonomie ?</label>
+                <p-selectButton [options]="ratingSelect" formControlName="competences_solo" autoWidth="false"
+                    [style]="{'width':'100%'}"></p-selectButton>
+            </div>
+            <div class="col-6">
+                <button pButton (click)="pageNumber=3" label="Revenir" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="col-6" *ngIf="!candidature">
+                <button pButton (click)="pageNumber=5" label="Suivant" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="col-6" *ngIf="candidature">
+                <button pButton (click)="saveCandidature()" label="Valider la candidature" autoWidth="false"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 grid" *ngIf="pageNumber==5">
+        <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
+            <signature-pad [options]="signaturePadOptions"></signature-pad><br>
+        </div>
+        <div class="col-6">
+            <button pButton (click)="signaturePad.clear()" label="Supprimer la signature" autoWidth="false"
+                [style]="{'width':'100%'}"></button>
+        </div>
+        <div class="col-6">
+            <button pButton (click)="saveCandidature()" label="Validez la signature & la candidature" autoWidth="false"
+                [style]="{'width':'100%'}"></button>
+        </div>
+    </div>
+</div>

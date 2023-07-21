@@ -21,6 +21,7 @@ const { Vente } = require('../models/vente');
 const { AlternantsPartenaire } = require('../models/alternantsPartenaire');
 const { FormationAdmission } = require('../models/formationAdmission');
 const { DocumentInternational } = require('../models/documentInternational');
+const { HistoriqueLead } = require('../models/HistoriqueLead');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -156,233 +157,280 @@ app.post("/create", (req, res, next) => {
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
-                                if (prospectSaved.type_form == "estya") {
-                                    let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
-                                    temp = temp.replace('eMailduProSpect', userCreated.email_perso)
-                                    temp = temp.replace('oRiGin', origin[0])
 
-                                    temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
+                                /*      if (prospectSaved.type_form == "eduhorizons") {
+                                          let htmlmail =
+                                              "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                              r + "</strong></p>" +
+                                              "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
+                                              "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                              " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                              "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
+                                              " <li>Déposer votre dossier de candidature </li>" +
+                                              " <li>Suivre l'état d'avancement sur le portail</li>" +
+                                              " </ul>" +
+                                              "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
+                                              "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                              "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
+                                              "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                              " <p>Cordialement.</p>" +
+                                              "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
+      
+      
+                                          let mailOptions = {
+                                              from: "contact@eduhorizons.com",
+                                              to: userCreated.email_perso,
+                                              subject: 'Confirmation de préinscription',
+                                              html: htmlmail,
+                                              attachments: [{
+                                                  filename: 'SignatureEmailEH.png',
+                                                  path: 'assets/SignatureEmailEH.png',
+                                                  cid: 'SignatureEmailEH' //same cid value as in the html img src
+                                              }]
+                                          };
+                                          transporterEH.sendMail(mailOptions, function (error, info) {
+                                              if (error) {
+                                                  console.error(error);
+      
+                                              }
+      
+      
+      
+                                          });
+      
+                                      }
+                                      else if (prospectSaved.type_form == "espic") {
+      
+                                          let htmlmail =
+                                              "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                              r + "</strong></p>" +
+                                              "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
+                                              "<ul><li>" +
+                                              "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                              " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                              "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
+                                              " <li>Déposer votre dossier de candidature </li>" +
+                                              " <li>Suivre l'état d'avancement sur le portail</li>" +
+                                              " </ul>" +
+                                              "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
+                                              "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                              "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
+                                              "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                              " <p>Cordialement.</p>" +
+                                          "<p><img src =''alt=\" \" width='620' height='227' /></p>"
+                                          let mailOptions = {
+                                              from: "admission@espic.com",
+                                              to: userCreated.email_perso,
+                                              subject: 'Confirmation de préinscription',
+                                              html: htmlmail
+                                          };
+                                          transporterEspic.sendMail(mailOptions, function (error, info) {
+                                              if (error) {
+                                                  console.error(error);
+      
+                                              }
+      
+      
+      
+                                          });
+      
+                                      }
+                                      else if (prospectSaved.type_form == "adg") {
+      
+      
+      
+                                          let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
+                                              "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
+                                              "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès." +
+                                              "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                              r + "</strong></p></div>" +
+                                              "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                              " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                              "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
+                                              "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
+                                              "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +
+                                              "</li><li> <p>Parcours académique : Cursus antérieur correspondant à la formation choisie. </p></li><li>" +
+                                              "<p>Rupture d'étude : les années précédentes sont justifiées. </p> </li></ul></div><div><p> <br /> </p></div>" +
+                                              "<div><ol start='2'><li><p>Documents demander doivent &ecirc;tre traduit en français et envoyé en format PDF : <br /> </p></li>" +
+                                              "</ol></div><div><ul><li><p>Pièce d'identité (passeport pour les non-résidents) (obligatoire).</p></li><li>" +
+                                              "<p>Dernier dipl&ocirc;me obtenu (obligatoire).</p></li><li><p>Relevés de notes des deux dernières années (obligatoire).</p></li><li>" +
+                                              "<p>Test de français : TCF B2 valide (moins de 2 ans), DELF B2 ou DALF (C1 ou C2) : obligatoire pour les étudiants non Francophones Obligatoire).</p>" +
+                                              "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
+                                              "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
+                                              "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
+                                              "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
+                                              "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
+                                              "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
+                                              "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"
+      
+      
+      
+                                          let mailOptions = {
+                                              from: "admission@adgeducation.com",
+                                              to: userCreated.email_perso,
+                                              subject: 'Confirmation de préinscription',
+                                              html: htmlmail
+                                          };
+                                          transporterAdg.sendMail(mailOptions, function (error, info) {
+                                              if (error) {
+                                                  console.error(error);
+      
+                                              }
+      
+      
+                                          });
+                                      } else if (prospectSaved.type_form == "inteducation") {
+      
+                                          FormationAdmission.findOne({ nom: prospectSaved.formation }).then(formation => {
+                                              let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
+                                                  "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
+                                                  "<div><p>Nous sommes ravis de recevoir votre candidature à notre établissement.   " +
+                                                  "  Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec votre mail et le mot de passe suivant :  <strong> " +
+                                                  r + "</strong> sur le lien : <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></p></div>" +
+                                                  "<div><p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, vous pouvez, dans ce cas, les envoyer directement sur l'adresse électronique : orientation@intedgroup.com .   </p>" +
+                                                  `<p>
+                                              Les document nécessaire pour la formation ${prospectSaved.formation} sont :  
+                                              ${formation.criteres}
+                                              Pour vous faciliter l’utilisation de notre plateforme, vous pouvez suivre les étapes ci-après :    
+                                              Vérifiez que vos informations personnelles ont été correctement saisies au niveau de la rubrique « Informations Personnelles »    
+                                              Assurez-vous d’avoir choisi :  le programme d’étude le plus en adéquation avec votre parcours académique.   
+                                              Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme également.   
+                                              Nous demeurons à votre disposition pour tout complément d'information.   
+                                              Bien cordialement.   
+                                              </p><br></div>
+                                              ------------------------------------------------------------------------------------- 
+                                              <div>
+                                              <p>Hello, </p> 
+                                              </div>
+                                              <div>
+                                              <p>We are delighted to receive your application to our institution. </p>
+                                              </div>
+                                              <div>
+                                              <p>
+                                              Your registration request on our platform has been successfully recorded. Please log in with your email and the following password: ${r} on the link: <a href="${origin[0]}/#/validation-email/${userCreated.email_perso}">Activate my IMS account</a>
+      If you encounter any difficulties in uploading your documents or have omitted some, you can send them directly to the email address: orientation@intedgroup.com. The documents required for the ${prospectSaved.formation} are: ${formation.criteres} 
+      
+      To facilitate your use of our platform, you can follow the steps below:  
+      
+      • Verify that your personal information has been correctly entered in the "Personal Information" section.  
+      
+      • Ensure that you have chosen the study program that best aligns with your academic background. 
+      
+      Please note that you can also check the status of your application on the platform. 
+      
+      We remain at your disposal for any further information. 
+      
+       
+      
+      Best regards. 
+      </p>
+      </div>
+                                              `
+                                              let mailOptions = {
+                                                  from: "ims@intedgroup.com",
+                                                  to: userCreated.email_perso,
+                                                  subject: 'Confirmation de préinscription',
+                                                  html: htmlmail
+                                              };
+                                              transporterINTED.sendMail(mailOptions, function (error, info) {
+                                                  if (error) {
+                                                      console.error(error);
+      
+                                                  }
+                                              });
+                                          })
+      
+      
+                                      } else if (prospectSaved.type_form == "estya") {
+                                          let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
+                                          temp = temp.replace('eMailduProSpect', userCreated.email_perso)
+                                          temp = temp.replace('oRiGin', origin[0])
+      
+                                          temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
+      
+                                          let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
+      
+                                          let mailOptions = {
+                                              from: "contact@estya.com",
+                                              to: userCreated.email_perso,
+                                              subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
+                                              html: htmlmail,
+                                              attachments: [{
+                                                  filename: 'Image1.png',
+                                                  path: 'assets/Image1.png',
+                                                  cid: 'Image1' //same cid value as in the html img src
+                                              }]
+                                          };
+      
+                                          transporterEstya.sendMail(mailOptions, function (error, info) {
+                                              if (error) {
+                                                  console.error(error);
+                                              }
+                                          });
+      
+                                      }
+                                      else {
+                                              let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
+                                              temp = temp.replace('eMailduProSpect', userCreated.email_perso)
+                                              temp = temp.replace('oRiGin', origin[0])
+      
+                                              temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
+      
+                                              let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
+      
+                                              let mailOptions = {
+                                                  from: "ims@intedgroup.com",
+                                                  to: userCreated.email_perso,
+                                                  subject: 'Inscription enregistrée',
+                                                  html: htmlmail,
+                                                  attachments: [{
+                                                      filename: 'Image1.png',
+                                                      path: 'assets/Image1.png',
+                                                      cid: 'Image1' //same cid value as in the html img src
+                                                  }]
+                                              };
+      
+                                              transporterINTED.sendMail(mailOptions, function (error, info) {
+                                                  if (error) {
+                                                      console.error(error);
+                                                  }
+                                              });
+      
+                                          }
+                                      */
+                                let htmlmail = `
+                                <p>Bonjour,&nbsp;</p>
+                                <p>Nous sommes ravis de recevoir votre candidature à notre établissement.&nbsp;</p>
+                                <p>Votre demande d'ins cription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec
+                                    <strong>votre mail</strong> et le <strong>mot de passe</strong> suivant : <strong>${r}</strong> sur ce lien  :
+                                    <a href="https://ims.intedgroup.com/#/login"><u>https://ims.intedgroup.com/#/login</u></a></p>
+                                <p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, ou bien se connecter à votre
+                                    compte, veuillez nous contacter sur support@intedgroup.com. </p>
+                                <p>&nbsp;</p>
+                                <p>Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme
+                                    également.&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>Nous demeurons à votre disposition pour tout complément d'information.&nbsp;</p>
+                                <p>Bien cordialement.</p>
+                                <footer> <img style="max-width: 300px;max-height: 200px;" src="cid:signature"/></footer>
+                                `
+                                let mailOptions = {
+                                    from: "ims@intedgroup.com",
+                                    to: userCreated.email_perso,
+                                    subject: 'Validation de votre compte étudiant',
+                                    html: htmlmail,
+                                    attachments: [{
+                                        filename: 'signature.png',
+                                        path: 'assets/ims-intedgroup-logo.png',
+                                        cid: 'signature' //same cid value as in the html img src
+                                    }]
+                                };
+                                transporterINTED.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.error(error);
 
-                                    let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
-
-                                    let mailOptions = {
-                                        from: "contact@estya.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
-                                        html: htmlmail,
-                                        attachments: [{
-                                            filename: 'Image1.png',
-                                            path: 'assets/Image1.png',
-                                            cid: 'Image1' //same cid value as in the html img src
-                                        }]
-                                    };
-
-                                    transporterEstya.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-                                        }
-                                    });
-
-                                }
-                                else if (prospectSaved.type_form == "eduhorizons") {
-                                    let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong></p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
-                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                        "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
-                                        " <li>Déposer votre dossier de candidature </li>" +
-                                        " <li>Suivre l'état d'avancement sur le portail</li>" +
-                                        " </ul>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
-                                        "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
-                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Cordialement.</p>" +
-                                        "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
-
-
-                                    let mailOptions = {
-                                        from: "contact@eduhorizons.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
-                                        html: htmlmail,
-                                        attachments: [{
-                                            filename: 'SignatureEmailEH.png',
-                                            path: 'assets/SignatureEmailEH.png',
-                                            cid: 'SignatureEmailEH' //same cid value as in the html img src
-                                        }]
-                                    };
-                                    transporterEH.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-
-                                        }
-
-
-
-                                    });
-
-                                }
-                                else if (prospectSaved.type_form == "espic") {
-
-                                    let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong></p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
-                                        "<ul><li>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                        "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
-                                        " <li>Déposer votre dossier de candidature </li>" +
-                                        " <li>Suivre l'état d'avancement sur le portail</li>" +
-                                        " </ul>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
-                                        "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
-                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Cordialement.</p>" /*+
-                                    "<p><img src =''alt=\" \" width='620' height='227' /></p>"*/
-                                    let mailOptions = {
-                                        from: "admission@espic.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
-                                        html: htmlmail,
-                                        /* attachments: [{
-                                             filename: 'EUsign.png',
-                                             path: 'assets/EUsign.png',
-                                             cid: 'red' //same cid value as in the html img src
-                                         }] */
-                                    };
-                                    transporterEspic.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-
-                                        }
-
-
-
-                                    });
-
-                                }
-                                else if (prospectSaved.type_form == "adg") {
-
-
-
-                                    let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
-                                        "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
-                                        "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès." +
-                                        "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong></p></div>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                        "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
-                                        "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
-                                        "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +
-                                        "</li><li> <p>Parcours académique : Cursus antérieur correspondant à la formation choisie. </p></li><li>" +
-                                        "<p>Rupture d'étude : les années précédentes sont justifiées. </p> </li></ul></div><div><p> <br /> </p></div>" +
-                                        "<div><ol start='2'><li><p>Documents demander doivent &ecirc;tre traduit en français et envoyé en format PDF : <br /> </p></li>" +
-                                        "</ol></div><div><ul><li><p>Pièce d'identité (passeport pour les non-résidents) (obligatoire).</p></li><li>" +
-                                        "<p>Dernier dipl&ocirc;me obtenu (obligatoire).</p></li><li><p>Relevés de notes des deux dernières années (obligatoire).</p></li><li>" +
-                                        "<p>Test de français : TCF B2 valide (moins de 2 ans), DELF B2 ou DALF (C1 ou C2) : obligatoire pour les étudiants non Francophones Obligatoire).</p>" +
-                                        "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
-                                        "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
-                                        "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
-                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
-                                        "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
-                                        "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"
-
-
-
-                                    let mailOptions = {
-                                        from: "admission@adgeducation.com",
-                                        to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
-                                        html: htmlmail,
-                                        /* attachments: [{
-                                             filename: 'EUsign.png',
-                                             path: 'assets/EUsign.png',
-                                             cid: 'red' //same cid value as in the html img src
-                                         }] */
-                                    };
-                                    transporterAdg.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-
-                                        }
-
-
-                                    });
-                                } else if (prospectSaved.type_form == "inteducation") {
-
-                                    FormationAdmission.findOne({ nom: prospectSaved.formation }).then(formation => {
-                                        let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
-                                            "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
-                                            "<div><p>Nous sommes ravis de recevoir votre candidature à notre établissement.   " +
-                                            "  Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec votre mail et le mot de passe suivant :  <strong> " +
-                                            r + "</strong> sur le lien : <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></p></div>" +
-                                            "<div><p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, vous pouvez, dans ce cas, les envoyer directement sur l'adresse électronique : orientation@intedgroup.com .   </p>" +
-                                            `<p>
-                                        Les document nécessaire pour la formation ${prospectSaved.formation} sont :  
-                                        ${formation.criteres}
-                                        Pour vous faciliter l’utilisation de notre plateforme, vous pouvez suivre les étapes ci-après :    
-                                        Vérifiez que vos informations personnelles ont été correctement saisies au niveau de la rubrique « Informations Personnelles »    
-                                        Assurez-vous d’avoir choisi :  le programme d’étude le plus en adéquation avec votre parcours académique.   
-                                        Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme également.   
-                                        Nous demeurons à votre disposition pour tout complément d'information.   
-                                        Bien cordialement.   
-                                        </p><br></div>
-                                        ------------------------------------------------------------------------------------- 
-                                        <div>
-                                        <p>Hello, </p> 
-                                        </div>
-                                        <div>
-                                        <p>We are delighted to receive your application to our institution. </p>
-                                        </div>
-                                        <div>
-                                        <p>
-                                        Your registration request on our platform has been successfully recorded. Please log in with your email and the following password: ${r} on the link: <a href="${origin[0]}/#/validation-email/${userCreated.email_perso}">Activate my IMS account</a>
-If you encounter any difficulties in uploading your documents or have omitted some, you can send them directly to the email address: orientation@intedgroup.com. The documents required for the ${prospectSaved.formation} are: ${formation.criteres} 
-
-To facilitate your use of our platform, you can follow the steps below:  
-
-• Verify that your personal information has been correctly entered in the "Personal Information" section.  
-
-• Ensure that you have chosen the study program that best aligns with your academic background. 
-
-Please note that you can also check the status of your application on the platform. 
-
-We remain at your disposal for any further information. 
-
- 
-
-Best regards. 
-</p>
-</div>
-                                        `
-                                        let mailOptions = {
-                                            from: "ims@intedgroup.com",
-                                            to: userCreated.email_perso,
-                                            subject: 'Confirmation de préinscription',
-                                            html: htmlmail,
-                                            /* attachments: [{
-                                                 filename: 'EUsign.png',
-                                                 path: 'assets/EUsign.png',
-                                                 cid: 'red' //same cid value as in the html img src
-                                             }] */
-                                        };
-                                        transporterINTED.sendMail(mailOptions, function (error, info) {
-                                            if (error) {
-                                                console.error(error);
-
-                                            }
-                                        });
-                                    })
-
-
-                                }
+                                    }
+                                });
                                 res.status(201).json({ success: 'Lead crée', dataUser: userCreated, token: token, prospect });
                             })
 
@@ -647,6 +695,23 @@ app.put("/update", (req, res, next) => {
                 .then((userUpdated) => {
                     Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                         .then((prospectsFromDb) => {
+                            let detail = "Mise à jour des informations"
+                            if (req.body.detail)
+                                detail = req.body.detail
+                            let token = jwt.decode(req.header("token"))
+                            //prospectUpdated.user_id = userUpdated
+                            //prospectsFromDb.user_id = userData
+                            let hl = new HistoriqueLead({
+                                lead_before: prospectUpdated,
+                                lead_after: prospectsFromDb,
+                                user_before: userUpdated,
+                                user_after: userData,
+                                lead_id: prospectsFromDb._id,
+                                user_id: token.id,
+                                detail,
+                                date_creation: new Date()
+                            })
+                            hl.save().then(h => { console.log(h) })
                             res.status(201).send(prospectsFromDb)
                         })
                         .catch((error) => { console.error(error); res.status(500).send(error.message); });
@@ -667,10 +732,26 @@ app.put("/updateV2", (req, res, next) => {
     Prospect.findByIdAndUpdate(req.body._id,
         {
             ...req.body
-        })
+        }, { new: true })
         .then((prospectUpdated) => {
+            console.log('NAN')
             Prospect.findById(prospectUpdated._id).populate("user_id").populate('agent_id')
                 .then((prospectsFromDb) => {
+                    let detail = "Mise à jour des informations"
+                    if (req.body.detail)
+                        detail = req.body.detail
+                    let token = jwt.decode(req.header("token"))
+                    console.log(token, req.header("token"))
+                    let hl = new HistoriqueLead({
+                        lead_before: prospectUpdated,
+                        lead_after: prospectsFromDb,
+                        lead_id: prospectsFromDb._id,
+                        user_id: token.id,
+                        detail,
+                        date_creation: new Date()
+                    })
+                    console.log(hl)
+                    hl.save().then(h => { console.log(h) })
                     res.status(201).send(prospectsFromDb)
                 })
                 .catch((error) => { res.status(500).send(error.message); });
@@ -1571,6 +1652,61 @@ app.get('/docChecker/:input', (req, res) => {
             })
         }
     })
+})
+
+app.get('/getAllHistoriqueFromLeadID/:lead_id', (req, res) => {
+    HistoriqueLead.find({ lead_id: req.params.lead_id }).sort({ date_creation: -1 }).populate('lead_id').populate('user_id').then(data => {
+        res.send(data)
+    })
+})
+
+//Mise à jour d'un groupe de prospect
+app.put("/updateMany", (req, res, next) => {
+    let listIds = req.body._id
+    delete req.body._id
+    console.log(listIds)
+    Prospect.updateMany({ _id: { $in: listIds } },
+        {
+            ...req.body
+        }, { new: true })
+        .then(() => {
+            Prospect.find({ _id: { $in: listIds } }).populate("user_id").populate('agent_id').then(prospects => {
+                res.status(201).send(prospects)
+            })
+
+        })
+        .catch((error) => { res.status(400).send(error.message); })
+});
+
+app.post('/sendMailAffectation', (req, res) => {
+    let htmlemail = `
+    <p>Bonjour,</p><br>
+    <p>Nous avons le plaisir de vous informer que le lead ${req.body.prospect_name} vous a été attribué pour traitement. Cette attribution a eu lieu le ${req.body.date}.</p><br>
+
+    <p>Nous vous demandons aimablement de prendre en charge ce lead et de faire le nécessaire pour le traiter. Votre expertise et votre engagement sont essentiels pour assurer la satisfaction de notre clientèle.</p>
+    <p>Nous vous remercions de votre collaboration et de votre dévouement continu. Nous avons pleinement confiance en vos compétences pour mener à bien cette mission avec succès.</p><br>
+    
+    <p>Cordialement,</p>
+    `
+    let mailOptions = {
+        from: 'ims@intedgroup.com',
+        to: req.body.email,
+        subject: '[IMS - International] - Attribution d\'un lead',
+        html: htmlemail,
+        attachments: [{
+            filename: 'signature.png',
+            path: 'assets/ims-intedgroup-logo.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+    };
+
+
+    transporterINTED.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({ ...req.body })
+    });
 })
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user

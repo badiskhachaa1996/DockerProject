@@ -19,6 +19,12 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { MailType } from 'src/app/models/MailType';
 import mongoose from 'mongoose';
+import { CandidatureLeadService } from 'src/app/services/candidature-lead.service';
+import { Router } from '@angular/router';
+import { VenteService } from 'src/app/services/vente.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { SocketService } from 'src/app/services/socket.service';
+import { Notification } from 'src/app/models/notification';
 @Component({
   selector: 'app-orientation',
   templateUrl: './orientation.component.html',
@@ -69,16 +75,93 @@ export class OrientationComponent implements OnInit {
     }
   }
 
-  downloadFile(id, i) {
-    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+  downloadFile(doc: { date: Date, nom: String, path: String }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
 
-      saveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
     }, (error) => {
       console.error(error)
     })
+  }
+  docToUpload: { date: Date, nom: string, path: string, _id: string }
+  initUpload(doc: { date: Date, nom: string, path: string, _id: string }, id = "selectedFile") {
+    this.docToUpload = doc
+    document.getElementById(id).click();
+  }
 
+  uploadFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload.nom}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_dossier.splice(this.showDetails.documents_dossier.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Affectation du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+  }
+
+  delete(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_dossier[this.showDetails.documents_dossier.indexOf(doc)].path = null
+    this.admissionService.deleteFile(this.showDetails._id, `${doc.nom}/${doc.path}`).subscribe(p => {
+      this.admissionService.updateV2({ documents_dossier: this.showDetails.documents_dossier, _id: this.showDetails._id }, "Suppresion d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    })
+
+  }
+
+  addDoc() {
+    this.showDetails.documents_autre.push({ date: new Date(), nom: 'Cliquer pour modifier le nom du document ici', path: '', _id: new mongoose.Types.ObjectId().toString() })
+  }
+
+  uploadOtherFile(event: File[]) {
+    let formData = new FormData()
+    formData.append('id', this.showDetails._id);
+    formData.append('document', `${this.docToUpload._id}`);
+    formData.append('file', event[0]);
+    this.admissionService.uploadFile(formData, this.showDetails._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: this.docToUpload.nom + ' a été envoyé' });
+      this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(this.docToUpload), 1, { date: new Date(), nom: this.docToUpload.nom, path: event[0].name, _id: this.docToUpload._id })
+
+      this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Ajout d'un document du dossier Lead-Dossier").subscribe(a => {
+        console.log(a)
+      })
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: this.docToUpload.nom, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+
+  }
+  deleteOther(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.showDetails.documents_autre.splice(this.showDetails.documents_autre.indexOf(doc), 1)
+    this.admissionService.updateV2({ documents_autre: this.showDetails.documents_autre, _id: this.showDetails._id }, "Suppresion d'un document autre Lead-Dossier").subscribe(a => {
+      console.log(a)
+    })
+    this.admissionService.deleteFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe(p => {
+      console.log(p)
+
+    })
+  }
+
+  downloadOtherFile(doc: { date: Date, nom: string, path: string, _id: string }) {
+    this.admissionService.downloadFile(this.showDetails._id, `${doc._id}/${doc.path}`).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      saveAs(new Blob([byteArray], { type: data.documentType }), doc.path)
+    }, (error) => {
+      console.error(error)
+    })
   }
   VisualiserFichier(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
@@ -230,7 +313,8 @@ export class OrientationComponent implements OnInit {
   ecoleList: EcoleAdmission[] = []
   AccessLevel = "Spectateur"
   constructor(private messageService: MessageService, private admissionService: AdmissionService, private FAService: FormulaireAdmissionService, private TeamsIntService: TeamsIntService, private CommercialService: CommercialPartenaireService,
-    private PartenaireService: PartenaireService, private UserService: AuthService, private EmailTypeS: EmailTypeService) { }
+    private PartenaireService: PartenaireService, private UserService: AuthService, private EmailTypeS: EmailTypeService, private router: Router, private CandidatureLeadService: CandidatureLeadService,
+    private VenteService: VenteService, private NotifService: NotificationService, private EmailService: EmailTypeService, private Socket: SocketService) { }
 
   prospects = {}
 
@@ -250,10 +334,15 @@ export class OrientationComponent implements OnInit {
       }
     }, 15);
   }
-
+  candidatureDic = {}
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.filterPays = this.filterPays.concat(environment.pays)
+    this.CandidatureLeadService.getAll().subscribe(candidatures => {
+      candidatures.forEach(v => {
+        this.candidatureDic[v.lead_id._id] = v
+      })
+    })
     this.TeamsIntService.MIgetAll().subscribe(data => {
       let dic = {}
       let listTeam = []
@@ -373,7 +462,7 @@ export class OrientationComponent implements OnInit {
     this.traitementForm.patchValue({ validated_cf: prospect.validated_cf == "true" })
   }
   saveTraitement(willClose = false) {
-    this.admissionService.updateV2({ ...this.traitementForm.value }).subscribe(data => {
+    this.admissionService.updateV2({ ...this.traitementForm.value }, "Traitement du dossier Orientation").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects[data.type_form].splice(this.prospects[data.type_form].indexOf(this.showTraitement), 1, data)
       if (willClose) {
@@ -430,10 +519,12 @@ export class OrientationComponent implements OnInit {
     finance: new FormControl(''),
     type_form: new FormControl('', Validators.required),
     avancement_visa: new FormControl(''),
+    avancement_cf: new FormControl(''),
 
 
   })
-
+  initalPayement = []
+  partenaireOwned: string = null
   initDetails(prospect: Prospect) {
     this.showDetails = prospect
     this.admissionService.getFiles(prospect?._id).subscribe(
@@ -450,8 +541,14 @@ export class OrientationComponent implements OnInit {
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
+    if (!this.payementList) { this.payementList = [] }
     this.lengthPaiement = prospect?.payement?.length
     this.scrollToTop()
+    this.initalPayement = [...prospect?.payement]
+    if (prospect.code_commercial)
+      this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
+        this.partenaireOwned = commercial.partenaire_id
+      })
   }
 
   lengthPaiement = 0
@@ -460,8 +557,10 @@ export class OrientationComponent implements OnInit {
     let bypass: any = this.showDetails.user_id
     let phase_candidature = this.showDetails.phase_candidature;
     let statut_payement = "Oui"
-    if (this.lengthPaiement >= this.payementList.length) {
+    if (this.payementList.length == 0) {
       statut_payement = this.showDetails.statut_payement;
+    } else {
+      phase_candidature = "En phase d'orientation consulaire"
     }
     /*let statut_payement = "Oui" 
     let phase_candidature = "En phase d'orientation consulaire"
@@ -495,6 +594,7 @@ export class OrientationComponent implements OnInit {
       decision_admission: this.detailsForm.value.decision_admission,
       a_besoin_visa: this.detailsForm.value.a_besoin_visa,
       validated_cf: this.detailsForm.value.validated_cf,
+      avancement_cf: this.detailsForm.value.avancement_cf,
       logement: this.detailsForm.value.logement,
       finance: this.detailsForm.value.finance,
       type_form: this.detailsForm.value.type_form,
@@ -504,6 +604,157 @@ export class OrientationComponent implements OnInit {
       phase_candidature,
       _id: this.showDetails._id
 
+    }
+    let listIDS = []
+    this.initalPayement.forEach(payement => {
+      listIDS.push(payement.ID)
+    })
+    if (this.detailsForm.value.decision_orientation != this.showDetails.decision_orientation) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'orientation est ${this.detailsForm.value.decision_orientation} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision orientation',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'orientation a été prise. </p>
+        <p>La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+      if (this.showDetails.code_commercial)
+        this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+          if (commercial) {
+            this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+            this.NotifService.create(new Notification(null, null, false,
+              `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+              new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+            this.EmailService.defaultEmail({
+              email: commercial.user_id?.email,
+              objet: '[IMS] Admission - Changement de décision orientation d\'un de vos leads ',
+              mail: `
+            Cher(e) partenaire,
+
+            Nous sommes ravis de vous informer que la décision d'orientation concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
+            
+            Nous sommes convaincus que cette orientation sera bénéfique pour l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} et contribuera à son développement académique et professionnel. Nous tenons à vous remercier pour votre collaboration tout au long de ce processus d'orientation.
+            
+            Si vous avez des questions ou besoin de plus amples informations sur cette décision, n'hésitez pas à nous contacter. Nous sommes là pour soutenir l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} et assurer sa réussite.
+            
+            Nous apprécions grandement notre partenariat et nous sommes impatients de continuer à travailler ensemble pour accompagner les étudiants dans leur parcours éducatif.
+            
+            Cordialement,
+            `
+            }).subscribe(() => { })
+          }
+        })
+    }
+    if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
+      this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+      this.NotifService.create(new Notification(null, null, false,
+        `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+        new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+
+      this.EmailService.defaultEmail({
+        email: this.showDetails?.user_id?.email_perso,
+        objet: '[IMS] Admission - Changement de décision admission',
+        mail: `
+        <p>Cher(e) Etudiant,</p>
+        <p>Nous avons le plaisir de vous informer que la décision d'admission a été prise. </p>
+        <p>La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}</p>
+        <p>Nous vous remercions de votre confiance et de votre collaboration tout au long de ce parcours. </p>
+        <p>Cordialement </p>
+        `
+      }).subscribe(() => { })
+      if (this.showDetails.code_commercial)
+        this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+          if (commercial) {
+            this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+
+            this.NotifService.create(new Notification(null, null, false,
+              `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+              new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+            this.EmailService.defaultEmail({
+              email: commercial.user_id?.email,
+              objet: '[IMS] Admission - Changement de décision admission d\'un de vos leads ',
+              mail: `
+            Cher(e) partenaire,
+
+            Nous avons le plaisir de vous informer que la décision d'admission concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
+            
+            Cette décision marque une étape importante dans le parcours académique de l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}. Nous croyons fermement en son potentiel et sommes convaincus qu'il/elle apportera une contribution significative à notre établissement.
+            
+            Si vous avez des questions ou avez besoin de plus amples informations concernant cette décision d'admission, n'hésitez pas à nous contacter. Nous sommes là pour vous assister.
+            
+            Nous tenons à vous remercier à nouveau pour votre partenariat précieux et nous sommes impatients de continuer à travailler ensemble pour façonner l'avenir de nos étudiants.
+            
+            Cordialement,
+          `
+            }).subscribe(() => { })
+          }
+        })
+    }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          //Ajouter Notif Payement
+          this.Socket.NewNotifV2(this.showDetails.user_id._id, `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`)
+
+          this.NotifService.create(new Notification(null, null, false,
+            `Vous avez effectuer un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
+            new Date(), this.showDetails.user_id._id, null)).subscribe(test => { })
+          if (this.showDetails.code_commercial)
+            this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+              if (commercial) {
+                this.Socket.NewNotifV2(commercial.user_id._id, `L'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} Lead a effecté un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`)
+
+                this.NotifService.create(new Notification(null, null, false,
+                  `L'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} Lead a effecté un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}`,
+                  new Date(), commercial.user_id._id, null)).subscribe(test => { })
+
+                this.EmailService.defaultEmail({
+                  email: commercial.user_id?.email,
+                  objet: '[IMS] Admission - Ajout d\'un paiement d\'un de vos leads ',
+                  mail: `
+                  Cher partenaire,
+
+                  Nous avons le plaisir de vous informer que l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a effectué un paiement de ${val.montant} à la date ${new Date(val.date).toLocaleDateString('fr-FR')} par ${val.type}.
+                  
+                  Nous tenons à vous remercier pour votre efficacité et votre professionnalisme dans le traitement de ce paiement. Votre collaboration nous aide à maintenir un processus de paiement fluide et efficace pour nos étudiants.
+                  
+                  Si vous avez des questions ou des préoccupations concernant ce paiement, n'hésitez pas à nous contacter. Nous sommes là pour vous aider et répondre à vos besoins.
+                  
+                  Nous apprécions grandement notre partenariat continu et nous sommes impatients de poursuivre notre collaboration fructueuse à l'avenir.
+                  
+                  Cordialement,
+                `
+                }).subscribe(() => { })
+              }
+            })
+        }
+      })
+    }
+    if (this.initalPayement.toString() != this.payementList.toString()) {
+      this.payementList.forEach((val, idx) => {
+        if (val.ID && listIDS.includes(val.ID) == false) {
+          let data: any = { prospect_id: this.showDetails._id, montant: val.montant, date_reglement: new Date(val.date), modalite_paiement: val.type, partenaire_id: this.partenaireOwned, paiement_prospect_id: val.ID }
+          this.VenteService.create({ ...data }).subscribe(v => {
+            console.log(v)
+            this.messageService.add({ severity: "success", summary: "Une nouvelle vente a été créé avec succès" })
+          })
+        }
+
+      })
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
@@ -600,7 +851,7 @@ export class OrientationComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: "", montant: 0, date: "", ID: this.generateIDPaiement() })
   }
   changeMontant(i, event, type) {
     if (type == "type") {
@@ -611,11 +862,20 @@ export class OrientationComponent implements OnInit {
       this.payementList[i][type] = event.target.value;
     }
   }
+  generateIDPaiement() {
+    let date = new Date()
+    return (this.payementList.length + 1).toString() + date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString() + date.getHours().toString() + date.getMinutes().toString() + date.getSeconds().toString()
+  }
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
+      if (this.payementList[i].ID)
+        this.VenteService.deleteByPaymentID(this.payementList[i].ID).subscribe(data => {
+          if (data)
+            this.messageService.add({ severity: 'success', summary: 'La vente associé a été supprimé' })
+        })
     }
   }
   showSideBar = false
@@ -652,17 +912,17 @@ export class OrientationComponent implements OnInit {
   formEmailPerso = new FormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
-    cc: new FormControl([], Validators.required),
+    cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
   formEmailType = new FormGroup({
     objet: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
-    cc: new FormControl([], Validators.required),
+    cc: new FormControl([]),
     send_from: new FormControl('', Validators.required)
   })
   onEmailPerso() {
-    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected  }).subscribe(data => {
+    this.EmailTypeS.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
         this.formEmailPerso.reset()
@@ -673,7 +933,7 @@ export class OrientationComponent implements OnInit {
 
   }
   onEmailType() {
-    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected  }).subscribe(data => {
+    this.EmailTypeS.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo.user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.EmailTypeS.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: this.prospectSendTo._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()
@@ -726,7 +986,7 @@ export class OrientationComponent implements OnInit {
   } = null
 
   onAddPj() {
-    this.piece_jointes.push({ date: new Date(), nom: 'Fichier temporaire', path: '', _id: new mongoose.Types.ObjectId().toString() })
+    this.piece_jointes.push({ date: new Date(), nom: "Téléverser le fichier s'il vous plaît", path: '', _id: new mongoose.Types.ObjectId().toString() })
   }
   downloadPJFile(pj) {
     this.EmailTypeS.downloadPJ(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
@@ -769,6 +1029,9 @@ export class OrientationComponent implements OnInit {
     }
   }
 
+  goToCandidature(id) {
+    this.router.navigate(['admission/lead-candidature/', id])
+  }
 
 
 }

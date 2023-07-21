@@ -87,6 +87,7 @@ export class Prospect {
         public modalite?: string,
         public documents_dossier?: [{ date: Date, nom: string, path: string, _id: string }],
         public documents_autre?: [{ date: Date, nom: string, path: string, _id: string }],
+        public avancement_cf?: string,
     ) { }
 
 }

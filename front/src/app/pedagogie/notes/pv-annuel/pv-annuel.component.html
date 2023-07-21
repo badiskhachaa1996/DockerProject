@@ -1,5 +1,16 @@
-<div class="col-12">
-    <div class="card" *ngFor="let semestre of SemestreList">
+<div class="col-12 grid">
+    <div class="card grid col-12" *ngIf="showRenamePV">
+        <div class="col-12 grid">
+            <label class="col-12">Nom du PV: </label>
+            <input class="col-12" pInputText type="text" [(ngModel)]="showRenamePV.nom" autoWidth="false"
+                [style]="{'width':'100%'}" />
+        </div>
+        <div class="col-12">
+            <button pButton label="Sauvegardez le nom" (click)="onRenamePV()" autoWidth="false"
+                [style]="{'width':'100%'}"></button>
+        </div>
+    </div>
+    <div class="card col-12" *ngFor="let semestre of SemestreList">
         <h5 *ngIf="classe">Liste des PVs {{semestre}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
         <p-table #dt1 *ngIf="pvAnnuel[semestre]" [value]="pvAnnuel[semestre]" dataKey="_id" responsiveLayout="scroll"
@@ -18,10 +29,15 @@
                             class="p-button-text p-button-rounded p-button-plain"
                             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
-                    <td>
+                    <td *ngIf="!pv.nom">
                         {{pv.date_creation | date : 'dd/MM/YYYY à HH:mm'}}
                     </td>
+                    <td *ngIf="pv.nom">
+                        {{pv.nom}}
+                    </td>
                     <td>
+                        <i (click)="initRenamePV(pv);scrollToTop()" pTooltip="Renommer le pv" style="margin-left: 2%;"
+                            tooltipPosition="bottom" class="pi pi-pencil" aria-hidden="true"></i>
                         <i (click)="loadPV(pv,semestre)" pTooltip="Charger le pv" style="margin-left: 2%;"
                             tooltipPosition="bottom" class="pi pi-download" aria-hidden="true"></i>
                         <i (click)="delete(pv)" pTooltip="Supprimer le pv" style="margin-left: 2%;"
@@ -78,7 +94,8 @@
                 </tr>
                 <tr>
                     <th class="text-center" colspan="5">Coefficient</th>
-                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols" [pEditableColumn]="col.coeff" pEditableColumnField="coeff">
+                    <th class="text-center" *ngFor="let col of pv.pv_annuel_cols" [pEditableColumn]="col.coeff"
+                        pEditableColumnField="coeff">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <input pInputText type="number" [(ngModel)]="col.coeff">
@@ -130,7 +147,7 @@
         </ng-template>
         </p-table>
     </div>
-    <div class="card">
+    <div class="card col-12">
         <h5 *ngIf="classe">PV Annuel de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="dataPVAnnuel" dataKey="_id" responsiveLayout="stack" id="dt1"
@@ -274,7 +291,8 @@
                                             (input)="modified=true">
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{data.appreciation}}
+                                        {{showAppreciation(calculMoyenne(StpFonctionne[data.email][semestre]
+                                        ,semestre),data.appreciation)}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>

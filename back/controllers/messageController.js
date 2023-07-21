@@ -65,7 +65,7 @@ app.post("/create", (req, res) => {
                         html: htmlemail,
                         attachments: [{
                             filename: 'signature.png',
-                            path: 'assets/signature.png',
+                            path: 'assets/ims-intedgroup-logo.png',
                             cid: 'red'
                         }]
                     };

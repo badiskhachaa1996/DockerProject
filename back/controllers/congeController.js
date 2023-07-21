@@ -2,82 +2,134 @@ const express = require('express');
 const app = express();
 app.disable("x-powered-by");
 const { Conge } = require('./../models/Conge');
-const { User } = require("./../models/user");
+const multer = require('multer');
+const fs = require('fs');
 
-//Methode de demande de congés
-app.post("/new-holidays", (req, res) => {
+// méthode de demande de congés
+app.post("/post-conge", (req, res) => {
+    const conge = new Conge({ ...req.body });
+    //Enregistrement du congé dans la base de données
+    conge.save()
+        .then((response) => { res.status(201).send(response); })
+        .catch((error) => { res.status(500).send("Impossible de prendre en compte votre demande de congés"); })
+})
+
+
+// recuperation de la liste des conges d'un utilisateur 
+app.get("/get-conges-user-id/:user_id", (req, res) => {
+    const { user_id } = req.params;
+
+    Conge.find({ user_id: user_id })
+        .then((response) => { res.status(200).send(response) })
+        .catch((error) => { res.status(400).send(error) })
+})
+
+
+// recuperation de la liste des congés
+app.get("/get-conges", (req, res) => {
+    const { user_id } = req.params;
+
+    Conge.find()?.populate('user_id')
+        .then((response) => { res.status(200).send(response) })
+        .catch((error) => { res.status(400).send(error) })
+})
+
+
+//mise à jour d'un object conge 
+app.put("/put-conge", (req, res) => {
     const conge = new Conge({ ...req.body });
 
-    //Recuperation de l'utilisateur
-    User.findOne({ _id: conge.user_id })
-    .then((user) => {
-        //Recuperation de l'id du responsable de service de l'utilisateur
-        User.findOne({ service_id: user.service_id, role: 'Responsable' })
-        .then((referent) => {
-            conge.referent_id = referent._id;
-            //Enregistrement du congé dans la base de données
-            conge.save()
-            .then((response) => { res.status(201).send(response); })
-            .catch((error) => { res.status(500).send("Impossible de prendre en compte votre demande de congés"); })
-        })
-        .catch((error) => { res.status(400).send("Vous n'êtes lié à aucun service, veuillez contacter un administrateur"); });
-    })
-    .catch((error) => { res.status(500).send('Erreur interne veuillez contacter un administrateur'); })
-});
+    Conge.updateOne({ _id: conge._id }, { ...req.body })
+        .then((response) => { res.status(201).send(response) })
+        .catch((error) => { res.status(400).send(error) })
+})
 
 
-//Methode de validation de congés
-app.patch("/validate-holidays", (req, res) => {
-    const conge_id = req.body.conge_id;
+//mise-a-jour du statut
+app.patch("/answer", (req, res) => {
+    const { answer } = req.body;
+    const { id } = req.body;
 
-    // changement de statut du congé dans la BD
-    Conge.updateOne({ _id: conge_id }, { statut: 'Validé' })
+    Conge.findOneAndUpdate({ _id: id }, { statut: answer })
+        .then((response) => { res.status(201).send(response) })
+        .catch((error) => { res.status(400).send(error) })
+
+})
+
+
+//suppression d'une demande de conge
+app.delete("/delete-conge/:id", (req, res) => {
+    const { id } = req.params;
+
+    Conge.findOne({ _id: id })
     .then((response) => {
-        //TODO: remplissage du compte rendu d'activité sur la période de congé avec la mention "en congé"
-        res.status(201).send(response);
-     })
-    .catch((error) => { res.status(404).send(error.message); })
+        if(response?.justificatif)
+        {
+            fs.unlink(`storage/justificatif-conge/${id}/justificatif.pdf`, (err) => {
+                if(err)
+                { 
+                    console.error(err);
+                }
+            });
+        }
+
+        Conge.deleteOne({ _id: id })
+        .then((response) => { res.status(201).send(response) })
+        .catch((error) => { console.log(error); res.status(400).send(error) })
+    })
+    .catch((error) => { console.log(error); res.status(500).send(error) })
+    
 });
 
+// upload du justificatif
+const uploadJustificatifStorage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        const { id } = req.body;
+        const destination = `storage/justificatif-conge/${id}`;
 
-//Methode de refus d'une demande de congés
-app.patch("/refuse-holidays", (req, res) => {
-    const conge_id = req.body.conge_id;
+        if (!fs.existsSync(destination)) {
+            fs.mkdirSync(destination, { recursive: true });
+        }
+        callBack(null, destination);
+    },
+    filename: (req, file, callBack) => {
+        let fileName = "justificatif";
+        const fileSplited = file.originalname.split('.');
+        const filetype = fileSplited[fileSplited.length - 1];
 
-    Conge.updateOne({ _id: conge_id }, { statut: 'Refusé' })
-    .then((response) => { res.status(201).send(response); })
-    .catch((error) => { res.status(400).send(error.message); })
+        callBack(null, `${fileName}.${filetype}`);
+    }
 });
 
+const uploadJustificatif = multer({ storage: uploadJustificatifStorage });
 
-//Methode de recuperation des demandes d'un utilisateur entre 2 dates
-app.get("/get-by-user-id/:user_id", (req, res) => {
-    let id = req.params.user_id;
+app.post('/upload-justificatif', uploadJustificatif.single('file'), (req, res) => {
+    const { file } = req;
+    const id = req.body.id;
 
-    Conge.find({ _id: id }).populate("user_id").populate("referent_id")
-    .then((response) => { res.status(200).send(response); })
-    .catch((error) => { res.status(400).send(error.message); });
+    let fileName = "justificatif";
+    const fileSplited = file.originalname.split('.');
+    const filetype = fileSplited[fileSplited.length - 1];
+
+    if (!file) {
+        return res.status(400).send("Aucun fichier sélectionnée");
+    }
+
+    Conge.findOneAndUpdate({_id: id}, { justificatif: `${fileName}.${filetype}`})
+    .then((response) => { res.status(201).send(response) })
+    .catch((error) => {res.status(400).send("Impossible de mettre à jour votre demande de congé"); });
 });
 
-
-//Methode de recuperation des demandes entre 2 dates
-app.get("/get-all-populate", (_, res) => {
-
-    Conge.find()?.populate('user_id')?.populate('referent_id')
-    .then((response) => { res.status(200).send(response); })
-    .catch((error) => { res.status(400).send(error.message); });
+// méthode de téléchargement du justificatif
+app.get("/download-justificatif/:id", (req, res) => {
+    res.download(
+        `./storage/justificatif-conge/${req.params.id}/justificatif.pdf`,
+        function (err) {
+            if (err) {
+                res.status(400).send(err);
+            }
+        }
+    );
 });
-
-
-//Methode de recuperation des demandes entre 2 dates pour un service
-app.get("/get-all-between-populate-for-service/:user_id", (req, res) => {
-    let id = req.params.user_id;
-
-    //Recuperation et envoi de la liste des demande du service de l'utilisateur
-    Conge.find({ referent_id: id })?.populate('user_id')
-    .then((response) => { res.status(200).send(response); })
-    .catch((error) => { res.status(400).send('Aucune demandes ne vous est assigné'); });
-});
-
 
 module.exports = app;

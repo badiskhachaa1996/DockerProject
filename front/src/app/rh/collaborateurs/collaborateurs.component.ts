@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
+import { DailyCheck } from 'src/app/models/DailyCheck';
 import { User } from 'src/app/models/User';
+import { DailyCheckService } from 'src/app/services/daily-check.service';
 import { RhService } from 'src/app/services/rh.service';
 import { environment } from 'src/environments/environment';
 
@@ -32,6 +34,9 @@ export class CollaborateursComponent implements OnInit {
   formUpdateJobDescription: FormGroup;
   showFormUpdateJobDescriptionForm: boolean = false;
   showCra: boolean = false;
+  showHistoriqueCra: boolean = false;
+  historiqueCra: DailyCheck[] = [];
+  historiqueCraSelected: DailyCheck;
 
   // chargement des données de tableau
   loading: boolean = false;
@@ -76,7 +81,7 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Avancé', value: 'Avancé' },
   ];
 
-  constructor(private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder) { }
+  constructor(private dailyCheckService: DailyCheckService, private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     // recuperation de la liste des collaborateurs
@@ -406,5 +411,16 @@ export class CollaborateursComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
     })
     .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+  }
+
+  // recuperation de l'historique des cra
+  onGetHistoriqueCra(id: string)
+  {
+    this.dailyCheckService.getUserChecks(id)
+    .then((response) => {
+      this.historiqueCra = response;
+      console.log(response)
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 }

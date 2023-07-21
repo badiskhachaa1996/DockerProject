@@ -9,6 +9,10 @@ import { Vente } from 'src/app/models/Vente';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from 'src/app/services/notification.service';
+import { SocketService } from 'src/app/services/socket.service';
+import { EmailTypeService } from 'src/app/services/email-type.service';
+import { Notification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-reglement',
@@ -19,7 +23,7 @@ export class ReglementComponent implements OnInit {
 
   constructor(private FCService: FactureCommissionService, private route: ActivatedRoute,
     private MessageService: MessageService, private VenteService: VenteService,
-    private PartenaireService: PartenaireService) { }
+    private PartenaireService: PartenaireService, private NotifService: NotificationService, private Socket: SocketService, private EmailService: EmailTypeService) { }
 
   showFormAddFacture = false
 
@@ -77,6 +81,31 @@ export class ReglementComponent implements OnInit {
     this.FCService.create({ ...this.formAddFacture.value }).subscribe(data => {
       if (data.nature == "A la source" || data.nature == "Compensation")
         this.factures.push(data)
+      if (this.formAddFacture.value.partenaire_id && this.partenaireDic[this.formAddFacture.value.partenaire_id]?.email_perso) {
+        let partenaire_user_id = this.partenaireDic[this.formAddFacture.value.partenaire_id]
+        this.Socket.NewNotifV2(partenaire_user_id._id, `Une nouvelle facture est disponible dans votre espace `)
+
+        this.NotifService.create(new Notification(null, null, false,
+          `Une nouvelle facture est disponible dans votre espace `,
+          new Date(), partenaire_user_id._id, null)).subscribe(test => { })
+
+        this.EmailService.defaultEmail({
+          email: partenaire_user_id.email,
+          objet: '[IMS] - Nouvelle Facture',
+          mail: `
+
+          Cher partenaire,
+
+          Nous sommes ravis de vous informer qu'une nouvelle facture est désormais disponible dans votre espace. Vous pouvez y accéder en vous connectant à votre compte sur notre plateforme en ligne.
+          
+          Si vous avez des questions ou des préoccupations concernant cette facture, n'hésitez pas à nous contacter. Notre équipe est là pour vous aider et répondre à vos demandes.
+          
+          Nous vous remercions de votre confiance continue et de votre partenariat précieux. Nous apprécions votre promptitude dans le règlement de nos factures et nous sommes impatients de poursuivre notre collaboration fructueuse.
+          
+          Cordialement,
+        `
+        }).subscribe(() => { })
+      }
       this.showFormAddFacture = false
       this.formAddFacture.patchValue({ numero: this.generateIDFacture() })
       this.formAddFacture.reset()
@@ -99,7 +128,7 @@ export class ReglementComponent implements OnInit {
     })
     this.showFormEditFacture = true
   }
-
+  partenaireDic = {}
   ngOnInit(): void {
     if (this.route.snapshot.paramMap.get('partenaire_id')) {
       this.PartenaireSelected = [this.route.snapshot.paramMap.get('partenaire_id')]
@@ -123,6 +152,7 @@ export class ReglementComponent implements OnInit {
         this.PartenaireList = [{ label: "Tous les Partenaires", value: null }]
         data.forEach(p => {
           this.PartenaireList.push({ label: p.nom, value: p._id })
+          this.partenaireDic[p._id] = p.user_id
         })
       })
     }

@@ -50,17 +50,17 @@
         <div class="card">
             <div class="grid">
                 <div class="col-6 md:col-3">
-                    <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2"></button> <br>
-                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause" class="p-button-warning mb-2"></button> <br></span>
-                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()" label="Fin de la pause" class="p-button-warning mb-2"></button> <br></span>
-                    <a href="#departAnticipe" (click)="selectedTabIndex = 5"><button  pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button></a> <br>
-                    <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"></button>
+                    <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2" [disabled]="dailyCheck != null"></button> <br>
+                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause" class="p-button-warning mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()" label="Fin de la pause" class="p-button-warning mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                    <a href="#departAnticipe" (click)="selectedTabIndex = 5" *ngIf="dailyCheck != null && dailyCheck.check_out == null"><button  pButton pRipple label="Départ anticipé" class="p-button-help mb-2"></button></a> <br *ngIf="dailyCheck != null && dailyCheck.check_out == null">
+                    <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger" [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
                 </div>
                 <div class="col-6 md:col-3">
                     <h6>Vous êtes arrivé au <br> travail à: <strong>{{dailyCheck?.check_in | date: 'HH:mm'}}</strong></h6>
                     <h6>Temps passé au <br> travail: <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn</h6>
                     <h6>Temps passé en <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
-                    <h6>Taux de remplissage du <br> CRA: <strong>69%</strong></h6>
+                    <h6>Taux de remplissage du <br> CRA: <strong>{{craPercent}}%</strong></h6>
                 </div>
                 <div class="col-6 md:col-3 flex align-items-center justify-content-center">
                     <h5 style="text-align: center;">
@@ -80,7 +80,7 @@
                             <hr>
                         </div>
                         <!-- end dialogue -->
-                        <span style="color: green; font-weight: bolder;">{{userConnected.statut}}</span>
+                        <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
                     </h5>
 
                 </div>
@@ -125,9 +125,38 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="CRA">
-                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;"></button>
+                    <!-- formulaire d'ajout d'une activité -->
+                    <div *ngIf="showFormAddCra">
+                        <div class="add-button-div mb-2">
+                            <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;" style="color: red; font-size: 20px; float: right; cursor: pointer;"></i>
+                        </div>
+                        <div style="clear: both;"></div>
+
+                        <form class="p-fluid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
+                            <div formArrayName="cras" *ngFor="let cra of getCras().controls; let i = index; let c = count">
+                                <div class="p-formgrid grid" [formGroupName]="i">
+                                    <div class="field col-12 md:col-5">
+                                        <input pInputText type="text" id="tache" formControlName="tache" placeholder="Veuillez décrire la tâche">
+                                    </div>
+                                    <div class="field col-12 md:col-5">
+                                        <input pInputText type="number" id="duration" formControlName="duration" placeholder="Durée en minute">
+                                    </div>
+                                    <div class="field col-12 md:col-2" *ngIf="c > 1">
+                                        <button pButton pRipple pTooltip="Supprimer la ligne" type="button" icon="pi pi-trash" class="p-button-outlined p-button-danger mb-2" (click)="onDeleteCraField()"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-outlined p-button-success mb-2" (click)="onAddCraField()"></button>
+
+                            <div class="col-2">
+                                <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2" [disabled]="formAddCra.invalid"></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;" (click)="showFormAddCra = true;" *ngIf="dailyCheck != null && !showFormAddCra"></button>
                     <div style="clear: both;"></div>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
@@ -135,11 +164,34 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
-                            <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
+                        <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                            <tr [pEditableRow]="cra">
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" [(ngModel)]="cra.number_minutes">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{cra.number_minutes}} mn
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="cra.task">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{cra.task}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(cra)" class="p-button-rounded p-button-text"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(cra)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(cra, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteCra(cra._id)"></button>
+                                </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
@@ -242,47 +294,175 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <!-- formulaire de modification d'une demande de congé -->
+                    <div *ngIf="showUpdateCongeForm">
+                        <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showUpdateCongeForm = false; showOtherTextArea = false"></i>
+                        <div style="float: right"></div>
+                        
+                        <h3 class="text-center">Modifier une demande de congé</h3>
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateConge" (ngSubmit)="onUpdateConge()">
+                            <div class="field col-12">
+                                <label>Type de congé <span style="color: red">*</span></label>
+                                <p-dropdown formControlName="type" [options]="congeStatutList" filter="true" placeholder="type du congé" [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                            </div>
+
+                            <div class="field col-12" *ngIf="showOtherTextArea">
+                                <label htmlFor="other"></label>
+                                <textarea formControlName="other" pInputTextarea placeholder="Préciser le motif" autoResize rows="4" cols="30"></textarea>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="debut">Début <span style="color: red">*</span></label>
+                                <p-calendar formControlName="debut" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="fin">Fin <span style="color: red">*</span></label>
+                                <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label htmlFor="nb_jour">Nombre de jours <span style="color: red">*</span></label>
+                                <input formControlName="nb_jour" pInputText type="number" id="nb_jour">
+                            </div>
+                            <div class="field col-12 md:col-8">
+                                <label htmlFor="motif">Motif de la demande <span style="color: red">*</span></label>
+                                <textarea formControlName="motif" pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
+                            </div>
+
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formUpdateConge.invalid"></button>
+                        </form>
+                    </div>
+                    
+                    <!-- formulaire de demande de congé -->
+                    <div *ngIf="showAddCongeForm">
+                        <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showAddCongeForm = false; showOtherTextArea = false;"></i>
+                        <div style="float: right"></div>
+                        
+                        <h3 class="text-center">Nouvelle demande de congé</h3>
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddConge" (ngSubmit)="onAskConge()">
+                            <div class="field col-12">
+                                <label>Type de congé <span style="color: red">*</span></label>
+                                <p-dropdown formControlName="type" [options]="congeStatutList" filter="true" placeholder="type du congé" [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                            </div>
+
+                            <div class="field col-12" *ngIf="showOtherTextArea">
+                                <label htmlFor="other"></label>
+                                <textarea formControlName="other" pInputTextarea placeholder="Préciser le motif" autoResize rows="4" cols="30"></textarea>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="debut">Début <span style="color: red">*</span></label>
+                                <p-calendar formControlName="debut" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="fin">Fin <span style="color: red">*</span></label>
+                                <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label htmlFor="nb_jour">Nombre de jours <span style="color: red">*</span></label>
+                                <input formControlName="nb_jour" pInputText type="number" id="nb_jour">
+                            </div>
+                            <div class="field col-12 md:col-8">
+                                <label htmlFor="motif">Motif de la demande <span style="color: red">*</span></label>
+                                <textarea formControlName="motif" pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
+                            </div>
+                            <div class="field col-12">
+                                <input type="file" pInputText (change)="onSelectFile($event)" accept="application/pdf">
+                            </div>
+
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formAddConge.invalid"></button>
+                        </form>
+                    </div>
+                    
+                    <button pButton pRipple label="Nouvelle demande" style="float: right;" class="p-button-outlined mb-2" (click)="showAddCongeForm = true"></button>
+                    <div style="clear: both"></div>
+                    <p-table [value]="conges" [expandedRowKeys]="expandedRows" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
+                                <th></th>
                                 <th>Date de la demande</th>
                                 <th>Type</th>
                                 <th>Période</th>
                                 <th>Nombre de jours</th>
-                                <th>Motif</th>
                                 <th>Justificatif</th>
-                                <th>Note</th>
-                                <th>Statut de la demande</th>
-                                <th>Note décideur</th>
+                                <th>Statut</th>
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-conge let-expanded="expanded">
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
                                 <td>
-                                    <button pButton pRipple label="Modifier" class="p-button-success p-button-outlined mb-2"></button>
-                                    <button pButton pRipple label="Supprimer" class="p-button-danger p-button-outlined ml-2 mb-2"></button>
-                                    <button pButton pRipple label="Charger un justificatif" class="p-button-help p-button-outlined ml-2 mb-2"></button>
+                                    <button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td>{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
+
+                                <td *ngIf="conge.type_conge == 'Autre motif'">{{ conge.other_motif}}</td>
+                                <td *ngIf="conge.type_conge != 'Autre motif'">{{ conge.type_conge}}</td>
+
+                                <td>du {{conge.date_debut | date: 'd/MM/YYYY'}} <br> au {{conge.date_fin | date: 'd/MM/YYYY'}}</td>
+
+                                <td *ngIf="conge.nombre_jours > 1">{{conge.nombre_jours}} jours</td>
+                                <td *ngIf="conge.nombre_jours <= 1">{{conge.nombre_jours}} jour</td>
+
+                                <td *ngIf="conge.justificatif == null">--</td>
+                                <td *ngIf="conge.justificatif != null">
+                                    <i class="pi pi-file" pTooltip="Télécharger le justificatif" (click)="onDonwloadJustificatif(conge._id)" style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
+                                </td>
+
+                                <td>{{conge.statut}}</td>
+                                <td>
+                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" (click)="onPachCongeData(conge)" class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                                    <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash" (click)="onDeleteConge(conge._id)" class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                                 </td>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="emptymessage">
+                        <ng-template pTemplate="rowexpansion" let-conge>
                             <tr>
-                                <td colspan="10">Vous n'avez émis aucune demande pour le moment.</td>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="loadingbody">
-                            <tr>
-                                <td colspan="10">Chargement de vos demandes, merci de patienter...</td>
+                                <td colspan="9">
+                                    <div class="p-3">
+                                        <p-table responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Motif</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td>{{conge.motif}}</td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+
+                                    <div class="p-3">
+                                        <p-table responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Note</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td>{{conge.note}}</td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+
+                                    <div class="p-3">
+                                        <p-table responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Note decideur</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td>{{conge.note_decideur}}</td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -290,18 +470,23 @@
 
                 <p-tabPanel header="Historique de pointage">
                     <!-- affichage du CRA d'un historique de pointage -->
-                    <h5>CRA du jour sélectionné</h5>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                    <div style="clear: both;"></div>
+
+                    <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
+                            <tr>
+                                <th>Cra du {{historiqueCraSelected.today}}</th>
+                            </tr>
                             <tr>
                                 <th>Durée</th>
                                 <th>Tâche</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-cra>
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
+                                <td>{{cra.number_minutes}}mn</td>
+                                <td>{{cra.task}}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
@@ -318,7 +503,7 @@
 
                     <!-- affichage de l'historique de pointage -->
                     <h5 class="mt-5">Historique de pointage</h5>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                    <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
@@ -329,15 +514,15 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-cra>
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
+                                <td>{{cra.today}}</td>
+                                <td>{{cra.check_in | date:'H:mm'}}</td>
+                                <td>{{cra.check_out | date:'H:mm'}}</td>
+                                <td>{{ cra.pause_timing }}mn</td>
+                                <td>{{ cra.taux_cra }}%</td>
                                 <td>
-                                    <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2"></button>
+                                    <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2" (click)="historiqueCraSelected = cra; showDailySelectedCra = true"></button>
                                 </td>
                             </tr>
                         </ng-template>

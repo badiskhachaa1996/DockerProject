@@ -81,12 +81,12 @@
                                 formControlName="formation"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
-                            <label For="campus_choix_1">Campus 1er choix</label>
+                            <label For="campus_choix_1">Campus</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_1"></p-dropdown>
 
                         </div>
-                        <div class="field md:col-6 col-12">
+                        <!--<div class="field md:col-6 col-12">
                             <label For="campus_choix_2">Campus 2ème choix</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_2"></p-dropdown>
@@ -95,9 +95,8 @@
                             <label For="campus_choix_3">Campus 3ème choix</label>
                             <p-dropdown [options]="dropdownCampus" placeholder="Choisissez un campus"
                                 formControlName="campus_choix_3"></p-dropdown>
-                            <!--<input pInputText formControlName="campus_choix_3" />-->
 
-                        </div>
+                    </div>-->
                         <div class="field col-12">
                             <label For="formation">Ecole</label>
                             <p-dropdown [options]="dropdownEcole" placeholder="Choisissez une école"
@@ -107,43 +106,81 @@
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Dossier d'admission">
-                <form class="grid" [formGroup]="detailsForm">
-                    <ul>
-                        <li *ngFor="let file of ListDocuments; index as i">
-                            <div class="grid">
-
-                                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                                        pTooltip="Visualiser dans un nouvel onglet"
-                                        (click)="VisualiserFichier(showDetails._id,i)"></i>
-                                    <em (click)="VisualiserFichier(showDetails._id,i)" [id]="i" style="cursor: pointer;"
-                                        pTooltip=" Visualiser dans un nouvel onglet">
-                                        {{ ListPiped[i] }}
-                                    </em>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                                        (click)="downloadFile(showDetails._id,i)"></i>
-                                </div>
-                                <div class="field col-1">
-                                    <i class="pi pi-times"
-                                        style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                                        pTooltip="Supprimer le fichier du dossier"
-                                        (click)="deleteFile(showDetails._id,i)" aria-hidden="true"> </i>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-                    <p *ngIf="ListDocuments==null || ListDocuments.length==0">
-                        Aucun document n'a été chargé !
-                    </p>
-                    <div class="col-12">
-                        <button pButton label="Ajouter un document"
-                            (click)="showUploadFile=showDetails;scrollToTop()"></button>
+                <div class="col-12">
+                    <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile
+                        style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                    <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther"
+                        #selectedFileOther style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                </div>
+                <div class="card grid">
+                    <h3 class="col-12">Documents Requis</h3>
+                    <p-table [value]="showDetails.documents_dossier" #dt1 dataKey="_id" class="col-12"
+                        responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Document</th>
+                                <th>Lien</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc>
+                            <tr>
+                                <td>{{doc.nom}}</td>
+                                <td>
+                                    <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                                </td>
+                                <td>
+                                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                        (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                        class="pi pi-trash" (click)="delete(doc)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <h3 class="col-8">Autre documents</h3>
+                    <div class="col-4">
+                        <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
+                            label="Ajouter un autre document"></p-button>
                     </div>
-                </form>
+                    <p-table [value]="showDetails.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single"
+                        [rows]="8" [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                        [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                        styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Document</th>
+                                <th>Lien</th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                            <tr [pEditableRow]="doc">
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" pInputText [(ngModel)]="doc.nom">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{doc.nom}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                                </td>
+                                <td>
+                                    <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                        *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                        (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;"
+                                        aria-hidden="true"></i>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                        class="pi pi-trash" (click)="deleteOther(doc)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
             </p-tabPanel>
             <p-tabPanel header="Paiements">
                 <div class="grid">
@@ -248,7 +285,7 @@
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="formation">Avancement Campus France</label>
-                            <p-dropdown [options]="cflist" formControlName="validated_cf"></p-dropdown>
+                            <p-dropdown [options]="cflist" formControlName="avancement_cf"></p-dropdown>
                         </div>
                         <div class="field md:col-6 col-12">
                             <label For="formation">Logement</label>
@@ -348,10 +385,14 @@
     <div class="col-12 card" *ngIf="showEmail">
         <p-tabView>
             <p-tabPanel header="Email personnalisé">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso" (ngSubmit)="onEmailPerso()">
-                    <div class="field col-12">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
+                    <div class="field col-6">
                         <label>Objet: </label>
                         <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
                     </div>
                     <div class="field col-12">
                         <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
@@ -363,9 +404,9 @@
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
-                        <label>Email(s) de(s) destinataire(s): </label>
+                        <label>Email(s)en cc: </label>
                         <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                            placeholder="email1@email.com , email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
@@ -393,8 +434,16 @@
                                     <td>
                                         {{rowData.date | date:'mediumDate'}}
                                     </td>
-                                    <td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
                                         <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
@@ -420,11 +469,12 @@
                                 autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
-                    <button pButton [disabled]="formEmailPerso.invalid" label="Envoyer l'email"></button>
+                    <button pButton [disabled]="formEmailPerso.invalid" (click)="onEmailPerso()"
+                        label="Envoyer l'email"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Depuis un mail type">
-                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType" (ngSubmit)="onEmailType()">
+                <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
                     <div class="field col-12">
                         <label>Email Type: </label>
                         <p-dropdown placeholder="Choisissez un mail type" filter="true"
@@ -432,9 +482,13 @@
                             [style]="{'width':'100%'}">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-6">
                         <label>Objet: </label>
                         <input type="text" formControlName="objet" pInputText>
+                    </div>
+                    <div class="field col-6">
+                        <label>Email du destinataire: </label>
+                        <p>{{prospectSendTo.user_id.email_perso}}</p>
                     </div>
                     <div class="field col-12">
                         <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
@@ -446,9 +500,9 @@
                         </p-dropdown>
                     </div>
                     <div class="field col-6">
-                        <label>Email(s) de(s) destinataire(s): </label>
+                        <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
                         <p-chips formControlName="cc" separator=","
-                            placeholder="email1@email.com;email2.email.com"></p-chips>
+                            placeholder="email1@email.com,email2.email.com"></p-chips>
                     </div>
                     <div class="field col-12">
                         <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
@@ -476,8 +530,16 @@
                                     <td>
                                         {{rowData.date | date:'mediumDate'}}
                                     </td>
-                                    <td>
+                                    <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                        {{rowData?.path}}
+                                    </td>
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                        Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
                                         <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
@@ -503,7 +565,8 @@
                                 autoWidth="false" [style]="{'width':'80%'}"></button>
                         </div>
                     </div>
-                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"></button>
+                    <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
+                        (click)="onEmailPerso()"></button>
                 </form>
             </p-tabPanel>
             <p-tabPanel header="Historique des emails">
@@ -801,14 +864,18 @@
                             <th>
                                 Note
                             </th>
+                            <th>
+                                Action
+                            </th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-rowData>
+                    <ng-template pTemplate="body" let-rowData let-idx="rowIndex">
                         <tr>
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="rowData.custom_id" (blur)="saveDoc()">
+                                        <input pInputText type="text" [(ngModel)]="rowData.custom_id"
+                                            (blur)="saveDoc()">
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{rowData.custom_id}}
@@ -832,6 +899,10 @@
                             </td>
                             <td>
                                 {{rowData.note}}
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer ce fichier" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                    aria-hidden="true" (click)="deletedoc(idx)"> </i>
                             </td>
                         </tr>
                     </ng-template>
@@ -1025,7 +1096,7 @@
                                     Anglais/Français <p-sortIcon field="programme"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
-                                    Documents d'inscription<p-sortIcon field="haveDoc"></p-sortIcon>
+                                    Documents d'admission<p-sortIcon field="haveDoc"></p-sortIcon>
                                 </th>
 
                                 <th pSortableColumn="decision_orientation" scope="col" style="text-align: center;">
@@ -1049,6 +1120,9 @@
                                 </th>
                                 <th pSortableColumn="rentree_scolaire" scope="col" style="text-align: center;">
                                     Rentrée scolaire <p-sortIcon field="rentree_scolaire"></p-sortIcon>
+                                </th>
+                                <th scope="col" style="text-align: center;">
+                                    Etat de Candidature
                                 </th>
                                 <th *ngIf="AccessLevel!='Spectateur'" pSortableColumn="action" scope="col"
                                     style="text-align: center;">
@@ -1077,11 +1151,11 @@
                                     {{ prospect?.source }}
                                 </td>
 
-                                <td *ngIf="prospect.user_id">
+                                <td>
                                     {{ prospect?.user_id?.firstname | titlecase }}
                                     {{ prospect?.user_id?.lastname | uppercase }}
                                 </td>
-                                <td *ngIf="prospect.user_id">
+                                <td>
                                     {{ prospect?.user_id?.pays_adresse }}
                                 </td>
 
@@ -1101,10 +1175,12 @@
                                     {{ prospect.programme }}
                                 </td>
                                 <td *ngIf="prospect.haveDoc">
-                                    Oui
+                                    <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
+                                    </p-tag>
                                 </td>
                                 <td *ngIf="!prospect.haveDoc">
-                                    Non
+                                    <p-tag icon="pi pi-times" severity="danger" [value]="'Non'">
+                                    </p-tag>
                                 </td>
                                 <td>
                                     {{ prospect.decision_orientation }}
@@ -1131,6 +1207,13 @@
                                 <td>
                                     {{ prospect.rentree_scolaire }}
                                 </td>
+                                <td *ngIf="candidatureDic[prospect._id]">
+                                    <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
+                                    </p-tag>
+                                </td>
+                                <td *ngIf="!candidatureDic[prospect._id]">
+                                    <p-tag icon="pi pi-times" severity="danger" [value]="'En attente'"></p-tag>
+                                </td>
                                 <td *ngIf="AccessLevel!='Spectateur'">
                                     <i pTooltip="Traiter le dossier" tooltipPosition="bottom" class="pi pi-cog mr-2"
                                         (click)="initTraitement(prospect);scrollToTop()" aria-hidden="true"></i>
@@ -1142,6 +1225,9 @@
                                         (click)="initDetails(prospect);scrollToTop()" aria-hidden="true"></i>
                                     <i pTooltip="Envoyer un mail" tooltipPosition="bottom" class="pi pi-envelope mr-2"
                                         aria-hidden="true" (click)="initSendEmail(prospect);scrollToTop()"> </i>
+                                    <i pTooltip="Voir la candidature" tooltipPosition="bottom"
+                                        class="pi pi-briefcase mr-2" (click)="goToCandidature(prospect._id)"
+                                        aria-hidden="true"></i>
 
                                 </td>
                             </tr>
@@ -1180,9 +1266,9 @@
 
             <h5>Choix académique</h5>
             <p>Rentrée scolaire: {{ selectedProspect?.rentree_scolaire }}</p>
-            <p>Campus choix 1: {{ selectedProspect?.campus_choix_1 }}</p>
-            <p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
-            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>
+            <p>Campus: {{ selectedProspect?.campus_choix_1 }}</p>
+            <!--<p>Campus choix 2: {{ selectedProspect?.campus_choix_2 }}</p>
+            <p>Campus choix 3: {{ selectedProspect?.campus_choix_3 }}</p>-->
             <p>Formation : {{ selectedProspect?.formation }}</p>
             <p>Programme : {{ selectedProspect?.programme }}</p>
             <p>Rythme : {{ selectedProspect?.rythme_formation }}</p>

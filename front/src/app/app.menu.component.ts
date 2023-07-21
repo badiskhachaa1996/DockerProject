@@ -22,7 +22,7 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 @Component({
     selector: 'app-menu',
     template: `
-        <p-panelMenu [model]="items"></p-panelMenu>
+        <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
         <!-- <div class="layout-menu-container">  
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
@@ -38,14 +38,26 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 export class AppMenuComponent implements OnInit {
 
     token: any;
-    items: MenuItem[];
-
+    items: MenuItem[] = [
+        {
+            label: 'Tableau de bord',
+            icon: 'pi pi-fw pi-home',
+            routerLink: ['/'],
+        },
+        {
+            label: 'Signaler un problème technique',
+            icon: 'pi pi-fw pi-exclamation-triangle',
+            routerLink: ['/ticketing-igs'],
+        },
+    ];
+    showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
         private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService) { }
 
     ngOnInit() {
         //Decoder le token
+        this.showMenu = false
         this.token = jwt_decode(localStorage.getItem('token'));
         // Récupération du user connecter
         this.userService.getPopulate(this.token.id).subscribe({
@@ -61,6 +73,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Développeur',
@@ -90,7 +107,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -111,33 +128,27 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -1013,7 +1024,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1247,7 +1263,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1332,7 +1353,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1504,6 +1530,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1559,6 +1590,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1610,6 +1646,11 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Leads',
                                     items: [
                                         { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
@@ -1632,7 +1673,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1836,7 +1882,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1890,6 +1941,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Développeur',
                             icon: 'pi pi-fw pi-cog',
                             items: [
@@ -1917,7 +1973,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2009,6 +2065,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -2036,7 +2097,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2561,7 +2622,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2810,7 +2876,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2910,7 +2981,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2966,7 +3042,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3149,7 +3230,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3305,7 +3391,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3374,6 +3465,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -3401,7 +3497,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3497,7 +3593,14 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },/*
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        /*
+                        
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -3643,7 +3746,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3722,11 +3830,17 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Tableau de bord',
                                             icon: 'pi pi-fw pi-home',
                                             routerLink: ['/']
-                                        }
+                                        },
+                                        {
+                                            label: 'Signaler un problème technique',
+                                            icon: 'pi pi-fw pi-exclamation-triangle',
+                                            routerLink: ['/ticketing-igs'],
+                                        },
                                     ]
                                 },
+
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3798,6 +3912,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/']
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Tuteurs',
                                     icon: 'pi pi-users',
                                     routerLink: ['/tuteur-ceo']
@@ -3805,7 +3924,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-ticket',
                             items: [
 
@@ -3876,7 +3995,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-
+                console.log(service_dic)
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
                         this.items.push(
@@ -3914,6 +4033,21 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
+                                    }, {
+                                        label: 'Ticketing',
+                                        icon: 'pi pi-fw pi-ticket',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un ticket',
+                                                icon: 'pi pi-plus',
+                                                routerLink: ['/ticketing/gestion/ajout']
+                                            },
+                                            {
+                                                label: 'Mes tickets envoyé',
+                                                icon: 'pi pi-inbox',
+                                                routerLink: ['/ticketing/gestion/mes-tickets']
+                                            }
+                                        ]
                                     },
                                     {
                                         label: 'Dashboard',
@@ -3949,41 +4083,50 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            },
+                            }, {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
+                                {
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                }
+                            ]
+                        }
                         )
                     }
                 }
                 if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4021,33 +4164,27 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Suivi des tickets',
-                                    icon: 'pi pi-fw pi-check-circle',
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
+                                },
+                                {
+                                    label: 'Gestion des tickets',
+                                    icon: 'pi pi-fw pi-folder-open',
                                     items: [
                                         {
                                             label: 'Tickets non assignés',
@@ -4080,52 +4217,40 @@ export class AppMenuComponent implements OnInit {
                         })
                     } else if (role == "Agent") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        },
-                                        {
-                                            label: 'Tickets assigné à moi',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/ticketing/gestion/assignes']
-                                        },
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                },
+                                {
+                                    label: 'Tickets assigné à moi',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/ticketing/gestion/assignes']
                                 }
                             ]
                         })
                     } else {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Gestion des tickets',
-                                    icon: 'pi pi-fw pi-folder-open',
-                                    items: [
-                                        {
-                                            label: 'Ajouter un ticket',
-                                            icon: 'pi pi-plus',
-                                            routerLink: ['/ticketing/gestion/ajout']
-                                        },
-                                        {
-                                            label: 'Mes tickets envoyé',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: ['/ticketing/gestion/mes-tickets']
-                                        }
-                                    ]
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
+                                },
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
                         })
@@ -4133,7 +4258,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
-                    if (role == "Super Admin")
+                    if (role == "Super-Admin")
                         this.items.push(
                             {
                                 label: 'International',
@@ -4420,6 +4545,7 @@ export class AppMenuComponent implements OnInit {
                 }
                 if (response.type == "Prospect") {
                     this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
+                        this.showMenu = false
                         this.items = [
                             {
                                 label: "Informations personnelles",
@@ -4427,14 +4553,19 @@ export class AppMenuComponent implements OnInit {
                                 routerLink: ['/admission/lead-informations/' + p._id]
                             },
                             {
-                                label: "Programme d'étude",
-                                icon: "pi pi-book",
-                                routerLink: ['/admission/lead-programme/' + p._id]
+                                label: "Ma Candidature PDF",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-candidature/' + p._id]
                             },
                             {
                                 label: "Mon dossier d'admission",
                                 icon: "pi pi-briefcase",
                                 routerLink: ['/admission/lead-dossier/' + p._id]
+                            },
+                            {
+                                label: "Programme d'étude",
+                                icon: "pi pi-book",
+                                routerLink: ['/admission/lead-programme/' + p._id]
                             },
                             {
                                 label: "Suivre ma candidature",
@@ -4446,12 +4577,30 @@ export class AppMenuComponent implements OnInit {
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
                             },
+                            {
+                                label: 'Ticketing',
+                                icon: 'pi pi-fw pi-ticket',
+                                items: [
+                                    {
+                                        label: 'Ajouter un ticket',
+                                        icon: 'pi pi-plus',
+                                        routerLink: ['/ticketing/gestion/ajout']
+                                    },
+                                    {
+                                        label: 'Mes tickets envoyé',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/ticketing/gestion/mes-tickets']
+                                    }
+                                ]
+                            }
+
                         ]
+                        setTimeout(() => this.showMenu = true, 0);
                     })
                 }
                 if (services_list.includes('Mailing')) {
                     let role = service_dic['Mailing']
-                    if (role == "Super Admin") {
+                    if (role == "Super-Admin") {
                         this.items.push(
                             {
                                 label: 'Gestions des emails',
@@ -4499,7 +4648,8 @@ export class AppMenuComponent implements OnInit {
                 if (services_list.includes('CRM')) {
                     let role = service_dic['CRM']
                     this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(member => {
-                        if (role == 'Super Admin') {
+                        this.showMenu = false
+                        if (role == 'Super-Admin') {
                             this.items.push(
                                 {
                                     label: 'CRM',
@@ -5003,9 +5153,375 @@ export class AppMenuComponent implements OnInit {
                                 ]
                             },)
                         }
+                        setTimeout(() => this.showMenu = true, 0);
                     })
 
                 }
+                if (services_list.includes('Admission')) {
+                    this.items.push({
+                        label: 'Admission',
+                        icon: 'pi pi-fw pi-check-circle',
+                        items: [
+                            {
+                                label: 'Gestions des Leads',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: 'En attente de traitement',
+                                        icon: 'pi pi-spin pi-spinner',
+                                        routerLink: ['/gestion-preinscriptions-filtered/En attente de traitement']
+                                    },
+                                    {
+                                        label: 'Dossiers traités',
+                                        icon: 'pi pi-check-circle',
+                                        routerLink: ['/gestion-preinscriptions-filter/traite']
+                                    },
+                                    {
+                                        label: 'Ajouter un dossier',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                ]
+                            },
+                            {
+                                label: 'Admission Dubai',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: "Nouvelle demande admission",
+                                        icon: 'pi pi-pencil',
+                                        routerLink: ['/admission/dubai-form']
+                                    },
+                                    {
+                                        label: "Liste des demandes d'admission",
+                                        icon: 'pi pi-file-excel',
+                                        routerLink: ['/admission/dubai-form-results']
+                                    },
+                                ]
+                            },
+                            {
+                                label: 'Dashboard',
+                                icon: 'pi pi-users',
+                                routerLink: ['/gestion-preinscriptions']
+                            },
+                            {
+                                label: 'Gestions des leads Intuns',
+                                icon: 'pi pi-user-plus',
+                                routerLink: ['/prospects-intuns']
+                            },
+                            {
+                                label: 'Gestion des participantes pour les événements',
+                                icon: 'pi pi-users',
+                                routerLink: ['/list-events']
+                            }
+                        ],
+                    })
+                }
+                if (services_list.includes('Commercial') || services_list.includes('Commerciale')) {
+                    this.items.push(
+                        {
+                            label: 'Commerciale',
+                            icon: 'pi pi-fw pi-briefcase',
+                            items: [
+                                {
+                                    label: 'Gestions des entreprises',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Ajouter une entreprise',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-entreprise']
+                                        },
+                                        {
+                                            label: 'Liste des entreprises',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/entreprises']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion des tuteurs',
+                                    icon: 'pi pi-user',
+                                    routerLink: ['/tuteur']
+                                },
+                                {
+                                    label: 'Placement',
+                                    icon: 'pi pi-star',
+                                    items: [
+                                        {
+                                            label: 'Alternances',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['/liste-contrats']
+                                        },
+                                        {
+                                            label: 'Stages',
+                                            icon: 'pi pi-briefcase',
+                                            routerLink: ['/stages']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion des équipes de conseillers',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/equipe-commercial']
+                                },
+                                {
+                                    label: 'Gestion des leads alternables',
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: ['/prospects-alt']
+                                },
+                                {
+                                    label: 'Ajouter un dossier',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/ajout-lead']
+                                },
+
+                            ]
+
+                        },
+                    )
+                }
+                if (services_list.includes('Pédagogie') || services_list.includes('Pedagogie')) {
+                    this.items.push(
+                        {
+                            label: 'Pédagogie',
+                            icon: 'pi pi-fw pi-folder',
+                            items: [
+                                {
+                                    label: 'Gestion des modules',
+                                    icon: 'pi pi-fw pi-tags',
+                                    routerLink: ['/matieres'],
+
+                                },
+                                {
+                                    label: 'Gestion des groupes',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un groupe',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-groupe']
+                                        },
+                                        {
+                                            label: 'Liste des groupes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/groupes']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion des séances',
+                                    icon: 'pi pi-video',
+                                    items: [
+                                        {
+                                            label: 'Ajouter une séance',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-seance'],
+                                        },
+                                        {
+                                            label: 'Voir la liste des séances',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/seances'],
+                                        },
+                                        {
+                                            label: 'Voir l\'emploi du temps des séances',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/emploi-du-temps'],
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des formateurs',
+                                    icon: 'pi pi-id-card',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un formateur',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-formateur']
+                                        },
+                                        {
+                                            label: 'Liste des formateurs',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/formateurs']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestion des inscrits en attente d\'assignation',
+                                    icon: 'pi pi-user-plus',
+                                    routerLink: ['/assignation-inscrit']
+                                },
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un étudiant',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-etudiant']
+                                        },
+                                        {
+                                            label: 'Liste des étudiants',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['etudiants']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des évaluations',
+                                    icon: 'pi pi-copy',
+                                    items: [
+                                        {
+                                            label: 'Ajouter une évaluation',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-examen']
+                                        },
+                                        {
+                                            label: 'Liste des évaluations',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/examens']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des Bulletins de notes',
+                                    icon: 'pi pi-pencil',
+                                    routerLink: ['/notes']
+                                },
+                                {
+                                    label: 'Gestions des devoirs',
+                                    icon: 'pi pi-book',
+                                    routerLink: 'devoirs'
+                                }
+                            ]
+                        },
+                        {
+                            label: 'Questionnaire',
+                            icon: 'pi pi-sort-alpha-down',
+                            items: [
+                                {
+                                    label: 'Questionnaire satisfaction',
+                                    icon: 'pi pi-heart',
+                                    routerLink: ['resultat-qs']
+                                },
+                                {
+                                    label: 'Questionnaire formateur',
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: ['resultat-qf']
+                                },
+                                {
+                                    label: 'Questionnaire fin de formation',
+                                    icon: 'pi pi-check-circle',
+                                    routerLink: ['resultat-qff']
+                                },
+                                {
+                                    label: 'Questionnaire ICBS Event title',
+                                    icon: 'pi pi-question-circle',
+                                    routerLink: ['resultats-icbs']
+                                }
+                            ]
+                        },
+                    )
+                }
+                if (services_list.includes('Administration')) {
+                    this.items.push(
+                        {
+                            label: 'Administration',
+                            icon: 'pi pi-fw pi-inbox',
+                            items: [
+                                {
+                                    label: 'Gestions des années scolaires',
+                                    icon: 'pi pi-calendar',
+                                    items:
+                                        [
+                                            {
+                                                label: 'Ajouter une année scolaire',
+                                                icon: 'pi pi-calendar-plus',
+                                                routerLink: ['/ajout-annee-scolaire']
+                                            },
+                                            {
+                                                label: 'Liste des années scolaires',
+                                                icon: 'pi pi-sort-alpha-down',
+                                                routerLink: ['/annee-scolaire']
+                                            },
+                                        ]
+                                },
+                                {
+                                    label: 'Gestions des écoles',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Ajouter une école',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-ecole']
+                                        },
+                                        {
+                                            label: 'Liste des écoles',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/ecole']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des campus',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un campus',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-campus']
+                                        },
+                                        {
+                                            label: 'Liste des campus',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/campus']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des diplômes',
+                                    icon: 'pi pi-bookmark',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un diplôme',
+                                            icon: 'pi pi-plus-circle',
+                                            routerLink: ['/ajout-diplome']
+                                        },
+                                        {
+                                            label: 'Liste des diplômes',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/diplomes']
+                                        },
+                                    ]
+                                },
+
+                                {
+                                    label: 'Gestions des agents',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un agent',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/admin/ajout-agent']
+                                        },
+                                        {
+                                            label: 'Liste des agents',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/admin/agents']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Validation des inscrits',
+                                    icon: 'pi pi-check-square',
+                                    routerLink: ['/validation-inscrit']
+                                },
+
+                            ]
+                        },
+                    )
+                }
+                setTimeout(() => this.showMenu = true, 0);
+                //this.showMenu=true
             },
             error: (error: any) => {
                 console.log(error);

@@ -93,7 +93,7 @@ export class MenusComponent implements OnInit {
                 ]
             },
             {
-                label: 'Profile',
+                label: 'Profil',
                 icon: 'pi pi-fw pi-user',
                 items: [
                     {

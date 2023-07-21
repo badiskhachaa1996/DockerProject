@@ -38,5 +38,6 @@ export class ContratAlternance {
         public livret_apprentissage?: string, // *file
         public add_by?: string,
         public added_date?: Date,
+        public historique_modification?: any[],
     ) { }
 }
