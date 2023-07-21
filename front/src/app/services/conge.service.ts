@@ -51,6 +51,20 @@ export class CongeService {
   }
 
 
+  // recuperation des demandes d'un utilisateur
+  getAll(): Promise<Conge[]>
+  {
+    const url = `${this.apiUrl}/get-conges`;
+
+    return new Promise<Conge[]>((resolve, reject) => {
+      this.httpClient.get<Conge[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response) => { resolve(response); }),
+        ((error) => { reject(error) })
+      );
+    });
+  }
+
+
   // mise à jour d'un objet conge
   putConge(conge: Conge): Promise<any>
   {
