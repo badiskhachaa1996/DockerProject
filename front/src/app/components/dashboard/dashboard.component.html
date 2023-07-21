@@ -379,6 +379,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th></th>
+                                <th>ID</th>
                                 <th>Date de la demande</th>
                                 <th>Type</th>
                                 <th>Période</th>
@@ -393,6 +394,7 @@
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
+                                <td>{{conge._id.substring(conge._id.length-6, conge._id.length)}}</td>
                                 <td>{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
 
                                 <td *ngIf="conge.type_conge == 'Autre motif'">{{ conge.other_motif}}</td>
