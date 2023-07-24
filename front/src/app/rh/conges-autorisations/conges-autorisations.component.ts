@@ -59,6 +59,7 @@ export class CongesAutorisationsComponent implements OnInit {
   formEmailPerso: FormGroup;
   formEmailType: FormGroup;
   mailDropdown: any[] = [];
+  mailTypeDropdown: any[] = [];
 
   uploadFilePJ: {
     date: Date,
@@ -275,6 +276,12 @@ export class CongesAutorisationsComponent implements OnInit {
         this.mailDropdown.push({ label: val.email, value: val })
       })
     });
+
+    this.emailTypeService.MTgetAll().subscribe(data => {
+      data.forEach(e => {
+        this.mailTypeDropdown.push({ label: e.objet, value: e })
+      })
+    })
 
     this.showEmailView = true;
   }
