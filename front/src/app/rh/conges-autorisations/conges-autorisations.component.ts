@@ -309,6 +309,14 @@ export class CongesAutorisationsComponent implements OnInit {
     delete this.piece_jointes[ri];
   }
 
+  onMailType(event: MailType) {
+    this.formEmailType.patchValue({
+      ...event
+    })
+    this.piece_jointes = event.pieces_jointe
+    this.mailTypeSelected = event
+  }
+
   onEmailPerso() {
 
     const {user_id}: any = this.congeToUpdate;
