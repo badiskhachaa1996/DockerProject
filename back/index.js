@@ -138,6 +138,7 @@ const admissionFormDubaiController = require('./controllers/admissionFormDubaiCo
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
+const mailController = require('./controllers/mailController');
 
 const { User } = require("./models/user");
 
@@ -356,7 +357,7 @@ app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
-app.use('/soc/mail', require('./controllers/mailController'))
+app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
 io.on("connection", (socket) => {
