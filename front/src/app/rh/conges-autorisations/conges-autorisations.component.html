@@ -1,10 +1,305 @@
 <div class="grid">
     <p-toast></p-toast>
     <div class="col-12">
+
+        <!-- formulaire de modification d'une demande de congé -->
+        <div class="card" *ngIf="showFormUpdateConge">
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;" (click)="showFormUpdateConge = false; showOtherTextArea = false"></i>
+            <div style="float: right"></div>
+            
+            <h3 class="text-center">Modification de la demande de congé</h3>
+            <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateConge" (ngSubmit)="onUpdateConge()">
+                <div class="field col-12">
+                    <label>Type de congé <span style="color: red">*</span></label>
+                    <p-dropdown formControlName="type" [options]="congeTypeList" filter="true" placeholder="type du congé" [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+                </div>
+
+                <div class="field col-12" *ngIf="showOtherTextArea">
+                    <label htmlFor="other"></label>
+                    <textarea formControlName="other" pInputTextarea placeholder="Préciser le motif" autoResize rows="4" cols="30"></textarea>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="debut">Début <span style="color: red">*</span></label>
+                    <p-calendar formControlName="debut" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="fin">Fin <span style="color: red">*</span></label>
+                    <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="nb_jour">Nombre de jours <span style="color: red">*</span></label>
+                    <input formControlName="nb_jour" pInputText type="number" id="nb_jour">
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label htmlFor="motif">Motif de la demande <span style="color: red">*</span></label>
+                    <textarea formControlName="motif" pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="note">Note <span style="color: red">*</span></label>
+                    <textarea formControlName="note" id="note" pInputTextarea autoResize rows="4" cols="30"></textarea>
+                </div>
+                <div class="field col-12">
+                    <label htmlFor="note_decideur">Note décideur <span style="color: red">*</span></label>
+                    <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4" cols="30"></textarea>
+                </div>
+
+                <button pButton pRipple type="submit" class="my-2" label="Envoyer" [disabled]="formUpdateConge.invalid"></button>
+            </form>
+        </div>
+
+        <div class="card" *ngIf="showEmailView">
+            <p-tabView>
+                <p-tabPanel header="Email personnalisé">
+                    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
+                        <div class="col-12" style="text-align: right;">
+                            Email du destinataire: <span style="color: red; font-weight: bolder">{{congeToUpdate.user_id?.email}}</span>
+                        </div>
+
+                        <div class="field col-12">
+                            <label>Objet: </label>
+                            <input type="text" formControlName="objet" pInputText>
+                        </div>
+                        <div class="field col-12">
+                            <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                        </div>
+                        <div class="field col-6">
+                            <label>Email de l'envoyeur: </label>
+                            <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                                [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-6">
+                            <label>Email(s)en cc: </label>
+                            <p-chips formControlName="cc" separator=","
+                                placeholder="email1@email.com , email2.email.com"></p-chips>
+                        </div>
+                        <div class="field col-12">
+                            <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
+                                style="display: none;" pInputFile />
+                            <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                                dataKey="_id" class="col-12" responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th>
+                                            Date d'upload
+                                        </th>
+                                        <th>
+                                            Nom du document
+                                        </th>
+                                        <th>
+                                            Lien de téléchargement
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                    <tr>
+                                        <td>
+                                            {{rowData.date | date:'mediumDate'}}
+                                        </td>
+                                        <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                            {{rowData.nom}}
+                                        </td>
+                                        <td
+                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                            {{rowData?.path}}
+                                        </td>
+                                        <td
+                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                            Téléverser le fichier s'il vous plaît
+                                        </td>
+                                        <td *ngIf="rowData.path">
+                                            <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                            {{rowData.path}}
+                                        </td>
+                                        <td *ngIf="!rowData.path">
+                                            <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                        </td>
+                                        <td>
+                                            <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                                class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                                (click)="onUploadPJ(rowData)">
+                                            </i>
+                                            <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                                class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                            </i>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="mt-2 col-12" style="text-align: center;">
+                                <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                    autoWidth="false" [style]="{'width':'80%'}"></button>
+                            </div>
+                        </div>
+                        <button pButton [disabled]="formEmailPerso.invalid" (click)="onEmailPerso()"
+                            label="Envoyer l'email"></button>
+                    </form>
+                </p-tabPanel>
+                
+                <p-tabPanel header="Depuis un mail type">
+                    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailType">
+                        <div class="field col-12">
+                            <label>Email Type: </label>
+                            <p-dropdown placeholder="Choisissez un mail type" filter="true"
+                                (onChange)="onMailType($event.value)" [options]="mailTypeDropdown" autoWidth="false"
+                                [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-12" style="text-align: right">
+                            Email du destinataire: <span style="color: red;">{{congeToUpdate.user_id.email}}</span>
+                        </div>
+
+                        <div class="field col-12">
+                            <label>Objet: </label>
+                            <input type="text" formControlName="objet" pInputText>
+                        </div>
+                        <div class="field col-12">
+                            <p-editor formControlName="body" [style]="{'height':'320px'}"></p-editor>
+                        </div>
+                        <div class="field col-6">
+                            <label>Email de l'envoyeur: </label>
+                            <p-dropdown placeholder="Choisissez une adresse mail" filter="true" formControlName="send_from"
+                                [options]="mailDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-6">
+                            <label>Email(s) en cc: (Écrivez un , après chaque email)</label>
+                            <p-chips formControlName="cc" separator=","
+                                placeholder="email1@email.com,email2.email.com"></p-chips>
+                        </div>
+                        <div class="field col-12">
+                            <input type="file" (change)="FileUploadPJ($event.target.files)" id="selectedFile" #selectedFile
+                                style="display: none;" pInputFile />
+                            <p-table styleClass="p-datatable-gridlines" [value]="piece_jointes" responsiveLayout="scroll"
+                                dataKey="_id" class="col-12" responsiveLayout="scroll">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th>
+                                            Date d'upload
+                                        </th>
+                                        <th>
+                                            Nom du document
+                                        </th>
+                                        <th>
+                                            Lien de téléchargement
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                                    <tr>
+                                        <td>
+                                            {{rowData.date | date:'mediumDate'}}
+                                        </td>
+                                        <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
+                                            {{rowData.nom}}
+                                        </td>
+                                        <td
+                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                            {{rowData?.path}}
+                                        </td>
+                                        <td
+                                            *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                            Téléverser le fichier s'il vous plaît
+                                        </td>
+                                        <td *ngIf="rowData.path">
+                                            <a style="cursor: pointer;" (click)="downloadPJFile(rowData)">Télécharger</a>
+                                            {{rowData.path}}
+                                        </td>
+                                        <td *ngIf="!rowData.path">
+                                            <a style="cursor: pointer;" (click)="onUploadPJ(rowData)">Upload</a>
+                                        </td>
+                                        <td>
+                                            <i pTooltip="Uploader un fichier" tooltipPosition="bottom"
+                                                class="pi pi-cloud-upload mr-2" style="cursor: pointer;"
+                                                (click)="onUploadPJ(rowData)">
+                                            </i>
+                                            <i pTooltip="Supprimer un fichier" tooltipPosition="bottom"
+                                                class="pi pi-trash mr-2" style="cursor: pointer;" (click)="onDeletePJ(ri)">
+                                            </i>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <div class="mt-2 col-12" style="text-align: center;">
+                                <button pButton (click)="onAddPj()" label="Ajouter une nouvelle pièces jointe"
+                                    autoWidth="false" [style]="{'width':'80%'}"></button>
+                            </div>
+                        </div>
+                        <button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
+                            (click)="onEmailPerso()"></button>
+                    </form>
+                </p-tabPanel>
+
+                <p-tabPanel header="Historique des emails">
+                    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="historiqueEmails"
+                        [paginator]="true" [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem" scope="col"></th>
+                                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                                    Date de l'envoie <p-sortIcon field="date_creation"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="objet" scope="col" style="text-align: center;">
+                                    Objet du mail <p-sortIcon field="objet"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="send_by.firstname" scope="col" style="text-align: center;">
+                                    Envoyé par <p-sortIcon field="send_by.firstname"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="cc" scope="col" style="text-align: center;">
+                                    Envoyé à <p-sortIcon field="cc"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="send_from" scope="col" style="text-align: center;">
+                                    Envoyé depuis <p-sortIcon field="send_from"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-email let-expanded="expanded">
+                            <tr>
+    
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="email"
+                                        class="p-button-text p-button-rounded p-button-plain"
+                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td>
+                                    {{email.date_creation|date:'mediumDate'}}
+                                </td>
+                                <td>
+                                    {{email.objet}}
+                                </td>
+                                <td>
+                                    {{email?.send_by?.firstname | titlecase}} {{email?.send_by?.lastname | uppercase}}
+                                </td>
+                                <td>
+                                    <strong>{{congeToUpdate?.user_id?.email }}</strong>
+                                </td>
+                                <td>
+                                    {{email.send_from}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-email>
+                            <div [innerHTML]="email.body">
+    
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+
         <div class="card">
             <h2 class="text-center">Gestion des congés, autorisations et absences</h2>
 
-            <p-table #dt1 [value]="conges" dataKey="_id" responsiveLayout="scroll" 
+            <p-table #dt1 [value]="conges" dataKey="_id" editMode="row" responsiveLayout="scroll" 
                     [rows]="8" [rowHover]="true" [paginator]="true"
                     [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email', 'statut']">
 				<ng-template pTemplate="caption">
@@ -38,8 +333,8 @@
 						<th>Action</th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-conge let-expanded="expanded">
-					<tr>
+				<ng-template pTemplate="body" let-conge let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
+					<tr [pEditableRow]="conge">
 						<td>
 							<button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 						</td>
@@ -61,20 +356,33 @@
                             <i class="pi pi-file" pTooltip="Télécharger le justificatif" (click)="onDonwloadJustificatif(conge._id)" style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
                         </td>
 
-                        <td *ngIf="conge.statut == 'En attente'"><p-tag icon="pi pi-spin pi-spinner" severity="warning" value={{conge.statut}}></p-tag></td>
-                        <td *ngIf="conge.statut == 'Refusé'"><p-tag icon="pi pi-times" severity="danger" value={{conge.statut}}></p-tag></td>
-                        <td *ngIf="conge.statut == 'Validé'"><p-tag icon="pi pi-check" severity="success" value={{conge.statut}}></p-tag></td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="filterStatut" appendTo="body" [(ngModel)]="conge.statut" [style]="{'width':'100%'}"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span *ngIf="conge.statut == 'En attente'"><p-tag icon="pi pi-spin pi-spinner" severity="warning" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Refusé'"><p-tag icon="pi pi-times" severity="danger" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Validé'"><p-tag icon="pi pi-check" severity="success" value={{conge.statut}}></p-tag></span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
 
                         <td>
-                            <button pButton pRipple icon="pi pi-flag" pTooltip="Mettre à jour le status" class="p-button-warning p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" class="p-button-primary p-button-rounded p-button-outlined ml-2 mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(conge)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(conge, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+
+                            <button *ngIf="!editing" pButton pRipple pInitEditableRow icon="pi pi-flag" (click)="onRowEditInit(conge)" pTooltip="Mettre à jour le status" class="p-button-warning p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" class="p-button-primary p-button-rounded p-button-outlined ml-2 mb-2" (click)="onFillFormUpdate(conge);"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" (click)="onDeleteConge(conge._id)" icon="pi pi-trash" class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                            <button pButton pRipple pTooltip="Envoyer un mail" (click)="onInitEmailView(conge)" icon="pi pi-envelope" class="p-button-info p-button-rounded p-button-outlined ml-2 mb-2"></button>
                         </td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="rowexpansion" let-conge>
 					<tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">

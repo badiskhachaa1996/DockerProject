@@ -410,7 +410,11 @@
                                     <i class="pi pi-file" pTooltip="Télécharger le justificatif" (click)="onDonwloadJustificatif(conge._id)" style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
                                 </td>
 
-                                <td>{{conge.statut}}</td>
+                                <td>
+                                    <span *ngIf="conge.statut == 'En attente'"><p-tag icon="pi pi-spin pi-spinner" severity="warning" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Refusé'"><p-tag icon="pi pi-times" severity="danger" value={{conge.statut}}></p-tag></span>
+                                    <span *ngIf="conge.statut == 'Validé'"><p-tag icon="pi pi-check" severity="success" value={{conge.statut}}></p-tag></span>
+                                </td>
                                 <td>
                                     <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" (click)="onPachCongeData(conge)" class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
                                     <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash" (click)="onDeleteConge(conge._id)" class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
