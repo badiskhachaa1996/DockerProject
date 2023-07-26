@@ -15,6 +15,7 @@ export class DashboardRhComponent implements OnInit {
   today: Date = new Date();
   dailyChecks:        DailyCheck[] = [];
   userChecksHistorique: DailyCheck[] = [];
+  showUserChecksHistorique: boolean = false;
   collaborateurs:     Collaborateur[] = [];
   numberOfChecks:     number = 0;
   checkPercent:       number = 0;
@@ -56,9 +57,9 @@ export class DashboardRhComponent implements OnInit {
       this.rhService.getCollaborateurs()
       .then((response) => {
         this.collaborateurs = response;
-        console.log(response);
+        this.loading = false;
         // pourcentage de checks
-        this.checkPercent = Math.ceil((this.collaborateurs.length * this.numberOfChecks));
+        this.checkPercent = Math.ceil((this.collaborateurs.length / this.numberOfChecks)*100);
 
         // initialisation à zero
         this.numberOfDisponible = 0;
@@ -96,6 +97,19 @@ export class DashboardRhComponent implements OnInit {
       .catch((error) => { this.messageService.add({severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des présences'}); });
     })
     .catch((error) => { this.messageService.add({severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des présences'}) });
+  }
+
+  // recuperation de la liste des check d'un utilisateur
+  onGetUserChecksHistorique(check: DailyCheck): void
+  {
+    const {user_id}: any = check;
+
+    this.dailyCheckService.getUserChecks(user_id._id)
+    .then((response) => {
+      this.userChecksHistorique = response;
+      this.showUserChecksHistorique = true;
+    })
+    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Erreur système', detail: "Impossible de récupérer l'historique de check du collaborateur"}); });
   }
 
 
