@@ -36,10 +36,6 @@
                     <textarea formControlName="motif" pInputTextarea placeholder="Merci de décrire les raisons de votre demande de congé" autoResize rows="4" cols="30"></textarea>
                 </div>
                 <div class="field col-12">
-                    <label htmlFor="note">Note <span style="color: red">*</span></label>
-                    <textarea formControlName="note" id="note" pInputTextarea autoResize rows="4" cols="30"></textarea>
-                </div>
-                <div class="field col-12">
                     <label htmlFor="note_decideur">Note décideur <span style="color: red">*</span></label>
                     <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4" cols="30"></textarea>
                 </div>
@@ -79,7 +75,7 @@
 						<th>ID</th>
 						<th>Date</th>
 						<th>Collaborateur</th>
-						<th>Type</th>
+						<th pSortableColumn="type_conge">Type <p-sortIcon field="type_conge"></p-sortIcon></th>
 						<th>Période</th>
 						<th>Nombre de jours</th>
 						<th>Justificatif</th>
@@ -146,21 +142,6 @@
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
                                             <td>{{conge.motif}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div>
-
-                            <div class="p-3">
-                                <p-table responsiveLayout="scroll">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Note</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td>{{conge.note}}</td>
                                         </tr>
                                     </ng-template>
                                 </p-table>
