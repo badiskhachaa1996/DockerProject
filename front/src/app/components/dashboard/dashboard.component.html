@@ -443,21 +443,6 @@
                                         <p-table responsiveLayout="scroll">
                                             <ng-template pTemplate="header">
                                                 <tr>
-                                                    <th>Note</th>
-                                                </tr>
-                                            </ng-template>
-                                            <ng-template pTemplate="emptymessage">
-                                                <tr>
-                                                    <td>{{conge.note}}</td>
-                                                </tr>
-                                            </ng-template>
-                                        </p-table>
-                                    </div>
-
-                                    <div class="p-3">
-                                        <p-table responsiveLayout="scroll">
-                                            <ng-template pTemplate="header">
-                                                <tr>
                                                     <th>Note decideur</th>
                                                 </tr>
                                             </ng-template>
@@ -525,7 +510,17 @@
                                 <td>{{cra.today}}</td>
                                 <td>{{cra.check_in | date:'H:mm'}}</td>
                                 <td>{{cra.check_out | date:'H:mm'}}</td>
-                                <td>{{ cra.pause_timing }}mn</td>
+                                <td *ngIf="cra.pause_timing">
+                                    <ul>
+                                        <li *ngFor="let pause of cra.pause; let i = index">
+                                            de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
+                                        </li>
+                                    </ul>
+                                    <br>Total: {{ cra.pause_timing }}mn
+                                </td>
+                                <td *ngIf="!cra.pause_timing">
+                                    0mn
+                                </td>
                                 <td>{{ cra.taux_cra }}%</td>
                                 <td>
                                     <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2" (click)="historiqueCraSelected = cra; showDailySelectedCra = true"></button>

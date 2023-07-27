@@ -24,7 +24,6 @@ const congeSchema = mongoose.Schema({
     nombre_jours:        { type: Number,required: false},	
     motif:               { type: String, required: false},
     justificatif:        { type: String, required: false},
-    note:                { type: String, required: false},
     statut:              { type: String, required: false},
     note_decideur:       { type: String, required: false},
 
