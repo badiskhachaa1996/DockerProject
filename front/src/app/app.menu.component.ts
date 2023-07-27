@@ -221,6 +221,27 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
+                            label: 'Projet V2',
+                            icon: 'pi pi-fw pi-shield',
+                            items: [
+                                {
+                                    label: 'Gestion des  projets',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    routerLink: ['/gestion-project'],
+                                },
+                                {
+                                    label: 'Mes projets',
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink: ['/my-tasks'],
+                                },
+                                {
+                                    label: 'Dasboard',
+                                    icon: 'pi pi-fw pi-users',
+                                    routerLink: ['/team'],
+                                },
+                            ]
+                        },
+                        {
                             label: 'Ressources humaines',
                             icon: 'pi pi-users',
                             items: [

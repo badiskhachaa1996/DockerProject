@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des Sujets
-const { Project } = require("./../models/project/Project");
+//const { Project } = require("./../models/project/Project");
 const { Task } = require("./../models/project/Task");
 const nodemailer = require('nodemailer');
 const { json } = require("body-parser");

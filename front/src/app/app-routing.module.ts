@@ -241,6 +241,7 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -336,7 +337,9 @@ const routes: Routes = [
             { path: 'task-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
             { path: 'team', canActivate: [AuthGuardService], component: TeamComponent },
             /** end */
-
+            /** IMS Project-V2 */
+            { path: 'gestion-project',  component: GestionComponent},
+            /** end */
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
             { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
