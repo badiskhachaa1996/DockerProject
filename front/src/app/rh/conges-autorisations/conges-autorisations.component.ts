@@ -80,7 +80,6 @@ export class CongesAutorisationsComponent implements OnInit {
       fin:              ['', Validators.required],
       nb_jour:          ['', Validators.required],
       motif:            ['', Validators.required],
-      note:             ['', Validators.required],
       note_decideur:    ['', Validators.required],
     });
   }
@@ -158,7 +157,6 @@ export class CongesAutorisationsComponent implements OnInit {
       fin:      new Date(conge.date_fin),
       nb_jour:  conge.nombre_jours,
       motif:    conge.motif,
-      note:             conge?.note,
       node_decideur:    conge?.note_decideur,
     });
 
@@ -183,7 +181,6 @@ export class CongesAutorisationsComponent implements OnInit {
     this.congeToUpdate.date_fin       = formValue.fin;
     this.congeToUpdate.nombre_jours   = formValue.nb_jour;
     this.congeToUpdate.motif          = formValue.motif;
-    this.congeToUpdate.note          = formValue.note;
     this.congeToUpdate.note_decideur          = formValue.note_decideur;
 
     this.congeService.putConge(this.congeToUpdate)
