@@ -36,7 +36,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { info } from 'console';
 import { ProjectService } from 'src/app/services/project.service';
-import { Tache } from 'src/app/models/project/Tache';
+import { Task } from 'src/app/models/project/Task';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { Partenaire } from 'src/app/models/Partenaire';

@@ -45,29 +45,136 @@
 
 </div>
 
+<div *ngIf="showAddTacheForm">
+    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        (click)="showAddTacheForm = false; showOtherTextArea = false;"></i>
+    <div style="float: right"></div>
+
+    <h3 class="text-center">Nouvelle tache pour ce project</h3>
+    <form class="p-formgrid grid p-fluid" [formGroup]="formAddTache" (ngSubmit)="addTache(project._id)">
+
+        <div class="field col-12 md:col-8">
+            <label htmlFor="libelle">Libellé <span style="color: red">*</span></label>
+            <textarea formControlName="libelle" pInputTextarea placeholder="Donnez un titre à votre projet" autoResize
+                rows="2" cols="40"></textarea>
+        </div>
+
+        <div class="field col-12">
+            <label>Priorité <span style="color: red">*</span></label>
+            <p-dropdown formControlName="priorite" [options]="prioriteListe" filter="true" placeholder="priorite"
+                [showClear]="true" (onChange)="onShowOtherTextArea($event)"></p-dropdown>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label htmlFor="number_of_hour">Nombre d'heurs <span style="color: red">*</span></label>
+            <input formControlName="number_of_hour" pInputText type="number" id="nb_jour">
+        </div>
+        <div class="field col-12 md:col-6">
+            <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
+            <p-calendar formControlName="date_limite" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+        </div>
+
+        <div class="field col-12 ">
+            <label htmlFor="description">Description <span style="color: red">*</span></label>
+            <textarea formControlName="description" pInputTextarea placeholder="Donnez une discription à votre projet"
+                autoResize rows="4" cols="30"></textarea>
+        </div>
+
+        <button pButton pRipple type="submit" class="my-2" label="Ajouter" [disabled]="formAddTache.invalid"></button>
+    </form>
+</div>
+
 <div *ngIf="showtache">
     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
         (click)="showtache = false; showOtherTextArea = false;"></i>
-        <h5 class="text-center">Les taches</h5>
+    <button pButton pRipple label="Nouvelle tache " style="float: right; margin-right: 2%;"
+        class="p-button-outlined mb-2" (click)="showAddTacheForm = true"></button>
+    <h5 class="text-center">Les taches</h5>
+
     <div style="float: right"></div>
-    <p-table >
+
+    <p-table #dt2 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="task" [paginator]="true"
+        rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
+        [globalFilterFields]="['customid', 'prenom', 'nom','email']" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+
         <ng-template pTemplate="header">
             <tr>
+                <th></th>
                 <th> ID Tache </th>
                 <th> ID Ticket </th>
-                <th> Libellé   </th>
+                <th> Libellé </th>
                 <th> Affecté à </th>
                 <th> Etat d'avancement </th>
                 <th> Action </th>
-               
+
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-tache>
+        <ng-template pTemplate="body" let-task let-expandedt="expandedt" let-rit="rowIndext">
             <tr>
-                <td>{{ tache.id }}</td>
-                <td>{{ tache.nom }}</td>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="task"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expandedt ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
+
+                <td>{{ task._id }}</td>
+                <td>{{ task.ticket_id}}</td>
+                <td>{{ task.libelle}}</td>
+                <td>{{ task.attribuate_to}}</td>
+                <td>{{ task.etat }}</td>
+                <td>
+                    <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
+                        (click)="onUpdatetask(task)" aria-hidden="true"></i>
+                    <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
+                        (click)="deletetask(task._id,ri)" aria-hidden="true"></i>
+                    <i pTooltip="transformer" style="margin-left: 3%; cursor: pointer;" class="pi pi-tag"
+                        (click)=" transformtask(task._id) ; showtache=true" aria-hidden="true"></i>
+                    <i pTooltip="affecter" style="margin-left: 3%; cursor: pointer;" class="pi pi-user"
+                        (click)=" affectertask(task._id) ; showtache=true" aria-hidden="true"></i>
+                </td>
+
+
+
             </tr>
         </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-tache>
+
+            <tr>
+                <td colspan="9">
+                    <p-table class="col-12" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+            <tr>
+                <th> Description </th>
+                <th> Date de fin </th>
+                <th> nombre d'heurs </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{tache.description}}</td>
+                <td>{{tache.date_limite| date:'mediumDate'}}</td>
+                <td>{{tache.number_of_hour}}</td>
+    
+            </tr>
+    
+        </ng-template>
+    
+    
+    </p-table>
+    </td>
+    
+    </tr>
+    
+    <tr>
+    
+    
+        </ng-template>
+    
+        
+        
     </p-table>
 </div>
 
@@ -190,12 +297,12 @@
                 {{project.avancement}} %
             </td>
             <td>
-                <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-cog"
+                <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
                     (click)="onUpdate(project)" aria-hidden="true"></i>
                 <i pTooltip="Supprimer" style="margin-left: 3%; cursor: pointer;" class="pi pi-trash"
                     (click)="delete(project._id,ri)" aria-hidden="true"></i>
                 <i pTooltip="taches" style="margin-left: 3%; cursor: pointer;" class="pi pi-align-justify"
-                    (click)="showtache=true" aria-hidden="true"></i>
+                    (click)=" showTaskList(project._id) ; showtache=true" aria-hidden="true"></i>
                 <i pTooltip="ressources" style="margin-left: 3%; cursor: pointer;" class="pi pi-info"
                     (click)="ressources(project._id,ri)" aria-hidden="true"></i>
                 <i pTooltip="budjet" style="margin-left: 3%; cursor: pointer;" class="pi pi-money-bill"
@@ -206,24 +313,10 @@
         </tr>
     </ng-template>
 
-    <p-table *ngIf="showTachesTable">
-        <ng-template pTemplate="header">
-            <tr>
-                <th> ID Tache </th>
-                <th> Nom Tache </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-tache>
-            <tr>
-                <td>{{ tache.id }}</td>
-                <td>{{ tache.nom }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
 
 
     <ng-template pTemplate="rowexpansion" let-ticket>
-        
+
         <tr>
             <td colspan="9">
                 <p-table class="col-12" styleClass="p-datatable-gridlines">
@@ -241,18 +334,18 @@
             <td>{{ticket.fin| date:'mediumDate'}}</td>
 
         </tr>
-       
+
     </ng-template>
-    
-    
+
+
 </p-table>
 </td>
 
 </tr>
 
 <tr>
-   
 
-</ng-template>
 
-</p-table>
+    </ng-template>
+
+    </p-table>

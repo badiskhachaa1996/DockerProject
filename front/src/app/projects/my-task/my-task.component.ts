@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Project } from 'src/app/models/project/Project';
-import { Tache } from 'src/app/models/project/Tache';
+import { Task } from 'src/app/models/project/Task';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProjectService } from 'src/app/services/project.service';
@@ -26,9 +26,9 @@ export class MyTaskComponent implements OnInit {
 
 
   /** Task */
-  tachesInProgress: Tache[] = [];
-  tachesFinished: Tache[] = [];
-  tacheSelected: Tache;
+  tachesInProgress: Task[] = [];
+  tachesFinished: Task[] = [];
+  tacheSelected: Task;
   showFormAddTache: boolean = false;
   formAddTache: FormGroup;
   formUpdateTachePercent: FormGroup;
@@ -122,12 +122,12 @@ export class MyTaskComponent implements OnInit {
   }
 
   // methode de remplissage du mise à jour du pourcentage d'une tâche
-  onFillFormUpdatePercent(tache: Tache)
+  onFillFormUpdatePercent(tache: Task)
   {
     this.tacheSelected = tache;
 
     this.formUpdateTachePercent.patchValue({
-      percent: this.tacheSelected.percent,
+      //percent: this.tacheSelected.percent,
     });
 
     this.showFormUpdateTachePercent = true;
@@ -139,7 +139,7 @@ export class MyTaskComponent implements OnInit {
     const formValue = this.formUpdateTachePercent.value;
     // Mis à jour de la tâche selctionnée
     const tache = this.tacheSelected;
-    tache.percent = formValue.percent;
+    //tache.percent = formValue.percent;
 
     // envoi de la tâche dans la bd
     this.projectService.putTask(tache)
@@ -157,10 +157,10 @@ export class MyTaskComponent implements OnInit {
   onAddTask(): void
   {
     const formValue = this.formAddTache.value;
-    const tache = new Tache();
+    const tache = new Task();
 
     tache.libelle = formValue.libelle;
-    tache.percent = 0;
+    //tache.percent = 0;
     tache.attribuate_to = [];
 
     formValue.attribuateTo.forEach((data: any) => {
@@ -170,8 +170,8 @@ export class MyTaskComponent implements OnInit {
     tache.project_id        = formValue.projet;
     tache.number_of_hour     = formValue.number_of_hour;
     tache.date_limite       = formValue.dateLimite;
-    tache.created_at        = new Date();
-    tache.creator_id        = this.userConnected._id;
+    //tache.created_at        = new Date();
+    //tache.creator_id        = this.userConnected._id;
 
 
     this.projectService.postTask(tache)
@@ -186,7 +186,7 @@ export class MyTaskComponent implements OnInit {
 
 
   // methode de remplissage du formulaire de mise à jour d'une tâche
-  onFillFormUpdateTache(tache: Tache): void
+  onFillFormUpdateTache(tache: Task): void
   {
     this.tacheSelected = tache;
     // Destructuration de l'objet pour recupérer le projet
@@ -207,11 +207,11 @@ export class MyTaskComponent implements OnInit {
   onUpdateTask()
   {
     const formValue = this.formUpdateTache.value;
-    const tache = new Tache();
+    const tache = new Task();
 
     tache._id = this.tacheSelected._id;
     tache.libelle = formValue.libelle;
-    tache.percent = this.tacheSelected.percent;
+    //tache.percent = this.tacheSelected.percent;
     tache.attribuate_to = [];
 
     formValue.attribuateTo.forEach((data: any) => {
@@ -221,8 +221,8 @@ export class MyTaskComponent implements OnInit {
     tache.project_id = formValue.project_id;
     tache.number_of_hour     = formValue.number_of_hour;
     tache.date_limite = this.tacheSelected.date_limite;
-    tache.created_at = this.tacheSelected.created_at;
-    tache.creator_id = this.tacheSelected.creator_id;
+    //tache.created_at = this.tacheSelected.created_at;
+    //tache.creator_id = this.tacheSelected.creator_id;
 
     this.projectService.putTask(tache)
     .then((response) => {

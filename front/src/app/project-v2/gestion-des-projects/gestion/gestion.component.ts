@@ -4,6 +4,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { Project } from 'src/app/models/Project';
+import {Task} from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
 import jwt_decode from "jwt-decode";
 @Component({
@@ -15,15 +16,25 @@ import jwt_decode from "jwt-decode";
 export class GestionComponent implements OnInit {
   showAddProjectForm: boolean = false;
   formAddProject: FormGroup;
+  formAddTache: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
+  task!: Task[];
   userConnected: User;
   token: any;
   showTachesTable: boolean = false;
   showtache: boolean = false;
+  showAddTacheForm : boolean = false;
   nbr_project:Number;
   nbr_projectEnCour:Number;
   nbr_projectCloturer:Number;
+  prioriteListe: any[] = [
+    { label: 'Priorité normale', value: "Priorité normale" },
+    { label: 'Basse priorité', value: "Basse priorité" },
+    { label: 'Moyenne priorité', value: "Moyenne priorité" },
+    { label: 'Haute priorité', value: "Haute priorité" },
+  ];
+  projectIdForTask:any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,9 +51,9 @@ export class GestionComponent implements OnInit {
    
     //appelle a la fonction de recupreation des personnes consernees
     this.getallusers();
-
+    //recuperer les project avec getProjects
     this.projectService.getProjects().then((data) => {
-      console.log(data);
+      
       this.project = [];
       this.project = data;
     })
@@ -56,12 +67,22 @@ export class GestionComponent implements OnInit {
     console.error('Error fetching projects:', error);
   });
 
-    //INITIALISATION DU FORMULAIRE
+    //INITIALISATION DU FORMULAIRE Project
     this.formAddProject = this.formBuilder.group({
       titre: ['', Validators.required],
       responsable: [''],
       debut: ['', Validators.required],
       fin: ['', Validators.required],
+      description: ['', Validators.required]
+
+    });
+
+    //INITIALISATION DU FORMULAIRE Tache
+    this.formAddTache = this.formBuilder.group({
+      libelle: ['', Validators.required],
+      priorite: [''],
+      number_of_hour: ['', Validators.required],
+      date_limite: ['', Validators.required],
       description: ['', Validators.required]
 
     });
@@ -106,7 +127,7 @@ export class GestionComponent implements OnInit {
       return;
     }
     // Construire l'objet à envoyer au serveur avec les données du formulaire
-    console.log(this.formAddProject.get('responsable'))
+    
     const currentDate = new Date();
     const newProject = {
       titre: this.formAddProject.get('titre').value,
@@ -139,9 +160,48 @@ export class GestionComponent implements OnInit {
         });
     }
   }
+
   onUpdate(project){}
+//PATIE TACHES
+addTache(project_id){
+  console.log(11111111111111111);
+  console.log(project_id);
+  if (this.formAddTache.invalid) 
+  return;{
+  }
+  const newTache ={
+    
+    libelle:this.formAddTache.get('libelle').value,
+    number_of_hour:this.formAddTache.get('number_of_hour').value,
+    date_limite:this.formAddTache.get('date_limite').value,
+    priorite:this.formAddTache.get('priorite').value,
+    description:this.formAddTache.get('description').value,
+    project_id:this.projectIdForTask,
+    
+
+  }
+  this.projectService.postTask(newTache)
+
+
+}
+
+
+
+showTaskList(project_id){
+    this.projectService.getTasksByIdProject(project_id).then((data) => {
+
+        console.log(this.projectIdForTask);
+        console.log(data);
+        this.task= [];
+        this.task = data;
+        this.projectIdForTask=project_id;
+        
+
+})}
+
   taches(id,ri){
-    console.log("i am here");
+   
     this.showTachesTable=true;
   }
+
 }

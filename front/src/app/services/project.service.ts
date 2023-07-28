@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Project } from '../models/project/Project';
-import { Tache } from '../models/project/Tache';
+import { Task } from '../models/project/Task';
 
 @Injectable({
   providedIn: 'root'
@@ -74,12 +74,12 @@ export class ProjectService {
   /** Task part */
 
   // create new task
-  postTask(task: Tache): Promise<any>
+  postTask(task: Task): Promise<any>
   {
     const url = `${this.apiUrl}/post-task`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.post<Tache>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.post<Task>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâche créée')
@@ -88,12 +88,12 @@ export class ProjectService {
   }
 
   // update task
-  putTask(task: Tache): Promise<any>
+  putTask(task: Task): Promise<any>
   {
     const url = `${this.apiUrl}/put-task`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.put<Tache>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.put<Task>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâche modifié')
@@ -102,12 +102,12 @@ export class ProjectService {
   }
 
   // get all tasks
-  getTasks(): Promise<Tache[]>
+  getTasks(): Promise<Task[]>
   {
     const url = `${this.apiUrl}/get-tasks`;
 
-    return new Promise<Tache[]>((resolve, reject) => {
-      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches récuperés')
@@ -116,12 +116,12 @@ export class ProjectService {
   }
 
   // get task by id task
-  getTask(id: string): Promise<Tache>
+  getTask(id: string): Promise<Task>
   {
     const url = `${this.apiUrl}/get-task/${id}`;
 
-    return new Promise<Tache>((resolve, reject) => {
-      this.httpClient.get<Tache>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task>((resolve, reject) => {
+      this.httpClient.get<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâche récuperé')
@@ -130,12 +130,12 @@ export class ProjectService {
   }
 
   // get tasks by id project
-  getTasksByIdProject(id: string): Promise<Tache[]>
+  getTasksByIdProject(id: string): Promise<Task[]>
   {
     const url = `${this.apiUrl}/get-tasks/${id}`;
 
-    return new Promise<Tache[]>((resolve, reject) => {
-      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches du projet récuperés')
@@ -144,12 +144,12 @@ export class ProjectService {
   }
 
   // get tasks by id user
-  getTasksByIdUser(id: string): Promise<Tache[]>
+  getTasksByIdUser(id: string): Promise<Task[]>
   {
     const url = `${this.apiUrl}/get-tasks-by-id-user/${id}`;
 
-    return new Promise<Tache[]>((resolve, reject) => {
-      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches du projet récuperés')
@@ -159,12 +159,12 @@ export class ProjectService {
 
 
   // get tasks in progress by id user
-  getTasksInProgressByIdUser(id: string): Promise<Tache[]>
+  getTasksInProgressByIdUser(id: string): Promise<Task[]>
   {
     const url = `${this.apiUrl}/get-tasks-in-progress-by-id-user/${id}`;
 
-    return new Promise<Tache[]>((resolve, reject) => {
-      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches en cours du projet récuperés')
@@ -174,12 +174,12 @@ export class ProjectService {
   
   
   // get tasks finished by id user
-  getTasksFinishedByIdUser(id: string): Promise<Tache[]>
+  getTasksFinishedByIdUser(id: string): Promise<Task[]>
   {
     const url = `${this.apiUrl}/get-tasks-finished-by-id-user/${id}`;
 
-    return new Promise<Tache[]>((resolve, reject) => {
-      this.httpClient.get<Tache[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches finis du projet récuperés')
@@ -194,7 +194,7 @@ export class ProjectService {
     const url = `${this.apiUrl}/delete-task/${id}`
 
     return new Promise<any>((resolve, reject) => {
-      this.httpClient.delete<Tache>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.delete<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Tâches supprimé')
