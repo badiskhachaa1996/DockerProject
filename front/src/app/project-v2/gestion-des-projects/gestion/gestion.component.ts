@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { Project } from 'src/app/models/Project';
 import {Task} from 'src/app/models/project/Task';
+import { Ressources } from 'src/app/models/project/Ressources';
+import { Budget } from 'src/app/models/project/Budget';
 import { ProjectService } from 'src/app/services/projectv2.service';
 import jwt_decode from "jwt-decode";
 @Component({
@@ -14,17 +16,33 @@ import jwt_decode from "jwt-decode";
 
 })
 export class GestionComponent implements OnInit {
+  private task_id: string;
+  private project_id: string;
+  private ressources_id: string;
+  private budgetid: string;
   showAddProjectForm: boolean = false;
+  showressources : boolean = false;
+  showbudget : boolean = false;
+  showUpdateProjectForm: boolean = false;
+  showAddRessourcesForm: boolean = false;
+  showAddBudgetForm: boolean = false;
+  showUpdateRessourcesForm: boolean = false;
+  showUpdateBudgetForm : boolean = false;
   formAddProject: FormGroup;
   formAddTache: FormGroup;
+  formAddressources: FormGroup;
+  formAddbudget: FormGroup;
   responsableListe: any[] = [];
   project!: Project[];
   task!: Task[];
+  ressources!: Ressources[];
+  budget!: Budget[];
   userConnected: User;
   token: any;
   showTachesTable: boolean = false;
   showtache: boolean = false;
   showAddTacheForm : boolean = false;
+  showUpdateTacheForm: boolean = false;
   nbr_project:Number;
   nbr_projectEnCour:Number;
   nbr_projectCloturer:Number;
@@ -86,6 +104,19 @@ export class GestionComponent implements OnInit {
       description: ['', Validators.required]
 
     });
+
+    //INITIALISATION DU FORMULAIRE Ressource
+    this.formAddressources= this.formBuilder.group({
+      nom: ['', Validators.required],
+      importance: ['', Validators.required],
+    })
+
+    //INITIALISATION DU FORMULAIRE budget 
+    this.formAddbudget= this.formBuilder.group({
+      libelle: ['', Validators.required],
+      charge: ['', Validators.required],
+      depense: ['', Validators.required],
+    })
 
   }
 
@@ -161,11 +192,51 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  onUpdate(project){}
+initialisation_project(project:Project){
+  this.showUpdateProjectForm=true;
+
+  this.project_id=project._id;
+  const string_Date=project.debut.toString();
+  const new_Date_d = string_Date!.substring(0, 10);
+  const string_Date_f=project.fin.toString();
+  const new_Date_fin = string_Date!.substring(0, 10);
+  this.formAddProject = this.formBuilder.group({
+      titre:project.titre,
+      responsable:[project.responsable],
+      debut:new Date(new_Date_d),
+      fin: new Date(new_Date_fin),
+      description:project.description
+    
+
+  });
+
+}
+UpdateProject(){
+  this.projectService.getProject(this.project_id).then((data) => {
+   
+    data.titre= this.formAddProject.get('titre').value,
+    data.debut= this.formAddProject.get('debut').value,
+    data.fin= this.formAddProject.get('fin').value,
+    data.responsable_id= this.formAddProject.get('responsable').value[0],
+    data.responsable= this.formAddProject.get('responsable').value[1],
+    data.description= this.formAddProject.get('description').value,
+    this.projectService.putProject(data)   
+
+    }) 
+
+
+
+}
+
+
+
+
+
 //PATIE TACHES
 addTache(project_id){
   console.log(11111111111111111);
-  console.log(project_id);
+  console.log(this.formAddTache.get('description').value)
+ 
   if (this.formAddTache.invalid) 
   return;{
   }
@@ -175,11 +246,12 @@ addTache(project_id){
     number_of_hour:this.formAddTache.get('number_of_hour').value,
     date_limite:this.formAddTache.get('date_limite').value,
     priorite:this.formAddTache.get('priorite').value,
-    description:this.formAddTache.get('description').value,
+    description_task:this.formAddTache.get('description').value,
     project_id:this.projectIdForTask,
     
 
   }
+  console.log(newTache.description_task);
   this.projectService.postTask(newTache)
 
 
@@ -199,9 +271,192 @@ showTaskList(project_id){
 
 })}
 
+//INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
+initialisation(task:Task){
+
+  this.showUpdateTacheForm=true;
+  this.task_id=task._id;
+  const string_Date=task.date_limite.toString();
+  const new_Date = string_Date!.substring(0, 10);
+  console.log(new_Date);
+  this.formAddTache = this.formBuilder.group({
+    libelle: task.libelle,
+    priorite: task.priorite,
+    number_of_hour:task.number_of_hour,
+    date_limite:new Date(new_Date),
+    description:task.description_task,
+
+  });
+}
+
+onUpdatetask(){
+  
+  this.projectService.getTask(this.task_id).then((data) => {
+    data.libelle=this.formAddTache.get('libelle').value,
+    data.number_of_hour=this.formAddTache.get('number_of_hour').value,
+    data.date_limite=this.formAddTache.get('date_limite').value,
+    data.priorite=this.formAddTache.get('priorite').value,
+    data.description_task=this.formAddTache.get('description').value,
+    
+    this.projectService.putTask(data)   
+
+    }) 
+
+};
+
+deleteTask(id, ri) {
+  if (confirm("Êtes-vous sûr de vouloir supprimer cette tache ?")) {
+    this.projectService.deleteTask(id)
+      .then(data => {
+        // The Promise is resolved successfully
+        this.task.splice(ri, 1);
+      })
+      .catch(error => {
+        // Handle errors from the Promise if needed
+        console.log('Error:', error);
+      });
+  }
+}
+
   taches(id,ri){
    
     this.showTachesTable=true;
   }
+//PARTIE RESSOURCES
+
+  addRessources(){
+    if (this.formAddressources.invalid) 
+  return;{
+  }
+  const newRessources ={
+    
+    nom:this.formAddressources.get('nom').value,
+    importance:this.formAddressources.get('importance').value,
+    project_id:this.projectIdForTask,
+    
+
+  }
+  console.log(newRessources);
+  this.projectService.postRessources(newRessources)
+
+
+
+  }
+  showRessources(project_id){
+    this.showressources=true;
+    this.projectIdForTask=project_id;
+    this.projectService.getRessourcesByIdProject(project_id).then((data) => {
+      this.ressources= [];
+      this.ressources = data;
+      console.log(this.ressources);
+    })}
+  
+  //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
+initialisation_r(ressources:Ressources){
+
+  this.showUpdateRessourcesForm=true;
+  this.ressources_id=ressources._id;
+  this.formAddressources = this.formBuilder.group({
+    nom: ressources.nom,
+    importance: ressources.importance
+  });
+}
+
+onUpdateressources(){
+  
+  this.projectService.getRessources(this.ressources_id).then((data) => {
+    data.nom=this.formAddressources.get('nom').value,
+    data.importance=this.formAddressources.get('importance').value,
+    this.projectService.putRessources(data)   
+
+    }) 
+
+};
+
+  delete_r(ressources_id,rir){
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette ressource ?")) {
+      this.projectService.deleteRessources(ressources_id)
+        .then(data => {
+          // The Promise is resolved successfully
+          this.ressources.splice(rir, 1);
+        })
+        .catch(error => {
+          // Handle errors from the Promise if needed
+          console.log('Error:', error);
+        });
+    }
+
+  }
+//PARTIE BUDGET  
+
+addBudget(){
+  if (this.formAddbudget.invalid) 
+return;{
+}
+const newBudjet ={
+  
+  libelle:this.formAddbudget.get('libelle').value,
+  charge:this.formAddbudget.get('charge').value,
+  depense:this.formAddbudget.get('depense').value,
+
+  project_id:this.projectIdForTask,
+  
+
+}
+
+this.projectService.postBudget(newBudjet)
+
+
+
+}
+showBudget(project_id){
+  this.showbudget=true;
+  this.projectIdForTask=project_id;
+  this.projectService.getBudgetByIdProject(project_id).then((data) => {
+    console.log(data);
+    this.budget= [];
+    this.budget = data;
+  })}
+
+//INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
+initialisation_b(budget:Budget){
+
+  this.showUpdateBudgetForm=true;
+  this.budgetid=budget._id;
+  this.formAddbudget = this.formBuilder.group({
+    libelle: budget.libelle,
+    charge: budget.charge,
+    depense: budget.depense
+  });
+}
+
+
+onUpdatebudget(){
+  this.projectService.getBudget(this.budgetid).then((data) => {
+    data._id=this.budgetid;
+    data.libelle=this.formAddbudget.get('libelle').value,
+    data.charge=this.formAddbudget.get('charge').value,
+    data.depense=this.formAddbudget.get('depense').value,
+    console.log(data)
+    this.projectService.putBudget(data)
+
+    }) 
+
+};
+
+delete_b(budget_id,rir){
+  if (confirm("Êtes-vous sûr de vouloir supprimer ce budget ?")) {
+    this.projectService.deleteBudget(budget_id)
+      .then(data => {
+        // The Promise is resolved successfully
+        this.budget.splice(rir, 1);
+      })
+      .catch(error => {
+        // Handle errors from the Promise if needed
+        console.log('Error:', error);
+      });
+  }
+
+}
 
 }

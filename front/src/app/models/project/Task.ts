@@ -4,7 +4,7 @@ export class Task{
         public _id?:            string,
         public ticket_id?:      string,
         public libelle?:        string,
-        public description?:    string,
+        public description_task?:    string,
         public attribuate_to?:  string[],
         public project_id?:     string,
         public number_of_hour?:  number,
