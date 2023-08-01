@@ -23,6 +23,15 @@ app.get("/get-checks", (req, res) => {
         .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
 });
 
+// recuperation de la liste des présences du jour de tous les utilisateurs
+app.get("/get-all-users-daily-checks", (req, res) => {
+    const today = new Date().toLocaleDateString();
+
+    DailyCheck.find({today: today}).populate('user_id')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
+});
+
 
 // recuperation de la liste des présences d'un utilisateur
 app.get("/get-user-checks/:userId", (req, res) => {
