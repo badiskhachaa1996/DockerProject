@@ -18,6 +18,8 @@ import { CampusService } from 'src/app/services/campus.service';
 import { saveAs } from 'file-saver';
 import { ClasseService } from 'src/app/services/classe.service';
 import { error } from 'console';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -940,6 +942,50 @@ export class ListeContratsComponent implements OnInit {
   }
 
   onFilterByEcole(event) {
+
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+  
+    this.ListeContrats.forEach(p => {
+      let t = {}
+      let buffer: any = p.alternant_id;
+      let bufferEcole: any = p.ecole
+      let bufferEntreprise: any = p.entreprise_id
+      let bufferCommercial: any = p.code_commercial
+      let bufferTuteur: any = p.tuteur_id
+      let bufferDirecteur: any = p.directeur_id
+      t['Nom'] = buffer.user_id?.lastname 
+      t['Prenom'] = buffer.user_id?.firstname
+      t['Statut'] = p.statut
+      t['Dernière date de changement du statut'] = p.last_status_change_date
+      t['Formation'] = p.formation.titre_long
+      t['OPCO'] = bufferEntreprise.OPCO
+      t['Ecole'] = bufferEcole.libelle
+      t['Date du contrat'] = p.debut_contrat 
+      t['Horaire'] = p.horaire
+      t['Niveau de la formation'] = p.niveau_formation
+      t['Groupe'] = p.formation
+      t['Commercial'] = bufferCommercial.firstname, bufferCommercial.lastname
+      t['Tuteur'] = bufferTuteur?.firstname 
+      if (bufferTuteur == null && bufferDirecteur !== null) {
+      t['Tuteur'] = bufferDirecteur?.firstname + " " + bufferDirecteur?.lastname
+      }
+      t['Année scolaire'] = ""
+      p.anne_scolaire.forEach(annee => {
+        t['Année scolaire'] = t['Année scolaire'] + " " + annee
+      })
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "contratAlternance" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
 }
