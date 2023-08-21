@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    created_at: { type: Date }
+    created_at: { type: Date },
+    date_naissance: { type: Date },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

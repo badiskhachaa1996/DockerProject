@@ -24,7 +24,6 @@ export class CvthequeComponent implements OnInit {
   cvLists: CV[] = [];
   showFormAddCV: boolean = false;
   formAddCV: FormGroup;
-
   showFormUpdateCV: boolean = false;
 
   languesList: any[] = [
@@ -76,9 +75,8 @@ export class CvthequeComponent implements OnInit {
   loading: boolean = true;
 
   users: User[] = [];
-  dropdownUser: any[] = [
-    { label: 'Choisir un utilisateur', value: null }
-  ];
+  dropdownUserExterne: any[] = [];
+  dropdownUserInterne: any[] = [];
 
   uploadedFiles: any;
 
@@ -100,11 +98,16 @@ export class CvthequeComponent implements OnInit {
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
       experiences_pro: this.formBuilder.array([]),
-      experiences_sco: this.formBuilder.array([]),
       competences: [],
       outils: ['', Validators.required],
       langues: [],
       video_lien: [],
+      mobilite_lieu: [''],
+      mobilite_autre: [''],
+      centre_interets: [''],
+      a_propos: [''],
+      disponibilite: [''],
+      user_create_type: ['Externe']
     });
 
   }
@@ -128,9 +131,12 @@ export class CvthequeComponent implements OnInit {
 
         // remplissage de la dropdown des users pour ajouter le CV
         response.forEach((user: User) => {
-          if(user.firstname && user.lastname && user.type){
+          if (user.firstname && user.lastname && user.type) {
             let username = `${user.firstname} ${user.lastname} | ${user.type}`;
-            this.dropdownUser.push({ label: username, value: user._id });
+            if (user.type == 'Externe' || user.type == 'Externe-InProgress')
+              this.dropdownUserExterne.push({ label: username, value: user._id });
+            else
+              this.dropdownUserInterne.push({ label: username, value: user._id });
           }
         })
       })
@@ -164,21 +170,6 @@ export class CvthequeComponent implements OnInit {
   }
   /* end Xp pro */
 
-  /* Xp sco */
-  getXpScos() {
-    return this.formAddCV.get('experiences_sco') as FormArray;
-  }
-
-  onAddXpSco() {
-    const newXpScoControl = this.formBuilder.control('', Validators.required);
-    this.getXpScos().push(newXpScoControl);
-  }
-
-  onRemoveXpSco(i: number) {
-    this.getXpScos().removeAt(i);
-  }
-  /* end xp sco */
-
   // upload du cv brute
   onUpload(event: any) {
     if (event.target.files.length > 0) {
@@ -197,11 +188,6 @@ export class CvthequeComponent implements OnInit {
     cv.experiences_pro = [];
     formValue.experiences_pro?.forEach(xpPro => {
       cv.experiences_pro.push(xpPro);
-    });
-
-    cv.experiences_sco = [];
-    formValue.experiences_sco?.forEach(xpSco => {
-      cv.experiences_sco.push(xpSco);
     });
 
     cv.competences = [];
@@ -281,7 +267,6 @@ export class CvthequeComponent implements OnInit {
   InitUpdateCV(cv) {
     this.formUpdateCV = this.formBuilder.group({
       experiences_pro: this.formBuilder.array([]),
-      experiences_sco: this.formBuilder.array([]),
       competences: [],
       outils: ['', Validators.required],
       langues: [],
@@ -291,11 +276,6 @@ export class CvthequeComponent implements OnInit {
     cv.experiences_pro?.forEach(xpPro => {
       const newXpProControl = this.formBuilder.control(xpPro, Validators.required);
       this.getUpdateXpPros().push(newXpProControl);
-    });
-
-    cv.experiences_sco?.forEach(xpSco => {
-      const newXpScoControl = this.formBuilder.control(xpSco, Validators.required);
-      this.getXpUpdateScos().push(newXpScoControl);
     });
 
     let cv_competences = [];
@@ -332,11 +312,6 @@ export class CvthequeComponent implements OnInit {
     cv.experiences_pro = [];
     formValue.experiences_pro?.forEach(xpPro => {
       cv.experiences_pro.push(xpPro);
-    });
-
-    cv.experiences_sco = [];
-    formValue.experiences_sco?.forEach(xpSco => {
-      cv.experiences_sco.push(xpSco);
     });
 
     cv.competences = [];
@@ -377,20 +352,6 @@ export class CvthequeComponent implements OnInit {
     this.getUpdateXpPros().removeAt(i);
   }
   /* end Xp pro */
-
-  /* Xp sco */
-  getXpUpdateScos() {
-    return this.formUpdateCV.get('experiences_sco') as FormArray;
-  }
-
-  onAddUpdateXpSco() {
-    const newXpScoControl = this.formBuilder.control('', Validators.required);
-    this.getXpUpdateScos().push(newXpScoControl);
-  }
-
-  onRemoveUpdateXpSco(i: number) {
-    this.getXpUpdateScos().removeAt(i);
-  }
 
   //Partie Exportation en PDF
 

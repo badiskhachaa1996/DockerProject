@@ -96,7 +96,7 @@ export class MesOffresComponent implements OnInit {
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService,
     private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService,
-    private annonceService: AnnonceService, private router:Router) { }
+    private annonceService: AnnonceService, private router: Router) { }
 
   ngOnInit(): void {
     //Decodage du token
@@ -579,7 +579,7 @@ export class MesOffresComponent implements OnInit {
 
     annonce.source = this.form.get('source')?.value;
     annonce.isClosed = false;
-
+    annonce.custom_id = this.onGenerateID(this.form.get('profil')?.value.label)
     //Envoi de l'annonce en BD
     this.annonceService.postAnnonce(annonce)
       .then((response) => {
@@ -668,5 +668,12 @@ export class MesOffresComponent implements OnInit {
     this.router.navigate(['matching', annonce._id])
   }
 
+  onGenerateID(profilLabel) {
+    let label = profilLabel.replace(/[^A-Z]+/g, "");
+    if (label == '')
+      label = "UNK"
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+    return label + "-" + random
+  }
 
 }

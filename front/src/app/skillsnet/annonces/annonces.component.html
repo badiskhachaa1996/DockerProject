@@ -297,13 +297,18 @@
 
 			<h3>Offres</h3>
 
-			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName" layout="grid">
+			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName,custom_id,source" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<span class="p-input-icon-left mb-2 md:mb-0">
 							<i class="pi pi-search"></i>
 							<input type="search" pInputText placeholder="Filtrer par poste"
 								(input)="dv.filter($event.target.value)">
+						</span>
+						<span class="p-input-icon-left mb-2 md:mb-0">
+							<i class="pi pi-search"></i>
+							<input type="search" pInputText placeholder="Filtrer par source"
+								(input)="dv.filter($event.target.value, 'contains')">
 						</span>
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>

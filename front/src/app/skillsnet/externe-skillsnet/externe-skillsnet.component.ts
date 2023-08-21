@@ -42,6 +42,7 @@ export class ExterneSkillsnetComponent implements OnInit {
     rue_adresse: new FormControl(),
     numero_adresse: new FormControl(),
     postal_adresse: new FormControl(),
+    date_naissance: new FormControl()
 
   })
 
