@@ -39,7 +39,11 @@
                                     </tr>
                                     <br>
                                     <tr>
-                                        
+                                        <th>
+                                            
+                                              {{task.validation}}
+                                           
+                                          </th>
                                         <br>
                                         <th colspan="2"><p-button label="consignes" badge={{task.consignes.length}} styleClass="mr-2" (click)="showDialogc(task)"></p-button></th>
                                         <p-dialog header="Details" [(visible)]="visible_consigne" [modal]="true"
