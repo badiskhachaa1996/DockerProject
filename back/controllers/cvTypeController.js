@@ -39,7 +39,7 @@ app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
 
 // ajout de CV
 app.post("/post-cv", (req, res) => {
-    const cv = new CvType({ ...req.body });
+    const cv = new CvType({ ...req.body, date_creation: new Date() });
 
     // requete de securite pour verifier que l'utilisateur n'a pas de CV existant
     CvType.findOne({ user_id: cv.user_id })
@@ -68,7 +68,7 @@ app.put("/put-cv", (req, res) => {
 
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
-    CvType.find()?.populate('user_id')
+    CvType.find()?.populate('user_id').populate('competences')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -76,7 +76,7 @@ app.get("/get-cvs", (_, res) => {
 
 // recuperation d'un cv par id du cv
 app.get("/get-cv", (req, res) => {
-    CvType.findOne({ _id: req.params.id })?.populate('user_id')
+    CvType.findOne({ _id: req.params.id })?.populate('user_id').populate('competences')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -84,7 +84,7 @@ app.get("/get-cv", (req, res) => {
 
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id/:id", (req, res) => {
-    CvType.findOne({ user_id: req.params.id })?.populate('user_id')
+    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate('competences')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });

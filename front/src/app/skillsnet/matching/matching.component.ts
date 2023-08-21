@@ -81,13 +81,13 @@ export class MatchingComponent implements OnInit {
   }
 
   AcceptMatching(cv: CV) {
-    let type_matching = "MR"
+    let type_matching = "Automatique"
     if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise")
-      type_matching = "ME"
+      type_matching = "Entreprise"
     else if (this.matcher.type == "Commercial")
-      type_matching = "MW"
+      type_matching = "Winner"
     else if (this.matcher.type == "Alternant")
-      type_matching = "MA"
+      type_matching = "Alternant"
     let matching = {
       offre_id: this.offre._id,
       matcher_id: this.token.id,

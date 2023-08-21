@@ -617,7 +617,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Skillsnet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -1836,7 +1836,7 @@ export class AppMenuComponent implements OnInit {
                         */
 
                         {
-                            label: 'Skillsnet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -2500,7 +2500,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },*/
                                 {
-                                    label: 'Skillsnet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -3330,7 +3330,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },*/
                                 {
-                                    label: 'Skillsnet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -3785,7 +3785,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'SkillsNet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -3964,7 +3964,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'SkillsNet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -5519,6 +5519,30 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     )
+                }
+                if (services_list.includes('iMatch')) {
+                    this.items.push({
+                        label: 'iMatch',
+                        icon: 'pi pi-star',
+                        items: [
+                            {
+                                label: 'Gestions des entreprises',
+                                icon: 'pi pi-home',
+                                items: [
+                                    {
+                                        label: 'Ajouter une entreprise',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-entreprise']
+                                    },
+                                    {
+                                        label: 'Liste des entreprises',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/entreprises']
+                                    },
+                                ]
+                            },
+                        ],
+                    })
                 }
                 setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true
