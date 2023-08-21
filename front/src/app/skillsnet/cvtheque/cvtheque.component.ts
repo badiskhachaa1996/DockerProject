@@ -12,6 +12,11 @@ import { Table } from 'primeng/table';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Competence } from 'src/app/models/Competence';
 import { from } from 'rxjs';
+import { EcoleService } from 'src/app/services/ecole.service';
+import { ClasseService } from 'src/app/services/classe.service';
+import { Campus } from 'src/app/models/Campus';
+import { EtudiantService } from 'src/app/services/etudiant.service';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
 @Component({
   selector: 'app-cvtheque',
@@ -82,10 +87,17 @@ export class CvthequeComponent implements OnInit {
 
   token: any;
 
+  ecoles = []
+  groupes = []
+
   @ViewChild('filter') filter: ElementRef;
 
 
-  constructor(private skillsService: SkillsService, private formBuilder: FormBuilder, private messageService: MessageService, private cvService: CvService, private userService: AuthService, private router: Router,) { }
+
+  constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
+    private messageService: MessageService, private cvService: CvService,
+    private userService: AuthService, private router: Router, private EcoleService: EcoleService,
+    private ClasseService: ClasseService, private EtudiantService: EtudiantService, private MatchingService: MatchingService) { }
 
   ngOnInit(): void {
     // decodage du token
@@ -97,11 +109,10 @@ export class CvthequeComponent implements OnInit {
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
-      experiences_pro: this.formBuilder.array([]),
       competences: [],
-      outils: ['', Validators.required],
+      //outils: [''],
       langues: [],
-      video_lien: [],
+      //video_lien: [],
       mobilite_lieu: [''],
       mobilite_autre: [''],
       centre_interets: [''],
@@ -110,8 +121,35 @@ export class CvthequeComponent implements OnInit {
       user_create_type: ['Externe']
     });
 
+    this.EcoleService.getAll().subscribe(ecoles => {
+      ecoles.forEach(ecole => {
+        this.ecoles.push({ label: ecole.libelle, value: ecole._id })
+      })
+    })
+
   }
 
+  onSelectEcole(ecole) {
+    this.ClasseService.getAllByEcoleID(ecole).subscribe(classes => {
+      this.groupes = []
+      classes.forEach(classe => {
+        if (classe.abbrv)
+          this.groupes.push({ label: classe.abbrv, value: classe._id })
+      })
+    })
+  }
+
+  onSelectGroupe(classe) {
+    this.EtudiantService.getAllByClasseId(classe).subscribe(etudiants => {
+      this.dropdownUserInterne = []
+      etudiants.forEach(etu => {
+        let buffer: any = etu.user_id
+        let user_temp: User = buffer
+        let username = `${user_temp.firstname} ${user_temp.lastname} | ${user_temp.type}`;
+        this.dropdownUserInterne.push({ label: username, value: user_temp._id })
+      })
+    })
+  }
 
   // methode de recuperation des données utile
   onGetAllClasses(): void {
@@ -155,20 +193,6 @@ export class CvthequeComponent implements OnInit {
 
 
   //Traitement des formArray
-  /* Xp pro */
-  getXpPros() {
-    return this.formAddCV.get('experiences_pro') as FormArray;
-  }
-
-  onAddXpPro() {
-    const newXpProControl = this.formBuilder.control('', Validators.required);
-    this.getXpPros().push(newXpProControl);
-  }
-
-  onRemoveXpPro(i: number) {
-    this.getXpPros().removeAt(i);
-  }
-  /* end Xp pro */
 
   // upload du cv brute
   onUpload(event: any) {
@@ -185,27 +209,28 @@ export class CvthequeComponent implements OnInit {
     let cv = new CV();
 
     cv.user_id = formValue.user_id;
-    cv.experiences_pro = [];
-    formValue.experiences_pro?.forEach(xpPro => {
-      cv.experiences_pro.push(xpPro);
-    });
+    cv.experiences_pro = this.experiences_pro
+    cv.education = this.education
+    cv.experiences_associatif = this.experiences_associatif
+    cv.informatique = this.informatique
+    cv.createur_id = this.token.id
 
     cv.competences = [];
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
 
-    cv.outils = [];
+    /*cv.outils = [];
     formValue.outils?.forEach((outil) => {
       cv.outils.push(outil.label);
-    });
+    });*/
 
     cv.langues = [];
     formValue.langues?.forEach(langue => {
       cv.langues.push(langue.label);
     });
 
-    cv.video_lien = formValue.video_lien;
+    //cv.video_lien = formValue.video_lien;
 
     // si un cv brute à été ajouté
     if (this.uploadedFiles) {
@@ -266,17 +291,17 @@ export class CvthequeComponent implements OnInit {
 
   InitUpdateCV(cv) {
     this.formUpdateCV = this.formBuilder.group({
-      experiences_pro: this.formBuilder.array([]),
       competences: [],
-      outils: ['', Validators.required],
+      //outils: ['', Validators.required],
       langues: [],
       video_lien: [],
+      mobilite_lieu: [''],
+      mobilite_autre: [''],
+      centre_interets: [''],
+      a_propos: [''],
+      disponibilite: [''],
     });
     this.showUpdateCV = cv
-    cv.experiences_pro?.forEach(xpPro => {
-      const newXpProControl = this.formBuilder.control(xpPro, Validators.required);
-      this.getUpdateXpPros().push(newXpProControl);
-    });
 
     let cv_competences = [];
     cv.competences?.forEach(cpt => {
@@ -286,49 +311,45 @@ export class CvthequeComponent implements OnInit {
       })
     });
 
-    let cv_outils = [];
+    /*let cv_outils = [];
     cv.outils?.forEach((outil) => {
       cv_outils.push({ label: outil });
-    });
+    });*/
 
     let cv_langues = [];
     cv.langues?.forEach(langue => {
       cv_langues.push({ label: langue });
     });
-    this.selectedMultiOutils = cv_outils
+    //this.selectedMultiOutils = cv_outils
     this.selectedMultilang = cv_langues
     this.selectedMultiCpt = cv_competences
     this.formUpdateCV.patchValue({
       competences: cv_competences,
-      outils: cv_outils,
+      //outils: cv_outils,
       langues: cv_langues,
-      video_lien: cv.video_lien
+      //video_lien: cv.video_lien
     })
   }
 
   onUpdateCV() {
     let cv = this.showUpdateCV
     const formValue = this.formUpdateCV.value;
-    cv.experiences_pro = [];
-    formValue.experiences_pro?.forEach(xpPro => {
-      cv.experiences_pro.push(xpPro);
-    });
 
     cv.competences = [];
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
 
-    cv.outils = [];
+    /*cv.outils = [];
     formValue.outils?.forEach((outil) => {
       cv.outils.push(outil.label);
-    });
+    });*/
 
     cv.langues = [];
     formValue.langues?.forEach(langue => {
       cv.langues.push(langue.label);
     });
-    cv.video_lien = formValue.video_lien
+    //cv.video_lien = formValue.video_lien
 
     this.cvService.putCv(cv).then(data => {
       this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
@@ -338,25 +359,57 @@ export class CvthequeComponent implements OnInit {
     })
   }
 
-  /* Xp pro */
-  getUpdateXpPros() {
-    return this.formUpdateCV.get('experiences_pro') as FormArray;
-  }
-
-  onAddUpdateXpPro() {
-    const newXpProControl = this.formBuilder.control('', Validators.required);
-    this.getUpdateXpPros().push(newXpProControl);
-  }
-
-  onRemoveUpdateXpPro(i: number) {
-    this.getUpdateXpPros().removeAt(i);
-  }
-  /* end Xp pro */
-
   //Partie Exportation en PDF
 
   showPDF: CV
   InitExportPDF(cv) {
     this.showPDF = cv
+  }
+
+  experiences_pro = []
+
+  addExpPro() {
+    this.experiences_pro.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+  }
+
+  deleteExpPro(idx) {
+    this.experiences_pro.splice(idx, 1)
+  }
+
+  education = []
+
+  addEdu() {
+    this.education.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+  }
+
+  deleteEdu(idx) {
+    this.education.splice(idx, 1)
+  }
+
+  experiences_associatif = []
+
+  addExpAss() {
+    this.experiences_associatif.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+  }
+
+  deleteExpAss(idx) {
+    this.experiences_associatif.splice(idx, 1)
+  }
+
+  informatique = []
+
+  addInf() {
+    this.informatique.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })
+  }
+
+  deleteInf(idx) {
+    this.informatique.splice(idx, 1)
+  }
+
+  seeAnnonce(cv: CV) {
+    let buffer: any = cv.user_id
+    this.MatchingService.getAllByCVUSERID(buffer._id).subscribe(data => {
+
+    })
   }
 }

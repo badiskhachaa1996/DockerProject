@@ -6,17 +6,17 @@ const cvTypeSchema = mongoose.Schema({
     experiences_pro: {
         type: [{
 
-            date_debut: Date,
+            date_debut: { type: Date },
 
-            date_fin: Date,
+            date_fin: { type: Date },
 
-            intitule_experience: String,
+            intitule_experience: { type: String },
 
-            structure: String,
+            structure: { type: String },
 
-            details: String,
+            details: { type: String },
 
-            type: String
+            type: { type: String }
 
         }], required: false
     },
@@ -28,51 +28,51 @@ const cvTypeSchema = mongoose.Schema({
     education: {
         type: [{
 
-            date_debut: Date,
+            date_debut: { type: Date },
 
-            date_fin: Date,
+            date_fin: { type: Date },
 
-            intitule_experience: String,
+            intitule_experience: { type: String },
 
-            structure: String,
+            structure: { type: String },
 
-            details: String,
+            details: { type: String },
 
-            type: String
+            type: { type: String }
 
         }], required: false
     },
     experiences_associatif: {
         type: [{
 
-            date_debut: Date,
+            date_debut: { type: Date },
 
-            date_fin: Date,
+            date_fin: { type: Date },
 
-            intitule_experience: String,
+            intitule_experience: { type: String },
 
-            structure: String,
+            structure: { type: String },
 
-            details: String,
+            details: { type: String },
 
-            type: String
+            type: { type: String }
 
         }], required: false
     },
     informatique: {
         type: [{
 
-            date_debut: Date,
+            date_debut: { type: Date },
 
-            date_fin: Date,
+            date_fin: { type: Date },
 
-            intitule_experience: String,
+            intitule_experience: { type: String },
 
-            structure: String,
+            structure: { type: String },
 
-            details: String,
+            details: { type: String },
 
-            type: String
+            type: { type: String }
 
         }], required: false
     },

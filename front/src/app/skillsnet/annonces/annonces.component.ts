@@ -272,6 +272,7 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.source = this.form.get('source')?.value;
     annonce.isClosed = false;
+    annonce.custom_id = this.onGenerateID(this.form.get('profil')?.value.label, this.form.get('missionType').value)
 
     //Envoi de l'annonce en BD
     this.annonceService.postAnnonce(annonce)
@@ -385,6 +386,17 @@ export class AnnoncesComponent implements OnInit {
         this.messageService.add({ summary: "Non eligible au matching", severity: "error", detail: "Merci de créer votre cv pour pouvoir être eligible au matching" })
       }
     })
+  }
+
+  onGenerateID(profilLabel, contrat) {
+    let label = profilLabel.replace(/[^A-Z]+/g, "");
+    if (label == '')
+      label = "UNK"
+    let cont = "OS"
+    if (contrat == "Alternance")
+      cont = "OA"
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+    return label + cont + random
   }
 
 

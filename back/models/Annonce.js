@@ -20,7 +20,7 @@ const annonceSchema = mongoose.Schema({
     publicationDate: { type: Date, required: false },
     source: { type: String, required: false },
     isClosed: { type: Boolean, required: false },
-    custom_id: { type: String, required: false },
+    custom_id: { type: String, required: false, default:'OSA50655' },
 });
 
 const Annonce = mongoose.model('annonce', annonceSchema);

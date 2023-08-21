@@ -478,6 +478,7 @@ const routes: Routes = [
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
     { path: 'formulaire', component: DemandeEventsComponent },
+
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
@@ -510,7 +511,7 @@ const routes: Routes = [
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
-    { path: 'document-authentification', component: DocCheckerComponent },
+    { path: 'document-authentification', component: DocCheckerComponent }
 
 ]
 

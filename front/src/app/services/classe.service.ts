@@ -45,8 +45,8 @@ export class ClasseService {
   }
   //recupération d'une classe par IdUser
   getById(id: string) {
-    let registreUrl = this.apiUrl + "getById";
-    return this.http.get<Classe[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    let registreUrl = this.apiUrl + "getById/" + id;
+    return this.http.get<Classe>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   hide(id: any) {
@@ -69,16 +69,15 @@ export class ClasseService {
     return this.http.get<Classe[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllByFormateurID(formateur_id){
+  getAllByFormateurID(formateur_id) {
     let url = this.apiUrl + "getAllByFormateurID/" + formateur_id
     return this.http.get<Classe[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   // upload du calendrier de la formation
-  uploadCalendar(formData: FormData): Promise<any>
-  {
+  uploadCalendar(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-calendar`;
-    
+
     return new Promise<any>((resolve, reject) => {
       this.http.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response: any) => { resolve(response); },
@@ -89,8 +88,7 @@ export class ClasseService {
   }
 
   // méthode de téléchargement de la relance
-  downloadCalendar(idGroupe: string): Promise<any>
-  {
+  downloadCalendar(idGroupe: string): Promise<any> {
     const url = `${this.apiUrl}download-calendar/${idGroupe}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -100,5 +98,10 @@ export class ClasseService {
         complete: () => { console.log('Calendrier téléchargé') }
       });
     });
+  }
+
+  getAllByEcoleID(idEcole) {
+    let registreUrl = this.apiUrl + "getAllByEcoleID/" + idEcole;
+    return this.http.get<Classe[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

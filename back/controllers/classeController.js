@@ -4,6 +4,9 @@ app.disable("x-powered-by");
 const { Classe } = require("./../models/classe");
 const { Diplome } = require("./../models/diplome");
 const { Seance } = require('./../models/seance')
+const { Ecole } = require("./../models/ecole");
+const { Campus } = require("./../models/campus");
+
 
 const multer = require('multer');
 const fs = require("fs");
@@ -111,8 +114,14 @@ app.get("/seeAll", (req, res) => {
 
 //Récupérer une classe via une école
 app.get("/getAllByEcoleID/:id", (req, res) => {
-    Ecole.findById({ ecole_id: req.params.id }).then((data) => {
-        res.status(200).send(data);
+    Campus.find({ ecole_id: req.params.id }).then((campus) => {
+        let campus_id = []
+        campus.forEach(campu => {
+            campus_id.push(campu._id)
+        })
+        Classe.find({ campus_id: { $in: campus_id } }).then((classes) => {
+            res.send(classes.length > 0 ? classes : []);
+        })
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
     })
@@ -150,9 +159,8 @@ const calendarUpload = multer.diskStorage({
     destination: (req, file, callBack) => {
         const id = req.body.id;
         const link = `storage/groupe/${id}`;
-        if(!fs.existsSync(link))
-        {
-            fs.mkdirSync(link, {recursive: true});
+        if (!fs.existsSync(link)) {
+            fs.mkdirSync(link, { recursive: true });
         }
         callBack(null, link);
     },
@@ -161,26 +169,24 @@ const calendarUpload = multer.diskStorage({
     }
 });
 
-const uploadCalendar = multer({storage: calendarUpload});
+const uploadCalendar = multer({ storage: calendarUpload });
 
 app.post("/upload-calendar", uploadCalendar.single('file'), (req, res) => {
     const file = req.file;
 
-    if(!file)
-    {
+    if (!file) {
         res.status(400).send('Aucun fichier sélectionnée');
     } else {
         Classe.findOneAndUpdate({ _id: req.body.id }, { calendrier: 'calendrier.pdf' })
-        .then((response) => { res.status(201).json({successMsg: 'Calendrier Téléversé, groupe mis à jour'}); })
-        .catch((error) => { res.status(400).send('Impossible de mettre à jour le groupe'); });
+            .then((response) => { res.status(201).json({ successMsg: 'Calendrier Téléversé, groupe mis à jour' }); })
+            .catch((error) => { res.status(400).send('Impossible de mettre à jour le groupe'); });
     }
 });
 
 // méthode de téléchargement du document de relance pour un contrat d'alternance
 app.get("/download-calendar/:idGroupe", (req, res) => {
-    res.download(`./storage/groupe/${req.params.idGroupe}/calendrier.pdf`, function(err){
-        if(err)
-        {
+    res.download(`./storage/groupe/${req.params.idGroupe}/calendrier.pdf`, function (err) {
+        if (err) {
             res.status(400).send(err);
         }
     });
