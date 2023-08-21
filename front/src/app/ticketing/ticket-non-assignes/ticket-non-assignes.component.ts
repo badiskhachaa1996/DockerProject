@@ -10,13 +10,15 @@ import { SocketService } from 'src/app/services/socket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
+import {Task} from 'src/app/models/project/Task';
+import { ProjectService } from 'src/app/services/projectv2.service';
 @Component({
   selector: 'app-ticket-non-assignes',
   templateUrl: './ticket-non-assignes.component.html',
   styleUrls: ['./ticket-non-assignes.component.scss']
 })
 export class TicketNonAssignesComponent implements OnInit {
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService,
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService, private projectService: ProjectService, 
     private ServService: ServService, private Socket: SocketService, private SujetService: SujetService, private NotifService: NotificationService) { }
   tickets = []
   ticketUpdate: Ticket;
@@ -26,7 +28,9 @@ export class TicketNonAssignesComponent implements OnInit {
     description: new FormControl('', Validators.required),
     priorite: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
+    
   })
+  task!: Task[];
   userDic = {}
   filterService = [{ label: 'Tous les services', value: null }]
   ngOnInit(): void {
@@ -80,9 +84,16 @@ export class TicketNonAssignesComponent implements OnInit {
       })
       this.NotifService.create(new Notification(null, null, false, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`, new Date(), this.formAffectation.value.agent_id, this.TicketAffecter.sujet_id.service_id._id)).subscribe(() => { console.log('SUCCES')})
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
+      //verfier si c'est une tache alors modifier la tache
+      this.projectService.getTaskbyticket(this.TicketAffecter._id)
+      .then(data => {if (data) { data.attribuate_to=this.formAffectation.value.agent_id ;data.etat="En attente de traitement"; this.projectService.putTask(data); }});
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
     })
+    
+
+    
+    
   }
 
   getAttente(temp_date) {

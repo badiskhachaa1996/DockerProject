@@ -12,7 +12,9 @@ export class Project{
         public responsable_id?:  string,       
         public responsable?:  string,              
         public etat?:         string,               
-        public avancement?:   Number,              
+        public avancement?:   Number, 
+        public identifian?: string,
+             
     
       
     ){}

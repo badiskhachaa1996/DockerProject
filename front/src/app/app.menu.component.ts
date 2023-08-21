@@ -230,9 +230,14 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-project'],
                                 },
                                 {
+                                    label:  'Mes Tâche' ,
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink:['mytask']
+                                },
+                                {
                                     label: 'Mes projets',
                                     icon: 'pi pi-fw pi-list',
-                                    routerLink: ['/my-tasks'],
+                                    routerLink: ['/myproject'],
                                 },
                                 {
                                     label: 'Dasboard',

@@ -3,7 +3,7 @@ export class Budget {
     (
         public _id?: string,
         public libelle?: string,
-        public charge?: string,
+        public charge?: number,
         public depense?: number,
         public project_id?: string
     ){}

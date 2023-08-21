@@ -13,12 +13,19 @@ import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { Task} from 'src/app/models/project/Task';
+import { ProjectService } from 'src/app/services/projectv2.service';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
   styleUrls: ['./ajout-ticket.component.scss']
 })
 export class AjoutTicketComponent implements OnInit {
+
+  receivedTask: Task;
+  itsTask:boolean = false;
+  taskID:string;
 
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
@@ -60,6 +67,17 @@ export class AjoutTicketComponent implements OnInit {
           this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
       });
+    if(this.itsTask){
+      
+      this.projectService.getTask(this.taskID).then((datat) => {
+        console.log(1111111111111);
+        console.log(data.doc._id);
+        datat.ticketId=data.doc._id;
+        console.log(datat.ticketId);
+        this.projectService.putTask(datat)   
+        }) 
+
+    }
     })
   }
   onSelectService() {
@@ -75,8 +93,8 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router,
-    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService) { }
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute,
+    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService,private projectService: ProjectService) { }
   serviceDic = {}
   sujetDic = {}
   USER: User
@@ -110,6 +128,19 @@ export class AjoutTicketComponent implements OnInit {
         })
       })
     }
-  }
+    this.route.queryParams.subscribe(params => {
+      if (params && params.data) {
+        this.receivedTask = JSON.parse(params.data);
+        this.itsTask=true;
+        this.taskID = this.receivedTask._id; 
+        this.TicketForm.patchValue({
+          description: this.receivedTask.libelle + ' :'+ this.receivedTask.description_task,
+          priorite: this.receivedTask.priorite,
+          
+        })
+         
+      }
+    });
 
+  }
 }

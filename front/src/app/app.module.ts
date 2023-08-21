@@ -347,6 +347,8 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
+import { MytaskComponent } from './project-v2/mytask/mytask.component';
+import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 
 @NgModule({
   imports: [
@@ -703,6 +705,8 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
     DocCheckerComponent,
     LeadCandidatureComponent,
     GestionComponent,
+    MytaskComponent,
+    MyprojectComponent,
 
   
   ],

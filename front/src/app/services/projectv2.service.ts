@@ -13,8 +13,8 @@ import { Budget } from 'src/app/models/project/Budget';
     providedIn: 'root'
 })
 export class ProjectService {
-    private apiUrl = 'http://localhost:3000/soc/projet';
-    //apiUrl = `${environment.origin}project`;
+    
+    apiUrl = `${environment.origin}projet`;
 
     constructor(private httpClient: HttpClient) { }
 
@@ -126,7 +126,33 @@ export class ProjectService {
        });
      });
    }
+// get task by id ticket
+getTaskbyticket(id: string): Promise<Task>
+{
+  const url = `${this.apiUrl}/get-tasks-by-id-ticket/${id}`;
 
+  return new Promise<Task>((resolve, reject) => {
+    this.httpClient.get<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      next: (response) => resolve(response),
+      error: (error) => reject(error),
+      complete: () => console.log('Tâche récuperé')
+    });
+  });
+}
+
+// get task by id agent
+getTaskbyagent(id: string): Promise<Task[]>
+{
+  const url = `${this.apiUrl}/get-tasks-by-id-agent/${id}`;
+
+  return new Promise<Task[]>((resolve, reject) => {
+    this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      next: (response) => resolve(response),
+      error: (error) => reject(error),
+      complete: () => console.log('Tâches de l agent récuperés')
+    });
+  });
+}
    // update task
   putTask(task: Task): Promise<any>
   {
@@ -174,7 +200,7 @@ export class ProjectService {
 //get ressources by id project 
   getRessourcesByIdProject(id: string): Promise<Ressources[]>
   {
-    const url = `${this.apiUrl}/get-ressources/${id}`;
+    const url = `${this.apiUrl}/get-ressourcess/${id}`;
 
     return new Promise<Ressources[]>((resolve, reject) => {
       this.httpClient.get<Ressources[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
@@ -246,7 +272,7 @@ deleteRessources(id: string): Promise<any>
 //get Budget by id project 
   getBudgetByIdProject(id: string): Promise<Budget[]>
   {
-    const url = `${this.apiUrl}/get-budget/${id}`;
+    const url = `${this.apiUrl}/get-budgets/${id}`;
 
     return new Promise<Budget[]>((resolve, reject) => {
       this.httpClient.get<Budget[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({

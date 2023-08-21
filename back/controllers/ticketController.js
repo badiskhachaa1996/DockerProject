@@ -309,7 +309,7 @@ app.post("/updateAllById/:id", (req, res) => {
 });
 
 //Récuperer un ticket
-app.post("/getById/:id", (req, res) => {
+app.get("/getById/:id", (req, res) => {
     Ticket.findOne({ _id: req.params.id }).then((dataTicket) => {
         res.status(200).send({ dataTicket });
     }).catch((error) => {

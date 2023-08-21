@@ -15,6 +15,8 @@ const projectv2Schema = mongoose.Schema({
     responsable:                { type: String, required: false},
     etat:                       { type: String, required: false },
     avancement:                 { type: Number, required: false }, 
+    identifian:                   { type: String, required: false},
+
 
 
 });

@@ -1,0 +1,538 @@
+<div class="card col-12 ">
+    <form class="p-formgrid grid p-fluid" [formGroup]="formFindProject" (ngSubmit)="findProject()">
+        <div class="field col-6">
+            <label>Nom du projet <span style="color: red">*</span></label>
+            <p-dropdown formControlName="project" [options]="projectListe" filter="true" placeholder="project"
+                [showClear]="true" (onChange)="onProjectSelected($event)"></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Nom du collaborateur <span style="color: red">*</span></label>
+            <p-dropdown formControlName="collaborateur" [options]="collaborateurListe" filter="true"
+                placeholder="collaborateur" [showClear]="true"></p-dropdown>
+        </div>
+        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+            [disabled]="formFindProject.invalid"></button>
+    </form>
+</div>
+<div *ngIf="showproject" class="card">
+    <div class="grid col-12">
+        <div class="col-3"><strong>ID:</strong>{{selectedProject.identifian}}</div>
+        <div class="col-3"><strong>Date de création:</strong> {{selectedProject.created_date| date:'mediumDate'}}</div>
+        <div class="col-3"><strong>Date de fin estimé:</strong>{{selectedProject.fin| date:'mediumDate'}} </div>
+        <div class="col-3"><strong>Nombre d'heurs restante:{{heur_total-heur_realiser| number:'2.2-2'}}</strong></div>
+    </div>
+    <div class="grid col-12">
+        <div class="col-3"><strong>Nom: </strong>{{selectedProject.titre}}</div>
+        <div class="col-3"><strong>Date de début :</strong>{{selectedProject.debut| date:'mediumDate'}}</div>
+        <div class="col-3"><strong>Nombre d'heurs realisés: {{heur_realiser| number:'2.2-2'}}</strong></div>
+        <div class="col-3"><strong>Avancement: <p-progressBar
+                    [value]="selectedProject.avancement"></p-progressBar></strong></div>
+    </div>
+</div>
+<div class="card">
+    <p-tabView [(activeIndex)]="selectedTabIndex">
+        <p-tabPanel header="To Do">
+            <div class="grid col-12" style="background-color: #ffeede;">
+                <ng-container *ngFor="let task of tasktodo">
+
+                    <div class="col-6">
+                        <p-card>
+                            <p-table responsiveLayout="scroll" styleClass="">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th colspan="3" style="color:mediumvioletred;">Assigné à :
+                                            {{task.attribuate_to[0].firstname}} {{task.attribuate_to[0].lastname}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th >ID: {{task.identifian}}</th>
+                                        <th style="color:rgb(110, 187, 255);">Libelle: {{task.libelle}} </th>
+                                        <th>ID Ticket: {{task.ticketId.customid}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID Projet : {{task.project_id.identifian}}</th>
+                                        <th colspan="2">Titre: {{task.project_id.titre}}</th>
+                                    </tr>
+                                    <br />
+                                    <tr>
+                                        <th>Assigné le: {{task.ticketId.date_ajout | date:'mediumDate'}}</th>
+
+                                        <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
+                                            date:'mediumDate'}} </th>
+                                    </tr>
+                                    <tr>
+                                        <th>nombre d'heurs estimés: {{task.number_of_hour}}</th>
+                                        <th colspan="2" width="10000px"
+                                            [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">{{
+                                            task.ticketId.statut}}</th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>Etat d'avancement : </th>
+                                        <th colspan="2">
+                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
+                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
+                                        </th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th colspan="3">{{task.validation}}</th>
+                                    </tr>
+                                    <br>
+
+
+
+                                </ng-template>
+
+                            </p-table>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>
+
+                                    <p-button label="Ajouter un pourcentage" styleClass=" p-button-help button-margin"
+                                        (onClick)="modifierpoucentage(task)"></p-button>
+                                </div>
+
+                                <div style="display: flex; justify-content: center;">
+                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onClick)="save('info',task)"
+                                        [model]="items"></p-splitButton>
+
+                                </div>
+
+                                <div>
+                                    <p-button styleClass="p-button-secondary" (click)="showDialogd()"
+                                        icon="pi pi-external-link" label="Detail"></p-button>
+                                    <p-dialog header="Details" [(visible)]="visibled" [modal]="true"
+                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+
+                                        <p class="m-0">
+
+                                            <strong>Description :</strong> {{task.description_task}}
+                                            <br />
+                                            <strong>Note :</strong> {{task.ticketId.note}}
+
+
+
+
+                                        </p>
+                                    </p-dialog>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div style="display: flex; justify-content: space-between;" class="col-12">
+                                <div class="col-6">
+                                    <p-button styleClass="p-button-warning" (click)="showDialog(task)"
+                                        icon="pi pi pi-bookmark" label="Ajouter une consigne"></p-button>
+                                    <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+                                        [draggable]="false" [resizable]="false">
+
+                                        <h3 class="text-center">Les consignes</h3>
+                                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddConsigne"
+                                            (ngSubmit)="addConsigne(task)">
+
+                                            <div class="field col-12 md:col-12">
+                                                <label htmlFor="consigne">la consigne :</label>
+                                                <textarea formControlName="consigne" pInputTextarea
+                                                    placeholder="Donnez une consigne " autoResize rows="2"
+                                                    cols="40"></textarea>
+                                            </div>
+                                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                                [disabled]="formAddConsigne.invalid"></button>
+                                        </form>
+                                        <p-table [rows]="8" [rowHover]="true" [paginator]="true"
+                                            [value]="task_consignes" [paginator]="true" rowExpandMode="single"
+                                            [pageLinks]="5" selectionMode="single" class="col-12"
+                                            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th style="width: 3rem"></th>
+                                                    <th pSortableColumn="consignes" style="text-align:center">
+                                                        consignes
+                                                    </th>
+                                                    <th pSortableColumn="action" style="text-align:center"> Action
+
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let tc let-rir="rowIndex">
+                                                <tr>
+                                                    <td>{{ rir + 1 }}</td>
+                                                    <td>{{task_consignes[rir]}}</td>
+                                                    <td>
+                                                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-pencil"
+                                                            (click)="initialisation_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                        <i pTooltip="Supprimer"
+                                                            style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-trash"
+                                                            (click)="delete_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <p class="m-0">
+                                            </p>
+                                        </p-table>
+                                    </p-dialog>
+                                </div>
+
+                                <div class="col-6">
+                                    <p-button label="   Valider   " styleClass=" p-button-success button-margin"
+                                        (onClick)="valider(task)"></p-button>
+                                </div>
+                            </div>
+                        </p-card>
+                    </div>
+                    <br />
+                </ng-container>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="En cours">
+            <div class="grid col-12" style="background-color: #e2e3cc;">
+                <ng-container *ngFor="let task of taskencours">
+                    <div class="col-6">
+                        <p-card>
+                            <p-table responsiveLayout="scroll" styleClass="">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th colspan="3" style="color:mediumvioletred;">Assigné à :
+                                            {{task.attribuate_to[0].firstname}} {{task.attribuate_to[0].lastname}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID: {{task.identifian}}</th>
+                                        <th>Libelle: {{task.libelle}} </th>
+                                        <th>ID Ticket: {{task.ticketId.customid}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID Projet : {{task.project_id.identifian}} </th>
+                                        <th colspan="2">Titre: {{task.project_id.titre}}</th>
+                                    </tr>
+                                    <br />
+                                    <tr>
+                                        <th>Assigné le: {{task.ticketId.date_ajout | date:'mediumDate'}}</th>
+
+                                        <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
+                                            date:'mediumDate'}} </th>
+                                    </tr>
+                                    <tr>
+                                        <th>nombre d'heurs estimés: {{task.number_of_hour}}</th>
+                                        <th colspan="2" width="10000px"
+                                            [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">{{
+                                            task.ticketId.statut}}</th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>Etat d'avancement : </th>
+                                        <th colspan="2">
+                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
+                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
+                                        </th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>{{task.validation}}</th>
+                                    </tr>
+                                    <br>
+
+
+
+                                </ng-template>
+
+                            </p-table>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>
+
+                                    <p-button label="Ajouter un pourcentage" styleClass=" p-button-help button-margin"
+                                        (onClick)="modifierpoucentage(task)"></p-button>
+                                </div>
+
+                                <div style="display: flex; justify-content: center;">
+                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onClick)="save('info',task)"
+                                        [model]="items"></p-splitButton>
+
+                                </div>
+
+                                <div>
+                                    <p-button styleClass="p-button-secondary" (click)="showDialogd()"
+                                        icon="pi pi-external-link" label="Detail"></p-button>
+                                    <p-dialog header="Details" [(visible)]="visibled" [modal]="true"
+                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+
+                                        <p class="m-0">
+
+                                            <strong>Description :</strong> {{task.description_task}}
+                                            <br />
+                                            <strong>Note :</strong> {{task.ticketId.note}}
+
+
+
+
+                                        </p>
+                                    </p-dialog>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div style="display: flex; justify-content: space-between;" class="col-12">
+                                <div class="col-6">
+                                    <p-button styleClass="p-button-warning" (click)="showDialog(task)"
+                                        icon="pi pi pi-bookmark" label="Ajouter une consigne"></p-button>
+                                    <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+                                        [draggable]="false" [resizable]="false">
+
+                                        <h3 class="text-center">Les consignes</h3>
+                                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddConsigne"
+                                            (ngSubmit)="addConsigne(task)">
+
+                                            <div class="field col-12 md:col-12">
+                                                <label htmlFor="consigne">la consigne :</label>
+                                                <textarea formControlName="consigne" pInputTextarea
+                                                    placeholder="Donnez une consigne " autoResize rows="2"
+                                                    cols="40"></textarea>
+                                            </div>
+                                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                                [disabled]="formAddConsigne.invalid"></button>
+                                        </form>
+                                        <p-table [rows]="8" [rowHover]="true" [paginator]="true"
+                                            [value]="task_consignes" [paginator]="true" rowExpandMode="single"
+                                            [pageLinks]="5" selectionMode="single" class="col-12"
+                                            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th style="width: 3rem"></th>
+                                                    <th pSortableColumn="consignes" style="text-align:center">
+                                                        consignes
+                                                    </th>
+                                                    <th pSortableColumn="action" style="text-align:center"> Action
+
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let tc let-rir="rowIndex">
+                                                <tr>
+                                                    <td>{{ rir + 1 }}</td>
+                                                    <td>{{task_consignes[rir]}}</td>
+                                                    <td>
+                                                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-pencil"
+                                                            (click)="initialisation_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                        <i pTooltip="Supprimer"
+                                                            style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-trash"
+                                                            (click)="delete_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <p class="m-0">
+                                            </p>
+                                        </p-table>
+                                    </p-dialog>
+                                </div>
+
+                                <div class="col-6">
+                                    <p-button label="   Valider   " styleClass=" p-button-success button-margin"
+                                        (onClick)="valider(task)"></p-button>
+                                </div>
+                            </div>
+                        </p-card>
+                    </div>
+                    <br />
+                </ng-container>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Done">
+            <div class="grid col-12" style="background-color: #c8f0cb;">
+                <ng-container *ngFor="let task of taskdone">
+
+                    <div class="col-6">
+                        <p-card>
+                            <p-table responsiveLayout="scroll" styleClass="">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th colspan="3" style="color:mediumvioletred;">Assigné à :
+                                            {{task.attribuate_to[0].firstname}} {{task.attribuate_to[0].lastname}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID: {{task.identifian}}</th>
+                                        <th>Libelle: {{task.libelle}} </th>
+                                        <th>ID Ticket: {{task.ticketId.customid}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>ID Projet : {{task.project_id.identifian}}</th>
+                                        <th colspan="2">Titre: {{task.project_id.titre}}</th>
+                                    </tr>
+                                    <br />
+                                    <tr>
+                                        <th>Assigné le: {{task.ticketId.date_ajout | date:'mediumDate'}}</th>
+
+                                        <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
+                                            date:'mediumDate'}} </th>
+                                    </tr>
+                                    <tr>
+                                        <th>nombre d'heurs estimés: {{task.number_of_hour}}</th>
+                                        <th colspan="2" width="10000px"
+                                            [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">{{
+                                            task.ticketId.statut}}</th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>Etat d'avancement : </th>
+                                        <th colspan="2">
+                                            <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
+                                                prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
+                                        </th>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>{{task.validation}}</th>
+                                    </tr>
+                                    <br>
+
+
+
+                                </ng-template>
+
+                            </p-table>
+                            <div style="display: flex; justify-content: space-between;">
+                                <div>
+
+                                    <p-button label="Ajouter un pourcentage" styleClass=" p-button-help button-margin"
+                                        (onClick)="modifierpoucentage(task)"></p-button>
+                                </div>
+
+                                <div style="display: flex; justify-content: center;">
+                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onClick)="save('info',task)"
+                                        [model]="items"></p-splitButton>
+
+                                </div>
+
+                                <div>
+                                    <p-button styleClass="p-button-secondary" (click)="showDialogd()"
+                                        icon="pi pi-external-link" label="Detail"></p-button>
+                                    <p-dialog header="Details" [(visible)]="visibled" [modal]="true"
+                                        [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+
+                                        <p class="m-0">
+
+                                            <strong>Description :</strong> {{task.description_task}}
+                                            <br />
+                                            <strong>Note :</strong> {{task.ticketId.note}}
+
+
+
+
+                                        </p>
+                                    </p-dialog>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div style="display: flex; justify-content: space-between;" class="col-12">
+                                <div class="col-6">
+                                    <p-button styleClass="p-button-warning" (click)="showDialog(task)"
+                                        icon="pi pi pi-bookmark" label="Ajouter une consigne"></p-button>
+                                    <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+                                        [draggable]="false" [resizable]="false">
+
+                                        <h3 class="text-center">Les consignes</h3>
+                                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddConsigne"
+                                            (ngSubmit)="addConsigne(task)">
+
+                                            <div class="field col-12 md:col-12">
+                                                <label htmlFor="consigne">la consigne :</label>
+                                                <textarea formControlName="consigne" pInputTextarea
+                                                    placeholder="Donnez une consigne " autoResize rows="2"
+                                                    cols="40"></textarea>
+                                            </div>
+                                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                                [disabled]="formAddConsigne.invalid"></button>
+                                        </form>
+                                        <p-table [rows]="8" [rowHover]="true" [paginator]="true"
+                                            [value]="task_consignes" [paginator]="true" rowExpandMode="single"
+                                            [pageLinks]="5" selectionMode="single" class="col-12"
+                                            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th style="width: 3rem"></th>
+                                                    <th pSortableColumn="consignes" style="text-align:center">
+                                                        consignes
+                                                    </th>
+                                                    <th pSortableColumn="action" style="text-align:center"> Action
+
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let tc let-rir="rowIndex">
+                                                <tr>
+                                                    <td>{{ rir + 1 }}</td>
+                                                    <td>{{task_consignes[rir]}}</td>
+                                                    <td>
+                                                        <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-pencil"
+                                                            (click)="initialisation_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                        <i pTooltip="Supprimer"
+                                                            style="margin-left: 3%; cursor: pointer;"
+                                                            class="pi pi-trash"
+                                                            (click)="delete_c(task_consignes[rir],rir)"
+                                                            aria-hidden="true"></i>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <p class="m-0">
+                                            </p>
+                                        </p-table>
+                                    </p-dialog>
+                                </div>
+
+                                <div class="col-6">
+                                    <p-button label="   Valider   " styleClass=" p-button-success button-margin"
+                                        (onClick)="valider(task)"></p-button>
+                                </div>
+                            </div>
+                        </p-card>
+                    </div>
+                    <br />
+                </ng-container>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Archivés">
+            <p-table [value]="taskarchiver" dataKey="_id" [rows]="4" [rowHover]="true"
+                styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>Libelle</th>
+                        <th>ID Ticket</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-task>
+                    <tr>
+                        <td>{{task.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td>{{task.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td>{{task.ticketId.customid}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td>
+
+                            <p-splitButton direction="up" label="Deplacer" icon="pi pi-send"
+                                (onClick)="save('info',task)" [model]="items"></p-splitButton>
+                            <br> <br> <br> <br><br> <br><br> <br> <br> <br>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">Aucune information pour le moment.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="4">Chargement des informations, merci de patienter...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+</div>

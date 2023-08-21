@@ -4,6 +4,7 @@ const { Project } = require("./../models/project/ProjectV2");
 const { Task } = require("./../models/project/Task");
 const { Ressources } = require("./../models/project/Ressources");
 const { Budget } = require("./../models/project/Budget");
+const { Ticket } = require("../models/ticket");
 
 
 
@@ -68,7 +69,7 @@ app.post("/post-task", (req, res, next) => {
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
     console.log(req.params.id);
-    Task.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')
+    Task.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate('ticketId')
     .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
 });
@@ -79,7 +80,18 @@ app.get("/get-task/:id", (req, res, next) => {
     .then((taskFromDb) => { res.status(200).send(taskFromDb) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });
-
+// get task by id ticket
+app.get("/get-tasks-by-id-ticket/:id", (req, res, next) => {
+    Task.findOne({ ticketId: req.params.id })?.populate('project_id')?.populate('attribuate_to')
+    .then((taskFromDb) => { res.status(200).send(taskFromDb) })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
+});
+// get task by id agent
+app.get("/get-tasks-by-id-agent/:id", (req, res, next) => {
+    Task.find({ attribuate_to: { $in: req.params.id } })?.populate('project_id')?.populate('ticketId')
+    .then((taskFromDb) => { res.status(200).send(taskFromDb) })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
+});
 // update task 
 app.put("/put-task", (req, res, next) => {
     const task = new Task({ ...req.body });
@@ -111,7 +123,7 @@ app.post("/post-ressources", (req, res, next) => {
 });
 
 // get ressource by id project
-app.get("/get-ressources/:id", (req, res, next) => {
+app.get("/get-ressourcess/:id", (req, res, next) => {
     console.log(req.params.id);
     Ressources.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')
     .then((ressourcesFromDb) => { res.status(200).send(ressourcesFromDb) })
@@ -154,7 +166,7 @@ app.post("/post-budget", (req, res, next) => {
 });
 
 // get Budget by id project
-app.get("/get-budget/:id", (req, res, next) => {
+app.get("/get-budgets/:id", (req, res, next) => {
     console.log(req.params.id);
     Budget.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')
     .then((budgetFromDb) => { res.status(200).send(budgetFromDb) })
