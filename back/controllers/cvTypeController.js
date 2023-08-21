@@ -68,7 +68,7 @@ app.put("/put-cv", (req, res) => {
 
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
-    CvType.find()?.populate('user_id').populate('competences')
+    CvType.find()?.populate('user_id').populate('competences').populate('createur_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
