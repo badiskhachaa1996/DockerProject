@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CV } from 'src/app/models/CV';
@@ -17,6 +17,9 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { Campus } from 'src/app/models/Campus';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
+import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
+import { Annonce } from 'src/app/models/Annonce';
+import { Matching } from 'src/app/models/Matching';
 
 @Component({
   selector: 'app-cvtheque',
@@ -97,7 +100,8 @@ export class CvthequeComponent implements OnInit {
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
-    private ClasseService: ClasseService, private EtudiantService: EtudiantService, private MatchingService: MatchingService) { }
+    private ClasseService: ClasseService, private EtudiantService: EtudiantService,
+    private MatchingService: MatchingService, private AnnonceService: AnnonceService) { }
 
   ngOnInit(): void {
     // decodage du token
@@ -406,10 +410,44 @@ export class CvthequeComponent implements OnInit {
     this.informatique.splice(idx, 1)
   }
 
+  matchingsFromCV: Matching[] = []
+  selectedUser: User
+
   seeAnnonce(cv: CV) {
     let buffer: any = cv.user_id
+    this.selectedUser = buffer
     this.MatchingService.getAllByCVUSERID(buffer._id).subscribe(data => {
-
+      this.matchingsFromCV = data
     })
+  }
+
+  selectedCVs = []
+  showFormAssignOffer = false
+  annoncesList = []
+
+  initAssign() {
+    this.AnnonceService.getAnnonces().then((annonces: Annonce[]) => {
+      annonces.forEach(annonce => {
+        if (annonce)
+          this.annoncesList.push({ label: annonce.missionName + ' de ' + annonce?.entreprise_name, value: annonce._id, annonce })
+      })
+    })
+  }
+
+  AssignForm = new FormGroup({
+    offer: new FormControl()
+  })
+
+  onAssignOffer() {
+    this.selectedCVs.forEach((cv: any) => {
+      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En Cours", "Winner", new Date())).subscribe(match => {
+        this.messageService.add({ severity: 'success', summary: "Création du Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname })
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: "Error sur le Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname, detail: error.toString() })
+      })
+    })
+    this.AssignForm.reset()
+    this.selectedCVs = []
+    this.showFormAssignOffer = false
   }
 }
