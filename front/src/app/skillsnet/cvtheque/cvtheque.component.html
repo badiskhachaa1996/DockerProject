@@ -1070,9 +1070,9 @@
                     <th pSortableColumn="date_creation" style="text-align:center">
                         Date du matching <p-sortIcon field="date_creation"></p-sortIcon>
                     </th>
-                    <th>
+                    <!--<th>
                         Action
-                    </th>
+                    </th>-->
             </ng-template>
             <ng-template pTemplate="body" let-match let-expanded="expanded">
                 <tr>
@@ -1099,10 +1099,10 @@
                     <td>
                         {{match.date_creation|date:medium}}
                     </td>
-                    <td>
+                    <!--<td>
                         <i pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
                             (click)="InitUpdateStatut(match)" aria-hidden="true"></i>
-                    </td>
+                    </td>-->
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-match>
