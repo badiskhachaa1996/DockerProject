@@ -85,7 +85,7 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<div class="field col-12">
+					<!--<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
 						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
 							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
@@ -106,7 +106,7 @@
 								</div>
 							</ng-template>
 						</p-multiSelect>
-					</div>
+					</div>-->
 					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label"
 							formControlName="workplaceType"></p-selectButton>
@@ -222,7 +222,7 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<div class="field col-12">
+					<!--<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
 						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
 							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
@@ -243,7 +243,7 @@
 								</div>
 							</ng-template>
 						</p-multiSelect>
-					</div>
+					</div>-->
 					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label"
 							formControlName="workplaceType"></p-selectButton>
@@ -385,11 +385,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
@@ -427,11 +427,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
