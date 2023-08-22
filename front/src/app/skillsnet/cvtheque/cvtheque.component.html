@@ -1035,11 +1035,12 @@
     </div>
 
     <div class="card col-12 grid" *ngIf="matchingsFromCV && selectedUser">
-        <h5>Liste des matchings en cours pour {{selectedUser.lastname | uppercase}} {{selectedUser.firstname | titlecase}}</h5>
-        <p-table #dtm rowExpandMode="single" [value]="matchingsFromCV" dataKey="_id" [rows]="5" [rowHover]="true" class="col-12"
-            [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']" styleClass="p-datatable-gridlines"
-            [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
-    
+        <h5>Liste des matchings en cours pour {{selectedUser.lastname | uppercase}} {{selectedUser.firstname |
+            titlecase}}</h5>
+        <p-table #dtm rowExpandMode="single" [value]="matchingsFromCV" dataKey="_id" [rows]="5" [rowHover]="true"
+            class="col-12" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
+            styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
+
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <span class="p-input-icon-left mb-3">
@@ -1052,11 +1053,8 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
-                    <th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
-                        Nom <p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="cv_id.user_id.firstname" style="text-align:center">
-                        Prénom <p-sortIcon field="cv_id.user_id.firstname"></p-sortIcon>
+                    <th>
+                        Offre <p-sortIcon field="offre_id.user_id.custom_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="taux" style="text-align:center">
                         Matcher <p-sortIcon field="taux"></p-sortIcon>
@@ -1082,10 +1080,7 @@
                             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                     </td>
                     <td>
-                        {{ match.cv_id.user_id?.lastname | uppercase}}
-                    </td>
-                    <td>
-                        {{ match.cv_id.user_id?.firstname | titlecase}}
+                        <a (click)="seeOffre(match.offre_id)">{{ match.offre_id.custom_id | titlecase}}</a>
                     </td>
                     <td>
                         {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
@@ -1111,166 +1106,237 @@
                         <div class="p-3">
                             <p-table responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Remarque</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                    <tr>
-                                        <td>{{match.remarque}}</td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                <tr>
+                    <th>Remarque</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>{{match.remarque}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>
+
+<div class="col-12 card" *ngIf="showFormAssignOffer">
+    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+        (click)="showFormAssignOffer = false" aria-hidden="true"> </i>
+    <h3 class="text-center" style="font-weight: bold;">Assignation d'une offre </h3>
+
+    <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAssignOffer()">
+        <div class="field col-12">
+            <label>Annonces <span style="color: red;">*</span></label>
+            <p-dropdown [options]="annoncesList" emptyFilterMessage="Pas d'offre trouvé" filterPlaceholder="Annonce"
+                filter="true" formControlName="offer"></p-dropdown>
+        </div>
+        <div>
+            <button pButton label="Assigner l'offre aux CVs" type="submit" [disabled]="AssignForm.invalid"></button>
+        </div>
+    </form>
+</div>
+
+<!-- Table d'affichae de la cvthèque -->
+<div class="col-12">
+    <div class="card">
+        <button pButton pRipple label="Ajouter un CV" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddCV = true"
+            style="float: right"></button>
+        <button pButton pRipple label="Assigner à une offre" icon="pi pi-plus" class="mr-2 mb-2"
+            *ngIf="selectedCVs.length!=0" (click)="showFormAssignOffer = true;initAssign()"
+            style="float: right"></button>
+
+        <h5>Cv thèque Intedgroup</h5>
+        <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedCVs"
+            [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <button pButton label="Vider les filtres" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
+                        (click)="clear(dt1)"></button>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="typeList"
+                        (onChange)="dt1.filter($event.value, 'user_id.type', 'equals')"
+                        filterPlaceholder="Type"></p-dropdown>
+
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Nom &amp; Prénom
                         </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Email
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Email perso
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Type
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Date de création
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Créateur du CV
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cv>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="cv"></p-tableCheckbox>
                     </td>
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.lastname | uppercase}} {{cv.user_id?.firstname | titlecase}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.email}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.email_perso}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.type}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv?.date_creation | date:'mediumDate'}}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{cv?.createur_id?.lastname | uppercase}} {{cv?.createur_id?.firstname | titlecase}}
+                    </td>
+                    <td class="text-center" style="min-width: 8rem;">
+                        <i class="pi pi-pencil mr-2"
+                            title="Modifier le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
+                            (click)="InitUpdateCV(cv)"></i>
+                        <i class="pi pi-file-pdf mr-2"
+                            title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
+                            (click)="InitExportPDF(cv)"></i>
+                        <i class="pi pi-book mr-2"
+                            title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
+                            style="color: green"></i>
+                        <i class="pi pi-briefcase" title="Voir les annonces postulés avec ce cv"
+                            (click)="seeAnnonce(cv)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5">Aucun cv trouvé.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="5">Chargement...</td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 
-    <div class="col-12 card" *ngIf="showFormAssignOffer">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-            (click)="showFormAssignOffer = false" aria-hidden="true"> </i>
-        <h3 class="text-center" style="font-weight: bold;">Assignation d'une offre </h3>
-
-        <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAssignOffer()">
-            <div class="field col-12">
-                <label>Annonces <span style="color: red;">*</span></label>
-                <p-dropdown [options]="annoncesList" emptyFilterMessage="Pas d'offre trouvé" filterPlaceholder="Annonce"
-                    filter="true" formControlName="offer"></p-dropdown>
-            </div>
-            <div>
-                <button pButton label="Assigner l'offre aux CVs" type="submit" [disabled]="AssignForm.invalid"></button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Table d'affichae de la cvthèque -->
-    <div class="col-12">
-        <div class="card">
-            <button pButton pRipple label="Ajouter un CV" icon="pi pi-plus" class="mr-2 mb-2"
-                (click)="showFormAddCV = true" style="float: right"></button>
-            <button pButton pRipple label="Assigner à une offre" icon="pi pi-plus" class="mr-2 mb-2"
-                *ngIf="selectedCVs.length!=0" (click)="showFormAssignOffer = true;initAssign()" style="float: right"></button>
-
-            <h5>Cv thèque Intedgroup</h5>
-            <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
-                styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedCVs"
-                [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
-                responsiveLayout="scroll">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <button pButton label="Vider les filtres" class="p-button-outlined mb-2"
-                            icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="typeList"
-                            (onChange)="dt1.filter($event.value, 'user_id.type', 'equals')"
-                            filterPlaceholder="Type"></p-dropdown>
-
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Nom &amp; Prénom
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Email
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Email perso
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Type
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Date de création
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Créateur du CV
-                            </div>
-                        </th>
-                        <th style="width: 8rem">
-                            <div class="flex justify-content-between align-items-center">
-                                Action
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-cv>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="cv"></p-tableCheckbox>
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.lastname | uppercase}} {{cv.user_id?.firstname | titlecase}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.email}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.email_perso}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.type}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv?.date_creation | date:'mediumDate'}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{cv?.createur_id?.lastname | uppercase}} {{cv?.createur_id?.firstname | titlecase}}
-                        </td>
-                        <td class="text-center" style="min-width: 8rem;">
-                            <i class="pi pi-pencil mr-2"
-                                title="Modifier le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                                (click)="InitUpdateCV(cv)"></i>
-                            <i class="pi pi-file-pdf mr-2"
-                                title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
-                                (click)="InitExportPDF(cv)"></i>
-                            <i class="pi pi-book mr-2"
-                                title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                                style="color: green"></i>
-                            <i class="pi pi-briefcase" title="Voir les annonces postulés avec ce cv"
-                                (click)="seeAnnonce(cv)"></i>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="5">Aucun cv trouvé.</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td colspan="5">Chargement...</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-
-    </div>
 </div>
+</div>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000"
+    *ngIf="!annonceSelected?.is_interne" [modal]="false">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+        annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span><br>
+        <span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <!--<h5 style="font-weight: bold">Outils</h5>
+<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+<ul>
+    <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+</ul>-->
+
+    <hr />
+</p-sidebar>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000"
+    *ngIf="annonceSelected?.is_interne" [modal]="false">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent
+        }} ({{ annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span><br>
+        <span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <!--<h5 style="font-weight: bold">Outils</h5>
+<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+<ul>
+    <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+</ul>-->
+
+    <hr />
+</p-sidebar>

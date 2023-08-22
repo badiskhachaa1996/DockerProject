@@ -962,6 +962,7 @@ export class ListeContratsComponent implements OnInit {
       t['Statut'] = p?.statut
       t['Dernière date de changement du statut'] = p?.last_status_change_date
       t['Formation'] = p?.formation?.titre_long
+      t['Entreprise'] = bufferEntreprise?.r_sociale
       t['OPCO'] = bufferEntreprise?.OPCO
       t['Ecole'] = bufferEcole?.libelle
       t['Date du contrat'] = p?.debut_contrat 

@@ -375,7 +375,7 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
 							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
@@ -417,7 +417,7 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
 							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
@@ -453,7 +453,7 @@
 									<i class="pi pi-tag mr-2"></i>
 									<span class="font-semibold">{{ annonce.missionType }}</span>
 								</div>
-								<span [class]="'sm:ml-2 product-badge'">{{ annonce.custom_id }}</span>
+								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY'}}</span>
 							</div>
 							<div class="text-center">
 
@@ -481,9 +481,9 @@
 							</div>
 							<div class="flex align-items-center justify-content-between">
 								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{
-									annonce.entreprise_name }}</span>
+									annonce.entreprise_name }}<br>{{ annonce.custom_id }}</span>
 								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{
-									annonce.entreprise_id?.r_sociale }}</span>
+									annonce.entreprise_id?.r_sociale }}<br>{{ annonce.custom_id }}</span>
 								<button pButton type="button"
 									(click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play"
 									title="Plus de détails"></button>
@@ -507,7 +507,7 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
 							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
@@ -549,7 +549,7 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
 							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
