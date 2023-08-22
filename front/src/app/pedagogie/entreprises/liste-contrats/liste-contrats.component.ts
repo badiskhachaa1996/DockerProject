@@ -963,6 +963,7 @@ export class ListeContratsComponent implements OnInit {
       t['Dernière date de changement du statut'] = p.last_status_change_date
       t['Formation'] = p.formation.titre_long
       t['OPCO'] = bufferEntreprise.OPCO
+      t['Entreprise'] = bufferEntreprise.r_sociale
       t['Ecole'] = bufferEcole.libelle
       t['Date du contrat'] = p.debut_contrat 
       t['Horaire'] = p.horaire

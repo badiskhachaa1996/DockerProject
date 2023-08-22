@@ -429,7 +429,7 @@ export class CvthequeComponent implements OnInit {
     this.AnnonceService.getAnnonces().then((annonces: Annonce[]) => {
       annonces.forEach(annonce => {
         if (annonce)
-          this.annoncesList.push({ label: annonce.missionName + ' de ' + annonce?.entreprise_name, value: annonce._id, annonce })
+          this.annoncesList.push({ label: '#' + annonce.custom_id + " " + annonce.missionName + ' de ' + annonce?.entreprise_name + " à " + annonce.source, value: annonce._id, annonce })
       })
     })
   }
@@ -440,7 +440,7 @@ export class CvthequeComponent implements OnInit {
 
   onAssignOffer() {
     this.selectedCVs.forEach((cv: any) => {
-      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En Cours", "Winner", new Date())).subscribe(match => {
+      this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En Cours", "Etudiant", new Date())).subscribe(match => {
         this.messageService.add({ severity: 'success', summary: "Création du Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname })
       }, error => {
         this.messageService.add({ severity: 'error', summary: "Error sur le Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname, detail: error.toString() })
@@ -449,5 +449,11 @@ export class CvthequeComponent implements OnInit {
     this.AssignForm.reset()
     this.selectedCVs = []
     this.showFormAssignOffer = false
+  }
+  visibleSidebar = false
+  annonceSelected;
+  seeOffre(offer_id) {
+    this.visibleSidebar = true;
+    this.annonceSelected = offer_id;
   }
 }
