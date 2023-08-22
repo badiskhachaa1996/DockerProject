@@ -392,9 +392,11 @@ export class AnnoncesComponent implements OnInit {
     let label = profilLabel.replace(/[^A-Z]+/g, "");
     if (label == '')
       label = "UNK"
-    let cont = "OS"
+    let cont = "OC"
     if (contrat == "Alternance")
       cont = "OA"
+    else if (contrat == "Stage")
+      cont = "OS"
     let random = Math.random().toString(36).substring(5).toUpperCase();
     return label + cont + random
   }
