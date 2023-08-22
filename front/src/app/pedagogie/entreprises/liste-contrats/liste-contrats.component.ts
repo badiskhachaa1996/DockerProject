@@ -951,24 +951,24 @@ export class ListeContratsComponent implements OnInit {
   
     this.ListeContrats.forEach(p => {
       let t = {}
-      let buffer: any = p.alternant_id;
-      let bufferEcole: any = p.ecole
-      let bufferEntreprise: any = p.entreprise_id
-      let bufferCommercial: any = p.code_commercial
-      let bufferTuteur: any = p.tuteur_id
-      let bufferDirecteur: any = p.directeur_id
-      t['Nom'] = buffer.user_id?.lastname 
-      t['Prenom'] = buffer.user_id?.firstname
+      let buffer: any = p?.alternant_id;
+      let bufferEcole: any = p?.ecole
+      let bufferEntreprise: any = p?.entreprise_id
+      let bufferCommercial: any = p?.code_commercial
+      let bufferTuteur: any = p?.tuteur_id
+      let bufferDirecteur: any = p?.directeur_id
+      t['Nom'] = buffer?.user_id?.lastname 
+      t['Prenom'] = buffer?.user_id?.firstname
       t['Statut'] = p?.statut
       t['Dernière date de changement du statut'] = p?.last_status_change_date
-      t['Formation'] = p.formation?.titre_long
+      t['Formation'] = p?.formation?.titre_long
       t['OPCO'] = bufferEntreprise?.OPCO
       t['Ecole'] = bufferEcole?.libelle
       t['Date du contrat'] = p?.debut_contrat 
       t['Horaire'] = p?.horaire
       t['Niveau de la formation'] = p?.niveau_formation
       t['Groupe'] = p?.formation
-      t['Commercial'] = bufferCommercial?.firstname, bufferCommercial.lastname
+      t['Commercial'] = bufferCommercial?.firstname, bufferCommercial?.lastname
       t['Tuteur'] = bufferTuteur?.firstname 
       if (bufferTuteur == null && bufferDirecteur !== null) {
       t['Tuteur'] = bufferDirecteur?.firstname + " " + bufferDirecteur?.lastname
