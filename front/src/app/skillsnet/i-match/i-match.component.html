@@ -39,7 +39,7 @@
         </div>
         <div>
             <label for="stacked">Compétences</label><br>
-            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences"
+            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences" [virtualScroll]="true" itemSize="30"
                 display="chip" (onChange)="updateFilter()"></p-multiSelect>
         </div>
         <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
