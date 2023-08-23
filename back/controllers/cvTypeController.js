@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
 const { CvType } = require("./../models/CvType");
-const path = require('path');
 
-const fs = require("fs")
 const multer = require('multer');
+const fs = require("fs")
+var mime = require('mime-types')
+const path = require('path');
 
 app.disable("x-powered-by");
 
@@ -88,5 +89,55 @@ app.get("/get-cv-by-user_id/:id", (req, res) => {
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });
+
+const uploadLogo = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, callBack) => {
+            if (!fs.existsSync('storage/cvPicture/' + req.body.id + '/')) {
+                fs.mkdirSync('storage/cvPicture/' + req.body.id + '/', { recursive: true })
+            }
+            let filenames = fs.readdirSync('storage/cvPicture/' + req.body.id + '/')
+            if (filenames && filenames[0])
+                fs.unlinkSync('storage/cvPicture/' + req.body.id + '/' + filenames[0])
+            callBack(null, 'storage/cvPicture/' + req.body.id + '/')
+        },
+        filename: (req, file, callBack) => {
+            callBack(null, `${file.originalname}`)
+        }
+    }), limits: { fileSize: 20000000 }
+})
+
+app.post('/uploadPicture', uploadLogo.single('file'), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        console.error(error)
+        res.status(400).send(error)
+    } else {
+        CvType.findByIdAndUpdate(req.body.id, { picture: req?.file?.originalname }).then(() => {
+            res.status(201).json({ message: req?.file?.originalname });
+        })
+
+    }
+})
+
+app.get('/getAllPicture', (req, res) => {
+    let ids = fs.readdirSync("storage/cvPicture")
+    let fileDic = {}
+    ids.forEach(id => {
+        console.log(id)
+        let filenames = fs.readdirSync("storage/cvPicture/" + id)
+        if (filenames)
+            fileDic[id] = {
+                file: fs.readFileSync("storage/cvPicture/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                    if (err) return console.error(err);
+                }),
+                extension: mime.contentType(path.extname("storage/cvPicture/" + id + "/" + filenames[0])),
+                url: ""
+            }
+    })
+    res.status(200).send({ files: fileDic, ids })
+})
 
 module.exports = app;

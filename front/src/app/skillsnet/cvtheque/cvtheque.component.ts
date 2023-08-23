@@ -92,6 +92,7 @@ export class CvthequeComponent implements OnInit {
 
   ecoles = []
   groupes = []
+  commercials = []
 
   @ViewChild('filter') filter: ElementRef;
 
@@ -110,6 +111,12 @@ export class CvthequeComponent implements OnInit {
     // initialisation de la methode de recuperation des données
     this.onGetAllClasses();
 
+    this.userService.getAllCommercialV2().subscribe(users => {
+      users.forEach(user => {
+        this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id })
+      })
+    })
+
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
       user_id: ['', Validators.required],
@@ -122,7 +129,8 @@ export class CvthequeComponent implements OnInit {
       centre_interets: [''],
       a_propos: [''],
       disponibilite: [''],
-      user_create_type: ['Externe']
+      user_create_type: ['Externe'],
+      winner_id: [''],
     });
 
     this.EcoleService.getAll().subscribe(ecoles => {
@@ -292,7 +300,7 @@ export class CvthequeComponent implements OnInit {
 
   showUpdateCV: CV
   formUpdateCV: FormGroup
-
+  canEditWinner = false
   InitUpdateCV(cv) {
     this.formUpdateCV = this.formBuilder.group({
       competences: [],
@@ -304,9 +312,11 @@ export class CvthequeComponent implements OnInit {
       centre_interets: [''],
       a_propos: [''],
       disponibilite: [''],
+      winner_id: [''],
     });
     this.showUpdateCV = cv
-
+    if (this.token.role != "Agent" && this.token.role != "user")
+      this.canEditWinner = true
     let cv_competences = [];
     cv.competences?.forEach(cpt => {
       this.competencesList.forEach(c => {
@@ -455,5 +465,38 @@ export class CvthequeComponent implements OnInit {
   seeOffre(offer_id) {
     this.visibleSidebar = true;
     this.annonceSelected = offer_id;
+  }
+
+  selectedPicture: CV
+
+  updatePicture(cv: CV) {
+    document.getElementById('selectedFile').click();
+    this.selectedPicture = cv
+  }
+
+  FileUploadPC(event: any) {
+    if (event && event.target.files.length > 0 && this.selectedPicture) {
+      const formData = new FormData();
+      //let file: File = event.target.files[0]
+      formData.append('id', this.selectedPicture._id)
+      formData.append('file', event.target.files[0])
+      this.cvService.uploadPicture(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Logo', detail: 'Mise à jour de l\'image avec succès' });
+        /*this.SMService.BgetAllLogo().subscribe(data => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onloadend = () => {
+            if (this.dicLogo[this.logoBrand._id])
+              this.dicLogo[this.logoBrand._id].url = reader.result;
+            else {
+              this.dicLogo[this.logoBrand._id] = {}
+              this.dicLogo[this.logoBrand._id].url = reader.result;
+            }
+          }
+        })*/
+      }, (error) => {
+        console.error(error)
+      })
+    }
   }
 }

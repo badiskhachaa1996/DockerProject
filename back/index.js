@@ -201,6 +201,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/user/getByEmail") ||
       req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") ||
       req.originalUrl == "/soc/etudiant/getAllAlternants" ||
+      req.originalUrl == "/soc/etudiant/getAll" ||
       req.originalUrl == "/soc/diplome/getAll" ||
       req.originalUrl == "/soc/entreprise/createNewContrat" ||
       req.originalUrl == "/soc/classe/getAll" ||
@@ -223,6 +224,9 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
+      req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl === '/soc/extSkillsnet/getAll' ||
+      req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
         req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
