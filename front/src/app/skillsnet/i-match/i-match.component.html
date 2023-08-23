@@ -1,20 +1,8 @@
 <div class="imatch-main-page">
     <div class="container header-top">
-        <div class="header-imatch">
-            <div class="col text-header">
-                <h1>iMatch : Votre bibiliothéque d’apprentis en rechercher d’alternance</h1>
-                <p>✓ Recruter un(e) alternant(e) en développement web, webdesign, webmarketing, data, IA... grâce à
-                    notre CVthèque.</p>
-                <p>✓ Vous pouvez filtrer en fonction de plusieurs catégories : profil, âge, lieu et compétences ou
-                    skills.</p>
-                <p>✓ N'hésitez pas à contacter nos élèves par téléphone ou par mail, afin de leur proposer un échange
-                    téléphonique, ou pour les rencontrer.</p>
-                <a target="_blank" href="#">En savoir plus</a>
-            </div>
-            <div class="col"><img src="../../../assets/images/imatch/top-image.png"></div>
-        </div>
+        <img src="../../../assets/images/imatch/header-imatch.png">
     </div>
-    <div class="container">
+    <div class="container" style="text-align: center;">
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
     </div>
 
@@ -39,8 +27,8 @@
         </div>
         <div>
             <label for="stacked">Compétences</label><br>
-            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences" [virtualScroll]="true" itemSize="30"
-                display="chip" (onChange)="updateFilter()"></p-multiSelect>
+            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences"
+                [virtualScroll]="true" itemSize="30" display="chip" (onChange)="updateFilter()"></p-multiSelect>
         </div>
         <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
             pTooltip="Supprimer les filtres" tooltipPosition="bottom"></button>
@@ -72,9 +60,9 @@
                     </div>
                 </div>
                 <div class="card-competences">
-                    <p *ngIf="cv.competences.length!=null">{{cv.competences[0].libelle}}</p>
-                    <p *ngIf="cv.competences.length>1">{{cv.competences[1].libelle}}</p>
-                    <p *ngIf="cv.competences.length>2">{{cv.competences[2].libelle}}</p>
+                    <p *ngIf="cv.competences.length!=null">{{cv.competences[0]?.libelle}}</p>
+                    <p *ngIf="cv.competences.length>1">{{cv.competences[1]?.libelle}}</p>
+                    <p *ngIf="cv.competences.length>2">{{cv.competences[2]?.libelle}}</p>
                 </div>
             </div>
             <div class="card-footer">
