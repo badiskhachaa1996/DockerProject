@@ -241,6 +241,7 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -511,7 +512,8 @@ const routes: Routes = [
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
-    { path: 'document-authentification', component: DocCheckerComponent }
+    { path: 'document-authentification', component: DocCheckerComponent },
+    { path: 'cvtheque-externe', component: IMatchComponent }
 
 ]
 

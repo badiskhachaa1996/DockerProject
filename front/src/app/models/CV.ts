@@ -76,5 +76,7 @@ export class CV {
         public a_propos?: string,
         public disponibilite?: Date,
         public createur_id?: User,
+        public winner_id?: User,
+        public picture?: string
     ) { }
 }

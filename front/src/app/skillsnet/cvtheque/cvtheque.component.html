@@ -1,4 +1,6 @@
 <p-toast></p-toast>
+<input type="file" (change)="FileUploadPC($event)" id="selectedFile" #selectedFile accept=".jpg,.png,.jpeg"
+    style="display: none;" pInputFile />
 <div class="grid">
     <div class="col-12" *ngIf="showPDF">
 
@@ -170,7 +172,13 @@
                         [style]="{'width':'100%'}"></p-calendar>
                 </div>
 
-
+                <div class="field col-12">
+                    <label>Winner lié à ce CV:</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
+                        formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
+                        filterPlaceholder="Recherche"></p-dropdown>
+                </div>
 
             </form>
             <div class="field col-12">
@@ -664,6 +672,14 @@
                     <label>Disponibilité</label>
                     <p-calendar formControlName="disponibilite" autoWidth="false"
                         [style]="{'width':'100%'}"></p-calendar>
+                </div>
+
+                <div class="field col-12" *ngIf="canEditWinner || formUpdateCV.value.winner_id == null">
+                    <label>Winner lié à ce CV:</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
+                        formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
+                        filterPlaceholder="Recherche"></p-dropdown>
                 </div>
             </form>
             <div class="field col-12">
@@ -1247,9 +1263,10 @@
                         <i class="pi pi-file-pdf mr-2"
                             title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
                             (click)="InitExportPDF(cv)"></i>
-                        <i class="pi pi-book mr-2"
+                        <!--<i class="pi pi-book mr-2"
                             title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                            style="color: green"></i>
+                            style="color: green"></i>-->
+                        <i class="pi pi-image mr-2" title="Modifier l'image" (click)="updatePicture(cv)"></i>
                         <i class="pi pi-briefcase" title="Voir les annonces postulés avec ce cv"
                             (click)="seeAnnonce(cv)"></i>
                     </td>

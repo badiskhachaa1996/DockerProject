@@ -104,4 +104,14 @@ export class CvService {
     }
     return result;
   }
+
+  uploadPicture(formData: FormData) {
+    let url = this.apiUrl + "/uploadPicture"
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllPicture() {
+    let url = this.apiUrl + "/getAllPicture"
+    return this.httpClient.get<{ files: {}, ids: string[] }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }

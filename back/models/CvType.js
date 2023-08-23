@@ -77,13 +77,14 @@ const cvTypeSchema = mongoose.Schema({
         }], required: false
     },
     mobilite_lieu: { type: String, required: false },
-    mobilite_autre: { type: String, required: false },
+    mobilite_autre: { type: String, required: false, default: "France" },
     date_creation: { type: Date, default: Date.now },
     centre_interets: { type: String, required: false },
     a_propos: { type: String, required: false },
-    disponibilite: { type: Date, required: false },
+    disponibilite: { type: Date, required: false, default: Date.now },
     createur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
-
+    winner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false }, //Commercial ()
+    picture: { type: String, required: false },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

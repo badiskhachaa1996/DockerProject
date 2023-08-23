@@ -1,0 +1,65 @@
+<div class="imatch-main-page">
+    <div class="container header-top">
+        <div class="header-imatch">
+            <div class="col text-header">
+                <h1>iMatch : Votre bibiliothéque d’apprentis en rechercher d’alternance</h1>
+                <p>✓ Recruter un(e) alternant(e) en développement web, webdesign, webmarketing, data, IA... grâce à
+                    notre CVthèque.</p>
+                <p>✓ Vous pouvez filtrer en fonction de plusieurs catégories : profil, âge, lieu et compétences ou
+                    skills.</p>
+                <p>✓ N'hésitez pas à contacter nos élèves par téléphone ou par mail, afin de leur proposer un échange
+                    téléphonique, ou pour les rencontrer.</p>
+                <a target="_blank" href="#">En savoir plus</a>
+            </div>
+            <div class="col"><img src="../../../assets/images/imatch/top-image.png"></div>
+        </div>
+    </div>
+    <div class="container">
+        <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
+    </div>
+    <span class="p-input-icon-left mb-2">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
+            placeholder="Recherche" class="w-full" />
+    </span>
+    <div>Filtres</div>
+    <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
+        pTooltip="Supprimer les filtres" tooltipPosition="bottom"></button>
+
+    <div class="container cv-list">
+        <div class="card" *ngFor="let cv of filteredCVS">
+            <div class="card-main">
+                <div class="card-information">
+                    <img *ngIf="dicPicture && dicPicture[cv._id]?.url" src="{{dicPicture[cv._id].url}}"
+                        style="max-width: 160px;max-height: 160px;" />
+                    <img *ngIf="!dicPicture || !dicPicture[cv._id]?.url" src="../../../assets/images/imatch/student.png"
+                        style="max-width: 160px;max-height: 160px;" />
+                    <div class="card-details">
+                        <div class="card-main-info">
+                            <div class="card-title">
+                                <h3>{{cv.user_id.firstname}}</h3>
+                                <h3>{{cv.user_id.lastname}}</h3>
+                            </div>
+                            <div class="card-age">{{calculateAge(cv.user_id._id)}}</div>
+                        </div>
+                        <div class="card-main-data">
+                            <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
+                            <p *ngIf='!cv.mobilite_lieu'>📍 {{cv.mobilite_autre}}</p>
+                            <p>⏱ {{cv.disponibilite}}</p>
+                            <p *ngIf="calculateAge(cv.user_id._id)>25">💸 Eligible à la prime de 6000€</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-competences">
+                    <p *ngIf="cv.competences.length!=null">{{cv.competences[0].libelle}}</p>
+                    <p *ngIf="cv.competences.length>1">{{cv.competences[1].libelle}}</p>
+                    <p *ngIf="cv.competences.length>2">{{cv.competences[2].libelle}}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="cv" href="#">Consulter le CV</a>
+                <a class="meeting" href="#">Prendez un rendez-vous</a>
+            </div>
+        </div>
+    </div>
+</div>

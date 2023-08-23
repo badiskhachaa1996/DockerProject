@@ -346,6 +346,8 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 
 @NgModule({
   imports: [
@@ -700,7 +702,9 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
     ConfigurationTargetComponent,
     DashboardTargetComponent,
     DocCheckerComponent,
-    LeadCandidatureComponent
+    LeadCandidatureComponent,
+    ConfigurationPointeuseComponent,
+    IMatchComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
