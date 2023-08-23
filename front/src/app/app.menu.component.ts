@@ -1012,6 +1012,16 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/mails/auto']
                                 },
                             ]
+                        }, {
+                            label: "Pointeuse",
+                            icon: 'pi pi-server',
+                            items: [
+                                {
+                                    label: "Configuration",
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/pointeuse/configuration']
+                                }
+                            ]
                         }
                     ];
                 }
