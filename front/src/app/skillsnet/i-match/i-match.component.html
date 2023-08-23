@@ -67,8 +67,9 @@
                         <div class="card-main-data">
                             <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
                             <p *ngIf='!cv.mobilite_lieu'>📍 {{cv.mobilite_autre}}</p>
-                            <p>⏱ {{cv.disponibilite}}</p>
-                            <p *ngIf="calculateAge(cv.user_id._id)>25">💸 Eligible à la prime de 6000€</p>
+                            <p *ngIf="disponible(cv.disponibilite)">⏱ {{cv.disponibilite | date : 'MMMM YYYY'}}</p>
+                            <p *ngIf="!disponible(cv.disponibilite)">⏱ Disponible Immédiatement</p>
+                            <p *ngIf="calculatePrime(cv.user_id._id)<30">💸 Eligible à la prime de 6000€</p>
                         </div>
                     </div>
                 </div>
@@ -79,7 +80,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a class="cv" href="#">Consulter le CV</a>
+                <a class="cv" (click)="onClickCV(cv)">Consulter le CV</a>
                 <a class="meeting" href="#">Prendez un rendez-vous</a>
             </div>
         </div>

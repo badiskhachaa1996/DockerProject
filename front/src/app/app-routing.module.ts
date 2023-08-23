@@ -346,8 +346,8 @@ const routes: Routes = [
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
@@ -515,7 +515,7 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-    { path: 'cvtheque-externe', component: IMatchComponent }
+    { path: 'cvtheque', component: IMatchComponent }
 
 ]
 

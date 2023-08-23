@@ -38,6 +38,23 @@ app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
     res.status(200).send('file');
 });
 
+app.get("/download-cv/:id", uploadCV.single('file'), (req, res, next) => {
+    let filePath = path.join('storage', 'cv', req.params.id.toString(), 'cv.pdf')
+    let fileExtention = 'pdf';
+
+    try {
+        let file = fs.readFileSync(filePath, { encoding: 'base64' }, (error) => {
+            if (error) {
+                res.status(400).json({ error: error });
+            }
+        });
+
+        res.status(200).json({ file: file, extension: fileExtention });
+    } catch (e) {
+        res.status(200).json({ error: e })
+    }
+});
+
 // ajout de CV
 app.post("/post-cv", (req, res) => {
     const cv = new CvType({ ...req.body, date_creation: new Date() });

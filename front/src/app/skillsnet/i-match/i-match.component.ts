@@ -9,7 +9,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
-
+import { saveAs as importedSaveAs } from "file-saver";
 @Component({
   selector: 'app-i-match',
   templateUrl: './i-match.component.html',
@@ -95,6 +95,29 @@ export class IMatchComponent implements OnInit {
     return `${age} ans`
   }
 
+  calculatePrime(user_id: string) {
+    let date_naissance = new Date(2000, 1, 1)
+    if (this.externes[user_id] && this.externes[user_id].date_naissance)
+      date_naissance = this.externes[user_id].date_naissance
+    else if (this.etudiants[user_id] && this.etudiants[user_id].date_naissance)
+      date_naissance = this.etudiants[user_id].date_naissance
+    else
+      return 9999
+    var dob = new Date(date_naissance);
+    //calculate month difference from current date in time  
+    var month_diff = Date.now() - dob.getTime();
+
+    //convert the calculated difference in date format  
+    var age_dt = new Date(month_diff);
+
+    //extract year from date      
+    var year = age_dt.getUTCFullYear();
+
+    //now calculate the age of the user  
+    var age = Math.abs(year - 1970);
+    return age
+  }
+
   researchValue = ""
   Age = null
   rangeDates = []
@@ -161,6 +184,20 @@ export class IMatchComponent implements OnInit {
     this.Age = null
     this.rangeDates = []
     this.selectedSkills = []
+  }
+
+  disponible(d: Date) {
+    return d <= new Date()
+  }
+
+  onClickCV(cv: CV) {
+    this.CVService.downloadCV(cv._id).then((data: any) => {
+      console.log(data)
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), 'cv.pdf')
+    })
   }
 
 }
