@@ -5,33 +5,46 @@
     <div class="container" style="text-align: center;">
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
     </div>
+    <div class="container">
+        <span class="p-input-icon-left" style="width: 100%;">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
+                placeholder="Ex: John" class="w-full" />
+        </span>
+    </div>
+    <div class="grid container">
 
-    <div class="grid">
-        <div>
-            <label for="range">Recherche</label><br>
-            <span class="p-input-icon-left">
-                <i class="pi pi-search"></i>
-                <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
-                    placeholder="Ex: John" class="w-full" />
-            </span>
-        </div>
-        <div class="field col-12 md:col-4">
+        <div class="field col-12 md:col-3">
             <label for="range">Disponibilité</label><br>
             <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
-                (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range"></p-calendar>
+                (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+                [style]="{'width':'100%'}"></p-calendar>
         </div>
-        <div class="field col-12 md:col-3">
+        <div class="field col-12 md:col-2">
             <label for="stacked">Age</label><br>
-            <p-inputNumber [(ngModel)]="Age" [showButtons]="true" inputId="stacked" (onBlur)="updateFilter()">
+            <p-inputNumber [(ngModel)]="Age" [showButtons]="true" inputId="stacked" (onBlur)="updateFilter()"
+                autoWidth="false" [style]="{'width':'100%'}">
             </p-inputNumber>
         </div>
-        <div>
+        <div class="field col-12 md:col-3">
             <label for="stacked">Compétences</label><br>
             <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences"
-                [virtualScroll]="true" itemSize="30" display="chip" (onChange)="updateFilter()"></p-multiSelect>
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
+                (onChange)="updateFilter()"></p-multiSelect>
         </div>
-        <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
-            pTooltip="Supprimer les filtres" tooltipPosition="bottom"></button>
+        <div class="field col-12 md:col-3">
+            <label for="stacked">Profil</label><br>
+            <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Choississez un profil"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
+                (onChange)="updateFilter()"></p-multiSelect>
+        </div>
+        <div class="field col-12 md:col-1">
+            <label for="stacked">&nbsp;</label><br>
+            <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
+                autoWidth="false" [style]="{'width':'100%'}" pTooltip="Supprimer les filtres"
+                tooltipPosition="bottom"></button>
+        </div>
+
     </div>
 
 
