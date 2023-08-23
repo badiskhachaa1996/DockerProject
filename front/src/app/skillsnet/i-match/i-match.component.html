@@ -17,14 +17,35 @@
     <div class="container">
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
     </div>
-    <span class="p-input-icon-left mb-2">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
-            placeholder="Recherche" class="w-full" />
-    </span>
-    <div>Filtres</div>
-    <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
-        pTooltip="Supprimer les filtres" tooltipPosition="bottom"></button>
+
+    <div class="grid">
+        <div>
+            <label for="range">Recherche</label><br>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
+                    placeholder="Ex: John" class="w-full" />
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label for="range">Disponibilité</label><br>
+            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
+                (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range"></p-calendar>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label for="stacked">Age</label><br>
+            <p-inputNumber [(ngModel)]="Age" [showButtons]="true" inputId="stacked" (onBlur)="updateFilter()">
+            </p-inputNumber>
+        </div>
+        <div>
+            <label for="stacked">Compétences</label><br>
+            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences" [virtualScroll]="true" itemSize="30"
+                display="chip" (onChange)="updateFilter()"></p-multiSelect>
+        </div>
+        <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
+            pTooltip="Supprimer les filtres" tooltipPosition="bottom"></button>
+    </div>
+
 
     <div class="container cv-list">
         <div class="card" *ngFor="let cv of filteredCVS">
