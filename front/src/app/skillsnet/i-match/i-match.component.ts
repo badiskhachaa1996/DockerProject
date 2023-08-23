@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CV } from 'src/app/models/CV';
+import { Competence } from 'src/app/models/Competence';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { ExterneSkillsnet } from 'src/app/models/ExterneSkillsnet';
 import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
+import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 
 @Component({
   selector: 'app-i-match',
@@ -19,8 +21,10 @@ export class IMatchComponent implements OnInit {
   etudiants = {}
   externes = {}
   dicPicture = {}
+  skills = []
 
-  constructor(private CVService: CvService, private EtudiantService: EtudiantService, private ExterneService: ExterneSNService) { }
+  constructor(private CVService: CvService, private EtudiantService: EtudiantService,
+    private ExterneService: ExterneSNService, private SkillService: SkillsService) { }
 
   ngOnInit(): void {
     this.CVService.getCvs().then((cvs: CV[]) => {
@@ -54,6 +58,11 @@ export class IMatchComponent implements OnInit {
         }
       })
     })
+    this.SkillService.getCompetences().then((competences: Competence[]) => {
+      competences.forEach(competence => {
+        this.skills.push({ label: competence.libelle, value: competence.libelle })
+      })
+    })
   }
 
   calculateAge(user_id: string) {
@@ -80,20 +89,58 @@ export class IMatchComponent implements OnInit {
   }
 
   researchValue = ""
+  Age = null
+  rangeDates = []
+  selectedSkills = []
 
   updateFilter() {
+    console.log(this.Age)
     this.filteredCVS = []
     this.cvs.forEach((cv: CV) => {
       let bufferUser: any = cv.user_id
       let user_id: User = bufferUser
       if (user_id && (user_id.lastname.toLowerCase().includes(this.researchValue.toLowerCase()) || user_id.firstname.toLowerCase().includes(this.researchValue.toLowerCase())))
         this.filteredCVS.push(cv)
+      else if (cv.mobilite_autre && cv.mobilite_autre.toLowerCase().includes(this.researchValue.toLowerCase())) {
+        this.filteredCVS.push(cv)
+      } else if (cv.mobilite_lieu && cv.mobilite_lieu.toLowerCase().includes(this.researchValue.toLowerCase())) {
+        this.filteredCVS.push(cv)
+      }
     })
+    let newFiltered = []
+    this.filteredCVS.forEach((cv: CV) => {
+      let bufferUser: any = cv.user_id
+      let user_id: User = bufferUser
+      let added = true
+      console.log(this.Age)
+      if (this.Age != null && this.Age && this.Age.toString() != "0")
+        if (!(user_id && `${this.Age} ans` == this.calculateAge(user_id._id)))
+          added = false; console.log('Age ISSUE', `${this.Age} ans`, this.calculateAge(user_id._id))
+      if (this.rangeDates.length == 2 && this.rangeDates[0] != new Date(1980))
+        if (!(this.rangeDates[0] < new Date(cv.disponibilite) && new Date(cv.disponibilite) < this.rangeDates[1]))
+          added = false; console.log('Date ISSUE', this.rangeDates, new Date(cv.disponibilite))
+      if (this.selectedSkills.length != 0) {
+        let tempSkill = []
+        cv.competences.forEach((skill: any) => {
+          tempSkill.push(skill.libelle)
+        })
+        if (!(this.selectedSkills.every(elem => tempSkill.includes(elem))))
+          added = false; console.log('SKILLS ISSUE')
+      }
+
+      if (added)
+        newFiltered.push(cv)
+
+    })
+    this.filteredCVS = newFiltered
   }
 
   clearFilter() {
     this.filteredCVS = this.cvs
     this.researchValue = ""
+    this.Age = null
+    this.rangeDates = []
+    this.selectedSkills = []
   }
 
 }
