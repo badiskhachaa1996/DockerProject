@@ -242,6 +242,7 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -474,6 +475,7 @@ const routes: Routes = [
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
+            { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] }
 
         ],
     },

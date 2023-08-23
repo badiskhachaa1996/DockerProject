@@ -3,6 +3,7 @@ import { CV } from 'src/app/models/CV';
 import { Competence } from 'src/app/models/Competence';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { ExterneSkillsnet } from 'src/app/models/ExterneSkillsnet';
+import { Profile } from 'src/app/models/Profile';
 import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
@@ -22,6 +23,7 @@ export class IMatchComponent implements OnInit {
   externes = {}
   dicPicture = {}
   skills = []
+  profiles = []
 
   constructor(private CVService: CvService, private EtudiantService: EtudiantService,
     private ExterneService: ExterneSNService, private SkillService: SkillsService) { }
@@ -63,6 +65,11 @@ export class IMatchComponent implements OnInit {
         this.skills.push({ label: competence.libelle, value: competence.libelle })
       })
     })
+    this.SkillService.getProfiles().then((profiles: Profile[]) => {
+      profiles.forEach(profil => {
+        this.profiles.push({ label: profil.libelle, value: profil._id })
+      })
+    })
   }
 
   calculateAge(user_id: string) {
@@ -92,6 +99,7 @@ export class IMatchComponent implements OnInit {
   Age = null
   rangeDates = []
   selectedSkills = []
+  selectedProfiles = []
 
   updateFilter() {
     console.log(this.Age)
@@ -126,6 +134,18 @@ export class IMatchComponent implements OnInit {
         })
         if (!(this.selectedSkills.every(elem => tempSkill.includes(elem))))
           added = false; console.log('SKILLS ISSUE')
+      }
+      if (this.selectedProfiles.length != 0) {
+        let bufferProfil: any = cv.competences[0]
+        let profil: Profile = bufferProfil.profile_id
+        let temp = false
+        console.log(this.selectedProfiles, cv.competences[0])
+        this.selectedProfiles.forEach(p => {
+          if (profil == p)
+            temp = true
+        })
+        if (!temp)
+          added = false
       }
 
       if (added)
