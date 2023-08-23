@@ -66,6 +66,11 @@
             <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text" placeholder="rue du louvre" />
         </div>
 
+        <div class="field col-12">
+            <label>Date de naissance</label>
+            <p-calendar formControlName="date_naissance" autoWidth="false" [style]="{'width':'100%'}"></p-calendar>
+        </div>
+
         <div>
             <button pButton type="submit" label="Ajouter l'externe"
                 [disabled]="formAddExterne.invalid || emailExist"></button>

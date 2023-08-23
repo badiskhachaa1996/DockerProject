@@ -85,7 +85,7 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<div class="field col-12">
+					<!--<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
 						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
 							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
@@ -106,7 +106,7 @@
 								</div>
 							</ng-template>
 						</p-multiSelect>
-					</div>
+					</div>-->
 					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label"
 							formControlName="workplaceType"></p-selectButton>
@@ -222,7 +222,7 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<div class="field col-12">
+					<!--<div class="field col-12">
 						<label htmlFor="outils">Outils</label>
 						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
 							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
@@ -243,7 +243,7 @@
 								</div>
 							</ng-template>
 						</p-multiSelect>
-					</div>
+					</div>-->
 					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label"
 							formControlName="workplaceType"></p-selectButton>
@@ -287,23 +287,29 @@
 				<button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
 					*ngIf="canAddOrEdit"></button>
 			</div>
-			
+
 			<div *ngIf="token.role == 'Watcher'">
 				<button disabled pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2"
 					(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
-				<button disabled pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
-					*ngIf="canAddOrEdit"></button>
+				<button disabled pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2"
+					style="float: right" *ngIf="canAddOrEdit"></button>
 			</div>
 
 			<h3>Offres</h3>
 
-			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName" layout="grid">
+			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName,custom_id,source"
+				layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<span class="p-input-icon-left mb-2 md:mb-0">
 							<i class="pi pi-search"></i>
 							<input type="search" pInputText placeholder="Filtrer par poste"
 								(input)="dv.filter($event.target.value)">
+						</span>
+						<span class="p-input-icon-left mb-2 md:mb-0">
+							<i class="pi pi-search"></i>
+							<input type="search" pInputText placeholder="Filtrer par source"
+								(input)="dv.filter($event.target.value, 'contains')">
 						</span>
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
@@ -369,7 +375,8 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
+							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
@@ -378,11 +385,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
@@ -410,7 +417,8 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
+							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
@@ -419,11 +427,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
@@ -445,7 +453,7 @@
 									<i class="pi pi-tag mr-2"></i>
 									<span class="font-semibold">{{ annonce.missionType }}</span>
 								</div>
-								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY' }}</span>
+								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY'}}</span>
 							</div>
 							<div class="text-center">
 
@@ -466,15 +474,16 @@
 									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
 
 								<div class="text-2xl font-bold">{{ annonce.missionName | slice: 0:20 }}</div>
-								<div class="mb-3">{{ annonce.missionDesc | slice: 0:20 }}...</div>
+								<div>{{ annonce.missionDesc | slice: 0:20 }}...</div>
+								<div class="mb-3">{{ annonce.debut | date: 'dd/MM/YY' }}</div>
 								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
 								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
 								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{
-									annonce.entreprise_name }}</span>
+									annonce.entreprise_name }}<br>{{ annonce.custom_id }}</span>
 								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{
-									annonce.entreprise_id?.r_sociale }}</span>
+									annonce.entreprise_id?.r_sociale }}<br>{{ annonce.custom_id }}</span>
 								<button pButton type="button"
 									(click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play"
 									title="Plus de détails"></button>
@@ -498,7 +507,8 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
+							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
@@ -507,11 +517,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
@@ -539,7 +549,8 @@
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
 								annonceSelected?.missionType }}</span> <br />
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
-								}}</span>
+								}}</span><br>
+							<span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
 						</p>
 
 						<h5 style="font-weight: bold">Compétences</h5>
@@ -548,11 +559,11 @@
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
-						<h5 style="font-weight: bold">Outils</h5>
+						<!--<h5 style="font-weight: bold">Outils</h5>
 						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
 						<ul>
 							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
-						</ul>
+						</ul>-->
 
 						<hr />
 						<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"

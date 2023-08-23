@@ -11,15 +11,39 @@
 
             <h4 style="text-align: center;">Nouveau CV</h4>
 
-            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCV" (ngSubmit)="onAddCV()">
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCV">
                 <div class="field col-12">
                     <label for="user">A qui appartient ce CV ?</label>
-                    <p-dropdown [options]="dropdownUser" placeholder="Selectionner un utilisateur" [showClear]="true"
+                    <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="user_create_type"
+                        optionValue="value" optionLabel="label"
+                        [options]="[{label:'Externe',value:'Externe'},{label:'Interne',value:'Interne'}]"></p-selectButton>
+                    <!-- Rajouter filter Ecole et Spécialité -->
+                </div>
+                <div class="field col-12" *ngIf="formAddCV.value.user_create_type=='Externe'">
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        [options]="dropdownUserExterne" placeholder="Selectionner un externe" [showClear]="true"
                         formControlName="user_id" filter="true" emptyFilterMessage="Aucun utilisateur trouvé"
                         filterPlaceholder="Recherche"></p-dropdown>
                 </div>
+                <div class="field col-12 grid" *ngIf="formAddCV.value.user_create_type=='Interne'">
+                    <p-dropdown autoWidth="false" class="col-6 mb-4" [style]="{'width':'100%'}" [options]="ecoles"
+                        [virtualScroll]="true" itemSize="30" placeholder="Selectionner une école" [showClear]="true"
+                        filter="true" emptyFilterMessage="Aucun école trouvé" (onChange)="onSelectEcole($event.value)"
+                        filterPlaceholder="Recherche"></p-dropdown>
 
-                <div formArrayName="experiences_pro">
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="groupes"
+                        [virtualScroll]="true" itemSize="30" placeholder="Selectionner un groupe" [showClear]="true"
+                        (onChange)="onSelectGroupe($event.value)" filter="true" emptyFilterMessage="Aucun groupe trouvé"
+                        filterPlaceholder="Recherche"></p-dropdown>
+
+                    <p-dropdown autoWidth="false" class="col-12" [style]="{'width':'100%'}"
+                        [options]="dropdownUserInterne" [virtualScroll]="true" itemSize="30"
+                        placeholder="Selectionner un Interne" [showClear]="true" formControlName="user_id" filter="true"
+                        emptyFilterMessage="Aucun utilisateur trouvé" filterPlaceholder="Recherche"></p-dropdown>
+
+                </div>
+
+                <!--<div formArrayName="experiences_pro">
                     <label>Expériences professionnelles</label> <br />
                     <div class="p-formgrid grid" *ngFor="let xpProControl of getXpPros().controls; let i = index">
                         <div class="field col-10">
@@ -33,7 +57,9 @@
                     </div>
                     <button pButton icon="pi pi-plus" label="Ajouter une expérience" type="button"
                         (click)="onAddXpPro()" class="p-button-outlined p-button-info"></button>
-                </div>
+                </div>-->
+
+
 
                 <div class="field col-12">
                     <label>Compétences</label>
@@ -57,7 +83,7 @@
                     </p-multiSelect>
                 </div>
 
-                <div class="field col-12 md:col-12">
+                <!--<div class="field col-12 md:col-12">
                     <label>Outils</label>
                     <p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
                         defaultLabel="Selectionner les outils" optionLabel="label" class="multiselect-custom"
@@ -78,7 +104,7 @@
                             </div>
                         </ng-template>
                     </p-multiSelect>
-                </div>
+                </div>-->
 
                 <div class="field col-12 md:col-12">
                     <label>Langues</label>
@@ -103,38 +129,410 @@
                     </p-multiSelect>
                 </div>
 
-                <div formArrayName="experiences_sco">
-                    <label>expériences scolaires</label> <br />
-                    <div class="p-formgrid grid" *ngFor="let xpScoControl of getXpScos().controls; let i = index">
-                        <div class="field col-10">
-                            <textarea pInputTextarea type="text" placeholder="2018-2019: expérience"
-                                [formControlName]="i"></textarea>
-                        </div>
-                        <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveXpSco(i)"
-                                class="p-button-outlined p-button-danger"></button>
-                        </div>
-                    </div>
-                    <button pButton icon="pi pi-plus" label="Ajouter un parcours scolaire" type="button"
-                        (click)="onAddXpSco()" class="p-button-outlined p-button-info"></button>
-                </div>
-
-                <div class="field col-12">
+                <!--<div class="field col-12">
                     <label>Lien présentation vidéo</label>
                     <input pInputText type="text"
                         placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien"
                         formControlName="video_lien" />
-                </div>
+                </div>-->
 
-                <div class="field col-12">
+                <!--<div class="field col-12">
                     <label>joindre un fichier (pdf)</label>
                     <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
                         (change)="onUpload($event)" chooseLabel="Browse" />
+                </div>-->
+
+                <div class="field col-6">
+                    <label>Mobilité - Ville</label>
+                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
+                        formControlName="mobilite_lieu" />
                 </div>
-                <div>
-                    <button pButton label="Valider" type="submit" [disabled]="formAddCV.invalid"></button>
+
+                <div class="field col-6">
+                    <label>Mobilité - Pays</label>
+                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
                 </div>
+
+                <div class="field col-12">
+                    <label>Centres d'intérêt</label>
+                    <input pInputText type="text" placeholder="Ex: Basketball, Littérature"
+                        formControlName="centre_interets" />
+                </div>
+
+                <div class="field col-12">
+                    <label>A propos</label>
+                    <input pInputText type="text" placeholder="Ex: J'adore la vie" formControlName="a_propos" />
+                </div>
+
+                <div class="field col-12">
+                    <label>Disponibilité</label>
+                    <p-calendar formControlName="disponibilite" autoWidth="false"
+                        [style]="{'width':'100%'}"></p-calendar>
+                </div>
+
+
+
             </form>
+            <div class="field col-12">
+                <h3 class="col-12">Expériences professionels</h3>
+                <p-table [value]="experiences_pro" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus" (click)="addExpPro()" class="mr-2"
+                            pTooltip="Ajouter une expérience" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteExpPro(ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Education</h3>
+                <p-table [value]="education" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus" (click)="addEdu()" class="mr-2"
+                            pTooltip="Ajouter une education" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteEdu(ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Expériences associatif</h3>
+                <p-table [value]="experiences_associatif" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus" (click)="addExpAss()" class="mr-2"
+                            pTooltip="Ajouter une expérience associatif" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteExpAss(ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Informatique</h3>
+                <p-table [value]="informatique" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus" (click)="addInf()" class="mr-2"
+                            pTooltip="Ajouter une expérience informatique" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="deleteInf(ri)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div>
+                <button pButton label="Valider" type="submit" [disabled]="formAddCV.invalid"
+                    (click)="onAddCV()"></button>
+            </div>
         </div>
     </div>
 
@@ -148,7 +546,7 @@
                 {{showUpdateCV.user_id.firstname | titlecase }}</h4>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateCV" (ngSubmit)="onUpdateCV()">
-                <div formArrayName="experiences_pro">
+                <!--<div formArrayName="experiences_pro">
                     <label>Expériences professionnelles</label> <br />
                     <div class="p-formgrid grid" *ngFor="let xpProControl of getUpdateXpPros().controls; let i = index">
                         <div class="field col-10">
@@ -162,7 +560,7 @@
                     </div>
                     <button pButton icon="pi pi-plus" label="Ajouter une expérience" type="button"
                         (click)="onAddUpdateXpPro()" class="p-button-outlined p-button-info"></button>
-                </div>
+                </div>-->
 
                 <div class="field col-12">
                     <label>Compétences</label>
@@ -186,7 +584,7 @@
                     </p-multiSelect>
                 </div>
 
-                <div class="field col-12 md:col-12">
+                <!--<div class="field col-12 md:col-12">
                     <label>Outils</label>
                     <p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
                         defaultLabel="Selectionner les outils" optionLabel="label" class="multiselect-custom"
@@ -207,7 +605,7 @@
                             </div>
                         </ng-template>
                     </p-multiSelect>
-                </div>
+                </div>-->
 
                 <div class="field col-12 md:col-12">
                     <label>Langues</label>
@@ -232,135 +630,713 @@
                     </p-multiSelect>
                 </div>
 
-                <div formArrayName="experiences_sco">
-                    <label>Expériences scolaires</label> <br />
-                    <div class="p-formgrid grid" *ngFor="let xpScoControl of getXpUpdateScos().controls; let i = index">
-                        <div class="field col-10">
-                            <textarea pInputTextarea type="text" placeholder="2018-2019: expérience"
-                                [formControlName]="i"></textarea>
-                        </div>
-                        <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveUpdateXpSco(i)"
-                                class="p-button-outlined p-button-danger"></button>
-                        </div>
-                    </div>
-                    <button pButton icon="pi pi-plus" label="Ajouter un parcours scolaire" type="button"
-                        (click)="onAddUpdateXpSco()" class="p-button-outlined p-button-info"></button>
-                </div>
-
-                <div class="field col-12">
+                <!--<div class="field col-12">
                     <label>Lien présentation vidéo</label>
                     <input pInputText type="text"
                         placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien"
                         formControlName="video_lien" />
+                </div>-->
+
+
+                <div class="field col-6">
+                    <label>Mobilité - Ville</label>
+                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
+                        formControlName="mobilite_lieu" />
                 </div>
-                <div>
-                    <button pButton label="Valider" type="submit" [disabled]="formUpdateCV.invalid"></button>
+
+                <div class="field col-6">
+                    <label>Mobilité - Pays</label>
+                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
+                </div>
+
+                <div class="field col-12">
+                    <label>Centres d'intérêt</label>
+                    <input pInputText type="text" placeholder="Ex: Basketball, Littérature"
+                        formControlName="centre_interets" />
+                </div>
+
+                <div class="field col-12">
+                    <label>A propos</label>
+                    <input pInputText type="text" placeholder="Ex: J'adore la vie" formControlName="a_propos" />
+                </div>
+
+                <div class="field col-12">
+                    <label>Disponibilité</label>
+                    <p-calendar formControlName="disponibilite" autoWidth="false"
+                        [style]="{'width':'100%'}"></p-calendar>
                 </div>
             </form>
+            <div class="field col-12">
+                <h3 class="col-12">Expériences professionels</h3>
+                <p-table [value]="showUpdateCV.experiences_pro" #dtexp dataKey="_id" class="col-12"
+                    responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus"
+                            (click)="showUpdateCV.experiences_pro.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })"
+                            class="mr-2" pTooltip="Ajouter une expérience" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="showUpdateCV.experiences_pro.splice(ri, 1)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Education</h3>
+                <p-table [value]="showUpdateCV.education" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                    styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus"
+                            (click)="showUpdateCV.education.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })"
+                            class="mr-2" pTooltip="Ajouter une education" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="showUpdateCV.education.splice(ri, 1)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Expériences associatif</h3>
+                <p-table [value]="showUpdateCV.experiences_associatif" #dtexp dataKey="_id" class="col-12"
+                    responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus"
+                            (click)="showUpdateCV.experiences_associatif.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })"
+                            class="mr-2" pTooltip="Ajouter une expérience associatif" tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="showUpdateCV.experiences_associatif.splice(idx, 1)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="field col-12">
+                <h3 class="col-12">Informatique</h3>
+                <p-table [value]="showUpdateCV.informatique" #dtexp dataKey="_id" class="col-12"
+                    responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <button type="button" pButton pRipple icon="pi pi-plus"
+                            (click)="showUpdateCV.informatique.push({ intitule_experience: '', type: '', details: '', structure: '', date_debut: '', date_fin: '' })"
+                            class="mr-2" pTooltip="Ajouter une expérience informatique"
+                            tooltipPosition="bottom"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Intitulé</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Structure</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                        <tr [pEditableRow]="exp">
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.intitule_experience">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.intitule_experience}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.type">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.type}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.details}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="text" pInputText [(ngModel)]="exp.structure">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.structure}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_debut">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_debut| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn>
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input type="date" pInputText [(ngModel)]="exp.date_fin">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{exp.date_fin| date:'mediumDate'}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                    (click)="showUpdateCV.informatique.splice(ri, 1)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div>
+                <button pButton label="Valider" type="submit" [disabled]="formUpdateCV.invalid"
+                    (click)="onUpdateCV"></button>
+            </div>
         </div>
     </div>
 
-    <!-- Table d'affichae de la cvthèque -->
-    <div class="col-12">
-        <div class="card">
-            <button pButton pRipple label="Ajouter un CV" icon="pi pi-plus" class="mr-2 mb-2"
-                (click)="showFormAddCV = true" style="float: right"></button>
+    <div class="card col-12 grid" *ngIf="matchingsFromCV && selectedUser">
+        <h5>Liste des matchings en cours pour {{selectedUser.lastname | uppercase}} {{selectedUser.firstname |
+            titlecase}}</h5>
+        <p-table #dtm rowExpandMode="single" [value]="matchingsFromCV" dataKey="_id" [rows]="5" [rowHover]="true"
+            class="col-12" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
+            styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
-            <h5>Cv thèque Intedgroup</h5>
-            <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
-                styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
-                responsiveLayout="scroll">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <button pButton label="Vider les filtres" class="p-button-outlined mb-2"
-                            icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
-
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="typeList"
-                            (onChange)="dt1.filter($event.value, 'user_id.type', 'equals')"
-                            filterPlaceholder="Type"></p-dropdown>
-
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Nom &amp; Prénom
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Email
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Email perso
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Type
-                            </div>
-                        </th>
-                        <th style="width: 8rem">
-                            <div class="flex justify-content-between align-items-center">
-                                Action
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-cv>
-                    <tr>
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.lastname | uppercase}} {{cv.user_id?.firstname | titlecase}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.email}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.email_perso}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.type}}
-                        </td>
-
-                        <td class="text-center" style="min-width: 8rem;">
-                            <i class="pi pi-pencil mr-2"
-                                title="Modifier le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                                (click)="InitUpdateCV(cv)"></i>
-                            <i class="pi pi-file-pdf mr-2"
-                                title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
-                                (click)="InitExportPDF(cv)"></i>
-                            <i class="pi pi-book"
-                                title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
-                                style="color: green"></i>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="5">Aucun cv trouvé.</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td colspan="5">Chargement...</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-3">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dtm.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th>
+                        Offre <p-sortIcon field="offre_id.user_id.custom_id"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="taux" style="text-align:center">
+                        Matcher <p-sortIcon field="taux"></p-sortIcon>
+                    </th>
+                    <th style="text-align:center">
+                        Type Matching
+                    </th>
+                    <th style="text-align:center">
+                        Statut du Matching
+                    </th>
+                    <th pSortableColumn="date_creation" style="text-align:center">
+                        Date du matching <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
+                    <!--<th>
+                        Action
+                    </th>-->
+            </ng-template>
+            <ng-template pTemplate="body" let-match let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="match"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td>
+                        <a (click)="seeOffre(match.offre_id)">{{ match.offre_id.custom_id | titlecase}}</a>
+                    </td>
+                    <td>
+                        {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+                    </td>
+                    <td>
+                        {{match.type_matching}}
+                    </td>
+                    <td>
+                        {{match.statut}}
+                    </td>
+                    <td>
+                        {{match.date_creation|date:medium}}
+                    </td>
+                    <!--<td>
+                        <i pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+                            (click)="InitUpdateStatut(match)" aria-hidden="true"></i>
+                    </td>-->
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-match>
+                <tr>
+                    <td colspan="7">
+                        <div class="p-3">
+                            <p-table responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th>Remarque</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>{{match.remarque}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
 </div>
+
+<div class="col-12 card" *ngIf="showFormAssignOffer">
+    <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+        (click)="showFormAssignOffer = false" aria-hidden="true"> </i>
+    <h3 class="text-center" style="font-weight: bold;">Assignation d'une offre </h3>
+
+    <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAssignOffer()">
+        <div class="field col-12">
+            <label>Annonces <span style="color: red;">*</span></label>
+            <p-dropdown [options]="annoncesList" emptyFilterMessage="Pas d'offre trouvé" filterPlaceholder="Annonce"
+                filter="true" formControlName="offer"></p-dropdown>
+        </div>
+        <div>
+            <button pButton label="Assigner l'offre aux CVs" type="submit" [disabled]="AssignForm.invalid"></button>
+        </div>
+    </form>
+</div>
+
+<!-- Table d'affichae de la cvthèque -->
+<div class="col-12">
+    <div class="card">
+        <button pButton pRipple label="Ajouter un CV" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddCV = true"
+            style="float: right"></button>
+        <button pButton pRipple label="Assigner à une offre" icon="pi pi-plus" class="mr-2 mb-2"
+            *ngIf="selectedCVs.length!=0" (click)="showFormAssignOffer = true;initAssign()"
+            style="float: right"></button>
+
+        <h5>Cv thèque Intedgroup</h5>
+        <p-table #dt1 [value]="cvLists" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedCVs"
+            [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <button pButton label="Vider les filtres" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
+                        (click)="clear(dt1)"></button>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="typeList"
+                        (onChange)="dt1.filter($event.value, 'user_id.type', 'equals')"
+                        filterPlaceholder="Type"></p-dropdown>
+
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Nom &amp; Prénom
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Email
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Email perso
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Type
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Date de création
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Créateur du CV
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cv>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="cv"></p-tableCheckbox>
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.lastname | uppercase}} {{cv.user_id?.firstname | titlecase}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.email}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.email_perso}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv.user_id?.type}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{cv?.date_creation | date:'mediumDate'}}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{cv?.createur_id?.lastname | uppercase}} {{cv?.createur_id?.firstname | titlecase}}
+                    </td>
+                    <td class="text-center" style="min-width: 8rem;">
+                        <i class="pi pi-pencil mr-2"
+                            title="Modifier le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
+                            (click)="InitUpdateCV(cv)"></i>
+                        <i class="pi pi-file-pdf mr-2"
+                            title="Exporter le cv de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}} en PDF"
+                            (click)="InitExportPDF(cv)"></i>
+                        <i class="pi pi-book mr-2"
+                            title="Acceder à la cv thèque de {{cv.user_id?.lastname}} {{cv.user_id?.firstname}}"
+                            style="color: green"></i>
+                        <i class="pi pi-briefcase" title="Voir les annonces postulés avec ce cv"
+                            (click)="seeAnnonce(cv)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5">Aucun cv trouvé.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="5">Chargement...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>
+</div>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000"
+    *ngIf="!annonceSelected?.is_interne" [modal]="false">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+        annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span><br>
+        <span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <!--<h5 style="font-weight: bold">Outils</h5>
+<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+<ul>
+    <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+</ul>-->
+
+    <hr />
+</p-sidebar>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000"
+    *ngIf="annonceSelected?.is_interne" [modal]="false">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent
+        }} ({{ annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span><br>
+        <span style="font-weight: bold">Source : {{ annonceSelected?.source}}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <!--<h5 style="font-weight: bold">Outils</h5>
+<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+<ul>
+    <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+</ul>-->
+
+    <hr />
+</p-sidebar>

@@ -134,7 +134,7 @@ export class AnnoncesComponent implements OnInit {
       missionName: [''],
       profil: [this.profilsList[0]],
       competences: [''],
-      outils: [''],
+      //outils: [''],
       workplaceType: [this.locationOptions[1]],
       missionDesc: [''],
       missionType: [this.missionTypes[0]],
@@ -154,7 +154,7 @@ export class AnnoncesComponent implements OnInit {
       missionName: [''],
       profil: [this.profilsList[0]],
       competences: [''],
-      outils: [''],
+      //outils: [''],
       workplaceType: [this.locationOptions[1]],
       missionDesc: [''],
       missionType: [this.missionTypes[0]],
@@ -219,6 +219,14 @@ export class AnnoncesComponent implements OnInit {
         response.forEach((competence: Competence) => {
           this.competencesList.push({ label: competence.libelle, value: competence._id });
         })
+        if(this.annonceSelected){
+          let competences = []
+          this.annonceSelected.competences.forEach(element => {
+            let buffer: any = element
+            competences.push({ label: buffer.libelle, value: buffer._id })
+          });
+          this.formUpdate.patchValue({ competences: competences })
+        }
       })
       .catch((error) => { console.log(error); })
 
@@ -258,7 +266,7 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.profil = this.form.get('profil')?.value.value;
     annonce.competences = [];
-    annonce.outils = [];
+    //annonce.outils = [];
     annonce.workplaceType = this.form.get('workplaceType')?.value.label;
     annonce.publicationDate = new Date();
 
@@ -266,12 +274,13 @@ export class AnnoncesComponent implements OnInit {
       annonce.competences.push(competence.value);
     });
 
-    this.form.get('outils')?.value.forEach((outil) => {
+    /*this.form.get('outils')?.value.forEach((outil) => {
       annonce.outils.push(outil.label);
-    });
+    });*/
 
     annonce.source = this.form.get('source')?.value;
     annonce.isClosed = false;
+    annonce.custom_id = this.onGenerateID(this.form.get('profil')?.value.label, this.form.get('missionType').value)
 
     //Envoi de l'annonce en BD
     this.annonceService.postAnnonce(annonce)
@@ -315,7 +324,7 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.profil = this.formUpdate.get('profil')?.value.value;
     annonce.competences = [];
-    annonce.outils = [];
+    //annonce.outils = [];
     annonce.workplaceType = this.formUpdate.get('workplaceType')?.value.label;
     annonce.publicationDate = new Date();
 
@@ -323,9 +332,9 @@ export class AnnoncesComponent implements OnInit {
       annonce.competences.push(competence.value);
     });
 
-    this.formUpdate.get('outils')?.value.forEach((outil) => {
+    /*this.formUpdate.get('outils')?.value.forEach((outil) => {
       annonce.outils.push(outil.label);
-    });
+    });*/
 
     annonce.source = this.formUpdate.get('source')?.value;
     annonce.isClosed = false;
@@ -362,6 +371,9 @@ export class AnnoncesComponent implements OnInit {
       debut: this.annonceSelected.debut,
       source: this.annonceSelected.source,
     });
+    let profile: any = this.annonceSelected.profil
+    this.formUpdate.patchValue({ profil: { label: profile.libelle, value: profile._id } })
+    this.chargeCompetence({ value: { label: profile.libelle, value: profile._id } })
   }
 
   InitMatching(annonce: Annonce) {
@@ -385,6 +397,19 @@ export class AnnoncesComponent implements OnInit {
         this.messageService.add({ summary: "Non eligible au matching", severity: "error", detail: "Merci de créer votre cv pour pouvoir être eligible au matching" })
       }
     })
+  }
+
+  onGenerateID(profilLabel, contrat) {
+    let label = profilLabel.replace(/[^A-Z]+/g, "");
+    if (label == '')
+      label = "UNK"
+    let cont = "OC"
+    if (contrat == "Alternance")
+      cont = "OA"
+    else if (contrat == "Stage")
+      cont = "OS"
+    let random = Math.random().toString(36).substring(5).toUpperCase();
+    return label + cont + random
   }
 
 

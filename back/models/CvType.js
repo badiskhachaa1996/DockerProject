@@ -2,14 +2,88 @@
 const mongoose = require('mongoose');
 //creation du schema de la table diplome
 const cvTypeSchema = mongoose.Schema({
-    user_id:            { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false, unique: true },
-    experiences_pro:    { type: [String], required: false },
-    experiences_sco:    { type: [String], required: false },
-    competences:        { type: [mongoose.Schema.Types.ObjectId], ref: 'competences', required: false },
-    outils:             { type: [String], required: false },
-    langues:            { type: [String], required: false },
-    video_lien:         { type: String, required: false },
-    filename:           { type: String, required: false }
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false, unique: true },
+    experiences_pro: {
+        type: [{
+
+            date_debut: { type: Date },
+
+            date_fin: { type: Date },
+
+            intitule_experience: { type: String },
+
+            structure: { type: String },
+
+            details: { type: String },
+
+            type: { type: String }
+
+        }], required: false
+    },
+    competences: { type: [mongoose.Schema.Types.ObjectId], ref: 'competences', required: false },
+    outils: { type: [String], required: false },
+    langues: { type: [String], required: false },
+    video_lien: { type: String, required: false },
+    filename: { type: String, required: false },
+    education: {
+        type: [{
+
+            date_debut: { type: Date },
+
+            date_fin: { type: Date },
+
+            intitule_experience: { type: String },
+
+            structure: { type: String },
+
+            details: { type: String },
+
+            type: { type: String }
+
+        }], required: false
+    },
+    experiences_associatif: {
+        type: [{
+
+            date_debut: { type: Date },
+
+            date_fin: { type: Date },
+
+            intitule_experience: { type: String },
+
+            structure: { type: String },
+
+            details: { type: String },
+
+            type: { type: String }
+
+        }], required: false
+    },
+    informatique: {
+        type: [{
+
+            date_debut: { type: Date },
+
+            date_fin: { type: Date },
+
+            intitule_experience: { type: String },
+
+            structure: { type: String },
+
+            details: { type: String },
+
+            type: { type: String }
+
+        }], required: false
+    },
+    mobilite_lieu: { type: String, required: false },
+    mobilite_autre: { type: String, required: false },
+    date_creation: { type: Date, default: Date.now },
+    centre_interets: { type: String, required: false },
+    a_propos: { type: String, required: false },
+    disponibilite: { type: Date, required: false },
+    createur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
+
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema
