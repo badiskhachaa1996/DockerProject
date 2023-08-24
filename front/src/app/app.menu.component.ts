@@ -178,6 +178,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing/configuration'],
                                 },
                                 {
+                                    label: 'Gestions des services',
+                                    icon: 'pi pi-sitemap',
+                                    routerLink: ['/ticketing/services'],
+                                },
+                                {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
                                     routerLink: ['/ticketing/dashboard'],

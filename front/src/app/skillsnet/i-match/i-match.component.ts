@@ -190,8 +190,8 @@ export class IMatchComponent implements OnInit {
     return d <= new Date()
   }
 
-  onClickCV(cv: CV) {
-    this.CVService.downloadCV(cv._id).then((data: any) => {
+  onClickCV(cv: any) {
+    this.CVService.downloadCV(cv.user_id._id).then((data: any) => {
       console.log(data)
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });

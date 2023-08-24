@@ -63,7 +63,7 @@ app.post("/post-cv", (req, res) => {
     CvType.findOne({ user_id: cv.user_id })
         .then((response) => {
             if (response) {
-                res.status(400).send(error);
+                res.status(400).send({response,message:'UN CV existe déjà'});
             } else {
                 cv.save()
                     .then((response) => { res.status(201).send(response); })
