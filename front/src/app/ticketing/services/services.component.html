@@ -1,0 +1,161 @@
+<div class="grid">
+    <div class="col-12 card" *ngIf="showUser">
+        <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+            (click)="showUser = false;">
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="usersList"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['firstname','lastname']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="_id" scope="col" style="text-align: center;">
+                            ID Pointeuse <p-sortIcon field="_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="serial_number" scope="col" style="text-align: center;">
+                            Numéro de série <p-sortIcon field="serial_number"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="localisation" scope="col" style="text-align: center;">
+                            Localisation <p-sortIcon field="localisation"></p-sortIcon>
+                        </th>
+                        <th>
+                            Type de Pointage disponible
+                        </th>
+                        <th pSortableColumn="nb_users_register" scope="col" style="text-align: center;">
+                            Nombre des utilisateurs enregistrées <p-sortIcon field="nb_users_register"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-machine>
+                    <tr>
+                        <td>
+                            {{machine._id | slice: 0:20 }}...
+                        </td>
+                        <td>
+                            {{machine.serial_number}}
+                        </td>
+                        <td>
+                            {{machine.localisation}}
+                        </td>
+                        <td>
+                            {{machine.pointageType}}
+                        </td>
+                        <td>
+                            En dévéloppement
+                        </td>
+                        <td>
+                            <i pTooltip="Voir des informations supplémentaire" tooltipPosition="bottom"
+                                class="pi pi-cog mr-2" (click)="seePopUp(machine);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                                (click)="initUpdate(machine);scrollToTop()" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                (click)="onDelete(machine)" aria-hidden="true"></i>
+                            <i pTooltip="Voir la liste des utilisateurs" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                                (click)="seeUsers(machine);scrollToTop()" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </i>
+    </div>
+    <div class="col-12" *ngIf="showAdd">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showAdd = false;">
+            </i>
+            <h4 style="text-align: center;">Ajouter un service</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="addForm" (ngSubmit)="onAdd()">
+                <div class="field col-12">
+                    <label>Nom du service<span style="color: red;"> * </span></label>
+                    <input pInputText id="matricule" type="text" placeholder="Ex: Pédagogie" formControlName="label" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter un service" [disabled]="addForm.invalid" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12" *ngIf="showUpdate">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUpdate = null;">
+            </i>
+            <h4 style="text-align: center;">Modifier une service</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+                <div class="field col-12">
+                    <label>Nom du service<span style="color: red;"> * </span></label>
+                    <input pInputText id="matricule" type="text" placeholder="Ex: Pédagogie" formControlName="label" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Modifier un service" [disabled]="updateForm.invalid" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <button pButton label="Ajouter une service" class="mr-2 mb-2" style="float: right;"
+                (click)="showAdd = true;scrollToTop()"></button>
+            <h5>Liste des services</h5>
+
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="services"
+                [paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['label']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="label" scope="col" style="text-align: center;">
+                            Service <p-sortIcon field="label"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-service>
+                    <tr>
+                        <td>
+                            {{service.label}}
+                        </td>
+                        <td>
+                            <i pTooltip="Voir les utilisateurs" tooltipPosition="bottom" class="pi pi-users mr-2"
+                                (click)="showUsers(service);scrollToTop()" aria-hidden="true"></i>
+
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                                (click)="initUpdate(service);scrollToTop()" aria-hidden="true"></i>
+
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                (click)="onDelete(service)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

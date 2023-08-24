@@ -85,11 +85,18 @@ export class ConfigurationPointeuseComponent implements OnInit {
     })
   }
 
+
+  visiblePopUp = false
+  dataPopUp
   seePopUp(machine: Pointeuse) {
-
+    this.visiblePopUp = true
+    this.dataPopUp = machine
   }
-  seeUsers(machine: Pointeuse) {
 
+  visibleUser = false
+  dataUser
+  seeUsers(machine: Pointeuse) {
+    this.visibleUser = true
   }
 
   scrollToTop() {

@@ -149,3 +149,39 @@
         </div>
     </div>
 </div>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visiblePopUp" position="right" [baseZIndex]="10000" [modal]="false">
+    <h4 style="font-weight:bold">Informations supplémentaires</h4>
+    <hr />
+    <p>
+        Nom de l'appareil : <br><br>
+        IP : <br>
+        Mask : <br>
+        Gateway : <br><br>
+        Version Firmware : <br>
+    </p>
+    <br>
+    <p>
+        Plateforme : <br><br>
+        Numéro de série : {{dataPopUp.serial_number}} <br><br>
+        Adresse MAC : <br><br>
+        Localisation : <br><br>
+    </p>
+    <br>
+    <p>
+        Nombre des utilisateurs : <br><br>
+        Nombres des fingers : <br><br>
+        Nombres des faces : <br><br>
+    </p>
+    <hr />
+</p-sidebar>
+
+<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleUser" position="left" [baseZIndex]="10000" [modal]="false">
+    <h4 style="font-weight:bold">Liste des utilisateurs</h4>
+    <hr />
+    <h5 style="font-weight: bold">Compétences</h5>
+    <!--<ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>-->
+    <hr />
+</p-sidebar>

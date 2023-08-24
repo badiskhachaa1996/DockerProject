@@ -348,6 +348,7 @@ import { DocCheckerComponent } from './international/generation-doc/doc-checker/
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { ServicesComponent } from './ticketing/services/services.component';
 
 @NgModule({
   imports: [
@@ -704,7 +705,8 @@ import { IMatchComponent } from './skillsnet/i-match/i-match.component';
     DocCheckerComponent,
     LeadCandidatureComponent,
     ConfigurationPointeuseComponent,
-    IMatchComponent
+    IMatchComponent,
+    ServicesComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
