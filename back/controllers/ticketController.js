@@ -89,7 +89,7 @@ app.post("/create", (req, res) => {
                 ticket.save((err, doc) => {
                     res.send({ message: "Votre ticket a été crée!", doc });
                     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-                        console.log(users)
+                        //console.log(users)
                         let emailList = []
                         users.forEach(u => {
                             emailList.push(u.email)
@@ -121,7 +121,34 @@ app.post("/create", (req, res) => {
                         });
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
-                        if (sujet.label != "Pédagogie")
+                        console.log(sujet.service_id.label, sujet.service_id.label.startsWith('IGS'))
+                        if (sujet.service_id.label.startsWith('IGS')) {
+                            let htmlemail = `
+                            <p>Bonjour,</p><br>
+                            <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service IGS, Le sujet de ce ticket est ${sujet.label}. Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                            <p>Cordialement,</p><br>
+                            `
+                            let mailOptions = {
+                                from: 'ims@intedgroup.com',
+                                to: 'ims.support@intedgroup.com',
+                                subject: '[IMS - Ticketing] - Ticket ' + id + ' a été crée',
+                                html: htmlemail,
+                                priority: 'high',
+                                attachments: [{
+                                    filename: 'signature.png',
+                                    path: 'assets/ims-intedgroup-logo.png',
+                                    cid: 'red' //same cid value as in the html img src
+                                }]
+                            };
+
+
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.error(error);
+                                }
+                            });
+                        }
+                        else if (sujet.service_id.label != "Pédagogie")
                             User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
                                 listResponsable.forEach(responsable => {
                                     let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
@@ -147,6 +174,7 @@ app.post("/create", (req, res) => {
                                     });
                                 })
                             })
+
                         else {
                             Etudiant.findOne({ user_id: req.body.id }).populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(etudiant => {
                                 let responsable = []

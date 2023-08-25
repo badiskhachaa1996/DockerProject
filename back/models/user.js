@@ -114,7 +114,13 @@ const user_schema = new mongoose.Schema({
     service_list: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "service" }], default: []
     },
-    statut: { type: String, required: false}
+    statut: { type: String, required: false },
+    roles_ticketing_list: {
+        type: [{
+            module: { type: mongoose.Schema.Types.ObjectId, ref: "service" },
+            role: { type: String },
+        }], default: []
+    },
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

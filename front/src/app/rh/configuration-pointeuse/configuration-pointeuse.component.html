@@ -23,12 +23,16 @@
                         [options]="localisationDropdown" autoWidth="false" [style]="{'width':'100%'}">
                     </p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-12 md:col-6">
                     <label>Type de pointage<span style="color: red;"> * </span></label>
                     <p-multiSelect placeholder="Choisissez un type de pointage" filter="true"
                         formControlName="pointageType" [options]="typePointageDropdown" autoWidth="false"
                         [style]="{'width':'100%'}">
                     </p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="service">Modèle <span style="color: red;"> * </span></label>
+                    <input type="text" formControlName="modele" pInputText>
                 </div>
 
                 <div style="justify-content: right;">
@@ -61,12 +65,17 @@
                         [options]="localisationDropdown" autoWidth="false" [style]="{'width':'100%'}">
                     </p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-12 md:col-6">
                     <label>Type de pointage<span style="color: red;"> * </span></label>
                     <p-multiSelect placeholder="Choisissez un type de pointage" filter="true"
                         formControlName="pointageType" [options]="typePointageDropdown" autoWidth="false"
                         [style]="{'width':'100%'}">
                     </p-multiSelect>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="service">Modèle <span style="color: red;"> * </span></label>
+                    <input type="text" formControlName="modele" pInputText>
                 </div>
 
                 <div style="justify-content: right;">
@@ -79,7 +88,7 @@
         <div class="card">
             <button pButton pRipple label="Configurer une nouvelle pointeuse" class="mr-2 mb-2" style="float: right;"
                 (click)="showAdd = true;scrollToTop()"></button>
-            <h5>Liste des pointeuse</h5>
+            <h5>Liste des pointeuses</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="pointeuses"
@@ -135,12 +144,12 @@
                         </td>
                         <td>
                             <i pTooltip="Voir des informations supplémentaire" tooltipPosition="bottom"
-                                class="pi pi-cog mr-2" (click)="seePopUp(machine);scrollToTop()" aria-hidden="true"></i>
+                                class="pi pi-align-right mr-2" (click)="seePopUp(machine);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2"
                                 (click)="initUpdate(machine);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash mr-2"
                                 (click)="onDelete(machine)" aria-hidden="true"></i>
-                            <i pTooltip="Voir la liste des utilisateurs" tooltipPosition="bottom" class="pi pi-cog mr-2"
+                            <i pTooltip="Voir la liste des utilisateurs" tooltipPosition="bottom" class="pi pi-users mr-2"
                                 (click)="seeUsers(machine);scrollToTop()" aria-hidden="true"></i>
                         </td>
                     </tr>
@@ -163,7 +172,7 @@
     <br>
     <p>
         Plateforme : <br><br>
-        Numéro de série : {{dataPopUp.serial_number}} <br><br>
+        Numéro de série : {{dataPopUp?.serial_number}} <br><br>
         Adresse MAC : <br><br>
         Localisation : <br><br>
     </p>

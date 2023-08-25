@@ -5,6 +5,7 @@ export class Pointeuse {
         public serial_number?: string,
         public localisation?: string,
         public pointageType?: string[],
+        public modele?: string,
 
     ) { }
 
