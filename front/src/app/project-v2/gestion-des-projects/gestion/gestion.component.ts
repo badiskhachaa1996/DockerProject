@@ -14,7 +14,6 @@ import jwt_decode from "jwt-decode";
   selector: 'app-gestion',
   templateUrl: './gestion.component.html',
   styleUrls: ['./gestion.component.scss'],
-
 })
 export class GestionComponent implements OnInit {
   private task_id: string;
@@ -57,7 +56,6 @@ export class GestionComponent implements OnInit {
     { label: 'Haute priorité', value: "Haute priorité" },
   ];
   projectIdForTask: any
-
   constructor(
     private formBuilder: FormBuilder,
     private userService: AuthService,
@@ -65,13 +63,10 @@ export class GestionComponent implements OnInit {
     private projectService: ProjectService,
     private router: Router
   ) { }
-
   ngOnInit(): void {
     // decoded the token
     this.token = jwt_decode(localStorage.getItem('token'));
-
     this.getthecrateur()
-
     //appelle a la fonction de recupreation des personnes consernees
     this.getallusers();
     //recuperer les project avec getProjects
@@ -88,9 +83,7 @@ export class GestionComponent implements OnInit {
       debut: ['', Validators.required],
       fin: ['', Validators.required],
       description: ['', Validators.required]
-
     });
-
     //INITIALISATION DU FORMULAIRE Tache
     this.formAddTache = this.formBuilder.group({
       libelle: ['', Validators.required],
@@ -98,15 +91,12 @@ export class GestionComponent implements OnInit {
       number_of_hour: ['', Validators.required],
       date_limite: ['', Validators.required],
       description: ['', Validators.required]
-
     });
-
     //INITIALISATION DU FORMULAIRE Ressource
     this.formAddressources = this.formBuilder.group({
       nom: ['', Validators.required],
       importance: ['', Validators.required],
     })
-
     //INITIALISATION DU FORMULAIRE budget 
     this.formAddbudget = this.formBuilder.group({
       libelle: ['', Validators.required],
@@ -115,7 +105,6 @@ export class GestionComponent implements OnInit {
     })
 
   }
-
   //recuperation de user qui vas cree le formulaire
   getthecrateur() {
     this.userService.getInfoById(this.token.id).subscribe({
@@ -126,7 +115,6 @@ export class GestionComponent implements OnInit {
   }
 
   listeprojets() {
-
     this.projectService.getProjects()
       .then(projects => {
         this.nbr_project = projects.length;
@@ -136,16 +124,12 @@ export class GestionComponent implements OnInit {
         for (let i = 0; i < projects.length; i = i + 1) {
           this.projectService.getTasksByIdProject(projects[i]._id).then((data) => {
             for (let j = 0; j < data.length; j++) {
-
               this.avancement_p = this.avancement_p + data[j].avancement / data.length;
-
             }
             projects[i].avancement = this.avancement_p;
             this.projectService.putProject(projects[i]);
             this.avancement_p = 0;
           })
-
-
           if (projects[i].etat == "cloture") {
             this.nbr_projectCloturer++;
           }
@@ -153,8 +137,6 @@ export class GestionComponent implements OnInit {
             this.nbr_projectEnCour++
           }
         }
-
-
       })
       .catch(error => {
         console.error('Error fetching projects:', error);
@@ -162,12 +144,9 @@ export class GestionComponent implements OnInit {
   }
   // recuperation des utilisateur  pour les afficher dans le drop down
   getallusers(): void {
-
-
     this.userService.getAllSalarie()
       .then((response) => {
         this.responsableListe = [];
-
         response.forEach((user: User) => {
           const newUser = {
             label: `${user.firstname} ${user.lastname}`,
@@ -178,8 +157,6 @@ export class GestionComponent implements OnInit {
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
   }
-
-
   //envoi du forulaire creation de project 
   addProject() {
     if (this.formAddProject.invalid) {
@@ -187,10 +164,8 @@ export class GestionComponent implements OnInit {
       return;
     }
     // Construire l'objet à envoyer au serveur avec les données du formulaire
-    
     const currentDate = new Date();
-    const costumid_="P"+currentDate.getTime();
-    
+    const costumid_="P"+currentDate.getTime();  
     const newProject = {
       titre: this.formAddProject.get('titre').value,
       createur_id: this.userConnected._id,
@@ -204,15 +179,11 @@ export class GestionComponent implements OnInit {
       avancement: 0,
       identifian:costumid_,
     };
-
     this.projectService.postProject(newProject);
     this.formAddProject.reset();
     this.listeprojets();
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
     this.listeprojets();
-
-
-
   }
 
   delete(id, ri) {
@@ -234,18 +205,26 @@ export class GestionComponent implements OnInit {
     this.showUpdateProjectForm = true;
 
     this.project_id = project._id;
-    const string_Date = project.debut.toString();
-    const new_Date_d = string_Date!.substring(0, 10);
-    const string_Date_f = project.fin.toString();
-    const new_Date_fin = string_Date!.substring(0, 10);
+    const debut = project.debut; // Supposons que project.debut soit une date valide
+    const dateObject = new Date(debut); // Conversion en objet Date
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const day = String(dateObject.getDate()).padStart(2, '0');
+    const new_Date_d = `${year}-${month}-${day}`;
+    //pour fin 
+    this.project_id = project._id;
+    const fin = project.fin; // Supposons que project.debut soit une date valide
+    const dateObjectf = new Date(fin); // Conversion en objet Date
+    const yearf = dateObjectf.getFullYear();
+    const monthf = String(dateObjectf.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const dayf = String(dateObjectf.getDate()).padStart(2, '0');
+    const new_Date_fin = `${yearf}-${monthf}-${dayf}`;
     this.formAddProject = this.formBuilder.group({
       titre: project.titre,
-      responsable: [project.responsable],
-      debut: new Date(new_Date_d),
+      responsable:this.responsableListe,
+       debut: new Date(new_Date_d),
       fin: new Date(new_Date_fin),
       description: project.description
-
-
     });
 
   }
@@ -255,23 +234,14 @@ export class GestionComponent implements OnInit {
       data.titre = this.formAddProject.get('titre').value,
         data.debut = this.formAddProject.get('debut').value,
         data.fin = this.formAddProject.get('fin').value,
-        data.responsable_id = this.formAddProject.get('responsable').value[0],
-        data.responsable = this.formAddProject.get('responsable').value[1],
+        data.responsable_id = this.formAddProject.get('responsable')?.value[0],
+        data.responsable = this.formAddProject?.get('responsable')?.value[1],
         data.description = this.formAddProject.get('description').value,
-        this.projectService.putProject(data)
+        this.projectService.putProject(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' })
       this.formAddProject.reset();
 
-    })
-
-
-
-  }
-
-
-
-
-
+    })  }
   //PATIE TACHES
   addTache(project_id) {
        
@@ -289,11 +259,8 @@ export class GestionComponent implements OnInit {
       description_task: this.formAddTache.get('description').value,
       avancement: 0,
       project_id: this.projectIdForTask,
-      validation:"Non valider",
+      validation:"La tâche n’est pas validée",
       identifian: costumid_,
-
-
-
     }
     this.projectService.postTask(newTache)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
@@ -314,17 +281,20 @@ export class GestionComponent implements OnInit {
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE TACHE
   initialisation(task: Task) {
-
+    const dl = task.date_limite; // Supposons que project.debut soit une date valide
+    const dateObjectl = new Date(dl); // Conversion en objet Date
+    const year = dateObjectl.getFullYear();
+    const month = String(dateObjectl.getMonth() + 1).padStart(2, '0'); // Les mois sont indexés à partir de 0
+    const day = String(dateObjectl.getDate()).padStart(2, '0');
+    const new_date = `${year}-${month}-${day}`;
     this.showUpdateTacheForm = true;
     this.task_id = task._id;
-    const string_Date = task.date_limite.toString();
-    const new_Date = string_Date!.substring(0, 10);
-
+    console.log(new_date);
     this.formAddTache = this.formBuilder.group({
       libelle: task.libelle,
       priorite: task.priorite,
       number_of_hour: task.number_of_hour,
-      date_limite: new Date(new_Date),
+      date_limite: new Date(new_date),
       description: task.description_task,
 
     });
@@ -341,17 +311,11 @@ export class GestionComponent implements OnInit {
 
         this.projectService.putTask(data)
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'Modification réussie' });
-      this.formAddTache.reset();
-
-    })
-
-  };
+      this.formAddTache.reset();})};
 
   transformtask(task: Task) {
     const taskDataJson = JSON.stringify(task);
     this.router.navigate(['/ticketing/gestion/ajout'], { queryParams: { data: taskDataJson } });
-
-
   }
 
   affectertask(task: Task) {
@@ -372,63 +336,46 @@ export class GestionComponent implements OnInit {
         });
     }
   }
-
   taches(id, ri) {
-
     this.showTachesTable = true;
   }
   //PARTIE RESSOURCES
-
   addRessources() {
     if (this.formAddressources.invalid)
       return; {
     }
     const newRessources = {
-
       nom: this.formAddressources.get('nom').value,
       importance: this.formAddressources.get('importance').value,
       project_id: this.projectIdForTask,
-
-
     }
     this.projectService.postRessources(newRessources)
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })
-    this.formAddressources.reset();
+    this.formAddressources.reset();}
 
-
-
-  }
   showRessources(project_id) {
     this.showressources = true;
     this.projectIdForTask = project_id;
     this.projectService.getRessourcesByIdProject(project_id).then((data) => {
       this.ressources = [];
-      this.ressources = data;
-    })
+      this.ressources = data;})
   }
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
   initialisation_r(ressources: Ressources) {
-
     this.showUpdateRessourcesForm = true;
     this.ressources_id = ressources._id;
     this.formAddressources = this.formBuilder.group({
       nom: ressources.nom,
-      importance: ressources.importance
-    });
-  }
+      importance: ressources.importance});}
 
   onUpdateressources() {
-
     this.projectService.getRessources(this.ressources_id).then((data) => {
       data.nom = this.formAddressources.get('nom').value,
         data.importance = this.formAddressources.get('importance').value,
         this.projectService.putRessources(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' });
-      this.formAddressources.reset();
-
-    })
-
+      this.formAddressources.reset();})
   };
 
   delete_r(ressources_id, rir) {
@@ -437,32 +384,23 @@ export class GestionComponent implements OnInit {
         .then(data => {
           // The Promise is resolved successfully
           this.ressources.splice(rir, 1);
-          this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' })
-        })
+          this.messageService.add({ severity: 'success', summary: 'success', detail: ' réussie' })})
         .catch(error => {
           // Handle errors from the Promise if needed
-          console.log('Error:', error);
-        });
-    }
-
-  }
+          console.log('Error:', error);});}}
   //PARTIE BUDGET  
-
   addBudget() {
     if (this.formAddbudget.invalid)
       return; {
     }
     const newBudjet = {
-
       libelle: this.formAddbudget.get('libelle').value,
       charge: this.formAddbudget.get('charge').value,
       depense: this.formAddbudget.get('depense').value,
-      project_id: this.projectIdForTask,
-    }
+      project_id: this.projectIdForTask,}
     this.projectService.postBudget(newBudjet);
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' });
-    this.formAddbudget.reset();
-  }
+    this.formAddbudget.reset();}
 
   showBudget(project_id) {
     this.showbudget = true;
@@ -475,14 +413,10 @@ export class GestionComponent implements OnInit {
       for (let j = 0; j < data.length + 1; j = j + 1) {
         this.budgect_depense = this.budgect_depense + data[j].depense;
         this.budget_charge = this.budget_charge + data[j].charge;
-      }
-
-    })
-  }
+      }})}
 
   //INITIALISATION DU FORMULAIRE POUR MODIFIER UNE ressource
   initialisation_b(budget: Budget) {
-
     this.showUpdateBudgetForm = true;
     this.budgetid = budget._id;
     this.formAddbudget = this.formBuilder.group({
@@ -492,7 +426,6 @@ export class GestionComponent implements OnInit {
     });
   }
 
-
   onUpdatebudget() {
     this.projectService.getBudget(this.budgetid).then((data) => {
       data._id = this.budgetid;
@@ -501,10 +434,7 @@ export class GestionComponent implements OnInit {
         data.depense = this.formAddbudget.get('depense').value,
         this.projectService.putBudget(data);
       this.messageService.add({ severity: 'success', summary: 'success', detail: 'modification réussie' });
-      this.formAddbudget.reset();
-
-    })
-
+      this.formAddbudget.reset();})
   };
 
   delete_b(budget_id, rir) {
@@ -518,9 +448,5 @@ export class GestionComponent implements OnInit {
         .catch(error => {
           // Handle errors from the Promise if needed
           console.log('Error:', error);
-        });
-    }
-
-  }
-
+        });}}
 }

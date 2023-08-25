@@ -349,6 +349,7 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
+import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 
 @NgModule({
   imports: [
@@ -707,6 +708,7 @@ import { MyprojectComponent } from './project-v2/myproject/myproject.component';
     GestionComponent,
     MytaskComponent,
     MyprojectComponent,
+    DashboardProjectV2Component,
 
   
   ],

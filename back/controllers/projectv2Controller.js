@@ -76,7 +76,7 @@ app.get("/get-tasks/:id", (req, res, next) => {
 
 // get task by id task
 app.get("/get-task/:id", (req, res, next) => {
-    Task.findOne({ _id: req.params.id })?.populate('project_id')?.populate('attribuate_to')
+    Task.findOne({ _id: req.params.id })?.populate('project_id')?.populate('attribuate_to')?.populate('creator_id')?.populate('ticketId')
     .then((taskFromDb) => { res.status(200).send(taskFromDb) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });

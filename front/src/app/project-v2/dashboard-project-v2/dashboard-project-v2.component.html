@@ -1,0 +1,171 @@
+<div class="grid col-12 card">
+    <div class="col-3">
+        <div class="card mb-0">
+            <label>Nom du responsable :</label>
+            <br>
+            <p-dropdown formControlName="responsable" [options]="responsablesListe" filter="true" placeholder="Choisissez le nom"
+            (onChange)="onResponsableSelected($event)"  [showClear]="true"></p-dropdown>
+
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre total des projets</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_projet}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-shield text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre des projets en cours:</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_projet_encour}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-replay text-cyan-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Projets cloturés</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_projet_cloture}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-check-square text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid col-12 card">
+    <div class="col-2">
+        <div class="card mb-0">
+            <label>Nom du projet :</label>
+            <br>
+            <p-dropdown formControlName="projet" [options]="projectListe" filter="true" placeholder="projet"
+            (onChange)="onProjectSelected($event)"  [showClear]="true"></p-dropdown>
+
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre total des tâches</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_taches}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-shield text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre de tâches en attente:</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_tache_attente}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-replay text-cyan-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre de tâches en cours</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_tache_encour}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-check-square text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">tâches traitées</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_tache_traite}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-check-square text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-4">
+                <div>
+                    <span class="block text-500 font-medium mb-4">Nombre des tâches validées</span>
+                    <div class="text-900 font-medium text-xl">{{nbr_tache_valide}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-shield text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid col-12 card">
+    <div class="col-3">
+        <div class="card mb-0">
+            <label>Nom de la tâche:</label>
+            <br>
+            <p-dropdown formControlName="tache" [options]="taskListe" filter="true" placeholder="tâche"
+            (onChange)="onTacheSelected($event)" [showClear]="true"></p-dropdown>
+
+        </div>
+    </div>
+    <div class="grid col-9">
+        <div class="col-3"><strong>Date de création: {{taskSelected?.ticketId?.date_ajout | date:'mediumDate'}}</strong> </div>
+        <div class="col-3"><strong>Etat: {{taskSelected?.etat}}</strong> </div>
+        <div class="col-3"><strong>Avancement: {{taskSelected?.avancement}}</strong> </div>
+        <table class="col-12" styleClass="p-datatable-gridlines"     
+        rowExpandMode="single"  selectionMode="single" class="col-12" responsiveLayout="scroll">
+            <tr>
+
+                <th > ID ticket</th>
+                <th > Collaborateur </th>
+                <th > Date de création </th>
+                <th > Etat</th>
+                <th > Délais de traitement </th>
+            </tr>  
+            <tr>
+                <td>{{taskSelected?.ticketId?.customid}}</td>
+                <td>{{taskSelected?.attribuate_to[0]?.firstname}} {{taskSelected?.attribuate_to[0]?.lastname}}</td>
+                <td>{{taskSelected?.ticketId?.date_ajout | date:'mediumDate'}}</td>
+                <td>{{taskSelected?.etat}}</td>
+                <td><script>
+                      getDelaiTraitrement();
+                  </script></td>
+            </tr>
+    </table>
+    
+    </div>
+</div>

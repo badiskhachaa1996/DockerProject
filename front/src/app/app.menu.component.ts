@@ -242,7 +242,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Dasboard',
                                     icon: 'pi pi-fw pi-users',
-                                    routerLink: ['/team'],
+                                    routerLink: ['/dashboard-project-v2'],
                                 },
                             ]
                         },

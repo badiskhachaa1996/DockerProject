@@ -30,6 +30,7 @@ export class MyprojectComponent implements OnInit {
   taskarchiver: any[] = [];
   task!: Task[];
   task_v:Task;
+  taskDetails:Task;
   actual_task:Task;
   tasktoupdate: Task;
   selectedProject: Project = null;
@@ -37,6 +38,7 @@ export class MyprojectComponent implements OnInit {
   userConnected: User;
   task_consignes: any;
   selectedProjectId: string;
+  selectedcolID: string;
   pourcentage_disabled: boolean = true;
   visible: boolean = false;
   visibled: boolean = false;
@@ -47,6 +49,7 @@ export class MyprojectComponent implements OnInit {
   avancementp:number = 0;
   items: MenuItem[];
   formAddConsigne : FormGroup;
+  icone:string="pi-pencil"
 
 
   constructor(private formBuilder: FormBuilder,
@@ -124,6 +127,7 @@ export class MyprojectComponent implements OnInit {
       }
     })
   }
+//filter selon le projet sellectioner
   onProjectSelected(event: any) {
     this.heur_realiser=0;
     this.heur_total=0;
@@ -186,6 +190,7 @@ export class MyprojectComponent implements OnInit {
                 this.projectService.putTask(t);
               }
               if (collaborateur_id) {
+              if (t.attribuate_to[0]._id==collaborateur_id) {
                 if (t.etat === "En attente de traitement") {
                   this.tasktodo.push(t);
                 }
@@ -198,7 +203,7 @@ export class MyprojectComponent implements OnInit {
                 if (t.etat === "archiver") {
                   this.taskarchiver.push(t);
                 }
-              } else {
+              }} else {
                 if (t.etat === "En attente de traitement") {
                   this.tasktodo.push(t);
                 }
@@ -222,12 +227,13 @@ export class MyprojectComponent implements OnInit {
     
 
   }
-  showDialogd() {
+  showDialogd(task:Task) {
+    this.taskDetails=task;
     this.visibled = true;
   }
-  showDialog(task) {
+  showDialog(task: Task) {
     this.visible = true;
-    this.actual_task=task[0];
+    this.actual_task=task;
     this.task_consignes=task.consignes;    
     
   
@@ -238,6 +244,19 @@ export class MyprojectComponent implements OnInit {
     this.messageService.add({ severity: severity, summary: 'Success', detail: 'Deplacer' });
   }
   todo() {
+
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "En attente de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -249,6 +268,19 @@ export class MyprojectComponent implements OnInit {
   }
 
   encours() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
+
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "En cour de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -260,6 +292,19 @@ export class MyprojectComponent implements OnInit {
   }
 
   done() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
+   
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "fin de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -270,6 +315,19 @@ export class MyprojectComponent implements OnInit {
     }
   }
   archiver() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+   
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "archiver";
       this.projectService.putTask(this.tasktoupdate);
@@ -282,7 +340,9 @@ export class MyprojectComponent implements OnInit {
   modifierpoucentage(task: Task) {
     if (this.pourcentage_disabled){
       this.pourcentage_disabled = false;
+      this.icone="pi-check"
     }else {
+      this.icone="pi-pencil"
       this.pourcentage_disabled = true;
       this.projectService.putTask(task);
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifier' });
@@ -328,10 +388,21 @@ export class MyprojectComponent implements OnInit {
   }
   valider(task: Task){
     if (confirm("Êtes-vous sûr de vouloir valider?")) {
-    task.validation="valider";
+    task.validation="Tache validée";
     this.projectService.putTask(task);
     this.messageService.add({ severity: 'success', summary: 'success', detail: 'Validation réussie' })
 
   }}
+  getColorForValidation(validation){
+    switch (validation) {
+      case 'La tâche n’est pas validée':
+        return 'red'; 
+    default: return'green';
+
+  }}
+  showTicket(task:Task){
+    console.log(task.ticketId._id);
+    this.router.navigate(['/ticketing/gestion/assignes'],{ queryParams: { data: task.ticketId._id } });
+  }
 
 }

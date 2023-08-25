@@ -9,6 +9,7 @@ import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { Ticket } from 'src/app/models/Ticket';
 import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mytask',
@@ -28,6 +29,8 @@ export class MytaskComponent implements OnInit {
   taskencours: any[] = [];
   taskarchiver: any[] = [];
   task!: Task[];
+  icone:string="pi-pencil"
+  taskDetails:Task;
   tasktoupdate: Task;
   ticket!: Ticket[];
   project: Project[] = [];
@@ -40,7 +43,7 @@ export class MytaskComponent implements OnInit {
   etat_avancement: number; description: string; note: string;
 
   constructor(private userService: AuthService, private messageService: MessageService, private projectService: ProjectService,
-    private ticketService: TicketService) { }
+    private ticketService: TicketService, private router: Router) { }
 
   ngOnInit(): void {
     this.items = [
@@ -82,9 +85,8 @@ export class MytaskComponent implements OnInit {
     this.ticket = [];
     //recuperation de toute les informations
     this.getAllInformation();
-
   }
-
+//recuperation des information  
   getAllInformation() {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
@@ -116,9 +118,12 @@ export class MytaskComponent implements OnInit {
       }
     })
   }
-  showDialog() {
+//afficher le details
+  showDialog(task: Task) {
+    this.taskDetails=task;
     this.visible = true;
   }
+ // afficher les consignes
 showDialogc(task:Task){
   this.visible_consigne = true;
   console.log(task)
@@ -133,6 +138,19 @@ showDialogc(task:Task){
     this.messageService.add({ severity: severity, summary: 'Success', detail: 'Deplacer' });
   }
   todo() {
+
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.tasktodo.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "En attente de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -144,6 +162,19 @@ showDialogc(task:Task){
   }
 
   encours() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
+
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.taskencours.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "En cour de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -155,6 +186,19 @@ showDialogc(task:Task){
   }
 
   done() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
+   
+    if (this.tasktoupdate.etat === "archiver") {
+      this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
+      this.taskdone.push(this.tasktoupdate);
+    }
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "fin de traitement";
       this.projectService.putTask(this.tasktoupdate);
@@ -165,6 +209,19 @@ showDialogc(task:Task){
     }
   }
   archiver() {
+    if (this.tasktoupdate.etat === "En attente de traitement") {
+      this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "En cour de traitement") {
+      this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+    if (this.tasktoupdate.etat === "fin de traitement") {
+      this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
+      this.taskarchiver.push(this.tasktoupdate);
+    }
+   
     if (this.tasktoupdate) {
       this.tasktoupdate.etat = "archiver";
       this.projectService.putTask(this.tasktoupdate);
@@ -174,11 +231,14 @@ showDialogc(task:Task){
 
     }
   }
+  //FONCTION POUR MODIFIER LE POURCETAGE
   modifierpoucentage(task: Task) {
     if (this.pourcentage_disabled){
       this.pourcentage_disabled = false;
+      this.icone="pi-check"
     }else {
       this.pourcentage_disabled = true;
+      this.icone="pi-pencil"
       this.projectService.putTask(task);
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifier' });
 
@@ -186,6 +246,7 @@ showDialogc(task:Task){
     
 
   }
+
   getColorForStatus(statut: string): string {
     switch (statut) {
       case 'En attente de traitement':
@@ -199,4 +260,16 @@ showDialogc(task:Task){
         return 'black'; 
     }
   }
+  getColorForValidation(validation){
+    switch (validation) {
+      case 'La tâche n’est pas validée':
+        return 'red'; 
+    default: return'green';
+
+  }
+}
+showTicket(task:Task){
+  console.log(task.ticketId._id);
+  this.router.navigate(['/ticketing/gestion/assignes'],{ queryParams: { data: task.ticketId._id } });
+}
 }

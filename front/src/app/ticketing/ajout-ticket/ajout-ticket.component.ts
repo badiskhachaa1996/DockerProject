@@ -70,13 +70,11 @@ export class AjoutTicketComponent implements OnInit {
     if(this.itsTask){
       
       this.projectService.getTask(this.taskID).then((datat) => {
-        console.log(1111111111111);
-        console.log(data.doc._id);
         datat.ticketId=data.doc._id;
-        console.log(datat.ticketId);
-        this.projectService.putTask(datat)   
+        this.projectService.putTask(datat)  ; 
+        
         }) 
-
+        this.router.navigate(['/gestion-project'])
     }
     })
   }

@@ -244,6 +244,7 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
+import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -343,6 +344,7 @@ const routes: Routes = [
             { path: 'gestion-project',  component: GestionComponent},
             { path: 'mytask', component: MytaskComponent},
             { path: 'myproject', component: MyprojectComponent},
+            { path: 'dashboard-project-v2', component: DashboardProjectV2Component},
             /** end */
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
             { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },

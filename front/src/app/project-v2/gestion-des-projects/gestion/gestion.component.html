@@ -409,9 +409,9 @@
                 </td>
 
                 <td>{{ task.identifian }}</td>
-                <td>{{ task.ticketId}}</td>
+                <td>{{ task.ticketId?.customid}}</td>
                 <td>{{ task.libelle}}</td>
-                <td>{{ task.attribuate_to}}</td>
+                <td>{{ task.attribuate_to[0]?.firstname }} {{ task.attribuate_to[0]?.lastname }}</td>
                 <td>{{ task.etat }}</td>
                 <td>
                     <i pTooltip="Modifier" style="margin-left: 3%; cursor: pointer;" class="pi pi-pencil"
