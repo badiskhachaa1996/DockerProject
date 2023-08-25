@@ -89,7 +89,7 @@ app.post("/create", (req, res) => {
                 ticket.save((err, doc) => {
                     res.send({ message: "Votre ticket a été crée!", doc });
                     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-                        console.log(users)
+                        //console.log(users)
                         let emailList = []
                         users.forEach(u => {
                             emailList.push(u.email)
@@ -121,7 +121,7 @@ app.post("/create", (req, res) => {
                         });
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
-                        if (sujet.label != "Pédagogie")
+                        if (sujet.service_id.label != "Pédagogie")
                             User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
                                 listResponsable.forEach(responsable => {
                                     let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
@@ -129,7 +129,7 @@ app.post("/create", (req, res) => {
                                     let mailOptions = {
                                         from: 'ims@intedgroup.com',
                                         to: responsable.email,
-                                        subject: '[IMS - Ticketing] - Notification ',
+                                        subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
                                         html: htmlemail,
                                         priority: 'high',
                                         attachments: [{
@@ -147,6 +147,7 @@ app.post("/create", (req, res) => {
                                     });
                                 })
                             })
+
                         else {
                             Etudiant.findOne({ user_id: req.body.id }).populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(etudiant => {
                                 let responsable = []
@@ -792,6 +793,12 @@ app.get("/getAllAssigne/:id", (req, res) => {
 
 app.get("/getAllNonAssigne", (req, res) => {
     Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.post("/getAllNonAssigneV2", (req, res) => {
+    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });

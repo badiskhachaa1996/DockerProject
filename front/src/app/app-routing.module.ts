@@ -245,6 +245,8 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -353,8 +355,8 @@ const routes: Routes = [
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
@@ -482,6 +484,7 @@ const routes: Routes = [
             { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
+            { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] }
 
         ],
     },
@@ -520,7 +523,8 @@ const routes: Routes = [
     { path: 'mp-oublie/:id', component: MpOublieComponent },
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
-    { path: 'document-authentification', component: DocCheckerComponent }
+    { path: 'document-authentification', component: DocCheckerComponent },
+    { path: 'cvtheque', component: IMatchComponent }
 
 ]
 

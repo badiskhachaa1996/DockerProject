@@ -202,6 +202,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/user/getByEmail") ||
       req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") ||
       req.originalUrl == "/soc/etudiant/getAllAlternants" ||
+      req.originalUrl == "/soc/etudiant/getAll" ||
       req.originalUrl == "/soc/diplome/getAll" ||
       req.originalUrl == "/soc/entreprise/createNewContrat" ||
       req.originalUrl == "/soc/classe/getAll" ||
@@ -224,6 +225,10 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
+      req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl === '/soc/extSkillsnet/getAll' ||
+      req.originalUrl === '/soc/cv/getAllPicture' ||
+      req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
         req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
@@ -363,6 +368,7 @@ app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
 app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
+app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

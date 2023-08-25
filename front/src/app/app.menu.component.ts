@@ -659,7 +659,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque']
+                                    routerLink: ['/cvtheque-interne']
                                 },
                                 {
                                     label: 'Gestion des compétences',
@@ -1037,6 +1037,16 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-sync',
                                     routerLink: ['/mails/auto']
                                 },
+                            ]
+                        }, {
+                            label: "Pointeuse",
+                            icon: 'pi pi-server',
+                            items: [
+                                {
+                                    label: "Configuration",
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/pointeuse/configuration']
+                                }
                             ]
                         }
                     ];
@@ -1878,7 +1888,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque']
+                                    routerLink: ['/cvtheque-interne']
                                 },
                                 {
                                     label: 'Gestion des compétences',
@@ -2542,7 +2552,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque']
+                                            routerLink: ['/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
@@ -3372,7 +3382,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque']
+                                            routerLink: ['/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
@@ -4006,7 +4016,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque']
+                                    routerLink: ['/cvtheque-interne']
                                 },
                             ]
                         },

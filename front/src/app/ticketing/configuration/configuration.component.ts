@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { Service } from 'src/app/models/Service';
 import { Sujet } from 'src/app/models/Sujet';
@@ -186,5 +187,42 @@ export class ConfigurationComponent implements OnInit {
         })
       })
     })
+  }
+
+  seeRole: User = null
+  onSeeRole(user: User) {
+    this.seeRole = user
+    this.ServServ.getAll().subscribe(services => {
+      this.moduleList = []
+      services.forEach((s: Service) => {
+        this.moduleList.push({ label: s.label, value: s })
+      })
+    })
+  }
+  roleList = [{ value: 'Agent', label: 'Agent' }, { value: 'Responsable', label: 'Responsable' }]
+  moduleList = []
+
+  initAddModule() {
+    this.seeRole.roles_ticketing_list.push({ _id: new mongoose.Types.ObjectId().toString(), module: null, role: "Agent" })
+  }
+
+  saveModule() {
+    let approved = true
+    this.seeRole.roles_ticketing_list.forEach(val => {
+      if (val.module == null)
+        approved = false
+    })
+    if (approved) {
+      this.UserService.update({ _id: this.seeRole._id, roles_ticketing_list: this.seeRole.roles_ticketing_list }).subscribe(r => {
+        this.seeRole = null
+        this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
+      })
+    } else {
+      alert('Un module n\'est pas selectionné')
+    }
+  }
+
+  deleteModule(module, idx) {
+    this.seeRole.roles_ticketing_list.splice(idx, 1)
   }
 }

@@ -350,6 +350,8 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 
 @NgModule({
   imports: [
@@ -711,6 +713,8 @@ import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/d
     DashboardProjectV2Component,
 
   
+    ConfigurationPointeuseComponent,
+    IMatchComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
