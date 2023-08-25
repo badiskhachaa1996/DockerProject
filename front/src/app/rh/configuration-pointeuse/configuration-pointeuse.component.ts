@@ -44,6 +44,7 @@ export class ConfigurationPointeuseComponent implements OnInit {
     serial_number: new FormControl('', Validators.required),
     localisation: new FormControl('', Validators.required),
     pointageType: new FormControl([], Validators.required),
+    modele: new FormControl('', Validators.required)
   })
   onAdd() {
     this.PointeuseService.create({ ...this.addForm.value }).subscribe(p => {
@@ -59,6 +60,7 @@ export class ConfigurationPointeuseComponent implements OnInit {
     serial_number: new FormControl('', Validators.required),
     localisation: new FormControl('', Validators.required),
     pointageType: new FormControl([], Validators.required),
+    modele: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
   })
   initUpdate(machine: Pointeuse) {

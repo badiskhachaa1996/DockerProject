@@ -1,3 +1,5 @@
+import { Service } from "./Service";
+
 export class User {
     indicateur: any;
     constructor(
@@ -35,6 +37,11 @@ export class User {
         }[],
         public service_list?: any[],
         public statut?: string,
+        public roles_ticketing_list?: {
+            _id?: string,
+            module?: Service,
+            role?: string,
+        }[],
     ) { }
 
 

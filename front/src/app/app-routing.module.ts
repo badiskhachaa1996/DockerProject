@@ -243,7 +243,6 @@ import { DocCheckerComponent } from './international/generation-doc/doc-checker/
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
-import { ServicesComponent } from './ticketing/services/services.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -454,7 +453,6 @@ const routes: Routes = [
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/services', component: ServicesComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             { path: 'agent/ajout', component: AddAgentV2Component, canActivate: [AuthGuardService] },
             { path: 'agent/list', component: ListAgentV2Component, canActivate: [AuthGuardService] },
