@@ -121,34 +121,7 @@ app.post("/create", (req, res) => {
                         });
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
-                        console.log(sujet.service_id.label, sujet.service_id.label.startsWith('IGS'))
-                        if (sujet.service_id.label.startsWith('IGS')) {
-                            let htmlemail = `
-                            <p>Bonjour,</p><br>
-                            <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service IGS, Le sujet de ce ticket est ${sujet.label}. Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
-                            <p>Cordialement,</p><br>
-                            `
-                            let mailOptions = {
-                                from: 'ims@intedgroup.com',
-                                to: 'ims.support@intedgroup.com',
-                                subject: '[IMS - Ticketing] - Ticket ' + id + ' a été crée',
-                                html: htmlemail,
-                                priority: 'high',
-                                attachments: [{
-                                    filename: 'signature.png',
-                                    path: 'assets/ims-intedgroup-logo.png',
-                                    cid: 'red' //same cid value as in the html img src
-                                }]
-                            };
-
-
-                            transporter.sendMail(mailOptions, function (error, info) {
-                                if (error) {
-                                    console.error(error);
-                                }
-                            });
-                        }
-                        else if (sujet.service_id.label != "Pédagogie")
+                        if (sujet.service_id.label != "Pédagogie")
                             User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
                                 listResponsable.forEach(responsable => {
                                     let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
@@ -156,7 +129,7 @@ app.post("/create", (req, res) => {
                                     let mailOptions = {
                                         from: 'ims@intedgroup.com',
                                         to: responsable.email,
-                                        subject: '[IMS - Ticketing] - Notification ',
+                                        subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
                                         html: htmlemail,
                                         priority: 'high',
                                         attachments: [{
@@ -820,6 +793,12 @@ app.get("/getAllAssigne/:id", (req, res) => {
 
 app.get("/getAllNonAssigne", (req, res) => {
     Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
+app.post("/getAllNonAssigneV2", (req, res) => {
+    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });

@@ -1374,7 +1374,7 @@ app.post('/create', (req, res) => {
 })
 
 app.get('/getAllByServiceFromList/:service_id', (req, res) => {
-  User.find({ service_list: { $in: [req.params.service_id] } }).then((usersFromDb) => {
+  User.find({ service_list: { $in: [req.params.service_id] } }).populate('roles_ticketing_list.module').then((usersFromDb) => {
     if (usersFromDb)
       res.status(200).send(usersFromDb);
     else

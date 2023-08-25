@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Pointeuse } from 'src/app/models/Pointeuse';
+import { PointeuseData } from 'src/app/models/PointeuseData';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
 
 @Component({
@@ -31,11 +32,19 @@ export class ConfigurationPointeuseComponent implements OnInit {
   serialNumberList = [
     { label: 'CLN5210560094', value: 'CLN5210560094' }
   ]
+
+  pointeuseDic = {}
   constructor(private PointeuseService: PointeuseService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
     this.PointeuseService.getAll().subscribe(data => {
       this.pointeuses = data
+    })
+    this.PointeuseService.getData().subscribe(data => {
+      data.forEach(pd => {
+        this.pointeuseDic[pd.serial_number] = pd
+      })
+      console.log(this.pointeuseDic)
     })
   }
 
@@ -89,10 +98,15 @@ export class ConfigurationPointeuseComponent implements OnInit {
 
 
   visiblePopUp = false
-  dataPopUp
+  dataPopUp: PointeuseData
+  dataMachine: Pointeuse
   seePopUp(machine: Pointeuse) {
     this.visiblePopUp = true
-    this.dataPopUp = machine
+    this.PointeuseService.getDataFromSN(machine.serial_number).subscribe(pd => {
+      this.dataPopUp = pd
+      this.dataMachine = machine
+    })
+
   }
 
   visibleUser = false

@@ -117,8 +117,8 @@
                         <th>
                             Type de Pointage disponible
                         </th>
-                        <th pSortableColumn="nb_users_register" scope="col" style="text-align: center;">
-                            Nombre des utilisateurs enregistrées <p-sortIcon field="nb_users_register"></p-sortIcon>
+                        <th scope="col" style="text-align: center;">
+                            Nombre des utilisateurs enregistrées
                         </th>
                         <th>
                             Action
@@ -139,8 +139,11 @@
                         <td>
                             {{machine.pointageType}}
                         </td>
-                        <td>
-                            En dévéloppement
+                        <td *ngIf="pointeuseDic && pointeuseDic[machine.serial_number]">
+                            {{pointeuseDic[machine.serial_number]?.nb_users}}
+                        </td>
+                        <td *ngIf="!pointeuseDic || !pointeuseDic[machine.serial_number]">
+                            Indisponible
                         </td>
                         <td>
                             <i pTooltip="Voir des informations supplémentaire" tooltipPosition="bottom"
@@ -163,24 +166,24 @@
     <h4 style="font-weight:bold">Informations supplémentaires</h4>
     <hr />
     <p>
-        Nom de l'appareil : <br><br>
-        IP : <br>
-        Mask : <br>
-        Gateway : <br><br>
-        Version Firmware : <br>
+        Nom de l'appareil : {{dataPopUp?.nom_appareil}} <br><br>
+        IP : {{dataPopUp?.ip}}<br>
+        Mask : {{dataPopUp?.mask}}<br>
+        Gateway : {{dataPopUp?.gateway}}<br><br>
+        Version Firmware : {{dataPopUp?.firmware}}<br>
     </p>
     <br>
     <p>
-        Plateforme : <br><br>
+        Plateforme : {{dataPopUp?.plateforme}}<br><br>
         Numéro de série : {{dataPopUp?.serial_number}} <br><br>
-        Adresse MAC : <br><br>
-        Localisation : <br><br>
+        Adresse MAC : {{dataPopUp?.adresse_mac}}<br><br>
+        Localisation : {{dataMachine?.localisation}}<br><br>
     </p>
     <br>
     <p>
-        Nombre des utilisateurs : <br><br>
-        Nombres des fingers : <br><br>
-        Nombres des faces : <br><br>
+        Nombre des utilisateurs : {{dataPopUp?.nb_users}}<br><br>
+        Nombres des fingers : {{dataPopUp?.nb_fingers}}<br><br>
+        Nombres des faces : {{dataPopUp?.nb_faces}}<br><br>
     </p>
     <hr />
 </p-sidebar>
