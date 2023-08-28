@@ -42,6 +42,11 @@ export class User {
             module?: Service,
             role?: string,
         }[],
+        public documents_rh?: {
+            _id?: string,
+            filename?: string,
+            date?: Date,
+        }[]
     ) { }
 
 

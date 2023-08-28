@@ -795,7 +795,7 @@
 							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs" style="cursor: pointer; color: #22C55E" (click)="onFillForm(collaborateur)"></i>
 							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles" style="cursor: pointer;" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
 							<i class="pi pi-align-center m-1" pTooltip="Job descrription" style="cursor: pointer; color: #3B82F6" (click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
-							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="cursor: pointer; color: #F59E0B"></i>
+							<i class="pi pi-file m-1" pTooltip="Insérer un document" style="cursor: pointer; color: #F59E0B" (click)="clickUploadFile()"></i>
 							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
 							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7" (click)="onGetHistoriqueCra(collaborateur.user_id?._id); showHistoriqueCra = true;"></i>
                             <i pTooltip="Envoyer un mail" (click)="onInitEmailView(collaborateur)" class="pi pi-envelope m-1" style="color: #C0C0C0"></i>

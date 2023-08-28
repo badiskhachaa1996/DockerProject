@@ -12,6 +12,12 @@ const schemea = mongoose.Schema({
     adresse_mac: { type: String },
     nb_faces: { type: Number },
     nb_fingers: { type: Number },
+    users: {
+        type: [{
+            UID: { type: Number },
+            name: { type: String }
+        }]
+    }
 });
 
 const PointeuseData = mongoose.model('pointeuseData', schemea);
