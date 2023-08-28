@@ -44,8 +44,10 @@ export class User {
         }[],
         public documents_rh?: {
             _id?: string,
-            filename?: string,
             date?: Date,
+            filename?: string,
+            path?: string,
+            note?: string
         }[]
     ) { }
 

@@ -56,9 +56,32 @@
         </form>
     </div>
 
+    <div class="col-12 card" *ngIf="addMember">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="addMember = false"
+            aria-hidden="true"> </i>
+        <h3 class="text-center" style="font-weight: bold;">
+            Ajout d'un membre
+        </h3>
+        <form [formGroup]="MemberForm" (ngSubmit)="onAddMb()" class="p-fluid p-formgrid grid col-12">
+            <div class="field col-12 md:col-12">
+                <label For="service">Membre <span style="color: red;"> * </span></label>
+                <p-dropdown placeholder="Choisissez un membre" filter="true" formControlName="member"
+                    [options]="memberDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="col-12">
+                <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Ajouter le membre" type="submit"
+                    [disabled]="MemberForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+
     <div class="col-12 card" *ngIf="addMemberOfService">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
             (click)="addMemberOfService = null" aria-hidden="true"> </i>
+        <button pButton icon="pi pi-file" label="Ajouter un membre" (click)="initAddMember()" type="button"
+            style="margin-left: 2px;">
+        </button>
         <h3 class="text-center" style="font-weight: bold;">
             Ajout des membres à {{addMemberOfService.label}}
         </h3>

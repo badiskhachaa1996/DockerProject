@@ -121,6 +121,8 @@ export class ConfigurationComponent implements OnInit {
       this.ToastService.add({ severity: 'success', summary: "Le membre a été ajouté au service avec succès" })
       this.memberList.push(data)
       this.memberDropdown.splice(this.customIndexOfDropdown(this.memberDropdown, agent), 1)
+      this.addMember = null
+      this.MemberForm.reset()
       if (this.memberDic[this.addMemberOfService._id])
         this.memberDic[this.addMemberOfService._id] = this.memberDic[this.addMemberOfService._id] + ", " + agent.firstname + " " + agent.lastname.toUpperCase()
       else
@@ -224,5 +226,17 @@ export class ConfigurationComponent implements OnInit {
 
   deleteModule(module, idx) {
     this.seeRole.roles_ticketing_list.splice(idx, 1)
+  }
+
+  addMember;
+  MemberForm: FormGroup = new FormGroup(
+    { member: new FormControl('', Validators.required) }
+  )
+  onAddMb() {
+    this.onAddMember(this.MemberForm.value.member)
+  }
+
+  initAddMember() {
+    this.addMember = true
   }
 }

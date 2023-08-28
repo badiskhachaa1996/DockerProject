@@ -309,7 +309,7 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="Mes documents">
-                    <p-table [value]="documents" dataKey="_id" [rows]="4" [rowHover]="true"
+                    <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
@@ -321,10 +321,12 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-actualite>
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
+                                <td>{{rowData.date | date:'mediumDate'}}</td>
+                                <td>{{rowData.filename}}</td>
+                                <td>
+                                    <a style="cursor: pointer;" (click)="downloadRHFile(rowData)">Télécharger</a>
+                                </td>
+                                <td>{{rowData.note}}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
