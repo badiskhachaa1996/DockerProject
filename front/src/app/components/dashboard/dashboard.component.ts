@@ -1054,6 +1054,14 @@ export class DashboardComponent implements OnInit {
   }
 
   actualites: ActualiteRH[]
-  documents: any[]
+  downloadRHFile(doc) {
+    this.UserService.downloadRH(this.token.id, doc._id, doc.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      saveAs(blob, doc.path)
+    }, (error) => {
+      console.error(error)
+    })
+  }
   //* end
 }

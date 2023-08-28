@@ -555,19 +555,40 @@ export class CollaborateursComponent implements OnInit {
     this.seeFile = user
   }
 
-  downloadRHFile(pj) {
-    /*this.UserService.downloadRH(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
+  downloadRHFile(doc) {
+    this.UserService.downloadRH(this.seeFile._id, doc._id, doc.path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
-      saveAs(blob, pj.path)
+      saveAs(blob, doc.path)
     }, (error) => {
       console.error(error)
-    })*/
+    })
   }
   uploadFileRH
+  FileUploadRH(event: [File]) {
+    if (event != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('filename', this.uploadFileRH.filename)
+      formData.append('_id', this.uploadFileRH._id)
+      formData.append('path', event[0].name)
+      formData.append('file', event[0])
+      this.UserService.uploadRH(formData).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.seeFile.documents_rh[this.seeFile.documents_rh.indexOf(this.uploadFileRH)].path = event[0].name
+        this.uploadFileRH = null;
+        //this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+  onAddRH() {
+    this.seeFile.documents_rh.push({ date: new Date(), filename: "Téléverser le fichier s'il vous plaît", _id: new mongoose.Types.ObjectId().toString() })
+  }
   onUploadRH(uploadFileRH) {
     if (uploadFileRH?.filename && uploadFileRH.filename != 'Cliquer pour modifier le nom du document ici') {
-      document.getElementById('selectedFile').click();
+      document.getElementById('selectedFileRH').click();
       this.uploadFileRH = uploadFileRH
     } else {
       this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
