@@ -515,7 +515,7 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-    { path: 'cvtheque', component: IMatchComponent }
+    { path: 'imatch', component: IMatchComponent }
 
 ]
 

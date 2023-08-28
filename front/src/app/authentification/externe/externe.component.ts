@@ -18,7 +18,7 @@ import { MpOublieComponent } from '../mp-oublie/mp-oublie.component';
   styleUrls: ['./externe.component.scss']
 })
 export class ExterneComponent implements OnInit {
-  logo = "assets/images/logo-ims.png"
+  logo = "assets/images/logo-ims-new.png"
   showLoginPage = false;
 
   formLogin: FormGroup = new FormGroup({
