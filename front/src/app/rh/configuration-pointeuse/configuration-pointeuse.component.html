@@ -191,9 +191,8 @@
 <p-sidebar [style]="{width:'30em'}" [(visible)]="visibleUser" position="left" [baseZIndex]="10000" [modal]="false">
     <h4 style="font-weight:bold">Liste des utilisateurs</h4>
     <hr />
-    <h5 style="font-weight: bold">Compétences</h5>
-    <!--<ul>
-        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
-    </ul>-->
+    <ul>
+        <li *ngFor="let user of dataPopUp?.users">{{user.UID}} : {{ user.name }}</li>
+    </ul>
     <hr />
 </p-sidebar>

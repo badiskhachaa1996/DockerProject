@@ -14,6 +14,7 @@ import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import { FileUpload } from 'primeng/fileupload';
 import { saveAs } from 'file-saver';
 import mongoose from 'mongoose';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-collaborateurs',
@@ -108,7 +109,8 @@ export class CollaborateursComponent implements OnInit {
 
   token: any;
 
-  constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService, private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder) { }
+  constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
+    private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder, private UserService: AuthService) { }
 
   ngOnInit(): void {
     // décodage du token
@@ -116,42 +118,42 @@ export class CollaborateursComponent implements OnInit {
 
     // recuperation de la liste des collaborateurs
     this.onGetCollaborateurs();
-    
+
     // recuperation de la liste des agents
     this.rhService.getAgents()
-    .then((response) => {
-      this.agents = [];
-      response.forEach((user: User) => {
-        let userName = `${user?.lastname} ${user?.firstname}`;
-        this.agents.push({label: userName, value: user._id});
-      });
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des agents'}); });
+      .then((response) => {
+        this.agents = [];
+        response.forEach((user: User) => {
+          let userName = `${user?.lastname} ${user?.firstname}`;
+          this.agents.push({ label: userName, value: user._id });
+        });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des agents' }); });
 
     // initialisation du formulaire d'ajout
     this.formAdd = this.formBuilder.group({
-      user_id:        ['', Validators.required],
-      matricule:      [''],
+      user_id: ['', Validators.required],
+      matricule: [''],
       date_demarrage: [new Date()],
       date_naissance: [new Date()],
-      localisation:   [''],
+      localisation: [''],
       intitule_poste: [''],
-      contrat_type:   ['', Validators.required],
-      statut:         [''],
-      h_cra:          ['']
+      contrat_type: ['', Validators.required],
+      statut: [''],
+      h_cra: ['']
     });
 
     // initialisation du formulaire de mise à jour
     this.formUpdate = this.formBuilder.group({
-      user_id:        ['', Validators.required],
-      matricule:      [''],
+      user_id: ['', Validators.required],
+      matricule: [''],
       date_demarrage: [''],
       date_naissance: [''],
-      localisation:   [''],
+      localisation: [''],
       intitule_poste: [''],
-      contrat_type:   ['', Validators.required],
-      statut:         [''],
-      h_cra:          ['']
+      contrat_type: ['', Validators.required],
+      statut: [''],
+      h_cra: ['']
     });
 
     // initialisation du formulaire de lise à jour des informations personnelles du collaborateur
@@ -187,57 +189,53 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // recuperation de la liste des collaborateurs
-  onGetCollaborateurs(): void
-  {
+  onGetCollaborateurs(): void {
     this.rhService.getCollaborateurs()
-    .then((response) => { this.collaborateurs = response; })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs'}); });
+      .then((response) => { this.collaborateurs = response; })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
   }
 
   // récupère un collaborateur via son id et attribution de ses compétences
-  onGetCollaborateurCompetence(id: string): void
-  {
+  onGetCollaborateurCompetence(id: string): void {
     this.rhService.getCollaborateur(id)
-    .then((response) => { this.collaborateurCompetences  = response.competences; })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer le collaborateur'}); });
+      .then((response) => { this.collaborateurCompetences = response.competences; })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer le collaborateur' }); });
   }
 
   // méthode d'ajout du collaborateur
-  onAdd(): void
-  {
+  onAdd(): void {
     // recuperation des données du formulaire
     const formValue = this.formAdd.value;
-    
+
     // création du nouvel objet collaborateur
-    const collaborateur =  new Collaborateur();
-    collaborateur.user_id         = formValue.user_id;
-    collaborateur.matricule       = formValue.matricule;
-    collaborateur.date_demarrage  = formValue.date_demarrage;
-    collaborateur.date_naissance  = formValue.date_naissance;
-    collaborateur.localisation    = formValue.localisation;
-    collaborateur.intitule_poste  = formValue.intitule_poste;
-    collaborateur.contrat_type    = formValue.contrat_type;
-    collaborateur.statut          = formValue.statut;
-    collaborateur.h_cra           = formValue.h_cra;
+    const collaborateur = new Collaborateur();
+    collaborateur.user_id = formValue.user_id;
+    collaborateur.matricule = formValue.matricule;
+    collaborateur.date_demarrage = formValue.date_demarrage;
+    collaborateur.date_naissance = formValue.date_naissance;
+    collaborateur.localisation = formValue.localisation;
+    collaborateur.intitule_poste = formValue.intitule_poste;
+    collaborateur.contrat_type = formValue.contrat_type;
+    collaborateur.statut = formValue.statut;
+    collaborateur.h_cra = formValue.h_cra;
 
     // envoi des données en base de données
     this.rhService.postCollaborateur(collaborateur)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Agents', detail: 'Collaborateur ajouté avec succès'});
-      // recuperation de la liste des collaborateurs
-      this.onGetCollaborateurs();
-      // masque le formulaire de mise à jour
-      this.showFormAdd = false;
-      this.formAdd.reset();
-    })
-    .catch((error) => { this.messageService.add({severity: 'error', summary: 'Agents', detail: "Ajout impossible"}); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Agents', detail: 'Collaborateur ajouté avec succès' });
+        // recuperation de la liste des collaborateurs
+        this.onGetCollaborateurs();
+        // masque le formulaire de mise à jour
+        this.showFormAdd = false;
+        this.formAdd.reset();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: "Ajout impossible" }); });
   }
 
   // remplissage du formulaire de modification
-  onFillForm(collaborateur: Collaborateur): void
-  {
+  onFillForm(collaborateur: Collaborateur): void {
     this.collaborateurToUpdate = collaborateur;
-    const {user_id} = collaborateur;
+    const { user_id } = collaborateur;
 
     this.formUpdate.patchValue({
       user_id: collaborateur.user_id._id,
@@ -259,48 +257,46 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // mise à jour des données collaborateur d'un collaborateur
-  onUpdate(): void
-  {
+  onUpdate(): void {
     // recuperation des données du formulaire
     const formValue = this.formUpdate.value;
     // affectations des données à la variable de mise à jour
-    this.collaborateurToUpdate.user_id         = formValue.user_id;
-    this.collaborateurToUpdate.matricule       = formValue.matricule;
-    this.collaborateurToUpdate.date_demarrage  = formValue.date_demarrage;
-    this.collaborateurToUpdate.date_naissance  = formValue.date_naissance;
-    this.collaborateurToUpdate.localisation    = formValue.localisation;
-    this.collaborateurToUpdate.intitule_poste  = formValue.intitule_poste;
-    this.collaborateurToUpdate.contrat_type    = formValue.contrat_type;
-    this.collaborateurToUpdate.statut          = formValue.statut;
-    this.collaborateurToUpdate.h_cra           = formValue.h_cra;
+    this.collaborateurToUpdate.user_id = formValue.user_id;
+    this.collaborateurToUpdate.matricule = formValue.matricule;
+    this.collaborateurToUpdate.date_demarrage = formValue.date_demarrage;
+    this.collaborateurToUpdate.date_naissance = formValue.date_naissance;
+    this.collaborateurToUpdate.localisation = formValue.localisation;
+    this.collaborateurToUpdate.intitule_poste = formValue.intitule_poste;
+    this.collaborateurToUpdate.contrat_type = formValue.contrat_type;
+    this.collaborateurToUpdate.statut = formValue.statut;
+    this.collaborateurToUpdate.h_cra = formValue.h_cra;
 
     this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
-    .then((response) => {
-      this.messageService.add({severity: 'success', summary: 'Collaborateur', detail: 'Collaborateur mis à jour avec succès'});
-      this.showFormUpdate = false;
-      this.formUpdate.reset();
-      // recuperation de la liste des collaborateurs
-      this.onGetCollaborateurs();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour le collaborateur' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Collaborateur mis à jour avec succès' });
+        this.showFormUpdate = false;
+        this.formUpdate.reset();
+        // recuperation de la liste des collaborateurs
+        this.onGetCollaborateurs();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour le collaborateur' }); });
   }
 
   // remplissage du formulaire de mise à jour des informations personnelles
-  onFillFormUpdatePersonalData(collaborateur: Collaborateur): void
-  {
+  onFillFormUpdatePersonalData(collaborateur: Collaborateur): void {
     this.collaborateurToUpdate = collaborateur;
     // recuperation des informations user du collaborateur;
-    const {user_id} = collaborateur;
+    const { user_id } = collaborateur;
     this.collaborateurPersonalData = user_id;
 
     this.formUpdatePersonalInfo.patchValue({
-      civilite:     user_id?.civilite,
-      firstname:    user_id?.firstname,
-      lastname:     user_id?.lastname,
-      indicatif:    user_id?.indicatif,
-      phone:        user_id?.phone,
-      email:        user_id?.email,
-      email_perso:  user_id?.email_perso,
+      civilite: user_id?.civilite,
+      firstname: user_id?.firstname,
+      lastname: user_id?.lastname,
+      indicatif: user_id?.indicatif,
+      phone: user_id?.phone,
+      email: user_id?.email,
+      email_perso: user_id?.email_perso,
     });
     // masque le formulaire d'ajout et de modif d'info collaborateur
     this.showFormAdd = false;
@@ -310,33 +306,31 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // mise à jour des informations personnelles du collaborateur
-  onUpdatePersonalData(): void
-  {
+  onUpdatePersonalData(): void {
     const formValue = this.formUpdatePersonalInfo.value;
-    this.collaborateurPersonalData.civilite     = formValue.civilite;
-    this.collaborateurPersonalData.firstname    = formValue.firstname;
-    this.collaborateurPersonalData.lastname     = formValue.lastname;
-    this.collaborateurPersonalData.indicatif    = formValue.indicatif;
-    this.collaborateurPersonalData.phone        = formValue.phone;
-    this.collaborateurPersonalData.email        = formValue.email;
-    this.collaborateurPersonalData.email_perso  = formValue.email_perso;
-    this.collaborateurPersonalData.role         = formValue.role;
+    this.collaborateurPersonalData.civilite = formValue.civilite;
+    this.collaborateurPersonalData.firstname = formValue.firstname;
+    this.collaborateurPersonalData.lastname = formValue.lastname;
+    this.collaborateurPersonalData.indicatif = formValue.indicatif;
+    this.collaborateurPersonalData.phone = formValue.phone;
+    this.collaborateurPersonalData.email = formValue.email;
+    this.collaborateurPersonalData.email_perso = formValue.email_perso;
+    this.collaborateurPersonalData.role = formValue.role;
 
     // envoi des données en bases de données
     this.rhService.patchCollaborateurPersonalData(this.collaborateurPersonalData)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Informations personnelles du collaborateur mis à jour avec succès' });
-      this.showFormUpdatePersonalInfo = false;
-      this.formUpdatePersonalInfo.reset();
-      this.onGetCollaborateurs();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Informations personnelles', detail: 'Impossible de mettre à jour les informations personnelles du collaborateur' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Informations personnelles du collaborateur mis à jour avec succès' });
+        this.showFormUpdatePersonalInfo = false;
+        this.formUpdatePersonalInfo.reset();
+        this.onGetCollaborateurs();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Informations personnelles', detail: 'Impossible de mettre à jour les informations personnelles du collaborateur' }); });
   }
 
   // pour créer des champs de formulaires à la volée
-  onCreateCompetenceField(): FormGroup
-  {
-    return(
+  onCreateCompetenceField(): FormGroup {
+    return (
       this.formBuilder.group({
         kind: [''],
         level: ['']
@@ -345,40 +339,36 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // récupère les compétences
-  getCompetences(): FormArray
-  {
+  getCompetences(): FormArray {
     return this.formAddCompetence.get('competences') as FormArray;
   }
 
   // ajoute de nouveaux champs au formulaire
-  onAddCompetence(): void
-  {
+  onAddCompetence(): void {
     const newCompetenceControl = this.onCreateCompetenceField();
     this.getCompetences().push(newCompetenceControl);
   }
 
   // suppression d'un champ de compétence
-  onDeleteCompetence(i: number): void
-  {
+  onDeleteCompetence(i: number): void {
     this.getCompetences().removeAt(i);
   }
 
   // méthode de mise à jour du collaborateur pour lui ajouter des compétences
-  onAddCollaborateurSkills(): void
-  {
+  onAddCollaborateurSkills(): void {
     const formValue = this.formAddCompetence.value;
 
     // envoi des données en base de données
     this.rhService.patchCollaborateurSkills(this.collaborateurToUpdate._id, formValue.competences)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétences du collaborateur mis à jour' });
-      this.formAddCompetence.reset();
-      this.showFormAddCompetence = false;
-      // recuperation de la liste des collaborateurs
-      this.onGetCollaborateurs();
-      this.onGetCollaborateurCompetence(response._id);
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétences du collaborateur mis à jour' });
+        this.formAddCompetence.reset();
+        this.showFormAddCompetence = false;
+        // recuperation de la liste des collaborateurs
+        this.onGetCollaborateurs();
+        this.onGetCollaborateurCompetence(response._id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
   }
 
   // méthodes de mise à jour d'une compétence
@@ -390,51 +380,47 @@ export class CollaborateursComponent implements OnInit {
     // méthode de mise à jour de la compétence
     this.collaborateurToUpdate.competences = this.collaborateurCompetences;
     this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
-    .then((response) => {
-      this.onGetCollaborateurs();
-      this.onGetCollaborateurCompetence(response._id);
-      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
-      delete this.clonedCollaborateurCompetences[competence._id as string];
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+      .then((response) => {
+        this.onGetCollaborateurs();
+        this.onGetCollaborateurCompetence(response._id);
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+        delete this.clonedCollaborateurCompetences[competence._id as string];
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
   }
 
   onRowEditCancel(competence: any, index: number) {
-      this.collaborateurCompetences[index] = this.clonedCollaborateurCompetences[competence._id as string];
-      delete this.clonedCollaborateurCompetences[competence._id as string];
+    this.collaborateurCompetences[index] = this.clonedCollaborateurCompetences[competence._id as string];
+    delete this.clonedCollaborateurCompetences[competence._id as string];
   }
 
   // méthode de suppression d'une compétence
-  onDeleteCollaborateurCompetence(id: string): void
-  {
+  onDeleteCollaborateurCompetence(id: string): void {
     this.collaborateurToUpdate.competences = this.collaborateurToUpdate.competences.filter(c => c._id != id);
 
     this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
-    .then((response) => {
-      this.onGetCollaborateurs();
-      this.onGetCollaborateurCompetence(response._id);
-      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+      .then((response) => {
+        this.onGetCollaborateurs();
+        this.onGetCollaborateurCompetence(response._id);
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
   }
 
   // méthode de suppression du collaborateur
-  onRemoveCollaborateur(id: string): void
-  {
-    if(confirm('Voulez vous supprimer ce collaborateur ?'))
-    {
+  onRemoveCollaborateur(id: string): void {
+    if (confirm('Voulez vous supprimer ce collaborateur ?')) {
       this.rhService.deleteCollaborateur(id)
-      .then((response) => {
-        this.onGetCollaborateurs();
-        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: response });
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: error }); });
+        .then((response) => {
+          this.onGetCollaborateurs();
+          this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: response });
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: error }); });
     }
   }
 
   // initialisation du formulaire de mise à jour de la description du poste
-  onInitFormUpdateJobDescription(): void
-  {
+  onInitFormUpdateJobDescription(): void {
     // initialisation du formulaire de mise à jour de la description du poste
     this.formUpdateJobDescription = this.formBuilder.group({
       description: [this.collaborateurToUpdate?.poste_description, Validators.required],
@@ -442,31 +428,29 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // mise à jour du poste du collaborateur
-  onUpdateJobDescription(): void
-  {
+  onUpdateJobDescription(): void {
     const formValue = this.formUpdateJobDescription.value;
 
     this.collaborateurToUpdate.poste_description = formValue.description;
 
     this.rhService.patchCollaborateurData(this.collaborateurToUpdate)
-    .then((response) => {
-      this.onGetCollaborateurs();
-      this.showFormUpdateJobDescriptionForm = false;
-      this.formUpdateJobDescription.reset();
-      this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
+      .then((response) => {
+        this.onGetCollaborateurs();
+        this.showFormUpdateJobDescriptionForm = false;
+        this.formUpdateJobDescription.reset();
+        this.messageService.add({ severity: 'success', summary: 'Collaborateur', detail: 'Compétence mis à jour' });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Collaborateur', detail: 'Impossible de mettre à jour les compétences du collaborateur' }); });
   }
 
   // recuperation de l'historique des cra
-  onGetHistoriqueCra(id: string)
-  {
+  onGetHistoriqueCra(id: string) {
     this.dailyCheckService.getUserChecks(id)
-    .then((response) => {
-      this.historiqueCra = response;
-      console.log(response)
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      .then((response) => {
+        this.historiqueCra = response;
+        console.log(response)
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
 
@@ -496,10 +480,9 @@ export class CollaborateursComponent implements OnInit {
   }
 
   // méthode d'initialisation de la vue envoi de mail
-  onInitEmailView(collaborateur: Collaborateur): void
-  {
+  onInitEmailView(collaborateur: Collaborateur): void {
     this.collaborateurToUpdate = collaborateur;
-    const {user_id}: any = this.collaborateurToUpdate;
+    const { user_id }: any = this.collaborateurToUpdate;
 
     this.emailTypeService.HEgetAllTo(user_id._id).subscribe(data => {
       this.historiqueEmails = data
@@ -553,7 +536,7 @@ export class CollaborateursComponent implements OnInit {
 
   onEmailPerso() {
 
-    const {user_id}: any = this.collaborateurToUpdate;
+    const { user_id }: any = this.collaborateurToUpdate;
 
     this.emailTypeService.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: user_id.email, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
@@ -564,5 +547,34 @@ export class CollaborateursComponent implements OnInit {
       })
     })
 
+  }
+
+
+  seeFile: User
+  clickUploadFile(user: User) {
+    this.seeFile = user
+  }
+
+  downloadRHFile(pj) {
+    /*this.UserService.downloadRH(this.mailTypeSelected?._id, pj._id, pj.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      saveAs(blob, pj.path)
+    }, (error) => {
+      console.error(error)
+    })*/
+  }
+  uploadFileRH
+  onUploadRH(uploadFileRH) {
+    if (uploadFileRH?.filename && uploadFileRH.filename != 'Cliquer pour modifier le nom du document ici') {
+      document.getElementById('selectedFile').click();
+      this.uploadFileRH = uploadFileRH
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Vous devez d\'abord donner un nom au fichier avant de l\'upload' });
+    }
+  }
+
+  onDeleteRH(ri) {
+    delete this.seeFile.documents_rh[ri];
   }
 }

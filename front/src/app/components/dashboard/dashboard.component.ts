@@ -51,6 +51,9 @@ import { RhService } from 'src/app/services/rh.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { Conge } from 'src/app/models/Conge';
 import { saveAs } from 'file-saver';
+import { ActualiteInt } from 'src/app/models/ActualiteInt';
+import { ActualiteRH } from 'src/app/models/ActualiteRH';
+import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -293,7 +296,8 @@ export class DashboardComponent implements OnInit {
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
-    private rhService: RhService, private congeService: CongeService
+    private rhService: RhService, private congeService: CongeService,
+    private ActuRHService: ActualiteRHService
   ) { }
 
 
@@ -407,6 +411,11 @@ export class DashboardComponent implements OnInit {
         this.historiqueCra = response;
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
+    //Recuperation des actus
+    this.ActuRHService.getAll().subscribe((response) => {
+      this.actualites = response;
+    })
 
     // initialisation du formulaire d'ajout de congé
     this.formAddConge = this.formBuilder.group({
@@ -994,11 +1003,9 @@ export class DashboardComponent implements OnInit {
   }
 
   // methode pour pre-remplir le formulaire de modification de congé
-  onPachCongeData(conge: Conge): void
-  {
+  onPachCongeData(conge: Conge): void {
     this.congeToUpdate = conge;
-    if(conge.type_conge === "Autre motif")
-    {
+    if (conge.type_conge === "Autre motif") {
       this.showOtherTextArea = true;
     }
 
@@ -1014,28 +1021,39 @@ export class DashboardComponent implements OnInit {
     this.showUpdateCongeForm = true;
   }
 
-  onUpdateConge(): void
-  {
+  onUpdateConge(): void {
     // recuperation des valeurs du formulaire
     const formValue = this.formUpdateConge.value;
 
-    this.congeToUpdate.type_conge     = formValue.type;
-    this.congeToUpdate.other_motif    = formValue.other;
+    this.congeToUpdate.type_conge = formValue.type;
+    this.congeToUpdate.other_motif = formValue.other;
 
-    this.congeToUpdate.date_debut     = formValue.debut;
-    this.congeToUpdate.date_fin       = formValue.fin;
-    this.congeToUpdate.nombre_jours   = formValue.nb_jour;
-    this.congeToUpdate.motif          = formValue.motif;
+    this.congeToUpdate.date_debut = formValue.debut;
+    this.congeToUpdate.date_fin = formValue.fin;
+    this.congeToUpdate.nombre_jours = formValue.nb_jour;
+    this.congeToUpdate.motif = formValue.motif;
 
     this.congeService.putConge(this.congeToUpdate)
-    .then(() => {
-      this.formUpdateConge.reset();
-      this.showUpdateCongeForm = false;
-      this.showOtherTextArea = false;
-      this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
-      this.onGetConges(this.congeToUpdate.user_id);
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
+      .then(() => {
+        this.formUpdateConge.reset();
+        this.showUpdateCongeForm = false;
+        this.showOtherTextArea = false;
+        this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
+        this.onGetConges(this.congeToUpdate.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
+
+  getHistoPointage(value) {
+    console.log(value)
+    this.dailyCheckService.getUserChecksByDate(this.token.id, value)
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+  }
+
+  actualites: ActualiteRH[]
+  documents: any[]
   //* end
 }

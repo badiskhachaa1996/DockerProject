@@ -358,6 +358,7 @@ app.use('/soc/rh', rhControlleur);
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
+app.use('/soc/actualiteRH', require('./controllers/actualiteRHController'))
 app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
