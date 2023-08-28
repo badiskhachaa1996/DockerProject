@@ -100,7 +100,7 @@
                         {{user.firstname|titlecase}} {{user.lastname|uppercase}}
                     </td>
                     <td>
-                        <i pTooltip="Voir les roles" style="margin-left: 2%; cursor: pointer;" class="pi pi-star"
+                        <i pTooltip="Voir les roles Ticketing" style="margin-left: 2%; cursor: pointer;" class="pi pi-star"
                             (click)="onSeeRole(user)" aria-hidden="true"></i>
 
                         <i pTooltip="Supprimer ce membre du service" style="margin-left: 2%; cursor: pointer;"
@@ -114,7 +114,7 @@
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="seeRole = null"
             aria-hidden="true"> </i>
         <h3 class="text-center" style="font-weight: bold;">
-            Ajout des role à {{seeRole.firstname | titlecase}} {{seeRole.lastname | uppercase}}
+            Ajout des role Ticketing à {{seeRole.firstname | titlecase}} {{seeRole.lastname | uppercase}}
         </h3>
         <button pButton icon="pi pi-file" label="Ajouter un module" (click)="initAddModule()" type="button"
             style="margin-left: 2px;">
@@ -129,7 +129,7 @@
                         Service <p-sortIcon field="module.libelle"> </p-sortIcon>
                     </th>
                     <th pSortableColumn="role" style="text-align:center">
-                        Role <p-sortIcon field="role"> </p-sortIcon>
+                        Role Ticketing<p-sortIcon field="role"> </p-sortIcon>
                     </th>
                     <th>Action</th>
                 </tr>
@@ -140,7 +140,7 @@
                         <p-cellEditor>
                             <ng-template pTemplate="input">
                                 <p-dropdown [options]="moduleList" [(ngModel)]="rowData.module"
-                                    placeholder="Choisissez le module"></p-dropdown>
+                                    placeholder="Choisissez le service Ticketing"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{rowData.module.label}}

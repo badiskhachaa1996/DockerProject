@@ -76,7 +76,6 @@ export class ConfigurationComponent implements OnInit {
       else
         this.sujetDic[data.service_id] = data.label
       this.SujetForm.reset()
-      this.addSujet = null
       this.ToastService.add({ severity: 'success', summary: "Ajout du sujet avec succès" })
     })
   }

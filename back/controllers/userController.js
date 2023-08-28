@@ -1397,4 +1397,40 @@ app.put('/path-user-statut', (req, res) => {
     .catch((error) => { res.status(400).send(error); });
 });
 
+//Sauvegarde de la photo de profile
+const storage2 = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    let id = req.body._id;
+    if (!fs.existsSync("storage/documentRH/" + id + "/")) {
+      fs.mkdirSync("storage/documentRH/" + id + "/", { recursive: true });
+    }
+    callBack(null, "storage/documentRH/" + id + "/");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  },
+});
+
+const upload2 = multer({ storage: storage2, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/uploadRH", upload2.single("file"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("No File");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+
+  res.send({ message: 'success' });
+});
+
+app.get("/downloadRH/:_id/:path", (req, res) => {
+  let pathFile = "storage/documentRH/" + req.params._id + "/" + req.params.path
+  let fileFinal = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+    if (err)
+      return console.error(err);
+  });
+  res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFile)) })
+});
+
 module.exports = app;

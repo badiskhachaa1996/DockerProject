@@ -356,7 +356,7 @@ export class AuthService {
   }
 
   downloadRH(user_id, _id, path) {
-    let url = `${this.apiUrl}downloadRH/${user_id}/${_id}/${path}`;
+    let url = `${this.apiUrl}downloadRH/${_id}/${path}`;
     return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
