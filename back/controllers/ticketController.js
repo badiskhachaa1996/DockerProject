@@ -1056,5 +1056,35 @@ app.post('/sendMailUpdateStatut', (req, res) => {
 
 })
 
+app.get('/getAllByServiceAndCreateurID/:service_id/:createur_id', (req, res) => {
+    let id = req.params.service_id
+    let listSujetofService = []
+    let TicketList = []
+    Sujet.find()
+        .then(listSujets => {
+            listSujets.forEach(sujet => {
+                if (sujet.service_id == id) {
+                    listSujetofService.push(sujet._id.toString())
+                }
+            });
+            Ticket.find({ createur_id: req.params.createur_id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+                .then(result => {
+                    let listTicket = result.length > 0 ? result : []
+                    listTicket.forEach(ticket => {
+                        if (listSujetofService.includes(ticket.sujet_id._id.toString())) {
+                            TicketList.push(ticket)
+                        }
+                    })
+                    res.status(200).send(TicketList)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        })
+        .catch(err => {
+            console.error(err);
+        })
+})
+
 
 module.exports = app;
