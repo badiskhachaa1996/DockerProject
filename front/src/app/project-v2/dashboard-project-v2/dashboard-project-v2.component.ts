@@ -169,12 +169,12 @@ export class DashboardProjectV2Component implements OnInit {
       this.taskSelected=data;
     console.log(this.taskSelected)})    
   }
-  getDelaiTraitrement(task: Task) {
-    if (task){
+  getDelaiTraitrement() {
+    if (this.taskSelected){
     let date1 = new Date()
-    if (task.ticketId.statut == 'Traité' && task.ticketId.date_fin_traitement)
-      date1 = new Date(task.date_limite)
-    let date2 = new Date(task.date_limite)
+    if (this.taskSelected.ticketId.statut == 'Traité' && this.taskSelected.ticketId.date_fin_traitement)
+      date1 = new Date(this.taskSelected.ticketId.date_fin_traitement)
+    let date2 = new Date(this.taskSelected.ticketId.date_ajout)
 
     var diff = {
       sec: 0,
@@ -198,9 +198,7 @@ export class DashboardProjectV2Component implements OnInit {
     if (diff.min < 10)
       diff.min = "0" + diff.min.toString()
 
-    return `${diff.day}J ${diff.hour}H${diff.min}`;
-  }else{
-    return " "
+    return `${diff.day}J ${diff.hour}H${diff.min}M`;
   }
 }
 }

@@ -352,6 +352,7 @@ import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 
 @NgModule({
   imports: [
@@ -714,7 +715,8 @@ import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 
   
     ConfigurationPointeuseComponent,
-    IMatchComponent
+    IMatchComponent,
+    AjouterUnTicketProjetComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

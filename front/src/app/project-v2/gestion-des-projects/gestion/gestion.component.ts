@@ -315,11 +315,11 @@ export class GestionComponent implements OnInit {
 
   transformtask(task: Task) {
     const taskDataJson = JSON.stringify(task);
-    this.router.navigate(['/ticketing/gestion/ajout'], { queryParams: { data: taskDataJson } });
+    this.router.navigate(['/ticketing/Ajouter-un-ticket-projet'], { queryParams: { data: taskDataJson } });
   }
 
   affectertask(task: Task) {
-    this.router.navigate(['/ticketing/suivi/non-assignes'], { queryParams: { data: task } })
+    this.router.navigate(['/ticketing/Ajouter-un-ticket-projet'], { queryParams: { data: task } })
   }
 
   deleteTask(id, ri) {

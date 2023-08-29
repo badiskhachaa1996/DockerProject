@@ -247,6 +247,7 @@ import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
@@ -459,6 +460,7 @@ const routes: Routes = [
             { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService]},
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
