@@ -45,10 +45,14 @@ app.get("/get-user-checks/:userId", (req, res) => {
 // recuperation de la liste des présences d'un utilisateur
 app.get("/getUserChecksByDate/:userId/:date", (req, res) => {
     const { userId } = req.params;
-
-    DailyCheck.find({ user_id: userId, check_in: { $gte: `${req.params.date}-01`, $lte: `${req.params.date}-31` } }).populate('user_id')
-        .then((response) => { res.status(200).send(response); })
-        .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
+    if (req.params.date != 'null')
+        DailyCheck.find({ user_id: userId, check_in: { $gte: `${req.params.date}-01`, $lte: `${req.params.date}-31` } }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
+    else
+        DailyCheck.find({ user_id: userId }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
 });
 
 
