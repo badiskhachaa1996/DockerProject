@@ -58,7 +58,7 @@
                     <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
                             label="Fin de la pause" class="p-button-warning mb-2"
                             [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
-                    <a href="#departAnticipe" (click)="selectedTabIndex = 5"
+                    <a href="#departAnticipe" (click)="selectedTabIndex = 5;onUpdateStatus('Absent')"
                         *ngIf="dailyCheck != null && dailyCheck.check_out == null"><button pButton pRipple
                             label="Départ anticipé" class="p-button-help mb-2"></button></a> <br
                         *ngIf="dailyCheck != null && dailyCheck.check_out == null">
@@ -254,14 +254,20 @@
                         <div class="col-6">
                             <div>
                                 <label htmlFor="">Choisissez un mois et une année</label> <br>
-                                <input pInputText type="month">
+                                <input pInputText type="month"
+                                    (input)="dateChoose=$event.target.value;OnCalcAssiduite()">
                             </div>
-                            <h6>Nombre de jours de congés: <strong>8 jrs</strong></h6>
-                            <h6>Nombre de jours en absences: <strong>8 jrs</strong></h6>
+                            <h6>Nombre de jours de congés payés: <strong>{{stats.conges_pay}} jrs</strong></h6>
+                            <h6>Nombre de jours de congés sans solde: <strong>{{stats.conges_ss}} jrs</strong></h6>
+                            <h6>Nombre de jours de congés maladie: <strong>{{stats.maladie}} jrs</strong></h6>
+                            <h6>Nombre de jours en absences justifies: <strong>{{stats.absence_justifie}} jrs</strong>
+                            </h6>
+                            <h6>Nombre de jours en absences non justifies: <strong>{{22-stats.assiduite-stats.absence_justifie-stats.maladie-stats.conges_ss-stats.conges_pay}} jrs</strong>
+                            </h6>
 
                         </div>
                         <div class="col-6 flex justify-content-center align-items-center">
-                            <h6>Taux d'assiduité: <strong>90 %</strong></h6>
+                            <h6>Taux d'assiduité: <strong>{{(stats.assiduite/22)*100}} %</strong></h6>
                         </div>
 
                     </div>
@@ -270,41 +276,194 @@
 
                 <p-tabPanel header="Mes demandes">
                     <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2"
-                        style="float: right;"></button>
+                        (click)="AddTicket()" style="float: right;"></button>
                     <div style="clear: both;"></div>
-                    <p-table [value]="" dataKey="_id" [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines"
-                        [paginator]="true" responsiveLayout="scroll">
+                    <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
+                        [paginator]="true" rowExpandMode="single" [pageLinks]="5" selectionMode="single" class="col-12"
+                        [globalFilterFields]="['customid', 'prenom', 'nom','email']" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <input pInputText type="text" #filter
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Recherche" />
+                                <!-- <p-dropdown [style]="{'margin':'5px'}" [options]="filterPays" filter="true"
+                                (onChange)="dt1.filter($event.value, 'pays_residence', 'equals');"
+                                emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Choisissez un pays"></p-dropdown>
+            
+                            <p-dropdown [style]="{'margin':'5px'}" [options]="filterSource" filter="true"
+                                (onChange)="dt1.filter($event.value, 'source', 'equals');" emptyFilterMessage="Pas de source trouvé"
+                                filterPlaceholder="Choisissez une source"></p-dropdown>
+            
+                            <p-dropdown [style]="{'margin':'5px'}" [options]="filterOperation" filter="true"
+                                (onChange)="dt1.filter($event.value, 'operation', 'equals');"
+                                emptyFilterMessage="Pas d'opération trouvé"
+                                filterPlaceholder="Choisissez une operation"></p-dropdown>-->
+                            </div>
+                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Statut</th>
-                                <th>Action</th>
+                                <th style="width: 3rem"></th>
+                                <th pSortableColumn="customid" style="text-align:center"> ID Ticket <p-sortIcon
+                                        field="customid">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="date_ajout" style="text-align:center"> Date de création <p-sortIcon
+                                        field="date_ajout">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="createur_id.lastname" style="text-align:center"> Crée par
+                                    <p-sortIcon field="user_id">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon
+                                        field="service">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="sujet" style="text-align:center"> Sujet <p-sortIcon field="sujet">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="priorite" style="text-align:center"> Priorité <p-sortIcon
+                                        field="priorite">
+                                    </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="statut" style="text-align:center"> Etat de traitement <p-sortIcon
+                                        field="statut">
+                                    </p-sortIcon>
+                                </th>
+                                <th style="text-align:center">
+                                    Délai de traitement
+                                </th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-ticket let-expanded="expanded" let-ri="rowIndex">
                             <tr>
-                                <td>test</td>
-                                <td>test</td>
-                                <td>test</td>
                                 <td>
-                                    <button pButton pRipple label="Modifier"
-                                        class="p-button-success p-button-outlined mb-2"></button>
-                                    <button pButton pRipple label="Supprimer"
-                                        class="p-button-danger p-button-outlined ml-2 mb-2"></button>
+                                    <button type="button" pButton pRipple [pRowToggler]="ticket"
+                                        class="p-button-text p-button-rounded p-button-plain"
+                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                                    </button>
+                                </td>
+                                <td>
+                                    {{ticket.customid}}
+                                </td>
+                                <td>
+                                    {{ticket.date_ajout | date:'mediumDate'}}
+                                </td>
+                                <td>
+                                    {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname |
+                                    uppercase}}
+                                </td>
+                                <td>
+                                    {{ticket?.sujet_id?.service_id?.label}}
+                                </td>
+                                <td>
+                                    {{ticket?.sujet_id?.label}}
+                                </td>
+                                <td>
+                                    {{ticket.priorite}}
+                                </td>
+                                <td>
+                                    <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
+                                        [value]="'Aucun status définit'">
+                                    </p-tag>
+                                    <p-tag *ngIf="ticket.statut == 'En attente de traitement'" icon="pi pi-eye-slash"
+                                        severity="info" [value]="ticket.statut">
+                                    </p-tag>
+                                    <p-tag *ngIf="ticket.statut == 'En cours de traitement'" icon="pi pi-eye"
+                                        severity="warning" [value]="ticket.statut">
+                                    </p-tag>
+                                    <p-tag *ngIf="ticket.statut == 'En suspension'" icon="pi pi-pause" severity="danger"
+                                        [value]="ticket.statut">
+                                    </p-tag>
+                                    <p-tag *ngIf="ticket.statut == 'Traité'" icon="pi pi-check-square"
+                                        severity="success" [value]="ticket.statut">
+                                    </p-tag>
+                                </td>
+                                <td>
+                                    {{getDelaiTraitrement(ticket)}}
                                 </td>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="emptymessage">
+                        <ng-template pTemplate="rowexpansion" let-ticket>
                             <tr>
-                                <td colspan="4">Vous n'avez émis aucune demande pour le moment.</td>
+                                <td colspan="9">
+                                    <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
+                                        <ng-template pTemplate="header">
+                            <tr>
+                                <th> Description </th>
+                                <th> Date de traitement </th>
+                                <th> Note du Service qui traite </th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="loadingbody">
+                        <ng-template pTemplate="body">
                             <tr>
-                                <td colspan="4">Chargement de vos demandes, merci de patienter...</td>
+                                <td>{{ticket.description}}</td>
+                                <td>{{ticket.date_fin_traitement| date:'mediumDate'}}</td>
+                                <td>{{ticket.note}}</td>
                             </tr>
                         </ng-template>
+                    </p-table>
+                    </td>
+
+                    </tr>
+
+                    <tr>
+                        <td colspan="10">
+                            <h5>Documents</h5>
+                            <p-table dataKey="_id" [value]="ticket.documents" class="col-12"
+                                styleClass="p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <th> Nom </th>
+                        <th>Lien </th> <!--TODO-->
+                        <th> Action </th>
+                    </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+                        <tr>
+                            <td>{{document.path}}</td>
+                            <td>
+                                <a (click)="downloadFile(idx,ticket)">Télécharger le document</a>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                    aria-hidden="true" (click)="deleteFile(idx,ticket)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    </p-table>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10">
+                            <h5>Documents du service</h5>
+                            <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12"
+                                styleClass="p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <th> Nom </th>
+                        <th>Lien </th> <!--TODO-->
+                        <th> Action </th>
+                    </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-document let-idx="rowIndex">
+                        <tr>
+                            <td>{{document.path}}</td>
+                            <td>
+                                <a (click)="downloadFileService(idx,ticket)">Télécharger le document</a>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                    aria-hidden="true" (click)="deleteFileService(idx,ticket)"> </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    </p-table>
+                    </td>
+                    </tr>
+
+                    </ng-template>
                     </p-table>
                 </p-tabPanel>
 

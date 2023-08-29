@@ -7,7 +7,7 @@ export class Conge{
         public other_motif?: string,
         public date_debut?: Date,
         public date_fin?: Date,
-        public nombre_jours?: Number,
+        public nombre_jours?: number,
         public motif?: string,
         public justificatif?: string,
         public statut?: string,

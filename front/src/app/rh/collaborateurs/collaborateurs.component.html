@@ -692,7 +692,7 @@
 	</div>
 
 	<!-- Voir la liste des documents -->
-	<div class="field col-12 card" *ngIf="seeFile">
+	<div class="field col-12 card grid" *ngIf="seeFile">
 		<input type="file" (change)="FileUploadRH($event.target.files)" id="selectedFileRH" #selectedFileRH
 			style="display: none;" pInputFile />
 		<p-table styleClass="p-datatable-gridlines" [value]="seeFile.documents_rh" responsiveLayout="scroll"
@@ -704,6 +704,9 @@
 					</th>
 					<th>
 						Nom du document
+					</th>
+					<th>
+						Note du document
 					</th>
 					<th>
 						Lien de téléchargement
@@ -728,6 +731,16 @@
 							</ng-template>
 						</p-cellEditor>
 					</td>
+					<td pEditableColumn>
+						<p-cellEditor>
+							<ng-template pTemplate="input">
+								<input type="text" pInputText [(ngModel)]="rowData.note">
+							</ng-template>
+							<ng-template pTemplate="output">
+								{{rowData.note}}
+							</ng-template>
+						</p-cellEditor>
+					</td>
 					<td *ngIf="rowData.path">
 						<a style="cursor: pointer;" (click)="downloadRHFile(rowData)">Télécharger</a>
 					</td>
@@ -745,8 +758,12 @@
 				</tr>
 			</ng-template>
 		</p-table>
-		<div class="mt-2 col-12" style="text-align: center;">
-			<button pButton (click)="onAddRH()" label="Ajouter une nouvelle pièces jointe" autoWidth="false"
+		<div class="col-6 mt-2" style="text-align: center;">
+			<button pButton (click)="onAddRH()" label="Ajouter un document" autoWidth="false"
+				[style]="{'width':'80%'}"></button>
+		</div>
+		<div class="col-6 mt-2" style="text-align: center;">
+			<button pButton (click)="saveRH()" label="Sauvegarder les documents" autoWidth="false"
 				[style]="{'width':'80%'}"></button>
 		</div>
 	</div>

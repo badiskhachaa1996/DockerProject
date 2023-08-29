@@ -233,4 +233,11 @@ export class TicketService {
     return this.http.post<null>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllByServiceAndCreateurID(service_id: string, user_id) {
+    let registreUrl = this.apiUrl + "getAllByServiceAndCreateurID/" + service_id + "/" + user_id;
+    return this.http.get<Ticket[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+
+
 }
