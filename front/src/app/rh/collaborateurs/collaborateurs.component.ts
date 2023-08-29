@@ -577,7 +577,7 @@ export class CollaborateursComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.seeFile.documents_rh[this.seeFile.documents_rh.indexOf(this.uploadFileRH)].path = event[0].name
         this.uploadFileRH = null;
-        this.UserService.update({ documents_rh: this.seeFile.documents_rh, _id: this.uploadFileRH._id }).subscribe(u => { })
+        this.UserService.update({ documents_rh: this.seeFile.documents_rh, _id: this.seeFile._id }).subscribe(u => { })
         //this.fileInput.clear()
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
@@ -598,5 +598,13 @@ export class CollaborateursComponent implements OnInit {
 
   onDeleteRH(ri) {
     delete this.seeFile.documents_rh[ri];
+  }
+
+  saveRH() {
+    this.UserService.update({ documents_rh: this.seeFile.documents_rh, _id: this.seeFile._id }).subscribe(u => {
+      this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Les fichiers ont bien été sauvegardé' });
+    }, err => {
+      console.error(err)
+    })
   }
 }
