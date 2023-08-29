@@ -36,7 +36,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
     { label: 'Infos' },
     { label: 'Parcours' },
     { label: 'Programme' },
-    { label: 'Partenaires' },
+    { label: 'Autres' },
     { label: 'Dernière étape' },
   ];;
   langueList = [

@@ -364,7 +364,7 @@
                             tout au
                             long de la procédure</small><br>
                     </div>
-                    <p-fieldset legend="Notre partenaire d'accompagnement EduHorizons"
+                    <p-fieldset
                         [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div class="grid" style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
@@ -460,7 +460,7 @@
                     <div style="text-align: center;">
                         <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
                     </div>
-                    <p-fieldset legend="Notre partenaire d'accompagnement EduHorizons"
+                    <p-fieldset legend="Autre"
                         [style]="{'color': 'red', 'font-weight': 'bold'}">
                         <div class="grid" style="color: black;font-weight:normal">
                             <div class="p-fluid p-formgrid grid">
@@ -490,7 +490,7 @@
                                     <input pInputText type="text" placeholder="+33 0612345678"
                                         formControlName="numeroAgence" />
                                 </div>
-                                <div class="field col-12 md:col-12" *ngIf="!hideCC">
+                                <div class="field col-12 md:col-12" *ngIf="!hideCC && RegisterForm.value.agence">
                                     <label For="code_commercial">Code Commercial<span style="color: red;"> * </span></label>
                                     <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
                                         (blur)="verificationCode()" formControlName="code_commercial" />

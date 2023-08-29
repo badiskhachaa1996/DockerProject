@@ -138,11 +138,8 @@ const admissionFormDubaiController = require('./controllers/admissionFormDubaiCo
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
-<<<<<<< HEAD
 const bookingController = require('./controllers/bookingController');
-=======
 const mailController = require('./controllers/mailController');
->>>>>>> 3284f60ec9049fc14325a1028df7c78ea212b2f3
 
 const { User } = require("./models/user");
 
@@ -372,11 +369,7 @@ app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
 app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
-<<<<<<< HEAD
-
-=======
 app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
->>>>>>> 3284f60ec9049fc14325a1028df7c78ea212b2f3
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

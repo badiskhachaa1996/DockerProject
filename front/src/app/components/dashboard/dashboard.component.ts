@@ -1175,6 +1175,7 @@ export class DashboardComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
     this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
       .then((response) => {
+        console.log(response)
         response.forEach(c => {
           /*
     { label: 'Congé payé', value: 'Congé payé' },
@@ -1198,8 +1199,8 @@ export class DashboardComponent implements OnInit {
           var Difference_In_Time = dd.getTime() - df.getTime();
 
           // To calculate the no. of days between two dates
-          var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-          //TODO Refaire le compte des jours entre les dates
+          var Difference_In_Days = (Difference_In_Time / (1000 * 3600 * 24))+1;
+          console.log(c.type_conge, Difference_In_Days)
           if (c.type_conge == "Congé payé")
             this.stats.conges_pay += Difference_In_Days
           else if (c.type_conge == "Congé sans solde")
