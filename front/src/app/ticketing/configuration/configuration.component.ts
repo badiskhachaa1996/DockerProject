@@ -190,9 +190,11 @@ export class ConfigurationComponent implements OnInit {
     })
   }
 
+  displayRolesTicketing = false
   seeRole: User = null
   onSeeRole(user: User) {
     this.seeRole = user
+    this.displayRolesTicketing = true
     this.ServServ.getAll().subscribe(services => {
       this.moduleList = []
       services.forEach((s: Service) => {
@@ -215,7 +217,6 @@ export class ConfigurationComponent implements OnInit {
     })
     if (approved) {
       this.UserService.update({ _id: this.seeRole._id, roles_ticketing_list: this.seeRole.roles_ticketing_list }).subscribe(r => {
-        this.seeRole = null
         this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
       })
     } else {
