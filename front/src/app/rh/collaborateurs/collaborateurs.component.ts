@@ -577,6 +577,7 @@ export class CollaborateursComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.seeFile.documents_rh[this.seeFile.documents_rh.indexOf(this.uploadFileRH)].path = event[0].name
         this.uploadFileRH = null;
+        this.UserService.update({ documents_rh: this.seeFile.documents_rh, _id: this.uploadFileRH._id }).subscribe(u => { })
         //this.fileInput.clear()
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });

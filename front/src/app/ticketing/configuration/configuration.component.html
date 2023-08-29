@@ -100,7 +100,7 @@
                         {{user.firstname|titlecase}} {{user.lastname|uppercase}}
                     </td>
                     <td>
-                        <i pTooltip="Voir les roles" style="margin-left: 2%; cursor: pointer;" class="pi pi-star"
+                        <i pTooltip="Voir les roles Ticketing" style="margin-left: 2%; cursor: pointer;" class="pi pi-star"
                             (click)="onSeeRole(user)" aria-hidden="true"></i>
 
                         <i pTooltip="Supprimer ce membre du service" style="margin-left: 2%; cursor: pointer;"
@@ -110,62 +110,7 @@
             </ng-template>
         </p-table>
     </div>
-    <div class="col-12 card" *ngIf="seeRole">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="seeRole = null"
-            aria-hidden="true"> </i>
-        <h3 class="text-center" style="font-weight: bold;">
-            Ajout des role à {{seeRole.firstname | titlecase}} {{seeRole.lastname | uppercase}}
-        </h3>
-        <button pButton icon="pi pi-file" label="Ajouter un module" (click)="initAddModule()" type="button"
-            style="margin-left: 2px;">
-        </button>
-        <button pButton icon="pi pi-save" label="Sauvegarder les roles" (click)="saveModule()" type="button"
-            style="margin-left: 2px;">
-        </button>
-        <p-table class="col-12" [value]="seeRole.roles_ticketing_list">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="module.libelle" style="text-align:center">
-                        Service <p-sortIcon field="module.libelle"> </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="role" style="text-align:center">
-                        Role <p-sortIcon field="role"> </p-sortIcon>
-                    </th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
-                <tr>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="moduleList" [(ngModel)]="rowData.module"
-                                    placeholder="Choisissez le module"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{rowData.module.label}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td pEditableColumn>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <p-dropdown [options]="roleList" [(ngModel)]="rowData.role"
-                                    placeholder="Choisissez la role"></p-dropdown>
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{rowData.role}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        <i pTooltip="Supprimer un module" style="cursor: pointer;" class="pi pi-trash"
-                            (click)="deleteModule(rowData,ri)" aria-hidden="true"></i>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+
 
     <h5 class="col-8">Liste des services</h5>
     <div class="col-4" style="text-align: right;">
@@ -236,3 +181,61 @@
     </p-table>
 
 </div>
+
+<p-dialog header="Ajout des role Ticketing à {{seeRole?.firstname | titlecase}} {{seeRole?.lastname | uppercase}}" [(visible)]="displayRolesTicketing" [modal]="true" [style]="{width: '75vw', height:'75vw'}">
+    <div class="grid" *ngIf="displayRolesTicketing">
+        <div class="col-12">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="seeRole = null"
+                aria-hidden="true"> </i>
+            <button pButton icon="pi pi-file" label="Ajouter un module" (click)="initAddModule()" type="button"
+                style="margin-left: 2px;">
+            </button>
+            <button pButton icon="pi pi-save" label="Sauvegarder les roles" (click)="saveModule()" type="button"
+                style="margin-left: 2px;">
+            </button>
+            <p-table class="col-12" [value]="seeRole.roles_ticketing_list">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="module.libelle" style="text-align:center">
+                            Service <p-sortIcon field="module.libelle"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="role" style="text-align:center">
+                            Role Ticketing<p-sortIcon field="role"> </p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
+                    <tr>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="moduleList" [(ngModel)]="rowData.module"
+                                        placeholder="Choisissez le service Ticketing"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.module.label}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="roleList" [(ngModel)]="rowData.role"
+                                        placeholder="Choisissez la role"></p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{rowData.role}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimer un module" style="cursor: pointer;" class="pi pi-trash"
+                                (click)="deleteModule(rowData,ri)" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-dialog>

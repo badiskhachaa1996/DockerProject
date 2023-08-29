@@ -172,11 +172,11 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
                                 },
-                                {
+                                /*{
                                     label: 'Configuration',
                                     icon: 'pi pi-cog',
                                     routerLink: ['/ticketing/configuration'],
-                                },
+                                },*/
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
@@ -1013,13 +1013,18 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         }, {
-                            label: "Pointeuse",
-                            icon: 'pi pi-server',
+                            label: "Admin IMS",
+                            icon: 'pi pi-star',
                             items: [
                                 {
-                                    label: "Configuration",
+                                    label: "Configuration Pointeuse",
                                     icon: 'pi pi-cog',
                                     routerLink: ['/pointeuse/configuration']
+                                },
+                                {
+                                    label: 'Configuration Ticketing',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/ticketing/configuration']
                                 }
                             ]
                         }
