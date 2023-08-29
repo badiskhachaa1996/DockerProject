@@ -48,7 +48,7 @@ app.post("/post-cv", (req, res) => {
     .then((response) => {
         if(response)
         {
-            res.status(400).send(error);
+            res.status(400).send(response);
         } else {
             cv.save()
             .then((response) => { res.status(201).send(response); })

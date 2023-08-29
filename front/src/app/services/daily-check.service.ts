@@ -13,8 +13,7 @@ export class DailyCheckService {
   constructor(private httpClient: HttpClient) { }
 
   // recuperation de la liste des présences de tous les utilisateurs
-  getChecks(): Promise<DailyCheck[]>
-  {
+  getChecks(): Promise<DailyCheck[]> {
     const url = `${this.endPoint}/get-checks`;
 
     return new Promise<DailyCheck[]>((resolve, reject) => {
@@ -26,9 +25,21 @@ export class DailyCheckService {
     });
   }
 
+  // recuperation de la liste des présences du jour de tous les utilisateurs
+  getAllUsersDailyChecks(): Promise<DailyCheck[]> {
+    const url = `${this.endPoint}/get-all-users-daily-checks`;
+
+    return new Promise<DailyCheck[]>((resolve, reject) => {
+      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la liste des présences exécuté') }
+      });
+    });
+  }
+
   // recuperation de la liste des présences d'un utilisateur
-  getUserChecks(userId: string): Promise<DailyCheck[]>
-  {
+  getUserChecks(userId: string): Promise<DailyCheck[]> {
     const url = `${this.endPoint}/get-user-checks/${userId}`;
 
     return new Promise<DailyCheck[]>((resolve, reject) => {
@@ -40,9 +51,20 @@ export class DailyCheckService {
     });
   }
 
+  getUserChecksByDate(userId: string, date: string): Promise<DailyCheck[]> {
+    const url = `${this.endPoint}/getUserChecksByDate/${userId}/${date}`;
+
+    return new Promise<DailyCheck[]>((resolve, reject) => {
+      this.httpClient.get<DailyCheck[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la liste des présences de l\'utilisateur exécuté') }
+      });
+    });
+  }
+
   // recuperation d'une presence via son id
-  getCheck(id: string): Promise<DailyCheck>
-  {
+  getCheck(id: string): Promise<DailyCheck> {
     const url = `${this.endPoint}/get-check/${id}`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
@@ -55,8 +77,7 @@ export class DailyCheckService {
   }
 
   // recuperation d'une presence via son id
-  getCheckByUserId(id: string): Promise<DailyCheck>
-  {
+  getCheckByUserId(id: string): Promise<DailyCheck> {
     const url = `${this.endPoint}/get-check-by-user-id/${id}`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
@@ -69,8 +90,7 @@ export class DailyCheckService {
   }
 
   // verification du check journalier d'un utilisateur
-  verifCheckByUserId(id: string): Promise<DailyCheck>
-  {
+  verifCheckByUserId(id: string): Promise<DailyCheck> {
     const url = `${this.endPoint}/verif-check-by-user-id/${id}`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
@@ -83,8 +103,7 @@ export class DailyCheckService {
   }
 
   // méthode de check in
-  postCheckIn(dailyCheck: DailyCheck): Promise<DailyCheck>
-  {
+  postCheckIn(dailyCheck: DailyCheck): Promise<DailyCheck> {
     const url = `${this.endPoint}/post-check-in`;
 
     return new Promise<DailyCheck>((resolve, reject) => {
@@ -97,8 +116,7 @@ export class DailyCheckService {
   }
 
   // méthode de mise à jour du check
-  patchCheckIn(dailyCheck: DailyCheck): Promise<DailyCheck>
-  {
+  patchCheckIn(dailyCheck: DailyCheck): Promise<DailyCheck> {
     const url = `${this.endPoint}/patch-check-in`;
 
     return new Promise<DailyCheck>((resolve, reject) => {

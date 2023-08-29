@@ -28,8 +28,6 @@ export class NotificationComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"))
     if (this.token) {
 
-      console.log(this.token)
-
       this.NotificationService.get20ByUserID(this.token.id)
         .subscribe(
           data => {
@@ -71,5 +69,9 @@ export class NotificationComponent implements OnInit {
       })
 
     }
+  }
+
+  deleteNotif() {
+    this.NotificationService.deleteAll(this.token.id).subscribe(d => { this.ngOnInit() })
   }
 }

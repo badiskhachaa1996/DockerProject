@@ -29,6 +29,7 @@ export class AddAgentComponent implements OnInit {
     { value: "Commerciale", label: "Commerciale" },
     { value: "International", label: "International" },
     { value: "Pedagogie", label: "Pedagogie" },
+    { value: "iMatch", label: "iMatch" },
   ]
   dropdownRole = [
     { value: "Agent", label: "Agent" },

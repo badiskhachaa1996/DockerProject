@@ -677,7 +677,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   }
 
   onNavigateToCV(id: string) {
-    this.router.navigate(['/cvtheque', id]);
+    this.router.navigate(['/cvtheque-interne', id]);
   }
 
   prospectCalled(bol: boolean) {

@@ -6,10 +6,12 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ServService } from 'src/app/services/service.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { saveAs } from "file-saver";
+import jwt_decode from "jwt-decode";
 import { SocketService } from 'src/app/services/socket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-ticket-non-assignes',
   templateUrl: './ticket-non-assignes.component.html',
@@ -28,11 +30,28 @@ export class TicketNonAssignesComponent implements OnInit {
     _id: new FormControl('', Validators.required)
   })
   userDic = {}
+  token;
   filterService = [{ label: 'Tous les services', value: null }]
   ngOnInit(): void {
-    this.TicketService.getAllNonAssigne().subscribe(data => {
-      this.tickets = data
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getPopulate(this.token.id).subscribe((u: User) => {
+      let server_list = []
+      u.roles_ticketing_list.forEach((data => {
+        if (data.role == 'Responsable')
+          server_list.push(data.module)
+      }))
+      if (u.role != 'Admin') { //TODO Voir si il possède le role Super-Admin dans Ticketing
+        this.TicketService.getAllNonAssigneV2(server_list).subscribe(data => {
+          this.tickets = data
+        })
+      } else {
+        this.TicketService.getAllNonAssigne().subscribe(data => {
+          this.tickets = data
+        })
+      }
+
     })
+
     this.UserService.getAllAgent().subscribe(data => {
       data.forEach(u => {
         this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
@@ -76,9 +95,9 @@ export class TicketNonAssignesComponent implements OnInit {
       let year = d.getUTCFullYear().toString().slice(-2);
       this.Socket.NewNotifV2(this.formAffectation.value.agent_id, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`)
       this.TicketService.sendMailAff({ sujet: this.TicketAffecter.sujet_id.label, service: this.TicketAffecter.sujet_id.service_id.label, date: `${day}/${month}/${year}`, agent_email: this.userDic[this.formAffectation.value.agent_id]?.email }).subscribe(() => {
-        
+
       })
-      this.NotifService.create(new Notification(null, null, false, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`, new Date(), this.formAffectation.value.agent_id, this.TicketAffecter.sujet_id.service_id._id)).subscribe(() => { console.log('SUCCES')})
+      this.NotifService.create(new Notification(null, null, false, `Un nouveau ticket vous a été assigné pour le service ${this.TicketAffecter.sujet_id.service_id.label}. Le sujet du ticket est ${this.TicketAffecter.sujet_id.label}. Il vous a été assigné le ${day}/${month}/${year}.`, new Date(), this.formAffectation.value.agent_id, this.TicketAffecter.sujet_id.service_id._id)).subscribe(() => { console.log('SUCCES') })
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })

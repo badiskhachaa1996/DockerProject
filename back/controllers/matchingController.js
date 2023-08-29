@@ -41,10 +41,10 @@ app.get('/getAllByOffreID/:offre_id', (req, res) => {
 })
 
 app.get('/getAllByCVUSERID/:user_id', (req, res) => {
-    Matching.find().populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(docs => {
+    Matching.find().populate({ path: 'offre_id', populate: { path: "competences" } }).populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(docs => {
         let r = []
         docs.forEach(d => {
-            if (d.cv_id.user_id._id == req.params.user_id)
+            if (d?.cv_id?.user_id?._id == req.params.user_id)
                 r.push(d)
         })
         res.send(r)

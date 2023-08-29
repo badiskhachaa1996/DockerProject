@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { Service } from 'src/app/models/Service';
 import { Sujet } from 'src/app/models/Sujet';
@@ -75,7 +76,7 @@ export class ConfigurationComponent implements OnInit {
       else
         this.sujetDic[data.service_id] = data.label
       this.SujetForm.reset()
-      this.addSujet = null
+      this.sujetList.push(data)
       this.ToastService.add({ severity: 'success', summary: "Ajout du sujet avec succès" })
     })
   }
@@ -120,6 +121,8 @@ export class ConfigurationComponent implements OnInit {
       this.ToastService.add({ severity: 'success', summary: "Le membre a été ajouté au service avec succès" })
       this.memberList.push(data)
       this.memberDropdown.splice(this.customIndexOfDropdown(this.memberDropdown, agent), 1)
+      this.addMember = null
+      this.MemberForm.reset()
       if (this.memberDic[this.addMemberOfService._id])
         this.memberDic[this.addMemberOfService._id] = this.memberDic[this.addMemberOfService._id] + ", " + agent.firstname + " " + agent.lastname.toUpperCase()
       else
@@ -186,5 +189,55 @@ export class ConfigurationComponent implements OnInit {
         })
       })
     })
+  }
+
+  displayRolesTicketing = false
+  seeRole: User = null
+  onSeeRole(user: User) {
+    this.seeRole = user
+    this.displayRolesTicketing = true
+    this.ServServ.getAll().subscribe(services => {
+      this.moduleList = []
+      services.forEach((s: Service) => {
+        this.moduleList.push({ label: s.label, value: s })
+      })
+    })
+  }
+  roleList = [{ value: 'Agent', label: 'Agent' }, { value: 'Responsable', label: 'Responsable' }]
+  moduleList = []
+
+  initAddModule() {
+    this.seeRole.roles_ticketing_list.push({ _id: new mongoose.Types.ObjectId().toString(), module: null, role: "Agent" })
+  }
+
+  saveModule() {
+    let approved = true
+    this.seeRole.roles_ticketing_list.forEach(val => {
+      if (val.module == null)
+        approved = false
+    })
+    if (approved) {
+      this.UserService.update({ _id: this.seeRole._id, roles_ticketing_list: this.seeRole.roles_ticketing_list }).subscribe(r => {
+        this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
+      })
+    } else {
+      alert('Un module n\'est pas selectionné')
+    }
+  }
+
+  deleteModule(module, idx) {
+    this.seeRole.roles_ticketing_list.splice(idx, 1)
+  }
+
+  addMember;
+  MemberForm: FormGroup = new FormGroup(
+    { member: new FormControl('', Validators.required) }
+  )
+  onAddMb() {
+    this.onAddMember(this.MemberForm.value.member)
+  }
+
+  initAddMember() {
+    this.addMember = true
   }
 }

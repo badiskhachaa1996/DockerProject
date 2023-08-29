@@ -15,7 +15,7 @@ export class EcoleService {
 
   getAll() {
     let ecoleUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(ecoleUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.get<Ecole[]>(ecoleUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
   getAllByAnnee(id: any) {
     let ecoleUrl = this.apiUrl + "getAllByAnnee/" + id;

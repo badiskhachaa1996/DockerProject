@@ -246,6 +246,8 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 const routes: Routes = [
     {
         path: '',
@@ -642,6 +644,26 @@ const routes: Routes = [
                 canActivate: [AuthGuardService, AdminGuardService],
                 component: GestionLogementComponent,
             },
+            { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
+            { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
+
+            { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
+            { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
+            { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
+            { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
+            { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
+            { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
+            { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+            { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+            { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
+            { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
+            { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
+            { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
+            { path: 'livret/:id', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
 
             {
                 path: 'offres',
@@ -1144,6 +1166,17 @@ const routes: Routes = [
                 component: AjoutTicketComponent,
                 canActivate: [AuthGuardService],
             },
+            { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/ajout/:service_id', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/attente-de-traitement', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/traite', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
@@ -1215,21 +1248,10 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             //Module Mail Type
-            {
-                path: 'mails/configuration',
-                component: ConfigurationMailComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'mails/type',
-                component: MailTypeComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'mails/auto',
-                component: MailAutoComponent,
-                canActivate: [AuthGuardService],
-            },
+            { path: 'mails/configuration', component: ConfigurationMailComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
+            { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
+            { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
 
             //Module Booking V2
             {
@@ -1244,53 +1266,18 @@ const routes: Routes = [
         component: InscriptionEntrepriseComponent,
     },
     { path: 'formulaire', component: DemandeEventsComponent },
-    {
-        path: 'completion-profil',
-        canActivate: [AuthGuardService, CompletionProfilGuard],
-        component: FirstConnectionComponent,
-    },
-    {
-        path: 'formulaire-admission/:ecole',
-        component: FormulaireAdmissionComponent,
-        canActivate: [FormAdmissionGuard],
-    },
-    {
-        path: 'formulaire-admission-international/:ecole',
-        component: VersionNonIframeComponent,
-    },
-    {
-        path: 'formulaire-admission-international/:ecole/:code_commercial',
-        component: VersionNonIframeComponent,
-    },
-    {
-        path: 'formulaire-admission-int/:ecole',
-        component: FormulaireAdmissionInternationalComponent,
-    },
-    {
-        path: 'formulaire-admission-int-lang/:ecole/:lang',
-        component: FormulaireAdmissionInternationalComponent,
-    },
-    {
-        path: 'formulaire-admission-int/:ecole/:code_commercial',
-        component: FormulaireAdmissionInternationalComponent,
-    },
-    {
-        path: 'formulaire-admission-alternance/:id',
-        component: ProspectAltFormComponent,
-    },
-    {
-        path: 'formulaire-admission-intuns',
-        component: FormulaireIntunsComponent,
-    },
-    {
-        path: 'formulaire-admission/:ecole/:code_commercial',
-        component: FormulaireAdmissionComponent,
-        canActivate: [FormAdmissionGuard],
-    },
-    {
-        path: 'partenaireInscription',
-        component: PartenaireInscriptionComponent,
-    },
+
+    { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
+    { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
+    { path: 'formulaire-admission-international/:ecole/:code_commercial', component: VersionNonIframeComponent },
+    { path: 'formulaire-admission-int/:ecole', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-int-lang/:ecole/:lang', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-int/:ecole/:code_commercial', component: FormulaireAdmissionInternationalComponent },
+    { path: 'formulaire-admission-alternance/:id', component: ProspectAltFormComponent },
+    { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
+    { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
     {
         path: 'suivre-ma-preinscription',
@@ -1329,7 +1316,10 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-];
+    { path: 'imatch', component: IMatchComponent }
+
+]
+
 
 @NgModule({
     imports: [

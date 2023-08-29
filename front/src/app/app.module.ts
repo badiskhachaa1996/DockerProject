@@ -347,6 +347,8 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
+import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 
 @NgModule({
   imports: [
@@ -702,7 +704,9 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
     DashboardTargetComponent,
     DocCheckerComponent,
     LeadCandidatureComponent,
-    BookingV2Component
+    BookingV2Component,
+    ConfigurationPointeuseComponent,
+    IMatchComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -23,6 +23,15 @@ app.get("/get-checks", (req, res) => {
         .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
 });
 
+// recuperation de la liste des présences du jour de tous les utilisateurs
+app.get("/get-all-users-daily-checks", (req, res) => {
+    const today = new Date().toLocaleDateString();
+
+    DailyCheck.find({ today: today }).populate('user_id')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(500).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences, veuillez contacter un admin' }) });
+});
+
 
 // recuperation de la liste des présences d'un utilisateur
 app.get("/get-user-checks/:userId", (req, res) => {
@@ -31,6 +40,19 @@ app.get("/get-user-checks/:userId", (req, res) => {
     DailyCheck.find({ user_id: userId }).populate('user_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
+});
+
+// recuperation de la liste des présences d'un utilisateur
+app.get("/getUserChecksByDate/:userId/:date", (req, res) => {
+    const { userId } = req.params;
+    if (req.params.date != 'null')
+        DailyCheck.find({ user_id: userId, check_in: { $gte: `${req.params.date}-01`, $lte: `${req.params.date}-31` } }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
+    else
+        DailyCheck.find({ user_id: userId }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des présences de l\'utilisateurs' }) });
 });
 
 
@@ -57,7 +79,7 @@ app.get("/get-check-by-user-id/:id", (req, res) => {
 app.post("/post-check-in", (req, res) => {
     const dailyCheck = new DailyCheck({ ...req.body });
     dailyCheck.today = new Date().toLocaleDateString();
-    
+
     dailyCheck.save()
         .then((response) => { res.status(201).send(response); })
         .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de prendre votre check in en considération' }) });

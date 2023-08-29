@@ -138,7 +138,11 @@ const admissionFormDubaiController = require('./controllers/admissionFormDubaiCo
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
+<<<<<<< HEAD
 const bookingController = require('./controllers/bookingController');
+=======
+const mailController = require('./controllers/mailController');
+>>>>>>> 3284f60ec9049fc14325a1028df7c78ea212b2f3
 
 const { User } = require("./models/user");
 
@@ -193,7 +197,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl == "/soc/user/AuthMicrosoft" ||
       req.originalUrl == "/soc/demande-events" ||
       req.originalUrl == "/soc/partenaire/inscription" ||
-      req.originalUrl == "/soc/notification/create" ||
+      req.originalUrl.startsWith("/soc/notification/create") ||
       req.originalUrl.startsWith("/soc/prospect/") ||
       req.originalUrl.startsWith("/soc/service/getByLabel") ||
       req.originalUrl == "/soc/demande-events/create" ||
@@ -201,6 +205,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/user/getByEmail") ||
       req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") ||
       req.originalUrl == "/soc/etudiant/getAllAlternants" ||
+      req.originalUrl == "/soc/etudiant/getAll" ||
       req.originalUrl == "/soc/diplome/getAll" ||
       req.originalUrl == "/soc/entreprise/createNewContrat" ||
       req.originalUrl == "/soc/classe/getAll" ||
@@ -223,6 +228,10 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
+      req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl === '/soc/extSkillsnet/getAll' ||
+      req.originalUrl === '/soc/cv/getAllPicture' ||
+      req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
         req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
@@ -355,14 +364,19 @@ app.use('/soc/sujet-booking', bookingController);
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
+app.use('/soc/actualiteRH', require('./controllers/actualiteRHController'))
 app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))
 app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
-app.use('/soc/mail', require('./controllers/mailController'))
+app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
+<<<<<<< HEAD
 
+=======
+app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
+>>>>>>> 3284f60ec9049fc14325a1028df7c78ea212b2f3
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

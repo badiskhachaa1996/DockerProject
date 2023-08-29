@@ -8,7 +8,7 @@ const service_schema= new mongoose.Schema({
     },
     active:{
         type: Boolean,
-        required : true
+        default : true
     }
 });
 //creation de la table avec le nom Service ( model/classe) à l'aide de la biblio mongoose et son schema

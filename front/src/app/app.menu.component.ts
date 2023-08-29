@@ -37,18 +37,22 @@ import { TeamsCrmService } from './services/crm/teams-crm.service';
 })
 export class AppMenuComponent implements OnInit {
     token: any;
-    items: MenuItem[] = [];
-    showMenu = false;
-    constructor(
-        public appMain: AppMainComponent,
-        private userService: AuthService,
-        private ETUService: EtudiantService,
-        private FService: FormateurService,
-        private CService: CommercialPartenaireService,
-        private TCService: TeamCommercialService,
-        private AdmissionService: AdmissionService,
-        private TeamCRMService: TeamsCrmService
-    ) {}
+    items: MenuItem[] = [
+        {
+            label: 'Tableau de bord',
+            icon: 'pi pi-fw pi-home',
+            routerLink: ['/'],
+        },
+        {
+            label: 'Signaler un problème technique',
+            icon: 'pi pi-fw pi-exclamation-triangle',
+            routerLink: ['/ticketing-igs'],
+        },
+    ];
+    showMenu = false
+    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
+        private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
+        private AdmissionService: AdmissionService, private TeamCRMService: TeamsCrmService) { }
 
     ngOnInit() {
         //Decoder le token
@@ -68,6 +72,11 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tableau de bord',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
                         },
                         {
                             label: 'Développeur',
@@ -96,7 +105,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -117,7 +126,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -171,11 +180,11 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'Configuration',
                                     icon: 'pi pi-cog',
                                     routerLink: ['/ticketing/configuration'],
-                                },
+                                },*/
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
@@ -632,7 +641,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Skillsnet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -648,7 +657,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque'],
+                                    routerLink: ['/cvtheque-interne']
                                 },
                                 {
                                     label: 'Gestion des compétences',
@@ -1098,8 +1107,23 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-sync',
                                     routerLink: ['/mails/auto'],
                                 },
-                            ],
-                        },
+                            ]
+                        }, {
+                            label: "Admin IMS",
+                            icon: 'pi pi-star',
+                            items: [
+                                {
+                                    label: "Configuration Pointeuse",
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/pointeuse/configuration']
+                                },
+                                {
+                                    label: 'Configuration Ticketing',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/ticketing/configuration']
+                                }
+                            ]
+                        }
                     ];
                 }
                 // menu service pédagogique
@@ -1114,7 +1138,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1349,7 +1378,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1440,7 +1474,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -1600,82 +1639,44 @@ export class AppMenuComponent implements OnInit {
                     ];
                 }
                 // Menu Commerciale Externe / Partenaire
-                else if (
-                    response.role === 'Agent' &&
-                    response.type === 'Commercial' &&
-                    !response.service_id
-                ) {
-                    this.CService.getByUserId(this.token.id).subscribe(
-                        (cData) => {
-                            if (cData && cData.statut != 'Admin') {
-                                //Commercial Normal
-                                this.items = [
-                                    {
-                                        label: 'Accueil',
-                                        items: [
-                                            //{ label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                                            {
-                                                label: 'Tableau de bord Commercial',
-                                                icon: 'pi pi-fw pi-home',
-                                                routerLink: [
-                                                    '/dashboard/commercial',
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Leads',
-                                        items: [
-                                            {
-                                                label: 'Insérer un lead',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: ['/ajout-lead'],
-                                            },
-                                            {
-                                                label: 'Liste des Leads',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'international/partenaire/',
-                                                    cData?.code_commercial_partenaire,
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Alternants',
-                                        items: [
-                                            {
-                                                label: 'Insérer un alternant',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: [
-                                                    '/international/partenaire/ajout-alternant/',
-                                                    cData?.code_commercial_partenaire,
-                                                ],
-                                            },
-                                            {
-                                                label: 'Liste des alternants',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    '/international/partenaire/alternants/',
-                                                    cData.code_commercial_partenaire,
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Commercials',
-                                        items: [
-                                            //{ label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur'] },
-                                            {
-                                                label: 'Liste des Commercials',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'collaborateur',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                        ],
-                                    },
+                else if (response.role === 'Agent' && response.type === 'Commercial' && !response.service_id) {
+                    this.CService.getByUserId(this.token.id).subscribe(cData => {
+                        if (cData && cData.statut != "Admin") {
+                            //Commercial Normal
+                            this.items = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        //{ label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                                        { label: 'Tableau de bord Commercial', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard/commercial'] }
+                                    ]
+                                },
+                                {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Leads',
+                                    items: [
+                                        { label: 'Insérer un lead', icon: 'pi pi-user-plus', routerLink: ['/ajout-lead'] },
+                                        { label: 'Liste des Leads', icon: 'pi pi-users', routerLink: ['international/partenaire/', cData?.code_commercial_partenaire] },
+                                    ]
+                                },
+                                {
+                                    label: 'Alternants',
+                                    items: [
+                                        { label: 'Insérer un alternant', icon: 'pi pi-user-plus', routerLink: ['/international/partenaire/ajout-alternant/', cData?.code_commercial_partenaire] },
+                                        { label: 'Liste des alternants', icon: 'pi pi-users', routerLink: ['/international/partenaire/alternants/', cData.code_commercial_partenaire] },
+                                    ]
+                                },
+                                {
+                                    label: 'Commercials',
+                                    items: [
+                                        //{ label: 'Insérer un collaborateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-collaborateur'] },
+                                        { label: 'Liste des Commercials', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                    ]
+                                },
 
                                     /*{
                                     label: 'Gestion des commissions',
@@ -1896,7 +1897,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2053,7 +2059,7 @@ export class AppMenuComponent implements OnInit {
                         */,
 
                         {
-                            label: 'Skillsnet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -2069,7 +2075,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque'],
+                                    routerLink: ['/cvtheque-interne']
                                 },
                                 {
                                     label: 'Gestion des compétences',
@@ -2102,7 +2108,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2158,6 +2169,11 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/'],
                         },
                         {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                        {
                             label: 'Développeur',
                             icon: 'pi pi-fw pi-cog',
                             items: [
@@ -2184,7 +2200,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -2277,6 +2293,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -2305,7 +2326,7 @@ export class AppMenuComponent implements OnInit {
                                     ],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -2747,7 +2768,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },*/,
                                 {
-                                    label: 'Skillsnet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -2763,7 +2784,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque'],
+                                            routerLink: ['/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
@@ -2894,7 +2915,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3186,7 +3212,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3313,7 +3344,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3391,7 +3427,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3613,7 +3654,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3711,7 +3757,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },*/,
                                 {
-                                    label: 'Skillsnet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -3727,7 +3773,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/cvtheque'],
+                                            routerLink: ['/cvtheque-interne']
                                         },
                                         {
                                             label: 'Gestion des compétences',
@@ -3797,7 +3843,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -3892,6 +3943,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
                                     items: [
@@ -3920,7 +3976,7 @@ export class AppMenuComponent implements OnInit {
                                     ],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -4043,7 +4099,13 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
                         /*
+                        
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -4211,7 +4273,12 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -4246,7 +4313,7 @@ export class AppMenuComponent implements OnInit {
                                     ],
                                 },
                                 {
-                                    label: 'SkillsNet',
+                                    label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
                                         {
@@ -4313,12 +4380,18 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Tableau de bord',
                                             icon: 'pi pi-fw pi-home',
-                                            routerLink: ['/'],
+                                            routerLink: ['/']
                                         },
-                                    ],
+                                        {
+                                            label: 'Signaler un problème technique',
+                                            icon: 'pi pi-fw pi-exclamation-triangle',
+                                            routerLink: ['/ticketing-igs'],
+                                        },
+                                    ]
                                 },
+
                                 {
-                                    label: 'Ticketing',
+                                    label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
                                         {
@@ -4401,6 +4474,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/'],
                                 },
                                 {
+                                    label: 'Signaler un problème technique',
+                                    icon: 'pi pi-fw pi-exclamation-triangle',
+                                    routerLink: ['/ticketing-igs'],
+                                },
+                                {
                                     label: 'Tuteurs',
                                     icon: 'pi pi-users',
                                     routerLink: ['/tuteur-ceo'],
@@ -4408,7 +4486,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Ticketing',
+                            label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-ticket',
                             items: [
                                 {
@@ -4446,7 +4524,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'SkillsNet',
+                            label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
                                 {
@@ -4462,7 +4540,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque'],
+                                    routerLink: ['/cvtheque-interne']
                                 },
                             ],
                         },
@@ -4474,97 +4552,121 @@ export class AppMenuComponent implements OnInit {
                 let service_dic = {};
                 response.roles_list.forEach((val) => {
                     if (!service_dic[val.module])
-                        service_dic[val.module] = val.role;
-                });
-                services_list = Object.keys(service_dic);
-
+                        service_dic[val.module] = val.role
+                })
+                services_list = Object.keys(service_dic)
+                console.log(service_dic)
                 if (services_list.includes('Partenaire')) {
-                    if (service_dic['Partenaire'] != 'Spectateur') {
-                        this.items.push({
-                            label: 'Partenaires',
-                            icon: 'pi pi-share-alt',
-                            items: [
-                                {
-                                    label: 'Insérer un Partenaire',
-                                    icon: 'pi pi pi-user-plus',
-                                    routerLink: ['/partenaireInscription'],
-                                },
-                                {
-                                    label: 'Liste des partenaires',
-                                    icon: 'pi pi-sort-alpha-down',
-                                    routerLink: ['/admin/partenaire'],
-                                },
-                                {
-                                    label: 'Support Marketing',
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: ['/international/brands'],
-                                },
-                                {
-                                    label: 'Gestion des commissions',
-                                    icon: 'pi pi-credit-card',
-                                    items: [
-                                        {
-                                            label: 'Ventes',
-                                            icon: 'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/ventes'],
-                                        },
-                                        {
-                                            label: 'Réglement',
-                                            icon: 'pi pi-shopping-cart',
-                                            routerLink: [
-                                                '/commissions/reglement',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Dashboard',
-                                    icon: 'pi pi-chart-line',
-                                    routerLink: ['/dashboard/partenaire'],
-                                },
-                                {
-                                    label: 'Actualités',
-                                    icon: 'pi pi-exclamation-circle',
-                                    routerLink: [
-                                        '/international/actualite/editMode',
-                                    ],
-                                },
-                            ],
-                        });
+                    if (service_dic['Partenaire'] != "Spectateur") {
+                        this.items.push(
+                            {
+                                label: 'Partenaires',
+                                icon: 'pi pi-share-alt',
+                                items: [
+                                    {
+                                        label: 'Insérer un Partenaire',
+                                        icon: 'pi pi pi-user-plus',
+                                        routerLink: ['/partenaireInscription']
+                                    },
+                                    {
+                                        label: 'Liste des partenaires',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/admin/partenaire']
+                                    },
+                                    {
+                                        label: 'Support Marketing',
+                                        icon: 'pi pi-briefcase'
+                                        , routerLink: ['/international/brands']
+                                    },
+                                    {
+                                        label: 'Gestion des commissions',
+                                        icon: 'pi pi-credit-card',
+                                        items: [
+                                            {
+                                                label: "Ventes",
+                                                icon: 'pi pi-shopping-cart',
+                                                routerLink: ['/commissions/ventes']
+                                            },
+                                            {
+                                                label: "Réglement",
+                                                icon: 'pi pi-shopping-cart',
+                                                routerLink: ['/commissions/reglement']
+                                            }
+                                        ]
+                                    }, {
+                                        label: 'Ticketing',
+                                        icon: 'pi pi-fw pi-ticket',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un ticket',
+                                                icon: 'pi pi-plus',
+                                                routerLink: ['/ticketing/gestion/ajout']
+                                            },
+                                            {
+                                                label: 'Mes tickets envoyé',
+                                                icon: 'pi pi-inbox',
+                                                routerLink: ['/ticketing/gestion/mes-tickets']
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-chart-line'
+                                        , routerLink: ['/dashboard/partenaire']
+                                    }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite/editMode'] },
+                                ]
+                            },
+                        )
                     } else {
-                        this.items.push({
-                            label: 'Partenaires',
-                            icon: 'pi pi-share-alt',
+                        this.items.push(
+                            {
+                                label: 'Partenaires',
+                                icon: 'pi pi-share-alt',
+                                items: [
+                                    {
+                                        label: 'Liste des partenaires',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/admin/partenaire']
+                                    },
+                                    {
+                                        label: 'Support Marketing',
+                                        icon: 'pi pi-briefcase'
+                                        , routerLink: ['/international/brands']
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-chart-line'
+                                        , routerLink: ['/dashboard/partenaire']
+                                    }, {
+                                        label: "Actualités",
+                                        icon: 'pi pi-exclamation-circle',
+                                        routerLink: ['/international/actualite']
+                                    },
+                                ]
+                            }, {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Liste des partenaires',
-                                    icon: 'pi pi-sort-alpha-down',
-                                    routerLink: ['/admin/partenaire'],
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
                                 {
-                                    label: 'Support Marketing',
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: ['/international/brands'],
-                                },
-                                {
-                                    label: 'Dashboard',
-                                    icon: 'pi pi-chart-line',
-                                    routerLink: ['/dashboard/partenaire'],
-                                },
-                                {
-                                    label: 'Actualités',
-                                    icon: 'pi pi-exclamation-circle',
-                                    routerLink: ['/international/actualite'],
-                                },
-                            ],
-                        });
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                }
+                            ]
+                        }
+                        )
                     }
                 }
                 if (services_list.includes('Ticketing')) {
-                    let role = service_dic['Ticketing'];
-                    if (role == 'Super Admin') {
+                    let role = service_dic['Ticketing']
+                    if (role == "Super-Admin") {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4632,7 +4734,7 @@ export class AppMenuComponent implements OnInit {
                         });
                     } else if (role == 'Admin') {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4695,7 +4797,7 @@ export class AppMenuComponent implements OnInit {
                         });
                     } else if (role == 'Agent') {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4719,7 +4821,7 @@ export class AppMenuComponent implements OnInit {
                         });
                     } else {
                         this.items.push({
-                            label: 'Ticketing V2',
+                            label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
@@ -4739,285 +4841,250 @@ export class AppMenuComponent implements OnInit {
                     }
                 }
                 if (services_list.includes('International')) {
-                    let role = service_dic['International'];
-                    if (role == 'Super Admin')
-                        this.items.push({
-                            label: 'International',
-                            icon: 'pi pi-globe',
-                            items: [
-                                {
-                                    label: 'Insérer un lead',
-                                    icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-lead'],
-                                },
-                                {
-                                    label: 'Source',
-                                    icon: 'pi pi-send',
-                                    routerLink: ['/international/sourcing'],
-                                },
-                                {
-                                    label: 'Orientation Leads',
-                                    icon: 'pi pi-globe',
-                                    routerLink: ['/international/orientation'],
-                                },
-                                {
-                                    label: 'Admission Leads',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/international/admission'],
-                                },
-                                {
-                                    label: 'Paiement',
-                                    icon: 'pi pi-money-bill',
-                                    routerLink: ['/international/paiement'],
-                                },
-                                {
-                                    label: 'Accompagenement Consulaire',
-                                    icon: 'pi pi-whatsapp',
-                                    routerLink: ['/international/consulaire'],
-                                },
-                                {
-                                    label: "Gestion de l'équipe",
-                                    icon: 'pi pi-briefcase',
-                                    items: [
-                                        {
-                                            label: 'Gestion des membres',
-                                            icon: 'pi pi-user',
-                                            routerLink: [
-                                                '/international/member',
-                                            ],
-                                        },
-                                        {
-                                            label: "Gestion de l'équipe",
-                                            icon: 'pi pi-users',
-                                            routerLink: [
-                                                '/international/teams',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: "Gestion de l'année scolaire",
-                                    icon: 'pi pi-calendar',
-                                    items: [
-                                        {
-                                            label: 'Formations disponibles',
-                                            icon: 'pi pi-briefcase',
-                                            routerLink: [
-                                                '/admission/formations',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Ecoles',
-                                            icon: 'pi pi-building',
-                                            routerLink: ['/admission/ecoles'],
-                                        },
-                                        {
-                                            label: 'Rentrées Scolaire',
-                                            icon: 'pi pi-calendar',
-                                            routerLink: ['/admission/rentree'],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Dashboard',
-                                    icon: 'pi pi-home',
-                                    items: [
-                                        {
-                                            label: 'Général',
-                                            icon: 'pi pi-chart-bar',
-                                            routerLink: [
-                                                '/international/dashboard',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Performance équipe',
-                                            icon: 'pi pi-users',
-                                            routerLink: [
-                                                'international/dashboard/performance',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Génération de documents',
-                                    icon: 'pi pi-folder',
-                                    routerLink: [
-                                        '/international/generation-documents',
-                                    ],
-                                },
-                            ],
-                        });
-                    else if (role == 'Admin')
-                        this.items.push({
-                            label: 'International',
-                            icon: 'pi pi-globe',
-                            items: [
-                                {
-                                    label: 'Insérer un lead',
-                                    icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-lead'],
-                                },
-                                {
-                                    label: 'Source',
-                                    icon: 'pi pi-send',
-                                    routerLink: ['/international/sourcing'],
-                                },
-                                {
-                                    label: 'Orientation Leads',
-                                    icon: 'pi pi-globe',
-                                    routerLink: ['/international/orientation'],
-                                },
-                                {
-                                    label: 'Admission Leads',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/international/admission'],
-                                },
-                                {
-                                    label: 'Paiement',
-                                    icon: 'pi pi-money-bill',
-                                    routerLink: ['/international/paiement'],
-                                },
-                                {
-                                    label: 'Accompagenement Consulaire',
-                                    icon: 'pi pi-whatsapp',
-                                    routerLink: ['/international/consulaire'],
-                                },
-                                {
-                                    label: "Gestion de l'équipe", //LECTURE
-                                    icon: 'pi pi-briefcase',
-                                    items: [
-                                        {
-                                            label: 'Gestion des membres',
-                                            icon: 'pi pi-user',
-                                            routerLink: [
-                                                '/international/member',
-                                            ],
-                                        },
-                                        {
-                                            label: "Gestion de l'équipe",
-                                            icon: 'pi pi-users',
-                                            routerLink: [
-                                                '/international/teams',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: "Gestion de l'année scolaire", //LECTURE
-                                    icon: 'pi pi-calendar',
-                                    items: [
-                                        {
-                                            label: 'Formations disponibles',
-                                            icon: 'pi pi-briefcase',
-                                            routerLink: [
-                                                '/admission/formations',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Ecoles',
-                                            icon: 'pi pi-building',
-                                            routerLink: ['/admission/ecoles'],
-                                        },
-                                        {
-                                            label: 'Rentrées Scolaire',
-                                            icon: 'pi pi-calendar',
-                                            routerLink: ['/admission/rentree'],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Dashboard',
-                                    icon: 'pi pi-home',
-                                    items: [
-                                        {
-                                            label: 'Général',
-                                            icon: 'pi pi-chart-bar',
-                                            routerLink: [
-                                                '/international/dashboard',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Performance équipe',
-                                            icon: 'pi pi-users',
-                                            routerLink: [
-                                                'international/dashboard/performance',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Génération de documents',
-                                    icon: 'pi pi-folder',
-                                    routerLink: [
-                                        '/international/generation-documents',
-                                    ],
-                                },
-                            ],
-                        });
-                    else if (role == 'Agent')
-                        this.items.push({
-                            label: 'International',
-                            icon: 'pi pi-globe',
-                            items: [
-                                {
-                                    label: 'Insérer un lead',
-                                    icon: 'pi pi-user-plus',
-                                    routerLink: ['/ajout-lead'],
-                                },
-                                {
-                                    label: 'Source', //Lecture
-                                    icon: 'pi pi-send',
-                                    routerLink: ['/international/sourcing'],
-                                },
-                                {
-                                    label: 'Orientation Leads', //Orientation
-                                    icon: 'pi pi-globe',
-                                    routerLink: ['/international/orientation'],
-                                },
-                                {
-                                    label: 'Admission Leads', //Admission
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/international/admission'],
-                                },
-                                {
-                                    label: 'Paiement',
-                                    icon: 'pi pi-money-bill',
-                                    routerLink: ['/international/paiement'],
-                                },
-                                {
-                                    label: 'Accompagenement Consulaire', //Orientation
-                                    icon: 'pi pi-whatsapp',
-                                    routerLink: ['/international/consulaire'],
-                                },
-                                {
-                                    label: 'Dashboard',
-                                    icon: 'pi pi-home',
-                                    items: [
-                                        {
-                                            label: 'Général',
-                                            icon: 'pi pi-chart-bar',
-                                            routerLink: [
-                                                '/international/dashboard',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Performance équipe',
-                                            icon: 'pi pi-users',
-                                            routerLink: [
-                                                'international/dashboard/performance',
-                                            ],
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: 'Génération de documents',
-                                    icon: 'pi pi-folder',
-                                    routerLink: [
-                                        '/international/generation-documents',
-                                    ],
-                                },
-                            ],
-                        });
+                    let role = service_dic['International']
+                    if (role == "Super-Admin")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source',
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads',
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire',
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    },
+                                    {
+                                        label: 'Gestion de l\'équipe',
+                                        icon: 'pi pi-briefcase',
+                                        items: [
+                                            {
+                                                label: 'Gestion des membres',
+                                                icon: 'pi pi-user',
+                                                routerLink: ['/international/member']
+                                            },
+                                            {
+                                                label: 'Gestion de l\'équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/international/teams']
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        label: 'Gestion de l\'année scolaire',
+                                        icon: 'pi pi-calendar',
+                                        items: [
+                                            {
+                                                label: 'Formations disponibles',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/admission/formations']
+                                            },
+                                            {
+                                                label: 'Ecoles',
+                                                icon: 'pi pi-building',
+                                                routerLink: ['/admission/ecoles']
+                                            },
+                                            {
+                                                label: 'Rentrées Scolaire',
+                                                icon: 'pi pi-calendar',
+                                                routerLink: ['/admission/rentree']
+                                            },
+                                        ]
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            }
+                        )
+                    else if (role == "Admin")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source',
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads',
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire',
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    },
+                                    {
+                                        label: 'Gestion de l\'équipe',//LECTURE
+                                        icon: 'pi pi-briefcase',
+                                        items: [
+                                            {
+                                                label: 'Gestion des membres',
+                                                icon: 'pi pi-user',
+                                                routerLink: ['/international/member']
+                                            },
+                                            {
+                                                label: 'Gestion de l\'équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/international/teams']
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        label: 'Gestion de l\'année scolaire',//LECTURE
+                                        icon: 'pi pi-calendar',
+                                        items: [
+                                            {
+                                                label: 'Formations disponibles',
+                                                icon: 'pi pi-briefcase',
+                                                routerLink: ['/admission/formations']
+                                            },
+                                            {
+                                                label: 'Ecoles',
+                                                icon: 'pi pi-building',
+                                                routerLink: ['/admission/ecoles']
+                                            },
+                                            {
+                                                label: 'Rentrées Scolaire',
+                                                icon: 'pi pi-calendar',
+                                                routerLink: ['/admission/rentree']
+                                            },
+                                        ]
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            },
+                        )
+
+                    else if (role == "Agent")
+                        this.items.push(
+                            {
+                                label: 'International',
+                                icon: 'pi pi-globe',
+                                items: [
+                                    {
+                                        label: 'Insérer un lead',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-lead']
+                                    },
+                                    {
+                                        label: 'Source', //Lecture
+                                        icon: 'pi pi-send',
+                                        routerLink: ['/international/sourcing']
+                                    },
+                                    {
+                                        label: 'Orientation Leads', //Orientation
+                                        icon: 'pi pi-globe',
+                                        routerLink: ['/international/orientation']
+                                    },
+                                    {
+                                        label: 'Admission Leads', //Admission
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/international/admission']
+                                    },
+                                    {
+                                        label: 'Paiement',
+                                        icon: 'pi pi-money-bill',
+                                        routerLink: ['/international/paiement']
+                                    },
+                                    {
+                                        label: 'Accompagenement Consulaire', //Orientation
+                                        icon: 'pi pi-whatsapp',
+                                        routerLink: ['/international/consulaire']
+                                    }, {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-home',
+                                        items: [
+                                            {
+                                                label: 'Général',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: ['/international/dashboard']
+                                            },
+                                            {
+                                                label: 'Performance équipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['international/dashboard/performance']
+                                            }
+                                        ]
+                                    },
+                                    { label: "Génération de documents", icon: 'pi pi-folder', routerLink: ['/international/generation-documents'] },
+
+                                ],
+                            },
+                        )
                     else
                         this.items.push({
                             label: 'International',
@@ -5062,108 +5129,115 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                 }
-                if (response.type == 'Prospect') {
-                    this.AdmissionService.getByUserId(this.token.id).subscribe(
-                        (p) => {
-                            this.showMenu = false;
-                            this.items = [
-                                {
-                                    label: 'Informations personnelles',
-                                    icon: 'pi pi-id-card',
-                                    routerLink: [
-                                        '/admission/lead-informations/' + p._id,
-                                    ],
-                                },
-                                {
-                                    label: 'Ma Candidature PDF',
-                                    icon: 'pi pi-list',
-                                    routerLink: [
-                                        '/admission/lead-candidature/' + p._id,
-                                    ],
-                                },
-                                {
-                                    label: "Mon dossier d'admission",
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: [
-                                        '/admission/lead-dossier/' + p._id,
-                                    ],
-                                },
-                                {
-                                    label: "Programme d'étude",
-                                    icon: 'pi pi-book',
-                                    routerLink: [
-                                        '/admission/lead-programme/' + p._id,
-                                    ],
-                                },
-                                {
-                                    label: 'Suivre ma candidature',
-                                    icon: 'pi pi-list',
-                                    routerLink: [
-                                        '/admission/lead-suivi/' + p._id,
-                                    ],
-                                },
-                                {
-                                    label: 'Paiements et documents administratives',
-                                    icon: 'pi pi-credit-card',
-                                    routerLink: [
-                                        '/admission/lead-paiements/' + p._id,
-                                    ],
-                                },
-                            ];
-                            setTimeout(() => (this.showMenu = true), 0);
-                        }
-                    );
+                if (response.type == "Prospect") {
+                    this.AdmissionService.getByUserId(this.token.id).subscribe(p => {
+                        this.showMenu = false
+                        this.items = [
+                            {
+                                label: "Informations personnelles",
+                                icon: "pi pi-id-card",
+                                routerLink: ['/admission/lead-informations/' + p._id]
+                            },
+                            {
+                                label: "Ma Candidature PDF",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-candidature/' + p._id]
+                            },
+                            {
+                                label: "Mon dossier d'admission",
+                                icon: "pi pi-briefcase",
+                                routerLink: ['/admission/lead-dossier/' + p._id]
+                            },
+                            {
+                                label: "Programme d'étude",
+                                icon: "pi pi-book",
+                                routerLink: ['/admission/lead-programme/' + p._id]
+                            },
+                            {
+                                label: "Suivre ma candidature",
+                                icon: "pi pi-list",
+                                routerLink: ['/admission/lead-suivi/' + p._id]
+                            },
+                            {
+                                label: "Paiements et documents administratives",
+                                icon: "pi pi-credit-card",
+                                routerLink: ['/admission/lead-paiements/' + p._id]
+                            },
+                            {
+                                label: 'Ticketing',
+                                icon: 'pi pi-fw pi-ticket',
+                                items: [
+                                    {
+                                        label: 'Ajouter un ticket',
+                                        icon: 'pi pi-plus',
+                                        routerLink: ['/ticketing/gestion/ajout']
+                                    },
+                                    {
+                                        label: 'Mes tickets envoyé',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/ticketing/gestion/mes-tickets']
+                                    }
+                                ]
+                            }
+
+                        ]
+                        setTimeout(() => this.showMenu = true, 0);
+                    })
                 }
                 if (services_list.includes('Mailing')) {
-                    let role = service_dic['Mailing'];
-                    if (role == 'Super Admin') {
-                        this.items.push({
-                            label: 'Gestions des emails',
-                            icon: 'pi pi-envelope',
-                            items: [
-                                {
-                                    label: 'Configuration des adresses mails',
-                                    icon: 'pi pi-cog',
-                                    routerLink: ['/mails/configuration'],
-                                },
-                                {
-                                    label: 'Mails types',
-                                    icon: 'pi pi-bars',
-                                    routerLink: ['/mails/type'],
-                                },
-                                {
-                                    label: 'Mails automatisés',
-                                    icon: 'pi pi-sync',
-                                    routerLink: ['/mails/auto'],
-                                },
-                            ],
-                        });
-                    } else if (role == 'Admin') {
-                        this.items.push({
-                            label: 'Gestions des emails',
-                            icon: 'pi pi-envelope',
-                            items: [
-                                {
-                                    label: 'Mails types',
-                                    icon: 'pi pi-bars',
-                                    routerLink: ['/mails/type'],
-                                },
-                                {
-                                    label: 'Mails automatisés',
-                                    icon: 'pi pi-sync',
-                                    routerLink: ['/mails/auto'],
-                                },
-                            ],
-                        });
+                    let role = service_dic['Mailing']
+                    if (role == "Super-Admin") {
+                        this.items.push(
+                            {
+                                label: 'Gestions des emails',
+                                icon: 'pi pi-envelope',
+                                items: [
+                                    {
+                                        label: 'Configuration des adresses mails',
+                                        icon: 'pi pi-cog',
+                                        routerLink: ['/mails/configuration']
+                                    },
+                                    {
+                                        label: 'Mails types',
+                                        icon: 'pi pi-bars',
+                                        routerLink: ['/mails/type']
+                                    },
+                                    {
+                                        label: 'Mails automatisés',
+                                        icon: 'pi pi-sync',
+                                        routerLink: ['/mails/auto']
+                                    },
+                                ]
+                            }
+                        )
+                    } else if (role == "Admin") {
+                        this.items.push(
+                            {
+                                label: 'Gestions des emails',
+                                icon: 'pi pi-envelope',
+                                items: [
+                                    {
+                                        label: 'Mails types',
+                                        icon: 'pi pi-bars',
+                                        routerLink: ['/mails/type']
+                                    },
+                                    {
+                                        label: 'Mails automatisés',
+                                        icon: 'pi pi-sync',
+                                        routerLink: ['/mails/auto']
+                                    },
+                                ]
+                            }
+                        )
                     }
                 }
                 if (services_list.includes('CRM')) {
-                    let role = service_dic['CRM'];
-                    this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(
-                        (member) => {
-                            this.showMenu = false;
-                            if (role == 'Super Admin') {
-                                this.items.push({
+                    let role = service_dic['CRM']
+                    this.TeamCRMService.MIgetByUSERID(this.token.id).subscribe(member => {
+                        this.showMenu = false
+                        if (role == 'Super-Admin') {
+                            this.items.push(
+                                {
                                     label: 'CRM',
                                     icon: 'pi pi-database',
                                     items: [
@@ -6145,7 +6219,31 @@ export class AppMenuComponent implements OnInit {
                         ],
                     });
                 }
-                setTimeout(() => (this.showMenu = true), 0);
+                if (services_list.includes('iMatch')) {
+                    this.items.push({
+                        label: 'iMatch',
+                        icon: 'pi pi-star',
+                        items: [
+                            {
+                                label: 'Gestions des entreprises',
+                                icon: 'pi pi-home',
+                                items: [
+                                    {
+                                        label: 'Ajouter une entreprise',
+                                        icon: 'pi pi-user-plus',
+                                        routerLink: ['/ajout-entreprise']
+                                    },
+                                    {
+                                        label: 'Liste des entreprises',
+                                        icon: 'pi pi-sort-alpha-down',
+                                        routerLink: ['/entreprises']
+                                    },
+                                ]
+                            },
+                        ],
+                    })
+                }
+                setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true
             },
             error: (error: any) => {

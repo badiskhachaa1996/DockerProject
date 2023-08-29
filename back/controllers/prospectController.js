@@ -401,11 +401,11 @@ app.post("/create", (req, res, next) => {
                                 let htmlmail = `
                                 <p>Bonjour,&nbsp;</p>
                                 <p>Nous sommes ravis de recevoir votre candidature à notre établissement.&nbsp;</p>
-                                <p>Votre demande d'ins cription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec
+                                <p>Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec
                                     <strong>votre mail</strong> et le <strong>mot de passe</strong> suivant : <strong>${r}</strong> sur ce lien  :
                                     <a href="https://ims.intedgroup.com/#/login"><u>https://ims.intedgroup.com/#/login</u></a></p>
                                 <p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, ou bien se connecter à votre
-                                    compte, veuillez nous contacter sur support@intedgroup.com. </p>
+                                    compte, veuillez nous contacter sur ims.support@intedgroup.com. </p>
                                 <p>&nbsp;</p>
                                 <p>Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme
                                     également.&nbsp;</p>
@@ -741,7 +741,7 @@ app.put("/updateV2", (req, res, next) => {
                     if (req.body.detail)
                         detail = req.body.detail
                     let token = jwt.decode(req.header("token"))
-                    console.log(token,req.header("token"))
+                    console.log(token, req.header("token"))
                     let hl = new HistoriqueLead({
                         lead_before: prospectUpdated,
                         lead_after: prospectsFromDb,
@@ -1677,6 +1677,37 @@ app.put("/updateMany", (req, res, next) => {
         })
         .catch((error) => { res.status(400).send(error.message); })
 });
+
+app.post('/sendMailAffectation', (req, res) => {
+    let htmlemail = `
+    <p>Bonjour,</p><br>
+    <p>Nous avons le plaisir de vous informer que le lead ${req.body.prospect_name} vous a été attribué pour traitement. Cette attribution a eu lieu le ${req.body.date}.</p><br>
+
+    <p>Nous vous demandons aimablement de prendre en charge ce lead et de faire le nécessaire pour le traiter. Votre expertise et votre engagement sont essentiels pour assurer la satisfaction de notre clientèle.</p>
+    <p>Nous vous remercions de votre collaboration et de votre dévouement continu. Nous avons pleinement confiance en vos compétences pour mener à bien cette mission avec succès.</p><br>
+    
+    <p>Cordialement,</p>
+    `
+    let mailOptions = {
+        from: 'ims@intedgroup.com',
+        to: req.body.email,
+        subject: '[IMS - International] - Attribution d\'un lead',
+        html: htmlemail,
+        attachments: [{
+            filename: 'signature.png',
+            path: 'assets/ims-intedgroup-logo.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+    };
+
+
+    transporterINTED.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({ ...req.body })
+    });
+})
 
 // TODO: Methode de modification d'un prospect alternable et de ses informations user
 

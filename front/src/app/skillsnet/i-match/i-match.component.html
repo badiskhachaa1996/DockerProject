@@ -1,0 +1,124 @@
+<div class="imatch-main-page">
+    <div class="header-top">
+        <img src="../../../assets/images/imatch/header-imatch.png">
+    </div>
+    <div class="container" style="text-align: center;">
+        <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
+    </div>
+    <div class="container">
+        <span class="p-input-icon-left" style="width: 100%;">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
+                placeholder="Ex: John" class="w-full" />
+        </span>
+    </div>
+    <div class="grid container">
+        <div class="field col-12 md:col-3">
+            <label for="range">Disponibilité</label><br>
+            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
+                (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+                [style]="{'width':'100%'}"></p-calendar>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label for="stacked">Compétences</label><br>
+            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
+                (onChange)="updateFilter()"></p-multiSelect>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label for="stacked">Profil</label><br>
+            <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Choississez un profil"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
+                (onChange)="updateFilter()"></p-multiSelect>
+        </div>
+        <div class="field col-12 md:col-1">
+            <label for="stacked">&nbsp;</label><br>
+            <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
+                autoWidth="false" [style]="{'width':'100%'}" pTooltip="Supprimer les filtres"
+                tooltipPosition="bottom"></button>
+        </div>
+
+    </div>
+
+
+    <div class="cv-list">
+        <div class="container">
+            <div class="row">
+            <!-- <div class="card col-md-4" *ngFor="let cv of filteredCVS">
+                <div class="card-main">
+                    <div class="card-information">
+                        <img *ngIf="dicPicture && dicPicture[cv._id]?.url" src="{{dicPicture[cv._id].url}}"
+                            style="max-width: 160px;max-height: 160px;" />
+                        <img *ngIf="!dicPicture || !dicPicture[cv._id]?.url" src="../../../assets/images/imatch/student.png"
+                            style="max-width: 160px;max-height: 160px;" />
+                        <div class="card-details">
+                            <div class="card-main-info">
+                                <div class="card-title">
+                                    <h3>{{cv.user_id.firstname.substring(0, 1)}}. {{cv.user_id.lastname.substring(0, 2)}}.</h3>
+                                </div>
+                            </div>
+                            <div class="card-main-data">
+                                <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
+                                <p *ngIf='!cv.mobilite_lieu'>📍 {{cv.mobilite_autre}}</p>
+                                <p *ngIf="disponible(cv.disponibilite)">⏱ {{cv.disponibilite | date : 'MMMM YYYY'}}</p>
+                                <p *ngIf="!disponible(cv.disponibilite)">⏱ Disponible Immédiatement</p>
+                                <p *ngIf="calculatePrime(cv.user_id._id)<30">💸 Eligible à la prime de 6000€</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-competences">
+                        <p *ngIf="cv.competences.length!=null">{{cv.competences[0]?.libelle}}</p>
+                        <p *ngIf="cv.competences.length>1">{{cv.competences[1]?.libelle}}</p>
+                        <p *ngIf="cv.competences.length>2">{{cv.competences[2]?.libelle}}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a class="cv" (click)="onClickCV(cv)">CV</a>
+                    <a class="meeting" href="#">Rendez-vous</a>
+                </div>
+            </div> -->
+                <div class="col-4" *ngFor="let cv of filteredCVS">
+                    <div class="cv-card">
+                    <div class="cv-card-main">
+                        <div class="cv-card-information">
+                    
+                            <div *ngIf="dicPicture && dicPicture[cv._id]?.url;then cv_image else default_image"></div>
+                                <ng-template #cv_image><img src="{{dicPicture[cv._id].url}}"/></ng-template>
+                                <ng-template #default_image>
+                                    <div *ngIf="cv.user_id.civilite == 'Madame'; then is_madame else other"></div>
+                                    <ng-template #is_madame><img src='../../../assets/images/imatch/female.png'/></ng-template>
+                                    <ng-template #other><img src='../../../assets/images/imatch/male.png'/></ng-template>
+                                </ng-template>
+                            <div class="cv-card-details">
+                                <div class="card-main-info">
+                                    <div class="cv-card-title">
+                                        <h4><strong>{{cv.competences[0].profile_id.libelle}}</strong></h4>
+                                        <h5>{{cv.user_id.firstname.substring(0, 1)}}. {{cv.user_id.lastname.substring(0, 2)}}.</h5>
+                                    </div>
+                                </div>
+                                <div class="card-main-data">
+                                    <p>📍 France</p>
+                                    <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo"></p>
+                                    <ng-template #not_dispo><p>⏱ {{cv.disponibilite | date : 'MMMM YYYY'}}</p></ng-template>
+                                    <ng-template #dispo_immediat><p>⏱ Disponible Immédiatement</p></ng-template>
+
+                                    <!-- <p *ngIf="calculatePrime(cv.user_id._id)<30">💸 Eligible à la prime de 6000€</p> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="card-competences">
+                            <p *ngIf="cv.competences.length!=null">{{cv.competences[0]?.libelle}}</p>
+                            <p *ngIf="cv.competences.length>1">{{cv.competences[1]?.libelle}}</p>
+                            <p *ngIf="cv.competences.length>2">{{cv.competences[2]?.libelle}}</p>
+                        </div> -->
+                    </div>
+                    <div class="cv-card-footer">
+                        <a class="cv" href="#">CV</a>
+                        <a class="meeting" href="#">Rendez-vous</a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

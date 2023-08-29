@@ -107,7 +107,7 @@ export class SkillsService {
     const url = `${this.apiUrl}/get-competences`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.get<Competence[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.get<Competence[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('Competences récuperés') 

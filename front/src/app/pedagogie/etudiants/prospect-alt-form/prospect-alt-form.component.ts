@@ -48,7 +48,7 @@ export class ProspectAltFormComponent implements OnInit {
     this.commercialId = this.activatedRoute.snapshot.paramMap.get('id');
 
     // initialisation du lien du logo
-    this.logoSrc = 'assets/images/logo-ims.png';
+    this.logoSrc = 'assets/images/logo-ims-new.png';
 
     // handicap options
     this.handicapOptions = [

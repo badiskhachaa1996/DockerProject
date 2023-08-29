@@ -334,7 +334,7 @@ export class AuthService {
 
   create(user: User) {
     let url = `${this.apiUrl}create`;
-    return this.http.post<User>(url,user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.post<User>(url, user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAllByServiceFromList(service_id) {
@@ -343,15 +343,14 @@ export class AuthService {
   }
 
   // méthode de mise à jour du statut de l'utilisateur
-  pathUserStatut(statut: string, id: string): Promise<User>
-  {
+  pathUserStatut(statut: string, id: string): Promise<User> {
     const url = `${this.apiUrl}path-user-statut`;
 
     return new Promise<User>((resolve, reject) => {
-      this.http.put(url, {statut: statut, id: id}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
-        next: (response: User) => {resolve(response)},
-        error: (error) => { reject(error)},
-        complete: () => { console.log('Requête de mise à jour du statut effectué')}
+      this.http.put(url, { statut: statut, id: id }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: User) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('Requête de mise à jour du statut effectué') }
       });
     });
   }
@@ -361,4 +360,14 @@ export class AuthService {
     return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
+  downloadRH(user_id, _id, path) {
+    let url = `${this.apiUrl}downloadRH/${_id}/${path}`;
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  uploadRH(data) {
+    let url = `${this.apiUrl}uploadRH/`;
+    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

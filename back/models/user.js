@@ -117,8 +117,21 @@ const user_schema = new mongoose.Schema({
     statut: { type: String, required: false},
     sujet_list : {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "sujet" }], default: []
-    }
-    
+    },
+    roles_ticketing_list: {
+        type: [{
+            module: { type: mongoose.Schema.Types.ObjectId, ref: "service" },
+            role: { type: String },
+        }], default: []
+    },
+    documents_rh: {
+        type: [{
+            date: { type: Date },
+            filename: { type: String },
+            path: { type: String },
+            note: { type: String }
+        }], default: []
+    },
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

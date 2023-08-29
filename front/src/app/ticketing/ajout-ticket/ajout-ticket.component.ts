@@ -12,14 +12,14 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
   styleUrls: ['./ajout-ticket.component.scss']
 })
 export class AjoutTicketComponent implements OnInit {
-
+  service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
@@ -76,7 +76,8 @@ export class AjoutTicketComponent implements OnInit {
     fileUpload.clear()
   }
   constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router,
-    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService) { }
+    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService,
+    private NotificationService: NotificationService, private route: ActivatedRoute) { }
   serviceDic = {}
   sujetDic = {}
   USER: User
@@ -94,16 +95,27 @@ export class AjoutTicketComponent implements OnInit {
       //Charger les sujets et services IGS
       this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-          if(val.label.startsWith('IGS')){
+          if (val.label.startsWith('IGS')) {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
           }
         })
       })
+    } else if (this.service_ID) {
+      this.ServService.getAServiceByid(this.service_ID).subscribe(data => {
+        this.serviceDropdown.push({ label: data.dataService.label, value: data.dataService._id })
+        this.TicketForm.patchValue({ service_id: this.service_ID })
+        this.sujetDropdown = []
+        this.SujetService.getAllByServiceID(this.service_ID).subscribe(data => {
+          data.forEach(val => {
+            this.sujetDropdown.push({ label: val.label, value: val._id })
+          })
+        })
+      })
     } else {
       this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-          if(!val.label.startsWith('IGS')){
+          if (!val.label.startsWith('IGS')) {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
           }

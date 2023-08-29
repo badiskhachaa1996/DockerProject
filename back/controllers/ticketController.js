@@ -89,7 +89,7 @@ app.post("/create", (req, res) => {
                 ticket.save((err, doc) => {
                     res.send({ message: "Votre ticket a été crée!", doc });
                     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
-                        console.log(users)
+                        //console.log(users)
                         let emailList = []
                         users.forEach(u => {
                             emailList.push(u.email)
@@ -121,64 +121,32 @@ app.post("/create", (req, res) => {
                         });
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
-                        if (sujet.label != "Pédagogie")
-                            User.find({ service_id: sujet.service_id._id, role: "Responsable" }, (err2, listResponsable) => {
-                                listResponsable.forEach(responsable => {
-                                    let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                                    let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
-                                    let mailOptions = {
-                                        from: 'ims@intedgroup.com',
-                                        to: responsable.email,
-                                        subject: '[IMS - Ticketing] - Notification ',
-                                        html: htmlemail,
-                                        priority: 'high',
-                                        attachments: [{
-                                            filename: 'signature.png',
-                                            path: 'assets/ims-intedgroup-logo.png',
-                                            cid: 'red' //same cid value as in the html img src
-                                        }]
-                                    };
+                        let htmlemail = `
+                        <p>Bonjour,</p><br>
+
+                        <p>Nous souhaitons vous informer qu'un nouveau ticket a été créé pour le service ${sujet.service_id.label}. Le sujet de ce ticket est " ${sujet.label}". Il a été créé le ${day}/${month}/${year} par ${u.lastname} ${u.firstname}.</p><br>
+                        
+                        <p>Cordialement,</p>
+                        `
+                        let mailOptions = {
+                            from: 'ims@intedgroup.com',
+                            to: 'ims.support@intedgroup.com',
+                            subject: '[IMS - Ticketing] - Nouveau Ticket de ' + sujet.service_id.label,
+                            html: htmlemail,
+                            priority: 'high',
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/ims-intedgroup-logo.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
 
 
-                                    transporter.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.error(error);
-                                        }
-                                    });
-                                })
-                            })
-                        else {
-                            Etudiant.findOne({ user_id: req.body.id }).populate({ path: 'classe_id', populate: { path: 'diplome_id' } }).then(etudiant => {
-                                let responsable = []
-                                if (etudiant.classe_id.diplome_id.domaine == "Informatique") {
-                                    responsable = ["m.benzarti@iltsglobal.com", "k.fakhfakh@estya.com", "s.hafhouf@intedgroup.com"]
-                                } else if (etudiant.classe_id.diplome_id.domaine == "Commerce") {
-                                    responsable = ["k.rahmani@intedgroup.com"]
-                                    //JE SAIS PAS QUI METTRE ICI METS EN GROS FAUT METTRE COMMERCE TERTIAIRE ETC
-                                }
-                                let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-                                let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
-                                let mailOptions = {
-                                    from: 'ims@intedgroup.com',
-                                    to: responsable,
-                                    subject: '[IMS - Ticketing] - Notification ',
-                                    html: htmlemail,
-                                    priority: 'high',
-                                    attachments: [{
-                                        filename: 'signature.png',
-                                        path: 'assets/ims-intedgroup-logo.png',
-                                        cid: 'red' //same cid value as in the html img src
-                                    }]
-                                };
-
-
-                                transporter.sendMail(mailOptions, function (error, info) {
-                                    if (error) {
-                                        console.error(error);
-                                    }
-                                });
-                            })
-                        }
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.error(error);
+                            }
+                        });
                     })
                 });
             })
@@ -796,6 +764,12 @@ app.get("/getAllNonAssigne", (req, res) => {
         .catch((error) => { res.status(400).send(error); })
 });
 
+app.post("/getAllNonAssigneV2", (req, res) => {
+    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+        .then((ticket) => { res.status(200).send(ticket); })
+        .catch((error) => { res.status(400).send(error); })
+});
+
 app.get("/getAllRefuse", (req, res) => {
     Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('user_revert')
         .then((ticket) => { res.status(200).send(ticket); })
@@ -983,6 +957,7 @@ app.post('/sendMailAff', (req, res) => {
     <p>Nous souhaitons vous notifier qu'un nouveau ticket vous a été assigné pour le service ${req.body.service}. Le sujet du ticket est ${req.body.sujet}. Il vous a été assigné le ${req.body.date}.</p><br>
     <p>Nous vous invitons à prendre en charge ce ticket dès que possible. Assurez-vous de bien comprendre la nature de la demande, de collecter toutes les informations nécessaires et de suivre les procédures internes pour résoudre le problème ou fournir l'assistance requise.</p><br>
     <p>Cordialement,</p>
+    <img src="red"/>
     `
     let mailOptions = {
         from: 'ims@intedgroup.com',
@@ -1018,6 +993,7 @@ app.post('/sendMailRefus', (req, res) => {
         
         
         <p>Cordialement,</p><br>
+        <img src="red"/>
         `
         let mailOptions = {
             from: 'ims@intedgroup.com',
@@ -1078,6 +1054,36 @@ app.post('/sendMailUpdateStatut', (req, res) => {
         });
     })
 
+})
+
+app.get('/getAllByServiceAndCreateurID/:service_id/:createur_id', (req, res) => {
+    let id = req.params.service_id
+    let listSujetofService = []
+    let TicketList = []
+    Sujet.find()
+        .then(listSujets => {
+            listSujets.forEach(sujet => {
+                if (sujet.service_id == id) {
+                    listSujetofService.push(sujet._id.toString())
+                }
+            });
+            Ticket.find({ createur_id: req.params.createur_id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+                .then(result => {
+                    let listTicket = result.length > 0 ? result : []
+                    listTicket.forEach(ticket => {
+                        if (listSujetofService.includes(ticket.sujet_id._id.toString())) {
+                            TicketList.push(ticket)
+                        }
+                    })
+                    res.status(200).send(TicketList)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        })
+        .catch(err => {
+            console.error(err);
+        })
 })
 
 
