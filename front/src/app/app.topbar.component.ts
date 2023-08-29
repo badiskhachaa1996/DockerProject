@@ -20,7 +20,7 @@ const io = require("socket.io-client");
 })
 export class AppTopBarComponent {
 
-  logo = "assets/images/logo-ims.png"
+  logo = "assets/images/logo-ims-new.png"
   notif = false;
   Notifications = 0;
   socket = io(environment.origin.replace('/soc', ''));

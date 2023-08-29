@@ -29,7 +29,7 @@ export class MpOublieComponent implements OnInit {
   constructor(private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.logo = "assets/images/logo-ims.png";
+    this.logo = "assets/images/logo-ims-new.png";
     this.showSuccessMessage = false;
     this.isPasswordUpdated = false;
 
