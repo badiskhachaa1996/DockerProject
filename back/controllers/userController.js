@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+var mime = require('mime-types')
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
