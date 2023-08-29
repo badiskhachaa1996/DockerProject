@@ -346,6 +346,7 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 
@@ -703,6 +704,7 @@ import { IMatchComponent } from './skillsnet/i-match/i-match.component';
     DashboardTargetComponent,
     DocCheckerComponent,
     LeadCandidatureComponent,
+    BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent
   ],

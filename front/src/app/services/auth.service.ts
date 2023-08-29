@@ -355,6 +355,11 @@ export class AuthService {
     });
   }
 
+  getAllBySujet(sujet_id) {
+    let url = `${this.apiUrl}getAllBySujet/${sujet_id}`;
+    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
   downloadRH(user_id, _id, path) {
     let url = `${this.apiUrl}downloadRH/${_id}/${path}`;
     return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
