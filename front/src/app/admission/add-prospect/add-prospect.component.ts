@@ -80,8 +80,9 @@ export class AddProspectComponent implements OnInit {
       this.FAService.EAgetAll().subscribe(data => {
         data.forEach(e => {
           this.EcoleListRework.push({ label: e.titre, value: e.url_form })
-          this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
+          //this.sourceList.push({ label: "Site web " + e.titre, value: "Site web " + e.titre })
         })
+        this.sourceList.push({ label: "Site Web", value: "Site Web" })
         this.sourceList = this.sourceList.concat([
           { label: "Equipe communication", value: "Equipe communication" },
           { label: "Bureau Congo", value: "Bureau Congo" },
