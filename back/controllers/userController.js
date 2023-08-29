@@ -156,21 +156,23 @@ app.post("/login", (req, res) => {
       ) {
         res.status(404).send({ message: "Email ou Mot de passe incorrect" });
       } else {
-        if (userFromDb.verifedEmail) {
-          let token = jwt.sign(
-            {
-              id: userFromDb._id,
-              role: userFromDb.role,
-              service_id: userFromDb.service_id,
-              type: userFromDb.type,
-            },
-            "126c43168ab170ee503b686cd857032d",
-            { expiresIn: "7d" }
-          );
-          res.status(200).send({ token });
+        /*if (userFromDb.verifedEmail) {
+
         } else {
           res.status(304).send({ message: "Compte pas activé", data });
-        }
+        }*/
+
+        let token = jwt.sign(
+          {
+            id: userFromDb._id,
+            role: userFromDb.role,
+            service_id: userFromDb.service_id,
+            type: userFromDb.type,
+          },
+          "126c43168ab170ee503b686cd857032d",
+          { expiresIn: "7d" }
+        );
+        res.status(200).send({ token });
       }
     })
     .catch((error) => {

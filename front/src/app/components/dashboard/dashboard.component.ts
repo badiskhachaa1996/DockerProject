@@ -1185,16 +1185,29 @@ export class DashboardComponent implements OnInit {
     { label: 'Autorisation', value: 'Autorisation' },
     { label: 'Autre motif', value: 'Autre motif' },
           */
+          let dd = new Date(c.date_debut)
+          if (dd > new Date(this.dateChoose + '-31'))
+            dd = new Date(this.dateChoose + '-31')
+          if (dd < new Date(this.dateChoose + '-01'))
+            dd = new Date(this.dateChoose + '-01')
+          let df = new Date(c.date_fin)
+          if (df < new Date(this.dateChoose + '-01'))
+            df = new Date(this.dateChoose + '-01')
+          if (df > new Date(this.dateChoose + '-31'))
+            df = new Date(this.dateChoose + '-31')
+          var Difference_In_Time = dd.getTime() - df.getTime();
 
+          // To calculate the no. of days between two dates
+          var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
           //TODO Refaire le compte des jours entre les dates
           if (c.type_conge == "Congé payé")
-            this.stats.conges_pay += c.nombre_jours
+            this.stats.conges_pay += Difference_In_Days
           else if (c.type_conge == "Congé sans solde")
-            this.stats.conges_ss += c.nombre_jours
+            this.stats.conges_ss += Difference_In_Days
           else if (c.type_conge == "Absence maladie")
-            this.stats.maladie += c.nombre_jours
+            this.stats.maladie += Difference_In_Days
           else
-            this.stats.absence_justifie += c.nombre_jours
+            this.stats.absence_justifie += Difference_In_Days
 
         })
       })
