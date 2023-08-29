@@ -37,6 +37,7 @@ export class User {
         }[],
         public service_list?: any[],
         public statut?: string,
+        public sujet_list?: any[],
         public roles_ticketing_list?: {
             _id?: string,
             module?: Service,

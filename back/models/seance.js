@@ -1,7 +1,7 @@
 //Importation de la bibliothèque mongoose
 const mongoose = require('mongoose');
 //Creation du schema de la table seance
-const seanceSchema = mongoose.Schema({
+const seanceSchema =  new mongoose.Schema({
     classe_id: { type: [mongoose.Schema.Types.ObjectId], ref: "classe", required: true },
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
     libelle: { type: String, required: false },
