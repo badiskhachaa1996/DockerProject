@@ -1385,6 +1385,18 @@ app.get('/getAllByServiceFromList/:service_id', (req, res) => {
     });
 })
 
+app.get("/getAllBySujet/:sujet_id", (req, res) => {
+  User.find({ sujet_list: { $in: [req.params.sujet_id] } }).then((usersFromDb) => {
+    if (usersFromDb)
+      res.status(200).send(usersFromDb);
+    else
+      res.status(200).send([]);
+  })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
+});
+
 // méthode de mise à jour du statut du collaborateur
 app.put('/path-user-statut', (req, res) => {
   const { statut } = req.body;

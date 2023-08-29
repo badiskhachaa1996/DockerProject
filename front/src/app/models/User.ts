@@ -35,6 +35,7 @@ export class User {
         }[],
         public service_list?: any[],
         public statut?: string,
+        public sujet_list?: any[],
     ) { }
 
 

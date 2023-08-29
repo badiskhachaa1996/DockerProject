@@ -138,6 +138,7 @@ const admissionFormDubaiController = require('./controllers/admissionFormDubaiCo
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
+const bookingController = require('./controllers/bookingController');
 
 const { User } = require("./models/user");
 
@@ -348,6 +349,8 @@ app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
 app.use('/soc/rh', rhControlleur);
+app.use('/soc/sujet-booking', bookingController);
+
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
@@ -359,6 +362,7 @@ app.use('/soc/teamsCRM', require('./controllers/teamsCRMController'))
 app.use('/soc/mail', require('./controllers/mailController'))
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
+
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

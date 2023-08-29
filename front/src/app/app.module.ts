@@ -346,6 +346,7 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 
 @NgModule({
   imports: [
@@ -700,7 +701,8 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
     ConfigurationTargetComponent,
     DashboardTargetComponent,
     DocCheckerComponent,
-    LeadCandidatureComponent
+    LeadCandidatureComponent,
+    BookingV2Component
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
