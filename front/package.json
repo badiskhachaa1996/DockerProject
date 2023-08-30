@@ -30,6 +30,7 @@
         "angular2-signaturepad": "4.0.2",
         "chart.js": "^3.3.2",
         "crypto-js": "^4.1.1",
+        "date-fns": "^2.30.0",
         "file-saver": "^2.0.5",
         "google-libphonenumber": "^3.2.30",
         "html2pdf.js": "^0.10.1",
