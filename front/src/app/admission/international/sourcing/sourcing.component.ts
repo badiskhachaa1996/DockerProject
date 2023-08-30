@@ -674,18 +674,18 @@ export class SourcingComponent implements OnInit {
         `
       }).subscribe(() => { })
       if (this.showDetails.code_commercial)
-      this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
-        if (commercial) {
-          this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+        this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+          if (commercial) {
+            this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
 
-          this.NotifService.create(new Notification(null, null, false,
-            `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
-            new Date(), commercial.user_id._id, null)).subscribe(test => { })
+            this.NotifService.create(new Notification(null, null, false,
+              `La décision d'orientation est ${this.detailsForm.value.decision_orientation} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+              new Date(), commercial.user_id._id, null)).subscribe(test => { })
 
-          this.EmailService.defaultEmail({
-            email: commercial.user_id?.email,
-            objet: '[IMS] Admission - Changement de décision orientation d\'un de vos leads ',
-            mail: `
+            this.EmailService.defaultEmail({
+              email: commercial.user_id?.email,
+              objet: '[IMS] Admission - Changement de décision orientation d\'un de vos leads ',
+              mail: `
             Cher(e) partenaire,
 
             Nous sommes ravis de vous informer que la décision d'orientation concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'orientation est ${this.detailsForm.value.decision_orientation} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
@@ -698,9 +698,9 @@ export class SourcingComponent implements OnInit {
             
             Cordialement,
             `
-          }).subscribe(() => { })
-        }
-      })
+            }).subscribe(() => { })
+          }
+        })
     }
     if (this.detailsForm.value.decision_admission != this.showDetails.decision_admission) {
       this.Socket.NewNotifV2(this.showDetails.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} , prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
@@ -721,18 +721,18 @@ export class SourcingComponent implements OnInit {
         `
       }).subscribe(() => { })
       if (this.showDetails.code_commercial)
-      this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
-        if (commercial) {
-          this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
+        this.CommercialService.getByCode(this.showDetails.code_commercial).subscribe(commercial => {
+          if (commercial) {
+            this.Socket.NewNotifV2(commercial.user_id._id, `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`)
 
-          this.NotifService.create(new Notification(null, null, false,
-            `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
-            new Date(), commercial.user_id._id, null)).subscribe(test => { })
+            this.NotifService.create(new Notification(null, null, false,
+              `La décision d'admission est ${this.detailsForm.value.decision_admission} concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname}, prise à la date ${new Date().toLocaleDateString('fr-FR')}`,
+              new Date(), commercial.user_id._id, null)).subscribe(test => { })
 
-          this.EmailService.defaultEmail({
-            email: commercial.user_id?.email,
-            objet: '[IMS] Admission - Changement de décision admission d\'un de vos leads ',
-            mail: `
+            this.EmailService.defaultEmail({
+              email: commercial.user_id?.email,
+              objet: '[IMS] Admission - Changement de décision admission d\'un de vos leads ',
+              mail: `
             Cher(e) partenaire,
 
             Nous avons le plaisir de vous informer que la décision d'admission concernant l'étudiant ${this.showDetails?.user_id?.firstname} ${this.showDetails?.user_id?.lastname} a été prise. La décision d'admission est ${this.detailsForm.value.decision_admission} et elle a été prise à la date ${new Date().toLocaleDateString('fr-FR')}.
@@ -745,9 +745,9 @@ export class SourcingComponent implements OnInit {
             
             Cordialement,
           `
-          }).subscribe(() => { })
-        }
-      })
+            }).subscribe(() => { })
+          }
+        })
     }
     if (this.initalPayement.toString() != this.payementList.toString()) {
       this.payementList.forEach((val, idx) => {
@@ -1118,7 +1118,10 @@ export class SourcingComponent implements OnInit {
   onRowSelect(event) {
     if (this.selectedLeads.length != 0) {
       this.showAffectationList = true
-      this.scrollToTop()
+      //this.scrollToTop()
+    }
+    if (this.selectedLeads.length == 1) {
+      this.messageService.add({ severity: 'info', summary: "Vous pouvez affecter ou supprimer les leads via l'interface en haut de la page" })
     }
 
   }
@@ -1148,5 +1151,21 @@ export class SourcingComponent implements OnInit {
     this.router.navigate(['admission/lead-candidature/', id])
   }
 
+  deleteList() {
+    if (confirm('Êtes-vous sûr de vouloir supprimer les leads selectionnés ?')) {
+      let listIds = []
+      let user_ids = []
+      this.selectedLeads.forEach(p => {
+        listIds.push(p._id)
+        user_ids.push(p.user_id._id)
+        this.prospects[p.type_form].splice(this.prospects[p.type_form].indexOf(p), 1)
+      })
+      this.admissionService.deleteMany(listIds, user_ids).subscribe(prospects => {
+        this.showAffectationList = false
+        this.affectationFormList.reset()
+        this.messageService.add({ severity: "success", summary: "Suppresions des leads avec succès" })
+      })
+    }
+  }
 
 }

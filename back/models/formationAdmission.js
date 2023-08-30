@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     tarif: { type: String, },
     langue: { type: [String], default: [] },
     deroulement: { type: String, },
+    filiere: { type: String, },
 });
 
 //Creation de la table ecole et export du model Ecole

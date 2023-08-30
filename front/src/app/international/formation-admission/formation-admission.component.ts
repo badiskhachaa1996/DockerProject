@@ -34,7 +34,21 @@ export class FormationAdmissionComponent implements OnInit {
     tarif: new FormControl(''),
     langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
+    filiere: new FormControl(''),
   })
+
+  filiereList = [
+    { value: "Informatique", label: "Informatique" },
+    { value: "Commerce et Marketing", label: "Commerce et Marketing" },
+    { value: "Comptabilité Gestion et Finance", label: "Comptabilité Gestion et Finance" },
+    { value: "Ressources Humaines", label: "Ressources Humaines" },
+    { value: "BIM", label: "BIM" },
+    { value: "Programme anglais", label: "Programme anglais" },
+    { value: "Logistique", label: "Logistique" },
+    { value: "Hôtellerie", label: "Hôtellerie" },
+    { value: "Médical", label: "Médical" },
+    { value: "Service à la personne", label: "Service à la personne" },
+  ]
 
   initUpdate(rowData: FormationAdmission) {
     this.selectedFormation = rowData
@@ -61,6 +75,7 @@ export class FormationAdmissionComponent implements OnInit {
     tarif: new FormControl(''),
     langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
+    filiere: new FormControl(''),
   })
 
   addForm = false
@@ -111,8 +126,8 @@ export class FormationAdmissionComponent implements OnInit {
   ]
   formationSelected;
   showDescriptionBool = false
-  showDescription(formation:FormationAdmission){
+  showDescription(formation: FormationAdmission) {
     this.formationSelected = formation,
-    this.showDescriptionBool = true
+      this.showDescriptionBool = true
   }
 }

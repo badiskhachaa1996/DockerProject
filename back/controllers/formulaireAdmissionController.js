@@ -66,7 +66,7 @@ app.post("/FA/create", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 app.put("/FA/update", (req, res) => {
-    FormationAdmission.findByIdAndUpdate(req.body._id, { ...req.body }, (err, doc) => {
+    FormationAdmission.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
         res.status(200).send(doc);
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
@@ -112,7 +112,7 @@ app.get("/EA/getByID/:id", (req, res) => {
 })
 
 app.get("/EA/getByParams/:params", (req, res) => {
-    EcoleAdmission.findOne({ url_form: req.params.params }).populate('formations')
+    EcoleAdmission.findOne({ url_form: req.params.params }).populate({ path: 'formations', options: { sort: { filiere: 1 } } })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })

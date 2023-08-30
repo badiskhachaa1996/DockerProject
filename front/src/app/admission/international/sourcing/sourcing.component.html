@@ -48,8 +48,11 @@
                 <label>Affecté le:</label>
                 <p>{{affectationFormList.value.date_sourcing | date:'mediumDate'}}</p>
             </div>
-            <div class="col-12">
+            <div class="col-6">
                 <button pButton label="Changer l'affectation" (click)="saveAffectationList()"></button>
+            </div>
+            <div class="col-6">
+                <button pButton label="Supprimer les leads selectionnés" (click)="deleteList()"></button>
             </div>
         </form>
     </div>
