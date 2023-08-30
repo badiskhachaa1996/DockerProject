@@ -147,8 +147,7 @@
                     </p-table>
                 </p-tabPanel>
 
-                <p-tabPanel header="CRA">
-                    <!-- formulaire d'ajout d'une activité -->
+                <!--  <p-tabPanel header="CRA">
                     <div *ngIf="showFormAddCra">
                         <div class="add-button-div mb-2">
                             <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
@@ -247,7 +246,7 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-tabPanel>
+                </p-tabPanel>-->
 
                 <p-tabPanel header="Suivre mon assiduité">
                     <div class="grid">
@@ -262,12 +261,14 @@
                             <h6>Nombre de jours de congés maladie: <strong>{{stats.maladie}} jrs</strong></h6>
                             <h6>Nombre de jours en absences justifies: <strong>{{stats.absence_justifie}} jrs</strong>
                             </h6>
-                            <h6>Nombre de jours en absences non justifies: <strong>{{22-stats.assiduite-stats.absence_justifie-stats.maladie-stats.conges_ss-stats.conges_pay}} jrs</strong>
+                            <h6>Nombre de jours en absences non justifies:
+                                <strong>{{22-stats.assiduite-stats.absence_justifie-stats.maladie-stats.conges_ss-stats.conges_pay}}
+                                    jrs</strong>
                             </h6>
 
                         </div>
                         <div class="col-6 flex justify-content-center align-items-center">
-                            <h6>Taux d'assiduité: <strong>{{(stats.assiduite/22)*100}} %</strong></h6>
+                            <h6>Taux d'assiduité: <strong>{{(stats.assiduite/22)*100 | number:'1.0-2'}} %</strong></h6>
                         </div>
 
                     </div>
@@ -468,6 +469,7 @@
                 </p-tabPanel>
 
                 <p-tabPanel header="Mes documents">
+
                     <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
@@ -478,14 +480,14 @@
                                 <th>Note</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-actualite>
+                        <ng-template pTemplate="body" let-rowData>
                             <tr>
-                                <td>{{rowData.date | date:'mediumDate'}}</td>
-                                <td>{{rowData.filename}}</td>
+                                <td>{{rowData?.date | date:'mediumDate'}}</td>
+                                <td>{{rowData?.filename}}</td>
                                 <td>
                                     <a style="cursor: pointer;" (click)="downloadRHFile(rowData)">Télécharger</a>
                                 </td>
-                                <td>{{rowData.note}}</td>
+                                <td>{{rowData?.note}}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
@@ -562,7 +564,7 @@
                             <div class="field col-12">
                                 <label>Type de congé <span style="color: red">*</span></label>
                                 <p-dropdown formControlName="type" [options]="congeStatutList" filter="true"
-                                    placeholder="type du congé" [showClear]="true"
+                                    placeholder="Choisissez un type de congé" [showClear]="true"
                                     (onChange)="onShowOtherTextArea($event)"></p-dropdown>
                             </div>
 
@@ -574,12 +576,14 @@
 
                             <div class="field col-12 md:col-6">
                                 <label htmlFor="debut">Début <span style="color: red">*</span></label>
-                                <p-calendar formControlName="debut" [showIcon]="true"
+                                <p-calendar formControlName="debut" [showIcon]="true" (onInput)="onCalcNumberDay()"
+                                    (onBlur)="onCalcNumberDay()" (onSelect)="onCalcNumberDay()"
                                     [showButtonBar]="true"></p-calendar>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label htmlFor="fin">Fin <span style="color: red">*</span></label>
-                                <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+                                <p-calendar formControlName="fin" [showIcon]="true" [showButtonBar]="true"
+                                    (onBlur)="onCalcNumberDay()" (onSelect)="onCalcNumberDay()"></p-calendar>
                             </div>
                             <div class="field col-12 md:col-4">
                                 <label htmlFor="nb_jour">Nombre de jours <span style="color: red">*</span></label>
@@ -701,7 +705,7 @@
         </p-table>
         </p-tabPanel>
 
-        <p-tabPanel header="Historique de pointage">
+        <p-tabPanel header="Historique de pointage et CRA">
             <!-- affichage du CRA d'un historique de pointage -->
             <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                 *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
@@ -737,7 +741,7 @@
             </p-table>
 
             <!-- affichage de l'historique de pointage -->
-            <h5 class="mt-5">Historique de pointage</h5>
+            <h5 class="mt-5">Historique de pointage et CRA</h5>
             <div class="m-2">
                 <label htmlFor="">Choisissez un mois et une année</label> <br>
                 <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
