@@ -115,11 +115,45 @@
   <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
   (click)="showFormCalendar = false;" aria-hidden="true"></i>
   <h2 class="header-title"> Calendrier des disponibilités </h2>
-  <div class="card flex justify-content-center">
-    <p-calendar class="max-w-full" [(ngModel)]="date" [inline]="true" [showWeek]="true"></p-calendar>
-</div></div>
-
-
+  <div class="card">
+  <div class="grid">
+      <div class="col-5 flex align-items-center justify-content-center">
+          <div class="p-fluid">
+            <div class="container text-start">
+              <div class="row justify-content-start">
+                <div class="col-12"> <!-- Utilisez la classe col-12 pour que la p-fieldset occupe toute la largeur -->
+                  <p-fieldset legend="Choisissez les disponibilités pour ce sujet">
+                    <div class="d-flex justify-content-start">
+                      <div class="text-left">
+                        <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <h6 class="mb-3">Dates sélectionnées :</h6>
+                        <li *ngFor="let date of rangeDates" class="list-group-item">{{ formatFrenchDate(date) }}</li>
+                    </div>
+                  </p-fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-2">
+          <p-divider layout="vertical">
+          </p-divider>
+      </div>
+      <div class="col-5 d-flex flex-column align-items-center justify-content-center">
+        <div class="text-left"><br><br>
+          <p>En choisissant ces dates, vous confirmez que vous êtes disponible pour des interactions liées à ce sujet. Veuillez noter que ces dates peuvent être soumises à des ajustements en fonction des disponibilités ultérieures.</p>
+        </div><br>
+        <div class="text-center">
+          <p-button label="Valider les disponibilités" icon="pi pi-check-circle" styleClass="p-button-success" (click)="sauvegarderDisponibilite()"></p-button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+</div>
 
 <!-- Affichage des sujets -->
 <div class="grid" *ngIf="showSujet">
@@ -168,7 +202,7 @@
               <td style="min-width: 10rem" [ngStyle]="{color: getColor(sujet.active)}"> En cours de développement</td>
               <td class="text-center" style="min-width: 8rem">
                 <i class="pi pi-user-plus m-1" pTooltip="Assigner les membres" (click)="showFormAddMember = sujet; AddMember(sujet)" aria-hidden="true" style="cursor: pointer; color: rgb(22, 225, 22)"></i>
-                <i class="pi pi-calendar m-1" pTooltip="Calendrier des disponibilités" (click)="showFormCalendar = true;" style="cursor: pointer; color: orangered"></i>
+                <i class="pi pi-calendar m-1" pTooltip="Calendrier des disponibilités" (click)="showFormCalendar = sujet" style="cursor: pointer; color: orangered"></i>
                 <i class="pi pi-pencil m-1" pTooltip="Modifier" (click)="onFillFormUpdateSujet(sujet); showFormUpdateSujet = true;"  style="cursor: pointer; color: #3b82f6"></i>
                 <i class="pi pi-clock m-1" pTooltip="Suspendre" (click)="showDialogSuspendre(sujet);" style="cursor: pointer; color: #f59e0b"></i>
                 <i class="pi pi-trash m-1" pTooltip="Supprimer" (click)="onDeleteSujet(sujet._id)" style="cursor: pointer; color: #ef4444"></i>
@@ -208,17 +242,21 @@
     <tr>
       <td colspan="7">
         <div class="p-3">
-          <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+          <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines" >
             <ng-template pTemplate="header">
               <tr>
                 <th>ID</th>
                 <th>Description</th>
+                <th>Disponibilités</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
               <tr>
                   <td>{{sujetDetails._id}}</td>
                   <td>{{sujetDetails.description}}</td>
+                  <td>
+                    <ng-container *ngFor="let date of sujetDetails.disponibilite">{{ date | date:'mediumDate':'':'fr' }}<br></ng-container>
+                  </td>
               </tr>
             </ng-template>
           </p-table>
