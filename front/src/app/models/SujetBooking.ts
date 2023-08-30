@@ -8,5 +8,6 @@ export class SujetBooking {
     public sujet_list?: any[],
     public active? : boolean,
     public membre?: any[],
+    public disponibilite?: Date[],
   ) {}
 }
