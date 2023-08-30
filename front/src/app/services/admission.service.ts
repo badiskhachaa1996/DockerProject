@@ -357,4 +357,9 @@ export class AdmissionService {
     return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  deleteMany(listIds, user_ids) {
+    let registreUrl = this.apiUrl + 'deleteMany';
+    return this.httpClient.post<any>(registreUrl, { listIds, user_ids }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
 }

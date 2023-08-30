@@ -1678,6 +1678,14 @@ app.put("/updateMany", (req, res, next) => {
         .catch((error) => { res.status(400).send(error.message); })
 });
 
+app.post('/deleteMany', (req, res) => {
+    User.deleteMany({ _id: { $in: req.body.user_ids } }).then(u => {
+        Prospect.deleteMany({ _id: { $in: req.body.listIds } }).then(p => {
+            res.send({ p, u })
+        })
+    })
+})
+
 app.post('/sendMailAffectation', (req, res) => {
     let htmlemail = `
     <p>Bonjour,</p><br>
