@@ -12,7 +12,7 @@ export class FormationAdmission {
         public tarif?: string,
         public langue?: string,
         public deroulement?: string,
-
+        public filiere?: string
     ) { }
 
 }

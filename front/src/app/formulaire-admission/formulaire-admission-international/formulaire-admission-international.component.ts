@@ -265,6 +265,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
   RENTREE: RentreeAdmission[]
   ngOnInit(): void {
     this.FAService.EAgetByParams(this.form_origin).subscribe(data => {
+      console.log(data)
       if (!data)
         this.router.navigate(['/'])
       this.ECOLE = data
@@ -276,12 +277,47 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         this.changeLanguage('English')
       this.FAService.RAgetByEcoleID(data._id).subscribe(dataEcoles => {
         this.RENTREE = dataEcoles
+        let dicFilFr = {}
+        let fFrList = []
+
+        let dicFilEn = {}
+        let fEnList = []
         data.formations.forEach(f => {
-          if (f.langue.includes('Programme Français'))
-            this.programeFrDropdown.push({ label: f.nom, value: f.nom })
+          if (f.langue.includes('Programme Français')) {
+            if (dicFilFr[f.filiere]) {
+              dicFilFr[f.filiere].push({ label: f.nom, value: f.nom })
+            } else {
+              dicFilFr[f.filiere] = [{ label: f.nom, value: f.nom }]
+              fFrList.push(f.filiere)
+            }
+          }
+          //this.programeFrDropdown.push({ label: f.nom, value: f.nom })
           if (f.langue.includes('Programme Anglais'))
-            this.programEnDropdown.push({ label: f.nom, value: f.nom })
+            if (dicFilEn[f.filiere]) {
+              dicFilEn[f.filiere].push({ label: f.nom, value: f.nom })
+            } else {
+              dicFilEn[f.filiere] = [{ label: f.nom, value: f.nom }]
+              fEnList.push(f.filiere)
+            }
         })
+        fFrList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programeFrDropdown.push(
+            { label: f, value: f, items: dicFilFr[ft] }
+          )
+        })
+        fEnList.forEach(f => {
+          let ft = f
+          if (f == undefined || f == "undefined")
+            f = "Autre"
+          this.programEnDropdown.push(
+            { label: f, value: f, items: dicFilEn[ft] }
+          )
+        })
+        console.log(fFrList, dicFilEn, this.programeFrDropdown)
+        console.log(fEnList, dicFilEn, this.programEnDropdown)
         dataEcoles.forEach(rentre => {
           this.rentreeList.push({ label: rentre.nom, value: rentre.nom, _id: rentre._id })
         })

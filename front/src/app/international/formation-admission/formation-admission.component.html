@@ -2,7 +2,8 @@
     [style]="{width: '80%'}">
     <p class="m-0">{{formationSelected?.description}}</p>
     <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="showDescriptionBool=false" label="Ok" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="showDescriptionBool=false" label="Ok"
+            styleClass="p-button-text"></p-button>
     </ng-template>
 </p-dialog>
 <div class="grid">
@@ -20,10 +21,16 @@
 
             <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
 
-                <div class="field col-12">
+                <div class="field col-6">
                     <label>Nom de la formation <span style="color: red;"> * </span></label>
                     <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
                         formControlName="nom" />
+                </div>
+                <div class="field col-6">
+                    <label>Filière </label>
+                    <p-dropdown formControlName="filiere" [options]="filiereList" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez une filière">
+                    </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Niveau </label>
@@ -55,14 +62,14 @@
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues"
-                        formControlName="langue">
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" autoWidth="false"
+                        [style]="{'width':'100%'}" formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
                     <label>Déroulement </label>
-                    <p-dropdown formControlName="deroulement" [options]="deroulementList"
-                        placeholder="Choisissez un deroulement">
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez un deroulement">
                     </p-dropdown>
                 </div>
                 <div>
@@ -86,10 +93,16 @@
                 (click)="addForm = false; createForm.reset()" aria-hidden="true"></i>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
-                <div class="field col-12">
+                <div class="field col-6">
                     <label>Nom de la formation <span style="color: red;"> * </span></label>
                     <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
                         formControlName="nom" />
+                </div>
+                <div class="field col-6">
+                    <label>Filière </label>
+                    <p-dropdown formControlName="filiere" [options]="filiereList" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez une filière">
+                    </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Niveau </label>
@@ -121,14 +134,14 @@
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues"
-                        formControlName="langue">
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" autoWidth="false"
+                        [style]="{'width':'100%'}" formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
                     <label>Déroulement </label>
-                    <p-dropdown formControlName="deroulement" [options]="deroulementList"
-                        placeholder="Choisissez un deroulement">
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Choisissez un deroulement">
                     </p-dropdown>
                 </div>
                 <div>
@@ -187,6 +200,9 @@
                         <th pSortableColumn="deroulement">Déroulement<p-sortIcon field="deroulement">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="filiere">Filière<p-sortIcon field="filiere">
+                        </p-sortIcon>
+                    </th>
                         <th>Action </th>
                     </tr>
                 </ng-template>
@@ -221,6 +237,9 @@
                         </td>
                         <td>
                             {{ formation.deroulement }}
+                        </td>
+                        <td>
+                            {{ formation.filiere }}
                         </td>
                         <td>
                             <i style="padding-left: 3%;" class="pi pi-eye" (click)="showDescription(formation)"
