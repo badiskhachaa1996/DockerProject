@@ -12,7 +12,9 @@ import { DividerModule } from 'primeng/divider';
 import { FieldsetModule } from 'primeng/fieldset';
 import { DialogModule } from 'primeng/dialog';
 import { Sujet } from '../models/Sujet';
-
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { SplitterModule } from 'primeng/splitter';
 
 
 
@@ -23,6 +25,8 @@ import { Sujet } from '../models/Sujet';
 })
 export class BookingV2Component implements OnInit {
 
+  rangeDates: Date[];
+  disponibilite: Date[];
   date: Date[] | undefined;
   sujets: SujetBooking[] = [];
   agents: any[] = [];
@@ -33,7 +37,7 @@ export class BookingV2Component implements OnInit {
   token: any;
   showFormAddSujet: boolean = false;
   showFormAddMember: SujetBooking;
-  showFormCalendar: boolean = false;
+  showFormCalendar: SujetBooking
   showSujet: boolean = false;
   showFormUpdateSujet: boolean = false;
   sujetSelected: SujetBooking;
@@ -92,6 +96,7 @@ export class BookingV2Component implements OnInit {
       duree:          [this.dureeSujet[0], Validators.required],
       canal:          new FormControl([], Validators.required),
       description:    ['', Validators.required],
+      disponibilite:  new FormControl('', Validators.required), 
     });
 
     // Initialisation du formulaire de modification d'un sujet 
@@ -100,6 +105,7 @@ export class BookingV2Component implements OnInit {
       duree:          [this.dureeSujet[0], Validators.required],
       canal:          new FormControl([], Validators.required),
       description:    ['', Validators.required],
+      disponibilite:  new FormControl('', Validators.required), 
     });
 
     // Récuperation de la liste des sujets
@@ -133,6 +139,7 @@ export class BookingV2Component implements OnInit {
     sujetBooking.duree = formValue.duree;
     sujetBooking.canal = formValue.canal;
     sujetBooking.description = formValue.description;
+    sujetBooking.disponibilite = formValue.disponibilite;
 
     console.log(sujetBooking)
 
@@ -157,6 +164,7 @@ export class BookingV2Component implements OnInit {
       duree: sujetBooking.duree,
       canal: sujetBooking.canal,
       description: sujetBooking.description,
+      disponibilite: sujetBooking.disponibilite,
     });
   }
   // Formulaire de modification d'un sujet
@@ -164,14 +172,16 @@ export class BookingV2Component implements OnInit {
   {
     const formValue = this.formUpdateSujet.value;
     const sujetBooking = new SujetBooking();
-
+    let tempSujet = this.sujetSelected
     this.sujetSelected.titre_sujet = formValue.titre_sujet;
     this.sujetSelected.duree = formValue.duree;
     this.sujetSelected.canal = formValue.canal;
     this.sujetSelected.description = formValue.description;
+    this.sujetSelected.disponibilite = formValue.disponibilite;
 
     this.sujetBooking.put(this.sujetSelected)
     .then((response) => {
+      this.sujets.splice(this.sujets.indexOf(tempSujet),1,response.sujet)
       this.messageService.add({severity:'success', summary:'Sujet Booking', detail: response.success});
       this.onGetAllClasses();
       this.formUpdateSujet.reset();
@@ -225,6 +235,7 @@ export class BookingV2Component implements OnInit {
 
   // Ajout d'un membre à un sujet
   onAddMemberToSujet(agent: User) {
+    let tempSujet = this.showFormAddMember
     if(agent.sujet_list)
       agent.sujet_list.push(this.showFormAddMember._id)
     else
@@ -235,7 +246,7 @@ export class BookingV2Component implements OnInit {
       this.memberDropdown.splice(this.customIndexOfDropdown(this.memberDropdown, agent), 1)
       //this.addMemberToSujet.membre.push(agent._id)
       this.sujetBooking.put({ _id: this.showFormAddMember._id, membre: this.showFormAddMember.membre }).then(data => {
-        //this.addMemberToSujet.membre = this.memberDropdown
+        this.sujets.splice(this.sujets.indexOf(tempSujet),1,data.sujet)
       })
       if (this.memberDic[this.showFormAddMember._id])
         this.memberDic[this.showFormAddMember._id] = this.memberDic[this.showFormAddMember._id] + ", " + agent.firstname + " " + agent.lastname.toUpperCase()
@@ -281,12 +292,16 @@ export class BookingV2Component implements OnInit {
     return r
   }
 
+  //Supprimer un membres d'un sujet
   removeMember(user: User, ri) {
+    let tempSujet = this.showFormAddMember
     user.sujet_list.splice(user.sujet_list.indexOf(this.showFormAddMember._id), 1)
     this.UserService.update({ _id: user._id, sujet_list: user.sujet_list }).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: "Le membre a été supprimé du sujet avec succès" })
       this.showFormAddMember.membre.splice(ri, 1)
-      this.sujetBooking.put({ _id: this.showFormAddMember._id, membre: this.showFormAddMember.membre }).then(data => {})
+      this.sujetBooking.put({ _id: this.showFormAddMember._id, membre: this.showFormAddMember.membre }).then(data => {
+        this.sujets.splice(this.sujets.indexOf(tempSujet),1,data.sujet)
+      })
       this.memberDropdown.push({ label: `${user.lastname} ${user.firstname}`, value: user })
       this.UserService.getAllAgent().subscribe(data => {
         this.memberDic = {}
@@ -299,6 +314,29 @@ export class BookingV2Component implements OnInit {
         })
       })
     })  
+  }
+
+  formatFrenchDate(date: Date): string {
+    const formattedDate = new Date(date); // Créer un nouvel objet Date
+    formattedDate.setHours(12, 0, 0, 0); // Définis une heure (12:00:00) pour éviter l'erreur
+    return format(formattedDate, 'dd/MM/yyyy', { locale: fr });
+  }  
+
+  onDateSelection() {
+    console.log('Dates sélectionnées :', this.rangeDates.map(this.formatFrenchDate));
+  }
+
+  sauvegarderDisponibilite() {
+
+    let tempSujet = this.showFormCalendar
+    this.disponibilite = this.rangeDates;
+    console.log(this.disponibilite)
+    this.sujetBooking.put({ _id: this.showFormCalendar._id ,disponibilite: this.disponibilite}).then(data => {
+      console.log(data)
+      this.sujets.splice(this.sujets.indexOf(tempSujet),1,data.sujet)
+    })
+    this.messageService.add({ severity: 'success', summary: "Disponibilité sauvegarder" })
+
   }
 }
 

@@ -7,6 +7,7 @@ const sujetBooking = new mongoose.Schema({
   description:    { type: String, required: false}, 
   active:         { type: Boolean, required: false},
   membre:         { type: [mongoose.Schema.Types.ObjectId], ref: "user", default: []},
+  disponibilite:  { type: [Date], required: true },
  });
 
 const SujetBooking = mongoose.model('sujetBooking', sujetBooking);

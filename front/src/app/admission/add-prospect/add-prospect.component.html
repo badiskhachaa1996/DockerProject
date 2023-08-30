@@ -7,8 +7,7 @@
                     obligatoires</small><br>
             </div>
             <br>
-            <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm2()"
-                [formGroup]="RegisterForm2">
+            <form class="p-fluid p-formgrid grid" (ngSubmit)="redirectToForm2()" [formGroup]="RegisterForm2">
                 <div class="field col-12 md:col-12">
                     <label For="role">Ecole <span style="color:red"> *</span></label>
                     <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
@@ -16,22 +15,23 @@
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
                     <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
-                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead" (onChange)="changeSource($event.value)"
-                        formControlName="source"></p-dropdown>
+                    <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
+                        (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->
-                    <label For="role">Commercial</label> 
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne"> <!--SI INTERNE-->
+                    <label For="role">Commercial</label>
                     <p-dropdown [options]="commercialList" filter="true"
                         placeholder="Choisissez le commercial qui a ajouté le lead"
                         formControlName="commercial"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton type="submit" label="Ajouter" [disabled]="(RegisterForm2.invalid && !isPartenaireExterne) || (!RegisterForm2.value.ecole)"></button>
+                    <button pButton type="submit" label="Ajouter"
+                        [disabled]="(RegisterForm2.invalid && !isPartenaireExterne) || (!RegisterForm2.value.ecole)"></button>
                 </div>
             </form>
         </div>
     </div>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!--<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <div class="col-12" *ngIf="!isPartenaireExterne">
         <div class="card" style="background-color: #eeeded;">
             <h4 style="text-align: center;">Ajouter un nouveau lead avec l'ancien formulaire</h4>
@@ -48,11 +48,11 @@
                         formControlName="ecole"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
-                    <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                    <label For="role">Source <span style="color:red"> *</span></label> 
                     <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead" (onChange)="changeSource($event.value)"
                         formControlName="source"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  <!--SI INTERNE-->
+                <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">  
                     <label For="role">Commercial</label> 
                     <p-dropdown [options]="commercialList" filter="true"
                         placeholder="Choisissez le commercial qui a ajouté le lead"
@@ -63,5 +63,5 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
 </div>

@@ -19,7 +19,12 @@ app.put("/update-sujet-booking", (req, res) => {
   const sujet = new SujetBooking({ ...req.body });
 
   SujetBooking.updateOne({ _id: sujet._id }, { ...req.body })
-    .then((sujet) => { res.status(201).json({ sujet: sujet, success: 'Sujejt mis à jour'}); })
+    .then((sujet) => { 
+      SujetBooking.findOne({ _id: req.body._id }).populate("membre")
+      .then(newsujet=>{
+        res.status(201).json({ sujet: newsujet, success: 'Sujet mis à jour'})
+      })
+    })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de mettre à jour le sujet, si le problème persite veuillez créer un ticket au service IMS' }); });
 });
 

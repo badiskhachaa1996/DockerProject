@@ -1175,7 +1175,6 @@ export class DashboardComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
     this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
       .then((response) => {
-        console.log(response)
         response.forEach(c => {
           /*
     { label: 'Congé payé', value: 'Congé payé' },
@@ -1199,7 +1198,7 @@ export class DashboardComponent implements OnInit {
           var Difference_In_Time = dd.getTime() - df.getTime();
 
           // To calculate the no. of days between two dates
-          var Difference_In_Days = (Difference_In_Time / (1000 * 3600 * 24))+1;
+          var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
           console.log(c.type_conge, Difference_In_Days)
           if (c.type_conge == "Congé payé")
             this.stats.conges_pay += Difference_In_Days
@@ -1217,5 +1216,13 @@ export class DashboardComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
       });
 
+  }
+
+  onCalcNumberDay() {
+    if (this.formAddConge.value.debut && this.formAddConge.value.fin) {
+      var Difference_In_Time = new Date(this.formAddConge.value.debut).getTime() - new Date(this.formAddConge.value.fin).getTime();
+      var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
+      this.formAddConge.patchValue({ nb_jour: Difference_In_Days })
+    }
   }
 }
