@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+var mime = require('mime-types')
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
@@ -155,21 +156,23 @@ app.post("/login", (req, res) => {
       ) {
         res.status(404).send({ message: "Email ou Mot de passe incorrect" });
       } else {
-        if (userFromDb.verifedEmail) {
-          let token = jwt.sign(
-            {
-              id: userFromDb._id,
-              role: userFromDb.role,
-              service_id: userFromDb.service_id,
-              type: userFromDb.type,
-            },
-            "126c43168ab170ee503b686cd857032d",
-            { expiresIn: "7d" }
-          );
-          res.status(200).send({ token });
+        /*if (userFromDb.verifedEmail) {
+
         } else {
           res.status(304).send({ message: "Compte pas activé", data });
-        }
+        }*/
+
+        let token = jwt.sign(
+          {
+            id: userFromDb._id,
+            role: userFromDb.role,
+            service_id: userFromDb.service_id,
+            type: userFromDb.type,
+          },
+          "126c43168ab170ee503b686cd857032d",
+          { expiresIn: "7d" }
+        );
+        res.status(200).send({ token });
       }
     })
     .catch((error) => {
@@ -1385,6 +1388,18 @@ app.get('/getAllByServiceFromList/:service_id', (req, res) => {
     });
 })
 
+app.get("/getAllBySujet/:sujet_id", (req, res) => {
+  User.find({ sujet_list: { $in: [req.params.sujet_id] } }).then((usersFromDb) => {
+    if (usersFromDb)
+      res.status(200).send(usersFromDb);
+    else
+      res.status(200).send([]);
+  })
+    .catch((error) => {
+      res.status(400).send(error.message);
+    });
+});
+
 // méthode de mise à jour du statut du collaborateur
 app.put('/path-user-statut', (req, res) => {
   const { statut } = req.body;
@@ -1395,6 +1410,42 @@ app.put('/path-user-statut', (req, res) => {
       res.status(201).send(response);
     })
     .catch((error) => { res.status(400).send(error); });
+});
+
+//Sauvegarde de la photo de profile
+const storage2 = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    let id = req.body._id;
+    if (!fs.existsSync("storage/documentRH/" + id + "/")) {
+      fs.mkdirSync("storage/documentRH/" + id + "/", { recursive: true });
+    }
+    callBack(null, "storage/documentRH/" + id + "/");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  },
+});
+
+const upload2 = multer({ storage: storage2, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/uploadRH", upload2.single("file"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("No File");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+
+  res.send({ message: 'success' });
+});
+
+app.get("/downloadRH/:_id/:path", (req, res) => {
+  let pathFile = "storage/documentRH/" + req.params._id + "/" + req.params.path
+  let fileFinal = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+    if (err)
+      return console.error(err);
+  });
+  res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFile)) })
 });
 
 module.exports = app;

@@ -139,6 +139,7 @@ const admissionFormDubaiController = require('./controllers/admissionFormDubaiCo
 const dailyCheckController = require('./controllers/dailyCheckController')
 const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
+const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
 
 const { User } = require("./models/user");
@@ -357,10 +358,13 @@ app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
 app.use('/soc/rh', rhControlleur);
+app.use('/soc/sujet-booking', bookingController);
+
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
 app.use('/soc/actualiteInt', require('./controllers/activiteIntController'))
+app.use('/soc/actualiteRH', require('./controllers/actualiteRHController'))
 app.use('/soc/docGenInt', require('./controllers/docGenController'))
 app.use('/soc/formulaireICBS', require('./controllers/formulaireICBSController'))
 app.use('/soc/leadCRM', require('./controllers/leadCRMController'))

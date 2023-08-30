@@ -11,7 +11,7 @@
                                     <tr>
                                         <th>ID:<span style="color:#878787" > {{task?.identifian}}</span></th>
                                         <th>Libelle:<span style="color:#878787" > {{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.ticketId.customid}}</span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
                                     </tr>
                                     <tr>
                                         <th>ID Projet :<span style="color:#878787" > {{task?.project_id?.identifian}} </span></th>
@@ -19,7 +19,7 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<span style="color:#878787" > {{task?.ticketId?.date_ajout | date:'mediumDate'}}</span></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
@@ -126,7 +126,7 @@
                                     <tr>
                                         <th>ID: <span style="color:#878787" >{{task?.identifian}}</span></th>
                                         <th>Libelle : <span style="color:#878787" >{{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.ticketId.customid}}</span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
                                     </tr>
                                     <tr>
                                         <th>ID Projet : <span style="color:#878787" >{{task?.project_id?.identifian}}</span> </th>
@@ -134,7 +134,7 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le: <span style="color:#878787" >{{task?.ticketId?.date_ajout | date:'mediumDate'}}</span></th>
+                                        <th>Assigné le: <ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
@@ -227,7 +227,7 @@
                                     <tr>
                                         <th>ID:<span style="color:#878787" > {{task?.identifian}} </span></th>
                                         <th>Libelle :<span style="color:#878787" > {{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.ticketId.customid}}</span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
                                     </tr>
                                     <tr>
                                         <th>ID Projet :<span style="color:#878787" > {{task?.project_id?.identifian}}</span> </th>
@@ -235,7 +235,7 @@
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<span style="color:#878787" > {{task?.ticketId?.date_ajout | date:'mediumDate'}}</span></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
@@ -351,7 +351,7 @@
                     <tr>
                         <td>{{task.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
                         <td>{{task.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td>{{task.ticketId.customid}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td><ng-container *ngFor="let t of task.ticketId">{{t?.customid}} <br></ng-container><br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
                         <td>
 
                             <p-splitButton direction="up" label="Deplacer" icon="pi pi-send"

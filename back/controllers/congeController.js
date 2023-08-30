@@ -62,23 +62,21 @@ app.delete("/delete-conge/:id", (req, res) => {
     const { id } = req.params;
 
     Conge.findOne({ _id: id })
-    .then((response) => {
-        if(response?.justificatif)
-        {
-            fs.unlink(`storage/justificatif-conge/${id}/justificatif.pdf`, (err) => {
-                if(err)
-                { 
-                    console.error(err);
-                }
-            });
-        }
+        .then((response) => {
+            if (response?.justificatif) {
+                fs.unlink(`storage/justificatif-conge/${id}/justificatif.pdf`, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
 
-        Conge.deleteOne({ _id: id })
-        .then((response) => { res.status(201).send(response) })
-        .catch((error) => { console.log(error); res.status(400).send(error) })
-    })
-    .catch((error) => { console.log(error); res.status(500).send(error) })
-    
+            Conge.deleteOne({ _id: id })
+                .then((response) => { res.status(201).send(response) })
+                .catch((error) => { console.log(error); res.status(400).send(error) })
+        })
+        .catch((error) => { console.log(error); res.status(500).send(error) })
+
 });
 
 // upload du justificatif
@@ -115,9 +113,9 @@ app.post('/upload-justificatif', uploadJustificatif.single('file'), (req, res) =
         return res.status(400).send("Aucun fichier sélectionnée");
     }
 
-    Conge.findOneAndUpdate({_id: id}, { justificatif: `${fileName}.${filetype}`})
-    .then((response) => { res.status(201).send(response) })
-    .catch((error) => {res.status(400).send("Impossible de mettre à jour votre demande de congé"); });
+    Conge.findOneAndUpdate({ _id: id }, { justificatif: `${fileName}.${filetype}` })
+        .then((response) => { res.status(201).send(response) })
+        .catch((error) => { res.status(400).send("Impossible de mettre à jour votre demande de congé"); });
 });
 
 // méthode de téléchargement du justificatif
@@ -130,6 +128,20 @@ app.get("/download-justificatif/:id", (req, res) => {
             }
         }
     );
+});
+
+
+// recuperation de la liste des présences d'un utilisateur
+app.get("/getUserCongesByDate/:userId/:date", (req, res) => {
+    const { userId } = req.params;
+    if (req.params.date != 'null')
+        Conge.find({ user_id: userId, date_debut: { $lte: `${req.params.date}-31` }, date_fin: { $gte: `${req.params.date}-01` }, statut: "Validé" }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des conges de l\'utilisateurs' }) });
+    else
+        Conge.find({ user_id: userId, statut: "Validé" }).populate('user_id')
+            .then((response) => { res.status(200).send(response); })
+            .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des conges de l\'utilisateurs' }) });
 });
 
 module.exports = app;

@@ -32,7 +32,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
   taskListe: any[] = [
 
   ];
-  taskSelected:Task;
+  taskSelected: Task;
   TicketForm = new FormGroup({
     project: new FormControl('', Validators.required),
     task: new FormControl('', Validators.required),
@@ -63,22 +63,6 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
       this.USER = data;
-      this.projectService.getProjects()
-      .then(data => {
-        this.projectListe = [];
-
-        data.forEach(project => {
-          if (project.responsable_id==this.USER._id){
-          const newprojet = {
-            label: `${project.titre}`,
-            value: [project._id]
-          };
-          
-          console.log(newprojet);
-          this.projectListe.push(newprojet);
-          
-
-      }})})
     });
     this.SujetService.getAll().subscribe(data => {
       data.forEach(element => {
@@ -118,19 +102,43 @@ export class AjouterUnTicketProjetComponent implements OnInit {
           label: `${this.receivedTask.libelle}`,
           value: [this.receivedTask._id]
         };
-        console.log(newprojet);
+        this.taskListe.push(newtask);
+        this.projectListe.push(newprojet);
+        console.log(newprojet)
         this.TicketForm.patchValue({
-          project: newprojet,
+          project:newprojet,
           task: newtask,
           description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
           priorite: this.receivedTask.priorite,
 
         })
 
+      }else{
+        this.projectService.getProjects()
+        .then(data => {
+          this.projectListe = [];
+
+          data.forEach(project => {
+            if (project.responsable_id == this.USER._id) {
+              const newprojet = {
+                label: `${project.titre}`,
+                value: [project._id]
+              };
+
+              console.log(newprojet);
+              this.projectListe.push(newprojet);
+              console.log(this.projectListe);
+
+
+            }
+          })
+        })
       }
     });
 
   }
+
+
   onAdd() {
     let documents = []
     this.uploadedFiles.forEach(element => {
@@ -156,7 +164,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
       if (this.itsTask) {
 
         this.projectService.getTask(this.taskID).then((datat) => {
-          datat.ticketId = data.doc._id;
+          datat.ticketId.push(data.doc._id);
           this.projectService.putTask(datat);
 
         })
@@ -176,26 +184,28 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-onProjectSelected(event){
-    this.taskSelected=null
-    this.taskListe=[];
-    const projectID=event.value;
+  onProjectSelected(event) {
+    this.taskSelected = null
+    this.taskListe = [];
+    const projectID = event.value;
     this.projectService.getTasksByIdProject(projectID)
-    .then(data=>{
-      data.forEach(t=>{
-        const newtask = {
-          label: `${t.libelle}`,
-          value: [t._id]
-        };
-        this.taskListe.push(newtask);
-        
-      })});
-      
+      .then(data => {
+        data.forEach(t => {
+          const newtask = {
+            label: `${t.libelle}`,
+            value: [t._id]
+          };
+          this.taskListe.push(newtask);
+
+        })
+      });
+
   }
-  onTacheSelected(event){
-    const taskID=event.value;
-    this.projectService.getTask(taskID).then(data=>{
-      this.taskSelected=data;
-    console.log(this.taskSelected)})    
+  onTacheSelected(event) {
+    const taskID = event.value;
+    this.projectService.getTask(taskID).then(data => {
+      this.taskSelected = data;
+      console.log(this.taskSelected)
+    })
   }
 }

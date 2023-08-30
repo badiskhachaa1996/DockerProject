@@ -185,7 +185,7 @@ export class MyprojectComponent implements OnInit {
             
             this.task = datatache;
             this.task.forEach(t => {
-              if (t.ticketId.statut == "Traité") {
+              if (t.ticketId[0].statut == "Traité") {
                 t.avancement = 100
                 this.projectService.putTask(t);
               }
@@ -401,8 +401,8 @@ export class MyprojectComponent implements OnInit {
 
   }}
   showTicket(task:Task){
-    console.log(task.ticketId._id);
-    this.router.navigate(['/ticketing/gestion/assignes'],{ queryParams: { data: task.ticketId._id } });
+    console.log(task.ticketId[0]._id);
+    this.router.navigate(['/ticketing/gestion/assignes'],{ queryParams: { data: task.ticketId[0]._id } });
   }
 
 }

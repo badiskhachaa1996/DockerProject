@@ -2,7 +2,7 @@ export class Task{
     constructor
     (
         public _id?:            string,
-        public ticketId?:      any,
+        public ticketId?:      any[],
         public libelle?:        string,
         public description_task?:    string,
         public attribuate_to?:  any[],

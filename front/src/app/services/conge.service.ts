@@ -30,7 +30,7 @@ export class CongeService {
     const url = `${this.apiUrl}/answer`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.patch<any>(url, {answer: answer, id: id}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.patch<any>(url, { answer: answer, id: id }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response); },
         error: (error) => { reject(error); }
       });
@@ -52,8 +52,7 @@ export class CongeService {
 
 
   // recuperation des demandes d'un utilisateur
-  getAll(): Promise<Conge[]>
-  {
+  getAll(): Promise<Conge[]> {
     const url = `${this.apiUrl}/get-conges`;
 
     return new Promise<Conge[]>((resolve, reject) => {
@@ -66,8 +65,7 @@ export class CongeService {
 
 
   // mise à jour d'un objet conge
-  putConge(conge: Conge): Promise<any>
-  {
+  putConge(conge: Conge): Promise<any> {
     const url = `${this.apiUrl}/put-conge`;
 
     return new Promise<any>((resolve, reject) => {
@@ -80,8 +78,7 @@ export class CongeService {
 
 
   // suppression d'une demande de conge
-  deleteConge(id: string): Promise<any>
-  {
+  deleteConge(id: string): Promise<any> {
     const url = `${this.apiUrl}/delete-conge/${id}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -93,8 +90,7 @@ export class CongeService {
   }
 
   // upload du justificatif
-  uploadJustificatif(formData: FormData): Promise<any>
-  {
+  uploadJustificatif(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}/upload-justificatif`;
 
     return new Promise<any>((resolve, reject) => {
@@ -106,14 +102,25 @@ export class CongeService {
   }
 
   // download du justificatif
-  donwloadJustificatif(id: string): Promise<any>
-  {
+  donwloadJustificatif(id: string): Promise<any> {
     const url = `${this.apiUrl}/download-justificatif/${id}`;
 
     return new Promise<any>((resolve, reject) => {
       this.httpClient.get(url, { responseType: 'blob', headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => { resolve(response) },
         error: (error) => { reject(error) },
+      });
+    });
+  }
+
+  getUserCongesByDate(userId: string, date: string): Promise<Conge[]> {
+    const url = `${this.apiUrl}/getUserCongesByDate/${userId}/${date}`;
+
+    return new Promise<Conge[]>((resolve, reject) => {
+      this.httpClient.get<Conge[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de recuperation de la liste des présences de l\'utilisateur exécuté') }
       });
     });
   }

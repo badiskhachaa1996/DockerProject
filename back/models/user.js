@@ -114,11 +114,22 @@ const user_schema = new mongoose.Schema({
     service_list: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "service" }], default: []
     },
-    statut: { type: String, required: false },
+    statut: { type: String, required: false},
+    sujet_list : {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "sujet" }], default: []
+    },
     roles_ticketing_list: {
         type: [{
             module: { type: mongoose.Schema.Types.ObjectId, ref: "service" },
             role: { type: String },
+        }], default: []
+    },
+    documents_rh: {
+        type: [{
+            date: { type: Date },
+            filename: { type: String },
+            path: { type: String },
+            note: { type: String }
         }], default: []
     },
 

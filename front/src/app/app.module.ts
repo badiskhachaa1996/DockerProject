@@ -350,6 +350,7 @@ import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gest
 import { MytaskComponent } from './project-v2/mytask/mytask.component';
 import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
+import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
@@ -714,6 +715,7 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
     DashboardProjectV2Component,
 
   
+    BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent,
     AjouterUnTicketProjetComponent

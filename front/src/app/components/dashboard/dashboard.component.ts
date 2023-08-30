@@ -51,6 +51,12 @@ import { RhService } from 'src/app/services/rh.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { Conge } from 'src/app/models/Conge';
 import { saveAs } from 'file-saver';
+import { ActualiteInt } from 'src/app/models/ActualiteInt';
+import { ActualiteRH } from 'src/app/models/ActualiteRH';
+import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
+import { TicketService } from 'src/app/services/ticket.service';
+import { ServService } from 'src/app/services/service.service';
+import { Ticket } from 'src/app/models/Ticket';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -293,7 +299,9 @@ export class DashboardComponent implements OnInit {
     private formBuilder: FormBuilder, private projectService: ProjectService,
     private CService: CommercialPartenaireService, private PartenaireService: PartenaireService,
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
-    private rhService: RhService, private congeService: CongeService
+    private rhService: RhService, private congeService: CongeService,
+    private ActuRHService: ActualiteRHService, private TicketService: TicketService,
+    private ServiceServ: ServService
   ) { }
 
 
@@ -407,6 +415,11 @@ export class DashboardComponent implements OnInit {
         this.historiqueCra = response;
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
+    //Recuperation des actus
+    this.ActuRHService.getAll().subscribe((response) => {
+      this.actualites = response;
+    })
 
     // initialisation du formulaire d'ajout de congé
     this.formAddConge = this.formBuilder.group({
@@ -656,14 +669,17 @@ export class DashboardComponent implements OnInit {
         this.onGetConges(this.userConnected._id);
         // verification du check in journalier
         this.onCheckDailyCheck(response._id);
+        // Charger les tickets
+        this.onGetTicketsRH()
+        // Charger l'assiduité
+        this.OnCalcAssiduite()
       },
       error: (error) => { console.log(error) },
     });
   }
 
   // méthode de mise à jour du statut
-  onUpdateStatus(): void {
-    const statut = this.formUpdateStatut.value.statut;
+  onUpdateStatus(statut = this.formUpdateStatut.value.statut): void {
     this.UserService.pathUserStatut(statut, this.userConnected._id)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
@@ -758,6 +774,7 @@ export class DashboardComponent implements OnInit {
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Check in', detail: "Votre journée de travail commence" });
         this.onCheckDailyCheck(response.user_id);
+        this.onUpdateStatus('Disponible')
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
@@ -773,6 +790,7 @@ export class DashboardComponent implements OnInit {
 
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
+        this.onUpdateStatus('En pause')
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
@@ -790,6 +808,7 @@ export class DashboardComponent implements OnInit {
 
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
+        this.onUpdateStatus('Disponible')
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
   }
@@ -805,6 +824,7 @@ export class DashboardComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Check Out', detail: 'Merci pour cette journée de travail. À très bientôt!' });
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
+        this.onUpdateStatus('Absent')
         // recuperation de l'historique du cra
         this.dailyCheckService.getUserChecks(this.token.id)
           .then((response) => {
@@ -911,6 +931,23 @@ export class DashboardComponent implements OnInit {
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" }) });
   }
 
+  tickets: Ticket[] = []
+  // Recuperation des tickets RH
+  onGetTicketsRH() {
+    this.ServiceServ.getAServiceByLabel('Ressources Humaines').subscribe(r => {
+      this.TicketService.getAllByServiceAndCreateurID(r.dataService._id, this.token.id).subscribe(tickets => {
+        this.tickets = tickets
+      })
+    })
+  }
+
+  //AddTicket
+  AddTicket() {
+    this.ServiceServ.getAServiceByLabel('Ressources Humaines').subscribe(r => {
+      this.router.navigate(['ticketing/gestion/ajout/', r.dataService._id])
+    })
+  }
+
   // methode qui affiche ou non le cgamps de saisie pour autres motif
   onShowOtherTextArea(event: any) {
     event.value == 'Autre motif' ? this.showOtherTextArea = true : this.showOtherTextArea = false;
@@ -994,11 +1031,9 @@ export class DashboardComponent implements OnInit {
   }
 
   // methode pour pre-remplir le formulaire de modification de congé
-  onPachCongeData(conge: Conge): void
-  {
+  onPachCongeData(conge: Conge): void {
     this.congeToUpdate = conge;
-    if(conge.type_conge === "Autre motif")
-    {
+    if (conge.type_conge === "Autre motif") {
       this.showOtherTextArea = true;
     }
 
@@ -1014,28 +1049,173 @@ export class DashboardComponent implements OnInit {
     this.showUpdateCongeForm = true;
   }
 
-  onUpdateConge(): void
-  {
+  onUpdateConge(): void {
     // recuperation des valeurs du formulaire
     const formValue = this.formUpdateConge.value;
 
-    this.congeToUpdate.type_conge     = formValue.type;
-    this.congeToUpdate.other_motif    = formValue.other;
+    this.congeToUpdate.type_conge = formValue.type;
+    this.congeToUpdate.other_motif = formValue.other;
 
-    this.congeToUpdate.date_debut     = formValue.debut;
-    this.congeToUpdate.date_fin       = formValue.fin;
-    this.congeToUpdate.nombre_jours   = formValue.nb_jour;
-    this.congeToUpdate.motif          = formValue.motif;
+    this.congeToUpdate.date_debut = formValue.debut;
+    this.congeToUpdate.date_fin = formValue.fin;
+    this.congeToUpdate.nombre_jours = formValue.nb_jour;
+    this.congeToUpdate.motif = formValue.motif;
 
     this.congeService.putConge(this.congeToUpdate)
-    .then(() => {
-      this.formUpdateConge.reset();
-      this.showUpdateCongeForm = false;
-      this.showOtherTextArea = false;
-      this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
-      this.onGetConges(this.congeToUpdate.user_id);
+      .then(() => {
+        this.formUpdateConge.reset();
+        this.showUpdateCongeForm = false;
+        this.showOtherTextArea = false;
+        this.messageService.add({ severity: 'success', summary: 'Demande de congé', detail: "Votre demande à bien été modifié" });
+        this.onGetConges(this.congeToUpdate.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
+  }
+
+  getHistoPointage(value) {
+    console.log(value)
+    this.dailyCheckService.getUserChecksByDate(this.token.id, value)
+      .then((response) => {
+        this.historiqueCra = response;
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+  }
+
+  actualites: ActualiteRH[]
+  downloadRHFile(doc) {
+    this.UserService.downloadRH(this.token.id, doc._id, doc.path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      saveAs(blob, doc.path)
+    }, (error) => {
+      console.error(error)
     })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
   //* end
+
+  getDelaiTraitrement(ticket: Ticket) {
+    let date1 = new Date()
+    if (ticket.statut == 'Traité' && ticket.date_fin_traitement)
+      date1 = new Date(ticket.date_fin_traitement)
+    let date2 = new Date(ticket.date_ajout)
+
+    var diff = {
+      sec: 0,
+      min: null,
+      hour: 0,
+      day: 0
+    }							// Initialisation du retour
+    var tmp = date1.getTime() - date2.getTime();
+
+    tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates
+    diff.sec = tmp % 60;					// Extraction du nombre de secondes
+
+    tmp = Math.floor((tmp - diff.sec) / 60);	// Nombre de minutes (partie entière)
+    diff.min = tmp % 60;					// Extraction du nombre de minutes
+
+    tmp = Math.floor((tmp - diff.min) / 60);	// Nombre d'heures (entières)
+    diff.hour = tmp % 24;					// Extraction du nombre d'heures
+
+    tmp = Math.floor((tmp - diff.hour) / 24);	// Nombre de jours restants
+    diff.day = tmp;
+    if (diff.min < 10)
+      diff.min = "0" + diff.min.toString()
+
+    return `${diff.day}J ${diff.hour}H${diff.min}`;
+  }
+
+  downloadFile(index, ri: Ticket) {
+    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+  deleteFile(index, ri: Ticket) {
+    ri.documents.splice(index, 1)
+    this.TicketService.update({ _id: ri._id, documents: ri.documents }).subscribe(data => {
+
+      this.messageService.add({ severity: 'success', summary: 'Documents supprimé' })
+    })
+  }
+
+  downloadFileService(index, ri: Ticket) {
+    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+    }, (error) => {
+      console.error(error)
+      this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+  }
+
+  deleteFileService(index, ri: Ticket) {
+    ri.documents_service.splice(index, 1)
+    this.TicketService.update({ _id: ri._id, documents_service: ri.documents_service }).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Documents supprimé' })
+    })
+  }
+
+  dateChoose = ''
+  stats = {
+    assiduite: 22,
+    conges_pay: 0,
+    conges_ss: 0,
+    absence_non_justifie: 0,
+    absence_justifie: 0,
+    maladie: 0
+  }
+  OnCalcAssiduite() {
+    this.dailyCheckService.getUserChecksByDate(this.token.id, this.dateChoose)
+      .then((response) => {
+        this.stats.assiduite = response.length
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+    this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
+      .then((response) => {
+        console.log(response)
+        response.forEach(c => {
+          /*
+    { label: 'Congé payé', value: 'Congé payé' },
+    { label: 'Congé sans solde', value: 'Congé sans solde' },
+    { label: 'Absence maladie', value: 'Absence maladie' },
+    { label: 'Télétravail', value: 'Télétravail' },
+    { label: 'Départ anticipé', value: 'Départ anticipé' },
+    { label: 'Autorisation', value: 'Autorisation' },
+    { label: 'Autre motif', value: 'Autre motif' },
+          */
+          let dd = new Date(c.date_debut)
+          if (dd > new Date(this.dateChoose + '-31'))
+            dd = new Date(this.dateChoose + '-31')
+          if (dd < new Date(this.dateChoose + '-01'))
+            dd = new Date(this.dateChoose + '-01')
+          let df = new Date(c.date_fin)
+          if (df < new Date(this.dateChoose + '-01'))
+            df = new Date(this.dateChoose + '-01')
+          if (df > new Date(this.dateChoose + '-31'))
+            df = new Date(this.dateChoose + '-31')
+          var Difference_In_Time = dd.getTime() - df.getTime();
+
+          // To calculate the no. of days between two dates
+          var Difference_In_Days = (Difference_In_Time / (1000 * 3600 * 24))+1;
+          console.log(c.type_conge, Difference_In_Days)
+          if (c.type_conge == "Congé payé")
+            this.stats.conges_pay += Difference_In_Days
+          else if (c.type_conge == "Congé sans solde")
+            this.stats.conges_ss += Difference_In_Days
+          else if (c.type_conge == "Absence maladie")
+            this.stats.maladie += Difference_In_Days
+          else
+            this.stats.absence_justifie += Difference_In_Days
+
+        })
+      })
+      .catch((error) => {
+        if (this.dateChoose)
+          this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
+      });
+
+  }
 }

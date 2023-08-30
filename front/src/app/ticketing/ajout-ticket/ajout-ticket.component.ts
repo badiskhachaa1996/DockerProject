@@ -27,6 +27,7 @@ export class AjoutTicketComponent implements OnInit {
   itsTask:boolean = false;
   taskID:string;
 
+  service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
@@ -110,16 +111,27 @@ export class AjoutTicketComponent implements OnInit {
       //Charger les sujets et services IGS
       this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-          if(val.label.startsWith('IGS')){
+          if (val.label.startsWith('IGS')) {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
           }
         })
       })
+    } else if (this.service_ID) {
+      this.ServService.getAServiceByid(this.service_ID).subscribe(data => {
+        this.serviceDropdown.push({ label: data.dataService.label, value: data.dataService._id })
+        this.TicketForm.patchValue({ service_id: this.service_ID })
+        this.sujetDropdown = []
+        this.SujetService.getAllByServiceID(this.service_ID).subscribe(data => {
+          data.forEach(val => {
+            this.sujetDropdown.push({ label: val.label, value: val._id })
+          })
+        })
+      })
     } else {
       this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-          if(!val.label.startsWith('IGS')){
+          if (!val.label.startsWith('IGS')) {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
           }

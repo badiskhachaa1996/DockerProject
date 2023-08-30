@@ -401,11 +401,11 @@ app.post("/create", (req, res, next) => {
                                 let htmlmail = `
                                 <p>Bonjour,&nbsp;</p>
                                 <p>Nous sommes ravis de recevoir votre candidature à notre établissement.&nbsp;</p>
-                                <p>Votre demande d'ins cription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec
+                                <p>Votre demande d'inscription sur notre plateforme a été enregistrée avec succès, merci de vous connecter avec
                                     <strong>votre mail</strong> et le <strong>mot de passe</strong> suivant : <strong>${r}</strong> sur ce lien  :
                                     <a href="https://ims.intedgroup.com/#/login"><u>https://ims.intedgroup.com/#/login</u></a></p>
                                 <p>Si vous rencontrez des difficultés à joindre vos documents ou en avez omis certains, ou bien se connecter à votre
-                                    compte, veuillez nous contacter sur support@intedgroup.com. </p>
+                                    compte, veuillez nous contacter sur ims.support@intedgroup.com. </p>
                                 <p>&nbsp;</p>
                                 <p>Nous portons à votre attention que vous pouvez consulter le statut de votre candidature sur la plateforme
                                     également.&nbsp;</p>

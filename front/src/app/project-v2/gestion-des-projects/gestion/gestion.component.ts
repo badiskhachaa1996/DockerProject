@@ -271,9 +271,11 @@ export class GestionComponent implements OnInit {
 
   showTaskList(project_id) {
     this.projectService.getTasksByIdProject(project_id).then((data) => {
+      
       this.task = [];
       this.task = data;
       this.projectIdForTask = project_id;
+      data.forEach((d) => {})
 
 
     })
@@ -339,6 +341,7 @@ export class GestionComponent implements OnInit {
   taches(id, ri) {
     this.showTachesTable = true;
   }
+  
   //PARTIE RESSOURCES
   addRessources() {
     if (this.formAddressources.invalid)

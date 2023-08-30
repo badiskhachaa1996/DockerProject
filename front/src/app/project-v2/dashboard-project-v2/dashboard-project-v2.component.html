@@ -146,26 +146,30 @@
         <div class="col-3"><strong>Date de création:<span style="color:#878787" > {{taskSelected?.ticketId?.date_ajout | date:'mediumDate'}}</span></strong> </div>
         <div class="col-3"><strong>Etat:<span style="color:#878787" > {{taskSelected?.etat}}</span></strong> </div>
         <div class="col-3"><strong>Avancement:<span style="color:#878787" > {{taskSelected?.avancement}} %</span></strong> </div>
-        <table class="col-12"rowExpandMode="single" 
-         selectionMode="single"  class="col-12" responsiveLayout="scroll" style="border-collapse: separate; border-spacing: 2px;"  >
+        <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"[paginator]="true" rowExpandMode="single"
+        [pageLinks]="5" selectionMode="single" class="col-12" responsiveLayout="scroll"
+        styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
             <tr>
-
                 <th style="border-right: 1px solid gray;" > ID ticket</th>
                 <th style="border-right: 1px solid gray;"> Collaborateur </th>
                 <th style="border-right: 1px solid gray;"> Date de création </th>
                 <th style="border-right: 1px solid gray;"> Etat</th>
                 <th style="border-right: 1px solid gray;"> Délais de traitement </th>
             </tr>  
+            </ng-template>
+            <ng-template  pTemplate="body" let-ticket let-rir="rowIndex">
             <tr>
-                <td style="border-right: 1px solid gray;">{{taskSelected?.ticketId?.customid}}</td>
-                <td style="border-right: 1px solid gray;">{{taskSelected?.attribuate_to[0]?.firstname}} {{taskSelected?.attribuate_to[0]?.lastname}}</td>
-                <td style="border-right: 1px solid gray;">{{taskSelected?.ticketId?.date_ajout | date:'mediumDate'}}</td>
+                <td style="border-right: 1px solid gray;">{{ticket?.customid}}</td>
+                <td style="border-right: 1px solid gray;">{{ticket?.agent_id?.firstname}} {{ticket?.agent_id?.lastname}}</td>
+                <td style="border-right: 1px solid gray;">{{ticket?.date_ajout | date:'mediumDate'}}</td>
                 <td style="border-right:  1px solid gray;">{{taskSelected?.etat}}</td>
                 <td style="border-right: 1px solid gray;">
-                      {{getDelaiTraitrement()}}
+                      {{getDelaiTraitrement(rir)}}
                   </td>
             </tr>
-    </table>
+        </ng-template>
+    </p-table>
     
     </div>
 </div>

@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { Project } from 'src/app/models/Project';
 import { Task } from 'src/app/models/project/Task';
+import { Ticket } from 'src/app/models/Ticket';
 import { Ressources } from 'src/app/models/project/Ressources';
 import { Budget } from 'src/app/models/project/Budget';
 import { ProjectService } from 'src/app/services/projectv2.service';
@@ -19,6 +20,7 @@ export class DashboardProjectV2Component implements OnInit {
   token: any;
   task!: Task[];
   taskSelected: Task;
+  tickets: Ticket[]=[];
   responsablesListe: any[] = [];
   projectListe: any[] = [];
   taskListe: any[] = [];
@@ -164,17 +166,22 @@ export class DashboardProjectV2Component implements OnInit {
       
   }
   onTacheSelected(event){
+    this.tickets=[];
     const taskID=event.value;
     this.projectService.getTask(taskID).then(data=>{
       this.taskSelected=data;
+      for (let i = 0; i < this.taskSelected.ticketId.length; i = i + 1) {
+        this.tickets.push(this.taskSelected.ticketId[i])
+      console.log(this.tickets)}
     console.log(this.taskSelected)})    
   }
-  getDelaiTraitrement() {
-    if (this.taskSelected){
+  getDelaiTraitrement(ri) {
+    if (this.tickets){
     let date1 = new Date()
-    if (this.taskSelected.ticketId.statut == 'Traité' && this.taskSelected.ticketId.date_fin_traitement)
-      date1 = new Date(this.taskSelected.ticketId.date_fin_traitement)
-    let date2 = new Date(this.taskSelected.ticketId.date_ajout)
+
+    if (this.tickets[ri].statut == 'Traité' && this.tickets[ri].date_fin_traitement)
+      date1 = new Date(this.tickets[ri].date_fin_traitement)
+    let date2 = new Date(this.tickets[ri].date_ajout)
 
     var diff = {
       sec: 0,
@@ -199,6 +206,6 @@ export class DashboardProjectV2Component implements OnInit {
       diff.min = "0" + diff.min.toString()
 
     return `${diff.day}J ${diff.hour}H${diff.min}M`;
-  }
-}
+  }}
+
 }

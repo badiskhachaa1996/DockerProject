@@ -37,11 +37,19 @@ export class User {
         }[],
         public service_list?: any[],
         public statut?: string,
+        public sujet_list?: any[],
         public roles_ticketing_list?: {
             _id?: string,
             module?: Service,
             role?: string,
         }[],
+        public documents_rh?: {
+            _id?: string,
+            date?: Date,
+            filename?: string,
+            path?: string,
+            note?: string
+        }[]
     ) { }
 
 

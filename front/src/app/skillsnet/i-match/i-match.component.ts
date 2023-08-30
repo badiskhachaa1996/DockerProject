@@ -13,7 +13,7 @@ import { saveAs as importedSaveAs } from "file-saver";
 @Component({
   selector: 'app-i-match',
   templateUrl: './i-match.component.html',
-  styleUrls: ['./i-match.component.scss']
+  styleUrls: ['./i-match.component.scss', '../../../assets/css/bootstrap.min.css']
 })
 export class IMatchComponent implements OnInit {
 

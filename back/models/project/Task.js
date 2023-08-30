@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
-    ticketId:                       { type: mongoose.Schema.Types.ObjectId, ref: 'ticket', required: false },
+    ticketId:                       { type: [mongoose.Schema.Types.ObjectId], ref: 'ticket', required: false },
     libelle:                        { type: String, required: false },
     description_task:               { type: String, required: false },
     attribuate_to:                  { type: [mongoose.Schema.Types.ObjectId], ref: 'user', required: false },

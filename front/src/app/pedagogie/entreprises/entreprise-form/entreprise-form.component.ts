@@ -48,7 +48,7 @@ export class EntrepriseFormComponent implements OnInit {
 
   ngOnInit(): void {
     // initialisation des src imgs
-    this.logoSrc = 'assets/images/logo-ims.png';
+    this.logoSrc = 'assets/images/logo-ims-new.png';
     this.etape1Src = 'assets/images/etape1.png';
     this.etape2Src = 'assets/images/etape2.png';
     this.etape3Src = 'assets/images/etape3.png';
