@@ -1,7 +1,6 @@
 import { User } from "./User"
 
-export class Collaborateur
-{
+export class Collaborateur {
     public constructor(
         public _id?: string,
         public user_id?: User,
@@ -24,5 +23,6 @@ export class Collaborateur
             notes?: string
             filename?: string
         }[],
-    ){}
+        public conge_nb?: number
+    ) { }
 }

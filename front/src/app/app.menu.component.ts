@@ -193,22 +193,6 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Gestion des agents V2',
-                            icon: 'pi pi-users',
-                            items: [
-                                {
-                                    label: 'Ajouter un agent',
-                                    icon: 'pi pi-plus',
-                                    routerLink: ['/agent/ajout'],
-                                },
-                                {
-                                    label: 'Liste des agents',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/agent/list'],
-                                },
-                            ],
-                        },
-                        {
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -252,6 +236,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Gestion des demandes et reclamation',
                                     icon: 'pi pi-check-square',
                                     routerLink: ['/rh/demandes-reclamations'],
+                                },
+                                {
+                                    label: 'Calendrier',
+                                    icon: 'pi pi-calendar',
+                                    routerLink: ['/rh/calendrier'],
                                 },
                                 {
                                     label: 'DashBoard',
@@ -1121,6 +1110,22 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Configuration Ticketing',
                                     icon: 'pi pi-cog',
                                     routerLink: ['/ticketing/configuration']
+                                },
+                                {
+                                    label: 'Gestion des Agents',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Ajouter un agent',
+                                            icon: 'pi pi-plus',
+                                            routerLink: ['/agent/ajout'],
+                                        },
+                                        {
+                                            label: 'Liste des agents',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/agent/list'],
+                                        },
+                                    ],
                                 }
                             ]
                         }
@@ -1678,210 +1683,210 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
 
-                                    /*{
+                                /*{
+                                label: 'Gestion des commissions',
+                                icon: 'pi pi-credit-card',
+                                items: [
+                                    {
+                                        label: "Ventes",
+                                        icon: 'pi pi-shopping-cart',
+                                        routerLink: ['/commissions/ventes', cData.partenaire_id]
+                                    },
+                                    {
+                                        label: "Réglement",
+                                        icon: 'pi pi-shopping-cart',
+                                        routerLink: ['/commissions/reglement', cData.partenaire_id]
+                                    }
+                                ]
+                            },*/
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: [
+                                        '/international/brands',
+                                        cData.partenaire_id,
+                                    ],
+                                },
+                                {
+                                    label: 'Effectuer un paiement',
+                                    icon: 'pi pi-dollar',
+                                },
+                                //{ label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
+                                {
+                                    label: 'Actualités',
+                                    icon: 'pi pi-exclamation-circle',
+                                    routerLink: [
+                                        '/international/actualite',
+                                    ],
+                                },
+                            ];
+                        } else if (cData) {
+                            //Commercial considéré Admin dans son Partenaire
+                            this.items = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        {
+                                            label: 'Tableau de bord',
+                                            icon: 'pi pi-fw pi-home',
+                                            routerLink: ['/'],
+                                        },
+                                        {
+                                            label: 'Tableau de bord Commercial',
+                                            icon: 'pi pi-fw pi-home',
+                                            routerLink: [
+                                                '/dashboard/commercial',
+                                            ],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Leads',
+                                    items: [
+                                        {
+                                            label: 'Insérer un lead',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-lead'],
+                                        },
+                                        {
+                                            label: 'Liste des Leads',
+                                            icon: 'pi pi-users',
+                                            routerLink: [
+                                                'international/partenaire/',
+                                                cData.partenaire_id,
+                                            ],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Alternants',
+                                    items: [
+                                        {
+                                            label: 'Insérer un alternant',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: [
+                                                '/international/partenaire/ajout-alternant/',
+                                                cData?.code_commercial_partenaire,
+                                            ],
+                                        },
+                                        {
+                                            label: 'Liste des alternants',
+                                            icon: 'pi pi-users',
+                                            routerLink: [
+                                                '/international/partenaire/alternants/',
+                                                cData.partenaire_id,
+                                            ],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Commercials',
+                                    items: [
+                                        {
+                                            label: 'Insérer un commercial',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: [
+                                                '/ajout-collaborateur',
+                                                cData.partenaire_id,
+                                            ],
+                                        },
+                                        {
+                                            label: 'Liste des Commercials',
+                                            icon: 'pi pi-users',
+                                            routerLink: [
+                                                'collaborateur',
+                                                cData.partenaire_id,
+                                            ],
+                                        },
+                                    ],
+                                },
+
+                                {
                                     label: 'Gestion des commissions',
                                     icon: 'pi pi-credit-card',
                                     items: [
                                         {
-                                            label: "Ventes",
+                                            label: 'Ventes',
                                             icon: 'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/ventes', cData.partenaire_id]
+                                            routerLink: [
+                                                '/commissions/ventes',
+                                                cData.partenaire_id,
+                                            ],
                                         },
                                         {
-                                            label: "Réglement",
+                                            label: 'Réglement',
                                             icon: 'pi pi-shopping-cart',
-                                            routerLink: ['/commissions/reglement', cData.partenaire_id]
-                                        }
-                                    ]
-                                },*/
-                                    {
-                                        label: 'Support Marketing',
-                                        icon: 'pi pi-briefcase',
-                                        routerLink: [
-                                            '/international/brands',
-                                            cData.partenaire_id,
-                                        ],
-                                    },
-                                    {
-                                        label: 'Effectuer un paiement',
-                                        icon: 'pi pi-dollar',
-                                    },
-                                    //{ label: 'Dashboard', icon: 'pi pi-chart-line', routerLink: ['/dashboard/partenaire', cData.partenaire_id] },
-                                    {
-                                        label: 'Actualités',
-                                        icon: 'pi pi-exclamation-circle',
-                                        routerLink: [
-                                            '/international/actualite',
-                                        ],
-                                    },
-                                ];
-                            } else if (cData) {
-                                //Commercial considéré Admin dans son Partenaire
-                                this.items = [
-                                    {
-                                        label: 'Accueil',
-                                        items: [
-                                            {
-                                                label: 'Tableau de bord',
-                                                icon: 'pi pi-fw pi-home',
-                                                routerLink: ['/'],
-                                            },
-                                            {
-                                                label: 'Tableau de bord Commercial',
-                                                icon: 'pi pi-fw pi-home',
-                                                routerLink: [
-                                                    '/dashboard/commercial',
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Leads',
-                                        items: [
-                                            {
-                                                label: 'Insérer un lead',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: ['/ajout-lead'],
-                                            },
-                                            {
-                                                label: 'Liste des Leads',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'international/partenaire/',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Alternants',
-                                        items: [
-                                            {
-                                                label: 'Insérer un alternant',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: [
-                                                    '/international/partenaire/ajout-alternant/',
-                                                    cData?.code_commercial_partenaire,
-                                                ],
-                                            },
-                                            {
-                                                label: 'Liste des alternants',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    '/international/partenaire/alternants/',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Commercials',
-                                        items: [
-                                            {
-                                                label: 'Insérer un commercial',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: [
-                                                    '/ajout-collaborateur',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                            {
-                                                label: 'Liste des Commercials',
-                                                icon: 'pi pi-users',
-                                                routerLink: [
-                                                    'collaborateur',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                        ],
-                                    },
-
-                                    {
-                                        label: 'Gestion des commissions',
-                                        icon: 'pi pi-credit-card',
-                                        items: [
-                                            {
-                                                label: 'Ventes',
-                                                icon: 'pi pi-shopping-cart',
-                                                routerLink: [
-                                                    '/commissions/ventes',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                            {
-                                                label: 'Réglement',
-                                                icon: 'pi pi-shopping-cart',
-                                                routerLink: [
-                                                    '/commissions/reglement',
-                                                    cData.partenaire_id,
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Support Marketing',
-                                        icon: 'pi pi-briefcase',
-                                        routerLink: [
-                                            '/international/brands',
-                                            cData.partenaire_id,
-                                        ],
-                                    },
-                                    {
-                                        label: 'Effectuer un paiement',
-                                        icon: 'pi pi-dollar',
-                                    },
-                                    {
-                                        label: 'Dashboard',
-                                        icon: 'pi pi-chart-line',
-                                        routerLink: [
-                                            '/dashboard/partenaire',
-                                            cData.partenaire_id,
-                                        ],
-                                    },
-                                    {
-                                        label: 'Actualités',
-                                        icon: 'pi pi-exclamation-circle',
-                                        routerLink: [
-                                            '/international/actualite',
-                                        ],
-                                    },
-                                ];
-                            } else {
-                                this.items = [
-                                    {
-                                        label: 'Accueil',
-                                        items: [
-                                            {
-                                                label: 'Tableau de bord',
-                                                icon: 'pi pi-fw pi-home',
-                                                routerLink: ['/'],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Leads',
-                                        items: [
-                                            {
-                                                label: 'Insérer un lead',
-                                                icon: 'pi pi-user-plus',
-                                                routerLink: ['/ajout-lead'],
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        label: 'Effectuer un paiement',
-                                        icon: 'pi pi-dollar',
-                                    },
-                                    {
-                                        label: 'Actualités',
-                                        icon: 'pi pi-exclamation-circle',
-                                        routerLink: [
-                                            '/international/actualite',
-                                        ],
-                                    },
-                                ];
-                            }
+                                            routerLink: [
+                                                '/commissions/reglement',
+                                                cData.partenaire_id,
+                                            ],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Support Marketing',
+                                    icon: 'pi pi-briefcase',
+                                    routerLink: [
+                                        '/international/brands',
+                                        cData.partenaire_id,
+                                    ],
+                                },
+                                {
+                                    label: 'Effectuer un paiement',
+                                    icon: 'pi pi-dollar',
+                                },
+                                {
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-chart-line',
+                                    routerLink: [
+                                        '/dashboard/partenaire',
+                                        cData.partenaire_id,
+                                    ],
+                                },
+                                {
+                                    label: 'Actualités',
+                                    icon: 'pi pi-exclamation-circle',
+                                    routerLink: [
+                                        '/international/actualite',
+                                    ],
+                                },
+                            ];
+                        } else {
+                            this.items = [
+                                {
+                                    label: 'Accueil',
+                                    items: [
+                                        {
+                                            label: 'Tableau de bord',
+                                            icon: 'pi pi-fw pi-home',
+                                            routerLink: ['/'],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Leads',
+                                    items: [
+                                        {
+                                            label: 'Insérer un lead',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-lead'],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Effectuer un paiement',
+                                    icon: 'pi pi-dollar',
+                                },
+                                {
+                                    label: 'Actualités',
+                                    icon: 'pi pi-exclamation-circle',
+                                    routerLink: [
+                                        '/international/actualite',
+                                    ],
+                                },
+                            ];
                         }
+                    }
                     );
                 }
 
@@ -4326,7 +4331,7 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-link',
                                             routerLink: [
                                                 '/matching-externe/' +
-                                                    this.token.id,
+                                                this.token.id,
                                             ],
                                         },
                                     ],
@@ -5282,7 +5287,7 @@ export class AppMenuComponent implements OnInit {
                                                     icon: 'pi pi-user',
                                                     routerLink: [
                                                         'crm/mes-leads/liste/' +
-                                                            member?._id,
+                                                        member?._id,
                                                     ],
                                                 },
                                             ],
@@ -5447,409 +5452,409 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 });
-                            } else if (role == 'Admin') {
-                                this.items.push({
-                                    label: 'CRM',
-                                    icon: 'pi pi-database',
-                                    items: [
-                                        {
-                                            label: 'Insertion',
-                                            icon: 'pi pi-user-plus',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un lead',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: [
-                                                        'crm/leads/ajout',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Importer',
-                                                    icon: 'pi pi-database',
-                                                    routerLink: ['crm/import'],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Liste des leads',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [
-                                                        'crm/leads/liste',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/' +
-                                                            member?._id,
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Qualification',
-                                            icon: 'pi pi-star',
-                                            items: [
-                                                {
-                                                    label: 'Les leads non qualifiés',
-                                                    icon: 'pi pi-star-fill',
-                                                    routerLink: [
-                                                        'crm/leads/non-qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les leads préqualifiés',
-                                                    icon: 'pi pi-star',
-                                                    routerLink: [
-                                                        'crm/leads/pre-qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les leads qualifiés',
-                                                    icon: 'pi pi-star',
-                                                    routerLink: [
-                                                        'crm/leads/qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les ventes',
-                                                    icon: 'pi pi-chart-line',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Communication',
-                                            icon: 'pi pi-share-alt',
-                                            items: [
-                                                {
-                                                    label: 'Facebook',
-                                                    icon: 'pi pi-facebook',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Instagram',
-                                                    icon: 'pi pi-instagram',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'WhatsApp',
-                                                    icon: 'pi pi-whatsapp',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'ChatBot',
-                                                    icon: 'pi pi-comments',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Target',
-                                            icon: 'pi pi-flag',
-                                            items: [
-                                                {
-                                                    label: 'Configuration',
-                                                    icon: 'pi pi-cog',
-                                                    routerLink: [
-                                                        'crm/target/configuration',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'My target',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/target/my-target',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Dashboard Général',
-                                                    icon: 'pi pi-chart-pie',
-                                                    routerLink: [
-                                                        'crm/target/dashboard',
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Mes taches',
-                                            icon: 'pi pi-briefcase',
-                                            items: [],
-                                        },
-                                        {
-                                            label: 'Support Commercial',
-                                            icon: 'pi pi-comment',
-                                            items: [
-                                                {
-                                                    label: 'Mails Type',
-                                                    icon: 'pi pi-envelope',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Discours',
-                                                    icon: 'pi pi-comment',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Pipeline',
-                                            icon: 'pi pi-filter',
-                                            items: [],
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-tablet',
-                                            items: [
-                                                {
-                                                    label: 'Equipe',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Ma performance',
-                                                    icon: 'pi pi-chart-bar',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                });
-                            } else if (role == 'Agent') {
-                                this.items.push({
-                                    label: 'CRM',
-                                    icon: 'pi pi-database',
-                                    items: [
-                                        {
-                                            label: 'Insertion',
-                                            icon: 'pi pi-user-plus',
-                                            items: [
-                                                {
-                                                    label: 'Ajouter un lead',
-                                                    icon: 'pi pi-user-plus',
-                                                    routerLink: [
-                                                        'crm/leads/ajout',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Importer',
-                                                    icon: 'pi pi-database',
-                                                    routerLink: ['crm/import'],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Liste des leads',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Mes Leads',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/mes-leads/liste/' +
-                                                            member?._id,
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Qualification',
-                                            icon: 'pi pi-star',
-                                            items: [
-                                                {
-                                                    label: 'Les leads non qualifiés',
-                                                    icon: 'pi pi-star-fill',
-                                                    routerLink: [
-                                                        'crm/leads/non-qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les leads préqualifiés',
-                                                    icon: 'pi pi-star',
-                                                    routerLink: [
-                                                        'crm/leads/pre-qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les leads qualifiés',
-                                                    icon: 'pi pi-star',
-                                                    routerLink: [
-                                                        'crm/leads/qualifies',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Les ventes',
-                                                    icon: 'pi pi-chart-line',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Communication',
-                                            icon: 'pi pi-share-alt',
-                                            items: [
-                                                {
-                                                    label: 'Facebook',
-                                                    icon: 'pi pi-facebook',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Instagram',
-                                                    icon: 'pi pi-instagram',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'WhatsApp',
-                                                    icon: 'pi pi-whatsapp',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'ChatBot',
-                                                    icon: 'pi pi-comments',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Target',
-                                            icon: 'pi pi-flag',
-                                            items: [
-                                                {
-                                                    label: 'Configuration',
-                                                    icon: 'pi pi-cog',
-                                                    routerLink: [
-                                                        'crm/target/configuration',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'My target',
-                                                    icon: 'pi pi-user',
-                                                    routerLink: [
-                                                        'crm/target/my-target',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Dashboard Général',
-                                                    icon: 'pi pi-chart-pie',
-                                                    routerLink: [
-                                                        'crm/target/dashboard',
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Mes taches',
-                                            icon: 'pi pi-briefcase',
-                                            items: [],
-                                        },
-                                        {
-                                            label: 'Support Commercial',
-                                            icon: 'pi pi-comment',
-                                            items: [
-                                                {
-                                                    label: 'Mails Type',
-                                                    icon: 'pi pi-envelope',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Discours',
-                                                    icon: 'pi pi-comment',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Pipeline',
-                                            icon: 'pi pi-filter',
-                                            items: [],
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-tablet',
-                                            items: [
-                                                {
-                                                    label: 'Ma performance',
-                                                    icon: 'pi pi-chart-bar',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                });
-                            } else {
-                                this.items.push({
-                                    label: 'CRM',
-                                    icon: 'pi pi-database',
-                                    items: [
-                                        {
-                                            label: 'Liste des leads',
-                                            icon: 'pi pi-users',
-                                            items: [
-                                                {
-                                                    label: 'Tout les leads',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [
-                                                        'crm/leads/liste',
-                                                    ],
-                                                },
-                                                {
-                                                    label: 'Leads non attribués',
-                                                    icon: 'pi pi-user-edit',
-                                                    routerLink: [
-                                                        'crm/leads/liste-non-attribue',
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Support Commercial',
-                                            icon: 'pi pi-comment',
-                                            items: [
-                                                {
-                                                    label: 'Mails Type',
-                                                    icon: 'pi pi-envelope',
-                                                    routerLink: [''],
-                                                },
-                                                {
-                                                    label: 'Discours',
-                                                    icon: 'pi pi-comment',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                        {
-                                            label: 'Pipeline',
-                                            icon: 'pi pi-filter',
-                                            items: [],
-                                        },
-                                        {
-                                            label: 'Dashboard',
-                                            icon: 'pi pi-tablet',
-                                            items: [
-                                                {
-                                                    label: 'Equipe',
-                                                    icon: 'pi pi-users',
-                                                    routerLink: [''],
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                });
-                            }
-                            setTimeout(() => (this.showMenu = true), 0);
+                        } else if (role == 'Admin') {
+                            this.items.push({
+                                label: 'CRM',
+                                icon: 'pi pi-database',
+                                items: [
+                                    {
+                                        label: 'Insertion',
+                                        icon: 'pi pi-user-plus',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Importer',
+                                                icon: 'pi pi-database',
+                                                routerLink: ['crm/import'],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Liste des leads',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Tout les leads',
+                                                icon: 'pi pi-users',
+                                                routerLink: [
+                                                    'crm/leads/liste',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Leads non attribués',
+                                                icon: 'pi pi-user-edit',
+                                                routerLink: [
+                                                    'crm/leads/liste-non-attribue',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Mes Leads',
+                                                icon: 'pi pi-user',
+                                                routerLink: [
+                                                    'crm/mes-leads/liste/' +
+                                                    member?._id,
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Qualification',
+                                        icon: 'pi pi-star',
+                                        items: [
+                                            {
+                                                label: 'Les leads non qualifiés',
+                                                icon: 'pi pi-star-fill',
+                                                routerLink: [
+                                                    'crm/leads/non-qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les leads préqualifiés',
+                                                icon: 'pi pi-star',
+                                                routerLink: [
+                                                    'crm/leads/pre-qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les leads qualifiés',
+                                                icon: 'pi pi-star',
+                                                routerLink: [
+                                                    'crm/leads/qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les ventes',
+                                                icon: 'pi pi-chart-line',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Communication',
+                                        icon: 'pi pi-share-alt',
+                                        items: [
+                                            {
+                                                label: 'Facebook',
+                                                icon: 'pi pi-facebook',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Instagram',
+                                                icon: 'pi pi-instagram',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'WhatsApp',
+                                                icon: 'pi pi-whatsapp',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'ChatBot',
+                                                icon: 'pi pi-comments',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Target',
+                                        icon: 'pi pi-flag',
+                                        items: [
+                                            {
+                                                label: 'Configuration',
+                                                icon: 'pi pi-cog',
+                                                routerLink: [
+                                                    'crm/target/configuration',
+                                                ],
+                                            },
+                                            {
+                                                label: 'My target',
+                                                icon: 'pi pi-user',
+                                                routerLink: [
+                                                    'crm/target/my-target',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Dashboard Général',
+                                                icon: 'pi pi-chart-pie',
+                                                routerLink: [
+                                                    'crm/target/dashboard',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Mes taches',
+                                        icon: 'pi pi-briefcase',
+                                        items: [],
+                                    },
+                                    {
+                                        label: 'Support Commercial',
+                                        icon: 'pi pi-comment',
+                                        items: [
+                                            {
+                                                label: 'Mails Type',
+                                                icon: 'pi pi-envelope',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Discours',
+                                                icon: 'pi pi-comment',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Pipeline',
+                                        icon: 'pi pi-filter',
+                                        items: [],
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-tablet',
+                                        items: [
+                                            {
+                                                label: 'Equipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Ma performance',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            });
+                        } else if (role == 'Agent') {
+                            this.items.push({
+                                label: 'CRM',
+                                icon: 'pi pi-database',
+                                items: [
+                                    {
+                                        label: 'Insertion',
+                                        icon: 'pi pi-user-plus',
+                                        items: [
+                                            {
+                                                label: 'Ajouter un lead',
+                                                icon: 'pi pi-user-plus',
+                                                routerLink: [
+                                                    'crm/leads/ajout',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Importer',
+                                                icon: 'pi pi-database',
+                                                routerLink: ['crm/import'],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Liste des leads',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Mes Leads',
+                                                icon: 'pi pi-user',
+                                                routerLink: [
+                                                    'crm/mes-leads/liste/' +
+                                                    member?._id,
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Qualification',
+                                        icon: 'pi pi-star',
+                                        items: [
+                                            {
+                                                label: 'Les leads non qualifiés',
+                                                icon: 'pi pi-star-fill',
+                                                routerLink: [
+                                                    'crm/leads/non-qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les leads préqualifiés',
+                                                icon: 'pi pi-star',
+                                                routerLink: [
+                                                    'crm/leads/pre-qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les leads qualifiés',
+                                                icon: 'pi pi-star',
+                                                routerLink: [
+                                                    'crm/leads/qualifies',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Les ventes',
+                                                icon: 'pi pi-chart-line',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Communication',
+                                        icon: 'pi pi-share-alt',
+                                        items: [
+                                            {
+                                                label: 'Facebook',
+                                                icon: 'pi pi-facebook',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Instagram',
+                                                icon: 'pi pi-instagram',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'WhatsApp',
+                                                icon: 'pi pi-whatsapp',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'ChatBot',
+                                                icon: 'pi pi-comments',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Target',
+                                        icon: 'pi pi-flag',
+                                        items: [
+                                            {
+                                                label: 'Configuration',
+                                                icon: 'pi pi-cog',
+                                                routerLink: [
+                                                    'crm/target/configuration',
+                                                ],
+                                            },
+                                            {
+                                                label: 'My target',
+                                                icon: 'pi pi-user',
+                                                routerLink: [
+                                                    'crm/target/my-target',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Dashboard Général',
+                                                icon: 'pi pi-chart-pie',
+                                                routerLink: [
+                                                    'crm/target/dashboard',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Mes taches',
+                                        icon: 'pi pi-briefcase',
+                                        items: [],
+                                    },
+                                    {
+                                        label: 'Support Commercial',
+                                        icon: 'pi pi-comment',
+                                        items: [
+                                            {
+                                                label: 'Mails Type',
+                                                icon: 'pi pi-envelope',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Discours',
+                                                icon: 'pi pi-comment',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Pipeline',
+                                        icon: 'pi pi-filter',
+                                        items: [],
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-tablet',
+                                        items: [
+                                            {
+                                                label: 'Ma performance',
+                                                icon: 'pi pi-chart-bar',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            });
+                        } else {
+                            this.items.push({
+                                label: 'CRM',
+                                icon: 'pi pi-database',
+                                items: [
+                                    {
+                                        label: 'Liste des leads',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Tout les leads',
+                                                icon: 'pi pi-users',
+                                                routerLink: [
+                                                    'crm/leads/liste',
+                                                ],
+                                            },
+                                            {
+                                                label: 'Leads non attribués',
+                                                icon: 'pi pi-user-edit',
+                                                routerLink: [
+                                                    'crm/leads/liste-non-attribue',
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Support Commercial',
+                                        icon: 'pi pi-comment',
+                                        items: [
+                                            {
+                                                label: 'Mails Type',
+                                                icon: 'pi pi-envelope',
+                                                routerLink: [''],
+                                            },
+                                            {
+                                                label: 'Discours',
+                                                icon: 'pi pi-comment',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        label: 'Pipeline',
+                                        icon: 'pi pi-filter',
+                                        items: [],
+                                    },
+                                    {
+                                        label: 'Dashboard',
+                                        icon: 'pi pi-tablet',
+                                        items: [
+                                            {
+                                                label: 'Equipe',
+                                                icon: 'pi pi-users',
+                                                routerLink: [''],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            });
                         }
+                        setTimeout(() => (this.showMenu = true), 0);
+                    }
                     );
                 }
                 if (services_list.includes('Admission')) {

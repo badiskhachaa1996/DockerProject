@@ -370,6 +370,7 @@ app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
 app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
+app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {

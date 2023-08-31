@@ -15,6 +15,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { saveAs } from 'file-saver';
 import mongoose from 'mongoose';
 import { AuthService } from 'src/app/services/auth.service';
+import { CongeService } from 'src/app/services/conge.service';
 
 @Component({
   selector: 'app-collaborateurs',
@@ -110,7 +111,8 @@ export class CollaborateursComponent implements OnInit {
   token: any;
 
   constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
-    private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder, private UserService: AuthService) { }
+    private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder,
+    private UserService: AuthService, private congeService: CongeService) { }
 
   ngOnInit(): void {
     // décodage du token
@@ -486,6 +488,7 @@ export class CollaborateursComponent implements OnInit {
 
     this.emailTypeService.HEgetAllTo(user_id._id).subscribe(data => {
       this.historiqueEmails = data
+      console.log(data, user_id._id)
     });
 
     this.emailTypeService.getAll().subscribe(data => {
@@ -540,8 +543,22 @@ export class CollaborateursComponent implements OnInit {
 
     this.emailTypeService.sendPerso({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: user_id.email, send_from: this.formEmailPerso.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
-      this.emailTypeService.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: this.collaborateurToUpdate._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
+      this.emailTypeService.HEcreate({ ...this.formEmailPerso.value, send_by: this.token.id, send_to: user_id._id, send_from: this.formEmailPerso.value.send_from.email }).subscribe(data2 => {
         this.formEmailPerso.reset()
+        this.historiqueEmails.push(data2)
+        console.log(data2)
+        this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
+      })
+    })
+
+  }
+
+  onEmailType() {
+    const { user_id }: any = this.collaborateurToUpdate;
+    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
+      this.emailTypeService.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
+        this.formEmailType.reset()
         this.historiqueEmails.push(data2)
         this.messageService.add({ severity: "success", summary: 'Enregistrement de l\'envoie du mail avec succès' })
       })
@@ -606,5 +623,35 @@ export class CollaborateursComponent implements OnInit {
     }, err => {
       console.error(err)
     })
+  }
+
+  displayConge = false
+  dataConge: Collaborateur;
+  nbrConge = 0
+  onInitConge(collaborateur: Collaborateur) {
+    this.displayConge = true
+    this.dataConge = collaborateur
+    this.congeService.getAllByUserId(this.dataConge.user_id._id)
+      .then((response) => {
+        let nb = 0
+        response.forEach(c => {
+          nb += c.nombre_jours
+        })
+        this.nbrConge = nb
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" }) });
+  }
+
+  onUpdateConge() {
+    this.rhService.patchCollaborateurData({ _id: this.dataConge._id, conge_nb: this.dataConge.conge_nb }).then(c => { })
+  }
+
+  calculDay(): number {
+    var Difference_In_Time = new Date(this.dataConge.date_demarrage).getTime() - new Date().getTime();
+    return Math.floor(Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1);
+  }
+
+  calcCPA(): number {
+    return Math.floor((this.dataConge.conge_nb * this.calculDay()) / 30)
   }
 }

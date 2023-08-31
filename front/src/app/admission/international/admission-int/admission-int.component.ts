@@ -581,10 +581,15 @@ export class AdmissionIntComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
-
+    let date_cf = this.showDetails.date_cf
+    if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
+      date_cf = new Date()
     let phase_candidature = "En phase d'admission"
+    let date_admission = new Date()
     if (this.lengthPaiement >= this.payementList.length) {
       phase_candidature = this.showDetails.phase_candidature;
+    } else {
+      date_admission = this.showDetails.date_admission
     }
 
     let prospect = {
@@ -604,7 +609,9 @@ export class AdmissionIntComponent implements OnInit {
       payement: this.payementList,
       type_form: this.detailsForm.value.type_form,
       phase_candidature,
-      _id: this.showDetails._id
+      _id: this.showDetails._id,
+      date_admission,
+      date_cf
 
     }
     let listIDS = []

@@ -248,6 +248,7 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 const routes: Routes = [
     {
         path: '',
@@ -766,6 +767,7 @@ const routes: Routes = [
                 component: DemandesReclamationsComponent,
             },
             { path: 'rh/dashboard', component: DashboardRhComponent },
+            { path: 'rh/calendrier', component: CalendrierRhComponent },
 
             /** end */
             {
@@ -1332,4 +1334,4 @@ const routes: Routes = [
 
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
