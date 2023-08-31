@@ -310,6 +310,21 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         default: "Non"
     },
+    date_orientation: {
+        type: Date,
+    },
+    date_admission: {
+        type: Date,
+    },
+    date_cf: {
+        type: Date,
+    },
+    date_visa: {
+        type: Date,
+    },
+    date_inscription_def: {
+        type: Date,
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

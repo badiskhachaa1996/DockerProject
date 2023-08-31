@@ -557,6 +557,7 @@ export class OrientationComponent implements OnInit {
     let bypass: any = this.showDetails.user_id
     let phase_candidature = this.showDetails.phase_candidature;
     let statut_payement = "Oui"
+    let date_admission = this.showDetails.date_admission
     if (this.payementList.length == 0) {
       statut_payement = this.showDetails.statut_payement;
     } else {
@@ -568,8 +569,15 @@ export class OrientationComponent implements OnInit {
       statut_payement = this.showDetails.statut_payement;
       phase_candidature = this.showDetails.phase_candidature;
     }*/
-    if (this.detailsForm.value.decision_orientation == "Validé" || this.detailsForm.value.decision_orientation == "Changement de campus" || this.detailsForm.value.decision_orientation == "Changement de formation" || this.detailsForm.value.decision_orientation == "Changement de destination")
+    if (this.detailsForm.value.decision_orientation == "Validé" || this.detailsForm.value.decision_orientation == "Changement de campus" || this.detailsForm.value.decision_orientation == "Changement de formation" || this.detailsForm.value.decision_orientation == "Changement de destination") {
       phase_candidature = "En phase d'admission"
+      date_admission = new Date()
+    }
+
+    let date_cf = this.showDetails.date_cf
+    if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
+      date_cf = new Date()
+
     let user = {
       civilite: this.detailsForm.value.civilite,
       lastname: this.detailsForm.value.lastname,
@@ -602,7 +610,9 @@ export class OrientationComponent implements OnInit {
       avancement_visa: this.detailsForm.value.avancement_visa,
       statut_payement,
       phase_candidature,
-      _id: this.showDetails._id
+      _id: this.showDetails._id,
+      date_admission,
+      date_cf
 
     }
     let listIDS = []

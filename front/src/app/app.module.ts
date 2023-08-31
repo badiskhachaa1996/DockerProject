@@ -349,6 +349,7 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 
 @NgModule({
   imports: [
@@ -706,7 +707,8 @@ import { IMatchComponent } from './skillsnet/i-match/i-match.component';
     LeadCandidatureComponent,
     BookingV2Component,
     ConfigurationPointeuseComponent,
-    IMatchComponent
+    IMatchComponent,
+    CalendrierRhComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

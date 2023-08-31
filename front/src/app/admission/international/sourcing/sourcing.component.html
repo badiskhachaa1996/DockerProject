@@ -111,10 +111,12 @@
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
                                     </td>
-                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
                                         {{rowData?.path}}
                                     </td>
-                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
                                         Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
@@ -205,10 +207,12 @@
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
                                     </td>
-                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && rowData.path">
                                         {{rowData?.path}}
                                     </td>
-                                    <td *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
+                                    <td
+                                        *ngIf="(!rowData.nom || rowData.nom=='Téléverser le fichier s\'il vous plaît') && !rowData.path">
                                         Téléverser le fichier s'il vous plaît
                                     </td>
                                     <td *ngIf="rowData.path">
@@ -735,7 +739,7 @@
     <p-toast></p-toast>
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12 card" *ngIf="ecoleList.length!=0">
-        <p-tabView style="max-width: 100%;">
+        <p-tabView> <!-- style="max-width: 100%;" -->
             <p-tabPanel [header]="ecole.titre" *ngFor="let ecole of ecoleList; let i = index" [selected]="i == 0">
                 <div class="grid" *ngIf="prospects && prospects[ecole.url_form]">
                     <h5 class="col-8">Liste des leads Sourcing de {{ecole.titre}}</h5>
@@ -959,7 +963,7 @@
                                     <p-tag icon="pi pi-check" severity="success" [value]="'Oui'">
                                     </p-tag>
                                 </td>
-                            <td *ngIf="!prospect.haveDoc">
+                                <td *ngIf="!prospect.haveDoc">
                                     <p-tag icon="pi pi-times" severity="danger" [value]="'Non'"></p-tag>
                                 </td>
                                 <td *ngIf="prospect.statut_payement">
@@ -998,6 +1002,9 @@
                                         aria-hidden="true"></i>
                                     <i pTooltip="Voir la candidature" tooltipPosition="bottom"
                                         class="pi pi-briefcase mr-2" (click)="goToCandidature(prospect._id)"
+                                        aria-hidden="true"></i>
+                                    <i pTooltip="Suivre l'avancement" tooltipPosition="bottom"
+                                        class="pi pi-chart-line mr-2" (click)="onShowTimeline(prospect)"
                                         aria-hidden="true"></i>
                                 </td>
                             </tr>
@@ -1065,3 +1072,14 @@
 
     </p-sidebar>
 </div>
+<p-dialog header="Suivre l'avancement" [(visible)]="showTimeline" [style]="{width: '75vw'}">
+    <p-timeline [value]="dataTimeline">
+        <ng-template pTemplate="content" let-event>
+            <small class="p-text-secondary">{{event.date| date:'medium'}}</small>
+        </ng-template>
+        <ng-template pTemplate="opposite" let-event>
+            <p *ngIf="event.date" style="font-weight: bold;">{{event.status }}</p>
+            <p *ngIf="!event.date" style="color: gray; text-decoration-line: line-through;">{{event.status }}</p>
+        </ng-template>
+    </p-timeline>
+</p-dialog>

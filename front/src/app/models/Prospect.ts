@@ -88,6 +88,11 @@ export class Prospect {
         public documents_dossier?: [{ date: Date, nom: string, path: string, _id: string }],
         public documents_autre?: [{ date: Date, nom: string, path: string, _id: string }],
         public avancement_cf?: string,
+        public date_orientation?: Date,
+        public date_admission?: Date,
+        public date_cf?: Date,
+        public date_visa?: Date,
+        public date_inscription_def?: Date,
     ) { }
 
 }

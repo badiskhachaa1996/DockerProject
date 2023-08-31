@@ -433,6 +433,8 @@
 
 	<div class="col-12" *ngIf="showEmailView">
 		<div class="card">
+			<i class="pi pi-times-circle mb-2" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+				(click)="showEmailView = false"></i><br>
 			<p-tabView>
 				<p-tabPanel header="Email personnalisé">
 					<form class="p-fluid p-formgrid grid col-12" [formGroup]="formEmailPerso">
@@ -627,7 +629,7 @@
 							</div>
 						</div>
 						<button pButton [disabled]="formEmailType.invalid" label="Envoyer l'email"
-							(click)="onEmailPerso()"></button>
+							(click)="onEmailType()"></button>
 					</form>
 				</p-tabPanel>
 
@@ -937,25 +939,30 @@
 							{{collaborateur.contrat_type}} jours
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
-							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence"
+							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" tooltipPosition="bottom"
 								style="cursor: pointer; color: #3B82F6"
 								(click)="collaborateurToUpdate = collaborateur; onGetCollaborateurCompetence(collaborateur._id); showCompetenceTable = true; showFormAdd = false; showFormUpdate = false; showFormUpdatePersonalInfo = false;"></i>
 							<i class="pi pi-pencil m-1" pTooltip="Modifier les informations collaborateurs"
-								style="cursor: pointer; color: #22C55E" (click)="onFillForm(collaborateur)"></i>
+								tooltipPosition="bottom" style="cursor: pointer; color: #22C55E"
+								(click)="onFillForm(collaborateur)"></i>
 							<i class="pi pi-user-edit m-1" pTooltip="Modifier les informations personnelles"
-								style="cursor: pointer;" (click)="onFillFormUpdatePersonalData(collaborateur)"></i>
-							<i class="pi pi-align-center m-1" pTooltip="Job descrription"
+								tooltipPosition="bottom" style="cursor: pointer;"
+								(click)="onFillFormUpdatePersonalData(collaborateur)"></i>
+							<i class="pi pi-align-center m-1" pTooltip="Job description" tooltipPosition="bottom"
 								style="cursor: pointer; color: #3B82F6"
 								(click)="collaborateurToUpdate = collaborateur; onInitFormUpdateJobDescription(); showJobDescription = true"></i>
-							<i class="pi pi-file m-1" pTooltip="Insérer un document"
+							<i class="pi pi-file m-1" pTooltip="Insérer un document" tooltipPosition="bottom"
 								style="cursor: pointer; color: #F59E0B"
 								(click)="clickUploadFile(collaborateur.user_id)"></i>
 							<i class="pi pi-trash m-1" pTooltip="Supprimer" style="cursor: pointer; color: #EF4444"
-								(click)="onRemoveCollaborateur(collaborateur._id)"></i>
+								tooltipPosition="bottom" (click)="onRemoveCollaborateur(collaborateur._id)"></i>
 							<i class="pi pi-list m-1" pTooltip="CRA" style="cursor: pointer; color: #A855F7"
+								tooltipPosition="bottom"
 								(click)="onGetHistoriqueCra(collaborateur.user_id?._id); showHistoriqueCra = true;"></i>
 							<i pTooltip="Envoyer un mail" (click)="onInitEmailView(collaborateur)"
-								class="pi pi-envelope m-1" style="color: #C0C0C0"></i>
+								tooltipPosition="bottom" class="pi pi-envelope m-1" style="color: #C0C0C0"></i>
+							<i pTooltip="Voir le résumé des congés" (click)="onInitConge(collaborateur)" tooltipPosition="bottom"
+								class="pi pi-calendar-minus m-1" style="color: #469cff"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -973,3 +980,18 @@
 		</div>
 	</div>
 </div>
+
+<p-dialog header="Nombre de jours de congés" [(visible)]="displayConge" [modal]="true">
+	<div class="field col-12" *ngIf="dataConge">
+		<label htmlFor="firstname">Définir le nombre des jours de congé payé / mois pour le collaborateur (CP)</label><br>
+		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}" autoWidth="false"> </p-inputNumber>
+	</div>
+	<div *ngIf="dataConge">
+		Le nombre de jours de congés payés acquis CPA : {{calcCPA()}}<br>
+
+		Le nombre de jours de congés payés pris CPP = {{calcCPA()-nbrConge}}<br>
+	
+		Le nombre de jours de congés payés restants CPR= {{calcCPA()-(calcCPA()-nbrConge)}}<br>
+	</div>
+
+</p-dialog>
