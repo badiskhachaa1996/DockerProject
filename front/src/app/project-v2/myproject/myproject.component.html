@@ -41,43 +41,55 @@
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th colspan="3" style="color:mediumvioletred;">Assigné à :
-                                            <ng-container *ngFor="let a of task.ticketId "> {{ a?.agent_id?.firstname}} {{a?.agent_id?.lastname }}.   </ng-container></th>
+                                            <ng-container *ngFor="let a of task.ticketId "> {{ a?.agent_id?.firstname}}
+                                                {{a?.agent_id?.lastname }}. </ng-container>
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th >ID:<span style="color:#878787" > {{task?.identifian}}</span></th>
-                                        <th >Libelle:<span style="color:#878787" > {{task?.libelle}}</span> </th>
-                                        <th (click)="showTicket(task)">ID Ticket: <span style="color:#878787" > <ng-container *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span></th>
+                                        <th>ID:<span style="color:#878787"> {{task?.identifian}}</span></th>
+                                        <th>Libelle:<span style="color:#878787"> {{task?.libelle}}</span> </th>
+                                        <th (click)="showTicket(task)">ID Ticket: <span style="color:#878787">
+                                                <ng-container
+                                                    *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span>
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet : <span style="color:#878787" >{{task?.project_id?.identifian}}</span></th>
-                                        <th colspan="2">Titre:<span style="color:#878787" > {{task?.project_id?.titre}}</span></th>
+                                        <th>ID Projet : <span
+                                                style="color:#878787">{{task?.project_id?.identifian}}</span></th>
+                                        <th colspan="2">Titre:<span style="color:#878787">
+                                                {{task?.project_id?.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span
+                                                    style="color:#878787"> {{t?.date_ajout |
+                                                    date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task.number_of_hour}}</span></th>
+                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                                {{task.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task?.ticketId?.statut)}">{{
                                             task.ticketId.statut}}</th>
                                     </tr>
                                     <br>
                                     <tr>
-                                        
+
                                         <th colspan="2">
                                             <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
                                                 prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
                                         </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
+                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded"
+                                                (onClick)="modifierpoucentage(task)"></p-button></th>
                                     </tr>
                                     <br>
                                     <tr>
                                         <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">{{task.validation}}</th>
+                                            [ngStyle]="{'color': getColorForValidation(task.validation)}">
+                                            {{task.validation}}</th>
                                     </tr>
                                     <br>
 
@@ -94,8 +106,8 @@
                                 </div>
 
                                 <div style="display: flex; justify-content: center;">
-                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
-                                        [model]="items"></p-splitButton>
+                                    <p-splitButton label="Deplacer" icon="pi pi-send"
+                                        (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
 
                                 </div>
 
@@ -122,7 +134,7 @@
                             <br>
                             <div style="display: flex; justify-content: space-between;" class="col-12">
                                 <div class="col-6">
-                                    
+
                                     <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
                                         [draggable]="false" [resizable]="false">
 
@@ -135,6 +147,12 @@
                                                 <textarea formControlName="consigne" pInputTextarea
                                                     placeholder="Donnez une consigne " autoResize rows="2"
                                                     cols="40"></textarea>
+                                            </div>
+                                            <div class="field col-12 md:col-12">
+                                            <p-dropdown [options]="ticketList" filter="true"
+                                                placeholder="Choisissez le ticket"
+                                                (onChange)="onResponsableSelected($event)"
+                                                [showClear]="true"></p-dropdown>
                                             </div>
                                             <button pButton pRipple type="submit" class="my-2" label="Envoyer"
                                                 [disabled]="formAddConsigne.invalid"></button>
@@ -165,8 +183,7 @@
                                                             aria-hidden="true"></i>
                                                         <i pTooltip="Supprimer"
                                                             style="margin-left: 3%; cursor: pointer;"
-                                                            class="pi pi-trash"
-                                                            (click)="delete_c(rir)"
+                                                            class="pi pi-trash" (click)="delete_c(rir)"
                                                             aria-hidden="true"></i>
                                                     </td>
                                                 </tr>
@@ -200,40 +217,50 @@
                                             {{task.attribuate_to[0].firstname}} {{task.attribuate_to[0].lastname}}</th>
                                     </tr>
                                     <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.identifian}} </span></th>
-                                        <th>Libelle:<span style="color:#878787" > {{task?.libelle}} </span> </th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > <ng-container *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span></th>
+                                        <th>ID:<span style="color:#878787"> {{task?.identifian}} </span></th>
+                                        <th>Libelle:<span style="color:#878787"> {{task?.libelle}} </span> </th>
+                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787">
+                                                <ng-container
+                                                    *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span>
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet : <span style="color:#878787" >{{task?.project_id?.identifian}} </span></th>
-                                        <th colspan="2">Titre: <span style="color:#878787" >{{task.project_id.titre}}</span></th>
+                                        <th>ID Projet : <span style="color:#878787">{{task?.project_id?.identifian}}
+                                            </span></th>
+                                        <th colspan="2">Titre: <span
+                                                style="color:#878787">{{task.project_id.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span
+                                                    style="color:#878787"> {{t?.date_ajout |
+                                                    date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.number_of_hour}}</span></th>
+                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                                {{task?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">{{
                                             task.ticketId.statut}}</th>
                                     </tr>
                                     <br>
                                     <tr>
-                        
+
                                         <th colspan="2">
                                             <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
                                                 prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
                                         </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
+                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded"
+                                                (onClick)="modifierpoucentage(task)"></p-button></th>
                                     </tr>
                                     <br>
                                     <tr>
                                         <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">{{task.validation}}</th>
+                                            [ngStyle]="{'color': getColorForValidation(task.validation)}">
+                                            {{task.validation}}</th>
                                     </tr>
                                     <br>
 
@@ -250,8 +277,8 @@
                                 </div>
 
                                 <div style="display: flex; justify-content: center;">
-                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
-                                        [model]="items"></p-splitButton>
+                                    <p-splitButton label="Deplacer" icon="pi pi-send"
+                                        (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
 
                                 </div>
 
@@ -278,7 +305,7 @@
                             <br>
                             <div style="display: flex; justify-content: space-between;" class="col-12">
                                 <div class="col-6">
-                                    
+
                                     <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
                                         [draggable]="false" [resizable]="false">
 
@@ -321,8 +348,7 @@
                                                             aria-hidden="true"></i>
                                                         <i pTooltip="Supprimer"
                                                             style="margin-left: 3%; cursor: pointer;"
-                                                            class="pi pi-trash"
-                                                            (click)="delete_c(rir)"
+                                                            class="pi pi-trash" (click)="delete_c(rir)"
                                                             aria-hidden="true"></i>
                                                     </td>
                                                 </tr>
@@ -354,26 +380,35 @@
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th colspan="3" style="color:mediumvioletred;">Assigné à :
-                                            {{task.attribuate_to[0]?.firstname}} {{task.attribuate_to[0]?.lastname}}</th>
+                                            {{task.attribuate_to[0]?.firstname}} {{task.attribuate_to[0]?.lastname}}
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.identifian}}</span></th>
-                                        <th>Libelle:<span style="color:#878787" > {{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > <ng-container *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span></th>
+                                        <th>ID:<span style="color:#878787"> {{task?.identifian}}</span></th>
+                                        <th>Libelle:<span style="color:#878787"> {{task?.libelle}} </span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787">
+                                                <ng-container
+                                                    *ngFor="let t of task.ticketId"><u>{{t.customid}}</u><br></ng-container></span>
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet :<span style="color:#878787" > {{task?.project_id?.identifian}}</span></th>
-                                        <th colspan="2"><span style="color:#878787" >Titre: {{task?.project_id?.titre}}</span></th>
+                                        <th>ID Projet :<span style="color:#878787">
+                                                {{task?.project_id?.identifian}}</span></th>
+                                        <th colspan="2"><span style="color:#878787">Titre:
+                                                {{task?.project_id?.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span
+                                                    style="color:#878787"> {{t?.date_ajout |
+                                                    date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.number_of_hour}}</span></th>
+                                        <th>nombre d'heurs estimés:<span style="color:#878787">
+                                                {{task?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
                                             [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">{{
                                             task.ticketId.statut}}</th>
@@ -384,12 +419,14 @@
                                             <p-inputNumber inputId="integeronly" [disabled]="pourcentage_disabled"
                                                 prefix="%" [(ngModel)]="task.avancement"> </p-inputNumber>
                                         </th>
-                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded" (onClick)="modifierpoucentage(task)"></p-button></th>
+                                        <th><p-button icon="pi {{icone}}" styleClass="p-button-rounded"
+                                                (onClick)="modifierpoucentage(task)"></p-button></th>
                                     </tr>
                                     <br>
                                     <tr>
                                         <th colspan="3" width="10000px"
-                                        [ngStyle]="{'color': getColorForValidation(task.validation)}">{{task.validation}}</th>
+                                            [ngStyle]="{'color': getColorForValidation(task.validation)}">
+                                            {{task.validation}}</th>
                                     </tr>
                                     <br>
 
@@ -402,12 +439,12 @@
                                 <div>
 
                                     <p-button styleClass="p-button-warning" (click)="showDialog(task)"
-                                    icon="pi pi pi-bookmark" label="Ajouter une consigne"></p-button>
+                                        icon="pi pi pi-bookmark" label="Ajouter une consigne"></p-button>
                                 </div>
 
                                 <div style="display: flex; justify-content: center;">
-                                    <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
-                                        [model]="items"></p-splitButton>
+                                    <p-splitButton label="Deplacer" icon="pi pi-send"
+                                        (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
 
                                 </div>
 
@@ -434,7 +471,7 @@
                             <br>
                             <div style="display: flex; justify-content: space-between;" class="col-12">
                                 <div class="col-6">
-                                    
+
                                     <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
                                         [draggable]="false" [resizable]="false">
 
@@ -477,8 +514,7 @@
                                                             aria-hidden="true"></i>
                                                         <i pTooltip="Supprimer"
                                                             style="margin-left: 3%; cursor: pointer;"
-                                                            class="pi pi-trash"
-                                                            (click)="delete_c(rir)"
+                                                            class="pi pi-trash" (click)="delete_c(rir)"
                                                             aria-hidden="true"></i>
                                                     </td>
                                                 </tr>
@@ -515,11 +551,12 @@
                     <tr>
                         <td>{{task.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
                         <td>{{task.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td><ng-container *ngFor="let t of task.ticketId">{{t?.customid}} <br></ng-container><br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td><ng-container *ngFor="let t of task.ticketId">{{t?.customid}} <br></ng-container><br> <br>
+                            <br> <br><br> <br><br> <br> <br> <br></td>
                         <td>
 
                             <p-splitButton direction="up" label="Deplacer" icon="pi pi-send"
-                            (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
+                                (onDropdownClick)="save('info',task)" [model]="items"></p-splitButton>
                             <br> <br> <br> <br><br> <br><br> <br> <br> <br>
                         </td>
                     </tr>

@@ -63,6 +63,53 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
       this.USER = data;
+      this.route.queryParams.subscribe(params => {
+        if (params && params.data) {
+          this.receivedTask = JSON.parse(params.data);
+          this.itsTask = true;
+          this.taskID = this.receivedTask._id;
+          const newprojet = {
+            label: `${this.receivedTask.project_id.titre}`,
+            value: [this.receivedTask.project_id._id]
+          };
+          const newtask = {
+            label: `${this.receivedTask.libelle}`,
+            value: [this.receivedTask._id]
+          };
+          this.taskListe.push(newtask);
+          this.projectListe.push(newprojet);
+          console.log(newprojet)
+          this.TicketForm.patchValue({
+            project:newprojet,
+            task: newtask,
+            description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
+            priorite: this.receivedTask.priorite,
+  
+          })
+  
+        }else{
+          this.projectService.getProjects()
+          .then(data => {
+            this.projectListe = [];
+  
+            data.forEach(project => {
+              if (project?.responsable_id == this.USER?._id) {
+                const newprojet = {
+                  label: `${project.titre}`,
+                  value:[project._id]
+                };
+  
+                console.log(newprojet);
+                this.projectListe.push(newprojet);
+                console.log(this.projectListe);
+  
+  
+              }
+            })
+          })
+        }
+      });
+
     });
     this.SujetService.getAll().subscribe(data => {
       data.forEach(element => {
@@ -89,53 +136,6 @@ export class AjouterUnTicketProjetComponent implements OnInit {
         })
       })
     }
-    this.route.queryParams.subscribe(params => {
-      if (params && params.data) {
-        this.receivedTask = JSON.parse(params.data);
-        this.itsTask = true;
-        this.taskID = this.receivedTask._id;
-        const newprojet = {
-          label: `${this.receivedTask.project_id.titre}`,
-          value: [this.receivedTask.project_id._id]
-        };
-        const newtask = {
-          label: `${this.receivedTask.libelle}`,
-          value: [this.receivedTask._id]
-        };
-        this.taskListe.push(newtask);
-        this.projectListe.push(newprojet);
-        console.log(newprojet)
-        this.TicketForm.patchValue({
-          project:newprojet,
-          task: newtask,
-          description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
-          priorite: this.receivedTask.priorite,
-
-        })
-
-      }else{
-        this.projectService.getProjects()
-        .then(data => {
-          this.projectListe = [];
-
-          data.forEach(project => {
-            if (project.responsable_id == this.USER._id) {
-              const newprojet = {
-                label: `${project.titre}`,
-                value: [project._id]
-              };
-
-              console.log(newprojet);
-              this.projectListe.push(newprojet);
-              console.log(this.projectListe);
-
-
-            }
-          })
-        })
-      }
-    });
-
   }
 
 
@@ -185,6 +185,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     fileUpload.clear()
   }
   onProjectSelected(event) {
+    console.log ("hello");
     this.taskSelected = null
     this.taskListe = [];
     const projectID = event.value;
@@ -201,11 +202,17 @@ export class AjouterUnTicketProjetComponent implements OnInit {
       });
 
   }
-  onTacheSelected(event) {
+  onSelectedTache(event) {
+  console.log ("hello");
     const taskID = event.value;
+    console.log ("hello");
     this.projectService.getTask(taskID).then(data => {
       this.taskSelected = data;
       console.log(this.taskSelected)
+      this.TicketForm.patchValue({
+        description: this.taskSelected.libelle + ' :' + this.taskSelected.description_task,  
+        priorite: this.taskSelected.priorite,  
     })
-  }
+
+  })}
 }

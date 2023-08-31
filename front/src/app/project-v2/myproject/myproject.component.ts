@@ -19,6 +19,7 @@ import jwt_decode from "jwt-decode";
   styleUrls: ['./myproject.component.scss']
 })
 export class MyprojectComponent implements OnInit {
+  ticketList: any []=[]
   token: any;
   selectedTabIndex: number = 0;
   showproject: boolean = false;
@@ -105,6 +106,7 @@ export class MyprojectComponent implements OnInit {
     })
     //recuperation des info 
     this.getallinformation();
+    this.ticketList=[];
   }
   getallinformation() {
     this.userService.getInfoById(this.token.id).subscribe({
@@ -234,7 +236,10 @@ export class MyprojectComponent implements OnInit {
   showDialog(task: Task) {
     this.visible = true;
     this.actual_task=task;
-    this.task_consignes=task.consignes;    
+    this.task_consignes=task.consignes;
+    for (let i=0; i<task.ticketId.length; i++)  {
+      this.ticketList.push(task.ticketId[i].customid +":"+ task.ticketId[i].agent_id.firstname+" "+task.ticketId[i].agent_id.lastname);
+    }  
     
   
   }

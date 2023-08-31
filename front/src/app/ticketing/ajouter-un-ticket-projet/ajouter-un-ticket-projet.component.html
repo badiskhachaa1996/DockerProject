@@ -8,8 +8,8 @@
         </div>
         <div class="field col-12 md:col-6">
             <label For="task">Tache <span style="color: red;"> * </span></label>
-            <p-dropdown [options]="taskListe" formControlName="task"placeholder="Choisissez une tache">
-                (onChange)="onTacheSelected($event)"</p-dropdown>
+            <p-dropdown [options]="taskListe" formControlName="task"placeholder="Choisissez une tache"
+                (onChange)="onSelectedTache($event)"></p-dropdown>
         </div>
         <div class="field col-12 md:col-4">
             <label For="service">Service <span style="color: red;"> * </span></label>
