@@ -72,17 +72,17 @@ export class DashboardRhComponent implements OnInit {
             this.collaborateurs.forEach((collaborateur: Collaborateur) => {
               const { user_id }: any = collaborateur;
 
-              if (user_id.statut == 'Disponible') {
+              if (user_id?.statut == 'Disponible') {
                 this.numberOfDisponible++;
-              } else if (user_id.statut == 'En congé') {
+              } else if (user_id?.statut == 'En congé') {
                 this.numberOfConge++;
-              } else if (user_id.statut == 'En réunion') {
+              } else if (user_id?.statut == 'En réunion') {
                 this.numberOfReunion++;
-              } else if (user_id.statut == 'Occupé') {
+              } else if (user_id?.statut == 'Occupé') {
                 this.numberOfOccupe++;
-              } else if (user_id.statut == 'Absent') {
+              } else if (user_id?.statut == 'Absent') {
                 this.numberOfAbsent++;
-              } else if (user_id.statut == 'En pause') {
+              } else if (user_id?.statut == 'En pause') {
                 this.numberOfPause++;
               }
             });

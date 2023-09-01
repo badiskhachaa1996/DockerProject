@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 var fs = require('fs');
 const { PointeuseData } = require("../models/PointeuseData");
-//*/5 * * * * node /home/ubuntu/ems3/back/scriptCron/collectPointeuseData.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-collectPointeuseData.log 2>&1
+//*/5 9-17 * * 1-5 node /home/ubuntu/ems3/back/scriptCron/collectPointeuseData.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-collectPointeuseData.log 2>&1
 mongoose
     .connect(`mongodb://127.0.0.1:27017/learningNode`, {
         useCreateIndex: true,
@@ -10,12 +10,10 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
-        console.log('CONNECTION MONFO')
         let pathToDirectory = '/var/www/P' //'/var/www/P'
         const directoriesInDIrectory = fs.readdirSync(pathToDirectory, { withFileTypes: true })
             .filter((item) => item.isDirectory())
             .map((item) => item.name);
-        console.log(directoriesInDIrectory)
         directoriesInDIrectory.forEach(serial_number => {
             let fileData = fs.readFileSync(pathToDirectory + "/" + serial_number + "/users").toString()
 
@@ -48,16 +46,32 @@ mongoose
             let posFinger = fileData.indexOf('fingers:')
             let nb_fingers = fileData.substring(posFinger + 'fingers:'.length, fileData.indexOf('/', posFinger)).replace(' ', '')
 
+            //Partie getUsers
+            let users = []
+            let indexData = 0
+            for (let index = 0; index < nb_users; index++) {
+                let posName = fileData.indexOf('Name     : ', indexData) + 'Name     : '.length
+                let name = fileData.substring(posName, fileData.indexOf('   ', posName))
+
+                let posUID = fileData.indexOf('User ID : ', indexData) + 'User ID : '.length
+                let uid = fileData.substring(posUID, fileData.indexOf('   ', posUID))
+                indexData = posUID
+                users.push({ UID: uid, name })
+                console.log({ UID: uid, name })
+            }
+
+
+
             PointeuseData.findOne({ serial_number }).then(data => {
                 if (data) {
                     PointeuseData.findByIdAndUpdate(data._id, {
-                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers
+                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, users
                     }).then(pd => {
                         console.log('Update de ' + serial_number)
                     })
                 } else {
                     let pd = new PointeuseData({
-                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, serial_number
+                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, serial_number, users
                     })
                     pd.save().then(newPd => {
                         console.log('Ajout de ' + serial_number)

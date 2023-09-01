@@ -235,7 +235,36 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestion des demandes et reclamation',
                                     icon: 'pi pi-check-square',
-                                    routerLink: ['/rh/demandes-reclamations'],
+                                    items: [
+                                        {
+                                            label: 'Tickets non assignés',
+                                            icon: 'pi pi-clock',
+                                            routerLink: [
+                                                '/ticketing/suivi/non-assignes/Ressources Humaines',
+                                            ],
+                                        },
+                                        {
+                                            label: 'Tickets assignés - En attente de traitement',
+                                            icon: 'pi pi-inbox',
+                                            routerLink: [
+                                                '/ticketing/suivi/attente-de-traitement/Ressources Humaines',
+                                            ],
+                                        },
+                                        {
+                                            label: 'Tickets traités',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: [
+                                                '/ticketing/suivi/traite/Ressources Humaines',
+                                            ],
+                                        },
+                                        {
+                                            label: 'Tickets refusés',
+                                            icon: 'pi pi-check-circle',
+                                            routerLink: [
+                                                '/ticketing/suivi/refuse/Ressources Humaines',
+                                            ],
+                                        },
+                                    ]
                                 },
                                 {
                                     label: 'Calendrier',
@@ -1102,12 +1131,23 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
-                                    label: "Configuration Pointeuse",
+                                    label: "Pointeuse",
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/pointeuse/configuration']
+                                    items: [
+                                        {
+                                            label: "Pointeuse",
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['/pointeuse/configuration']
+                                        }, {
+                                            label: "Pointage",
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['/pointage/configuration']
+                                        },
+                                    ]
+
                                 },
                                 {
-                                    label: 'Configuration Ticketing',
+                                    label: 'Ticketing',
                                     icon: 'pi pi-cog',
                                     routerLink: ['/ticketing/configuration']
                                 },

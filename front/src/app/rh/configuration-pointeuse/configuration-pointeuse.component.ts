@@ -30,7 +30,7 @@ export class ConfigurationPointeuseComponent implements OnInit {
   ]
 
   serialNumberList = [
-    { label: 'CLN5210560094', value: 'CLN5210560094' }
+    //{ label: 'CLN5210560094', value: 'CLN5210560094' }
   ]
 
   pointeuseDic = {}
@@ -43,8 +43,8 @@ export class ConfigurationPointeuseComponent implements OnInit {
     this.PointeuseService.getData().subscribe(data => {
       data.forEach(pd => {
         this.pointeuseDic[pd.serial_number] = pd
+        this.serialNumberList.push({ label: pd.serial_number, value: pd.serial_number })
       })
-      console.log(this.pointeuseDic)
     })
   }
 
@@ -113,6 +113,9 @@ export class ConfigurationPointeuseComponent implements OnInit {
   dataUser
   seeUsers(machine: Pointeuse) {
     this.visibleUser = true
+    this.PointeuseService.getDataFromSN(machine.serial_number).subscribe(pd => {
+      this.dataPopUp = pd
+    })
   }
 
   scrollToTop() {
