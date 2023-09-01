@@ -10,7 +10,7 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
-        let pathToDirectory = '../storage/P' //'/var/www/P'
+        let pathToDirectory = '/var/www/P' //'/var/www/P'
         const directoriesInDIrectory = fs.readdirSync(pathToDirectory, { withFileTypes: true })
             .filter((item) => item.isDirectory())
             .map((item) => item.name);
