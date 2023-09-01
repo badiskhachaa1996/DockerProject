@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Pointeuse } from 'src/app/models/Pointeuse';
 import { PointeuseData } from 'src/app/models/PointeuseData';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-configuration-pointeuse',
@@ -12,6 +13,7 @@ import { PointeuseService } from 'src/app/services/pointeuse.service';
 })
 export class ConfigurationPointeuseComponent implements OnInit {
   pointeuses: Pointeuse[]
+  collaborateurList = []
   localisationDropdown = [
     { label: 'Paris - Champs sur Marne', value: 'Paris - Champs sur Marne' },
     { label: 'Paris - Louvre', value: 'Paris - Louvre' },
@@ -34,18 +36,32 @@ export class ConfigurationPointeuseComponent implements OnInit {
   ]
 
   pointeuseDic = {}
-  constructor(private PointeuseService: PointeuseService, private ToastService: MessageService) { }
+  constructor(private PointeuseService: PointeuseService, private ToastService: MessageService, private rhService: RhService) { }
 
   ngOnInit(): void {
     this.PointeuseService.getAll().subscribe(data => {
       this.pointeuses = data
     })
     this.PointeuseService.getData().subscribe(data => {
+      console.log(data)
       data.forEach(pd => {
         this.pointeuseDic[pd.serial_number] = pd
         this.serialNumberList.push({ label: pd.serial_number, value: pd.serial_number })
       })
     })
+    this.onGetCollaborateurs()
+  }
+
+  onGetCollaborateurs(): void {
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        console.log(response)
+        response.forEach(c => {
+          if (c.user_id)
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.user_id._id })
+        })
+      })
+      .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
   }
 
   showAdd = false
@@ -115,6 +131,13 @@ export class ConfigurationPointeuseComponent implements OnInit {
     this.visibleUser = true
     this.PointeuseService.getDataFromSN(machine.serial_number).subscribe(pd => {
       this.dataPopUp = pd
+    })
+  }
+
+  updatePointeuse() {
+    console.log(this.dataPopUp)
+    this.PointeuseService.updateData({ ...this.dataPopUp }).subscribe(p => {
+      console.log(p)
     })
   }
 

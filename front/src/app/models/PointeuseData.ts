@@ -13,7 +13,7 @@ export class PointeuseData {
         public adresse_mac?: string,
         public nb_faces?: number,
         public nb_fingers?: number,
-        public users?: string
+        public users?: any[]
     ) { }
 
 }

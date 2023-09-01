@@ -15,7 +15,11 @@ const schemea = mongoose.Schema({
     users: {
         type: [{
             UID: { type: Number },
-            name: { type: String }
+            name: { type: String },
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "user"
+            }
         }]
     }
 });

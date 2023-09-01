@@ -36,6 +36,12 @@ app.get('/getData', (req, res, next) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
 
+app.put('/updateData', (req, res, next) => {
+    PointeuseData.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
+        res.status(200).send(doc);
+    }).catch((error) => { console.error(error); res.status(500).send(error); });
+});
+
 app.get('/getDataFromSN/:sn', (req, res, next) => {
     PointeuseData.findOne({ serial_number: req.params.sn })
         .then((formFromDb) => { res.status(200).send(formFromDb); })

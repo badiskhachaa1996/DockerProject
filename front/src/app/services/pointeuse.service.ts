@@ -20,6 +20,11 @@ export class PointeuseService {
     let registreUrl = this.apiUrl + "update";
     return this.httpClient.put<Pointeuse>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  updateData(data: PointeuseData) {
+    let registreUrl = this.apiUrl + "updateData";
+    return this.httpClient.put<PointeuseData>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   delete(id: string) {
     let registreUrl = this.apiUrl + "delete/" + id;
     return this.httpClient.delete<Pointeuse>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
