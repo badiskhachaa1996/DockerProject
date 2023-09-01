@@ -221,6 +221,9 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
+import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
+import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+
 import {
   MsalInterceptor,
   MsalModule,
@@ -349,13 +352,8 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
-<<<<<<< Updated upstream
-import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
-import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
-=======
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
->>>>>>> Stashed changes
 
 @NgModule({
   imports: [
@@ -714,13 +712,10 @@ import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.compo
     BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent,
-<<<<<<< Updated upstream
     CalendrierRhComponent,
-    ConfigurationPointageComponent
-=======
+    ConfigurationPointageComponent,
     CvComponent,
     AjoutCvComponent,
->>>>>>> Stashed changes
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
