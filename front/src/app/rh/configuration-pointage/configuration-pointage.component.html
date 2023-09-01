@@ -43,8 +43,11 @@
                                 <td>
                                     {{point.uid}}
                                 </td>
-                                <td>
-                                    En dévéloppement
+                                <td *ngIf="collaborateurDic && uidDic && collaborateurDic[uidDic[point.uid]]">
+                                    {{collaborateurDic[uidDic[point.uid]]}}
+                                </td>
+                                <td *ngIf="!collaborateurDic || !uidDic || !collaborateurDic[uidDic[point.uid]]">
+                                    Aucun assigné
                                 </td>
                                 <td>
                                     {{point.type}}

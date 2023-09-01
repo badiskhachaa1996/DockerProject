@@ -188,11 +188,15 @@
     <hr />
 </p-sidebar>
 
-<p-sidebar [style]="{width:'30em'}" [(visible)]="visibleUser" position="left" [baseZIndex]="10000" [modal]="false">
+<p-sidebar [style]="{width:'50em'}" [(visible)]="visibleUser" position="left" [baseZIndex]="10000" [modal]="false">
     <h4 style="font-weight:bold">Liste des utilisateurs</h4>
     <hr />
     <ul>
-        <li *ngFor="let user of dataPopUp?.users">{{user.UID}} : {{ user.name }}</li>
+        <li *ngFor="let user of dataPopUp?.users;let i = index;">
+            {{user.UID}} : {{ user.name }} attribué à : <p-dropdown [options]="collaborateurList" autoWidth="false"
+                placeholder="Choisissez un collaborateur" [style]="{'width':'100%'}" [(ngModel)]="user.user_id"
+                (onChange)="updatePointeuse()"></p-dropdown><br><br>
+        </li>
     </ul>
     <hr />
 </p-sidebar>
