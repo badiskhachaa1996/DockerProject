@@ -15,6 +15,7 @@ export class ConfigurationPointageComponent implements OnInit {
   pointages = {}
   collaborateurDic = {}
   uidDic = {}
+  dateAjr = new Date()
 
   ngOnInit(): void {
     this.PoiService.getAll().subscribe(ps => {
@@ -24,13 +25,19 @@ export class ConfigurationPointageComponent implements OnInit {
       pd.forEach(p => {
         p.users.forEach(u => {
           if (u.user_id) {
-            this.uidDic[u.UID] = u.user_id
+            if (this.uidDic[p.serial_number]) {
+              this.uidDic[p.serial_number][u.UID] = u.user_id
+            } else {
+              this.uidDic[p.serial_number] = {}
+              this.uidDic[p.serial_number][u.UID] = u.user_id
+            }
+
           }
         })
       })
       console.log(this.uidDic)
     })
-    this.PointageService.getAll().subscribe(ps => {
+    this.PointageService.getAllToday().subscribe(ps => {
       console.log(ps)
       ps.forEach(p => {
         if (this.pointages[p.machine]) {
@@ -47,7 +54,6 @@ export class ConfigurationPointageComponent implements OnInit {
           if (c.user_id)
             this.collaborateurDic[c.user_id._id] = `${c.user_id.lastname} ${c.user_id.firstname}`
         })
-        console.log(this.collaborateurDic)
       })
   }
 

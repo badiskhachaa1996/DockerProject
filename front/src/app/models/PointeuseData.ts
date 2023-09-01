@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export class PointeuseData {
 
     constructor(
@@ -13,7 +15,7 @@ export class PointeuseData {
         public adresse_mac?: string,
         public nb_faces?: number,
         public nb_fingers?: number,
-        public users?: any[]
+        public users?: [{ UID: number, machine: string; user_id: User }]
     ) { }
 
 }
