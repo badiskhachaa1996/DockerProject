@@ -57,7 +57,6 @@ mongoose
                 let uid = fileData.substring(posUID, fileData.indexOf('   ', posUID))
                 indexData = posUID
                 users.push({ UID: uid, name })
-                console.log({ UID: uid, name })
             }
 
 
@@ -65,7 +64,7 @@ mongoose
             PointeuseData.findOne({ serial_number }).then(data => {
                 if (data) {
                     PointeuseData.findByIdAndUpdate(data._id, {
-                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers, users
+                        nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers
                     }).then(pd => {
                         console.log('Update de ' + serial_number)
                     })

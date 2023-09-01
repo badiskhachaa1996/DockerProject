@@ -39,7 +39,8 @@ mongoose
 
                                 let r = new PointageData({
                                     machine: serial_number,
-                                    date, uid: UID, type
+                                    date, uid: UID, type,
+                                    updateDate: new Date()
                                 })
                                 r.save().then(newPointage => {
                                     console.log('Ajout de ', { ...newPointage._doc })
