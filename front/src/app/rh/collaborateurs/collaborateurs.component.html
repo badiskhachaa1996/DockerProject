@@ -933,7 +933,7 @@
 							{{'---'}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{20}} jours
+							{{afficherAnciennete(collaborateur)}} jours
 						</td>
 						<td style="min-width: 10rem;">
 							{{collaborateur.contrat_type}} jours
@@ -961,8 +961,10 @@
 								(click)="onGetHistoriqueCra(collaborateur.user_id?._id); showHistoriqueCra = true;"></i>
 							<i pTooltip="Envoyer un mail" (click)="onInitEmailView(collaborateur)"
 								tooltipPosition="bottom" class="pi pi-envelope m-1" style="color: #C0C0C0"></i>
-							<i pTooltip="Voir le résumé des congés" (click)="onInitConge(collaborateur)" tooltipPosition="bottom"
-								class="pi pi-calendar-minus m-1" style="color: #469cff"></i>
+							<i pTooltip="Voir le résumé des congés" (click)="onInitConge(collaborateur)"
+								tooltipPosition="bottom" class="pi pi-calendar-minus m-1" style="color: #469cff"></i>
+							<i pTooltip="Voir l'emploi du temps du salarié" (click)="seeCalendar(collaborateur)"
+								tooltipPosition="bottom" class="pi pi-calendar m-1" style="color: #00326b"></i>
 						</td>
 					</tr>
 				</ng-template>
@@ -983,15 +985,17 @@
 
 <p-dialog header="Nombre de jours de congés" [(visible)]="displayConge" [modal]="true">
 	<div class="field col-12" *ngIf="dataConge">
-		<label htmlFor="firstname">Définir le nombre des jours de congé payé / mois pour le collaborateur (CP)</label><br>
-		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}" autoWidth="false"> </p-inputNumber>
+		<label htmlFor="firstname">Définir le nombre des jours de congé payé / mois pour le collaborateur
+			(CP)</label><br>
+		<p-inputNumber [(ngModel)]="dataConge.conge_nb" (onBlur)="onUpdateConge()" [style]="{'width':'100%'}"
+			autoWidth="false"> </p-inputNumber>
 	</div>
 	<div *ngIf="dataConge">
-		Le nombre de jours de congés payés acquis CPA : {{calcCPA()}}<br>
+		Le nombre de jours de congés payés acquis : {{calcCPA()}}<br>
 
-		Le nombre de jours de congés payés pris CPP = {{calcCPA()-nbrConge}}<br>
-	
-		Le nombre de jours de congés payés restants CPR= {{calcCPA()-(calcCPA()-nbrConge)}}<br>
+		Le nombre de jours de congés payés pris = {{calcCPA()-nbrConge}}<br>
+
+		Le nombre de jours de congés payés restants = {{calcCPA()-(calcCPA()-nbrConge)}}<br>
 	</div>
 
 </p-dialog>

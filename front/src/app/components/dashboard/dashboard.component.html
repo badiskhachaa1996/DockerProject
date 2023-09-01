@@ -66,8 +66,9 @@
                         [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
                 </div>
                 <div class="col-6 md:col-3">
-                    <h6>Vous êtes arrivé au <br> travail à: <strong>{{dailyCheck?.check_in | date: 'HH:mm'}}</strong>
-                    </h6>
+                    <h5>Heure de check In </h5>
+                    <h6><strong>Online</strong>{{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
+                    <h6><strong>Pointeuse</strong>En dévéloppement </h6>
                     <h6>Temps passé au <br> travail:
                         <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
                     </h6>
@@ -796,6 +797,20 @@
                     </tr>
                 </ng-template>
             </p-table>
+        </p-tabPanel>
+        <p-tabPanel header="Calendrier">
+            <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
+            </p-fullCalendar>
+            <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+                [style]="{width: '75vw'}">
+                <div class="col-12 grid">
+                    <div class="col-12">
+                        <p>
+                            {{dataEvent?.note}}
+                        </p>
+                    </div>
+                </div>
+            </p-dialog>
         </p-tabPanel>
         </p-tabView>
     </div>

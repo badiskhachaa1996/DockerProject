@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver';
 import mongoose from 'mongoose';
 import { AuthService } from 'src/app/services/auth.service';
 import { CongeService } from 'src/app/services/conge.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-collaborateurs',
@@ -112,7 +113,7 @@ export class CollaborateursComponent implements OnInit {
 
   constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
     private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder,
-    private UserService: AuthService, private congeService: CongeService) { }
+    private UserService: AuthService, private congeService: CongeService, private router: Router) { }
 
   ngOnInit(): void {
     // décodage du token
@@ -651,7 +652,16 @@ export class CollaborateursComponent implements OnInit {
     return Math.floor(Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1);
   }
 
+  afficherAnciennete(coll) {
+    var Difference_In_Time = new Date(coll.date_demarrage).getTime() - new Date().getTime();
+    return Math.floor(Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1);
+  }
+
   calcCPA(): number {
     return Math.floor((this.dataConge.conge_nb * this.calculDay()) / 30)
+  }
+
+  seeCalendar(c: Collaborateur) {
+    this.router.navigate(['rh/calendrier', c.user_id._id])
   }
 }
