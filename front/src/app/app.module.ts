@@ -349,8 +349,13 @@ import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+<<<<<<< Updated upstream
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+=======
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
+>>>>>>> Stashed changes
 
 @NgModule({
   imports: [
@@ -709,8 +714,13 @@ import { ConfigurationPointageComponent } from './rh/configuration-pointage/conf
     BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent,
+<<<<<<< Updated upstream
     CalendrierRhComponent,
     ConfigurationPointageComponent
+=======
+    CvComponent,
+    AjoutCvComponent,
+>>>>>>> Stashed changes
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

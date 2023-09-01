@@ -247,6 +247,8 @@ import { DocCheckerComponent } from './international/generation-doc/doc-checker/
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
@@ -1275,8 +1277,10 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-    { path: 'imatch', component: IMatchComponent }
-
+    { path: 'gen-cv', component: AjoutCvComponent },
+    // Accessible from anywhere
+    { path: 'imatch', component: IMatchComponent },
+    { path: 'imatch/cv/:id', component: CvComponent },
 ]
 
 

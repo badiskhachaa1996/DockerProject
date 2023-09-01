@@ -19,6 +19,7 @@
 
 .header-top {
     box-shadow: inset 0px 30px 0px 0px #F2F2F2;
+    padding-top: 30px;
 }
 
 .steps-imatch {
@@ -151,10 +152,45 @@
     margin-bottom: 15px;
 }
 
-.cv-card-information img {
+.cv-clear-button {
+    background: none;
+    color: #AAAAAA;
+    border: none !important;
+
+}
+
+.pad-bt-16 {
+    padding-bottom: 16px;
+}
+
+.cv-clear-button:hover,.cv-clear-button:focus, .cv-clear-button:active {
+    background: none;
+    color: #D95525;
+    border: none !important;
+}
+
+.cv-search {
+    left: 1.75rem !important;
+    color: #9D9D9D !important;
+}
+
+.cv-search {
+    left: 1.75rem !important;
+    color: #9D9D9D !important;
+}
+
+.cv-input-text {
+    padding-left: 3.5rem;
+    border-radius: 100px;
+
+}
+
+.cv-card-information .img-card {
     width: 80px;
     height: 80px;
     border-radius: 150px;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .cv-card-information .cv-card-details {

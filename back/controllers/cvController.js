@@ -84,6 +84,12 @@ app.get("/get-cv", (req, res) => {
     .catch((error) => { res.status(400).send(error.message); });
 });
 
+app.get("/get-object-cv", (req, res) => {
+    CvType.findOne({ _id: req.params.id })?.populate('user_id')
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(400).send(error.message); });
+});
+
 
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id", (req, res) => {

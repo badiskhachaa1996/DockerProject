@@ -69,8 +69,7 @@ export class CV {
             type: string
 
         }[],
-        public mobilite_lieu?: string,
-        public mobilite_autre?: string,
+        public mobilite_lieu?: string[],
         public date_creation?: Date,
         public centre_interets?: string,
         public a_propos?: string,

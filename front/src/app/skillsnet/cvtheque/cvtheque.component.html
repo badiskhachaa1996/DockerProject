@@ -145,16 +145,12 @@
                 </div>
 
                 <div class="field col-6">
-                    <label>Mobilité - Ville</label>
-                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
-                        formControlName="mobilite_lieu" />
-                </div>
+                    <label>Test Mobilité - Ville</label>
+                <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100" formControlName="locations"></p-multiSelect>
 
-                <div class="field col-6">
-                    <label>Mobilité - Pays</label>
-                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
-                </div>
-
+            </div>
+                
                 <div class="field col-12">
                     <label>Centres d'intérêt</label>
                     <input pInputText type="text" placeholder="Ex: Basketball, Littérature"
@@ -644,18 +640,13 @@
                         placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien"
                         formControlName="video_lien" />
                 </div>-->
-
-
+                
                 <div class="field col-6">
-                    <label>Mobilité - Ville</label>
-                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
-                        formControlName="mobilite_lieu" />
-                </div>
+                    <label>Test Mobilité - Ville</label>
+                <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100" formControlName="locations"></p-multiSelect>
 
-                <div class="field col-6">
-                    <label>Mobilité - Pays</label>
-                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
-                </div>
+            </div>
 
                 <div class="field col-12">
                     <label>Centres d'intérêt</label>

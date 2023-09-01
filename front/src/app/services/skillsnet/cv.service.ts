@@ -74,6 +74,14 @@ export class CvService {
         complete: () => console.log('CV modifié'),
       })
     });
+
+  }
+
+
+
+  getByID(id: any){
+    let cvUrl=this.apiUrl+"/get-object-cv/"+id;
+    return this.httpClient.get<any>(cvUrl,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   // methode de recupération d'un cv via son user id
