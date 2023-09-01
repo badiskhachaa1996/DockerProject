@@ -249,6 +249,7 @@ import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
+import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
 const routes: Routes = [
     {
         path: '',
@@ -1119,63 +1120,17 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             /*Ticketing V2*/
-            {
-                path: 'ticketing/gestion/ajout',
-                component: AjoutTicketComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/gestion/mes-tickets',
-                component: MesTicketsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/attente-de-traitement',
-                component: ListTicketsEnAttenteDeTraitementComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/traite',
-                component: ListTicketsTraiteComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/refuse',
-                component: ListTicketsRefuseComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/non-assignes',
-                component: TicketNonAssignesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/gestion/assignes',
-                component: TicketsAssignesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/configuration',
-                component: ConfigurationComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/dashboard',
-                component: DashboardTicketingComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing-igs',
-                component: AjoutTicketComponent,
-                canActivate: [AuthGuardService],
-            },
             { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/ajout/:service_id', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/attente-de-traitement', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/attente-de-traitement/:service', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/traite', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/traite/:service', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/refuse/:service', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/non-assignes/:service', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
@@ -1255,6 +1210,7 @@ const routes: Routes = [
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
             { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
+            { path: 'pointage/configuration', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
 
             //Module Booking V2
             {
