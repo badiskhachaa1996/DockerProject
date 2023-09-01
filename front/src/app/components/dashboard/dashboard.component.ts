@@ -24,6 +24,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { environment } from 'src/environments/environment';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridMonth from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Note } from 'src/app/models/Note';
@@ -57,6 +58,8 @@ import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ServService } from 'src/app/services/service.service';
 import { Ticket } from 'src/app/models/Ticket';
+import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
+import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -301,7 +304,7 @@ export class DashboardComponent implements OnInit {
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
     private rhService: RhService, private congeService: CongeService,
     private ActuRHService: ActualiteRHService, private TicketService: TicketService,
-    private ServiceServ: ServService
+    private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
   ) { }
 
 
@@ -673,6 +676,8 @@ export class DashboardComponent implements OnInit {
         this.onGetTicketsRH()
         // Charger l'assiduité
         this.OnCalcAssiduite()
+        //charger les events du Calendar
+        this.loadCalendar()
       },
       error: (error) => { console.log(error) },
     });
@@ -1224,5 +1229,104 @@ export class DashboardComponent implements OnInit {
       var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
       this.formAddConge.patchValue({ nb_jour: Difference_In_Days })
     }
+  }
+  eventsRH = []
+  optionsRH = {
+    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
+    defaultDate: new Date(),
+    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    header: {
+      left: "title",
+      right: 'prev,next'
+      // left: 'prev,next'
+    },
+    locale: 'fr',
+    timeZone: 'local',
+    contentHeight: 500,
+    eventClick: this.eventClickFCRH.bind(this),
+    events: [
+
+    ],
+    defaultView: "dayGridMonth",
+    minTime: '08:00:00',
+    firstDay: 1,
+    selectable: true,
+  };
+  displayData = false
+  dataEvent: EventCalendarRH
+  eventClickFCRH(event) {
+    this.displayData = true
+    this.dataEvent = event.event.extendedProps;
+    //console.log(event)
+  }
+
+  addEvent(event: EventCalendarRH) {
+    let backgroundColor = '#1F618D'
+    let borderColor = '#17202A'
+    if (event.type == 'Jour férié France') {
+      backgroundColor = '#D4AC0D'
+      borderColor = '#D35400'
+    } else if (event.type == 'Autre événement') {
+      backgroundColor = '#9B59B6'
+      borderColor = '#8E44AD'
+    } else if (event.type == "Congé Validé") {
+      backgroundColor = '#1ABC9C'
+      borderColor = '#186A3B'
+    } else if (event.type == "Absence Non Justifié") {
+      backgroundColor = '#E74C3C'
+      borderColor = '#7B241C'
+    }
+    this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    //  this.events.push({ title: "TEST", date: new Date() })
+    this.options.events = this.eventsRH
+    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
+    //this.cd.detectChanges();
+
+  }
+
+  loadCalendar() {
+    this.eventsRH = []
+    this.CalendrierRHService.getAll().subscribe(events => {
+      events.forEach(ev => { this.addEvent(ev) })
+      this.dailyCheckService.getUserChecks(this.token.id).then(dcs => {
+        this.congeService.getAllByUserId(this.token.id).then(conges => {
+          //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
+          let congesList: Date[] = []
+          let absencesList: Date[] = []
+          let presencesList: Date[] = []
+          conges.forEach(c => {
+            let dateC = new Date(c.date_debut)
+            dateC.setDate(dateC.getDate() - 1)
+            while (dateC < new Date(c.date_fin)) {
+              congesList.push(new Date(dateC))
+              this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
+              dateC.setDate(dateC.getDate() + 1)
+            }
+          })
+          dcs.forEach(dc => {
+            presencesList.push(new Date(dc.check_in))
+          })
+          let dateDebut = new Date()
+          let dateEnd = new Date()
+          dateEnd.setFullYear(dateEnd.getFullYear() - 1)
+          console.log(congesList, conges)
+          while (dateEnd < dateDebut) {
+            if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
+              //Vérifier si il a été présent ou si il a été en congé 
+              if (presencesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                congesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
+                absencesList.push(dateDebut)
+                this.addEvent(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
+              } else {
+                //console.log(dateDebut,events)
+              }
+            }
+            dateDebut.setDate(dateDebut.getDate() - 1)
+          }
+        })
+      })
+    })
+
   }
 }

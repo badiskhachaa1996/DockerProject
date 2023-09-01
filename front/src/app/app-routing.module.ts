@@ -768,6 +768,7 @@ const routes: Routes = [
             },
             { path: 'rh/dashboard', component: DashboardRhComponent },
             { path: 'rh/calendrier', component: CalendrierRhComponent },
+            { path: 'rh/calendrier/:id', component: CalendrierRhComponent },
 
             /** end */
             {
