@@ -3,7 +3,7 @@ import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleService } from 'src/app/services/ecole.service';
-
+import * as html2pdf from 'html2pdf.js';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
@@ -21,21 +21,22 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Annonce } from 'src/app/models/Annonce';
 import { Matching } from 'src/app/models/Matching';
+import { sub } from 'date-fns';
 
 
 
 @Component({
   selector: 'app-ajout-cv',
   templateUrl: './ajout-cv.component.html',
-  styleUrls: ['./ajout-cv.component.scss','../../../../../assets/css/bootstrap.min.css']
+  styleUrls: ['./ajout-cv.component.scss', '../../../../../assets/css/bootstrap.min.css']
 })
 export class AjoutCvComponent implements OnInit {
-  
-    // partie dedié aux CV
-    cvLists: CV[] = [];
-    showFormAddCV: boolean = true;
-    formAddCV: FormGroup;
-    showFormUpdateCV: boolean = false;
+  cv: CV
+  // partie dedié aux CV
+  cvLists: CV[] = [];
+  showFormAddCV: boolean = true;
+  formAddCV: FormGroup;
+  showFormUpdateCV: boolean = false;
   languesList: any[] = [
     { label: 'Français' },
     { label: 'Anglais' },
@@ -83,64 +84,64 @@ export class AjoutCvComponent implements OnInit {
   selectedMultiOutils: string[] = [];
   selectedMultilang: string[] = [];
   locations: any[] = [
-    { label: "100% Télétravail",value: "100% Télétravail"},
-    { label: "Aix-Marseille",value: "Aix-Marseille"},
-    { label: "Amiens",value: "Amiens"},
-    { label: "Angers",value: "Angers"},
-    { label: "Annecy",value: "Annecy"},
-    { label: "Auxerre",value: "Auxerre"},
-    { label: "Avignon",value: "Avignon"},
-    { label: "Bayonne",value: "Bayonne"},
-    { label: "Bergerac",value: "Bergerac"},
-    { label: "Besançon",value: "Besançon"},
-    { label: "Biarritz",value: "Biarritz"},
-    { label: "Bordeaux",value: "Bordeaux"},
-    { label: "Boulogne-sur-mer",value: "Boulogne-sur-mer"},
-    { label: "Brest",value: "Brest"},
-    { label: "Caen",value: "Caen"},
-    { label: "Calais",value: "Calais"},
-    { label: "Cannes",value: "Cannes"},
-    { label: "Chambéry",value: "Chambéry"},
-    { label: "Clermont-Ferrand",value: "Clermont-Ferrand"},
-    { label: "Dijon",value: "Dijon"},
-    { label: "France",value: "France"},
-    { label: "Grenoble",value: "Grenoble"},
-    { label: "La Réunion",value: "La Réunion"},
-    { label: "La Roche sur Yon",value: "La Roche sur Yon"},
-    { label: "La Rochelle",value: "La Rochelle"},
-    { label: "Le Havre",value: "Le Havre"},
-    { label: "Le Mans",value: "Le Mans"},
-    { label: "Lille",value: "Lille"},
-    { label: "Limoges",value: "Limoges"},
-    { label: "Lyon",value: "Lyon"},
-    { label: "Mâcon",value: "Mâcon"},
-    { label: "Metz",value: "Metz"},
-    { label: "Montauban",value: "Montauban"},
-    { label: "Montpellier",value: "Montpellier"},
-    { label: "Mulhouse",value: "Mulhouse"},
-    { label: "Nancy",value: "Nancy"},
-    { label: "Nantes",value: "Nantes"},
-    { label: "Nice",value: "Nice"},
-    { label: "Nîmes",value: "Nîmes"},
-    { label: "Niort",value: "Niort"},
-    { label: "Orléans",value: "Orléans"},
-    { label: "Oyonnax",value: "Oyonnax"},
-    { label: "Paris/Ile de France",value: "Paris/Ile de France"},
-    { label: "Pau",value: "Pau"},
-    { label: "Perpignan",value: "Perpignan"},
-    { label: "Poitiers",value: "Poitiers"},
-    { label: "Reims",value: "Reims"},
-    { label: "Rennes",value: "Rennes"},
-    { label: "Rodez",value: "Rodez"},
-    { label: "Rouen",value: "Rouen"},
-    { label: "Saint-Etienne",value: "Saint-Etienne"},
-    { label: "Saint-Tropez",value: "Saint-Tropez"},
-    { label: "Strasbourg",value: "Strasbourg"},
-    { label: "Toulon",value: "Toulon"},
-    { label: "Toulouse",value: "Toulouse"},
-    { label: "Troyes",value: "Troyes"},
-    { label: "Valence",value: "Valence"},
-    { label: "Guadeloupe",value: "Guadeloupe"},
+    { label: "100% Télétravail", value: "100% Télétravail" },
+    { label: "Aix-Marseille", value: "Aix-Marseille" },
+    { label: "Amiens", value: "Amiens" },
+    { label: "Angers", value: "Angers" },
+    { label: "Annecy", value: "Annecy" },
+    { label: "Auxerre", value: "Auxerre" },
+    { label: "Avignon", value: "Avignon" },
+    { label: "Bayonne", value: "Bayonne" },
+    { label: "Bergerac", value: "Bergerac" },
+    { label: "Besançon", value: "Besançon" },
+    { label: "Biarritz", value: "Biarritz" },
+    { label: "Bordeaux", value: "Bordeaux" },
+    { label: "Boulogne-sur-mer", value: "Boulogne-sur-mer" },
+    { label: "Brest", value: "Brest" },
+    { label: "Caen", value: "Caen" },
+    { label: "Calais", value: "Calais" },
+    { label: "Cannes", value: "Cannes" },
+    { label: "Chambéry", value: "Chambéry" },
+    { label: "Clermont-Ferrand", value: "Clermont-Ferrand" },
+    { label: "Dijon", value: "Dijon" },
+    { label: "France", value: "France" },
+    { label: "Grenoble", value: "Grenoble" },
+    { label: "La Réunion", value: "La Réunion" },
+    { label: "La Roche sur Yon", value: "La Roche sur Yon" },
+    { label: "La Rochelle", value: "La Rochelle" },
+    { label: "Le Havre", value: "Le Havre" },
+    { label: "Le Mans", value: "Le Mans" },
+    { label: "Lille", value: "Lille" },
+    { label: "Limoges", value: "Limoges" },
+    { label: "Lyon", value: "Lyon" },
+    { label: "Mâcon", value: "Mâcon" },
+    { label: "Metz", value: "Metz" },
+    { label: "Montauban", value: "Montauban" },
+    { label: "Montpellier", value: "Montpellier" },
+    { label: "Mulhouse", value: "Mulhouse" },
+    { label: "Nancy", value: "Nancy" },
+    { label: "Nantes", value: "Nantes" },
+    { label: "Nice", value: "Nice" },
+    { label: "Nîmes", value: "Nîmes" },
+    { label: "Niort", value: "Niort" },
+    { label: "Orléans", value: "Orléans" },
+    { label: "Oyonnax", value: "Oyonnax" },
+    { label: "Paris/Ile de France", value: "Paris/Ile de France" },
+    { label: "Pau", value: "Pau" },
+    { label: "Perpignan", value: "Perpignan" },
+    { label: "Poitiers", value: "Poitiers" },
+    { label: "Reims", value: "Reims" },
+    { label: "Rennes", value: "Rennes" },
+    { label: "Rodez", value: "Rodez" },
+    { label: "Rouen", value: "Rouen" },
+    { label: "Saint-Etienne", value: "Saint-Etienne" },
+    { label: "Saint-Tropez", value: "Saint-Tropez" },
+    { label: "Strasbourg", value: "Strasbourg" },
+    { label: "Toulon", value: "Toulon" },
+    { label: "Toulouse", value: "Toulouse" },
+    { label: "Troyes", value: "Troyes" },
+    { label: "Valence", value: "Valence" },
+    { label: "Guadeloupe", value: "Guadeloupe" },
   ];
   loading: boolean = true;
 
@@ -157,6 +158,8 @@ export class AjoutCvComponent implements OnInit {
   ecoles = []
   groupes = []
   commercials = []
+
+  dicPicture = {}
 
   @ViewChild('filter') filter: ElementRef;
 
@@ -201,6 +204,19 @@ export class AjoutCvComponent implements OnInit {
       })
     })
 
+    this.cvService.getAllPicture().subscribe(data => {
+      this.dicPicture = data.files // {id:{ file: string, extension: string }}
+      data.ids.forEach(id => {
+        const reader = new FileReader();
+        const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          this.dicPicture[id].url = reader.result;
+        }
+      })
+    })
+
   }
 
   onSelectEcole(ecole) {
@@ -230,7 +246,7 @@ export class AjoutCvComponent implements OnInit {
       this.userService.getPopulate(id).subscribe(user => {
         return this.user = user
       })
-    } 
+    }
   }
 
   // methode de recuperation des données utile
@@ -257,7 +273,7 @@ export class AjoutCvComponent implements OnInit {
     this.skillsService.getCompetences()
       .then((response: Competence[]) => {
         response.forEach((competence: Competence) => {
-          this.competencesList.push({ label: competence.libelle, value: competence._id });
+          this.competencesList.push({ label: competence.libelle, value: competence._id, profile: competence.profile_id });
         })
       })
       .catch((error) => { console.log(error); })
@@ -306,7 +322,7 @@ export class AjoutCvComponent implements OnInit {
       cv.langues.push(langue.label);
     });
 
-   
+
     //cv.video_lien = formValue.video_lien;
 
     // si un cv brute à été ajouté
@@ -539,6 +555,14 @@ export class AjoutCvComponent implements OnInit {
     this.selectedPicture = cv
   }
 
+  onSelectUser(val) {
+    this.onGetUserById(val)
+    this.cvService.getCvbyUserId(val).subscribe(c => {
+      this.cv = c
+      console.log(c)
+    })
+  }
+
   FileUploadPC(event: any) {
     if (event && event.target.files.length > 0 && this.selectedPicture) {
       const formData = new FormData();
@@ -563,5 +587,20 @@ export class AjoutCvComponent implements OnInit {
         console.error(error)
       })
     }
+  }
+
+  onPrint() {
+    var element = document.getElementById('page-certif');
+    var opt = {
+      margin: 0,
+      filename: 'CV.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    //html2pdf().set(opt).from(element).save();
+    html2pdf().from(element).toPdf().get('pdf').then(function (pdf) {
+      window.open(pdf.output('bloburl'), '_blank');
+    });
   }
 }

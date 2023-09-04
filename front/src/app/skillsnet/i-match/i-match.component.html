@@ -29,7 +29,7 @@
                 (onChange)="updateFilter()" class="w-100"></p-multiSelect>
             </div>
             <div class="field col-md-3 col-12">
-                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
+                <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" [(ngModel)]="dispoFilter"
                     (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
                     [style]="{'width':'100%'}" placeholder="Disponibilité"></p-calendar>
             </div>
@@ -112,16 +112,17 @@
                                 <div class="card-main-info">
                                     <div class="cv-card-title">
                                         <h4><strong>{{cv.competences[0].profile_id.libelle}}</strong></h4>
-                                        <h4><strong>Dévelopeur Web</strong></h4>
+                                        
                                         <h5>{{cv.user_id.firstname.substring(0, 1)}}. {{cv.user_id.lastname.substring(0, 2)}}.</h5>
                                     </div>
                                 </div>
                                 <div class="card-main-data">
-                                    <p>📍 France</p>
+                                    <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
+                                    <p *ngIf='!cv.mobilite_lieu'>📍 France</p>
                                     <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo"></p>
                                     <ng-template #not_dispo><p>⏱ {{cv.disponibilite | date : 'MMMM YYYY'}}</p></ng-template>
                                     <ng-template #dispo_immediat><p>⏱ Disponible Immédiatement</p></ng-template>
-                                    <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
+                                    
 
                                     <!-- <p *ngIf="calculatePrime(cv.user_id._id)<30">💸 Eligible à la prime de 6000€</p> -->
                                 </div>

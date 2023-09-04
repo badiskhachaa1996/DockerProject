@@ -1078,12 +1078,12 @@ export class DashboardComponent implements OnInit {
   }
 
   getHistoPointage(value) {
-    console.log(value)
-    this.dailyCheckService.getUserChecksByDate(this.token.id, value)
-      .then((response) => {
-        this.historiqueCra = response;
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+    if (value)
+      this.dailyCheckService.getUserChecksByDate(this.token.id, value)
+        .then((response) => {
+          this.historiqueCra = response;
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   actualites: ActualiteRH[]
@@ -1173,54 +1173,55 @@ export class DashboardComponent implements OnInit {
     maladie: 0
   }
   OnCalcAssiduite() {
-    this.dailyCheckService.getUserChecksByDate(this.token.id, this.dateChoose)
-      .then((response) => {
-        this.stats.assiduite = response.length
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
-    this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
-      .then((response) => {
-        response.forEach(c => {
-          /*
-    { label: 'Congé payé', value: 'Congé payé' },
-    { label: 'Congé sans solde', value: 'Congé sans solde' },
-    { label: 'Absence maladie', value: 'Absence maladie' },
-    { label: 'Télétravail', value: 'Télétravail' },
-    { label: 'Départ anticipé', value: 'Départ anticipé' },
-    { label: 'Autorisation', value: 'Autorisation' },
-    { label: 'Autre motif', value: 'Autre motif' },
-          */
-          let dd = new Date(c.date_debut)
-          if (dd > new Date(this.dateChoose + '-31'))
-            dd = new Date(this.dateChoose + '-31')
-          if (dd < new Date(this.dateChoose + '-01'))
-            dd = new Date(this.dateChoose + '-01')
-          let df = new Date(c.date_fin)
-          if (df < new Date(this.dateChoose + '-01'))
-            df = new Date(this.dateChoose + '-01')
-          if (df > new Date(this.dateChoose + '-31'))
-            df = new Date(this.dateChoose + '-31')
-          var Difference_In_Time = dd.getTime() - df.getTime();
-
-          // To calculate the no. of days between two dates
-          var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
-          console.log(c.type_conge, Difference_In_Days)
-          if (c.type_conge == "Congé payé")
-            this.stats.conges_pay += Difference_In_Days
-          else if (c.type_conge == "Congé sans solde")
-            this.stats.conges_ss += Difference_In_Days
-          else if (c.type_conge == "Absence maladie")
-            this.stats.maladie += Difference_In_Days
-          else
-            this.stats.absence_justifie += Difference_In_Days
-
+    if (this.dateChoose) {
+      this.dailyCheckService.getUserChecksByDate(this.token.id, this.dateChoose)
+        .then((response) => {
+          this.stats.assiduite = response.length
         })
-      })
-      .catch((error) => {
-        if (this.dateChoose)
-          this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
-      });
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
+        .then((response) => {
+          response.forEach(c => {
+            /*
+      { label: 'Congé payé', value: 'Congé payé' },
+      { label: 'Congé sans solde', value: 'Congé sans solde' },
+      { label: 'Absence maladie', value: 'Absence maladie' },
+      { label: 'Télétravail', value: 'Télétravail' },
+      { label: 'Départ anticipé', value: 'Départ anticipé' },
+      { label: 'Autorisation', value: 'Autorisation' },
+      { label: 'Autre motif', value: 'Autre motif' },
+            */
+            let dd = new Date(c.date_debut)
+            if (dd > new Date(this.dateChoose + '-31'))
+              dd = new Date(this.dateChoose + '-31')
+            if (dd < new Date(this.dateChoose + '-01'))
+              dd = new Date(this.dateChoose + '-01')
+            let df = new Date(c.date_fin)
+            if (df < new Date(this.dateChoose + '-01'))
+              df = new Date(this.dateChoose + '-01')
+            if (df > new Date(this.dateChoose + '-31'))
+              df = new Date(this.dateChoose + '-31')
+            var Difference_In_Time = dd.getTime() - df.getTime();
 
+            // To calculate the no. of days between two dates
+            var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
+            console.log(c.type_conge, Difference_In_Days)
+            if (c.type_conge == "Congé payé")
+              this.stats.conges_pay += Difference_In_Days
+            else if (c.type_conge == "Congé sans solde")
+              this.stats.conges_ss += Difference_In_Days
+            else if (c.type_conge == "Absence maladie")
+              this.stats.maladie += Difference_In_Days
+            else
+              this.stats.absence_justifie += Difference_In_Days
+
+          })
+        })
+        .catch((error) => {
+          if (this.dateChoose)
+            this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
+        });
+    }
   }
 
   onCalcNumberDay() {
