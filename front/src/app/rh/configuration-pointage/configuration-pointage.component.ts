@@ -16,6 +16,7 @@ export class ConfigurationPointageComponent implements OnInit {
   collaborateurDic = {}
   uidDic = {}
   dateAjr = new Date()
+  date_dernier_maj = new Date()
 
   ngOnInit(): void {
     this.PoiService.getAll().subscribe(ps => {
@@ -46,6 +47,9 @@ export class ConfigurationPointageComponent implements OnInit {
           this.pointages[p.machine] = [p]
         }
       })
+      if (this.machineList && this.machineList.length != 0 && this.pointages[this.machineList[0]] && this.pointages[this.machineList[0]].length != 0 && this.pointages[this.machineList[0]][0].updateDate) {
+        this.date_dernier_maj = this.pointages[this.machineList[0]][0].updateDate
+      }
     })
     this.rhService.getCollaborateurs()
       .then((response) => {

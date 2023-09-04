@@ -634,6 +634,10 @@ export class SourcingComponent implements OnInit {
       _id: bypass._id
     }
     let date_cf = this.showDetails.date_cf
+    let date_visa = this.showDetails.date_visa
+    if (this.detailsForm.value.avancement_visa != 'Pas de retour' && this.detailsForm.value.avancement_visa != this.showDetails.avancement_visa)
+      date_visa = new Date()
+    let date_inscription_def = this.showDetails.date_inscription_def
     if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
       date_cf = new Date()
     let prospect = {
@@ -653,7 +657,7 @@ export class SourcingComponent implements OnInit {
       payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
       _id: this.showDetails._id,
-      date_cf
+      date_cf, date_visa, date_inscription_def
 
     }
     let listIDS = []
