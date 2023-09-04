@@ -50,11 +50,11 @@
                                 {{point.uid}}
                             </td>
                             <td
-                                *ngIf="collaborateurDic && uidDic && collaborateurDic[uidDic[machine.serial_number][point.uid]]">
+                                *ngIf="collaborateurDic && uidDic && machine.serial_number && uidDic[machine.serial_number] && uidDic[machine.serial_number][point.uid] && collaborateurDic[uidDic[machine.serial_number][point.uid]]">
                                 {{collaborateurDic[uidDic[machine.serial_number][point.uid]]}}
                             </td>
                             <td
-                                *ngIf="!collaborateurDic || !uidDic || !collaborateurDic[uidDic[machine.serial_number][point.uid]]">
+                                *ngIf="!collaborateurDic || !uidDic || !machine.serial_number || !uidDic[machine.serial_number] || !uidDic[machine.serial_number][point.uid] || !collaborateurDic[uidDic[machine.serial_number][point.uid]]">
                                 Aucun assigné
                             </td>
                             <td>
