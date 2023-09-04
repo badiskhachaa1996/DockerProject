@@ -3,8 +3,8 @@
     <div class="card grid col-12">
         <h5 class="col-12" style="text-align: center;">Liste des pointages</h5>
         <div class="col-12">
-            <h3 *ngIf="machineList && machineList.length!=0 && machineList[0].serial_number && pointages && pointages[machineList[0].serial_number].length !=0 && pointages[machineList[0].serial_number][0].updateDate">
-                Dernier Mis à jour : {{pointages[machineList[0]][0].updateDate | date : "short"}}
+            <h3 *ngIf="date_dernier_maj!=dateAjr">
+                Dernier Mis à jour : {{date_dernier_maj | date : "short"}}
             </h3>
             <h3>
                 Date : {{ dateAjr | date : "mediumDate"}}

@@ -587,6 +587,10 @@ export class ListProspectsComponent implements OnInit {
       _id: bypass._id
     }
     let date_cf = this.showDetails.date_cf
+    let date_visa = this.showDetails.date_visa
+    if (this.detailsForm.value.avancement_visa != 'Pas de retour' && this.detailsForm.value.avancement_visa != this.showDetails.avancement_visa)
+      date_visa = new Date()
+    let date_inscription_def = this.showDetails.date_inscription_def
     if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
       date_cf = new Date()
     let prospect = {
@@ -606,7 +610,7 @@ export class ListProspectsComponent implements OnInit {
       payement: this.payementList,
       type_form: this.detailsForm.value.type_form,
       _id: this.showDetails._id,
-      date_cf
+      date_cf, date_visa, date_inscription_def
 
     }
     this.admissionService.update({ user, prospect }).subscribe(data => {
@@ -754,7 +758,7 @@ export class ListProspectsComponent implements OnInit {
       phase_candidature = this.showPaiement.phase_candidature;
     }
 
-    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature },"Modification des paiements Liste des leads").subscribe(data => {
+    this.admissionService.updateV2({ _id: this.showPaiement._id, payement: this.payementList, statut_payement, phase_candidature }, "Modification des paiements Liste des leads").subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Enregistrement des modifications avec succès" })
       this.prospects.splice(this.prospects.indexOf(this.showPaiement), 1, data)
       this.showPaiement = null
