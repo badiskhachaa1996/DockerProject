@@ -99,7 +99,14 @@ app.get("/get-cv", (req, res) => {
         .catch((error) => { res.status(400).send(error.message); });
 });
 
-
+app.get("/get-object-cv/:id", (req, res) => {
+        CvType.findOne({_id: req.params.id}).then((dataCv) => {
+            res.status(200).send({ dataCv });
+        }).catch((error) => {
+            res.status(400).send("erreur :" + error);
+        })
+});
+ 
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id/:id", (req, res) => {
     CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate('competences')

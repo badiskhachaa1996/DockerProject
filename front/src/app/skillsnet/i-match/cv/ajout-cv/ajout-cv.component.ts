@@ -1,18 +1,19 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { SkillsService } from 'src/app/services/skillsnet/skills.service';
+import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { EcoleService } from 'src/app/services/ecole.service';
+
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CV } from 'src/app/models/CV';
 import { User } from 'src/app/models/User';
-import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { Table } from 'primeng/table';
-import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Competence } from 'src/app/models/Competence';
 import { from } from 'rxjs';
-import { EcoleService } from 'src/app/services/ecole.service';
 import { ClasseService } from 'src/app/services/classe.service';
 import { Campus } from 'src/app/models/Campus';
 import { EtudiantService } from 'src/app/services/etudiant.service';
@@ -21,19 +22,20 @@ import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Annonce } from 'src/app/models/Annonce';
 import { Matching } from 'src/app/models/Matching';
 
+
+
 @Component({
-  selector: 'app-cvtheque',
-  templateUrl: './cvtheque.component.html',
-  styleUrls: ['./cvtheque.component.scss']
+  selector: 'app-ajout-cv',
+  templateUrl: './ajout-cv.component.html',
+  styleUrls: ['./ajout-cv.component.scss','../../../../../assets/css/bootstrap.min.css']
 })
-export class CvthequeComponent implements OnInit {
-
-  // partie dedié aux CV
-  cvLists: CV[] = [];
-  showFormAddCV: boolean = false;
-  formAddCV: FormGroup;
-  showFormUpdateCV: boolean = false;
-
+export class AjoutCvComponent implements OnInit {
+  
+    // partie dedié aux CV
+    cvLists: CV[] = [];
+    showFormAddCV: boolean = true;
+    formAddCV: FormGroup;
+    showFormUpdateCV: boolean = false;
   languesList: any[] = [
     { label: 'Français' },
     { label: 'Anglais' },
@@ -150,12 +152,13 @@ export class CvthequeComponent implements OnInit {
 
   token: any;
 
+  user: User;
+
   ecoles = []
   groupes = []
   commercials = []
 
   @ViewChild('filter') filter: ElementRef;
-
 
 
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
@@ -222,17 +225,16 @@ export class CvthequeComponent implements OnInit {
     })
   }
 
+  onGetUserById(id) {
+    if (id) {
+      this.userService.getPopulate(id).subscribe(user => {
+        return this.user = user
+      })
+    } 
+  }
+
   // methode de recuperation des données utile
   onGetAllClasses(): void {
-    // recuperation des CVs
-    this.cvService.getCvs()
-      .then((response: CV[]) => {
-        this.cvLists = response;
-        this.loading = false;
-      })
-      .catch((error) => { console.error(error); })
-
-
     // recuperation de la liste des users et remplissage de la dropdown
     this.userService.getAllForCV()
       .then((response: User[]) => {
@@ -304,6 +306,7 @@ export class CvthequeComponent implements OnInit {
       cv.langues.push(langue.label);
     });
 
+   
     //cv.video_lien = formValue.video_lien;
 
     // si un cv brute à été ajouté

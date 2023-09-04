@@ -6,38 +6,47 @@
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
     </div>
     <div class="container">
-        <span class="p-input-icon-left" style="width: 100%;">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
-                placeholder="Ex: John" class="w-full" />
-        </span>
-    </div>
-    <div class="grid container">
-        <div class="field col-12 md:col-3">
-            <label for="range">Disponibilité</label><br>
-            <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
-                (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
-                [style]="{'width':'100%'}"></p-calendar>
+        <div class="row">
+            <div class="col-12">
+                <span class="p-input-icon-left w-100">
+                    <i class="pi pi-search cv-search"></i>
+                    <input claas="rounded-circle" pInputText type="text" #filter (input)="updateFilter()" [(ngModel)]="researchValue"
+                        placeholder="Ex: John" class="w-full cv-input-text" />
+                </span>
+            </div>
         </div>
-        <div class="field col-12 md:col-3">
-            <label for="stacked">Compétences</label><br>
-            <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Choississez une compétences"
-                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
+        <div class="row">
+            <div class="col-md-11 col-12">
+                <div class="row">
+            <div class="field col-md-3 col-12">
+                <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Profil"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                (onChange)="updateFilter()" class="w-100"></p-multiSelect>
+            </div>
+            <div class="field col-md-3 col-12">
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                (onChange)="updateFilter()" class="w-100"></p-multiSelect>
+            </div>
+            <div class="field col-md-3 col-12">
+                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true"
+                    (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+                    [style]="{'width':'100%'}" placeholder="Disponibilité"></p-calendar>
+            </div>
+            <div class="field col-md-3 col-12">
+                <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Compétences"
+                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                 (onChange)="updateFilter()"></p-multiSelect>
+            </div></div></div>
+            <div class="col-md-1 col-12">
+            <div class="field col-md col-12">
+                <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()" class="mr-2"
+                    autoWidth="false" [style]="{'width':'100%'}" pTooltip="Supprimer les filtres"
+                    tooltipPosition="bottom" class="cv-clear-button ">
+                </button>
+            </div>
+            </div> 
         </div>
-        <div class="field col-12 md:col-3">
-            <label for="stacked">Profil</label><br>
-            <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Choississez un profil"
-                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" display="chip"
-                (onChange)="updateFilter()"></p-multiSelect>
-        </div>
-        <div class="field col-12 md:col-1">
-            <label for="stacked">&nbsp;</label><br>
-            <button type="button" pButton pRipple icon="pi pi-trash" (click)="clearFilter()" class="mr-2"
-                autoWidth="false" [style]="{'width':'100%'}" pTooltip="Supprimer les filtres"
-                tooltipPosition="bottom"></button>
-        </div>
-
     </div>
 
 
@@ -77,22 +86,33 @@
                     <a class="meeting" href="#">Rendez-vous</a>
                 </div>
             </div> -->
-                <div class="col-4" *ngFor="let cv of filteredCVS">
+                <div class="col-4 pad-bt-16" *ngFor="let cv of filteredCVS">
                     <div class="cv-card">
                     <div class="cv-card-main">
                         <div class="cv-card-information">
                     
                             <div *ngIf="dicPicture && dicPicture[cv._id]?.url;then cv_image else default_image"></div>
-                                <ng-template #cv_image><img src="{{dicPicture[cv._id].url}}"/></ng-template>
+                                <ng-template #cv_image>
+                                    <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');"></div>
+                                    <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
+                                </ng-template>
                                 <ng-template #default_image>
                                     <div *ngIf="cv.user_id.civilite == 'Madame'; then is_madame else other"></div>
-                                    <ng-template #is_madame><img src='../../../assets/images/imatch/female.png'/></ng-template>
-                                    <ng-template #other><img src='../../../assets/images/imatch/male.png'/></ng-template>
+                                    <ng-template #is_madame>
+                                        <div class="img-card" style="background-image: url('../../../assets/images/imatch/female.png');"></div>
+                                        
+                                        <!-- <img src='../../../assets/images/imatch/female.png'/> -->
+                                    </ng-template>
+                                    <ng-template #other>
+                                        <div class="img-card" style="background-image: url('../../../assets/images/imatch/male.png');"></div>
+                                        <!-- <img src='../../../assets/images/imatch/male.png'/> -->
+                                    </ng-template>
                                 </ng-template>
                             <div class="cv-card-details">
                                 <div class="card-main-info">
                                     <div class="cv-card-title">
                                         <h4><strong>{{cv.competences[0].profile_id.libelle}}</strong></h4>
+                                        <h4><strong>Dévelopeur Web</strong></h4>
                                         <h5>{{cv.user_id.firstname.substring(0, 1)}}. {{cv.user_id.lastname.substring(0, 2)}}.</h5>
                                     </div>
                                 </div>
@@ -101,6 +121,7 @@
                                     <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo"></p>
                                     <ng-template #not_dispo><p>⏱ {{cv.disponibilite | date : 'MMMM YYYY'}}</p></ng-template>
                                     <ng-template #dispo_immediat><p>⏱ Disponible Immédiatement</p></ng-template>
+                                    <p *ngIf='cv.mobilite_lieu'>📍 {{cv.mobilite_lieu}}</p>
 
                                     <!-- <p *ngIf="calculatePrime(cv.user_id._id)<30">💸 Eligible à la prime de 6000€</p> -->
                                 </div>
@@ -113,7 +134,7 @@
                         </div> -->
                     </div>
                     <div class="cv-card-footer">
-                        <a class="cv" href="#">CV</a>
+                        <a class="cv" href="{{'#/imatch/cv/' + cv._id}}">CV</a>
                         <a class="meeting" href="#">Rendez-vous</a>
                     </div>
                 </div>

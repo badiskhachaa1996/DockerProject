@@ -1,0 +1,147 @@
+<div *ngIf="cv && user" class="imatch-main-page">
+    <div class="page-content">
+        <div class="top-header container">
+            <a routerLink="/imatch" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour</a>
+            <a href="#" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
+        </div>
+        <div class="header">
+            <div class="container">
+                <div class="cv-title">
+                    <div *ngIf="dicPicture && dicPicture[cv._id]?.url;then cv_image else default_image"></div>
+                                <ng-template #cv_image>
+                                    <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');"></div>
+                                    <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
+                                </ng-template>
+                                <ng-template #default_image>
+                                    <div *ngIf="user.civilite == 'Madame'; then is_madame else other"></div>
+                                    <ng-template #is_madame>
+                                        <div class="img-card" style="background-image: url('../../../assets/images/imatch/female.png');"></div>
+                                        
+                                        <!-- <img src='../../../assets/images/imatch/female.png'/> -->
+                                    </ng-template>
+                                    <ng-template #other>
+                                        <div class="img-card" style="background-image: url('../../../assets/images/imatch/male.png');"></div>
+                                        <!-- <img src='../../../assets/images/imatch/male.png'/> -->
+                                    </ng-template>
+                                </ng-template>
+                    <div class="cv-main-info">
+                        <h1 class="cv-name">{{user.firstname.substring(0, 1)}}. {{user.lastname.substring(0, 2)}}.</h1>
+                        <hr>
+                        <h1 class="cv-profile">{{cv.profile || "Profile non spécifié"}}</h1>
+                    </div>
+                </div>
+                <div class="competences-block">
+                    <h2>Compétences</h2>
+                    <div class="row gx-5 competence">
+                    <div class="col-md col-12 marg-right"><p>{{cv.competences[0]?.libelle || "Compétences 1"}}</p></div>
+                    <div class="col-md col-12 marg-both"><p>{{cv.competences[1]?.libelle || "Compétences 2"}}</p></div>
+                    <div class="col-md col-12 marg-left"><p>{{cv.competences[2]?.libelle || "Compétences 3"}}</p></div>
+                    </div>
+                </div>
+
+                    <div class="row other-cv-info">
+                        <div class="col-md-4 first-block">
+                            <h2>à propos</h2>
+                            <p>{{cv.a_propos || 'A propos non spécifié'}}</p>
+                        </div>
+                        <div class="col-md-8 second-block">
+                            <div class="row gx-5">
+                                <div class="col inner-area-1">
+                                    <h2>centres D'Intérêts</h2>
+                                    <p>{{cv.a_propos || "Centre d'intérets non spécifiés"}}</p>
+                                </div>
+                                <div class="col inner-area-2">
+                                    <h2>Langues</h2>
+                                    <p>{{cv.a_propos || 'Langues non spécifiés'}}</p>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>  
+        </div> 
+        <div class="content">
+            <div class="container">
+                <div class="big-section">
+                    <h2>éducation</h2>
+                    <div class="section-block">
+                        <div class="section-sub-info">
+                            <h4 class="sub-info">Poste</h4>
+                            <h4 class="sub-date">20xx-20xx</h4>
+                        </div>
+                        <h4 class="structure-name">Ecole</h4>
+                        <div class="section-details">
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-section">
+                    <h2>expériences professionnelles</h2>
+                    <div class="section-block">
+                        <div class="section-sub-info">
+                            <h4 class="sub-info">Poste</h4>
+                            <h4 class="sub-date">20xx-20xx</h4>
+                        </div>
+                        <h4 class="structure-name">Entreprise</h4>
+                        <div class="section-details">
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                        </div>
+                    </div>
+                    <div class="section-block">
+                        <div class="section-sub-info">
+                            <h4 class="sub-info">Poste</h4>
+                            <h4 class="sub-date">20xx-20xx</h4>
+                        </div>
+                        <h4 class="structure-name">Entreprise</h4>
+                        <div class="section-details">
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-section">
+                    <h2>expériences Associatives</h2>
+                    <div class="section-block">
+                        <div class="section-sub-info">
+                            <h4 class="sub-info">Poste</h4>
+                            <h4 class="sub-date">20xx-20xx</h4>
+                        </div>
+                        <h4 class="structure-name">Association</h4>
+                        <div class="section-details">
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-section">
+                    <h2>Informatique</h2>
+                    <div class="section-block">
+                        <div class="section-details">
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                            <li>Lorem ipsum dolor sit amet</li>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div> 
+        <div class="main-footer">
+            <div class="footer container">
+                <a routerLink="/imatch" class="btn-cv btn-cv-3 btn-cv-shadow-2"><i class="pi pi-arrow-left"></i>Retour</a>
+                <a href="#" class="btn-cv btn-cv-4 btn-cv-shadow-2">Prendre un rendez-vous</a>
+            </div>
+        </div> 
+    </div> 
+</div>
+
+
