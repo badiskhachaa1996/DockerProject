@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 var fs = require('fs');
 const { PointeuseData } = require("../models/PointeuseData");
-//*/5 9-17 * * 1-5 node /home/ubuntu/ems3/back/scriptCron/collectPointeuseData.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-collectPointeuseData.log 2>&1
+//30 1 * * * node /home/ubuntu/ems3/back/scriptCron/collectPointeuseData.js >/home/ubuntu/logCron/`date +\%d\\\%m\-\%H:\%M`-collectPointeuseData.log 2>&1
 mongoose
     .connect(`mongodb://127.0.0.1:27017/learningNode`, {
         useCreateIndex: true,
@@ -48,6 +48,7 @@ mongoose
 
             //Partie getUsers
             let users = []
+            let usersDic = {}
             let indexData = 0
             for (let index = 0; index < nb_users; index++) {
                 let posName = fileData.indexOf('Name     : ', indexData) + 'Name     : '.length
@@ -56,12 +57,18 @@ mongoose
                 let posUID = fileData.indexOf('User ID : ', indexData) + 'User ID : '.length
                 let uid = fileData.substring(posUID, fileData.indexOf('   ', posUID))
                 indexData = posUID
+                usersDic[uid] = name
                 users.push({ UID: uid, name })
             }
 
 
 
             PointeuseData.findOne({ serial_number }).then(data => {
+                /*let oldUserList = []
+                data.users.forEach(u => {
+                    oldUserList.push({ UID: u.UID, name: u.name })
+
+                })//WIP*/
                 if (data) {
                     PointeuseData.findByIdAndUpdate(data._id, {
                         nb_users, nom_appareil, ip, mask, gateway, firmware, plateforme, adresse_mac, nb_faces, nb_fingers
