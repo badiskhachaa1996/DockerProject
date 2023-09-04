@@ -63,7 +63,7 @@ app.post("/post-cv", (req, res) => {
     CvType.findOne({ user_id: cv.user_id })
         .then((response) => {
             if (response) {
-                res.status(400).send({response,message:'UN CV existe déjà'});
+                res.status(400).send({ response, message: 'UN CV existe déjà' });
             } else {
                 cv.save()
                     .then((response) => { res.status(201).send(response); })
@@ -86,7 +86,7 @@ app.put("/put-cv", (req, res) => {
 
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
-    CvType.find()?.populate('user_id').populate('competences').populate('createur_id')
+    CvType.find()?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -100,16 +100,16 @@ app.get("/get-cv", (req, res) => {
 });
 
 app.get("/get-object-cv/:id", (req, res) => {
-        CvType.findOne({_id: req.params.id}).then((dataCv) => {
-            res.status(200).send({ dataCv });
-        }).catch((error) => {
-            res.status(400).send("erreur :" + error);
-        })
+    CvType.findOne({ _id: req.params.id }).populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').then((dataCv) => {
+        res.status(200).send({ dataCv });
+    }).catch((error) => {
+        res.status(400).send("erreur :" + error);
+    })
 });
- 
+
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id/:id", (req, res) => {
-    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate('competences')
+    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });

@@ -25,64 +25,64 @@ export class IMatchComponent implements OnInit {
   skills = []
   profiles = []
   locations = [
-    { label: "100% Télétravail",value: "100% Télétravail"},
-    { label: "Aix-Marseille",value: "Aix-Marseille"},
-    { label: "Amiens",value: "Amiens"},
-    { label: "Angers",value: "Angers"},
-    { label: "Annecy",value: "Annecy"},
-    { label: "Auxerre",value: "Auxerre"},
-    { label: "Avignon",value: "Avignon"},
-    { label: "Bayonne",value: "Bayonne"},
-    { label: "Bergerac",value: "Bergerac"},
-    { label: "Besançon",value: "Besançon"},
-    { label: "Biarritz",value: "Biarritz"},
-    { label: "Bordeaux",value: "Bordeaux"},
-    { label: "Boulogne-sur-mer",value: "Boulogne-sur-mer"},
-    { label: "Brest",value: "Brest"},
-    { label: "Caen",value: "Caen"},
-    { label: "Calais",value: "Calais"},
-    { label: "Cannes",value: "Cannes"},
-    { label: "Chambéry",value: "Chambéry"},
-    { label: "Clermont-Ferrand",value: "Clermont-Ferrand"},
-    { label: "Dijon",value: "Dijon"},
-    { label: "France",value: "France"},
-    { label: "Grenoble",value: "Grenoble"},
-    { label: "La Réunion",value: "La Réunion"},
-    { label: "La Roche sur Yon",value: "La Roche sur Yon"},
-    { label: "La Rochelle",value: "La Rochelle"},
-    { label: "Le Havre",value: "Le Havre"},
-    { label: "Le Mans",value: "Le Mans"},
-    { label: "Lille",value: "Lille"},
-    { label: "Limoges",value: "Limoges"},
-    { label: "Lyon",value: "Lyon"},
-    { label: "Mâcon",value: "Mâcon"},
-    { label: "Metz",value: "Metz"},
-    { label: "Montauban",value: "Montauban"},
-    { label: "Montpellier",value: "Montpellier"},
-    { label: "Mulhouse",value: "Mulhouse"},
-    { label: "Nancy",value: "Nancy"},
-    { label: "Nantes",value: "Nantes"},
-    { label: "Nice",value: "Nice"},
-    { label: "Nîmes",value: "Nîmes"},
-    { label: "Niort",value: "Niort"},
-    { label: "Orléans",value: "Orléans"},
-    { label: "Oyonnax",value: "Oyonnax"},
-    { label: "Paris/Ile de France",value: "Paris/Ile de France"},
-    { label: "Pau",value: "Pau"},
-    { label: "Perpignan",value: "Perpignan"},
-    { label: "Poitiers",value: "Poitiers"},
-    { label: "Reims",value: "Reims"},
-    { label: "Rennes",value: "Rennes"},
-    { label: "Rodez",value: "Rodez"},
-    { label: "Rouen",value: "Rouen"},
-    { label: "Saint-Etienne",value: "Saint-Etienne"},
-    { label: "Saint-Tropez",value: "Saint-Tropez"},
-    { label: "Strasbourg",value: "Strasbourg"},
-    { label: "Toulon",value: "Toulon"},
-    { label: "Toulouse",value: "Toulouse"},
-    { label: "Troyes",value: "Troyes"},
-    { label: "Valence",value: "Valence"},
-    { label: "Guadeloupe",value: "Guadeloupe"},
+    { label: "100% Télétravail", value: "100% Télétravail" },
+    { label: "Aix-Marseille", value: "Aix-Marseille" },
+    { label: "Amiens", value: "Amiens" },
+    { label: "Angers", value: "Angers" },
+    { label: "Annecy", value: "Annecy" },
+    { label: "Auxerre", value: "Auxerre" },
+    { label: "Avignon", value: "Avignon" },
+    { label: "Bayonne", value: "Bayonne" },
+    { label: "Bergerac", value: "Bergerac" },
+    { label: "Besançon", value: "Besançon" },
+    { label: "Biarritz", value: "Biarritz" },
+    { label: "Bordeaux", value: "Bordeaux" },
+    { label: "Boulogne-sur-mer", value: "Boulogne-sur-mer" },
+    { label: "Brest", value: "Brest" },
+    { label: "Caen", value: "Caen" },
+    { label: "Calais", value: "Calais" },
+    { label: "Cannes", value: "Cannes" },
+    { label: "Chambéry", value: "Chambéry" },
+    { label: "Clermont-Ferrand", value: "Clermont-Ferrand" },
+    { label: "Dijon", value: "Dijon" },
+    { label: "France", value: "France" },
+    { label: "Grenoble", value: "Grenoble" },
+    { label: "La Réunion", value: "La Réunion" },
+    { label: "La Roche sur Yon", value: "La Roche sur Yon" },
+    { label: "La Rochelle", value: "La Rochelle" },
+    { label: "Le Havre", value: "Le Havre" },
+    { label: "Le Mans", value: "Le Mans" },
+    { label: "Lille", value: "Lille" },
+    { label: "Limoges", value: "Limoges" },
+    { label: "Lyon", value: "Lyon" },
+    { label: "Mâcon", value: "Mâcon" },
+    { label: "Metz", value: "Metz" },
+    { label: "Montauban", value: "Montauban" },
+    { label: "Montpellier", value: "Montpellier" },
+    { label: "Mulhouse", value: "Mulhouse" },
+    { label: "Nancy", value: "Nancy" },
+    { label: "Nantes", value: "Nantes" },
+    { label: "Nice", value: "Nice" },
+    { label: "Nîmes", value: "Nîmes" },
+    { label: "Niort", value: "Niort" },
+    { label: "Orléans", value: "Orléans" },
+    { label: "Oyonnax", value: "Oyonnax" },
+    { label: "Paris/Ile de France", value: "Paris/Ile de France" },
+    { label: "Pau", value: "Pau" },
+    { label: "Perpignan", value: "Perpignan" },
+    { label: "Poitiers", value: "Poitiers" },
+    { label: "Reims", value: "Reims" },
+    { label: "Rennes", value: "Rennes" },
+    { label: "Rodez", value: "Rodez" },
+    { label: "Rouen", value: "Rouen" },
+    { label: "Saint-Etienne", value: "Saint-Etienne" },
+    { label: "Saint-Tropez", value: "Saint-Tropez" },
+    { label: "Strasbourg", value: "Strasbourg" },
+    { label: "Toulon", value: "Toulon" },
+    { label: "Toulouse", value: "Toulouse" },
+    { label: "Troyes", value: "Troyes" },
+    { label: "Valence", value: "Valence" },
+    { label: "Guadeloupe", value: "Guadeloupe" },
   ]
   disponibilite = []
 
@@ -182,6 +182,7 @@ export class IMatchComponent implements OnInit {
   researchValue = ""
   Age = null
   rangeDates = []
+  dispoFilter = null
   selectedSkills = []
   selectedProfiles = []
   selectedLocations = []
@@ -205,9 +206,17 @@ export class IMatchComponent implements OnInit {
       if (this.Age != null && this.Age && this.Age.toString() != "0")
         if (!(user_id && `${this.Age} ans` == this.calculateAge(user_id._id)))
           added = false; console.log('Age ISSUE', `${this.Age} ans`, this.calculateAge(user_id._id))
-      if (this.rangeDates.length == 2 && this.rangeDates[0] != new Date(1980))
+      /*if (this.rangeDates.length == 2 && this.rangeDates[0] != new Date(1980))
         if (!(this.rangeDates[0] < new Date(cv.disponibilite) && new Date(cv.disponibilite) < this.rangeDates[1]))
-          added = false; console.log('Date ISSUE', this.rangeDates, new Date(cv.disponibilite))
+          added = false; console.log('Date ISSUE', this.rangeDates, new Date(cv.disponibilite))*/
+      if (this.dispoFilter) {
+        let db = new Date(this.dispoFilter)
+        let df = new Date(this.dispoFilter)
+        df.setMonth(df.getMonth() + 1)
+        if (!(db <= new Date(cv.disponibilite) && new Date(cv.disponibilite) <= df))
+          added = false; console.log('Date ISSUE', this.dispoFilter, new Date(cv.disponibilite))
+      }
+
       if (this.selectedSkills.length != 0) {
         let tempSkill = []
         cv.competences.forEach((skill: any) => {
@@ -216,16 +225,11 @@ export class IMatchComponent implements OnInit {
         if (!(this.selectedSkills.every(elem => tempSkill.includes(elem))))
           added = false; console.log('SKILLS ISSUE')
       }
-      if (this.selectedLocations.length !=0) {
+      if (this.selectedLocations.length != 0) {
         this.selectedLocations.forEach(p => {
-          console.log(p)
-          console.log(cv.mobilite_lieu)
-          console.log(p.toLowerCase())
-          if (!(cv.mobilite_lieu.includes(p.toLowerCase())))
-          console.log("Heeeere")
-          added = false;console.log('Location ISSUE')
+          if (!cv.mobilite_lieu || !cv.mobilite_lieu.includes(p))
+            added = false; console.log('Location ISSUE')
         })
-        
       }
       if (this.selectedProfiles.length != 0) {
         let bufferProfil: any = cv.competences[0]

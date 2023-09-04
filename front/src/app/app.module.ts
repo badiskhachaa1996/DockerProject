@@ -354,6 +354,7 @@ import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/co
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
+import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
 
 @NgModule({
   imports: [
@@ -716,6 +717,7 @@ import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.compo
     ConfigurationPointageComponent,
     CvComponent,
     AjoutCvComponent,
+    ArchivagePointageComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

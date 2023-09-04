@@ -13,20 +13,18 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./cv.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class CvComponent implements OnInit {
-  
+
   cv: CV;
   user: User;
   dicPicture = {}
 
-  constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute) { 
+  constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute) {
     const id = this.route.snapshot.paramMap.get('id')
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
-      this.UserService.getPopulate(this.cv.user_id).subscribe((udata) => {
-        this.user = udata;
-      })
+      this.user = data.dataCv.user_id
     })
-    
+
     this.cvservice.getAllPicture().subscribe(data => {
       this.dicPicture = data.files // {id:{ file: string, extension: string }}
       data.ids.forEach(id => {
@@ -42,6 +40,6 @@ export class CvComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 }

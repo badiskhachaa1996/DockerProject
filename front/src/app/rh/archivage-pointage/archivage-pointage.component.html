@@ -1,0 +1,67 @@
+<div class="grid col-12">
+    <p-toast></p-toast>
+    <div class="card grid col-12">
+        <h5 class="col-12" style="text-align: center;">Archivage des pointages</h5>
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="pointages"
+            [paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['uid', 'machine']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="date" scope="col" style="text-align: center;">
+                        Date <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="machine" scope="col" style="text-align: center;">
+                        Numéro de série <p-sortIcon field="machine"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="machine" scope="col" style="text-align: center;">
+                        Localisation <p-sortIcon field="machine"></p-sortIcon>
+                    </th>
+                    <th>
+                        Nombre des pointages
+                    </th>
+                    <th>
+                        Heure du premier pointage
+                    </th>
+                    <th>
+                        Heure du dernier pointage
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-point>
+                <tr>
+                    <td>
+                        {{point.date | date:'short' }}
+                    </td>
+                    <td>
+                        {{point.machine }}
+                    </td>
+                    <td>
+                        {{machineDic[point.machine]?.localisation }}
+                    </td>
+                    <td>
+                        En dévéloppement
+                    </td>
+                    <td>
+                        En dévéloppement
+                    </td>
+                    <td>
+                        En dévéloppement
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
