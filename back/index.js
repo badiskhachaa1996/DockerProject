@@ -227,6 +227,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
       req.originalUrl === '/soc/cv/get-cvs' ||
       req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
+      req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl === '/soc/skills/get-competences' ||

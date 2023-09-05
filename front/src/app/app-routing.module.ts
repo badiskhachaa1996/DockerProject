@@ -252,6 +252,7 @@ import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.compo
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
 const routes: Routes = [
     {
         path: '',
@@ -1280,6 +1281,8 @@ const routes: Routes = [
     { path: 'document-authentification', component: DocCheckerComponent },
     // Accessible from anywhere
     { path: 'imatch', component: IMatchComponent },
+    { path: 'rendez-vous', component: RendezVousComponent },
+    { path: 'rendez-vous/:user_id', component: RendezVousComponent },
     { path: 'imatch/cv/:id', component: CvComponent },
 ]
 

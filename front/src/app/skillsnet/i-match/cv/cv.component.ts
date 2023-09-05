@@ -18,7 +18,7 @@ export class CvComponent implements OnInit {
   user: User;
   dicPicture = {}
 
-  constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute) {
+  constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute, private router: Router) {
     const id = this.route.snapshot.paramMap.get('id')
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
@@ -42,6 +42,9 @@ export class CvComponent implements OnInit {
         }
       })
     })
+  }
+  takeARendezVous() {
+    this.router.navigate(['rendez-vous/', this.user._id])
   }
 
   ngOnInit(): void {

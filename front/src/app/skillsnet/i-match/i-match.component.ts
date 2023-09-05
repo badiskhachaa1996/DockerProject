@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CV } from 'src/app/models/CV';
 import { Competence } from 'src/app/models/Competence';
-import { Etudiant } from 'src/app/models/Etudiant';
-import { ExterneSkillsnet } from 'src/app/models/ExterneSkillsnet';
 import { Profile } from 'src/app/models/Profile';
 import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
@@ -10,6 +8,8 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { saveAs as importedSaveAs } from "file-saver";
+import { MicrosoftService } from 'src/app/services/microsoft.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-i-match',
   templateUrl: './i-match.component.html',
@@ -87,7 +87,7 @@ export class IMatchComponent implements OnInit {
   disponibilite = []
 
   constructor(private CVService: CvService, private EtudiantService: EtudiantService,
-    private ExterneService: ExterneSNService, private SkillService: SkillsService) { }
+    private ExterneService: ExterneSNService, private SkillService: SkillsService, private router: Router) { }
 
   ngOnInit(): void {
     this.CVService.getCvs().then((cvs: CV[]) => {
@@ -269,6 +269,10 @@ export class IMatchComponent implements OnInit {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), 'cv.pdf')
     })
+  }
+
+  takeARendezVous(cv: any) {
+    this.router.navigate(['rendez-vous/', cv.user_id._id])
   }
 
 }
