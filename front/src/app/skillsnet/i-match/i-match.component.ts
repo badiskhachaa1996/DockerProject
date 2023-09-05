@@ -85,12 +85,19 @@ export class IMatchComponent implements OnInit {
     { label: "Guadeloupe", value: "Guadeloupe" },
   ]
   disponibilite = []
+  etudes = [
+    {label:'Baccalauréat',value:'Baccalauréat'},
+    {label:'BTS (Brevet de Technicien Supérieur)',value:'BTS (Brevet de Technicien Supérieur)'},
+    {label:'Bachelor',value:'Bachelor'},
+    {label:'Master 1er année',value:'Master 1er année'},
+    {label:'Master 2ème année',value:'Master 2ème année'},
+  ]
 
   constructor(private CVService: CvService, private EtudiantService: EtudiantService,
     private ExterneService: ExterneSNService, private SkillService: SkillsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.CVService.getCvs().then((cvs: CV[]) => {
+    this.CVService.getCvsPublic().then((cvs: CV[]) => {
       cvs.forEach(cv => {
         if (cv.user_id)
           this.cvs.push(cv)

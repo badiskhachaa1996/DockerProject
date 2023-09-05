@@ -225,7 +225,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
-      req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl === '/soc/cv/get-cvs-public' ||
       req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
       req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||

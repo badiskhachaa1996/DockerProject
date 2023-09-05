@@ -76,6 +76,8 @@ export class CV {
         public disponibilite?: Date,
         public createur_id?: User,
         public winner_id?: User,
-        public picture?: string
+        public picture?: string,
+        public isPublic?: Boolean,
+        public niveau_etude?: string,
     ) { }
 }

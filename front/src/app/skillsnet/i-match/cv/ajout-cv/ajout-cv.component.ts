@@ -161,6 +161,14 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
+  etudes = [
+    { label: 'Baccalauréat', value: 'Baccalauréat' },
+    { label: 'BTS (Brevet de Technicien Supérieur)', value: 'BTS (Brevet de Technicien Supérieur)' },
+    { label: 'Bachelor', value: 'Bachelor' },
+    { label: 'Master 1er année', value: 'Master 1er année' },
+    { label: 'Master 2ème année', value: 'Master 2ème année' },
+  ]
+
   @ViewChild('filter') filter: ElementRef;
 
 
@@ -196,6 +204,8 @@ export class AjoutCvComponent implements OnInit {
       disponibilite: [''],
       user_create_type: ['Externe'],
       winner_id: [''],
+      isPublic: [true],
+      niveau_etude: ['']
     });
 
     this.EcoleService.getAll().subscribe(ecoles => {
