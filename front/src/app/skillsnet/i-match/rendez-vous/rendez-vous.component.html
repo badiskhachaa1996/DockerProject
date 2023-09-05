@@ -1,0 +1,22 @@
+<div class="col-12 grid card">
+    <h1 class="col-12" style="text-align: center;">Prendre rendez-vous</h1>
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="form" (submit)="onSubmit()">
+        <div class="field col-6">
+            <label for="email">Adresse e-mail</label>
+            <input pInputText type="email" id="email" formControlName="email" autoWidth="false"
+                [style]="{'width':'100%'}">
+        </div>
+        <div class="field col-6">
+            <label for="phone">Numéro de téléphone</label>
+            <input pInputText type="tel" id="phone" formControlName="phone" autoWidth="false"
+                [style]="{'width':'100%'}">
+        </div>
+        <div class="field col-12">
+            <label for="date">Date de rendez-vous</label>
+            <p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
+                [showTime]="true"></p-calendar>
+        </div>
+        <button pButton type="submit" [disabled]="form.invalid" label="Prendre rendez-vous" autoWidth="false"
+            [style]="{'width':'100%'}"></button>
+    </form>
+</div>

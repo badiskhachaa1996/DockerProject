@@ -17,6 +17,7 @@ const { Partenaire } = require("../models/partenaire");
 const { Prospect } = require("../models/prospect");
 const { Service } = require("../models/service");
 const { CommercialPartenaire } = require("../models/CommercialPartenaire");
+const { CvType } = require("../models/CvType");
 
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
@@ -218,6 +219,23 @@ app.get("/getPopulate/:id", (req, res, next) => {
     .populate("service_id")
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .send("Impossible de recuperer ce utilisateur: " + error.message);
+    });
+});
+
+app.get("/nstuget/:id", (req, res, next) => {
+  User.findById(req.params.id)
+    ?.then((userfromDb) => {
+      CvType.find({ user_id: req.params.id }).populate('winner_id').then(w => {
+        res.status(200).send({
+          lastname: userfromDb.lastname, firstname: userfromDb.firstname,
+          email: userfromDb.email, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname
+        });
+      })
     })
     .catch((error) => {
       res

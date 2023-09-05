@@ -370,4 +370,10 @@ export class AuthService {
     return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  nstuget(id) {
+    let url = `${this.apiUrl}nstuget/${id}`;
+    return this.http.get<{ lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 }
