@@ -226,9 +226,11 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
       req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl === '/soc/skills/get-competences' ||
+      req.originalUrl === '/soc/skills/get-profiles' ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
         req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {

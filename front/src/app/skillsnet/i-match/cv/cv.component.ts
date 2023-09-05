@@ -23,6 +23,11 @@ export class CvComponent implements OnInit {
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
       this.user = data.dataCv.user_id
+      if (!data) {
+        this.UserService.getPopulate(id).subscribe(u => {
+          this.user = u
+        })
+      }
     })
 
     this.cvservice.getAllPicture().subscribe(data => {
