@@ -63,6 +63,18 @@ export class CvService {
     });
   }
 
+  getCvsPublic() {
+    const url = `${this.apiUrl}/get-cvs-public`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CVs récupérés'),
+      })
+    });
+  }
+
   // methode de recupération d'un cv via son id
   getCv(id: string) {
     const url = `${this.apiUrl}/get-cv/${id}`;

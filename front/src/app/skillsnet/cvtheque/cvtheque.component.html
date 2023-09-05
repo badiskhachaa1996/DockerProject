@@ -146,11 +146,12 @@
 
                 <div class="field col-6">
                     <label>Test Mobilité - Ville</label>
-                <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
-                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100" formControlName="locations"></p-multiSelect>
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
+                        formControlName="locations"></p-multiSelect>
 
-            </div>
-                
+                </div>
+
                 <div class="field col-12">
                     <label>Centres d'intérêt</label>
                     <input pInputText type="text" placeholder="Ex: Basketball, Littérature"
@@ -174,6 +175,19 @@
                         [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
                         formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
                         filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label for="user">Rendre votre CV Public ?</label>
+                    <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
+                        optionValue="value" optionLabel="label"
+                        [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
+                    <!-- Rajouter filter Ecole et Spécialité -->
+                </div>
+                <div class="field col-12">
+                    <label for="user">Selectionné un niveau d'étude</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="etudes"
+                        placeholder="Selectionner un niveau" formControlName="niveau_etude" filter="true"
+                        emptyFilterMessage="Aucun niveau trouvé" filterPlaceholder="Recherche"></p-dropdown>
                 </div>
 
             </form>
@@ -640,13 +654,14 @@
                         placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien"
                         formControlName="video_lien" />
                 </div>-->
-                
+
                 <div class="field col-6">
                     <label>Test Mobilité - Ville</label>
-                <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
-                autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100" formControlName="locations"></p-multiSelect>
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
+                        formControlName="locations"></p-multiSelect>
 
-            </div>
+                </div>
 
                 <div class="field col-12">
                     <label>Centres d'intérêt</label>
@@ -672,6 +687,20 @@
                         formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
                         filterPlaceholder="Recherche"></p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <label for="user">Rendre votre CV Public ?</label>
+                    <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
+                        optionValue="value" optionLabel="label"
+                        [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
+                    <!-- Rajouter filter Ecole et Spécialité -->
+                </div>
+                <div class="field col-12">
+                    <label for="user">Selectionné un niveau d'étude</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="etudes"
+                        placeholder="Selectionner un niveau" formControlName="niveau_etude" filter="true"
+                        emptyFilterMessage="Aucun niveau trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+
             </form>
             <div class="field col-12">
                 <h3 class="col-12">Expériences professionels</h3>

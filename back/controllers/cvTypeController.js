@@ -91,6 +91,12 @@ app.get("/get-cvs", (_, res) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+app.get("/get-cvs-public", (_, res) => {
+    CvType.find({ isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 
 // recuperation d'un cv par id du cv
 app.get("/get-cv", (req, res) => {

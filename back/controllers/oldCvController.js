@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { CvType } = require("./../models/CvType");
+const { CvType } = require("../models/CvType");
 const path = require('path');
 
 const fs = require("fs")
