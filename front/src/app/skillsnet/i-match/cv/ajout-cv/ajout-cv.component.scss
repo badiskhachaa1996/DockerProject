@@ -1,5 +1,4 @@
 
-
 .main-page {
     min-height: 100vh;
     width: 100%;
@@ -197,6 +196,15 @@
       background-color: white;
     
     }
+
+    .layout-sidebar {
+      display: none;
+    }
+
+    .layout-topbar {
+      display: none;
+    }
+    
 
     .main-page {
         padding: 0;
