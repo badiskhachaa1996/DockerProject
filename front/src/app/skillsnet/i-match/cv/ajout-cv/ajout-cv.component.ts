@@ -590,7 +590,7 @@ export class AjoutCvComponent implements OnInit {
   }
 
   onPrint() {
-    var element = document.getElementById('page-certif');
+    /*var element = document.getElementById('page-certif');
     var opt = {
       margin: 0,
       filename: 'CV.pdf',
@@ -601,6 +601,7 @@ export class AjoutCvComponent implements OnInit {
     //html2pdf().set(opt).from(element).save();
     html2pdf().from(element).toPdf().get('pdf').then(function (pdf) {
       window.open(pdf.output('bloburl'), '_blank');
-    });
+    });*/
+    window.print()
   }
 }

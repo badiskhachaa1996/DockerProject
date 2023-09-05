@@ -213,7 +213,7 @@ export class IMatchComponent implements OnInit {
         let db = new Date(this.dispoFilter)
         let df = new Date(this.dispoFilter)
         df.setMonth(df.getMonth() + 1)
-        if (!(db <= new Date(cv.disponibilite) && new Date(cv.disponibilite) <= df))
+        if (!(db <= new Date(cv.disponibilite)))
           added = false; console.log('Date ISSUE', this.dispoFilter, new Date(cv.disponibilite))
       }
 

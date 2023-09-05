@@ -1220,6 +1220,7 @@ const routes: Routes = [
                 component: BookingV2Component,
                 canActivate: [AuthGuardService],
             },
+            { path: 'gen-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
         ],
     },
     {
@@ -1277,7 +1278,6 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-    { path: 'gen-cv', component: AjoutCvComponent },
     // Accessible from anywhere
     { path: 'imatch', component: IMatchComponent },
     { path: 'imatch/cv/:id', component: CvComponent },

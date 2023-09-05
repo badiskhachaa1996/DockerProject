@@ -143,7 +143,7 @@
 
                     <div class="field col-12" *ngIf="formAddCV.value.user_create_type=='Externe'">
                         <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
-                            [options]="dropdownUserExterne" placeholder="Selectionner un externe" [showClear]="true"
+                            [options]="dropdownUserExterne" placeholder="Selectionner un externe" [showClear]="true" (onChange)="onSelectUser($event.value)"
                             formControlName="user_id" filter="true" emptyFilterMessage="Aucun utilisateur trouvé"
                             filterPlaceholder="Recherche"></p-dropdown>
                     </div>
