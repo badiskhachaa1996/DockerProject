@@ -253,6 +253,7 @@ import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/co
 import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
 import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
+import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
 const routes: Routes = [
     {
         path: '',
@@ -1138,6 +1139,7 @@ const routes: Routes = [
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
