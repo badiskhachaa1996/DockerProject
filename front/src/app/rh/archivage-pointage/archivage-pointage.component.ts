@@ -14,12 +14,13 @@ export class ArchivagePointageComponent implements OnInit {
   constructor(private PoiService: PointeuseService, private PointageService: PointageService, private rhService: RhService) { }
   machineList = []
   pointages: PointageData[] = []
+  dicPointages = {}
   collaborateurDic = {}
   machineDic = {}
   uidDic = {}
   dateAjr = new Date()
   date_dernier_maj = new Date()
-
+  datePointageArray = []
   ngOnInit(): void {
     this.PoiService.getAll().subscribe(ps => {
       this.machineList = ps
@@ -44,7 +45,10 @@ export class ArchivagePointageComponent implements OnInit {
       console.log(this.uidDic)
     })
     this.PointageService.getAll().subscribe(ps => {
-      this.pointages = ps
+      this.pointages = ps.pointages
+      this.dicPointages = ps.dicDayPointage
+      this.datePointageArray = Object.keys(this.dicPointages)
+      console.log(this.datePointageArray)
     })
     this.rhService.getCollaborateurs()
       .then((response) => {
@@ -54,6 +58,14 @@ export class ArchivagePointageComponent implements OnInit {
             this.collaborateurDic[c.user_id._id] = `${c.user_id.lastname} ${c.user_id.firstname}`
         })
       })
+  }
+
+  seeHisto(pds: PointageData[]) {
+
+  }
+
+  exportToExcel(pds: PointageData[]) {
+
   }
 
 }

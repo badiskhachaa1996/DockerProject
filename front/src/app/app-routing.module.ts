@@ -254,6 +254,7 @@ import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.componen
 import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
 import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
+import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
 const routes: Routes = [
     {
         path: '',
@@ -1216,6 +1217,7 @@ const routes: Routes = [
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
             { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
             { path: 'pointage/configuration', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
+            { path: 'pointage/archivage', component: ArchivagePointageComponent, canActivate: [AuthGuardService] },
 
             //Module Booking V2
             {
