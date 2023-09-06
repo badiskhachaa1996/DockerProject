@@ -4660,7 +4660,19 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                console.log(service_dic)
+                if (services_list.length != 0 || response.date_creation > new Date(2023, 9, 5,23))
+                    this.items = [
+                        {
+                            label: 'Tableau de bord',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        },
+                        {
+                            label: 'Signaler un problème technique',
+                            icon: 'pi pi-fw pi-exclamation-triangle',
+                            routerLink: ['/ticketing-igs'],
+                        },
+                    ]
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
                         this.items.push(
