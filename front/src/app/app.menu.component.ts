@@ -4660,7 +4660,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                if (services_list.length != 0 || response.date_creation > new Date(2023, 9, 5,23))
+                if ((services_list.length != 0 || response.date_creation > new Date(2023, 8, 5)) && response.role!='Admin')
                     this.items = [
                         {
                             label: 'Tableau de bord',

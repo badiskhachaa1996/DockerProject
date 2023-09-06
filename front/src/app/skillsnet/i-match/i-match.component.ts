@@ -86,11 +86,11 @@ export class IMatchComponent implements OnInit {
   ]
   disponibilite = []
   etudes = [
-    {label:'Baccalauréat',value:'Baccalauréat'},
-    {label:'BTS (Brevet de Technicien Supérieur)',value:'BTS (Brevet de Technicien Supérieur)'},
-    {label:'Bachelor',value:'Bachelor'},
-    {label:'Master 1er année',value:'Master 1er année'},
-    {label:'Master 2ème année',value:'Master 2ème année'},
+    { label: 'Baccalauréat', value: 'Baccalauréat' },
+    { label: 'BTS (Brevet de Technicien Supérieur)', value: 'BTS (Brevet de Technicien Supérieur)' },
+    { label: 'Bachelor', value: 'Bachelor' },
+    { label: 'Master 1er année', value: 'Master 1er année' },
+    { label: 'Master 2ème année', value: 'Master 2ème année' },
   ]
 
   constructor(private CVService: CvService, private EtudiantService: EtudiantService,
@@ -193,6 +193,7 @@ export class IMatchComponent implements OnInit {
   selectedSkills = []
   selectedProfiles = []
   selectedLocations = []
+  selectEtude = []
 
   updateFilter() {
     this.filteredCVS = []
@@ -221,7 +222,7 @@ export class IMatchComponent implements OnInit {
         let df = new Date(this.dispoFilter)
         df.setMonth(df.getMonth() + 1)
         if (!(db <= new Date(cv.disponibilite)))
-          added = false; console.log('Date ISSUE', this.dispoFilter, new Date(cv.disponibilite))
+          added = false;
       }
 
       if (this.selectedSkills.length != 0) {
@@ -230,13 +231,20 @@ export class IMatchComponent implements OnInit {
           tempSkill.push(skill.libelle)
         })
         if (!(this.selectedSkills.every(elem => tempSkill.includes(elem))))
-          added = false; console.log('SKILLS ISSUE')
+          added = false;
       }
       if (this.selectedLocations.length != 0) {
         this.selectedLocations.forEach(p => {
           if (!cv.mobilite_lieu || !cv.mobilite_lieu.includes(p))
-            added = false; console.log('Location ISSUE')
+            added = false;
         })
+      }
+      if (this.selectEtude.length != 0) {
+        this.selectEtude.forEach(p => {
+          if (!cv.niveau_etude || !cv.niveau_etude.includes(p))
+            added = false
+        })
+
       }
       if (this.selectedProfiles.length != 0) {
         let bufferProfil: any = cv.competences[0]

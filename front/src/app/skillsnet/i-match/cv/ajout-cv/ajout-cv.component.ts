@@ -161,6 +161,11 @@ export class AjoutCvComponent implements OnInit {
 
   dicPicture = {}
 
+  ecolesImage = [
+    { label: "Espic", value: 'espic' }
+  ]
+  ecoleImage = "espic"
+
   etudes = [
     { label: 'Baccalauréat', value: 'Baccalauréat' },
     { label: 'BTS (Brevet de Technicien Supérieur)', value: 'BTS (Brevet de Technicien Supérieur)' },

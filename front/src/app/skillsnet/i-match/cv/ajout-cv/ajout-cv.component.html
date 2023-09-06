@@ -132,7 +132,14 @@
         <div class="input-form-cv">
             <div *ngIf="formAddCV">
                 <h4 class="title-add-cv">Génération de CV</h4>
+                <div class="col-12">
+                    <label for="user">Choisir une école</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="ecolesImage"
+                        [(ngModel)]="ecoleImage" placeholder="Selectionner une école" filter="true"
+                        emptyFilterMessage="Aucun école trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddCV">
+
                     <div class="field col-12">
                         <label for="user">A qui appartient ce CV ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="user_create_type"
@@ -674,7 +681,7 @@
             <div class="page-container" id="page-certif">
                 <div class="page-inner-content">
                     <div class="header" id="header_area"
-                        style="background-image: url('../../../../../assets/images/imatch/gen-cv/espic/bg-header.png');">
+                        style="background-image: url('../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/bg-header.png')">
                         <div class="student-image"
                             style="background-image: url('../../../../../assets/images/imatch/female.png')"></div>
                         <div class="student-identity">
@@ -785,7 +792,7 @@
                                 </div>
                             </div>
                         </div>
-                        <img class="logo-image" src="../../../../../assets/images/imatch/gen-cv/espic/logo.png" />
+                        <img class="logo-image" src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
                     </div>
 
                 </div>

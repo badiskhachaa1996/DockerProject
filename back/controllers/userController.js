@@ -233,7 +233,7 @@ app.get("/nstuget/:id", (req, res, next) => {
       CvType.find({ user_id: req.params.id }).populate('winner_id').then(w => {
         res.status(200).send({
           lastname: userfromDb.lastname, firstname: userfromDb.firstname,
-          email: userfromDb.email, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname
+          email: userfromDb.email, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
         });
       })
     })

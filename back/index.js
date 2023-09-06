@@ -140,6 +140,7 @@ const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
 const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
+const meetingTeamsController = require('./controllers/meetingTeamsController');
 
 const { User } = require("./models/user");
 
@@ -375,6 +376,7 @@ app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController
 app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
 app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 app.use('/soc/pointage', require('./controllers/pointageController'))
+app.use('/soc/meetingTeams', meetingTeamsController)
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
