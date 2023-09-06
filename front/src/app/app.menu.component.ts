@@ -1153,6 +1153,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-cog',
                                             routerLink: ['/pointage/configuration']
                                         },
+                                        {
+                                            label: "Archivage des pointages",
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['/pointage/archivage']
+                                        },
                                     ]
 
                                 },

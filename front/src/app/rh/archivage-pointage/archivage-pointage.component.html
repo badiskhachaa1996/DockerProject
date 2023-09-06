@@ -2,9 +2,9 @@
     <p-toast></p-toast>
     <div class="card grid col-12">
         <h5 class="col-12" style="text-align: center;">Archivage des pointages</h5>
-        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="pointages"
-            [paginator]="true" [pageLinks]="5" selectionMode="single" [globalFilterFields]="['uid', 'machine']"
-            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="datePointageArray"
+            class="col-12" [paginator]="true" [pageLinks]="5" selectionMode="single"
+            [globalFilterFields]="['uid', 'machine']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <span class="p-input-icon-left mb-2">
                     <i class="pi pi-search"></i>
@@ -40,25 +40,29 @@
             <ng-template pTemplate="body" let-point>
                 <tr>
                     <td>
-                        {{point.date | date:'short' }}
+                        {{dicPointages[point][0].date | date:'mediumDate' }}
                     </td>
                     <td>
-                        {{point.machine }}
+                        {{dicPointages[point][0].machine }}
                     </td>
                     <td>
-                        {{machineDic[point.machine]?.localisation }}
+                        {{machineDic[dicPointages[point][0]?.machine]?.localisation }}
                     </td>
                     <td>
-                        En dévéloppement
+                        {{dicPointages[point].length}}
                     </td>
                     <td>
-                        En dévéloppement
+                        {{dicPointages[point][0].date| date:'short' }}
                     </td>
                     <td>
-                        En dévéloppement
+                        {{dicPointages[point][dicPointages[point].length-1].date| date:'short' }}
                     </td>
-                    <td>
 
+                    <td>
+                        <i class="pi pi-file-excel" pTooltip="Exporter" (click)="exportToExcel(dicPointages[point])"
+                            tooltipPosition="bottom" aria-hidden="true"></i>
+                        <i class="pi pi-bars" pTooltip="Voir l'historique" (click)="seeHisto(dicPointages[point])"
+                            tooltipPosition="bottom" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>

@@ -927,10 +927,10 @@
 							{{collaborateur?.intitule_poste}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{'---'}}
+							{{collaborateur.user_id.mention}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{'---'}}
+							{{collaborateur?.user_id?.service_id?.label}}
 						</td>
 						<td style="min-width: 10rem;">
 							{{afficherAnciennete(collaborateur)}} jours

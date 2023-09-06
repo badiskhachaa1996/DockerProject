@@ -4,8 +4,20 @@ const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 
 app.get("/getAll", (req, res, next) => {
-    PointageData.find().sort({ updateDate: -1 })
-        .then((formFromDb) => { res.status(200).send(formFromDb); })
+    PointageData.find().sort({ date: -1 })
+        .then((formFromDb) => {
+            let r = {}// {date : PointageData[]}
+            formFromDb.forEach(pd => {
+                let d = new Date(pd.date)
+                let k = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`
+                if (r[k]) {
+                    r[k].push(pd)
+                } else {
+                    r[k] = [pd]
+                }
+            })
+            res.status(200).send({ pointages: formFromDb, dicDayPointage: r })
+        })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
 
