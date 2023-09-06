@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
+import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 import { MicrosoftService } from 'src/app/services/microsoft.service';
 
 @Component({
@@ -18,10 +20,10 @@ export class RendezVousComponent implements OnInit {
     date: new FormControl('', Validators.required)
   })
 
-  ID = this.route.snapshot.paramMap.get('user_id');
-  USER: { lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname }
+  ID: any = this.route.snapshot.paramMap.get('user_id');
+  USER: { lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname, winner_id }
   constructor(private route: ActivatedRoute, private McService: MicrosoftService, private UserService: AuthService,
-    private ToastService: MessageService, private router: Router) { }
+    private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService) { }
 
   ngOnInit(): void {
     let d = new Date()
@@ -93,6 +95,9 @@ export class RendezVousComponent implements OnInit {
     this.McService.createTeamsMeeting(event).then(r => {
       if (r) {
         this.ToastService.add({ severity: 'success', detail: 'Le rendez-vous a été planifié' })
+        this.MeetingTeamService.create(new MeetingTeams(null, this.USER.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone)).subscribe(mt => {
+          
+        })
         this.router.navigate(['/imatch'])
       }
     })
