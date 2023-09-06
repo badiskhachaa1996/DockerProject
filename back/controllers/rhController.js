@@ -108,8 +108,12 @@ app.patch("/upload-collaborateur-document", uploadCollaborateurDocument.single('
 app.delete('/delete-collaborateur/:id', (req, res) => {
     const { id } = req.params;
 
-    Collaborateur.findByIdAndUpdate(id)
-        .then(() => { res.status(200).send('Collaborateur supprimé correctement') })
+    Collaborateur.findByIdAndRemove(id)
+        .then((c) => {
+            User.findByIdAndRemove(c.user_id).then((u) => {
+                res.status(200).send('Collaborateur supprimé correctement')
+            })
+        })
         .catch((error) => { res.status(500).send("Impossible de supprimer le collaborateur"); })
 });
 

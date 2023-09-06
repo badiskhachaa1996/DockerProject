@@ -356,6 +356,7 @@ import { CvComponent } from './skillsnet/i-match/cv/cv.component';
 import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
 import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
+import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
 
 @NgModule({
   imports: [
@@ -720,6 +721,7 @@ import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous
     AjoutCvComponent,
     ArchivagePointageComponent,
     RendezVousComponent,
+    GestionMentionServiceComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -69,7 +69,7 @@ export class AppMenuComponent implements OnInit {
                 if (response.role === 'Admin') {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -1158,8 +1158,13 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Ticketing',
-                                    icon: 'pi pi-cog',
+                                    icon: 'pi pi-ticket',
                                     routerLink: ['/ticketing/configuration']
+                                },
+                                {
+                                    label: 'Configuration des mentions et services',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/configuration/service-mention']
                                 },
                                 {
                                     label: 'Gestion des Agents',
@@ -1188,7 +1193,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -1428,7 +1433,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -1524,7 +1529,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -1947,7 +1952,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -2168,7 +2173,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -2229,7 +2234,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
@@ -4180,7 +4185,7 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Tableau de bord',
+                            label: 'Espace personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },

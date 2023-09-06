@@ -69,7 +69,8 @@ export class CollaborateursComponent implements OnInit {
     { label: 'CDI', value: 'CDI' },
     { label: 'CDD', value: 'CDD' },
     { label: 'Alternant', value: 'Alternant' },
-    { label: 'Prestation', value: 'Prestation' }
+    { label: 'Prestation', value: 'Prestation' },
+    { label: 'SIVP', value: 'SIVP' }
   ];
 
   statutList: any[] = [

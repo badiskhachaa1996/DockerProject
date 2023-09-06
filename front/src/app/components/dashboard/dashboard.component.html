@@ -103,8 +103,8 @@
                 <div class="col-6 md:col-3" style="text-align: center">
                     <img src="https://picsum.photos/200/300" alt="Nom et prénom de l'utilisateur" width="100"
                         height="100">
-                    <h6 style="font-style: italic;">Consultant informatique</h6>
-                    <h6>Département: <i>Pédagogie</i></h6>
+                    <h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
+                    <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@
                     </p-table>
                 </p-tabPanel>
 
-                <!--  <p-tabPanel header="CRA">
+                <p-tabPanel header="CRA">
                     <div *ngIf="showFormAddCra">
                         <div class="add-button-div mb-2">
                             <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
@@ -247,7 +247,7 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-tabPanel>-->
+                </p-tabPanel>
 
                 <p-tabPanel header="Suivre mon assiduité">
                     <div class="grid">
@@ -504,7 +504,7 @@
                     </p-table>
                 </p-tabPanel>
 
-                <p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">
+                <p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">*
                     <!-- formulaire de modification d'une demande de congé -->
                     <div *ngIf="showUpdateCongeForm">
                         <i class="pi pi-times-circle"
@@ -811,6 +811,43 @@
                     </div>
                 </div>
             </p-dialog>
+        </p-tabPanel>
+        <p-tabPanel header="Mes favoris">
+            <div class="card" *ngIf="showForm">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
+                <h4 style="text-align: center;">Ajouter un lien</h4>
+                <div style="text-align: center;">
+                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                        obligatoires</small><br>
+                </div>
+                <br>
+                <form class="p-fluid p-formgrid grid" [formGroup]="addLinkForm" (ngSubmit)="saveLink()">
+                    <div class="field col-12 md:col-6">
+                        <label for="libelle">Libellé <span style="color: red;"> * </span></label>
+                        <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Google" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="link">Lien <span style="color: red;"> * </span></label>
+                        <input pInputText id="link" type="text" formControlName="link" placeholder="google.fr" />
+                    </div>
+                    <div style="justify-content: right;">
+                        <button pButton label="Ajouter" type="submit" [disabled]="addLinkForm.invalid"></button>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus"
+                    label="Ajouter un nouveau lien" style="width:auto;float:right"></button>
+                <div class="grid">
+                    <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
+                        <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
+                        <i class="col-1 pi pi-trash"
+                            style="font-size: 20px; color: red; cursor: pointer; margin-left: 1%;"
+                            (click)="deleteLink(i)" aria-hidden="true"> </i>
+                    </div>
+                </div>
+            </div>
         </p-tabPanel>
         </p-tabView>
     </div>
@@ -1282,7 +1319,7 @@
 
 
 
-<div *ngIf="dashboard">
+<!--<div *ngIf="dashboard">
     <div class="card" *ngIf="showForm">
         <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
             (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
@@ -1318,4 +1355,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
