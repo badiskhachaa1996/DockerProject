@@ -1,4 +1,3 @@
-
 <div class="grid col-12 card">
     <h5 class="col-12">Liste des agents</h5>
     <p-table #dt1 [value]="agents" dataKey="_id" responsiveLayout="scroll" class="col-12"
@@ -33,6 +32,9 @@
                     Module : Role
                 </th>
                 <th>
+                    Date de création
+                </th>
+                <th>
                     Action
                 </th>
             </tr>
@@ -61,6 +63,9 @@
                     <ng-container *ngFor="let role of agent.roles_list">
                         {{role.module}} : {{role.role}}<br>
                     </ng-container>
+                </td>
+                <td>
+                    {{agent?.date_creation | date:'mediumDate'}}
                 </td>
                 <td>
                     <i pTooltip="Mettre à jour cette agent" tooltipPosition="bottom" class="pi pi-cog ml-2"
