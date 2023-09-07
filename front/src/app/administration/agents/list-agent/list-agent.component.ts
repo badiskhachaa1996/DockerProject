@@ -59,11 +59,11 @@ export class ListAgentComponent implements OnInit {
     }
     this.authService.getAllAgent().subscribe((users) => {
       //this.tabUser = users;
-      this.tabUser = []
-      users.forEach(u => {
-        if (new Date(u.date_creation) < new Date(2023, 9, 5) && u.service_list.length == 0)
+      this.tabUser = users
+      /*users.forEach(u => {
+        if (new Date(u.date_creation) < new Date(2023, 7, 5) && u.service_list.length == 0)
           this.tabUser.push(u)
-      })
+      })*/
     })
     this.servService.getAll().subscribe((services) => {
       services.forEach(serv => {
