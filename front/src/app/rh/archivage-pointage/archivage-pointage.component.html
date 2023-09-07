@@ -59,8 +59,9 @@
                     </td>
 
                     <td>
-                        <i class="pi pi-file-excel" pTooltip="Exporter" (click)="exportToExcel(dicPointages[point])"
-                            tooltipPosition="bottom" aria-hidden="true"></i>
+                        <i class="pi pi-file-excel" pTooltip="Exporter"
+                            (click)="exportToExcel(dicPointages[point],point)" tooltipPosition="bottom"
+                            aria-hidden="true"></i>
                         <i class="pi pi-bars" pTooltip="Voir l'historique" (click)="seeHisto(dicPointages[point])"
                             tooltipPosition="bottom" aria-hidden="true"></i>
                     </td>
@@ -69,3 +70,67 @@
         </p-table>
     </div>
 </div>
+<p-dialog header="Historique des pointages" [(visible)]="display" [modal]="true">
+    <div class="col-12">
+        <h3 *ngIf="date_dernier_maj">
+            Dernier Mis à jour : {{date_dernier_maj | date : "short"}}
+        </h3>
+        <h3 *ngIf="date_dernier_maj">
+            Date : {{ date_dernier_maj | date : "mediumDate"}}
+        </h3>
+    </div>
+    <p-tabView class="col-12 " style="max-width: 100%;" *ngIf="dataHisto">
+        <p-tabPanel [header]="machine.serial_number" *ngFor="let machine of machineList; let i = index"
+            [selected]="i == 0">
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
+                [value]="dataHisto[machine.serial_number]" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['uid', 'machine']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="date" scope="col" style="text-align: center;">
+                            Time <p-sortIcon field="date"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="uid" scope="col" style="text-align: center;">
+                            UID <p-sortIcon field="uid"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id" scope="col" style="text-align: center;">
+                            Collaborateur <p-sortIcon field="user_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" scope="col" style="text-align: center;">
+                            Type de Pointage disponible <p-sortIcon field="type"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-point>
+                    <tr>
+                        <td>
+                            {{point.date | date:'H:mm' }}
+                        </td>
+                        <td>
+                            {{point.uid}}
+                        </td>
+                        <td
+                            *ngIf="collaborateurDic && uidDic && machine.serial_number && uidDic[machine.serial_number] && uidDic[machine.serial_number][point.uid] && collaborateurDic[uidDic[machine.serial_number][point.uid]]">
+                            {{collaborateurDic[uidDic[machine.serial_number][point.uid]]}}
+                        </td>
+                        <td
+                            *ngIf="!collaborateurDic || !uidDic || !machine.serial_number || !uidDic[machine.serial_number] || !uidDic[machine.serial_number][point.uid] || !collaborateurDic[uidDic[machine.serial_number][point.uid]]">
+                            Aucun assigné
+                        </td>
+                        <td>
+                            {{point.type}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>
