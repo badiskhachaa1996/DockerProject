@@ -15,11 +15,11 @@ export class ListAgentComponent implements OnInit {
 
   ngOnInit(): void {
     this.UserService.getAllAgentPopulate().subscribe(data => {
-      this.agents = []
-      data.forEach(u => {
-        if (new Date(u.date_creation) > new Date(2023, 9, 5) || u.service_list.length != 0)
+      this.agents = data
+      /*data.forEach(u => {
+        if (new Date(u.date_creation) > new Date(2023, 7, 5) || u.service_list.length != 0)
           this.agents.push(u)
-      })
+      })*/
     })
   }
 
