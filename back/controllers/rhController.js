@@ -39,7 +39,7 @@ app.patch('/update-agent-data', (req, res) => {
 
 // récupérer la liste des collaborateurs
 app.get('/get-collaborateurs', (req, res) => {
-    Collaborateur.find().populate({path:'user_id', populate:{path:'service_id'}})?.populate('code_commercial')
+    Collaborateur.find().populate({ path: 'user_id', populate: { path: 'service_id' } })?.populate('code_commercial')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error); });
 });

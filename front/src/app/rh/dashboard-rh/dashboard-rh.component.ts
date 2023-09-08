@@ -55,9 +55,9 @@ export class DashboardRhComponent implements OnInit {
   onGetUsersDailyChecksAndCollaborateur(): void {
     // recuperation de la liste des checks
     this.dailyCheckService.getAllUsersDailyChecks()
-      .then((response) => {
+      .then((dcs) => {
         this.dailyChecks = [];
-        response.forEach(dc => {
+        dcs.forEach(dc => {
           if (dc && dc.user_id)
             this.dailyChecks.push(dc)
         })
@@ -73,6 +73,7 @@ export class DashboardRhComponent implements OnInit {
               if (dc && dc.user_id)
                 listCIDS.push(dc.user_id._id)
             })
+            console.log(this.dailyChecks, listCIDS, this.collaborateurs)
             this.collaborateurs.forEach(c => {
               if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
                 c.user_id.statut = "Absent"
