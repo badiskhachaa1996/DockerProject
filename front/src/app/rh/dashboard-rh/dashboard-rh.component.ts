@@ -68,8 +68,9 @@ export class DashboardRhComponent implements OnInit {
               listCIDS.push(dc.user_id._id)
             })
             this.collaborateurs.forEach(c => {
-              if (c.user_id && listCIDS.includes(c.user_id._id) == false) {
+              if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
                 c.user_id.statut = "Absent"
+                console.log(c.user_id)
                 this.dailyChecks.push(new DailyCheck(null, c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
               }
 

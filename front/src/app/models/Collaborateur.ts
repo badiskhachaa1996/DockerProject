@@ -6,7 +6,7 @@ export class Collaborateur {
         public user_id?: User,
         public matricule?: string,
         public date_demarrage?: string,
-        public date_naissance?: string,
+        public date_naissance?: Date,
         public localisation?: string,
         public intitule_poste?: string,
         public contrat_type?: string,
