@@ -672,11 +672,22 @@ export class CollaborateursComponent implements OnInit {
     this.router.navigate(['rh/calendrier', c.user_id._id])
   }
 
-  clickDetails(r:Collaborateur){
+  clickDetails(r: Collaborateur) {
     this.displayDetails = true
     this.dataCollab = r
   }
 
   displayDetails = false
   dataCollab: Collaborateur
+  addOther() {
+    this.dataCollab.other.push({ _id: new mongoose.Types.ObjectId().toString(), title: '', description: '' })
+  }
+  onDeleteRow(ri) {
+    this.dataCollab.other.splice(ri, 1)
+    this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
+  }
+  onUpdateRow() {
+    this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
+  }
+
 }

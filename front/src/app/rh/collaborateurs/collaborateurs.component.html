@@ -887,7 +887,9 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-collaborateur>
 					<tr>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.matricule}}
 						</td>
 						<!--<td style="min-width: 10rem;">
@@ -896,13 +898,17 @@
 						<!--<td style="min-width: 10rem;">
 							{{collaborateur.user_id?.civilite}}
 						</td>-->
-						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}
 						</td>
 						<!--<td style="min-width: 10rem;">
 							{{collaborateur?.date_naissance | date: 'MM/dd/yyyy'}}
 						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.email}}
 						</td>
 						<!--<td style="min-width: 12rem;">
@@ -916,26 +922,36 @@
 							{{collaborateur.user_id?.postal_adresse}}, {{collaborateur.user_id?.ville_adresse}}/
 							{{collaborateur.user_id?.pays_adresse}}
 						</td>-->
-						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.localisation}}
 						</td>
 						<!--<td style="min-width: 12rem;">
 							{{collaborateur?.h_cra}}<span *ngIf="collaborateur?.h_cra == 1"> heure</span><span
 								*ngIf="collaborateur?.h_cra > 1"> heures</span>
 						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.intitule_poste}}
 						</td>
 						<!--<td style="min-width: 10rem;">
 							{{collaborateur.user_id.mention}}
 						</td>-->
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.user_id?.service_id?.label}}
 						</td>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{afficherAnciennete(collaborateur)}} jours
 						</td>
-						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"  style="cursor: pointer;" pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.statut}}
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
@@ -999,7 +1015,8 @@
 	</div>
 
 </p-dialog>
-<p-dialog header="Informations supplémentaires du Collaborateur" [(visible)]="displayDetails" [modal]="true">
+<p-dialog header="Informations supplémentaires du Collaborateur" [(visible)]="displayDetails" [modal]="true"
+	[style]="{width: '50vw'}">
 	<h6 style="text-align: center;">Information collaborateur</h6><br><br>
 	<p *ngIf="dataCollab && dataCollab.user_id">
 		Civilité : {{dataCollab?.user_id?.civilite}} <br>
@@ -1009,9 +1026,11 @@
 		Email personnelle : {{dataCollab.user_id?.email_perso}}<br>
 		Téléphone personnelle : {{dataCollab.user_id?.indicatif}} {{dataCollab.user_id?.phone}}<br>
 		Adresse : {{dataCollab.user_id?.numero_adresse}} {{dataCollab.user_id?.rue_adresse}} <br>
-		{{dataCollab.user_id?.postal_adresse}}, {{dataCollab.user_id?.ville_adresse}}/{{dataCollab.user_id?.pays_adresse}}<br>
+		{{dataCollab.user_id?.postal_adresse}},
+		{{dataCollab.user_id?.ville_adresse}}/{{dataCollab.user_id?.pays_adresse}}<br>
 	</p>
-	<br>	<hr />
+	<br>
+	<hr />
 	<h6 style="text-align: center;">Poste</h6><br><br>
 	<p *ngIf="dataCollab && dataCollab.user_id">
 		Matricule : {{dataCollab?.matricule}}<br>
@@ -1024,8 +1043,56 @@
 		Taux horaire : {{dataCollab?.h_cra}}<br>
 		Localisation : {{dataCollab?.localisation}}<br>
 	</p>
-	<br>	<hr />
+	<br>
+	<hr />
 	<h6 style="text-align: center;">Autre Informations</h6><br><br>
-	<p>En dévéloppement</p>
+	<div style="width: 100%;" class="grid">
+		<button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined col-12 mb-2"
+			style="float: right;" (click)="addOther()"></button>
+		<p-table [value]="dataCollab?.other" dataKey="_id" editMode="row" class="col-12"
+			styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Libellé</th>
+					<th>Information</th>
+					<th>Action</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+				<tr>
+					<td pEditableColumn>
+						<p-cellEditor>
+							<ng-template pTemplate="input">
+								<input pInputText type="text" [(ngModel)]="rowData.title" (blur)="onUpdateRow()">
+							</ng-template>
+							<ng-template pTemplate="output">
+								{{rowData.title}}
+							</ng-template>
+						</p-cellEditor>
+					</td>
+					<td pEditableColumn>
+						<p-cellEditor>
+							<ng-template pTemplate="input">
+								<input pInputText type="text" [(ngModel)]="rowData.description" (blur)="onUpdateRow()">
+							</ng-template>
+							<ng-template pTemplate="output">
+								{{rowData.description}}
+							</ng-template>
+						</p-cellEditor>
+					</td>
+					<td>
+						<button pButton pRipple type="button" icon="pi pi-trash"
+							class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteRow(ri)"></button>
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="emptymessage">
+				<tr>
+					<td colspan="3">Aucun autre information pour le moment.</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
 	<hr />
 </p-dialog>

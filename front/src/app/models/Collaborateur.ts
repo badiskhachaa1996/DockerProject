@@ -23,6 +23,11 @@ export class Collaborateur {
             notes?: string
             filename?: string
         }[],
-        public conge_nb?: number
+        public conge_nb?: number,
+        public other?: {
+            _id?: string,
+            title?: string,
+            description?: string,
+        }[]
     ) { }
 }

@@ -39,19 +39,26 @@ app.get('/getAllWithUserID', (req, res) => {
     PointageData.find({ date: { $gte: `${year}-${month}-${day}`, $lte: `${year}-${month}-${day} 23:59` } }).sort({ updateDate: -1 })
         .then((formFromDb) => {
             let machine_id = []
+            let PD = {}
             formFromDb.forEach(pd => {
                 machine_id.push(pd.machine)
+                if (PD[pd.uid])
+                    PD[pd.uid].push(pd)
+                else
+                    PD[pd.uid] = [pd]
             })
+
             PointeuseData.find({ serial_number: { $in: machine_id } }).populate({ path: 'users', populate: { path: 'user_id' } }).then(poid => {
-                let dicR = {}
+                let UserToUID = {}
+                let UIDToUser = {}
                 poid.forEach(poi => {
-                    if (!dicR[poi.serial_number])
-                        dicR[poi.serial_number] = {}
                     poi.users.forEach(u => {
-                        dicR[poi.serial_number][u.UID] = u.user_id
+                        if (u.user_id)
+                            UserToUID[u.user_id._id] = u.UID
+                        UIDToUser[u.UID] = u.user_id
                     })
                 })
-                res.status(200).send({ PD: formFromDb, dicPD: dicR });
+                res.status(200).send({ PD: formFromDb, UIDToUser, UserToUID, DataDic:PD });
             })
 
         })
