@@ -195,7 +195,13 @@ export class CollaborateursComponent implements OnInit {
   // recuperation de la liste des collaborateurs
   onGetCollaborateurs(): void {
     this.rhService.getCollaborateurs()
-      .then((response) => { this.collaborateurs = response; })
+      .then((response) => {
+        this.collaborateurs=[]
+        response.forEach(c => {
+          if (c.user_id)
+            this.collaborateurs.push(c)
+        })
+      })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
   }
 

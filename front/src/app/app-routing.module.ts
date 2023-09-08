@@ -1251,6 +1251,11 @@ const routes: Routes = [
         component: SuiviePreinscriptionComponent,
         canActivate: [ProspectGuard],
     },
+    {
+        path: 'suivre-ma-preinscription/:user_id',
+        component: SuiviePreinscriptionComponent,
+        canActivate: [ProspectGuard],
+    },
     { path: 'creer-mon-entreprise/:id', component: EntrepriseFormComponent },
 
     { path: 'pages/landing', component: LandingComponent },
