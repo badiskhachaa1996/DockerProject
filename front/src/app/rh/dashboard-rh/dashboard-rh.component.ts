@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
+import { PointageService } from 'src/app/services/pointage.service';
 import { RhService } from 'src/app/services/rh.service';
 
 @Component({
@@ -36,11 +37,17 @@ export class DashboardRhComponent implements OnInit {
     { label: 'En pause', value: 'En pause' },
   ];
 
-  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService, private messageService: MessageService) { }
+
+
+  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService,
+    private messageService: MessageService, private PointageService: PointageService) { }
 
   ngOnInit(): void {
     // recuperation de la liste des checks
     this.onGetUsersDailyChecksAndCollaborateur();
+    this.PointageService.getAllWithUserID().subscribe(r => {
+      console.log(r)
+    })
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
@@ -56,9 +63,20 @@ export class DashboardRhComponent implements OnInit {
         this.rhService.getCollaborateurs()
           .then((response) => {
             this.collaborateurs = response;
+            let listCIDS = []
+            this.dailyChecks.forEach((dc: any) => {
+              listCIDS.push(dc.user_id._id)
+            })
+            this.collaborateurs.forEach(c => {
+              if (c.user_id && listCIDS.includes(c.user_id._id) == false) {
+                c.user_id.statut = "Absent"
+                this.dailyChecks.push(new DailyCheck(null, c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
+              }
+
+            })
             this.loading = false;
             // pourcentage de checks
-            this.checkPercent = Math.ceil(( this.numberOfChecks / this.collaborateurs.length) * 100);
+            this.checkPercent = Math.ceil((this.numberOfChecks / this.collaborateurs.length) * 100);
 
             // initialisation à zero
             this.numberOfDisponible = 0;
