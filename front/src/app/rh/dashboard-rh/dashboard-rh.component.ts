@@ -56,7 +56,11 @@ export class DashboardRhComponent implements OnInit {
     // recuperation de la liste des checks
     this.dailyCheckService.getAllUsersDailyChecks()
       .then((response) => {
-        this.dailyChecks = response;
+        this.dailyChecks = [];
+        response.forEach(dc => {
+          if (dc && dc.user_id)
+            this.dailyChecks.push(dc)
+        })
         // nombre de checks
         this.numberOfChecks = this.dailyChecks.length;
 
@@ -66,7 +70,8 @@ export class DashboardRhComponent implements OnInit {
             this.collaborateurs = response;
             let listCIDS = []
             this.dailyChecks.forEach((dc: any) => {
-              listCIDS.push(dc.user_id._id)
+              if (dc && dc.user_id)
+                listCIDS.push(dc.user_id._id)
             })
             this.collaborateurs.forEach(c => {
               if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
