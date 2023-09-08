@@ -24,7 +24,13 @@ const collaborateurSchema = mongoose.Schema({
             filename: { type: String, required: false },
         }], required: false
     },
-    conge_nb: { type: Number, required: false, default: 0 }
+    conge_nb: { type: Number, required: false, default: 0 },
+    other: {
+        type: [{
+            title: { type: String, required: false },
+            description: { type: String, required: false },
+        }], default: []
+    }
 });
 
 const Collaborateur = mongoose.model('collaborateur', collaborateurSchema);

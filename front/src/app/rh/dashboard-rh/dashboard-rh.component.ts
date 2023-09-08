@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
+import { PointageData } from 'src/app/models/PointageData';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import { RhService } from 'src/app/services/rh.service';
@@ -37,7 +38,7 @@ export class DashboardRhComponent implements OnInit {
     { label: 'En pause', value: 'En pause' },
   ];
 
-
+  dataMachine;
 
   constructor(private rhService: RhService, private dailyCheckService: DailyCheckService,
     private messageService: MessageService, private PointageService: PointageService) { }
@@ -46,7 +47,7 @@ export class DashboardRhComponent implements OnInit {
     // recuperation de la liste des checks
     this.onGetUsersDailyChecksAndCollaborateur();
     this.PointageService.getAllWithUserID().subscribe(r => {
-      console.log(r)
+      this.dataMachine = r
     })
   }
 
@@ -122,6 +123,39 @@ export class DashboardRhComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: "Impossible de récupérer l'historique de check du collaborateur" }); });
   }
+
+  getCheckIn(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) < date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+
+  }
+
+  getCheckOut(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) > date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+  }
+
+
 
 
 }

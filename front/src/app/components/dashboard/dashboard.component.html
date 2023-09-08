@@ -18,6 +18,44 @@
     </div>
 </div>
 
+<p-dialog [style]="{width: '50vw'}" [(visible)]="displayPointeuse" header="Heure de Pointage" [modal]="true">
+    <p-table #dtPoi dataKey="_id" [value]="histoPointage" responsiveLayout="scroll" styleClass="p-datatable-gridlines"
+        *ngIf="histoPointage">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date" scope="col" style="text-align: center;">
+                    Time <p-sortIcon field="date"></p-sortIcon>
+                </th>
+                <th pSortableColumn="uid" scope="col" style="text-align: center;">
+                    UID <p-sortIcon field="uid"></p-sortIcon>
+                </th>
+                <th pSortableColumn="user_id" scope="col" style="text-align: center;">
+                    Localisation <p-sortIcon field="user_id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="type" scope="col" style="text-align: center;">
+                    Type de Pointage disponible <p-sortIcon field="type"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-point>
+            <tr>
+                <td>
+                    {{point.date | date:'H:mm' }}
+                </td>
+                <td>
+                    {{point.uid}}
+                </td>
+                <td>
+                    {{machineDic[point.machine]?.localisation}}
+                </td>
+                <td>
+                    {{point.type}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+
 <!-- Modèle visiteur -->
 <div *ngIf="isVisitor">
     <h2 *ngIf="user && !isEtudiant" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname
@@ -67,8 +105,8 @@
                 </div>
                 <div class="col-6 md:col-3">
                     <h5>Heure de check In </h5>
-                    <h6><strong>Online</strong>{{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
-                    <h6><strong>Pointeuse</strong>En dévéloppement </h6>
+                    <h6><strong>Online</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
+                    <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
                     <h6>Temps passé au <br> travail:
                         <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
                     </h6>
@@ -470,7 +508,7 @@
 
                 <p-tabPanel header="Mes documents" *ngIf="user">
 
-                    <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true" 
+                    <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
@@ -764,9 +802,9 @@
                     <tr>
                         <td>{{cra.today}}</td>
                         <td>{{cra.check_in | date:'H:mm'}}</td>
-                        <td>En dévéloppement</td>
+                        <td>WIP</td>
                         <td>{{cra.check_out | date:'H:mm'}}</td>
-                        <td>En dévéloppement</td>
+                        <td>WIP</td>
                         <td *ngIf="cra.pause_timing">
                             <ul>
                                 <li *ngFor="let pause of cra.pause; let i = index">
@@ -782,6 +820,8 @@
                         <td>
                             <button pButton pRipple label="Afficher CRA" class="p-button-success p-button-outlined mb-2"
                                 (click)="historiqueCraSelected = cra; showDailySelectedCra = true"></button>
+                            <button pButton pRipple label="Afficher Pointeuse"
+                                class="p-button-success p-button-outlined mb-2" (click)="onSeePointeuse()"></button>
                         </td>
                     </tr>
                 </ng-template>
