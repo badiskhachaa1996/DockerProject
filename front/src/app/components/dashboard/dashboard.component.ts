@@ -91,6 +91,7 @@ export class DashboardComponent implements OnInit {
   isUnknow = false;
   isVisitor = false;
   isIntuns = false
+  isProspect = false
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
@@ -331,6 +332,7 @@ export class DashboardComponent implements OnInit {
         this.isCEO = dataUser.type == "CEO Entreprise";
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
         this.isIntuns = dataUser.type == "EtudiantsIntuns"
+        this.isProspect = dataUser.type == "Prospect"
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
