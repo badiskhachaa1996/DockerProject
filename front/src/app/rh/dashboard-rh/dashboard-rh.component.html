@@ -29,7 +29,7 @@
 
 		<!-- tableau d'affichage des données en temps réel -->
 		<div class="card">
-			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [totalRecords]="dailyChecks.length"
 				styleClass="p-datatable-gridlines" [paginator]="true"
 				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
 				responsiveLayout="scroll">
