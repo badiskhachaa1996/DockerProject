@@ -101,9 +101,8 @@
 
                 </div>
                 <div class="col-6 md:col-3" style="text-align: center">
-                    <img src="https://picsum.photos/200/300" alt="Nom et prénom de l'utilisateur" width="100"
-                        height="100">
-                    <h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
+                    <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
+                    <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>-->
                     <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>
                 </div>
             </div>
@@ -469,9 +468,9 @@
                     </p-table>
                 </p-tabPanel>
 
-                <p-tabPanel header="Mes documents">
+                <p-tabPanel header="Mes documents" *ngIf="user">
 
-                    <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
+                    <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true" 
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
@@ -839,7 +838,7 @@
             <div class="card">
                 <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus"
                     label="Ajouter un nouveau lien" style="width:auto;float:right"></button>
-                <div class="grid">
+                <div class="grid" *ngIf="dashboard">
                     <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
                         <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
                         <i class="col-1 pi pi-trash"
@@ -1373,8 +1372,7 @@
 
                 </div>
                 <div class="col-6 md:col-3" style="text-align: center">
-                    <img src="https://picsum.photos/200/300" alt="Nom et prénom de l'utilisateur" width="100"
-                        height="100">
+                    <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
                     <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>-->
                     <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>
                 </div>
@@ -1741,7 +1739,7 @@
                     </p-table>
                 </p-tabPanel>
 
-                <p-tabPanel header="Mes documents">
+                <p-tabPanel header="Mes documents" *ngIf="user">
 
                     <p-table [value]="user.documents_rh" dataKey="_id" [rows]="4" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
@@ -2111,7 +2109,7 @@
             <div class="card">
                 <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus"
                     label="Ajouter un nouveau lien" style="width:auto;float:right"></button>
-                <div class="grid">
+                <div class="grid" *ngIf="dashboard">
                     <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
                         <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
                         <i class="col-1 pi pi-trash"

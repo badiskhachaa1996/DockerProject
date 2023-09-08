@@ -196,7 +196,7 @@ export class CollaborateursComponent implements OnInit {
   onGetCollaborateurs(): void {
     this.rhService.getCollaborateurs()
       .then((response) => {
-        this.collaborateurs=[]
+        this.collaborateurs = []
         response.forEach(c => {
           if (c.user_id)
             this.collaborateurs.push(c)
@@ -671,4 +671,12 @@ export class CollaborateursComponent implements OnInit {
   seeCalendar(c: Collaborateur) {
     this.router.navigate(['rh/calendrier', c.user_id._id])
   }
+
+  clickDetails(r:Collaborateur){
+    this.displayDetails = true
+    this.dataCollab = r
+  }
+
+  displayDetails = false
+  dataCollab: Collaborateur
 }

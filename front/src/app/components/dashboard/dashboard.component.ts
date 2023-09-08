@@ -60,6 +60,7 @@ import { ServService } from 'src/app/services/service.service';
 import { Ticket } from 'src/app/models/Ticket';
 import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
 import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
+import { ro } from 'date-fns/locale';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -308,10 +309,24 @@ export class DashboardComponent implements OnInit {
     private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
   ) { }
 
-
+  reader: FileReader = new FileReader();
   ngOnInit() {
-
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.UserService.getProfilePicture(this.token.id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          this.reader.readAsDataURL(blob);
+        }
+      }
+    })
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
@@ -558,10 +573,12 @@ export class DashboardComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
+    console.log(rowData)
     this.imageToShow = "../assets/images/avatar.PNG"
     console.log(rowData)
     this.CService.getProfilePicture(rowData._id).subscribe((data) => {
       if (data.error) {
+        console.error(data.error)
         this.imageToShow = "../assets/images/avatar.PNG"
       } else {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
