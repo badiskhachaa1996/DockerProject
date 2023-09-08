@@ -185,19 +185,19 @@
 				<ng-template pTemplate="body" let-check>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{check.today}}
+							{{check?.today}}
 						</td>
 						<td style="min-width: 12rem;">
-							{{check.user_id.lastname | uppercase}} {{check.user_id.firstname | titlecase}}
+							{{check?.user_id?.lastname | uppercase}} {{check?.user_id?.firstname | titlecase}}
 						</td>
 						<td style="min-width: 14rem;">
-							{{check.check_in | date: 'H:mm'}}
+							{{check?.check_in | date: 'H:mm'}}
 						</td>
 						<td style="min-width: 14rem;">
 							WIP
 						</td>
 						<td style="min-width: 10rem;">
-							{{check.check_out | date: 'H:mm'}}
+							{{check?.check_out | date: 'H:mm'}}
 						</td>
 						<td style="min-width: 14rem;">
 							WIP
