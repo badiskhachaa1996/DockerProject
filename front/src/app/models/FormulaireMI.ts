@@ -21,7 +21,8 @@ export class FormulaireMI {
         public domaine?: string,
         public destination?: DestinationMI,
         public dateSejour?: DateSejourMI,
-        public avantage?: string
+        public avantage?: string,
+        public date_creation?: Date
     ) { }
 
 }

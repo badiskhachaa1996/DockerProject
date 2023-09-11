@@ -15,7 +15,7 @@ app.post("/create", (req, res) => {
 })
 
 app.get("/getAll", (req, res, next) => {
-    FormulaireMI.find().sort({ date_creation: -1 })
+    FormulaireMI.find().sort({ date_creation: -1 }).populate('destination').populate('dateSejour')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });

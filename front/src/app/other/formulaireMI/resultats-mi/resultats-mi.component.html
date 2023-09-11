@@ -1,1 +1,93 @@
-<p>resultats-mi works!</p>
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Voir le formulaire" icon="pi pi-arrow-right" (click)="goToForm();"
+                    style="margin-right: 3px;"></button>
+            </div>
+            <h5>Liste des réponses au formulaire Mobilité International</h5>
+            <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="resultats"
+                [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['name', 'date_naissance', 'telephone.nationalNumber', 'mail','ecole','domaine','destination']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name" scope="col" style="text-align: center;">
+                            Nom et prénom <p-sortIcon field="name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_naissance" scope="col" style="text-align: center;">
+                            Date de naissance <p-sortIcon field="date_naissance"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="telephone.nationalNumber" scope="col" style="text-align: center;">
+                            Numéro de téléphone <p-sortIcon field="telephone.nationalNumber"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="mail" scope="col" style="text-align: center;">
+                            Adresse mail <p-sortIcon field="mail"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="ecole" scope="col" style="text-align: center;">
+                            Ecole <p-sortIcon field="ecole"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="domaine" scope="col" style="text-align: center;">
+                            Domaine <p-sortIcon field="domaine"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="destination.name" scope="col" style="text-align: center;">
+                            Destination <p-sortIcon field="destination.name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dateSejour.name" scope="col" style="text-align: center;">
+                            Date de Sejour <p-sortIcon field="dateSejour.name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="avantage" scope="col" style="text-align: center;">
+                            Comment avez-vous entendu parler de cet avantage ? <p-sortIcon
+                                field="avantage"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                            Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-resultat>
+                    <tr>
+                        <td>
+                            {{resultat.name}}
+                        </td>
+                        <td>
+                            {{resultat.date_naissance | date: 'mediumDate'}}
+                        </td>
+                        <td>
+                            {{resultat.telephone.dialCode}} {{resultat.telephone.nationalNumber}}
+                        </td>
+                        <td>
+                            {{resultat.mail}}
+                        </td>
+                        <td>
+                            {{resultat.ecole}}
+                        </td>
+                        <td>
+                            {{resultat.domaine}}
+                        </td>
+                        <td>
+                            {{resultat.destination.name}}
+                        </td>
+                        <td>
+                            {{resultat.dateSejour.name}}
+                        </td>
+                        <td>
+                            {{resultat.avantage}}
+                        </td>
+                        <td>
+                            {{resultat.date_creation | date: 'mediumDate'}}
+                        </td>
+                        <td>
+                            <i pTooltip="Supprimé cette entrée" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                (click)="delete(resultat);" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
