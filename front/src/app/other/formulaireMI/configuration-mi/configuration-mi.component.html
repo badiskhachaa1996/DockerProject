@@ -62,7 +62,6 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="text-align:center">Destination</th>
-                        <th style="text-align:center">Nombre de Date de Séjour</th>
                         <th style="text-align:center">Action</th>
                     </tr>
                 </ng-template>
@@ -72,13 +71,8 @@
                             {{rowData.name}}
                         </td>
                         <td>
-                            WIP
-                        </td>
-                        <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil mr-2"
                                 (click)="onInitEditDestination(rowData);" aria-hidden="true"></i>
-                            <i pTooltip="Voir les dates de Séjours" tooltipPosition="bottom" class="pi pi-eye"
-                                (click)="onSeeDS(rowData);" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -124,12 +118,12 @@
         </div>
     </div>
 
-    <div class="col-12" *ngIf="DESelected">
+    <div class="col-12">
         <div class="card">
             <div style="float: right;">
                 <button pButton label="Créer une date de séjour" (click)="showFormAddDS=true"></button>
             </div>
-            <h5>Liste des dates de séjour de {{DESelected?.name}}</h5>
+            <h5>Liste des dates de séjour </h5>
             <p-table #dt2 *ngIf="dateSejours" [value]="dateSejours" selectionMode="single" dataKey="_id" [rows]="8"
                 [rowHover]="true" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['name']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">

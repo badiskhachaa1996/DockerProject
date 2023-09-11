@@ -45,7 +45,6 @@ export class FormulaireMIComponent implements OnInit {
   destinations = []
 
   dateSejours = []
-  dateSejourDefault: DateSejourMI[] = []
 
   RegisterForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -54,8 +53,8 @@ export class FormulaireMIComponent implements OnInit {
     mail: new FormControl('', Validators.required),
     ecole: new FormControl('', Validators.required),
     domaine: new FormControl('', Validators.required),
-    destination: new FormControl('', Validators.required),
-    dateSejour: new FormControl('', Validators.required),
+    destination: new FormControl([], Validators.required),
+    dateSejour: new FormControl([], Validators.required),
     avantage: new FormControl('', Validators.required),
     date_creation: new FormControl(new Date()),
   })
@@ -63,7 +62,9 @@ export class FormulaireMIComponent implements OnInit {
 
   loadData() {
     this.FMIService.DSgetAll().subscribe(ds => {
-      this.dateSejourDefault = ds
+      ds.forEach(d => {
+        this.dateSejours.push({ label: d.name, value: d._id })
+      })
     })
     this.FMIService.DEgetAll().subscribe(de => {
       this.destinations = []
@@ -72,14 +73,6 @@ export class FormulaireMIComponent implements OnInit {
       })
 
 
-    })
-  }
-
-  onSeeDS(destination_id: string) {
-    this.dateSejours = []
-    this.dateSejourDefault.forEach(ds => {
-      if (ds.destination._id == destination_id)
-        this.dateSejours.push({ value: ds._id, label: ds.name })
     })
   }
 
