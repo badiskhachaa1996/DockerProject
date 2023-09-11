@@ -1,11 +1,11 @@
 <p-toast></p-toast>
 <div class="grid col-12 m-2">
     <div class="md:col-8 col-12 grid md:col-offset-2 card mb-3" style="background-color: #25336e;">
-        <div class="col-4">
-            <img src="assets/images/eh.png" />
+        <div class="md:col-4 col-12">
+            <img src="assets/images/icbs-logo.png" />
         </div>
-        <div class="col-8" style="color: white;">
-            <h1 style="text-align: center;">Mobilité International</h1>
+        <div class="md:col-8 col-12" style="color: white;">
+            <h1 style="text-align: center;margin-top:160px">Mobilité International</h1>
         </div>
         <span style="color: white;"><br>
             🌍 Explorez le monde avec IEG !&nbsp;<br><br>Tous les étudiants
@@ -53,7 +53,7 @@
         </div>
 
         <div class="field md:col-6 col-12">
-            <label>Dans quel école êtes vous inscrits? <span style="color:red"> *</span></label>
+            <label>Dans quelle école êtes vous inscrits? <span style="color:red"> *</span></label>
             <input pInputText formControlName="ecole" type="text" placeholder="Ex: Studinfo" />
         </div>
 
@@ -62,9 +62,9 @@
             <p-dropdown placeholder="Choissisez un Domaine" [options]="domaines" formControlName="domaine"></p-dropdown>
         </div>
         <div class="field md:col-6 col-12">
-            <label>Par quelle destination êtes-vous intéressé(e) ? <span style="color:red"> *</span></label>
-            <p-dropdown placeholder="Choissisez une destination" [options]="destinations"
-                (onChange)="onSeeDS($event.value)" formControlName="destination"></p-dropdown>
+            <label>Par quelle destination êtes-vous intéressé(e) ? (3 max) <span style="color:red"> *</span></label>
+            <p-multiSelect placeholder="Choissisez une destination" [options]="destinations" [selectionLimit]="3"
+                formControlName="destination"></p-multiSelect>
         </div>
 
         <div class="field md:col-6 col-12">
@@ -73,9 +73,9 @@
                 formControlName="avantage"></p-dropdown>
         </div>
         <div class="field col-12" *ngIf="dateSejours.length!=0">
-            <label>Choisissez votre date de séjour <span style="color:red"> *</span></label>
-            <p-dropdown placeholder="Choissisez une destination" [options]="dateSejours"
-                formControlName="dateSejour"></p-dropdown>
+            <label>Choisissez votre date de séjour : (3 max)<span style="color:red"> *</span></label>
+            <p-multiSelect placeholder="Choissisez une destination" [options]="dateSejours" [selectionLimit]="3"
+                formControlName="dateSejour"></p-multiSelect>
         </div>
         <div class="field col-12">
             <button pButton type="submit" label="Envoyer" [disabled]="RegisterForm.invalid"></button>

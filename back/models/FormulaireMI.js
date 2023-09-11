@@ -29,8 +29,8 @@ const schema = new mongoose.Schema({
     mail: { type: String },
     ecole: { type: String },
     domaine: { type: String },
-    destination: { type: mongoose.Schema.Types.ObjectId, ref: "destinationMI" },
-    dateSejour: { type: mongoose.Schema.Types.ObjectId, ref: "dateSejourMI" },
+    destination: { type: [mongoose.Schema.Types.ObjectId], ref: "destinationMI" },
+    dateSejour: { type: [mongoose.Schema.Types.ObjectId], ref: "dateSejourMI" },
     avantage: { type: String },
     date_creation: { type: Date, default: Date.now }
 })

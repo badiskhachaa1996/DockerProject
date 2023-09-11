@@ -12,10 +12,7 @@ import { FormulaireMIService } from 'src/app/services/formulaire-mi.service';
 })
 export class ConfigurationMIComponent implements OnInit {
   destinations: DestinationMI[] = []
-  dateSejourDefault: DateSejourMI[] = []
   dateSejours: DateSejourMI[] = []
-  DESelected: DestinationMI
-
   showFormAddDestination = false
   destinationFormAdd = new FormGroup({
     name: new FormControl('', Validators.required)
@@ -56,7 +53,7 @@ export class ConfigurationMIComponent implements OnInit {
   })
 
   saveDS() {
-    this.FMIService.DScreate({ ...this.DSFormAdd.value, destination: this.DESelected }).subscribe(d => {
+    this.FMIService.DScreate({ ...this.DSFormAdd.value }).subscribe(d => {
       this.loadData()
       this.showFormAddDS = false
       this.DSFormAdd.reset()
@@ -89,9 +86,7 @@ export class ConfigurationMIComponent implements OnInit {
 
   loadData() {
     this.FMIService.DSgetAll().subscribe(ds => {
-      this.dateSejourDefault = ds
-      if (this.DESelected)
-        this.onSeeDS(this.DESelected)
+      this.dateSejours = ds
     })
     this.FMIService.DEgetAll().subscribe(de => {
       this.destinations = de
@@ -99,14 +94,7 @@ export class ConfigurationMIComponent implements OnInit {
     })
   }
 
-  onSeeDS(rowData: DestinationMI) {
-    this.dateSejours = []
-    this.dateSejourDefault.forEach(ds => {
-      if (ds.destination._id == rowData._id)
-        this.dateSejours.push(ds)
-    })
-    this.DESelected = rowData
-  }
+
 
   scrollToTop() {
     var scrollDuration = 250;

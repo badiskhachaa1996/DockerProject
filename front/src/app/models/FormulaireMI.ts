@@ -19,8 +19,8 @@ export class FormulaireMI {
         public mail?: string,
         public ecole?: string,
         public domaine?: string,
-        public destination?: DestinationMI,
-        public dateSejour?: DateSejourMI,
+        public destination?: DestinationMI[],
+        public dateSejour?: DateSejourMI[],
         public avantage?: string,
         public date_creation?: Date
     ) { }
