@@ -70,10 +70,14 @@
                             {{resultat.domaine}}
                         </td>
                         <td>
-                            {{resultat.destination.name}}
+                            <ng-container *ngFor="let de of resultat.destination">
+                                {{de.name}}<br>
+                            </ng-container>
                         </td>
                         <td>
-                            {{resultat.dateSejour.name}}
+                            <ng-container *ngFor="let ds of resultat.dateSejour">
+                                {{ds.name}}<br>
+                            </ng-container>
                         </td>
                         <td>
                             {{resultat.avantage}}
