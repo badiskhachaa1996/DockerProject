@@ -7,11 +7,15 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 import { MicrosoftService } from 'src/app/services/microsoft.service';
+import { CV } from 'src/app/models/CV';
+
+import { CvService } from 'src/app/services/skillsnet/cv.service';
+
 
 @Component({
   selector: 'app-rendez-vous',
   templateUrl: './rendez-vous.component.html',
-  styleUrls: ['./rendez-vous.component.scss']
+  styleUrls: ['./rendez-vous.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class RendezVousComponent implements OnInit {
   form = new FormGroup({
@@ -20,10 +24,13 @@ export class RendezVousComponent implements OnInit {
     date: new FormControl('', Validators.required)
   })
 
+  cv: CV;
+  dicPicture = {}
+
   ID: any = this.route.snapshot.paramMap.get('user_id');
   USER: { lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname, winner_id }
   constructor(private route: ActivatedRoute, private McService: MicrosoftService, private UserService: AuthService,
-    private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService) { }
+    private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService, private cvservice: CvService) { }
 
   ngOnInit(): void {
     let d = new Date()
@@ -31,6 +38,22 @@ export class RendezVousComponent implements OnInit {
     this.form.patchValue({ date: d })
     this.UserService.nstuget(this.ID).subscribe(u => {
       this.USER = u
+    })
+    this.cvservice.getAllPicture().subscribe(data => {
+      this.dicPicture = data.files // {id:{ file: string, extension: string }}
+      data.ids.forEach(id => {
+        const reader = new FileReader();
+        const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          this.dicPicture[id].url = reader.result;
+        }
+      })
+    })
+
+    this.cvservice.getByID(this.ID).subscribe((data) => {
+      this.cv = data.dataCv;
     })
   }
 

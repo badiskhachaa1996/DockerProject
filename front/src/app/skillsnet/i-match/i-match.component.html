@@ -1,7 +1,16 @@
 <div class="imatch-main-page">
     <div class="header-top">
-        <img src="../../../assets/images/imatch/header-imatch.png">
-    </div>
+        <div class="page-title">
+            <h1>iMatch<br>Votre portail de mise en relation entre alternants et entreprises</h1>
+            <hr class="imatch-main">
+        </div>
+            <div class="header-top-container">
+                    <img class="images-imatch image-student" src="../../../assets/images/imatch/student-imatch.png">              
+                    <img class="video-intro" src="../../../assets/images/imatch/video.png">             
+                    <img class="images-imatch image-company" src="../../../assets/images/imatch/company-imatch.png">
+            </div>
+            <a class="bouton-plus" target="_blank" href="#">En savoir plus <i class="pi pi-arrow-right icon-right"></i></a>
+            </div>
     <div class="container" style="text-align: center;">
         <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
     </div>
@@ -18,27 +27,27 @@
         <div class="row">
             <div class="col-md-11 col-12">
                 <div class="row">
-                    <div class="field col-md-3 col-12">
+                    <div class="field col-md col-12">
                         <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Profil"
                             autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             (onChange)="updateFilter()" class="w-100"></p-multiSelect>
                     </div>
-                    <div class="field col-md-3 col-12">
+                    <div class="field col-md col-12">
                         <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
                             autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             (onChange)="updateFilter()" class="w-100"></p-multiSelect>
                     </div>
-                    <div class="field col-md-3 col-12">
+                    <div class="field col-md col-12">
                         <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" [(ngModel)]="dispoFilter"
                             (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
                             [style]="{'width':'100%'}" placeholder="Disponibilité"></p-calendar>
                     </div>
-                    <div class="field col-md-3 col-12">
+                    <div class="field col-md col-12">
                         <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Compétences"
                             autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             (onChange)="updateFilter()"></p-multiSelect>
                     </div>
-                    <div class="field col-md-3 col-12">
+                    <div class="field col-md col-12">
                         <p-multiSelect [options]="etudes" [(ngModel)]="selectEtude" defaultLabel="Niveau d'étule"
                             placeholder="Choississez une niveau d'étude" autoWidth="false" [style]="{'width':'100%'}"
                             (onChange)="updateFilter()"></p-multiSelect>
