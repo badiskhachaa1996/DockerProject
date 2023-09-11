@@ -357,6 +357,9 @@ import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.compo
 import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
 import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
+import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
+import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
+import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
 
 @NgModule({
   imports: [
@@ -722,6 +725,9 @@ import { GestionMentionServiceComponent } from './agents/gestion-mention-service
     ArchivagePointageComponent,
     RendezVousComponent,
     GestionMentionServiceComponent,
+    ConfigurationMIComponent,
+    FormulaireMIComponent,
+    ResultatsMIComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

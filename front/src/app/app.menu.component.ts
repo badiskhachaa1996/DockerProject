@@ -789,6 +789,22 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-question-circle',
                                     routerLink: ['resultats-icbs'],
                                 },
+                                {
+                                    label: 'Formulaire Mobilité internationale',
+                                    icon: 'pi pi-car',
+                                    items: [
+                                        {
+                                            label: 'Configuration',
+                                            icon: 'pi pi-cog',
+                                            routerLink: ['formulaireMI/configuration'],
+                                        },
+                                        {
+                                            label: 'Résultats',
+                                            icon: 'pi pi-list',
+                                            routerLink: ['formulaireMI/resultats'],
+                                        }
+                                    ]
+                                }
                             ],
                         },
                         {
