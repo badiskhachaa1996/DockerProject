@@ -60,6 +60,11 @@ import { ServService } from 'src/app/services/service.service';
 import { Ticket } from 'src/app/models/Ticket';
 import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
 import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
+import { ro } from 'date-fns/locale';
+import { PointageData } from 'src/app/models/PointageData';
+import { PointageService } from 'src/app/services/pointage.service';
+import { PointeuseData } from 'src/app/models/PointeuseData';
+import { PointeuseService } from 'src/app/services/pointeuse.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -91,6 +96,7 @@ export class DashboardComponent implements OnInit {
   isUnknow = false;
   isVisitor = false;
   isIntuns = false
+  isProspect = false
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
@@ -305,12 +311,40 @@ export class DashboardComponent implements OnInit {
     private rhService: RhService, private congeService: CongeService,
     private ActuRHService: ActualiteRHService, private TicketService: TicketService,
     private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
+    private PointageService: PointageService, private PoiService: PointeuseService
   ) { }
-
-
+  histoPointage: PointageData[]
+  reader: FileReader = new FileReader();
+  machineDic = {}
   ngOnInit() {
 
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.PointageService.getAllWithUserID().subscribe(r => {
+      this.dataMachine = r
+      let UID = this.dataMachine.UserToUID[this.token.id]
+      if (this.dataMachine.DataDic[UID])
+        this.histoPointage = this.dataMachine.DataDic[UID]
+    })
+    this.PoiService.getAll().subscribe(ps => {
+      ps.forEach(m => {
+        this.machineDic[m.serial_number] = m
+      })
+    })
+    this.UserService.getProfilePicture(this.token.id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          this.reader.readAsDataURL(blob);
+        }
+      }
+    })
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
@@ -331,6 +365,7 @@ export class DashboardComponent implements OnInit {
         this.isCEO = dataUser.type == "CEO Entreprise";
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
         this.isIntuns = dataUser.type == "EtudiantsIntuns"
+        this.isProspect = dataUser.type == "Prospect"
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
@@ -556,10 +591,12 @@ export class DashboardComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
+    console.log(rowData)
     this.imageToShow = "../assets/images/avatar.PNG"
     console.log(rowData)
     this.CService.getProfilePicture(rowData._id).subscribe((data) => {
       if (data.error) {
+        console.error(data.error)
         this.imageToShow = "../assets/images/avatar.PNG"
       } else {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -1330,4 +1367,28 @@ export class DashboardComponent implements OnInit {
     })
 
   }
+  dataMachine
+
+  getCheckIn(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) < date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+
+  }
+  displayPointeuse = false
+  onSeePointeuse() {
+    console.log('test')
+    this.displayPointeuse = true
+    console.log(this.displayPointeuse)
+  }
+
 }

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
+import { PointageData } from 'src/app/models/PointageData';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
+import { PointageService } from 'src/app/services/pointage.service';
 import { RhService } from 'src/app/services/rh.service';
 
 @Component({
@@ -36,19 +38,29 @@ export class DashboardRhComponent implements OnInit {
     { label: 'En pause', value: 'En pause' },
   ];
 
-  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService, private messageService: MessageService) { }
+  dataMachine;
+
+  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService,
+    private messageService: MessageService, private PointageService: PointageService) { }
 
   ngOnInit(): void {
     // recuperation de la liste des checks
     this.onGetUsersDailyChecksAndCollaborateur();
+    this.PointageService.getAllWithUserID().subscribe(r => {
+      this.dataMachine = r
+    })
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
   onGetUsersDailyChecksAndCollaborateur(): void {
     // recuperation de la liste des checks
     this.dailyCheckService.getAllUsersDailyChecks()
-      .then((response) => {
-        this.dailyChecks = response;
+      .then((dcs) => {
+        this.dailyChecks = [];
+        dcs.forEach(dc => {
+          if (dc && dc.user_id)
+            this.dailyChecks.push(dc)
+        })
         // nombre de checks
         this.numberOfChecks = this.dailyChecks.length;
 
@@ -56,9 +68,23 @@ export class DashboardRhComponent implements OnInit {
         this.rhService.getCollaborateurs()
           .then((response) => {
             this.collaborateurs = response;
+            let listCIDS = []
+            this.dailyChecks.forEach((dc: any) => {
+              if (dc && dc.user_id)
+                listCIDS.push(dc.user_id._id)
+            })
+            console.log(this.dailyChecks, listCIDS, this.collaborateurs)
+            this.collaborateurs.forEach(c => {
+              if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
+                c.user_id.statut = "Absent"
+                console.log(c.user_id)
+                this.dailyChecks.push(new DailyCheck(null, c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
+              }
+
+            })
             this.loading = false;
             // pourcentage de checks
-            this.checkPercent = Math.ceil(( this.numberOfChecks / this.collaborateurs.length) * 100);
+            this.checkPercent = Math.ceil((this.numberOfChecks / this.collaborateurs.length) * 100);
 
             // initialisation à zero
             this.numberOfDisponible = 0;
@@ -103,6 +129,39 @@ export class DashboardRhComponent implements OnInit {
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: "Impossible de récupérer l'historique de check du collaborateur" }); });
   }
+
+  getCheckIn(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) < date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+
+  }
+
+  getCheckOut(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) > date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+  }
+
+
 
 
 }

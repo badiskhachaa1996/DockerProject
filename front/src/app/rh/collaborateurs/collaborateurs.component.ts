@@ -195,7 +195,13 @@ export class CollaborateursComponent implements OnInit {
   // recuperation de la liste des collaborateurs
   onGetCollaborateurs(): void {
     this.rhService.getCollaborateurs()
-      .then((response) => { this.collaborateurs = response; })
+      .then((response) => {
+        this.collaborateurs = []
+        response.forEach(c => {
+          if (c.user_id)
+            this.collaborateurs.push(c)
+        })
+      })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
   }
 
@@ -665,4 +671,23 @@ export class CollaborateursComponent implements OnInit {
   seeCalendar(c: Collaborateur) {
     this.router.navigate(['rh/calendrier', c.user_id._id])
   }
+
+  clickDetails(r: Collaborateur) {
+    this.displayDetails = true
+    this.dataCollab = r
+  }
+
+  displayDetails = false
+  dataCollab: Collaborateur
+  addOther() {
+    this.dataCollab.other.push({ _id: new mongoose.Types.ObjectId().toString(), title: '', description: '' })
+  }
+  onDeleteRow(ri) {
+    this.dataCollab.other.splice(ri, 1)
+    this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
+  }
+  onUpdateRow() {
+    this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
+  }
+
 }

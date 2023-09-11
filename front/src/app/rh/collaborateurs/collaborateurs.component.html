@@ -803,32 +803,32 @@
 								Matricule
 							</div>
 						</th>
-						<th>
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Date de démarrage
 							</div>
-						</th>
-						<th>
+						</th>-->
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Civilité
 							</div>
-						</th>
+						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Nom et prénom
 							</div>
 						</th>
-						<th>
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Date de naissance
 							</div>
-						</th>
+						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Email travail
 							</div>
 						</th>
-						<th>
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Email personnelle
 							</div>
@@ -842,27 +842,27 @@
 							<div class="flex justify-content-between align-items-center">
 								Adresse
 							</div>
-						</th>
+						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Localisation
 							</div>
 						</th>
-						<th>
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Taux horaire
 							</div>
-						</th>
+						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Nom du poste
 							</div>
 						</th>
-						<th>
+						<!--<th>
 							<div class="flex justify-content-between align-items-center">
 								Mention
 							</div>
-						</th>
+						</th>-->
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Service
@@ -875,7 +875,7 @@
 						</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Type de contrat
+								Statut
 							</div>
 						</th>
 						<th style="width: 8rem">
@@ -887,25 +887,31 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-collaborateur>
 					<tr>
-						<td style="min-width: 10rem;">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.matricule}}
 						</td>
-						<td style="min-width: 10rem;">
+						<!--<td style="min-width: 10rem;">
 							{{collaborateur.date_demarrage | date: 'MM/dd/yyyy'}}
-						</td>
-						<td style="min-width: 10rem;">
+						</td>-->
+						<!--<td style="min-width: 10rem;">
 							{{collaborateur.user_id?.civilite}}
-						</td>
-						<td style="min-width: 12rem;">
+						</td>-->
+						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}
 						</td>
-						<td style="min-width: 10rem;">
+						<!--<td style="min-width: 10rem;">
 							{{collaborateur?.date_naissance | date: 'MM/dd/yyyy'}}
-						</td>
-						<td style="min-width: 10rem;">
+						</td>-->
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur.user_id?.email}}
 						</td>
-						<td style="min-width: 12rem;">
+						<!--<td style="min-width: 12rem;">
 							{{collaborateur.user_id?.email_perso}}
 						</td>
 						<td style="min-width: 10rem;">
@@ -915,28 +921,38 @@
 							{{collaborateur.user_id?.numero_adresse}} {{collaborateur.user_id?.rue_adresse}} <br>
 							{{collaborateur.user_id?.postal_adresse}}, {{collaborateur.user_id?.ville_adresse}}/
 							{{collaborateur.user_id?.pays_adresse}}
-						</td>
-						<td style="min-width: 12rem;">
+						</td>-->
+						<td style="min-width: 12rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.localisation}}
 						</td>
-						<td style="min-width: 12rem;">
+						<!--<td style="min-width: 12rem;">
 							{{collaborateur?.h_cra}}<span *ngIf="collaborateur?.h_cra == 1"> heure</span><span
 								*ngIf="collaborateur?.h_cra > 1"> heures</span>
-						</td>
-						<td style="min-width: 10rem;">
+						</td>-->
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.intitule_poste}}
 						</td>
-						<td style="min-width: 10rem;">
+						<!--<td style="min-width: 10rem;">
 							{{collaborateur.user_id.mention}}
-						</td>
-						<td style="min-width: 10rem;">
+						</td>-->
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{collaborateur?.user_id?.service_id?.label}}
 						</td>
-						<td style="min-width: 10rem;">
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
 							{{afficherAnciennete(collaborateur)}} jours
 						</td>
-						<td style="min-width: 10rem;">
-							{{collaborateur.contrat_type}}
+						<td style="min-width: 10rem;" (click)="clickDetails(collaborateur)" tooltipPosition="bottom"
+							style="cursor: pointer;"
+							pTooltip="Voir plus d'informations sur {{collaborateur.user_id?.lastname | uppercase}} {{collaborateur.user_id?.firstname}}">
+							{{collaborateur.statut}}
 						</td>
 						<td class="text-center" style="min-width: 8rem;">
 							<i class="pi pi-briefcase m-1" pTooltip="Ajouter une compétence" tooltipPosition="bottom"
@@ -998,4 +1014,85 @@
 		Le nombre de jours de congés payés restants = {{calcCPA()-(calcCPA()-nbrConge)}}<br>
 	</div>
 
+</p-dialog>
+<p-dialog header="Informations supplémentaires du Collaborateur" [(visible)]="displayDetails" [modal]="true"
+	[style]="{width: '50vw'}">
+	<h6 style="text-align: center;">Information collaborateur</h6><br><br>
+	<p *ngIf="dataCollab && dataCollab.user_id">
+		Civilité : {{dataCollab?.user_id?.civilite}} <br>
+		Nom et prénom : {{dataCollab.user_id?.lastname | uppercase}} {{dataCollab.user_id?.firstname}}<br>
+		Date de naissance : {{dataCollab?.date_naissance | date: 'mediumDate'}}<br>
+		Email travail : {{dataCollab.user_id?.email}}<br>
+		Email personnelle : {{dataCollab.user_id?.email_perso}}<br>
+		Téléphone personnelle : {{dataCollab.user_id?.indicatif}} {{dataCollab.user_id?.phone}}<br>
+		Adresse : {{dataCollab.user_id?.numero_adresse}} {{dataCollab.user_id?.rue_adresse}} <br>
+		{{dataCollab.user_id?.postal_adresse}},
+		{{dataCollab.user_id?.ville_adresse}}/{{dataCollab.user_id?.pays_adresse}}<br>
+	</p>
+	<br>
+	<hr />
+	<h6 style="text-align: center;">Poste</h6><br><br>
+	<p *ngIf="dataCollab && dataCollab.user_id">
+		Matricule : {{dataCollab?.matricule}}<br>
+		Nom du poste : {{dataCollab?.intitule_poste}} <br>
+		Service : {{dataCollab?.user_id?.service_id?.label}}<br>
+		Mention : {{dataCollab.user_id.mention}}<br>
+		Date de démarrage : {{dataCollab?.date_demarrage | date: 'mediumDate'}}<br>
+		Ancienneté : {{afficherAnciennete(dataCollab)}} jours<br>
+		Type de contrat : {{dataCollab?.contrat_type}}<br>
+		Taux horaire : {{dataCollab?.h_cra}}<br>
+		Localisation : {{dataCollab?.localisation}}<br>
+	</p>
+	<br>
+	<hr />
+	<h6 style="text-align: center;">Autre Informations</h6><br><br>
+	<div style="width: 100%;" class="grid">
+		<button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined col-12 mb-2"
+			style="float: right;" (click)="addOther()"></button>
+		<p-table [value]="dataCollab?.other" dataKey="_id" editMode="row" class="col-12"
+			styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Libellé</th>
+					<th>Information</th>
+					<th>Action</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+				<tr>
+					<td pEditableColumn>
+						<p-cellEditor>
+							<ng-template pTemplate="input">
+								<input pInputText type="text" [(ngModel)]="rowData.title" (blur)="onUpdateRow()">
+							</ng-template>
+							<ng-template pTemplate="output">
+								{{rowData.title}}
+							</ng-template>
+						</p-cellEditor>
+					</td>
+					<td pEditableColumn>
+						<p-cellEditor>
+							<ng-template pTemplate="input">
+								<input pInputText type="text" [(ngModel)]="rowData.description" (blur)="onUpdateRow()">
+							</ng-template>
+							<ng-template pTemplate="output">
+								{{rowData.description}}
+							</ng-template>
+						</p-cellEditor>
+					</td>
+					<td>
+						<button pButton pRipple type="button" icon="pi pi-trash"
+							class="p-button-rounded p-button-text p-button-danger" (click)="onDeleteRow(ri)"></button>
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="emptymessage">
+				<tr>
+					<td colspan="3">Aucun autre information pour le moment.</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
+	<hr />
 </p-dialog>

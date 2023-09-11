@@ -1,5 +1,6 @@
 const express = require("express");
 const { PointageData } = require("../models/PointageData");
+const { PointeuseData } = require("../models/PointeuseData");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 
@@ -30,6 +31,39 @@ app.get("/getAllToday", (req, res, next) => {
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
+
+app.get('/getAllWithUserID', (req, res) => {
+    let day = new Date().getDate()
+    let month = new Date().getMonth() + 1
+    let year = new Date().getFullYear()
+    PointageData.find({ date: { $gte: `${year}-${month}-${day}`, $lte: `${year}-${month}-${day} 23:59` } }).sort({ updateDate: -1 })
+        .then((formFromDb) => {
+            let machine_id = []
+            let PD = {}
+            formFromDb.forEach(pd => {
+                machine_id.push(pd.machine)
+                if (PD[pd.uid])
+                    PD[pd.uid].push(pd)
+                else
+                    PD[pd.uid] = [pd]
+            })
+
+            PointeuseData.find({ serial_number: { $in: machine_id } }).populate({ path: 'users', populate: { path: 'user_id' } }).then(poid => {
+                let UserToUID = {}
+                let UIDToUser = {}
+                poid.forEach(poi => {
+                    poi.users.forEach(u => {
+                        if (u.user_id)
+                            UserToUID[u.user_id._id] = u.UID
+                        UIDToUser[u.UID] = u.user_id
+                    })
+                })
+                res.status(200).send({ PD: formFromDb, UIDToUser, UserToUID, DataDic:PD });
+            })
+
+        })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+})
 
 
 app.delete('/delete/:id', (req, res) => {
