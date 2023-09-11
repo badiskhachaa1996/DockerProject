@@ -28,7 +28,6 @@
 
 .page-inner-content {
     height: 290mm;
-    margin: -5mm auto;
     position: relative;
 }
 
@@ -51,12 +50,14 @@
 .header {
     background-size: cover;
     height: 45mm;
-    padding-left: 20mm;
     line-height: 45mm;
     text-align: center;
     font-size: 14px;
     font-family: "Century Gothic";
     font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .owner-file {
