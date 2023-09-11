@@ -233,6 +233,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
+      req.originalUrl.startsWith("/soc/fIM") ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
         req.originalUrl.startsWith('/soc/docGenInt/download'))
     ) {
@@ -376,6 +377,7 @@ app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController
 app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
 app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 app.use('/soc/pointage', require('./controllers/pointageController'))
+app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

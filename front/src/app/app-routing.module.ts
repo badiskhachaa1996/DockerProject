@@ -255,6 +255,9 @@ import { ConfigurationPointageComponent } from './rh/configuration-pointage/conf
 import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
 import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
 import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
+import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
+import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
+import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
 const routes: Routes = [
     {
         path: '',
@@ -1225,6 +1228,11 @@ const routes: Routes = [
                 component: BookingV2Component,
                 canActivate: [AuthGuardService],
             },
+            //Module Formulaire MI
+            { path: 'formulaireMI/configuration', component: ConfigurationMIComponent, canActivate: [AuthGuardService] },
+            { path: 'formulaireMI/resultats', component: ResultatsMIComponent, canActivate: [AuthGuardService] },
+
+
             { path: 'gen-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
         ],
     },
@@ -1233,7 +1241,7 @@ const routes: Routes = [
         component: InscriptionEntrepriseComponent,
     },
     { path: 'formulaire', component: DemandeEventsComponent },
-
+    { path: 'formulaire-mi', component: FormulaireMIComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
