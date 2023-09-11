@@ -1,0 +1,77 @@
+.imatch-main-page {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    box-shadow: inset 0px 10px 0px 0px #0A2E40;
+    padding-top: 10px;
+    min-height: 100vh;
+}
+
+.page-content {
+    box-shadow: inset 0px 30px 0px 0px #F2F2F2;
+    padding-top: 30px;
+}
+
+.top-header, .footer {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .pi-arrow-left {
+        margin-right: 30px;
+    }
+}
+
+.btn-cv {
+    border-radius: 7px;
+    padding: 7px 20px;
+    min-width: 250px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-cv:hover{
+    text-decoration: none;
+}
+
+.btn-cv-shadow-1 {
+    filter: drop-shadow(0rem 0.3rem 0.2rem rgba(175, 175, 175, 0.4));
+
+}
+
+.btn-cv-1 {
+    color: #D95525;
+    background-color: white;
+    border: 1px solid #D95525;
+}
+
+.btn-cv-1:hover {
+    color: white;
+    background-color: #D95525;
+}
+
+.header {
+    background-color: #F2F2F2;
+    padding-bottom: 50px;
+}
+
+.cv-main-info {
+    margin-left: 30px;
+    hr {
+        margin: 2px 0;
+        width: 30px;
+        border-top: 2px solid #9D9D9D;
+    }
+    h1 {
+        margin: 0;
+        padding: 0;
+        font-weight: 900;
+        color: #0A2E40;
+        text-transform: uppercase;
+    }
+    .cv-profile {
+        color: #D93B3B;
+
+    }
+}

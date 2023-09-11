@@ -62,13 +62,14 @@
 
 
 .btn-cv-2 {
-    color: white;
+    color: white !important;
     background-color: #1E526C;
+    cursor: pointer;
 }
 
 
 .btn-cv-2:hover {
-    color: white;
+    color: white !important;
     background-color: #37BAD4;
 }
 
@@ -88,11 +89,12 @@
 .btn-cv-4 {
     color: #1E526C;
     background-color: white;
+    cursor: pointer;
 }
 
 
 .btn-cv-4:hover {
-    color: white;
+    color: white !important;
     background-color: #37BAD4;
 }
 

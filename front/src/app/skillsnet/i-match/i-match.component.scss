@@ -19,7 +19,105 @@
 
 .header-top {
     box-shadow: inset 0px 30px 0px 0px #F2F2F2;
-    padding-top: 30px;
+    padding: 30px 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.page-title {
+    margin-top: 50px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.page-title h1 {
+    font-weight: 900;
+    color: #0A2E40;
+    font-size: 2.4em;
+}
+
+hr.imatch-main {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: auto;
+    margin-left: auto;
+    border: 0;
+    width: 130px;
+    border-top: 6px solid #F28627;
+}
+
+.header-top-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-intro {
+    margin-right: 50px;
+    margin-left: 50px;
+    height: 400px;
+    width: auto !important;
+}
+
+.images-imatch {
+    height: 450px;
+    width: auto !important;
+}
+
+.image-student {
+    transform: perspective(900px) rotateY(-30deg) scale(1);
+    transition: 0.5s ease all;
+    background: linear-gradient(180deg, #eba65b 30%, #d99267);
+}
+.image-company {
+    transform: perspective(900px) rotateY(30deg) scale(1);
+    transition: 0.5s ease all;
+    background: linear-gradient(180deg, #eba65b 30%, #d99267);
+}
+
+
+.images-imatch:hover {
+    transform: rotate(0deg) scale(1) translateY(10px);
+    box-shadow: 0px 0px 21px #9D9D9D;
+  }
+
+
+  @media screen and (max-width: 1350px) {
+    .images-imatch {
+        height: 300px;
+        width: auto !important;
+    }}
+
+
+    @media screen and (max-width: 1120px) {
+        .images-imatch {
+            display: none;
+        }}
+
+    
+
+
+.bouton-plus {
+    background-color: #F28627;
+    font-size: 1em;
+    padding: 10px 50px;
+    border-radius: 50px;
+    color: white;
+    line-height: 1.2;
+}
+
+.bouton-plus:hover {
+    background-color: #37BAD4;
+    text-decoration: none;
+    color: white;
+}
+
+.icon-right {
+    margin-top: 2px;
+    line-height: 1.2;
+    margin-left: 10px;
 }
 
 .steps-imatch {
@@ -98,6 +196,7 @@
 .cv-card-footer .meeting {
     background-color: #1E526C;
     border-radius: 0 0 0 20px;
+    color: white;
 }
 
 
@@ -109,6 +208,9 @@
 
 .cv-card-footer .meeting:hover {
     background-color: #D95525;
+    color: white;
+    cursor: pointer;
+
 }
 
 
@@ -206,3 +308,5 @@
     width: 100%;
     
     }
+
+    
