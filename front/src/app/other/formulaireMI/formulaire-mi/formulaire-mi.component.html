@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <div class="grid col-12 m-2">
-    <div class="md:col-8 col-12 grid col-offset-2 card mb-3" style="background-color: #25336e;">
+    <div class="md:col-8 col-12 grid md:col-offset-2 card mb-3" style="background-color: #25336e;">
         <div class="col-4">
             <img src="assets/images/eh.png" />
         </div>
@@ -19,7 +19,7 @@
 
     </div>
 
-    <form class="p-fluid p-formgrid grid md:col-8 col-12 card col-offset-2" (ngSubmit)="saveFormulaire()"
+    <form class="p-fluid p-formgrid grid md:col-8 col-12 card md:col-offset-2" (ngSubmit)="saveFormulaire()"
         [formGroup]="RegisterForm" *ngIf="!resultat">
         <!--<div class="col-12">
             <h1>Event title</h1>
@@ -85,18 +85,12 @@
 
 <div class="grid" *ngIf="resultat">
     <div class="col-2"></div>
-    <div class="col-8">
+    <div class="col-8 col-offset-2">
         <div class="card" style="text-align: center; font-family: Montserrat; color: #666666; padding: 50px">
             <h2>Merci {{resultat.name}}!</h2>
             <h4>
-                You are one step closer into learning a new language and boosting your career.
-                We will be contacting you soon to confirm your FREE test timing.
-            </h4>
-            <h4>
-                If you can't make it to our campus,there is always a chance to pass the test online for free as well! We
-                can't wait to meet you!
+                Votre formulaire a bien été envoyé !
             </h4>
         </div>
     </div>
-    <div class="col-2"></div>
 </div>

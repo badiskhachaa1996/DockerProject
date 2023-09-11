@@ -358,6 +358,10 @@
                 class="ml-1" type="button" label="Modifier les appréciations"
                 *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
             </button>
+            <div>
+                <label>Année :</label><br>
+                <input pInputText type="text" [(ngModel)]="exInfoDiplome">
+            </div>
 
             <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin()" type="button"
                 style="float:right;" label="Exporter en pdf">
@@ -387,7 +391,8 @@
 
                 <div style="float: right; margin-top: 80px;">
                     <p>
-                        <strong><!--{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}--> {{
+                        <strong><!--{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}-->
+                            {{
                             users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
                             users[etudiantToGenerateBulletin.user_id]?.firstname | titlecase }} </strong> <br>
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
@@ -518,6 +523,11 @@
                 <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin('contentAnnuel');"
                     type="button" style="float:right;" label="Exporter en pdf">
                 </button>
+
+                <div>
+                    <label>Année :</label><br>
+                    <input pInputText type="text" [(ngModel)]="exInfoDiplome">
+                </div>
             </div>
             <br>
             <h3>Prévisualisation du bulletin Annuel</h3>
@@ -535,7 +545,7 @@
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin Annuel <br>
-                        <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}} 2022-2023</strong>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>
                 </div>
@@ -774,9 +784,9 @@
             </p>
 
             <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']" [rows]="8" [pageLinks]="10" [paginator]="true"
-                rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length"
-                styleClass="p-datatable-gridlines">
+                [globalFilterFields]="['note_val', 'etudiant_id?.user_id?.firstname','etudiant_id?.user_id?.lastname','etudiant_id?.user_id?.email']"
+                [rows]="8" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+                [totalRecords]="notesByClasseBySemestre.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
@@ -841,7 +851,7 @@
     </div>
 
 
-    
+
 
 
 
@@ -885,7 +895,8 @@
                         <th pSortableColumn="examen_id.matiere_id.[0].nom"> Module <p-sortIcon
                                 field="examen_id.matiere_id.[0].nom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="examen_id.formateur_id.user_id.firstname"> Formateur <p-sortIcon field="examen_id.formateur_id.user_id.firstname"></p-sortIcon>
+                        <th pSortableColumn="examen_id.formateur_id.user_id.firstname"> Formateur <p-sortIcon
+                                field="examen_id.formateur_id.user_id.firstname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="examen_id.libelle"> Evaluation <p-sortIcon field="examen_id.libelle">
                             </p-sortIcon>
