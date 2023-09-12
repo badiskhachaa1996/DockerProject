@@ -1,55 +1,63 @@
-<div class="imatch-main-page">
+<div class="imatch-main-page" *ngIf="USER">
     <div class="page-content">
         <div class="top-header container">
             <a routerLink="/imatch" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour aux CVs</a>
         </div>
         <div class="header">
             <div class="container">
-                    <h1 class="col-12" style="text-align: center;">Prendre rendez-vous{{USER.lastname}}</h1>
-                    <div class="cv-title">
-                        <div *ngIf="dicPicture && dicPicture[cv._id]?.url;then cv_image else default_image"></div>
-                        <ng-template #cv_image>
-                            <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');"></div>
-                            <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
-                        </ng-template>
-                        <ng-template #default_image>
-                            <div *ngIf="user.civilite == 'Madame'; then is_madame else other"></div>
-                            <ng-template #is_madame>
-                                <div class="img-card"
-                                    style="background-image: url('../../../assets/images/imatch/female.png');"></div>
-    
-                                <!-- <img src='../../../assets/images/imatch/female.png'/> -->
+                    <a href="" class="btn-cancel"><i class="pi pi-arrow-left"></i>Annuler le rendez-vous</a>
+                    <div class="rendez-vous-header">
+                        <h1 class="rendez-vous-title">PRENDRE<br>RENDEZ-VOUS<hr></h1>
+                        <p>Avec</p>
+                        <div class="cv-title">
+                            <div *ngIf="profilePic ;then cv_image else default_image"></div>
+                            <ng-template #cv_image>
+                                <div class="img-card" style="background-image: url('{{profilePic}}');"></div>
+                                <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
                             </ng-template>
-                            <ng-template #other>
-                                <div class="img-card"
-                                    style="background-image: url('../../../assets/images/imatch/male.png');"></div>
-                                <!-- <img src='../../../assets/images/imatch/male.png'/> -->
+                            <ng-template #default_image>
+                                <div *ngIf="USER.civilite == 'Madame'; then is_madame else other"></div>
+                                <ng-template #is_madame>
+                                    <div class="img-card"
+                                        style="background-image: url('../../../assets/images/imatch/female.png');"></div>
+        
+                                    <!-- <img src='../../../assets/images/imatch/female.png'/> -->
+                                </ng-template>
+                                <ng-template #other>
+                                    <div class="img-card"
+                                        style="background-image: url('../../../assets/images/imatch/male.png');"></div>
+                                    <!-- <img src='../../../assets/images/imatch/male.png'/> -->
+                                </ng-template>
                             </ng-template>
-                        </ng-template>
-                        <div class="cv-main-info">
-                            <h1 class="cv-name">{{USER.firstname.substring(0, 1)}}. {{USER.lastname.substring(0, 2)}}.</h1>
-                            <hr>
-                            <h1 class="cv-profile">{{cv.competences[0] || "Profile non spécifié"}}</h1>
+                            <div class="cv-main-info">
+                                <h1 class="cv-name">{{USER.firstname.substring(0, 1)}}. {{USER.lastname.substring(0, 2)}}.</h1>
+                                <hr>
+                                <h1 class="cv-profile">{{USER.profile || "Profile non spécifié"}}</h1>
+                            </div>
                         </div>
                     </div>
-                    <form class="p-fluid p-formgrid grid col-12" [formGroup]="form" (submit)="onSubmit()">
-                        <div class="field col-6">
-                            <label for="email">Adresse e-mail</label>
-                            <input pInputText type="email" id="email" formControlName="email" autoWidth="false"
-                                [style]="{'width':'100%'}">
+                    <form class="form-container" [formGroup]="form" (submit)="onSubmit()">
+                        <div class="row">
+                            <div class="col-md-6 col-12">
+                                <label for="email">Adresse e-mail</label>
+                                <input pInputText type="email" id="email" formControlName="email" autoWidth="false"
+                                    [style]="{'width':'100%'}">
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <label for="phone">Numéro de téléphone</label>
+                                <input pInputText type="tel" id="phone" formControlName="phone" autoWidth="false"
+                                    [style]="{'width':'100%'}">
+                            </div>
                         </div>
-                        <div class="field col-6">
-                            <label for="phone">Numéro de téléphone</label>
-                            <input pInputText type="tel" id="phone" formControlName="phone" autoWidth="false"
-                                [style]="{'width':'100%'}">
-                        </div>
-                        <div class="field col-12">
-                            <label for="date">Date de rendez-vous</label>
-                            <p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
-                                [showTime]="true"></p-calendar>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="date">Date de rendez-vous</label>
+                                <p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
+                                    [showTime]="true" ></p-calendar>
+                            </div>
                         </div>
                         <button pButton type="submit" [disabled]="form.invalid" label="Prendre rendez-vous" autoWidth="false"
-                            [style]="{'width':'100%'}"></button>
+                            class="button-submit"></button>
                     </form>
             </div>
         </div>

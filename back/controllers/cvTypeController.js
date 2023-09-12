@@ -151,6 +151,21 @@ app.post('/uploadPicture', uploadLogo.single('file'), (req, res, next) => {
 
     }
 })
+app.get('/get-picture-by-user/:id', (req, res) => {
+    let id = req.params.id
+    let fileOne
+    console.log(id)
+    let filenames = fs.readdirSync("storage/cvPicture/" + id)
+    if (filenames)
+        fileOne = {
+            file: fs.readFileSync("storage/cvPicture/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                if (err) return console.error(err);
+            }),
+            extension: mime.contentType(path.extname("storage/cvPicture/" + id + "/" + filenames[0])),
+            url: ""
+        }
+    res.status(200).send({ fileOne })
+})
 
 app.get('/getAllPicture', (req, res) => {
     let ids = fs.readdirSync("storage/cvPicture")
@@ -169,5 +184,6 @@ app.get('/getAllPicture', (req, res) => {
     })
     res.status(200).send({ files: fileDic, ids })
 })
+
 
 module.exports = app;

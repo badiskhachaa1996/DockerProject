@@ -18,6 +18,9 @@ const { Prospect } = require("../models/prospect");
 const { Service } = require("../models/service");
 const { CommercialPartenaire } = require("../models/CommercialPartenaire");
 const { CvType } = require("../models/CvType");
+const { Competence } = require("../models/Competence");
+const { Profile } = require("../models/Profile");
+
 
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
@@ -228,13 +231,38 @@ app.get("/getPopulate/:id", (req, res, next) => {
 });
 
 app.get("/nstuget/:id", (req, res, next) => {
+
   User.findById(req.params.id)
     ?.then((userfromDb) => {
       CvType.find({ user_id: req.params.id }).populate('winner_id').then(w => {
-        res.status(200).send({
-          lastname: userfromDb.lastname, firstname: userfromDb.firstname,
-          email: userfromDb.email, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
-        });
+
+        let my_cv = w[0]
+        let fileOne
+        let cv_id = my_cv._id
+        if (cv_id !== undefined)  { 
+            let filenames = fs.readdirSync("storage/cvPicture/" + cv_id)
+            if (filenames)
+                fileOne = {
+                    file: fs.readFileSync("storage/cvPicture/" + cv_id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                        if (err) return console.error(err);
+                    }),
+                    extension: mime.contentType(path.extname("storage/cvPicture/" + cv_id + "/" + filenames[0])),
+                    url: ""
+                }
+                Competence.find({ _id : my_cv.competences[0]}).then( competence => {
+                  console.log(competence)
+                  console.log(competence[0].profile_id)
+                  Profile.find({_id : competence[0].profile_id}).then(profile => {
+                    res.status(200).send({
+                      lastname: userfromDb.lastname, firstname: userfromDb.firstname, civilite: userfromDb.civilite, cv_id: cv_id,
+                      email: userfromDb.email, profilePic: fileOne, profile: profile[0].libelle,  email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
+                    });
+                  })
+                })
+          }
+
+            // add then to get the profile and add a then for the
+
       })
     })
     .catch((error) => {

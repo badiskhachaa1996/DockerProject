@@ -231,6 +231,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
+      req.originalUrl.startsWith("/soc/cv/get-picture-by-user/") ||
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
       req.originalUrl.startsWith("/soc/fIM") ||

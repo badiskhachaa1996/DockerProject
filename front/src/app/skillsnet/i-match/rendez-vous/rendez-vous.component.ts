@@ -25,10 +25,11 @@ export class RendezVousComponent implements OnInit {
   })
 
   cv: CV;
-  dicPicture = {}
+  profilePic
+  dicPicture
 
   ID: any = this.route.snapshot.paramMap.get('user_id');
-  USER: { lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname, winner_id }
+  USER: { cv_id, lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname, winner_id, profilePic, profile, civilite }
   constructor(private route: ActivatedRoute, private McService: MicrosoftService, private UserService: AuthService,
     private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService, private cvservice: CvService) { }
 
@@ -38,23 +39,26 @@ export class RendezVousComponent implements OnInit {
     this.form.patchValue({ date: d })
     this.UserService.nstuget(this.ID).subscribe(u => {
       this.USER = u
-    })
-    this.cvservice.getAllPicture().subscribe(data => {
-      this.dicPicture = data.files // {id:{ file: string, extension: string }}
-      data.ids.forEach(id => {
+
+      this.dicPicture = this.USER.profilePic // {id:{ file: string, extension: string }}
         const reader = new FileReader();
-        const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+        const byteArray = new Uint8Array(atob(this.dicPicture.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: this.dicPicture.extension })
         reader.readAsDataURL(blob);
         reader.onloadend = () => {
-          this.dicPicture[id].url = reader.result;
+          this.profilePic = reader.result;
         }
-      })
     })
+
+ 
+
+
+
 
     this.cvservice.getByID(this.ID).subscribe((data) => {
       this.cv = data.dataCv;
     })
+
   }
 
   onSubmit() {

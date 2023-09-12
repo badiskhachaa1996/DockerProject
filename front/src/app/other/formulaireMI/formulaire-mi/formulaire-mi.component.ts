@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-formulaire-mi',
   templateUrl: './formulaire-mi.component.html',
-  styleUrls: ['./formulaire-mi.component.scss']
+  styleUrls: ['./formulaire-mi.component.scss','../../../../assets/css/bootstrap.min.css']
 })
 export class FormulaireMIComponent implements OnInit {
 

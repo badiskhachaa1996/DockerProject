@@ -7,9 +7,9 @@
         <div class="header">
             <div class="container">
                 <div class="cv-title">
-                    <div *ngIf="dicPicture && dicPicture[cv._id]?.url;then cv_image else default_image"></div>
+                    <div *ngIf="profilePic;then cv_image else default_image"></div>
                     <ng-template #cv_image>
-                        <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');"></div>
+                        <div class="img-card" style="background-image: url('{{profilePic}}');"></div>
                         <!-- <img src="{{dicPicture[cv._id].url}}"/> -->
                     </ng-template>
                     <ng-template #default_image>

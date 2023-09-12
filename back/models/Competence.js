@@ -10,6 +10,6 @@ const competenceSchema = mongoose.Schema({
     libelle:    { type: String, required: true },
     profile_id:  { type: mongoose.Schema.Types.ObjectId, ref: 'profiles', required: true },
 });
-
+ 
 const Competence = mongoose.model("competences", competenceSchema);
 module.exports = { Competence };

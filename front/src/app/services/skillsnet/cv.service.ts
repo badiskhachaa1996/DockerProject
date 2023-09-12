@@ -135,6 +135,11 @@ export class CvService {
     return this.httpClient.get<{ files: {}, ids: string[] }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  getPictureByUser(id) {
+    let url = `${this.apiUrl}/get-picture-by-user/${id}`;
+    return this.httpClient.get<{ file: {}}>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
   downloadCV(id) {
     const url = `${this.apiUrl}/download-cv/${id}`;
 
