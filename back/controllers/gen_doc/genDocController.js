@@ -37,7 +37,7 @@ app.put("/delete-doc", (req, res) => {
 
 // recuperation du doc
 app.get("/get-doc/:id", (req, res) => {
-    GenDoc.findOne({ _id: req.params.id }).populate('school').then((response) => { 
+    GenDoc.findOne({ _id: req.params.id }).then((response) => { 
         res.status(200).send(response); 
     })
         .catch((error) => { res.status(400).send(error.message); });
@@ -46,7 +46,7 @@ app.get("/get-doc/:id", (req, res) => {
 
 // recuperation de la liste de doc
 app.get("/get-docs", (_, res) => {
-    GenDoc.find()?.then((response) => { res.status(200).send(response); })
+    GenDoc.find().populate('school').populate('campus').populate('formation').populate('rentre')?.then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
