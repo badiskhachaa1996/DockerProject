@@ -700,7 +700,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                                 {
                                     label: 'Rendez-vous',
@@ -2211,7 +2211,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                                 {
                                     label: 'Rendez-vous',
@@ -2924,7 +2924,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -3665,7 +3665,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -5108,7 +5108,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -5606,7 +5606,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                             ],
                         }
@@ -5689,7 +5689,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                     ],
                                 },
@@ -5912,7 +5912,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                             ],
                         },
