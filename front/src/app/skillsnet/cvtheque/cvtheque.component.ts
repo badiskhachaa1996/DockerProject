@@ -372,7 +372,7 @@ export class CvthequeComponent implements OnInit {
   formUpdateCV: FormGroup
   canEditWinner = false
   InitUpdateCV(cv) {
-    this.formUpdateCV = this.formBuilder.group({
+    /*this.formUpdateCV = this.formBuilder.group({
       competences: [],
       //outils: ['', Validators.required],
       langues: [],
@@ -397,11 +397,6 @@ export class CvthequeComponent implements OnInit {
       })
     });
 
-    /*let cv_outils = [];
-    cv.outils?.forEach((outil) => {
-      cv_outils.push({ label: outil });
-    });*/
-
     let cv_langues = [];
     cv.langues?.forEach(langue => {
       cv_langues.push({ label: langue });
@@ -414,7 +409,8 @@ export class CvthequeComponent implements OnInit {
       //outils: cv_outils,
       langues: cv_langues,
       //video_lien: cv.video_lien
-    })
+    })*/
+    this.router.navigate(['gen-cv', cv.user_id._id])
   }
 
   onUpdateCV() {

@@ -76,7 +76,7 @@ const cvTypeSchema = mongoose.Schema({
 
         }], required: false
     },
-    mobilite_lieu: { type: String, required: false },
+    mobilite_lieu: { type: [String], required: false },
     mobilite_autre: { type: String, required: false, default: "France" },
     date_creation: { type: Date, default: Date.now },
     centre_interets: { type: String, required: false },

@@ -177,7 +177,7 @@
                         filterPlaceholder="Recherche"></p-dropdown>
                 </div>
                 <div class="field col-12">
-                    <label for="user">Rendre votre CV Public ?</label>
+                    <label for="user">Publier votre CV sur iMATCH ?</label>
                     <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
                         optionValue="value" optionLabel="label"
                         [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
@@ -235,7 +235,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -291,7 +291,6 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Intitulé</th>
-                            <th>Type</th>
                             <th>Details</th>
                             <th>Structure</th>
                             <th>Date début</th>
@@ -314,17 +313,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.type">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{exp.type}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td pEditableColumn>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -413,7 +402,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -502,7 +491,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -688,7 +677,7 @@
                         filterPlaceholder="Recherche"></p-dropdown>
                 </div>
                 <div class="field col-12">
-                    <label for="user">Rendre votre CV Public ?</label>
+                    <label for="user">Publier votre CV sur iMATCH ?</label>
                     <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
                         optionValue="value" optionLabel="label"
                         [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
@@ -747,7 +736,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -804,7 +793,6 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Intitulé</th>
-                            <th>Type</th>
                             <th>Details</th>
                             <th>Structure</th>
                             <th>Date début</th>
@@ -827,17 +815,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.type">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{exp.type}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td pEditableColumn>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -927,7 +905,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -1018,7 +996,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}

@@ -248,14 +248,19 @@ export class IMatchComponent implements OnInit {
       }
       if (this.selectedProfiles.length != 0) {
         let bufferProfil: any = cv.competences[0]
-        let profil: Profile = bufferProfil.profile_id
-        let temp = false
-        this.selectedProfiles.forEach(p => {
-          if (profil == p)
-            temp = true
-        })
-        if (!temp)
+        if (bufferProfil && bufferProfil.profile_id) {
+          let profil: Profile = bufferProfil.profile_id
+          let temp = false
+          this.selectedProfiles.forEach(p => {
+            if (profil._id == p)
+              temp = true
+          })
+          if (!temp)
+            added = false
+        } else {
           added = false
+        }
+
       }
 
       if (added)

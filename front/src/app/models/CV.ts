@@ -3,7 +3,7 @@ import { User } from "./User"
 export class CV {
     constructor(
         public _id?: string,
-        public user_id?: string,
+        public user_id?: any,
         public experiences_pro?: {
 
             date_debut: Date,
@@ -19,7 +19,7 @@ export class CV {
             type: string
 
         }[],
-        public competences?: string[],
+        public competences?: any[],
         public outils?: string[],
         public langues?: string[],
         public video_lien?: string,

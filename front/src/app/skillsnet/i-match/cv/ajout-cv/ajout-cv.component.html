@@ -1,7 +1,129 @@
 <div class="main-page">
     <div class="page-header"></div>
     <div class="page-content">
-        <div class="old-cv">Affichage Ancien CV</div>
+        <div class="old-cv" *ngIf="cv">
+            <div class="page-container" id="page-certif">
+                <div class="page-inner-content">
+                    <div class="header" id="header_area"
+                        style="background-image: url('../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/bg-header.png')">
+                        <div class="student-image"
+                            style="background-image: url('../../../../../assets/images/imatch/female.png')"></div>
+                        <div class="student-identity">
+                            <h1 class="student-name" id="lname">{{cv.user_id?.lastname || 'NOM' | uppercase }}</h1>
+                            <h1 class="student-name" id="fname">{{cv.user_id?.firstname || 'Prénom' | titlecase }}</h1>
+                            <h1 class="student-name"><strong
+                                    *ngIf="cv.competences && cv.competences.length!=0">{{cv.competences[0]?.profile?.libelle
+                                    || "Profile non spécifié"}}</strong></h1>
+
+                        </div>
+                    </div>
+                    <div class="content-container">
+                        <div class="sidebar">
+                            <div class="sidebar-inner">
+                                <div class="sidebar-section">
+                                    <h2 class="sidebar-title">Compétences</h2>
+                                    <div class="sidebar-content">
+                                        <div *ngIf="cv.competences">
+                                            <p class="spectialite" *ngFor="let option of cv.competences">
+                                                {{option.label}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sidebar-section">
+                                    <h2 class="sidebar-title">A propos</h2>
+                                    <div class="sidebar-content">{{cv?.a_propos}}</div>
+                                </div>
+                                <div class="sidebar-section">
+                                    <h2 class="sidebar-title">Langues</h2>
+                                    <div *ngIf="selectedMultilang">
+                                        <div class="spectialite" *ngFor="let option of cv.langues">
+                                            {{option.label}}<br></div>
+                                    </div>
+
+                                </div>
+                                <div class="sidebar-section">
+                                    <h2 class="sidebar-title">Centres d'intérêts</h2>
+                                    <div class="sidebar-content">{{cv?.centre_interets}}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="content">
+                            <div class="section-cv">
+                                <h2>Education</h2>
+                                <div class="section-content" *ngFor="let exp of cv?.education">
+                                    <div class="section-title">
+                                        <div class="section-training">{{exp?.intitule_experience}}</div>
+                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                            date:'YYYY'}}</div>
+                                    </div>
+                                    <div class="section-main">{{exp?.structure}}</div>
+                                    <div class="section-details">
+                                        <p>
+                                            {{exp?.details}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-cv">
+                                <h2>Experiences Professionnelles</h2>
+                                <div class="section-content" *ngFor="let exp of cv?.experiences_pro">
+                                    <div class="section-title">
+                                        <div class="section-training">{{exp?.intitule_experience}}</div>
+                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                            date:'YYYY'}}</div>
+                                    </div>
+                                    <div class="section-main">{{exp?.structure}}</div>
+                                    <div class="section-details">
+                                        <p>
+                                            {{exp?.type}} : {{exp?.details}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-cv">
+                                <h2>Experiences Associatif</h2>
+                                <div class="section-content" *ngFor="let exp of cv?.experiences_associatif">
+                                    <div class="section-title">
+                                        <div class="section-training">{{exp?.intitule_experience}}</div>
+                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                            date:'YYYY'}}</div>
+                                    </div>
+                                    <div class="section-main">{{exp?.structure}}</div>
+                                    <div class="section-details">
+                                        <p>
+                                            {{exp?.type}} : {{exp?.details}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-cv">
+                                <h2>Informatique</h2>
+                                <div class="section-content" *ngFor="let exp of cv?.informatique">
+                                    <div class="section-title">
+                                        <div class="section-training">{{exp?.intitule_experience}}</div>
+                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                            date:'YYYY'}}</div>
+                                    </div>
+                                    <div class="section-main">{{exp?.structure}}</div>
+                                    <div class="section-details">
+                                        <p>
+                                            {{exp?.type}} : {{exp?.details}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <img class="logo-image"
+                            src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
 
         <div class="input-form-cv">
             <div *ngIf="formAddCV">
@@ -150,10 +272,9 @@
                         <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
                             (change)="onUpload($event)" chooseLabel="Browse" />
                     </div>
-
                     <div class="field col-6">
                         <label>Test Mobilité - Ville</label>
-                        <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        <p-multiSelect [options]="locations" defaultLabel="Lieu"
                             autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             class="w-100" formControlName="mobilite_lieu"></p-multiSelect>
 
@@ -180,7 +301,7 @@
                             filterPlaceholder="Recherche"></p-dropdown>
                     </div>
                     <div class="field col-12">
-                        <label for="user">Rendre votre CV Public ?</label>
+                        <label for="user">Publier votre CV sur iMATCH ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
                             optionValue="value" optionLabel="label"
                             [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
@@ -237,7 +358,7 @@
                                 <td pEditableColumn>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText [(ngModel)]="exp.details">
+                                            <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{exp.details}}
@@ -293,7 +414,6 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Intitulé</th>
-                                <th>Type</th>
                                 <th>Details</th>
                                 <th>Structure</th>
                                 <th>Date début</th>
@@ -316,17 +436,7 @@
                                 <td pEditableColumn>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText [(ngModel)]="exp.type">
-                                        </ng-template>
-                                        <ng-template pTemplate="output">
-                                            {{exp.type}}
-                                        </ng-template>
-                                    </p-cellEditor>
-                                </td>
-                                <td pEditableColumn>
-                                    <p-cellEditor>
-                                        <ng-template pTemplate="input">
-                                            <input type="text" pInputText [(ngModel)]="exp.details">
+                                            <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{exp.details}}
@@ -415,7 +525,7 @@
                                 <td pEditableColumn>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText [(ngModel)]="exp.details">
+                                            <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{exp.details}}
@@ -504,7 +614,7 @@
                                 <td pEditableColumn>
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input type="text" pInputText [(ngModel)]="exp.details">
+                                            <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
                                             {{exp.details}}
@@ -612,7 +722,7 @@
                                     <div class="section-main">{{exp?.structure}}</div>
                                     <div class="section-details">
                                         <p>
-                                            {{exp?.type}} : {{exp?.details}}
+                                            {{exp?.details}}
                                         </p>
                                     </div>
                                 </div>
@@ -666,7 +776,8 @@
                                 </div>
                             </div>
                         </div>
-                        <img class="logo-image" src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
+                        <img class="logo-image"
+                            src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
                     </div>
 
                 </div>
