@@ -43,11 +43,11 @@ export class AppMenuComponent implements OnInit {
             icon: 'pi pi-fw pi-home',
             routerLink: ['/'],
         },
-        {
+        /*{
             label: 'Signaler un problème technique',
             icon: 'pi pi-fw pi-exclamation-triangle',
             routerLink: ['/ticketing-igs'],
-        },
+        },*/
     ];
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
@@ -73,38 +73,12 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
-                        },
-                        {
-                            label: 'Développeur',
-                            icon: 'pi pi-fw pi-cog',
-                            items: [
-                                {
-                                    label: 'Gestion des utilisateurs',
-                                    icon: 'pi pi-fw pi-user',
-                                    routerLink: ['/gestion-des-utilisateurs'],
-                                },
-                                {
-                                    label: 'Analyseur de doublon',
-                                    icon: 'pi pi-fw pi-server',
-                                    routerLink: ['/analyseur-doublons'],
-                                },
-                                {
-                                    label: 'Connexion des étudiants',
-                                    icon: 'pi pi-fw pi-sign-in',
-                                    routerLink: ['/gestion-etudiants'],
-                                },
-                                {
-                                    label: 'Infos IMS',
-                                    icon: 'pi pi-fw pi-info-circle',
-                                    routerLink: ['/infos-ims'],
-                                },
-                            ],
-                        },
-                        {
+                        },*/
+                        /*{
                             label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -124,7 +98,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/admin/gestion-services'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
@@ -192,7 +166,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -212,7 +186,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/team'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Ressources humaines',
                             icon: 'pi pi-users',
@@ -709,18 +683,7 @@ export class AppMenuComponent implements OnInit {
                                 }
                             ],
                         },
-                        {
-                            label: 'Support',
-                            icon: 'pi pi-cog',
-                            items: [
-                                {
-                                    label: 'Étudiants en attente de leur compte IMS',
-                                    icon: 'pi pi-user-plus',
-                                    routerLink: ['/assign-ims'],
-                                },
-                            ],
-                        },
-                        {
+                        /*{
                             label: 'Booking',
                             icon: 'pi pi-building',
                             items: [
@@ -735,9 +698,9 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/gestion-reservations'],
                                 },
                             ],
-                        },
+                        },*/
                         {
-                            label: 'Booking V2',
+                            label: 'Booking',
                             icon: ' pi pi-calendar',
                             items: [
                                 {
@@ -759,7 +722,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Finance',
                             icon: 'pi pi-money-bill',
                             items: [
@@ -769,7 +732,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/facture-formateur'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Questionnaire',
                             icon: 'pi pi-sort-alpha-down',
@@ -1207,7 +1170,44 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/agent/list'],
                                         },
                                     ],
-                                }
+                                },
+                                {
+                                    label: 'Développeur',
+                                    icon: 'pi pi-fw pi-cog',
+                                    items: [
+                                        {
+                                            label: 'Gestion des utilisateurs',
+                                            icon: 'pi pi-fw pi-user',
+                                            routerLink: ['/gestion-des-utilisateurs'],
+                                        },
+                                        {
+                                            label: 'Analyseur de doublon',
+                                            icon: 'pi pi-fw pi-server',
+                                            routerLink: ['/analyseur-doublons'],
+                                        },
+                                        {
+                                            label: 'Connexion des étudiants',
+                                            icon: 'pi pi-fw pi-sign-in',
+                                            routerLink: ['/gestion-etudiants'],
+                                        },
+                                        {
+                                            label: 'Infos IMS',
+                                            icon: 'pi pi-fw pi-info-circle',
+                                            routerLink: ['/infos-ims'],
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: 'Support',
+                                    icon: 'pi pi-cog',
+                                    items: [
+                                        {
+                                            label: 'Étudiants en attente de leur compte IMS',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/assign-ims'],
+                                        },
+                                    ],
+                                },
                             ]
                         }, {
                             label: "Genérateur Docs",
@@ -1248,12 +1248,12 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
-                        },
-                        {
+                        },*/
+                        /*{
                             label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -1268,8 +1268,8 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/suivi-ticket'],
                                 },
                             ],
-                        },
-                        {
+                        },*/
+                        /*{
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -1284,7 +1284,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Pédagogie',
                             icon: 'pi pi-fw pi-folder',
@@ -1488,7 +1488,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
@@ -1524,7 +1524,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Admission',
                             icon: 'pi pi-fw pi-check-circle',
@@ -1584,7 +1584,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
@@ -1620,7 +1620,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Administration',
                             icon: 'pi pi-fw pi-inbox',
@@ -1762,11 +1762,11 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Tableau de bord Commercial', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard/commercial'] }
                                     ]
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
-                                },
+                                },*/
                                 {
                                     label: 'Leads',
                                     items: [
@@ -2007,7 +2007,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
@@ -2043,7 +2043,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Pédagogie',
                             icon: 'pi pi-fw pi-folder',
@@ -2233,7 +2233,7 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
@@ -2269,7 +2269,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/my-tasks'],
                                 },
                             ],
-                        }
+                        }*/
                     ];
                 }
                 // menu service support informatique
@@ -2283,38 +2283,12 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
-                        },
-                        {
-                            label: 'Développeur',
-                            icon: 'pi pi-fw pi-cog',
-                            items: [
-                                {
-                                    label: 'Gestion des utilisateurs',
-                                    icon: 'pi pi-fw pi-user',
-                                    routerLink: ['/gestion-des-utilisateurs'],
-                                },
-                                {
-                                    label: 'Analyseur de doublon',
-                                    icon: 'pi pi-fw pi-server',
-                                    routerLink: ['/analyseur-doublons'],
-                                },
-                                {
-                                    label: 'Connexion des étudiants',
-                                    icon: 'pi pi-fw pi-sign-in',
-                                    routerLink: ['/gestion-etudiants'],
-                                },
-                                {
-                                    label: 'Infos IMS',
-                                    icon: 'pi pi-fw pi-info-circle',
-                                    routerLink: ['/infos-ims'],
-                                },
-                            ],
-                        },
-                        {
+                        },*/
+                        /*{
                             label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -2334,8 +2308,8 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/admin/gestion-services'],
                                 },
                             ],
-                        },
-                        {
+                        },*/
+                        /*{
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -2355,7 +2329,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/team'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Pédagogie',
                             icon: 'pi pi-fw pi-folder',
@@ -2378,17 +2352,6 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
-                            label: 'Support',
-                            icon: 'pi pi-cog',
-                            items: [
-                                {
-                                    label: 'Étudiants en attente de leur compte IMS',
-                                    icon: 'pi pi-user-plus',
-                                    routerLink: ['/assign-ims'],
-                                },
-                            ],
-                        },
                     ];
                 }
                 /* end menus salariés*/
@@ -2407,40 +2370,12 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
-                                },
-                                {
-                                    label: 'Développeur',
-                                    icon: 'pi pi-fw pi-cog',
-                                    items: [
-                                        {
-                                            label: 'Gestion des utilisateurs',
-                                            icon: 'pi pi-fw pi-user',
-                                            routerLink: [
-                                                '/gestion-des-utilisateurs',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Analyseur de doublon',
-                                            icon: 'pi pi-fw pi-server',
-                                            routerLink: ['/analyseur-doublons'],
-                                        },
-                                        {
-                                            label: 'Connexion des étudiants',
-                                            icon: 'pi pi-fw pi-sign-in',
-                                            routerLink: ['/gestion-etudiants'],
-                                        },
-                                        {
-                                            label: 'Infos IMS',
-                                            icon: 'pi pi-fw pi-info-circle',
-                                            routerLink: ['/infos-ims'],
-                                        },
-                                    ],
-                                },
-                                {
+                                },*/
+                                /*{
                                     label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -2462,8 +2397,8 @@ export class AppMenuComponent implements OnInit {
                                             ],
                                         },
                                     ],
-                                },
-                                {
+                                },*/
+                                /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
                                     items: [
@@ -2483,7 +2418,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/team'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Ressources humaines',
                                     icon: 'pi pi-fw pi-users',
@@ -2933,18 +2868,7 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ],
                                 },
-                                {
-                                    label: 'Support',
-                                    icon: 'pi pi-cog',
-                                    items: [
-                                        {
-                                            label: 'Étudiants en attente de leur compte IMS',
-                                            icon: 'pi pi-user-plus',
-                                            routerLink: ['/assign-ims'],
-                                        },
-                                    ],
-                                },
-                                {
+                                /*{
                                     label: 'Booking',
                                     icon: 'pi pi-building',
                                     items: [
@@ -2972,7 +2896,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/facture-formateur'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Questionnaire',
                                     icon: 'pi pi-sort-alpha-down',
@@ -3005,11 +2929,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -3038,38 +2962,12 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
-                                },
-                                {
-                                    label: 'Développeur',
-                                    icon: 'pi pi-fw pi-cog',
-                                    items: [
-                                        {
-                                            label: 'Gestion des utilisateurs',
-                                            icon: 'pi pi-fw pi-user',
-                                            routerLink: ['/gestion-des-utilisateurs'],
-                                        },
-                                        {
-                                            label: 'Analyseur de doublon',
-                                            icon: 'pi pi-fw pi-server',
-                                            routerLink: ['/analyseur-doublons'],
-                                        },
-                                        {
-                                            label: 'Connexion des étudiants',
-                                            icon: 'pi pi-fw pi-sign-in',
-                                            routerLink: ['/gestion-etudiants'],
-                                        },
-                                        {
-                                            label: 'Infos IMS',
-                                            icon: 'pi pi-fw pi-info-circle',
-                                            routerLink: ['/infos-ims'],
-                                        },
-                                    ],
-                                },
-                                {
+                                },*/
+                                /*{
                                     label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -3089,7 +2987,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/admin/gestion-services'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
@@ -3157,7 +3055,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
                                     items: [
@@ -3177,7 +3075,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/team'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Ressources humaines',
                                     icon: 'pi pi-users',
@@ -3674,18 +3572,7 @@ export class AppMenuComponent implements OnInit {
                                         }
                                     ],
                                 },
-                                {
-                                    label: 'Support',
-                                    icon: 'pi pi-cog',
-                                    items: [
-                                        {
-                                            label: 'Étudiants en attente de leur compte IMS',
-                                            icon: 'pi pi-user-plus',
-                                            routerLink: ['/assign-ims'],
-                                        },
-                                    ],
-                                },
-                                {
+                                /*{
                                     label: 'Booking',
                                     icon: 'pi pi-building',
                                     items: [
@@ -3700,9 +3587,9 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/gestion-reservations'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
-                                    label: 'Booking V2',
+                                    label: 'Booking',
                                     icon: ' pi pi-calendar',
                                     items: [
                                         {
@@ -3724,7 +3611,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'Finance',
                                     icon: 'pi pi-money-bill',
                                     items: [
@@ -3734,7 +3621,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/facture-formateur'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Questionnaire',
                                     icon: 'pi pi-sort-alpha-down',
@@ -4156,7 +4043,45 @@ export class AppMenuComponent implements OnInit {
                                                     routerLink: ['/agent/list'],
                                                 },
                                             ],
-                                        }
+                                        },
+                                        {
+                                            label: 'Développeur',
+                                            icon: 'pi pi-fw pi-cog',
+                                            items: [
+                                                {
+                                                    label: 'Gestion des utilisateurs',
+                                                    icon: 'pi pi-fw pi-user',
+                                                    routerLink: ['/gestion-des-utilisateurs'],
+                                                },
+                                                {
+                                                    label: 'Analyseur de doublon',
+                                                    icon: 'pi pi-fw pi-server',
+                                                    routerLink: ['/analyseur-doublons'],
+                                                },
+                                                {
+                                                    label: 'Connexion des étudiants',
+                                                    icon: 'pi pi-fw pi-sign-in',
+                                                    routerLink: ['/gestion-etudiants'],
+                                                },
+                                                {
+                                                    label: 'Infos IMS',
+                                                    icon: 'pi pi-fw pi-info-circle',
+                                                    routerLink: ['/infos-ims'],
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            label: 'Support',
+                                            icon: 'pi pi-cog',
+                                            items: [
+                                                {
+                                                    label: 'Étudiants en attente de leur compte IMS',
+                                                    icon: 'pi pi-user-plus',
+                                                    routerLink: ['/assign-ims'],
+                                                },
+                                            ],
+                                        },
+                                    
                                     ]
                                 }
                             ];
@@ -4224,7 +4149,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -4260,7 +4185,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/my-tasks'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -4482,11 +4407,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -4521,7 +4446,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -4557,7 +4482,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/my-tasks'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Admission',
                                     icon: 'pi pi-fw pi-check-circle',
@@ -4617,11 +4542,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -4653,7 +4578,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -4673,7 +4598,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/suivi-ticket'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Admission',
                                     icon: 'pi pi-fw pi-check-circle',
@@ -4698,11 +4623,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -4736,7 +4661,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -4772,7 +4697,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/my-tasks'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Administration',
                                     icon: 'pi pi-fw pi-inbox',
@@ -4924,11 +4849,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -4963,7 +4888,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -4999,7 +4924,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/my-tasks'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -5128,11 +5053,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -5167,7 +5092,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -5203,7 +5128,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/my-tasks'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Ressources humaines',
                                     icon: 'pi pi-fw pi-users',
@@ -5228,11 +5153,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -5267,11 +5192,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
-                                },
+                                },*/
                                 {
                                     label: 'Développeur',
                                     icon: 'pi pi-fw pi-cog',
@@ -5300,7 +5225,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -5322,8 +5247,8 @@ export class AppMenuComponent implements OnInit {
                                             ],
                                         },
                                     ],
-                                },
-                                {
+                                },*/
+                                /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
                                     items: [
@@ -5343,7 +5268,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/team'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -5369,17 +5294,6 @@ export class AppMenuComponent implements OnInit {
                                     ],
                                 },
                                 {
-                                    label: 'Support',
-                                    icon: 'pi pi-cog',
-                                    items: [
-                                        {
-                                            label: 'Étudiants en attente de leur compte IMS',
-                                            icon: 'pi pi-user-plus',
-                                            routerLink: ['/assign-ims'],
-                                        },
-                                    ],
-                                },
-                                {
                                     label: 'Étudiant',
                                     icon: 'pi pi-chart-pie',
                                     items: [
@@ -5390,11 +5304,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -5424,11 +5338,11 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
-                        },
+                        },*/
                         /*
                         
                         {
@@ -5629,7 +5543,7 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
@@ -5644,7 +5558,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/suivi-ticket'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -5658,7 +5572,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'Booking',
                                     icon: 'pi pi-building',
                                     items: [
@@ -5668,7 +5582,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/logements'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'iMatch',
                                     icon: 'pi pi-star',
@@ -5704,11 +5618,11 @@ export class AppMenuComponent implements OnInit {
                                                 'emploi-du-temps/classe/' +
                                                 dataEtu.classe_id,
                                         },
-                                        {
+                                        /*{
                                             label: 'Booking - Logements',
                                             icon: 'pi pi-home',
                                             routerLink: ['/logements'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Assiduité',
                                             icon: 'pi pi-check-square',
@@ -5744,15 +5658,15 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-fw pi-home',
                                             routerLink: ['/']
                                         },
-                                        {
+                                        /*{
                                             label: 'Signaler un problème technique',
                                             icon: 'pi pi-fw pi-exclamation-triangle',
                                             routerLink: ['/ticketing-igs'],
-                                        },
+                                        },*/
                                     ]
                                 },
 
-                                {
+                                /*{
                                     label: 'Ticketing - Ancienne Version',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -5762,7 +5676,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/suivi-ticket'],
                                         },
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -5835,11 +5749,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                {
+                                /*{
                                     label: 'Signaler un problème technique',
                                     icon: 'pi pi-fw pi-exclamation-triangle',
                                     routerLink: ['/ticketing-igs'],
-                                },
+                                },*/
                                 {
                                     label: 'Tuteurs',
                                     icon: 'pi pi-users',
@@ -5847,7 +5761,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Ticketing - Ancienne Version',
                             icon: 'pi pi-ticket',
                             items: [
@@ -5857,7 +5771,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/suivi-ticket'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Alternance',
                             icon: 'pi pi-briefcase',
@@ -5934,11 +5848,11 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
                         },
-                        {
+                        /*{
                             label: 'Signaler un problème technique',
                             icon: 'pi pi-fw pi-exclamation-triangle',
                             routerLink: ['/ticketing-igs'],
-                        },
+                        },*/
                     ]
                 if (services_list.includes('Partenaire')) {
                     if (service_dic['Partenaire'] != "Spectateur") {
