@@ -112,7 +112,7 @@ export class AjoutTicketComponent implements OnInit {
           })
         })
       })
-    } else {
+    } /*else {
       this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
           if (!val.label.startsWith('IGS')) {
@@ -121,7 +121,7 @@ export class AjoutTicketComponent implements OnInit {
           }
         })
       })
-    }
+    }*/
   }
 
 }
