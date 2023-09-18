@@ -7,11 +7,10 @@ app.disable("x-powered-by");
 
 // ajout de le campus"
 app.post("/add-campus", (req, res) => {
-    const campus = new GenCampus({ ...req.body});
-    campus.save()  
-    .then((response) => { res.status(201).send(response); })
-    .catch((error) => { res.status(500).send(error.message); });
-
+    const campus = new GenCampus({ ...req.body });
+    campus.save()
+        .then((response) => { res.status(201).send(response); })
+        .catch((error) => { res.status(500).send(error.message); });
 });
 
 

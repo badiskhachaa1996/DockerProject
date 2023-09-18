@@ -92,7 +92,7 @@ app.get("/get-cvs", (_, res) => {
 });
 
 app.get("/get-cvs-public", (_, res) => {
-    CvType.find({ isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
+    CvType.find({ isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').sort({ _id: -1 })
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
