@@ -143,7 +143,7 @@ export class CvService {
   downloadCV(id) {
     const url = `${this.apiUrl}/download-cv/${id}`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
