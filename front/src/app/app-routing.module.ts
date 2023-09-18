@@ -263,6 +263,7 @@ import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
 import { GenformationComponent } from './gen_doc/genformation/genformation.component';
 import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
+import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 const routes: Routes = [
     {
         path: '',
@@ -1314,6 +1315,8 @@ const routes: Routes = [
     { path: 'rendez-vous', component: RendezVousComponent },
     { path: 'rendez-vous/:user_id', component: RendezVousComponent },
     { path: 'imatch/cv/:id', component: CvComponent },
+
+    { path: 'document/:id_doc', component: GendocViewComponent },
 ]
 
 

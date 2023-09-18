@@ -1,0 +1,169 @@
+.display-top {
+    display: flex;
+}
+
+.page-container {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0mm;
+    border: 1px #d3d3d3 solid;
+    border-radius: 5px;
+    background: white;
+    font-size: 14px;
+  }
+
+  .header {
+    background: center center no-repeat;
+    background-size: cover;
+    height: 45mm;
+    min-height: 45mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-size: 1.7em;
+    padding: 0;
+    margin: 0;
+    font-weight: bolder;
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .content-container {
+    padding: 5mm 15mm;
+  }
+
+  .start-file {
+    padding: 30px 0;
+  }
+
+  .footer-file {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    font-size: 10px;
+    text-align: center;
+  }
+  
+  .footer-file p {
+    margin: 0;
+  }
+
+  .margin-bottom-is {
+    margin-bottom: 10px;
+  }
+  
+  .owner-file {
+    padding: 40px 0;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+    h2 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  .end-file {
+    margin-top: 20px;
+  }
+
+  .no-margin-left {
+    text-align: left;
+    padding: 0;
+  }
+
+
+  .footer-file h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+  }
+  
+  .signature-image {
+    width: 180px;
+    margin-top: -10px;
+  }
+  .qr-files {
+    text-align: left;
+    margin-left: 60px;
+  }
+
+
+  .sign {
+    margin-top: 50px;
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    p {
+      margin: 0;
+    }
+  }
+  
+  .page {
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: start;
+    transform: scale(0.7);
+    transform-origin: top left;
+    z-index: 50;
+  }
+
+
+
+  /* Rendering PDF */
+
+  
+  @media print {
+  
+
+  
+    .page-container {
+      padding: 0;
+      padding-bottom: 30px;
+      margin: 0;
+      max-height: 29.7cm !important;
+      width: 21cm !important;
+    }
+  }
+  
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  
+  
+  @media print {
+  
+    .display-top {
+      width: 21cm;
+      min-height: 29.7cm;
+      margin: 0;
+    }
+    
+    .input-page, .table-docs, .icon-doc {
+      display: none;
+    }
+    
+    
+    .page {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 21cm !important;
+      min-height: 29.7cm !important;
+      margin-top: 0 !important;
+      transform: scale(1) !important;
+      overflow: hidden;
+    }
+  }
+  
+  

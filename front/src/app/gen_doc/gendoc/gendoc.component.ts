@@ -27,10 +27,10 @@ import { User } from 'src/app/models/User';
 export class GendocComponent implements OnInit {
 
   // donner accés a la mise à jour d'un doc
-  grantAccessToEdit = true
+  grantAccessToEdit = false
 
   // donner accés à la suppression
-  grantAccessToDelete = true
+  grantAccessToDelete = false
 
   // le controle d'accés est hierarchique, 
   // si le user peut supprimer (delete) il peut tout faire 
@@ -211,6 +211,7 @@ export class GendocComponent implements OnInit {
       .then((response: GenDoc[]) => {
         this.docList = response;
         this.loading = false;
+        console.log(this.docList)
       })
       .catch((error) => { console.error(error); })
       this.schoolList  = [];
@@ -283,7 +284,7 @@ export class GendocComponent implements OnInit {
 
         this.student.full_name = formValue.student_full_name
         this.student.birth_date = formValue.student_birth_date
-        this.student.birth_place = formValue.student_birth_place
+        this.student.birth_place = this.country.label
 
         document.student = this.student
         document.amount_paid = formValue.amount_paid
@@ -446,5 +447,10 @@ export class GendocComponent implements OnInit {
   }
   onGenerateIdDoc(): void {
     this.id_doc = this.country.value + '-' + Math.floor(Math.random() * Date.now()).toString()
+  }
+
+
+  checkDoc(doc) {
+    this.router.navigate(['/document/', doc.id_doc]);
   }
 }
