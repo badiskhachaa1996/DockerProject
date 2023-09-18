@@ -262,6 +262,7 @@ import { GenschoolComponent } from './gen_doc/genschool/genschool.component';
 import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
 import { GenformationComponent } from './gen_doc/genformation/genformation.component';
 import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
+import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 const routes: Routes = [
     {
@@ -1239,6 +1240,8 @@ const routes: Routes = [
 
 
             { path: 'gen-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'gen-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
 
             // Generateur de Doc 
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },

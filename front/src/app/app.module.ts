@@ -368,6 +368,7 @@ import { OutputpageComponent } from './gen_doc/gendoc/outputpage/outputpage.comp
 import { QRCodeModule  } from 'angularx-qrcode';
 import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-intro.component';
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
+import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 
 @NgModule({
@@ -745,6 +746,7 @@ import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.co
     OutputpageComponent,
     GenIntroComponent,
     GenOutroComponent,
+    RendezVousResultatsComponent,
     GendocViewComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,

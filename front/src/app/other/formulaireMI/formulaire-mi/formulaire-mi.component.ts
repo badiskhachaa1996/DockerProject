@@ -5,10 +5,11 @@ import { DestinationMI } from 'src/app/models/DestinationMI';
 import { FormulaireMIService } from 'src/app/services/formulaire-mi.service';
 import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 import { MessageService } from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-formulaire-mi',
   templateUrl: './formulaire-mi.component.html',
-  styleUrls: ['./formulaire-mi.component.scss','../../../../assets/css/bootstrap.min.css']
+  styleUrls: ['./formulaire-mi.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class FormulaireMIComponent implements OnInit {
 
@@ -30,7 +31,8 @@ export class FormulaireMIComponent implements OnInit {
     { label: 'Social Sanitaire', value: 'Social Sanitaire' },
     { label: 'Autre', value: 'Autre' },
   ]
-
+  ecole = this.route.snapshot.paramMap.get('ecole');
+  ecole_str = { str: "", hashtag: "" }
   avantages = [
     { label: 'Facebook', value: 'Facebook' },
     { label: 'Instagram', value: 'Instagram' },
@@ -76,7 +78,7 @@ export class FormulaireMIComponent implements OnInit {
     })
   }
 
-  constructor(private FMIService: FormulaireMIService, private ToastService: MessageService) { }
+  constructor(private FMIService: FormulaireMIService, private ToastService: MessageService, private route: ActivatedRoute) { }
 
   resultat;
 
@@ -93,6 +95,9 @@ export class FormulaireMIComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData()
+    if (this.ecole) {
+
+    }
   }
 
 }

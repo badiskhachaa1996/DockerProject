@@ -240,10 +240,16 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
       req.originalUrl.startsWith("/soc/fIM") ||
+<<<<<<< HEAD
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID') ||
+      req.originalUrl.startsWith('/soc/docGenInt/download') ||
+      req.originalUrl === '/soc/meetingTeams/create'
+=======
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
       req.originalUrl.startsWith('/soc/docGenInt/download') ||
       req.originalUrl === '/soc/meetingTeams/create') ||
       req.originalUrl.startsWith('/soc/genDoc/get-doc')
+>>>>>>> 215b689b25371940e47df543639a6b4a794a6ba4
     ) {
       next();
     } else {
@@ -253,7 +259,7 @@ app.use("/", function (req, res, next) {
         .send(
           "Accès non autorisé, Wrong Token " +
           token +
-          " Vérifiez aussi que la méthode de request POST ou GET est respecté" +
+          " Vérifiez aussi que la méthode de request POST ou GET est respecté\n" +
           req.originalUrl
         );
     }

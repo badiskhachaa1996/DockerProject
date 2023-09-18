@@ -702,6 +702,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-cog',
                                     routerLink: ['/gen-cv'],
                                 },
+                                {
+                                    label: 'Rendez-vous',
+                                    icon: 'pi pi-calendar',
+                                    routerLink: ['/imatch/rendez-vous']
+                                }
                             ],
                         },
                         {
@@ -2208,6 +2213,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-cog',
                                     routerLink: ['/gen-cv'],
                                 },
+                                {
+                                    label: 'Rendez-vous',
+                                    icon: 'pi pi-calendar',
+                                    routerLink: ['/imatch/rendez-vous']
+                                }
                             ],
                         },
                     ];
@@ -2916,6 +2926,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-cog',
                                             routerLink: ['/gen-cv'],
                                         },
+                                        {
+                                            label: 'Rendez-vous',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/imatch/rendez-vous']
+                                        }
                                     ],
                                 },
                                 {
@@ -3652,6 +3667,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-cog',
                                             routerLink: ['/gen-cv'],
                                         },
+                                        {
+                                            label: 'Rendez-vous',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/imatch/rendez-vous']
+                                        }
                                     ],
                                 },
                                 {
@@ -5090,6 +5110,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-cog',
                                             routerLink: ['/gen-cv'],
                                         },
+                                        {
+                                            label: 'Rendez-vous',
+                                            icon: 'pi pi-calendar',
+                                            routerLink: ['/imatch/rendez-vous']
+                                        }
                                     ],
                                 },
                                 {
@@ -5554,8 +5579,40 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                     ];
+                } else if (response.role.startsWith('Externe')) {
+                    this.items = [
+                        {
+                            label: 'Espace Personnel',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        },
+                        {
+                            label: 'iMatch',
+                            icon: 'pi pi-star',
+                            items: [
+                                {
+                                    label: 'Offres',
+                                    icon: 'pi pi-volume-up',
+                                    routerLink: ['/offres'],
+                                },
+                                {
+                                    label: 'Mes Matching',
+                                    icon: 'pi pi-link',
+                                    routerLink: [
+                                        '/matching-externe/' +
+                                        this.token.id,
+                                    ],
+                                },
+                                {
+                                    label: 'Générateur de CV',
+                                    icon: 'pi pi-cog',
+                                    routerLink: ['/gen-cv'],
+                                },
+                            ],
+                        }
+                    ]
                 }
-                /* end menus alternants intedgroup */
+                /* end menus role */
 
                 /* menus internes */
                 // menu étudiant

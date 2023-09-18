@@ -1,20 +1,22 @@
 <p-toast></p-toast>
 <div class="container-fluid">
-    <img class="top-image" src="assets/images/form-header-top.png"/>
+    <img class="top-image" src="assets/images/form-header-top.png" />
     <div class="top-content">
-        <img src="assets/images/icbs-logo.png" />
-        <h1 class="page-title">Mobilité International</h1>
+        <!--<img src="assets/images/icbs-logo.png" />-->
+        <h1 class="page-title">Mobilité Internationale</h1>
         <div class="page-content">
             <p>🌍 Explorez le monde avec ICBS !</p>
-            <p>Tous les étudiants alternants, qu'ils fassent partie de nos écoles ou non, peuvent profiter d'un séjour linguistique GRATUIT d'une semaine dans des destinations incroyables : Dubaï, Malte, Londres, Hammamet, Djerba et Marrakech.</p>
-            <p>Nous couvrons le transport, l'hébergement et la formation. ✈️</p>
-            <p>Acquérez des compétences interculturelles, élargissez votre réseau professionnel et découvrez de nouvelles perspectives. </p>
+            <p>Tous les étudiants alternants, quel que soit leur école, peuvent profiter d'un séjour linguistique
+                GRATUIT d'une semaine dans des destinations incroyables : Dubaï, Malte, Londres, Hammamet, Djerba et
+                Marrakech.</p>
+            <p>Nous couvrons le transport, l'hébergement et la formation en langue. ✈️</p>
+            <p>Acquérez des compétences interculturelles, élargissez votre réseau professionnel et découvrez de
+                nouvelles perspectives. </p>
             <p>Votre avenir commence ici ! 🚀🗺️ #ICBSglobal</p>
-            </div>
+        </div>
     </div>
-        
-    <form class="form-container" (ngSubmit)="saveFormulaire()"
-        [formGroup]="RegisterForm" *ngIf="!resultat">
+
+    <form class="form-container" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm" *ngIf="!resultat">
         <!--<div class="col-12">
             <h1>Event title</h1>
             <p>
@@ -40,11 +42,12 @@
                     [searchCountryField]="[
             SearchCountryField.Iso2,
             SearchCountryField.Name
-            ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
-                    [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
-                    formControlName="telephone"> </ngx-intl-tel-input>
+            ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates"
+                    [phoneValidation]="true" [separateDialCode]="separateDialCode"
+                    [numberFormat]="PhoneNumberFormat.National" name="phone" formControlName="telephone">
+                </ngx-intl-tel-input>
             </div>
-    
+
             <div class="col-md-6 col-12">
                 <label>Adresse mail <span style="color:red"> *</span></label>
                 <input pInputText formControlName="mail" type="mail" placeholder="Ex: john.smith@gmail.com" />
@@ -55,10 +58,11 @@
                 <label>Dans quelle école êtes vous inscrits? <span style="color:red"> *</span></label>
                 <input pInputText formControlName="ecole" type="text" placeholder="Ex: Studinfo" />
             </div>
-    
+
             <div class="col-md-6 col-12">
                 <label>Domaine d'études <span style="color:red"> *</span></label>
-                <p-dropdown placeholder="Choissisez un Domaine" [options]="domaines" formControlName="domaine" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown placeholder="Choissisez un Domaine" [options]="domaines" formControlName="domaine"
+                    [style]="{'width':'100%'}"></p-dropdown>
             </div>
         </div>
         <div class="row">
@@ -76,13 +80,14 @@
         <div class="row">
             <div class="col-12">
                 <label>Comment avez-vous entendu parler de cet avantage ? <span style="color:red"> *</span></label>
-                <p-dropdown placeholder="Choissisez une réponse" [options]="avantages"
-                    formControlName="avantage" [style]="{'width':'100%'}"></p-dropdown>
+                <p-dropdown placeholder="Choissisez une réponse" [options]="avantages" formControlName="avantage"
+                    [style]="{'width':'100%'}"></p-dropdown>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <button pButton type="submit" label="Envoyer" [disabled]="RegisterForm.invalid" [style]="{'width':'100%'}"></button>
+                <button pButton type="submit" label="Envoyer" [disabled]="RegisterForm.invalid"
+                    [style]="{'width':'100%'}"></button>
             </div>
         </div>
 

@@ -7,7 +7,7 @@ import * as html2pdf from 'html2pdf.js';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CV } from 'src/app/models/CV';
 import { User } from 'src/app/models/User';
@@ -32,6 +32,7 @@ import { sub } from 'date-fns';
 })
 export class AjoutCvComponent implements OnInit {
   cv: CV
+  ID = this.route.snapshot.paramMap.get('id');
   // partie dedié aux CV
   cvLists: CV[] = [];
   showFormAddCV: boolean = true;
@@ -181,7 +182,7 @@ export class AjoutCvComponent implements OnInit {
     private messageService: MessageService, private cvService: CvService,
     private userService: AuthService, private router: Router, private EcoleService: EcoleService,
     private ClasseService: ClasseService, private EtudiantService: EtudiantService,
-    private MatchingService: MatchingService, private AnnonceService: AnnonceService) { }
+    private MatchingService: MatchingService, private AnnonceService: AnnonceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     // decodage du token
