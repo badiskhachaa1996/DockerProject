@@ -34,7 +34,7 @@
         <div class="footer-file"  *ngIf="school?.name">
             <div class="qr-files" *ngIf="id_doc">
                 <qrcode
-                    [qrdata]="id_doc"
+                    [qrdata]=" base_url + id_doc"
                     [allowEmptyString]="true"
                     [elementType]="'svg'"
                     [errorCorrectionLevel]="'M'"

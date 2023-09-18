@@ -8,7 +8,7 @@ import { GenDoc } from 'src/app/models/gen_doc/GenDoc';
 })
 export class OutputpageComponent implements OnInit {
 
-  base_url = "ieg.group"
+  base_url =  "https://ims.intedgroup.com/#/document/"
 
   @Input() isWoman: Boolean;
   @Input() prep: string;
@@ -22,14 +22,16 @@ export class OutputpageComponent implements OnInit {
   @Input() student;
   @Input() country;
   @Input() id_doc;
+
   
   
+  constructor() { 
 
-  school_name = "INT Education"
-
-  constructor() { }
+  }
 
   ngOnInit(): void {
+    console.log(this.base_url + this.id_doc)
+    console.log(this.school)
   }
 
 }

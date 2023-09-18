@@ -185,6 +185,16 @@
                             Ecole
                         </div>
                     </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Créé par
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Date de Création
+                        </div>
+                    </th>
                     <th style="width: 8rem">
                         <div class="flex justify-content-between align-items-center">
                             Action
@@ -201,7 +211,7 @@
                         {{doc.id_doc}}
                     </td>
                     <td>
-                        {{doc.type_certif?.name}}
+                        {{doc.type_certif?.label}}
                     </td>
                     <td>
                         {{doc.student?.full_name}}
@@ -212,20 +222,27 @@
                     <td>
                         {{doc.school?.name}}
                     </td>
+                    <td>
+                        {{doc.created_by?.firstname}} {{doc.created_by?.lastname}} 
+                    </td>
+                    <td>
+                        {{doc.created_on | date: "dd MMM yyyy HH':'mm"}}
+                    </td>
                     <td class="text-center" style="min-width: 8rem;">
                         <i *ngIf="grantAccessToEdit" class="pi pi-pencil mr-2" title="Modifier l'école" (click)="InitUpdateDoc(doc)"></i>
                         <i *ngIf="grantAccessToDelete" class="pi pi-trash" title="Suprimer l'école l'image" (click)="deleteDoc(doc)"></i>
+                        <i class="pi pi-external-link clickable-link" title="Vérifier le certificat" (click)="checkDoc(doc)"></i>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="8">Aucun document trouvé.</td>
+                    <td colspan="10">Aucun document trouvé.</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="loadingbody">
                 <tr>
-                    <td colspan="8">Chargement...</td>
+                    <td colspan="10">Chargement...</td>
                 </tr>
             </ng-template>
         </p-table>

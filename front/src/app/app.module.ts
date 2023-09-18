@@ -368,6 +368,7 @@ import { OutputpageComponent } from './gen_doc/gendoc/outputpage/outputpage.comp
 import { QRCodeModule  } from 'angularx-qrcode';
 import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-intro.component';
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
+import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 
 @NgModule({
   imports: [
@@ -744,6 +745,7 @@ import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-out
     OutputpageComponent,
     GenIntroComponent,
     GenOutroComponent,
+    GendocViewComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

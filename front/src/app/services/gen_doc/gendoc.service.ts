@@ -62,4 +62,9 @@ export class GenDocService {
     });
   }
 
+  getDoc(id: string) {
+    const url = `${this.apiUrl}/get-doc/${id}`;
+    return this.httpClient.get<GenDoc>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
 }

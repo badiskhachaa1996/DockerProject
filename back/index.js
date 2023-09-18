@@ -241,8 +241,9 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/skills/get-profiles' ||
       req.originalUrl.startsWith("/soc/fIM") ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID',
-        req.originalUrl.startsWith('/soc/docGenInt/download') ||
-        req.originalUrl === '/soc/meetingTeams/create')
+      req.originalUrl.startsWith('/soc/docGenInt/download') ||
+      req.originalUrl === '/soc/meetingTeams/create') ||
+      req.originalUrl.startsWith('/soc/genDoc/get-doc')
     ) {
       next();
     } else {
