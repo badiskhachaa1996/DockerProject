@@ -98,6 +98,7 @@ import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -465,7 +466,7 @@ import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.co
     FullCalendarModule,
     NgxIntlTelInputModule,
     EditorModule,
-    QRCodeModule,
+    QRCodeModule,PdfViewerModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {

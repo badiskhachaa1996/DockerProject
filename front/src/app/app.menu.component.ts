@@ -7624,6 +7624,11 @@ export class AppMenuComponent implements OnInit {
                                     },
                                 ]
                             },
+                            {
+                                label: 'Générateur de documents',
+                                icon: 'pi pi-folder',
+                                routerLink: ['/genDoc']
+                            },
                         ],
                     })
                 }
