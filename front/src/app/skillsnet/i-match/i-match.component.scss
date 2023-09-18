@@ -50,13 +50,11 @@ hr.imatch-main {
 
 .btn-cv {
     border-radius: 30px;
-    padding: 7px 30px;
-    min-width: 250px;
+    padding: 7px 60px;
     text-align: center;
     text-decoration: none;
-    text-align: center;
-
 }
+
 .btn-cv p, .btn-cv i {
     margin: 0;
 }
@@ -120,6 +118,7 @@ hr.imatch-main {
 
 
 
+
 .header-top-container {
     display: flex;
     justify-content: center;
@@ -173,6 +172,27 @@ hr.imatch-main {
         }}
 
     
+@media screen and (max-width: 1099px) {
+        .btn-cv {
+            padding: 7px 30px;
+        }
+    }
+
+    @media screen and (max-width: 835px) {
+        .btn-cv {
+            width: 100%;
+        }
+
+        .margin-both {
+            margin: 0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header-top-container {
+            flex-direction: column;
+        }
+    }
 
 
 .bouton-plus {
@@ -197,7 +217,7 @@ hr.imatch-main {
 }
 
 .steps-imatch {
-    width: 500px;
+    width: 70%;
 }
 
 .text-header {
@@ -221,6 +241,11 @@ hr.imatch-main {
     .cv-list {
         grid-template-columns: auto ;
     }
+
+    .steps-imatch {
+        width: 100%;
+    }
+    
   }
 
 .lightgray-bg {

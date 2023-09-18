@@ -44,7 +44,7 @@
             <p><strong>Modalité de paiement : </strong>{{paiement_method}} </p>
             <p><strong>Formation : </strong> {{formation?.name}}</p>
             <p><strong>Campus choisi : </strong>{{campus?.name.replace("Campus ", "")}}</p>
-            <p><strong>N° Chéque :</strong> {{formContent.check}}. <strong>Nom de la banque :</strong> {{formContent.bank}}.</p>
+            <p *ngIf="paiement_method ==='Chèque'"><strong>N° Chéque :</strong> {{formContent.check}}. <strong>Nom de la banque :</strong> {{formContent.bank}}.</p>
         </div>
         <p class="underlined">* Les frais de dossier ne sont pas remboursables en cas de
             non-obtention de visa, d'annulation de candidature ou de dépassement de délai de dépôt chez Campus France.</p>
