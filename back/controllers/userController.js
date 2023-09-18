@@ -239,29 +239,38 @@ app.get("/nstuget/:id", (req, res, next) => {
         let my_cv = w[0]
         let fileOne
         let cv_id = my_cv._id
-        if (cv_id !== undefined)  { 
+        if (cv_id !== undefined) {
+          try {
             let filenames = fs.readdirSync("storage/cvPicture/" + cv_id)
             if (filenames)
-                fileOne = {
-                    file: fs.readFileSync("storage/cvPicture/" + cv_id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
-                        if (err) return console.error(err);
-                    }),
-                    extension: mime.contentType(path.extname("storage/cvPicture/" + cv_id + "/" + filenames[0])),
-                    url: ""
-                }
-                Competence.find({ _id : my_cv.competences[0]}).then( competence => {
-                  console.log(competence)
-                  console.log(competence[0].profile_id)
-                  Profile.find({_id : competence[0].profile_id}).then(profile => {
-                    res.status(200).send({
-                      lastname: userfromDb.lastname, firstname: userfromDb.firstname, civilite: userfromDb.civilite, cv_id: cv_id,
-                      email: userfromDb.email, profilePic: fileOne, profile: profile[0].libelle,  email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
-                    });
-                  })
-                })
+              fileOne = {
+                file: fs.readFileSync("storage/cvPicture/" + cv_id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                  if (err) return console.error(err);
+                }),
+                extension: mime.contentType(path.extname("storage/cvPicture/" + cv_id + "/" + filenames[0])),
+                url: ""
+              }
+          } catch (error) {
+            fileOne = { file: "", extension: "" }
           }
 
-            // add then to get the profile and add a then for the
+          Competence.find({ _id: my_cv.competences[0] }).then(competence => {
+            if (competence.length != 0)
+              Profile.find({ _id: competence[0].profile_id }).then(profile => {
+                res.status(200).send({
+                  lastname: userfromDb.lastname, firstname: userfromDb.firstname, civilite: userfromDb.civilite, cv_id: cv_id,
+                  email: userfromDb.email, profilePic: fileOne, profile: profile[0].libelle, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
+                });
+              })
+            else
+              res.status(200).send({
+                lastname: userfromDb.lastname, firstname: userfromDb.firstname, civilite: userfromDb.civilite, cv_id: cv_id,
+                email: userfromDb.email, profilePic: fileOne, email_perso: userfromDb.email_perso, winner_email: w?.email, winner_lastname: w?.lastname, winner_firstname: w?.firstname, winner_id: w?._id
+              });
+          })
+        }
+
+        // add then to get the profile and add a then for the
 
       })
     })

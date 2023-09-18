@@ -11,7 +11,8 @@ export class MeetingTeams {
         public company_email?: string,
         public meeting_start_date?: Date,
         public date_creation?: Date,
-        public description?: string
+        public description?: string,
+        public statut?: string
     ) { }
 
 }

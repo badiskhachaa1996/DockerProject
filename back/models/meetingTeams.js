@@ -8,7 +8,8 @@ const matiereSchema = mongoose.Schema({
     company_email: { type: String },
     meeting_start_date: { type: Date },
     date_creation: { type: Date, default: Date.now },
-    description: { type: String }
+    description: { type: String },
+    statut: { type: String, default: "En cours" }
 });
 
 //creation de la table matiere

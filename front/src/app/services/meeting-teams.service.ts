@@ -8,7 +8,7 @@ import { MeetingTeams } from '../models/MeetingTeams';
 })
 export class MeetingTeamsService {
 
-  apiUrl = environment.origin + "actualiteInt/"
+  apiUrl = environment.origin + "meetingTeams/"
   constructor(private httpClient: HttpClient) { }
 
   create(data: MeetingTeams) {

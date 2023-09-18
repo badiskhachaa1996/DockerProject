@@ -41,16 +41,16 @@ export class RendezVousComponent implements OnInit {
       this.USER = u
 
       this.dicPicture = this.USER.profilePic // {id:{ file: string, extension: string }}
-        const reader = new FileReader();
-        const byteArray = new Uint8Array(atob(this.dicPicture.file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: this.dicPicture.extension })
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          this.profilePic = reader.result;
-        }
+      const reader = new FileReader();
+      const byteArray = new Uint8Array(atob(this.dicPicture.file).split('').map(char => char.charCodeAt(0)));
+      let blob: Blob = new Blob([byteArray], { type: this.dicPicture.extension })
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        this.profilePic = reader.result;
+      }
     })
 
- 
+
 
 
 
@@ -121,11 +121,15 @@ export class RendezVousComponent implements OnInit {
     };
     this.McService.createTeamsMeeting(event).then(r => {
       if (r) {
-        this.ToastService.add({ severity: 'success', detail: 'Le rendez-vous a été planifié' })
+
         this.MeetingTeamService.create(new MeetingTeams(null, this.USER.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone)).subscribe(mt => {
-          
+          this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été planifié' })
+          this.router.navigate(['/imatch'])
+        }, error => {
+          console.error(error)
+          this.ToastService.add({ severity: 'error', summary: 'Le rendez-vous a eu un problème', detail: error?.error })
         })
-        this.router.navigate(['/imatch'])
+
       }
     })
   }
