@@ -113,6 +113,11 @@ const paymentController = require('./controllers/paymentController');
 const teamCommercialController = require('./controllers/teamCommercialController');
 const logementController = require('./controllers/logementController');
 const cvTypeController = require('./controllers/cvTypeController');
+const genSchoolController = require('./controllers/gen_doc/genSchoolController');
+const genCampusController = require('./controllers/gen_doc/genCampusController');
+const genDocController = require('./controllers/gen_doc/genDocController');
+const genFormationController = require('./controllers/gen_doc/genFormationController');
+const genRentreController = require('./controllers/gen_doc/genRentreController');
 const DemandeConseillerController = require('./controllers/demandeConseillerController');
 const congeController = require('./controllers/congeController');
 const devoirController = require('./controllers/devoirController');
@@ -301,6 +306,15 @@ app.use("/soc/entreprise", entrepriseController);
 app.use("/soc/examen", examenController);
 
 app.use("/soc/cv", cvTypeController);
+
+
+
+app.use("/soc/genSchool", genSchoolController);
+app.use("/soc/genCampus", genCampusController);
+app.use("/soc/genDoc", genDocController);
+app.use("/soc/genFormation", genFormationController);
+app.use("/soc/genRentre", genRentreController);
+
 
 app.use("/soc/prestataire", prestataireController);
 

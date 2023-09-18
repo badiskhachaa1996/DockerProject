@@ -1,0 +1,58 @@
+
+<ng-template [ngIf]="type_certif?.value !== 'paiement'" [ngIfElse]="paiement">
+<p>Est bien admis<span *ngIf="isWoman">e</span> et 
+    <ng-template [ngIf]="type_certif?.value !== 'pre'" [ngIfElse]="preinscrit">
+        inscrit<span *ngIf="isWoman">e</span>
+    </ng-template>
+    <ng-template #preinscrit>
+        préinscrit<span *ngIf="isWoman">e</span>
+    </ng-template>
+    <ng-template [ngIf]="!formContent.alternance" [ngIfElse]="alterance">
+        <strong> en initiale </strong>
+    </ng-template>
+    <ng-template #alterance>
+        <strong> en alternance </strong>
+    </ng-template>
+    au sein de notre établissement à {{campus?.name.replace("Campus ", "")}} pour la rentrée scolaire {{rentre?.type}} 
+    qui débutera le {{rentre?.date_rentre}}.</p>
+
+<p>L'étudiant<span *ngIf="isWoman">e</span> suivra en présentiel la formation 
+    <ng-template [ngIf]="!formContent.alternance" [ngIfElse]="alterance">
+        <strong> en initiale </strong>
+    </ng-template>
+    <ng-template #alterance>
+        <strong> en alternance </strong>
+    </ng-template>
+    {{formation?.name}},
+    enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau {{formation?.niveau}} et
+    accréditée par {{formation?.accrediteur}}.</p>
+
+
+
+<div *ngIf="type_certif?.value !== 'compl'"><p>La durée de la formation est de {{formation?.duration}} mois.</p>
+<p>La date limite d'arrivée : <span class="underlined">{{rentre?.date_limite}}</span></p>
+<p class="underlined">L'étudiant(e) est sélectionné(e) suite à l'appréciation de son projet académique et le
+    remplissage des critères exigés par l'équipe pédagogique.</p>
+<p>L'étudiant<span *ngIf="isWoman">e</span> a bien réglé la somme de <strong>{{formContent.amount_paid}} €</strong> 
+    <span *ngIf="type_certif?.value !== 'pre'"> dont 550 €</span> frais de dossier <span class="underlined">non remboursable</span> hormis
+    les frais de sa formation qui coûte <strong>{{formation?.price}} € par an</strong>.</p>
+<p>L'inscription de l'étudiant<span *ngIf="isWoman">e</span> ne sera définitive qu'à l'obtention de son visa d'entrée sur le territoire français.</p></div>
+</ng-template>
+
+<ng-template #paiement>
+        <div class="outro-paiement">
+            <p><strong>Modalité de paiement : </strong>{{paiement_method}} </p>
+            <p><strong>Formation : </strong> {{formation?.name}}</p>
+            <p><strong>Campus choisi : </strong>{{campus?.name.replace("Campus ", "")}}</p>
+            <p><strong>N° Chéque :</strong> {{formContent.check}}. <strong>Nom de la banque :</strong> {{formContent.bank}}.</p>
+        </div>
+        <p class="underlined">* Les frais de dossier ne sont pas remboursables en cas de
+            non-obtention de visa, d'annulation de candidature ou de dépassement de délai de dépôt chez Campus France.</p>
+        <div *ngIf="type_certif?.value === 'paiement' && +formContent.amount_paid > 550">
+            <p>Le paiment inclus</p>
+            <ul>
+                <li>{{+formContent.amount_paid - 550}} euros, remboursable en cas de refus de visa.</li>
+                <li>550 euros, frais de préinscription non remboursable.</li>
+            </ul>
+        </div>
+</ng-template>

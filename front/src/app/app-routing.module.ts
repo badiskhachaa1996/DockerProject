@@ -258,6 +258,10 @@ import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-po
 import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
 import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
 import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
+import { GenschoolComponent } from './gen_doc/genschool/genschool.component';
+import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
+import { GenformationComponent } from './gen_doc/genformation/genformation.component';
+import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 const routes: Routes = [
     {
         path: '',
@@ -1234,6 +1238,12 @@ const routes: Routes = [
 
 
             { path: 'gen-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+
+            // Generateur de Doc 
+            { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
+            { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
+            { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
+            { path: 'genDoc', component: GendocComponent, canActivate: [AuthGuardService] },
         ],
     },
     {

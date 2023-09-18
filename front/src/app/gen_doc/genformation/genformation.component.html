@@ -1,0 +1,234 @@
+<p-toast></p-toast>
+    <!-- Formulaire d'ajout d'école -->
+    <div class="col-12" *ngIf="showAddFormation  || showUpdateFormation">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showAddFormation = false; showUpdateFormation = false; formAddFormation.reset()" aria-hidden="true"></i>
+
+            <h4 style="text-align: center;">Nouvelle école</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddFormation">
+                <div class="field col-6">
+                    <label>Nom de la formation</label>
+                    <input pInputText type="text" placeholder="Ex: MASTER Manager des organisations - Management et stratégies financières" formControlName="name" />
+                </div>
+                <div class="field col-6">
+                    <label>RNCP</label>
+                    <input pInputText type="text" placeholder="Ex: 35280" formControlName="rncp" />
+                </div>
+                <div class="field col-6">
+                    <label>Niveau</label>
+                    <input pInputText type="text" placeholder="Ex: 7" formControlName="niveau" />
+                </div>
+                <div class="field col-6">
+                    <label>Accréditeur</label>
+                    <input pInputText type="text" placeholder="Ex: FEDE" formControlName="accrediteur" />
+                </div>
+                <div class="field col-6">
+                    <label>Durée en Mois de la formation</label>
+                    <input pInputText type="text" placeholder="Ex: 24" formControlName="duration" />
+                </div>
+                <div class="field col-6">
+                    <label>Prix de la formation</label>
+                    <input pInputText type="text" placeholder="Ex: 35280" formControlName="price" />
+                </div>
+            </form>
+            <div>
+                <button pButton label="Valider" type="submit" [disabled]="formAddFormation.invalid"
+                    (click)="onAddFormation()"></button>
+            </div>
+        </div>
+    </div>
+
+<!-- Table d'affichage des écoles -->
+<div class="col-12">
+    <div class="card">
+        <button pButton pRipple label="Ajouter une formation" icon="pi pi-plus" class="mr-2 mb-2" (click)="showAddFormation = true"
+            style="float: right"></button>
+
+        <h3>Formations pour Generation de Doc</h3>
+        <p-table #dt1 [value]="formationList" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedFormations"
+            [globalFilterFields]="['formation.name']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Formation
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Niveau
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            RNCP
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Accrditeur
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Durée
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Prix
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-formation>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="formation"></p-tableCheckbox>
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{formation.name}}
+                    </td>
+                    <td>
+                        {{formation.niveau}}
+                    </td>
+                    <td>
+                        {{formation.rncp}}
+                    </td>
+                    <td>
+                        {{formation.accrediteur}}
+                    </td>
+
+                    <td>
+                        {{formation.duration}}
+                    </td>
+                    <td>
+                        {{formation.price}}
+                    </td>
+                    <td class="text-center" style="min-width: 8rem;">
+                        <i class="pi pi-pencil mr-2" title="Modifier la formation" (click)="InitUpdateFormation(formation)"></i>
+                        <i class="pi pi-calendar mr-2" title="Gestion des rentrée" (click)="formationSelected = formation; onGetDateRentre(); showRentreTable = true;"></i>
+                        <i class="pi pi-trash" title="Suprimer la formation" (click)="deleteFormation(formation)"></i>
+                        
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">Aucun formation trouvé.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Chargement...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+
+        <!-- Ajout d'une nouvelle Rentrée -->
+        <div class="col-12" *ngIf="showFormAddRentre || showFormUpdateRentre">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormAddRentre = false; showFormUpdateRentre = false; formAddRentre.reset()" aria-hidden="true"></i>
+    
+                <form class="p-fluid p-formgrid grid" [formGroup]="formAddRentre" (ngSubmit)="onAddRentre()">
+                        <div class="field col-12">
+                            <label htmlFor="libelle">Type de Rentrée</label>
+                            <input pInputText id="libelle"  placeholder="Ex: décalée de Janvier 2024" type="text" formControlName="type"/>
+                        </div>
+                        <div class="field col-6">
+                            <label htmlFor="libelle">Date de Rentrée</label>
+                            <input pInputText id="libelle"  placeholder="Ex: 3 octobre 2023" type="text" formControlName="date_rentre"/>
+                        </div>
+                        <div class="field col-6">
+                            <label htmlFor="libelle">Date Limite de Rentrée</label>
+                            <input pInputText id="libelle"  placeholder="Ex: 23 novembre 2023" type="text" formControlName="date_limite"/>
+                        </div>
+                        <div>
+                            <button pButton type="submit" label="Valider" [disabled]="formAddRentre.invalid"></button>
+                        </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Table des rentrées pour une formation -->
+	<div class="col-12" *ngIf="showRentreTable">
+
+		<div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+            (click)="showRentreTable = false;" aria-hidden="true"></i>
+            <button pButton pRipple label="Ajouter une rentrée" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddRentre = true" style="float: right"></button>
+            <h5>Liste des rentrées pour {{ formationSelected.name }}</h5>
+			<p-table #dt1 [value]="rentres" dataKey="_id" [rows]="8" [loading]="loadingRentres" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+                                Type de Rentrée
+							</div>
+						</th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+                                Date de Rentrée
+							</div>
+						</th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+                                Date Lmite de Rentrée
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-rentre>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{ rentre.type }}
+						</td>
+                        <td style="min-width: 12rem;">
+							{{ rentre.date_rentre }}
+						</td>
+                        <td style="min-width: 12rem;">
+							{{ rentre.date_limite }}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+							<i class="pi pi-pencil" title="Modifier la Rentrée" style="cursor: pointer;" (click)="rentreToUpdate = rentre; InitUpdateRentre(rentre); showFormUpdateRentre = true;"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="4">Aucune réntrée trouvée pour {{ formationSelected.name }}.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="4">chargement des données.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+	</div>
+
+</div>
+

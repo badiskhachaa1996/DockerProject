@@ -360,6 +360,14 @@ import { GestionMentionServiceComponent } from './agents/gestion-mention-service
 import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
 import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
 import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
+import { GenschoolComponent } from './gen_doc/genschool/genschool.component';
+import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
+import { GenformationComponent } from './gen_doc/genformation/genformation.component';
+import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
+import { OutputpageComponent } from './gen_doc/gendoc/outputpage/outputpage.component';
+import { QRCodeModule  } from 'angularx-qrcode';
+import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-intro.component';
+import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 
 @NgModule({
   imports: [
@@ -455,6 +463,7 @@ import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultat
     FullCalendarModule,
     NgxIntlTelInputModule,
     EditorModule,
+    QRCodeModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -728,6 +737,13 @@ import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultat
     ConfigurationMIComponent,
     FormulaireMIComponent,
     ResultatsMIComponent,
+    GenschoolComponent,
+    GencampusComponent,
+    GenformationComponent,
+    GendocComponent,
+    OutputpageComponent,
+    GenIntroComponent,
+    GenOutroComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

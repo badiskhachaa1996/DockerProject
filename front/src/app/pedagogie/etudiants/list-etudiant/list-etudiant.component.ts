@@ -454,8 +454,7 @@ export class ListEtudiantComponent implements OnInit {
             i++;
           });
         },
-        error: (error) => { console.log(error); },
-        complete: () => { console.log('Étudiants récupérés'); }
+        error: (error) => { console.log(error); }
       });
     }
 

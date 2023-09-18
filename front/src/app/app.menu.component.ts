@@ -1204,6 +1204,31 @@ export class AppMenuComponent implements OnInit {
                                     ],
                                 }
                             ]
+                        }, {
+                            label: "Genérateur Docs",
+                            icon: 'pi pi-folder-open',
+                            items: [
+                                {
+                                    label: 'Campus',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['/genCampus']
+                                },
+                                {
+                                    label: "Ecoles",
+                                    icon: 'pi pi-building',
+                                    routerLink: ['/genschools']
+                                },
+                                {
+                                    label: 'Formation',
+                                    icon: 'pi pi-align-justify',
+                                    routerLink: ['/genFormation']
+                                },
+                                {
+                                    label: 'Documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ]
                         }
                     ];
                 }

@@ -1,0 +1,235 @@
+<p-toast></p-toast>
+    <!-- Génération de docuement -->
+
+    <div *ngIf="showAddDoc  || showUpdateDoc">
+        <i class="pi pi-times-circle icon-doc" style="position:absolute; right: 30px; top: 90px; font-size: 20px; color: red; cursor: pointer;"
+        (click)="showAddDoc = false; showUpdateDoc = false; formAddDoc.reset()" aria-hidden="true"></i>
+        <div class="display-top">
+        <div class="input-page">
+            <h4 style="text-align: center;" *ngIf="!showUpdateDoc">Nouveau Document</h4>
+            <h4 style="text-align: center;" *ngIf="showUpdateDoc">Mettre à jour le document</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddDoc">
+                <div class="field col-12 margin-0">
+                    <label>Type de certificat</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="certificate_types" formControlName="type_certif"
+                            [virtualScroll]="true" itemSize="30" placeholder="Selectionner un type de certificat" [showClear]="true"
+                            (onChange)="changeCertificate($event.value)" filter="true"
+                            emptyFilterMessage="Aucun certif trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-6 margin-0">
+                    <label>Ecole</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="schoolList"
+                    formControlName="school"
+                    [virtualScroll]="true" itemSize="30" placeholder="Ecole" [showClear]="true"
+                    (onChange)="changeSchool($event.value)" filter="true"
+                    emptyFilterMessage="Aucun certif trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-6 margin-0">
+                    <label>Campus</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="campusList"
+                    formControlName="campus"
+                    [virtualScroll]="true" itemSize="30" placeholder="Campus" [showClear]="true"
+                    (onChange)="changeCampus($event.value)" filter="true"
+                    emptyFilterMessage="Aucun certif trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-12 margin-0">
+                    <label>Choix de formation</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="formationList"
+                            formControlName="formation"
+                            [virtualScroll]="true" itemSize="30" placeholder="Selectionner une formation" [showClear]="true"
+                            (onChange)="changeFormation($event.value)" filter="true"
+                            emptyFilterMessage="Aucun certif trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-12 margin-0" *ngIf="rentreList.length>0">
+                    <label>Choix de la rentrée</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="rentreList"
+                            formControlName="rentre"
+                            [virtualScroll]="true" itemSize="30" placeholder="Selectionner une rentrée" [showClear]="true"
+                            (onChange)="changeRentre($event.value)" filter="true"
+                            emptyFilterMessage="Aucune rentrée trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+
+                <div class="field col-12">
+                    <label>
+                        <ng-template [ngIf]="formAddDoc.value.alternance" [ngIfElse]="initial">
+                            <div>
+                              Etudiant en Alternance
+                            </div>
+                          </ng-template>
+                          
+                          <ng-template #initial>
+                            <div>
+                                Etudiant en Initial
+                            </div>
+                          </ng-template>
+                        </label><br>
+                    <p-inputSwitch formControlName="alternance"></p-inputSwitch>
+                </div>
+                <div class="field col-6 margin-0">
+                    <label>Civilité</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="civiliteList"
+                            formControlName="civilite"
+                            [virtualScroll]="true" itemSize="30" placeholder="Sélectionner" [showClear]="true"
+                            (onChange)="changeCivilite($event.value)" filter="true"
+                            emptyFilterMessage="Aucun certif trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Nom de l'étudiant</label>
+                    <input pInputText type="text" placeholder="Ex: Nom et Prénom" formControlName="student_full_name"/>
+                </div>
+                <div class="field col-6">
+                    <label>Date de naissance</label>
+                    <input pInputText type="text" placeholder="Ex: 10/10/1990" formControlName="student_birth_date"/>
+                </div>
+                <div class="field col-6">
+                    <label>Lieu de naissance</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="paysIsoCodes"
+                            formControlName="student_birth_place"
+                            [virtualScroll]="true" itemSize="30" placeholder="Sélectionner" [showClear]="true"
+                            (onChange)="changePays($event.value)" filter="true"
+                            emptyFilterMessage="Aucun pays trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-12 margin-0" *ngIf="type_certif?.value === 'paiement'">
+                    <label>Moyen de paiement</label>
+                    <p-dropdown autoWidth="false" class="col-6" [style]="{'width':'100%'}" [options]="payementList"
+                            formControlName="paiement_method"
+                            [virtualScroll]="true" itemSize="30" placeholder="Selectionner un moyen de paiement" [showClear]="true"
+                            (onChange)="changePayment($event.value)" filter="true"
+                            emptyFilterMessage="Aucun moyen de paiement trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-6 background-special" *ngIf="paiement_method==='Chèque'">
+                    <label>Numéro du chèque</label>
+                    <input pInputText type="text" placeholder="Ex: 254478899664" formControlName="check" [(ngModel)]="formAddDoc.value.check" />
+                </div>
+                <div class="field col-6 background-special" *ngIf="paiement_method==='Chèque'">
+                    <label>Nom de la banque</label>
+                    <input pInputText type="text" placeholder="Ex: BNP Paris bas" formControlName="bank" [(ngModel)]="formAddDoc.value.bank" />
+                </div>
+                <div class="field col-12">
+                    <label>Montant payé par l'étudiant</label>
+                    <input pInputText type="text" placeholder="Ex: 550" formControlName="amount_paid" [(ngModel)]="formAddDoc.value.amount_paid" />
+                </div> 
+                <div class="field col-6">
+                    <label>Lieu certificat</label>
+                    <input pInputText type="text" placeholder="Ex: Paris" formControlName="place_created" [(ngModel)]="formAddDoc.value.place_created" />
+                </div>
+                <div class="field col-6">
+                    <label>Date Certificat</label>
+                    <input pInputText type="text" placeholder="Ex: 3 mai 2023" formControlName="date" [(ngModel)]="formAddDoc.value.date" />
+                </div>
+                <div class="field col-12">
+                    <button pButton  class="p-button-warning" label="Générer ID du Document" type="button" [disabled]="formAddDoc.invalid"
+                    (click)="onGenerateIdDoc()"></button>
+                </div>
+            </form>
+            <div>
+                <button pButton label="Valider" type="submit" [disabled]="formAddDoc.invalid || !id_doc"
+                    (click)="onAddDoc()"></button>
+                </div>
+            </div>
+            <div class="page">
+                <app-outputpage 
+                [isWoman]="isWoman" 
+                [type_certif]="type_certif" 
+                [school]="school"
+                [campus]="campus"
+                [formation]="formation"
+                [rentre]="rentre"
+                [paiement_method]="paiement_method"
+                [student]="student"
+                [country]="country"
+                [id_doc]="id_doc"
+                [formContent]="formAddDoc.value"
+                ></app-outputpage>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Table d'affichage des docs -->
+<div class="col-12 table-docs">
+    <div class="card">
+        <button pButton pRipple label="Créer un document" icon="pi pi-plus" class="mr-2 mb-2" (click)="showAddDoc = true"
+            style="float: right"></button>
+        <h3>Documents Générés</h3>
+        <p-table #dt1 [value]="docList" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDocs"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Id du document
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Certificat
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Etudiant
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Formation
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Ecole
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doc>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="doc"></p-tableCheckbox>
+                    </td>
+                    <td>
+                        {{doc.id_doc}}
+                    </td>
+                    <td>
+                        {{doc.type_certif?.name}}
+                    </td>
+                    <td>
+                        {{doc.student?.full_name}}
+                    </td>
+                    <td>
+                        {{doc.formation?.name}}
+                    </td>
+                    <td>
+                        {{doc.school?.name}}
+                    </td>
+                    <td class="text-center" style="min-width: 8rem;">
+                        <i *ngIf="grantAccessToEdit" class="pi pi-pencil mr-2" title="Modifier l'école" (click)="InitUpdateDoc(doc)"></i>
+                        <i *ngIf="grantAccessToDelete" class="pi pi-trash" title="Suprimer l'école l'image" (click)="deleteDoc(doc)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">Aucun document trouvé.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Chargement...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>
+

@@ -30,6 +30,7 @@
         "@fullcalendar/timegrid": "^4.0.1",
         "@microsoft/microsoft-graph-client": "^3.0.6",
         "angular2-signaturepad": "4.0.2",
+        "angularx-qrcode": "^13.0.15",
         "chart.js": "^3.3.2",
         "crypto-js": "^4.1.1",
         "date-fns": "^2.30.0",
