@@ -81,9 +81,9 @@ export class AjoutCvComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
   ];
 
-  selectedMultiCpt: string[] = [];
+  selectedMultiCpt: { label: string, value: string, profile: any }[] = [];
   selectedMultiOutils: string[] = [];
-  selectedMultilang: string[] = [];
+  selectedMultilang: { label: string }[] = [];
   locations: any[] = [
     { label: "100% Télétravail", value: "100% Télétravail" },
     { label: "Aix-Marseille", value: "Aix-Marseille" },
@@ -196,6 +196,33 @@ export class AjoutCvComponent implements OnInit {
         this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id })
       })
     })
+
+    if (this.ID) {
+      this.onGetUserById(this.ID)
+      this.cvService.getCvbyUserId(this.ID).subscribe(c => {
+        this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
+
+        this.selectedMultiCpt = []
+        c.competences.forEach(val => {
+          this.selectedMultiCpt.push({ label: val.libelle, value: val._id, profile: val.profile_id })
+        })
+        this.selectedMultilang = []
+        c.langues.forEach(val => {
+          this.selectedMultilang.push({ label: val })
+        })
+        this.experiences_pro = c.experiences_pro
+        this.education = c.education
+        this.experiences_associatif = c.experiences_associatif
+        this.informatique = c.informatique
+        setTimeout(() => {
+          if (c.user_id.type.startsWith('Externe'))
+            this.formAddCV.patchValue({ user_create_type: 'Externe' })
+          else
+            this.formAddCV.patchValue({ user_create_type: 'Interne' })
+        }, 1000);
+
+      })
+    }
 
     //Initialisation du formulaire d'ajout de CV
     this.formAddCV = this.formBuilder.group({
@@ -319,6 +346,12 @@ export class AjoutCvComponent implements OnInit {
     cv.experiences_associatif = this.experiences_associatif
     cv.informatique = this.informatique
     cv.createur_id = this.token.id
+    cv.disponibilite = new Date(this.formAddCV.value.disponibilite)
+    cv.a_propos = this.formAddCV.value.a_propos
+    cv.winner_id = this.formAddCV.value.winner_id
+    cv.centre_interets = this.formAddCV.value.centre_interets
+    cv.mobilite_lieu = this.formAddCV.value.mobilite_lieu
+    cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
