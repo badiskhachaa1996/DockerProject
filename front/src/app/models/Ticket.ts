@@ -30,6 +30,7 @@ export class Ticket {
             nom?: string,
             path?: string,
         }[],
+        public module?: string,
     ) { }
 
 
