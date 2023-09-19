@@ -98,6 +98,7 @@ import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -370,7 +371,7 @@ import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-int
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
-import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 
 @NgModule({
   imports: [
@@ -466,7 +467,7 @@ import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/
     FullCalendarModule,
     NgxIntlTelInputModule,
     EditorModule,
-    QRCodeModule,
+    QRCodeModule,PdfViewerModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -749,7 +750,7 @@ import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/
     GenOutroComponent,
     RendezVousResultatsComponent,
     GendocViewComponent,
-    DashboardAlternanceComponent,
+    FormulaireFrontComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

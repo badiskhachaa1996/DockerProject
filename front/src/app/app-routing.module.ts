@@ -1245,8 +1245,8 @@ const routes: Routes = [
             { path: 'formulaireMI/resultats', component: ResultatsMIComponent, canActivate: [AuthGuardService] },
 
 
-            { path: 'gen-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
-            { path: 'gen-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'generateur-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
 
             // Generateur de Doc 

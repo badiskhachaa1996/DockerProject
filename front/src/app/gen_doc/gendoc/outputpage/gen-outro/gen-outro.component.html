@@ -14,8 +14,9 @@
         <strong> en alternance </strong>
     </ng-template>
     au sein de notre établissement à {{campus?.name.replace("Campus ", "")}} pour la rentrée scolaire {{rentre?.type}} 
-    qui débutera le {{rentre?.date_rentre}}.</p>
+    <span *ngIf="type_certif?.value !== 'derogation'"> qui débutera le {{rentre?.date_rentre}}</span>.</p>
 
+    <ng-template [ngIf]="type_certif?.value !== 'derogation'" [ngIfElse]="derogation">
 <p>L'étudiant<span *ngIf="isWoman">e</span> suivra en présentiel la formation 
     <ng-template [ngIf]="!formContent.alternance" [ngIfElse]="alterance">
         <strong> en initiale </strong>
@@ -38,13 +39,25 @@
     les frais de sa formation qui coûte <strong>{{formation?.price}} € par an</strong>.</p>
 <p>L'inscription de l'étudiant<span *ngIf="isWoman">e</span> ne sera définitive qu'à l'obtention de son visa d'entrée sur le territoire français.</p></div>
 </ng-template>
+<ng-template #derogation>
+<p>La rentrée relative à cette filière a été fixée pour la date du {{rentre?.date_rentre}} et nous 
+    autorisons nos étudiants exceptionnellement à rejoindre les cours jusqu'au <strong> {{rentre?.date_limite}} </strong>
+    comme date d'arrivée tardive.
+    <p> Nous avons anticipé par mettre en place un dispositif d'enseignement à distance sur notre 
+    plateforme éducative pour permettre à l'ensemble de nos étudiants de suivre les cours en 
+    ligne le temps qu(ils peuvent intégrer notre école.</p>
+    <p>Espérant vous avoir fourni les éléments nécessaires au traitement de ce dossier, je vous prie 
+de croire, Monsieur, Madame, à mes sentiments les plus cordiaux.</p>
+</ng-template>
+
+</ng-template>
 
 <ng-template #paiement>
         <div class="outro-paiement">
             <p><strong>Modalité de paiement : </strong>{{paiement_method}} </p>
             <p><strong>Formation : </strong> {{formation?.name}}</p>
             <p><strong>Campus choisi : </strong>{{campus?.name.replace("Campus ", "")}}</p>
-            <p><strong>N° Chéque :</strong> {{formContent.check}}. <strong>Nom de la banque :</strong> {{formContent.bank}}.</p>
+            <p *ngIf="paiement_method ==='Chèque'"><strong>N° Chéque :</strong> {{formContent.check}}. <strong>Nom de la banque :</strong> {{formContent.bank}}.</p>
         </div>
         <p class="underlined">* Les frais de dossier ne sont pas remboursables en cas de
             non-obtention de visa, d'annulation de candidature ou de dépassement de délai de dépôt chez Campus France.</p>

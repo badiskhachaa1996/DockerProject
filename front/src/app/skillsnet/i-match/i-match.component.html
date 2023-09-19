@@ -1,18 +1,18 @@
 <div class="imatch-main-page">
     <div class="header-top">
         <div class="page-title">
-            <h1>iMatch<br>Votre portail de mise en relation entre alternants et entreprises</h1>
+            <h1>iMATCH<br>Votre portail de mise en relation entre alternants et entreprises</h1>
             <hr class="imatch-main">
         </div>
-            <div class="header-top-container">
-                    <img class="images-imatch image-student" src="../../../assets/images/imatch/student-imatch.png">              
-                    <img class="video-intro" src="../../../assets/images/imatch/video.png">             
-                    <img class="images-imatch image-company" src="../../../assets/images/imatch/company-imatch.png">
+            <div class="header-top-container ">
+                <a class="btn-cv btn-cv-2" target="_blank" href="#">Déposer mon CV</a>
+                <a class="btn-cv  btn-cv-1 margin-both" target="_blank" href="#">Comment ça marche ?</a>
+                <a class="btn-cv   btn-cv-3" target="_blank" href="#">Déposer mon Offre</a>
             </div>
-            <a class="bouton-plus" target="_blank" href="#">En savoir plus <i class="pi pi-arrow-right icon-right"></i></a>
+
             </div>
     <div class="container" style="text-align: center;">
-        <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.png">
+        <img class="steps-imatch" src="../../../assets/images/imatch/steps-imatch.svg">
     </div>
     <div class="container">
         <div class="row">
@@ -133,11 +133,8 @@
                                 <div class="cv-card-details">
                                     <div class="card-main-info">
                                         <div class="cv-card-title">
-                                            <h4><strong>{{cv?.competences[0]?.profile_id?.libelle || "Profil"}}</strong>
-                                            </h4>
-
-                                            <h5>{{cv.user_id.firstname.substring(0, 1)}}.
-                                                {{cv.user_id.lastname.substring(0, 2)}}.</h5>
+                                            <h4><strong>{{cv?.competences[0]?.profile_id?.libelle || "Profil"}}</strong><br *ngIf="cv?.competences[0]?.profile_id?.libelle.length<20">&nbsp;</h4>
+                                            <h5>{{cv.user_id.firstname.substring(0, 1).toUpperCase( )}} {{cv.user_id.lastname.substring(0, 2).toUpperCase( )}}</h5>
                                         </div>
                                     </div>
                                     <div class="card-main-data">

@@ -679,7 +679,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                                 {
                                     label: 'Rendez-vous',
@@ -2216,7 +2216,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                                 {
                                     label: 'Rendez-vous',
@@ -2864,7 +2864,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -3568,7 +3568,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -4086,7 +4086,7 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                             ],
                                         },
-                                    
+
                                     ]
                                 }
                             ];
@@ -5038,7 +5038,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -5525,7 +5525,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                             ],
                         }
@@ -5608,7 +5608,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Générateur de CV',
                                             icon: 'pi pi-cog',
-                                            routerLink: ['/gen-cv'],
+                                            routerLink: ['/generateur-cv'],
                                         },
                                     ],
                                 },
@@ -5831,7 +5831,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Générateur de CV',
                                     icon: 'pi pi-cog',
-                                    routerLink: ['/gen-cv'],
+                                    routerLink: ['/generateur-cv'],
                                 },
                             ],
                         },
@@ -7543,8 +7543,87 @@ export class AppMenuComponent implements OnInit {
                                     },
                                 ]
                             },
+                            {
+                                label: 'Générateur de documents',
+                                icon: 'pi pi-folder',
+                                routerLink: ['/genDoc']
+                            },
                         ],
                     })
+                }
+                if (services_list.includes('Générateur de Document')) {
+                    let role = service_dic['Générateur de Document']
+                    if (role == "Agent") {
+                        this.items.push({
+                            label: "Genérateur de documents",
+                            icon: 'pi pi-folder-open',
+                            items: [
+                                {
+                                    label: 'Documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ]
+                        })
+                    } else if (role == "Super-Admin") {
+                        this.items.push({
+                            label: "Genérateur de documents",
+                            icon: 'pi pi-folder-open',
+                            items: [
+                                {
+                                    label: 'Campus',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['/genCampus']
+                                },
+                                {
+                                    label: "Ecoles",
+                                    icon: 'pi pi-building',
+                                    routerLink: ['/genschools']
+                                },
+                                {
+                                    label: 'Formation',
+                                    icon: 'pi pi-align-justify',
+                                    routerLink: ['/genFormation']
+                                },
+                                {
+                                    label: 'Documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ]
+                        })
+                    } else if (role == "Admin") {
+                        this.items.push({
+                            label: "Genérateur de documents",
+                            icon: 'pi pi-folder-open',
+                            items: [
+                                {
+                                    label: 'Formation',
+                                    icon: 'pi pi-align-justify',
+                                    routerLink: ['/genFormation']
+                                },
+                                {
+                                    label: 'Documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ]
+                        })
+                    } else if (role == "Spectateur") {
+                        this.items.push({
+                            label: "Genérateur de documents",
+                            icon: 'pi pi-folder-open',
+                            items: [
+                                {
+                                    label: 'Documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ]
+                        })
+                    }
+
+
                 }
                 setTimeout(() => this.showMenu = true, 0);
                 //this.showMenu=true

@@ -200,6 +200,7 @@ export class AjoutCvComponent implements OnInit {
     if (this.ID) {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
+        this.onLoadFile(c._id)
         this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
 
         this.selectedMultiCpt = []
@@ -325,12 +326,30 @@ export class AjoutCvComponent implements OnInit {
 
 
   //Traitement des formArray
-
+  pdfSrc = ""
   // upload du cv brute
   onUpload(event: any) {
     if (event.target.files.length > 0) {
       this.uploadedFiles = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.pdfSrc = reader.result as string;
+      }
+      console.log(event.target.files[0])
+      reader.readAsDataURL(event.target.files[0])
     }
+  }
+
+  onLoadFile(cv_id) {
+    this.cvService.downloadCV(cv_id).then(r => {
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.pdfSrc = reader.result as string;
+      }
+      //console.log(r, new Blob([r.file], { type: r.extension }), new File(new Blob([r.file], { type: r.extension }), "test.pdf"))
+      reader.readAsDataURL(new Blob([r.file], { type: r.extension }))
+    })
   }
 
   // methode d'ajout du cv
@@ -353,6 +372,8 @@ export class AjoutCvComponent implements OnInit {
     cv.mobilite_lieu = this.formAddCV.value.mobilite_lieu
     cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
+
+    console.log(this.formAddCV)
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
@@ -548,6 +569,26 @@ export class AjoutCvComponent implements OnInit {
 
   deleteInf(idx) {
     this.informatique.splice(idx, 1)
+  }
+
+  links = []
+
+  addLink() {
+    this.links.push({ label: '', lien: "" })
+  }
+
+  deleteLink(idx) {
+    this.links.splice(idx, 1)
+  }
+
+  documents = []
+
+  addDoc() {
+    this.documents.push({ label: '', lien: "" })
+  }
+
+  deleteDoc(idx) {
+    this.documents.splice(idx, 1)
   }
 
   matchingsFromCV: Matching[] = []

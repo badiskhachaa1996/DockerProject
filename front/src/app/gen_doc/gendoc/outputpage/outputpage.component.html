@@ -1,6 +1,7 @@
 <div class="page-container" *ngIf="type_certif?.value">
         <div class="header" id="header_area" *ngIf="school?.name" style="background-image: url('../../../../../assets/images/gen_doc/{{school?.name}}/header.png')">
-            <h1 class="page-title" *ngIf="type_certif?.title">ATTESTATION {{type_certif?.title}}</h1>
+            <h1 class="page-title" *ngIf="type_certif?.title && type_certif?.value !== 'derogation' ">ATTESTATION {{type_certif?.title}}</h1>
+            <h1 class="page-title" *ngIf="type_certif?.title && type_certif?.value === 'derogation' ">Lettre {{type_certif?.title}}</h1>
         </div>
         <div class="content-container">
             <app-gen-intro  [type_certif]="type_certif"  [formContent]="formContent"  [school]="school"></app-gen-intro>

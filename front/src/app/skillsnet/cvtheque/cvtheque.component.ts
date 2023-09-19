@@ -410,7 +410,7 @@ export class CvthequeComponent implements OnInit {
       langues: cv_langues,
       //video_lien: cv.video_lien
     })*/
-    this.router.navigate(['gen-cv', cv.user_id._id])
+    this.router.navigate(['generateur-cv', cv.user_id._id])
   }
 
   onUpdateCV() {

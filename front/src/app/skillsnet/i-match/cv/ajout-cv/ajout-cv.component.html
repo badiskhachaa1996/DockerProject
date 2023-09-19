@@ -1,128 +1,10 @@
 <div class="main-page">
     <div class="page-header"></div>
     <div class="page-content">
-        <div class="old-cv" *ngIf="cv">
-            <div class="page-container" id="page-certif">
-                <div class="page-inner-content">
-                    <div class="header" id="header_area"
-                        style="background-image: url('../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/bg-header.png')">
-                        <div class="student-image"
-                            style="background-image: url('../../../../../assets/images/imatch/female.png')"></div>
-                        <div class="student-identity">
-                            <h1 class="student-name" id="lname">{{cv.user_id?.lastname || 'NOM' | uppercase }}</h1>
-                            <h1 class="student-name" id="fname">{{cv.user_id?.firstname || 'Prénom' | titlecase }}</h1>
-                            <h1 class="student-name"><strong
-                                    *ngIf="cv.competences && cv.competences.length!=0">{{cv.competences[0]?.profile?.libelle
-                                    || "Profile non spécifié"}}</strong></h1>
+        <div class="old-cv" *ngIf="pdfSrc">
+            <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
+                class="pdf-viewer-here"></pdf-viewer>
 
-                        </div>
-                    </div>
-                    <div class="content-container">
-                        <div class="sidebar">
-                            <div class="sidebar-inner">
-                                <div class="sidebar-section">
-                                    <h2 class="sidebar-title">Compétences</h2>
-                                    <div class="sidebar-content">
-                                        <div *ngIf="cv.competences">
-                                            <p class="spectialite" *ngFor="let option of cv.competences">
-                                                {{option.label}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="sidebar-section">
-                                    <h2 class="sidebar-title">A propos</h2>
-                                    <div class="sidebar-content">{{cv?.a_propos}}</div>
-                                </div>
-                                <div class="sidebar-section">
-                                    <h2 class="sidebar-title">Langues</h2>
-                                    <div *ngIf="selectedMultilang">
-                                        <div class="spectialite" *ngFor="let option of cv.langues">
-                                            {{option.label}}<br></div>
-                                    </div>
-
-                                </div>
-                                <div class="sidebar-section">
-                                    <h2 class="sidebar-title">Centres d'intérêts</h2>
-                                    <div class="sidebar-content">{{cv?.centre_interets}}
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div class="content">
-                            <div class="section-cv">
-                                <h2>Education</h2>
-                                <div class="section-content" *ngFor="let exp of cv?.education">
-                                    <div class="section-title">
-                                        <div class="section-training">{{exp?.intitule_experience}}</div>
-                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
-                                            date:'YYYY'}}</div>
-                                    </div>
-                                    <div class="section-main">{{exp?.structure}}</div>
-                                    <div class="section-details">
-                                        <p>
-                                            {{exp?.details}}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-cv">
-                                <h2>Experiences Professionnelles</h2>
-                                <div class="section-content" *ngFor="let exp of cv?.experiences_pro">
-                                    <div class="section-title">
-                                        <div class="section-training">{{exp?.intitule_experience}}</div>
-                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
-                                            date:'YYYY'}}</div>
-                                    </div>
-                                    <div class="section-main">{{exp?.structure}}</div>
-                                    <div class="section-details">
-                                        <p>
-                                            {{exp?.type}} : {{exp?.details}}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-cv">
-                                <h2>Experiences Associatif</h2>
-                                <div class="section-content" *ngFor="let exp of cv?.experiences_associatif">
-                                    <div class="section-title">
-                                        <div class="section-training">{{exp?.intitule_experience}}</div>
-                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
-                                            date:'YYYY'}}</div>
-                                    </div>
-                                    <div class="section-main">{{exp?.structure}}</div>
-                                    <div class="section-details">
-                                        <p>
-                                            {{exp?.type}} : {{exp?.details}}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-cv">
-                                <h2>Informatique</h2>
-                                <div class="section-content" *ngFor="let exp of cv?.informatique">
-                                    <div class="section-title">
-                                        <div class="section-training">{{exp?.intitule_experience}}</div>
-                                        <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
-                                            date:'YYYY'}}</div>
-                                    </div>
-                                    <div class="section-main">{{exp?.structure}}</div>
-                                    <div class="section-details">
-                                        <p>
-                                            {{exp?.type}} : {{exp?.details}}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <img class="logo-image"
-                            src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
-                    </div>
-
-                </div>
-
-            </div>
         </div>
 
         <div class="input-form-cv">
@@ -274,9 +156,9 @@
                     </div>
                     <div class="field col-6">
                         <label>Test Mobilité - Ville</label>
-                        <p-multiSelect [options]="locations" defaultLabel="Lieu"
-                            autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
-                            class="w-100" formControlName="mobilite_lieu"></p-multiSelect>
+                        <p-multiSelect [options]="locations" defaultLabel="Lieu" autoWidth="false"
+                            [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
+                            formControlName="mobilite_lieu"></p-multiSelect>
 
                     </div>
 
@@ -654,6 +536,106 @@
                                 <td>
                                     <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
                                         class="pi pi-trash" (click)="deleteInf(ri)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="field col-12">
+                    <h3 class="col-12">Lien</h3>
+                    <p-table [value]="links" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="caption">
+                            <button type="button" pButton pRipple icon="pi pi-plus" (click)="addLink()" class="mr-2"
+                                pTooltip="Ajouter un lien" tooltipPosition="bottom"></button>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Intitulé</th>
+                                <th>Lien (cliquable)</th>
+                                <th>Lien (modifiable)</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                            <tr [pEditableRow]="exp">
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" pInputText [(ngModel)]="exp.label">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{exp.label}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <a style="cursor: pointer;" href="https://{{exp.lien}}" target="_blank">
+                                        https://{{exp.lien}}
+                                    </a>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" pInputText [(ngModel)]="exp.lien">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{exp.lien}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                        class="pi pi-trash" (click)="deleteLink(ri)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="field col-12">
+                    <h3 class="col-12">Documents</h3>
+                    <p-table [value]="documents" #dtexp dataKey="_id" class="col-12" responsiveLayout="scroll"
+                        styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="caption">
+                            <button type="button" pButton pRipple icon="pi pi-plus" (click)="addDoc()" class="mr-2"
+                                pTooltip="Ajouter un document" tooltipPosition="bottom"></button>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Intitulé</th>
+                                <th>Lien (cliquable)</th>
+                                <th>Lien (modifiable)</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-exp let-ri="rowIndex">
+                            <tr [pEditableRow]="exp">
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" pInputText [(ngModel)]="exp.label">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{exp.label}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <a style="cursor: pointer;" href="https://{{exp.lien}}" target="_blank">
+                                        https://{{exp.lien}}
+                                    </a>
+                                </td>
+                                <td pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input type="text" pInputText [(ngModel)]="exp.lien">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{exp.lien}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;"
+                                        class="pi pi-trash" (click)="deleteDoc(ri)" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
