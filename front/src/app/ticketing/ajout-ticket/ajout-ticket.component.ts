@@ -113,7 +113,7 @@ export class AjoutTicketComponent implements OnInit {
         })
       })
     } else {
-      this.ServService.getAll().subscribe(data => {
+        this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
             this.serviceDropdown.push({ label: val.label, value: val._id })
             this.serviceDic[val._id] = val.label
