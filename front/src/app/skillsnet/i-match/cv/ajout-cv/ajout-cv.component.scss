@@ -10,21 +10,21 @@
   justify-content: space-between;
 }
 
+.pdf-viewer-here .page {
+  width: auto;
+}
+
 .old-cv,
 .new-cv {
   min-width: 12.6cm;
   height: 17.82cm;
-  background-color: lightblue;
 }
 
 .old-cv {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-weight: bold;
   min-width: 21cm;
+  margin-right: -200px;
   height: 29.7cm;
-  background-color: lightblue;
   transform: scale(0.7);
   transform-origin: top left;
 }

@@ -372,6 +372,8 @@ export class AjoutCvComponent implements OnInit {
     cv.mobilite_lieu = this.formAddCV.value.mobilite_lieu
     cv.niveau_etude = this.formAddCV.value.niveau_etude
     cv.competences = [];
+
+    console.log(this.formAddCV)
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
