@@ -169,3 +169,110 @@ SearchCountryField.Name
         </div>
     </div>
 </p-fieldset>
+<p-fieldset legend="Exemple de formulaire en plusieurs partie">
+    <div *ngIf="idx==1">
+        <h2 style="text-align: center;">Voici l'exemple d'un formulaire qui se fait en plusieurs étapes</h2>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formulaire">
+            <!-- Input : https://www.primefaces.org/primeng-v13-lts/#/inputtext -->
+            <div class="md:col-6 col-12">
+                <label>Texte <span style="color:red"> *</span></label>
+                <input pInputText formControlName="texte" type="text" placeholder="Ex: John Smith" />
+            </div>
+
+            <!-- Calendar : https://www.primefaces.org/primeng-v13-lts/#/calendar -->
+            <div class="md:col-6 col-12">
+                <label>Date <span style="color:red"> *</span></label>
+                <p-calendar formControlName="date" placeholder="Ex: 21/12/2000" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+
+            <!-- ngx-intl-tel-input : https://www.npmjs.com/package/ngx-intl-tel-input -->
+            <div class="md:col-6 col-12">
+                <label>Numéro de téléphone</label><br>
+                <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[
+    SearchCountryField.Iso2,
+    SearchCountryField.Name
+    ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates" [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
+                    formControlName="telephone">
+                </ngx-intl-tel-input>
+            </div>
+
+            <!-- Dropdown : https://www.primefaces.org/primeng-v13-lts/#/dropdown -->
+            <div class="md:col-6 col-12">
+                <label>Choix unique dans une liste déroulante</label>
+                <p-dropdown [options]="dropdownContent1" placeholder="Choisissez une valeur" autoWidth="false"
+                    [filter]="true" [style]="{'width':'100%'}" formControlName="dropdown"></p-dropdown>
+            </div>
+
+            <!-- MultiSelect : https://www.primefaces.org/primeng-v13-lts/#/multiselect -->
+            <div class="md:col-6 col-12">
+                <label>Choix multiple dans une liste déroulante</label>
+                <p-multiSelect [options]="multiSelect1" placeholder="Choisissez plusieurs valeurs" autoWidth="false"
+                    [filter]="true" [style]="{'width':'100%'}" formControlName="multiSelect"></p-multiSelect>
+            </div>
+
+            <!-- MultiSelect : https://www.primefaces.org/primeng-v13-lts/#/multiselect selectionLimit-->
+            <div class="md:col-6 col-12">
+                <label>Choix multiple dans une liste déroulante (Max 3)</label>
+                <p-multiSelect [options]="multiSelect1" placeholder="Choisissez plusieurs valeurs" autoWidth="false"
+                    selectionLimit="3" [filter]="true" [style]="{'width':'100%'}"
+                    formControlName="multiSelectMax3"></p-multiSelect>
+            </div>
+
+            <!-- SelectButton : https://www.primefaces.org/primeng-v13-lts/#/selectbutton -->
+            <div class="col-12">
+                <label>Choix unique avec un panel</label>
+                <p-selectButton [options]="selectButton1" formControlName="selectButton"></p-selectButton>
+            </div>
+
+            <!-- TextArea : https://www.primefaces.org/primeng-v13-lts/#/inputtextarea -->
+            <div class="col-12">
+                <label>Grand Champ Texte (TextArea)</label>
+                <textarea formControlName="textArea"
+                    placeholder="Ex: https://www.primefaces.org/primeng-v13-lts/#/setup" pInputTextarea></textarea>
+            </div>
+
+
+            <div class="col-12">
+                <button pButton type="submit" label="Suivant" [disabled]="formulaire.invalid" (click)="idx = idx + 1"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="idx==2">
+        <h2 style="text-align: center;">Voici l'étape 2</h2>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formulaire">
+            <!-- ngIf : https://angular.io/api/common/NgIf -->
+            <div class="col-12">
+                <label>Quel est le sens de la vie ?</label>
+                <p-selectButton [options]="selectButton2" formControlName="sens_vie"></p-selectButton>
+            </div>
+            <div class="col-12" *ngIf="formulaire.value.sens_vie=='42'">
+                <p>Bonne réponse !</p>
+            </div>
+            <div class="col-12" *ngIf="formulaire.value.sens_vie=='Le Travail'">
+                <p>A quoi sert de travailler si on ne peut pas profiter de la vie ?</p>
+            </div>
+            <div class="col-12" *ngIf="formulaire.value.sens_vie=='La Famille'">
+                <label>Argumenter avec 400 mots</label>
+                <textarea formControlName="argumentation"
+                    placeholder="Ex: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in lacinia sem, at suscipit quam. Cras tempus venenatis lectus, vel condimentum nibh pulvinar eu. Phasellus vel neque vel dui vestibulum tincidunt vel id leo. Integer faucibus sodales ornare. Proin ultricies bibendum nisi ut tincidunt. Pellentesque ornare, leo quis tincidunt finibus, massa enim scelerisque erat, ut elementum ex lorem ac neque. Suspendisse pellentesque feugiat mollis. Duis malesuada, quam sed placerat egestas, nibh lorem facilisis nunc, vitae lacinia mauris diam nec risus. Aenean nec condimentum sapien. Praesent eget ullamcorper tellus. Mauris eleifend lectus elit, et eleifend mauris auctor a. Proin cursus egestas nunc nec tempus. In tellus nibh, iaculis id vulputate maximus, porttitor ultricies est. Curabitur luctus at quam sed egestas."
+                    pInputTextarea></textarea>
+            </div>
+            <div class="md:col-6 col-12">
+                <button pButton type="submit" label="Précedent" (click)="idx = idx - 1" [style]="{'width':'100%'}"></button>
+            </div>
+            <div class="md:col-6 col-12">
+                <button pButton type="submit" label="Valider" [disabled]="formulaire.invalid"
+                    (click)="idx = idx+ 1;onSaveFormulaire()" [style]="{'width':'100%'}"></button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="idx==3">
+        <h1 style="text-align: center;">
+            Bravo c'est fini
+        </h1>
+    </div>
+</p-fieldset>
