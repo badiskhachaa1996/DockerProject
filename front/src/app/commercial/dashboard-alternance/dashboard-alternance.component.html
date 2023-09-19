@@ -1,1 +1,105 @@
-<p>dashboard-alternance works!</p>
+<h3 class="text-center col-12">Dashboard Alternance</h3>
+<div class="card justify-content-center">
+    <p-fieldset
+        legend="Veuillez sélectionner les paramètres que vous souhaitez pour consulter l'avancement sur les contrats d'alternance"
+    >
+        <div class="dropdown-container">
+            <!-- Rentrée scolaire -->
+            <div class="dropdown">
+                <p-multiSelect
+                    placeholder="Choisissez la rentrée scolaire"
+                    filter="true"
+                    [options]=""
+                    autoWidth="false"
+                    [style]="{ width: '100%' }"
+                >
+                </p-multiSelect>
+            </div>
+
+            <!-- Formation -->
+            <div class="dropdown">
+                <p-multiSelect
+                    placeholder="Choisissez la formation"
+                    filter="true"
+                    [options]=""
+                    autoWidth="false"
+                    [style]="{ width: '100%' }"
+                >
+                </p-multiSelect>
+            </div>
+
+            <!-- Campus -->
+            <div class="dropdown">
+                <p-multiSelect
+                    placeholder="Choisissez le campus"
+                    filter="true"
+                    [options]=""
+                    autoWidth="false"
+                    [style]="{ width: '100%' }"
+                >
+                </p-multiSelect>
+            </div>
+
+            <!-- École -->
+            <div class="dropdown">
+                <p-multiSelect
+                    placeholder="Choisissez l'école"
+                    filter="true"
+                    [options]=""
+                    autoWidth="false"
+                    [style]="{ width: '100%' }"
+                >
+                </p-multiSelect>
+            </div>
+        </div>
+
+        <!-- Commercial (centré) -->
+        <div class="dropdown-center">
+            <p-multiSelect
+                placeholder="Choisissez le commercial"
+                filter="true"
+                [options]=""
+                autoWidth="false"
+                [style]="{ width: '100%' }"
+            >
+            </p-multiSelect>
+        </div>
+    </p-fieldset>
+</div>
+
+<div class="card justify-content-center">
+    <p-fieldset legend="Statut du contrat">
+        <p-table
+            [value]=""
+            styleClass="p-datatable-gridlines"
+            [tableStyle]="{ 'min-width': '50rem' }"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="text-align: center">
+                        Total des contrats insérés
+                    </th>
+                    <th style="text-align: center">Crée</th>
+                    <th style="text-align: center">Conclu</th>
+                    <th style="text-align: center">En attente d'information</th>
+                    <th style="text-align: center">En attente de validation</th>
+                    <th style="text-align: center">Champs repuis</th>
+                    <th style="text-align: center">Montant optimisé</th>
+                    <th style="text-align: center">Signé</th>
+                    <th style="text-align: center">Déposé à l'OPCO</th>
+                    <th style="text-align: center">Relance à traiter</th>
+                    <th style="text-align: center">Validé à facturation</th>
+                    <th style="text-align: center">Résilié</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-fieldset>
+</div>
