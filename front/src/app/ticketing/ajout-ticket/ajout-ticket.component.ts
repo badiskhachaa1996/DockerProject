@@ -145,15 +145,15 @@ export class AjoutTicketComponent implements OnInit {
     const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
  
     if(selectedSubject === "IMS") {
-      this.showModuleDropdown = true;
-      this.TicketForm.get('module').setValidators([Validators.required]);
-      this.TicketForm.get('module').updateValueAndValidity();
+        this.showModuleDropdown = true;
+        this.TicketForm.get('module').setValidators([Validators.required]);
+        this.TicketForm.get('module').updateValueAndValidity();
     }
     else {
-      this.TicketForm.get('module').clearValidators();
-      this.TicketForm.get('module').updateValueAndValidity();
-      this.TicketForm.get('module').reset();
-      this.showModuleDropdown = false;
+        this.TicketForm.get('module').clearValidators();
+        this.TicketForm.get('module').updateValueAndValidity();
+        this.TicketForm.get('module').reset();
+        this.showModuleDropdown = false;
     }
   };
 
