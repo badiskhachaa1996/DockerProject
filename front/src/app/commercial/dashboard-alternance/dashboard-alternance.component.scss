@@ -1,0 +1,16 @@
+.dropdown-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.dropdown {
+    flex: 0 0 calc(50% - 5px); /* 50% width with 5px spacing in between */
+    margin-bottom: 10px;
+}
+
+.dropdown-center {
+    display: flex;
+    justify-content: center;
+}
