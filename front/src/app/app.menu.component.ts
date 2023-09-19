@@ -550,7 +550,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Dashboard Alternance',
-                                    icon : 'pi pi-chart-line',
+                                    icon: 'pi pi-chart-line',
                                     routerLink: ['/dashboard-alternance'],
                                 },
                                 {
@@ -1199,6 +1199,17 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Infos IMS',
                                             icon: 'pi pi-fw pi-info-circle',
                                             routerLink: ['/infos-ims'],
+                                        },
+                                        {
+                                            label: 'Template Code',
+                                            icon: 'pi pi-copy',
+                                            items: [
+                                                {
+                                                    label: 'Formulaire',
+                                                    icon: 'pi pi-align-center',
+                                                    routerLink: ['/template/formulaire/GH4'],
+                                                },
+                                            ]
                                         },
                                     ],
                                 },
@@ -4073,6 +4084,17 @@ export class AppMenuComponent implements OnInit {
                                                     icon: 'pi pi-fw pi-info-circle',
                                                     routerLink: ['/infos-ims'],
                                                 },
+                                                {
+                                                    label: 'Template Code',
+                                                    icon: 'pi pi-copy',
+                                                    items: [
+                                                        {
+                                                            label: 'Formulaire',
+                                                            icon: 'pi pi-align-center',
+                                                            routerLink: ['/template/formulaire/GH4'],
+                                                        },
+                                                    ]
+                                                },
                                             ],
                                         },
                                         {
@@ -5227,6 +5249,17 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Infos IMS',
                                             icon: 'pi pi-fw pi-info-circle',
                                             routerLink: ['/infos-ims'],
+                                        },
+                                        {
+                                            label: 'Template Code',
+                                            icon: 'pi pi-copy',
+                                            items: [
+                                                {
+                                                    label: 'Formulaire',
+                                                    icon: 'pi pi-align-center',
+                                                    routerLink: ['/template/formulaire/GH4'],
+                                                },
+                                            ]
                                         },
                                     ],
                                 },

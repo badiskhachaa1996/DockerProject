@@ -24,6 +24,22 @@ export class FormulaireServiceService {
     return this.httpClient.delete<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAll(){
+    let registreUrl = this.apiUrl + "getAll";
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  /*
+    Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
+    Dans ce cas il faut supprimer le '.append('token', localStorage.getItem('token'))' qui se trouve après le headers et 
+    Surtout rajouter le chemin de la route dans le fichier index.js du back (voir /back/index.js ligne 247)
+  */
+
+  getAllPopulate(){
+    let registreUrl = this.apiUrl + "getAllPopulate";
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
   exempleGETEcole() {
     return [
       { _id: "CD2", name: "STUDINFO", details: "Ecole Informatique" },

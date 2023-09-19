@@ -244,6 +244,11 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith('/soc/docGenInt/download') ||
       req.originalUrl === '/soc/meetingTeams/create' ||
       req.originalUrl.startsWith('/soc/genDoc/get-doc')
+      /*
+          Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
+          il faut dans ce cas rajouter le chemin de la route ici
+      */
+      || req.originalUrl === '/soc/template/formulaire/getAllPopulate'
     ) {
       next();
     } else {
