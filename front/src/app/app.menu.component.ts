@@ -549,6 +549,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/tuteur'],
                                 },
                                 {
+                                    label: 'Dashboard Alternance',
+                                    icon : 'pi pi-chart-line',
+                                    routerLink: ['/dashboard-alternance'],
+                                },
+                                {
                                     label: 'Placement',
                                     icon: 'pi pi-star',
                                     items: [

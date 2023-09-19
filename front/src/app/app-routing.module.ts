@@ -265,6 +265,7 @@ import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
+import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
 const routes: Routes = [
     {
         path: '',
@@ -730,6 +731,11 @@ const routes: Routes = [
             {
                 path: 'liste-demande-commercial',
                 component: DemandeConseillerComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'dashboard-alternance',
+                component: DashboardAlternanceComponent,
                 canActivate: [AuthGuardService],
             },
             {
