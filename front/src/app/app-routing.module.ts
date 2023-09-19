@@ -264,6 +264,7 @@ import { GenformationComponent } from './gen_doc/genformation/genformation.compo
 import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
+import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
 const routes: Routes = [
     {
@@ -1254,6 +1255,9 @@ const routes: Routes = [
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
             { path: 'genDoc', component: GendocComponent, canActivate: [AuthGuardService] },
+            //Template
+            { path: 'template/formulaire', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
+            { path: 'template/formulaire/:ecole', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
         ],
     },
     {

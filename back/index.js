@@ -396,6 +396,9 @@ app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 app.use('/soc/pointage', require('./controllers/pointageController'))
 app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
+
+app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
+
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
