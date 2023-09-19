@@ -371,6 +371,7 @@ import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-int
 import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
 import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
+import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 
 @NgModule({
   imports: [
@@ -749,6 +750,7 @@ import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.co
     GenOutroComponent,
     RendezVousResultatsComponent,
     GendocViewComponent,
+    FormulaireFrontComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
