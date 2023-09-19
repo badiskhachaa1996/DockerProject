@@ -57,7 +57,8 @@ app.post("/create", (req, res) => {
                     customid: id,
                     etudiant_id: req.body.etudiant_id,
                     priorite: req.body.priorite,
-                    documents: req.body.documents
+                    documents: req.body.documents,
+                    module: req.body.module,
                 });
 
                 let htmlemail = `
