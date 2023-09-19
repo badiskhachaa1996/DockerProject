@@ -24,7 +24,8 @@ export class AjoutTicketComponent implements OnInit {
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    priorite: new FormControl('', Validators.required)
+    priorite: new FormControl('', Validators.required),
+    module : new FormControl('', Validators.required),
   })
   token;
   sujetDropdown: any[] = [
@@ -33,11 +34,29 @@ export class AjoutTicketComponent implements OnInit {
   ];;
   // Haute priorité / Moyenne priorité / Basse priorité / Priorité normale
   prioriteDropdown: any[] = [
-    { label: 'Priorité normale', value: "Priorité normale" },
-    { label: 'Basse priorité', value: "Basse priorité" },
-    { label: 'Moyenne priorité', value: "Moyenne priorité" },
-    { label: 'Haute priorité', value: "Haute priorité" },
+    { label: 'Urgent', value: "Urgent" },
+    { label: 'Très urgent', value: "Très urgent" },
   ];
+
+  moduleDropdown: any[] = [
+    { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
+    { label: 'Module Pédagogie', value: "Module Pédagogie" },
+    { label: 'Module Administration', value: "Module Administration" },
+    { label: 'Module Admission', value: "Module Admission" },
+    { label: 'Module Commerciale', value: "Module Commerciale" },
+    { label: 'Module Partenaires', value: "Module Partenaires" },
+    { label: 'Module iMatch', value: "Module iMatch" },
+    { label: 'Module Booking', value: "Module Booking" },
+    { label: 'Module Questionnaire', value: "Module Questionnaire" },
+    { label: 'Module International', value: "Module International" },
+    { label: 'Module CRM', value: "Module CRM" },
+    { label: 'Module Intuns', value: "Module Intuns" },
+    { label: 'Module Gestions des emails', value: "Module Gestions des emails" },
+    { label: 'Module Admin IMS', value: "Module Admin IMS" },
+    { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
+  ];
+
+  showModuleDropdown: boolean = false;
   onAdd() {
     let documents = []
     this.uploadedFiles.forEach(element => {
@@ -121,5 +140,21 @@ export class AjoutTicketComponent implements OnInit {
       })
     }
   }
+
+  onSubjectChange() {
+    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
+ 
+    if(selectedSubject === "IMS") {
+        this.showModuleDropdown = true;
+        this.TicketForm.get('module').setValidators([Validators.required]);
+        this.TicketForm.get('module').updateValueAndValidity();
+    }
+    else {
+        this.TicketForm.get('module').clearValidators();
+        this.TicketForm.get('module').updateValueAndValidity();
+        this.TicketForm.get('module').reset();
+        this.showModuleDropdown = false;
+    }
+  };
 
 }

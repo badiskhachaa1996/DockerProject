@@ -87,7 +87,10 @@ const ticket_schema = new mongoose.Schema({
     },
     date_limite: {
         type: Date
-    }
+    },
+    module: {
+        type: String
+    },
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Ticket = mongoose.model("ticket", ticket_schema);
