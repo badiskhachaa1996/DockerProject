@@ -126,4 +126,6 @@ export class FormulaireFrontComponent implements OnInit {
 
   ECOLE;
 
+  idx = 1
+
 }
