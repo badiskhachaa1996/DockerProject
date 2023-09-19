@@ -43,21 +43,18 @@ export class GendocComponent implements OnInit {
       accessLevel: "read"
     },
     {
-      role:  [""],
+      role: [""],
       accessLevel: "create"
     },
     {
-      role:  ["Responsable"],
+      role: ["Responsable"],
       accessLevel: "update"
     },
     {
-      role:  ["Admin"],
+      role: ["Admin"],
       accessLevel: "delete"
     },
   ]
-
-  AccessLevel = ""
-
 
 
 
@@ -150,7 +147,7 @@ export class GendocComponent implements OnInit {
   type_certif = {
     label: '',
     value: '',
-    title: '', 
+    title: '',
   };
 
   school: GenSchool;
@@ -171,10 +168,10 @@ export class GendocComponent implements OnInit {
 
   user: User;
 
-
+  AccessLevel = "Spectateur"
 
   constructor(private formBuilder: FormBuilder, private UserService: AuthService,
-    private messageService: MessageService, private genDocService: GenDocService, private genRentreService: GenRentreService, private genFormationService: GenFormationService, private genSchoolService: GenSchoolService,private genCampusService: GenCampusService, private router: Router) { }
+    private messageService: MessageService, private genDocService: GenDocService, private genRentreService: GenRentreService, private genFormationService: GenFormationService, private genSchoolService: GenSchoolService, private genCampusService: GenCampusService, private router: Router) { }
 
   ngOnInit(): void {
     // decodage du token
@@ -183,25 +180,25 @@ export class GendocComponent implements OnInit {
     // initialisation de la methode de recuperation des données
     this.onGetAllClasses();
 
-        //Initialisation du formulaire d'ajout d'doc
-        this.formAddDoc = this.formBuilder.group({
-          type_certif:  ['', Validators.required],
-          school:  ['', Validators.required],
-          rentre: ['', Validators.required],
-          campus: ['', Validators.required],
-          formation:  ['', Validators.required],
-          alternance:  false,
-          civilite: [''],
-          student_full_name: ['', Validators.required],
-          student_birth_date: ['', Validators.required],
-          student_birth_place: ['', Validators.required],
-          amount_paid: [''],
-          paiement_method: [''],
-          check: [''],
-          bank: [''],
-          date: ['', Validators.required],
-          place_created: ['', Validators.required],
-        });
+    //Initialisation du formulaire d'ajout d'doc
+    this.formAddDoc = this.formBuilder.group({
+      type_certif: ['', Validators.required],
+      school: ['', Validators.required],
+      rentre: ['', Validators.required],
+      campus: ['', Validators.required],
+      formation: ['', Validators.required],
+      alternance: false,
+      civilite: [''],
+      student_full_name: ['', Validators.required],
+      student_birth_date: ['', Validators.required],
+      student_birth_place: ['', Validators.required],
+      amount_paid: [''],
+      paiement_method: [''],
+      check: [''],
+      bank: [''],
+      date: ['', Validators.required],
+      place_created: ['', Validators.required],
+    });
   }
 
   // methode de recuperation des données utile
@@ -214,113 +211,120 @@ export class GendocComponent implements OnInit {
         console.log(this.docList)
       })
       .catch((error) => { console.error(error); })
-      this.schoolList  = [];
-      this.genSchoolService.getSchools()
+    this.schoolList = [];
+    this.genSchoolService.getSchools()
       .then((response: GenSchool[]) => {
         response.forEach((school: GenSchool) => {
-          this.schoolList.push({ label: school.name, value: school._id});
+          this.schoolList.push({ label: school.name, value: school._id });
         })
       })
       .catch((error) => { console.log(error); })
-      this.campusList  = [];
-      this.genCampusService.getCampuss()
+    this.campusList = [];
+    this.genCampusService.getCampuss()
       .then((response: GenCampus[]) => {
         response.forEach((campus: GenCampus) => {
-          this.campusList.push({ label: campus.name, value: campus._id});
+          this.campusList.push({ label: campus.name, value: campus._id });
         })
       })
       .catch((error) => { console.log(error); })
-      this.formationList  = [];
-      this.genFormationService.getFormations()
+    this.formationList = [];
+    this.genFormationService.getFormations()
       .then((response: GenCampus[]) => {
         response.forEach((formation: GenFormation) => {
-          this.formationList.push({ label: formation.name, value: formation._id});
+          this.formationList.push({ label: formation.name, value: formation._id });
         })
       })
       .catch((error) => { console.log(error); })
 
-      this.UserService.getPopulate(this.token.id).subscribe((userdata) => {
-        this.user = userdata
-      })
+    this.UserService.getPopulate(this.token.id).subscribe((userdata) => {
+      this.user = userdata
+      if (userdata.roles_list)
+        userdata.roles_list.forEach(role => {
+          if (role.module == "Générateur de Document")
+            this.AccessLevel = role.role
+        })
+      if (userdata.role == "Admin")
+        this.AccessLevel = "Super-Admin"
+    })
 
   }
 
 
-    // methode d'ajout du cv
-    onAddDoc(): void {
-      // recuperation des données du formulaire
-      const formValue = this.formAddDoc.value;
+  // methode d'ajout du cv
+  onAddDoc(): void {
+    // recuperation des données du formulaire
+    const formValue = this.formAddDoc.value;
 
+    const document = new GenDoc()
+
+    console.log(formValue)
+    console.log(document)
+
+    //création du cv
+    if (this.showUpdateDoc) {
+
+      if (this.grantAccessToEdit) {
+        let doc = this.showUpdateDoc;
+        //Mise à jour de l'doc
+        this.genDocService.updateDoc(doc).then(data => {
+          this.docList.splice(this.docList.indexOf(this.showUpdateDoc), 1, doc)
+          this.messageService.add({ severity: 'success', summary: "Mis à jour du doc avec succès" })
+          this.formAddDoc.reset();
+          this.showUpdateDoc = null;
+        })
+      } else {
+        this.messageService.add({ severity: "error", summary: `Vous ne pouvez pas mettre à jour le doc` })
+      }
+
+    } else if (this.showAddDoc) {
       const document = new GenDoc()
+      document.type_certif = this.type_certif
+      document.school = this.school
+      document.rentre = this.rentre
+      document.campus = this.campus
+      document.formation = this.formation
+      document.alternance = formValue.alternance
+      document.civilite = formValue.civilite
 
-      console.log(formValue)
-      console.log(document)
+      this.student.full_name = formValue.student_full_name
+      this.student.birth_date = formValue.student_birth_date
+      this.student.birth_place = this.country.label
 
-      //création du cv
-      if (this.showUpdateDoc) {
-
-        if (this.grantAccessToEdit) {
-          let doc = this.showUpdateDoc;
-          //Mise à jour de l'doc
-          this.genDocService.updateDoc(doc).then(data => {
-            this.docList.splice(this.docList.indexOf(this.showUpdateDoc), 1, doc)
-            this.messageService.add({ severity: 'success', summary: "Mis à jour du doc avec succès" })
-            this.formAddDoc.reset();
-            this.showUpdateDoc = null;
-          })
-        } else {
-          this.messageService.add({ severity: "error", summary: `Vous ne pouvez pas mettre à jour le doc` })
-        }
-        
-      } else if (this.showAddDoc) {
-        const document = new GenDoc()
-        document.type_certif = this.type_certif
-        document.school = this.school
-        document.rentre = this.rentre
-        document.campus = this.campus
-        document.formation = this.formation
-        document.alternance = formValue.alternance
-        document.civilite = formValue.civilite
-
-        this.student.full_name = formValue.student_full_name
-        this.student.birth_date = formValue.student_birth_date
-        this.student.birth_place = this.country.label
-
-        document.student = this.student
-        document.amount_paid = formValue.amount_paid
-        document.paiement_method = formValue.paiement_method
-        document.check = formValue.check
-        document.bank = formValue.bank
-        document.date = formValue.date
-        document.place_created = formValue.place_created
-        document.id_doc = this.id_doc
-        document.created_by = this.user
-        document.created_on = new Date()
-        //ajout du doc
-        this.genDocService.addDoc(document)
-          .then((response: GenDoc) => {
-            this.messageService.add({ severity: "success", summary: `Le doc a été ajouté avec succés` })
-            this.formAddDoc.reset();
-            this.showAddDoc = false;
-            this.onGetAllClasses();
-          })
-          .catch((error) => {
-            this.messageService.add({ severity: "error", summary: `Ajout impossible` });
-            console.log(error);
-          });
-      }
-      }
+      document.student = this.student
+      document.amount_paid = formValue.amount_paid
+      document.paiement_method = formValue.paiement_method
+      document.check = formValue.check
+      document.bank = formValue.bank
+      document.date = formValue.date
+      document.place_created = formValue.place_created
+      document.id_doc = this.id_doc
+      document.created_by = this.user
+      document.created_on = new Date()
+      //ajout du doc
+      this.genDocService.addDoc(document)
+        .then((response: GenDoc) => {
+          this.messageService.add({ severity: "success", summary: `Le doc a été ajouté avec succés` })
+          this.formAddDoc.reset();
+          this.showAddDoc = false;
+          this.onGetAllClasses();
+        })
+        .catch((error) => {
+          this.messageService.add({ severity: "error", summary: `Ajout impossible` });
+          console.log(error);
+        });
+    }
+  }
 
   InitUpdateDoc(doc) {
     console.log(doc)
     this.showUpdateDoc = doc
     this.formAddDoc = this.formBuilder.group({
-      type_certif:  doc.type_certif.value,
+      type_certif: doc.type_certif.value,
       school: doc.school.name,
       rentre: doc.rentre.type,
       campus: doc.campus.name,
-      formation:  doc.formation.name,
-      alternance: doc.alternance ,
+      formation: doc.formation.name,
+      alternance: doc.alternance,
       civilite: doc.civilite,
       student_birth_date: doc.student.birth_date,
       student_full_name: doc.student.full_name,
@@ -350,8 +354,8 @@ export class GendocComponent implements OnInit {
 
 
   RemoveElementFromArray(arrayElements, element) {
-    arrayElements.forEach((value,index)=>{
-        if(value==element) arrayElements.splice(index,1);
+    arrayElements.forEach((value, index) => {
+      if (value == element) arrayElements.splice(index, 1);
     });
   }
 
@@ -362,18 +366,18 @@ export class GendocComponent implements OnInit {
   changeCertificate(val): void {
     if (val) {
       this.type_certif = this.certificate_types.find(x => x.value == val)
-  } else {
-    this.type_certif = null
-  }
+    } else {
+      this.type_certif = null
+    }
   }
 
   changeSchool(val): void {
     if (val) {
-    this.genSchoolService.getById(val)
-      .then((response: GenSchool) => {
-        this.school = response
-      })
-      .catch((error) => { console.log(error); })
+      this.genSchoolService.getById(val)
+        .then((response: GenSchool) => {
+          this.school = response
+        })
+        .catch((error) => { console.log(error); })
     } else {
       this.school = null
     }
@@ -386,29 +390,29 @@ export class GendocComponent implements OnInit {
           this.campus = response
         })
         .catch((error) => { console.log(error); })
-  } else {
-    this.campus = null
-  }
+    } else {
+      this.campus = null
+    }
   }
 
   changeFormation(val): void {
     this.rentreList = []
     if (val) {
       this.genFormationService.getById(val)
-      .then((response: GenFormation) => {
-        this.formation = response
-        this.rentre = undefined
-        this.genRentreService.getRentreByFormation(val)
-        .then((response: GenRentre[]) => {
-          response.forEach((rentre: GenRentre) => {
-            this.rentreList.push({ label: rentre.type, value: rentre._id});
-          })
+        .then((response: GenFormation) => {
+          this.formation = response
+          this.rentre = undefined
+          this.genRentreService.getRentreByFormation(val)
+            .then((response: GenRentre[]) => {
+              response.forEach((rentre: GenRentre) => {
+                this.rentreList.push({ label: rentre.type, value: rentre._id });
+              })
+
+            })
+            .catch((error) => { console.log(error); })
 
         })
         .catch((error) => { console.log(error); })
-        
-    })
-    .catch((error) => { console.log(error); })
     } else {
       this.formation = null
     }
@@ -421,9 +425,9 @@ export class GendocComponent implements OnInit {
           this.rentre = response
         })
         .catch((error) => { console.log(error); })
-      } else {
-        this.rentre = null
-      }
+    } else {
+      this.rentre = null
+    }
   }
 
   changeCivilite(val): void {
