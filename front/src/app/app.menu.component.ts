@@ -4081,7 +4081,7 @@ export class AppMenuComponent implements OnInit {
                                                 },
                                             ],
                                         },
-                                    
+
                                     ]
                                 }
                             ];
@@ -7544,6 +7544,13 @@ export class AppMenuComponent implements OnInit {
                                 routerLink: ['/genDoc']
                             },
                         ],
+                    })
+                }
+                if (services_list.includes('Générateur de Document')) {
+                    this.items.push({
+                        label: 'Générateur de documents',
+                        icon: 'pi pi-folder',
+                        routerLink: ['/genDoc']
                     })
                 }
                 setTimeout(() => this.showMenu = true, 0);
