@@ -71,7 +71,11 @@ export class GendocViewComponent implements OnInit {
       this.country = this.paysIsoCodes.find(x => x.label == this.document.student.birth_place)
       this.type_certif = this.document.type_certif
       this.student = this.document.student
-      this.paiement_method = this.payementList.find(x => x.value == this.document.paiement_method).label
+      this.paiement_method = ''
+      if (this.document.paiement_method) {
+        this.paiement_method = this.payementList.find(x => x.value == this.document.paiement_method).label
+      } 
+      
       this.school = this.document.school
       this.campus = this.document.campus
       this.formation = this.document.formation
