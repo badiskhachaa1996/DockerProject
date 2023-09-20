@@ -1,0 +1,94 @@
+<p-toast></p-toast>
+<div class="grid col-12">
+    <div class="grid col-12 card" *ngIf="rdvToUpdate">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="rdvToUpdate=null"
+            aria-hidden="true"> </i>
+        <h3 style="font-weight: bold; text-align: center;">Mettre à jour
+            le rendez-vous
+        </h3>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="form" (ngSubmit)="onUpdate()">
+            <div class="field col-12">
+                <label>Statut: </label>
+                <p-dropdown [options]="statutDropdown" placeholder="Choissisez un statut" autoWidth="false"
+                    [filter]="true" [style]="{'width':'100%'}" formControlName="statut"></p-dropdown>
+            </div>
+            <button pButton [disabled]="form.invalid" label="Mettre à jour le rendez-vous"></button>
+        </form>
+    </div>
+    <div class="grid col-12 card">
+        <h5 class="col-9">Liste des rendez-vous</h5>
+        <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="meetings" class="col-12"
+            [paginator]="true" [pageLinks]="5"
+            [globalFilterFields]="['statut', 'winner_id.firstname','winner_id.lastname','user_id.firstname','user_id.lastname','company_email','description']"
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
+                </span>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
+                        Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                        Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="company_email" scope="col" style="text-align: center;">
+                        Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+                        Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                        Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="description" scope="col" style="text-align: center;">
+                        Description <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="statut" scope="col" style="text-align: center;">
+                        Statut <p-sortIcon field="statut"></p-sortIcon>
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rdv>
+                <tr>
+                    <td *ngIf="rdv?.winner_id">
+                        {{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
+                    </td>
+                    <td *ngIf="!rdv.winner_id">
+                        Aucun
+                    </td>
+                    <td>
+                        {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+                    </td>
+                    <td>
+                        {{rdv?.company_email}}
+                    </td>
+                    <td>
+                        {{rdv?.meeting_start_date | date:'mediumDate'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+                    </td>
+                    <td>
+                        {{rdv?.date_creation | date:'mediumDate'}}
+                    </td>
+                    <td>
+                        {{rdv?.description}}
+                    </td>
+                    <td>
+                        {{rdv?.statut}}
+                    </td>
+                    <td>
+                        <i pTooltip="Mettre à jour le statut du rendez-vous" tooltipPosition="bottom"
+                            class="pi pi-pencil mr-2" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+
+            </ng-template>
+        </p-table>
+    </div>
+</div>

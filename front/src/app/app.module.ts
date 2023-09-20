@@ -373,6 +373,8 @@ import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-re
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
+import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
 
 @NgModule({
   imports: [
@@ -753,6 +755,8 @@ import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/
     GendocViewComponent,
     FormulaireFrontComponent,
     DashboardAlternanceComponent,
+    MesRendezVousComponent,
+    EntrepriseDashboardComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -174,8 +174,7 @@ export class EntrepriseService {
   }
 
   // méthode d'upload de cerfa pour les contrats
-  uploadCerfa(formData: FormData): Promise<any>
-  {
+  uploadCerfa(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-cerfa`;
 
     return new Promise<any>((resolve, reject) => {
@@ -188,8 +187,7 @@ export class EntrepriseService {
   }
 
   // méthode d'upload de la convention de formation pour les contrats
-  uploadConvention(formData: FormData): Promise<any>
-  {
+  uploadConvention(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-convention`;
 
     return new Promise<any>((resolve, reject) => {
@@ -202,8 +200,7 @@ export class EntrepriseService {
   }
 
   // méthode d'upload de l'accord de prise en charge
-  uploadAccordPriseEnCharge(formData: FormData): Promise<any>
-  {
+  uploadAccordPriseEnCharge(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-accord-prise-en-charge`;
 
     return new Promise<any>((resolve, reject) => {
@@ -216,8 +213,7 @@ export class EntrepriseService {
   }
 
   // méthode d'upload de la résiliation pour les contrats
-  uploadResiliation(formData: FormData): Promise<any>
-  {
+  uploadResiliation(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-resiliation`;
 
     return new Promise<any>((resolve, reject) => {
@@ -230,8 +226,7 @@ export class EntrepriseService {
   }
 
   // méthode d'upload de la relance pour les contrats
-  uploadRelance(formData: FormData): Promise<any>
-  {
+  uploadRelance(formData: FormData): Promise<any> {
     const url = `${this.apiUrl}upload-relance`;
 
     return new Promise<any>((resolve, reject) => {
@@ -243,23 +238,21 @@ export class EntrepriseService {
     });
   }
 
-    // méthode d'upload du livret d'apprentissage
-    uploadLivret(formData: FormData): Promise<any>
-    {
-      const url = `${this.apiUrl}upload-livret`;
-  
-      return new Promise<any>((resolve, reject) => {
-        this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
-          next: (response: any) => { resolve(response); },
-          error: (error) => { reject(error); },
-          complete: () => { console.log("Livret d'apprentissage envoyé"); }
-        });
+  // méthode d'upload du livret d'apprentissage
+  uploadLivret(formData: FormData): Promise<any> {
+    const url = `${this.apiUrl}upload-livret`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: any) => { resolve(response); },
+        error: (error) => { reject(error); },
+        complete: () => { console.log("Livret d'apprentissage envoyé"); }
       });
-    }
+    });
+  }
 
   // méthode de téléchargement du cerfa
-  getCerfa(idContrat: string): Promise<any>
-  {
+  getCerfa(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-cerfa/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -272,8 +265,7 @@ export class EntrepriseService {
   }
 
   // méthode de téléchargement de la convention
-  getConvention(idContrat: string): Promise<any>
-  {
+  getConvention(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-convention/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -286,8 +278,7 @@ export class EntrepriseService {
   }
 
   // méthode de téléchargement de l'accord de prise en charge
-  getAccord(idContrat: string): Promise<any>
-  {
+  getAccord(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-accord/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -300,8 +291,7 @@ export class EntrepriseService {
   }
 
   // méthode de téléchargement de la résiliation
-  getResiliation(idContrat: string): Promise<any>
-  {
+  getResiliation(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-resiliation/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -314,8 +304,7 @@ export class EntrepriseService {
   }
 
   // méthode de téléchargement de la relance
-  getRelance(idContrat: string): Promise<any>
-  {
+  getRelance(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-relance/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -328,8 +317,7 @@ export class EntrepriseService {
   }
 
   // méthode de téléchargement du livret d'apprentissage
-  getLivret(idContrat: string): Promise<any>
-  {
+  getLivret(idContrat: string): Promise<any> {
     const url = `${this.apiUrl}download-livret/${idContrat}`;
 
     return new Promise<any>((resolve, reject) => {
@@ -342,17 +330,26 @@ export class EntrepriseService {
   }
 
   // méthode de modification d'une remarque faite sur un contrat
-  patchRemarque(idContrat: string, remarque: string): Promise<any>
-  {
+  patchRemarque(idContrat: string, remarque: string): Promise<any> {
     const url = `${this.apiUrl}patch-remarque`;
 
     return new Promise<any>((resolve, reject) => {
-      this.httpClient.patch<any>(url, {idContrat: idContrat, remarque: remarque}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.patch<any>(url, { idContrat: idContrat, remarque: remarque }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response: any) => { resolve(response) },
         error: (error: any) => { reject(error) },
         complete: () => { console.log('Remarque mis à jour') }
       });
     });
+  }
+
+  uploadLogo(data: FormData) {
+    let url = this.apiUrl + "uploadLogo";
+    return this.httpClient.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
+  getLogo(id) {
+    let url = this.apiUrl + "getLogo/" + id;
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
 }

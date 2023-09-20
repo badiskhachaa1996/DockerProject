@@ -17,6 +17,12 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
 
+app.get("/getAllByEmail/:email", (req, res, next) => {
+    MeetingTeams.find({ company_email: req.params.email }).populate('winner_id').populate('user_id').populate('cv_id').sort({ date_creation: -1 })
+        .then((formFromDb) => { res.status(200).send(formFromDb); })
+        .catch((error) => { console.error(error); res.status(500).send(error); });
+});
+
 app.put("/update", (req, res) => {
     MeetingTeams.findByIdAndUpdate(req.body._id, { ...req.body }, { new: true }, (err, doc) => {
         res.status(200).send(doc);
