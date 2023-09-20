@@ -257,8 +257,6 @@ export class GendocComponent implements OnInit {
 
     const document = new GenDoc()
 
-    console.log(formValue)
-    console.log(document)
 
     //création du cv
     if (this.showUpdateDoc) {
@@ -316,7 +314,6 @@ export class GendocComponent implements OnInit {
   }
 
   InitUpdateDoc(doc) {
-    console.log(doc)
     this.showUpdateDoc = doc
     this.formAddDoc = this.formBuilder.group({
       type_certif: doc.type_certif.value,
@@ -337,7 +334,6 @@ export class GendocComponent implements OnInit {
       place_created: doc.place_created,
     });
 
-    console.log(this.formAddDoc.value)
   }
 
   deleteDoc(doc) {
