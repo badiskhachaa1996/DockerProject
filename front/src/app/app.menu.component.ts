@@ -5779,37 +5779,10 @@ export class AppMenuComponent implements OnInit {
                 ) {
                     this.items = [
                         {
-                            label: 'Accueil',
-                            icon: 'pi pi-fw pi-home',
-                            items: [
-                                {
-                                    label: 'Espace Personnel',
-                                    icon: 'pi pi-fw pi-home',
-                                    routerLink: ['/'],
-                                },
-                                /*{
-                                    label: 'Signaler un problème technique',
-                                    icon: 'pi pi-fw pi-exclamation-triangle',
-                                    routerLink: ['/ticketing-igs'],
-                                },*/
-                                {
-                                    label: 'Tuteurs',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/tuteur-ceo'],
-                                },
-                            ],
+                            label: 'Tuteurs',
+                            icon: 'pi pi-users',
+                            routerLink: ['/tuteur-ceo'],
                         },
-                        /*{
-                            label: 'Ticketing - Ancienne Version',
-                            icon: 'pi pi-ticket',
-                            items: [
-                                {
-                                    label: 'Mes tickets',
-                                    icon: 'pi pi-ticket',
-                                    routerLink: ['/suivi-ticket'],
-                                },
-                            ],
-                        },*/
                         {
                             label: 'Alternance',
                             icon: 'pi pi-briefcase',
@@ -5838,19 +5811,30 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'iMatch',
-                            icon: 'pi pi-star',
+                            label: 'Suivi',
+                            icon: 'pi pi-reply',
                             items: [
                                 {
-                                    label: 'Offres',
-                                    icon: 'pi pi-volume-up',
-                                    routerLink: ['/offres'],
+                                    label: 'Mes Rendez-vous',
+                                    icon: 'pi pi-calendar',
+                                    routerLink: ['/mes-rendez-vous']
                                 },
                                 {
-                                    label: 'Mes offres',
-                                    icon: 'pi pi-user',
-                                    routerLink: ['/mes-offres'],
-                                },
+                                    label: 'Suivi des candidats',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/suivi-candidat']
+                                }
+                            ],
+                        },
+                        {
+                            label: 'Offres',
+                            icon: 'pi pi-star',
+                            routerLink: ['/mes-offres']
+                        },
+                        {
+                            label: 'Candidats',
+                            icon: 'pi pi-chart-line',
+                            items: [
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
@@ -5861,12 +5845,28 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-briefcase',
                                     routerLink: ['/imatch'],
                                 },
+                            ]
+                        },
+                        {
+                            label: 'Rapport',
+                            icon: 'pi pi-chart-line',
+                            routerLink: ['/dashboard-alternance'],
+                        },
+                        {
+                            label: 'Ticketing',
+                            icon: 'pi pi-fw pi-ticket',
+                            items: [
                                 {
-                                    label: 'Générateur de CV',
-                                    icon: 'pi pi-cog',
-                                    routerLink: ['/generateur-cv'],
+                                    label: 'Ajouter un ticket',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/ticketing/gestion/ajout']
                                 },
-                            ],
+                                {
+                                    label: 'Mes tickets envoyé',
+                                    icon: 'pi pi-inbox',
+                                    routerLink: ['/ticketing/gestion/mes-tickets']
+                                }
+                            ]
                         },
                     ];
                 }

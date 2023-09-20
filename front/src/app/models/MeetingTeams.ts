@@ -1,4 +1,5 @@
 
+import { Annonce } from "./Annonce";
 import { CV } from "./CV";
 import { User } from "./User";
 
@@ -12,7 +13,10 @@ export class MeetingTeams {
         public meeting_start_date?: Date,
         public date_creation?: Date,
         public description?: string,
-        public statut?: string
+        public statut?: string,
+        public note?: string,
+        public offre_id?: Annonce,
+        public teams_id?: string,
     ) { }
 
 }

@@ -266,6 +266,9 @@ import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-re
 import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
 import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
 import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
+import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
+import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
 const routes: Routes = [
     {
         path: '',
@@ -1249,6 +1252,9 @@ const routes: Routes = [
             { path: 'generateur-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
+            { path: 'mes-rendez-vous', component: MesRendezVousComponent, canActivate: [AuthGuardService], },
+            { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
+            { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
 
             // Generateur de Doc 
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },

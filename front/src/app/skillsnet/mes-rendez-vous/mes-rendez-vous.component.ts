@@ -3,21 +3,26 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
-
+import jwt_decode from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
-  selector: 'app-rendez-vous-resultats',
-  templateUrl: './rendez-vous-resultats.component.html',
-  styleUrls: ['./rendez-vous-resultats.component.scss']
+  selector: 'app-mes-rendez-vous',
+  templateUrl: './mes-rendez-vous.component.html',
+  styleUrls: ['./mes-rendez-vous.component.scss']
 })
-export class RendezVousResultatsComponent implements OnInit {
+export class MesRendezVousComponent implements OnInit {
+  token;
   meetings: MeetingTeams[] = []
-  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService) { }
+  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService, private AuthService: AuthService) { }
 
   ngOnInit(): void {
-    this.MeetingTeamsService.getAll().subscribe(mts => {
-      console.log(mts)
-      this.meetings = mts
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      this.MeetingTeamsService.getAllByEmail(user.email_perso).subscribe(mts => {
+        this.meetings = mts
+      })
     })
+
   }
 
   form = new FormGroup({
@@ -25,6 +30,8 @@ export class RendezVousResultatsComponent implements OnInit {
   })
 
   rdvToUpdate: MeetingTeams
+  meetingSelected: MeetingTeams
+  showForm
 
   statutDropdown = [
     { label: "Planifié", value: "Planifié" },
@@ -33,11 +40,23 @@ export class RendezVousResultatsComponent implements OnInit {
     { label: "Fait", value: "Fait" },
   ]
 
-
   onInitUpdate(rdv: MeetingTeams) {
     this.form.patchValue({ statut: rdv.statut })
     this.rdvToUpdate = rdv
     this.scrollToTop()
+  }
+
+  onInitCustom(rdv: MeetingTeams, type = 'Note') {
+    this.showForm = type
+    this.meetingSelected = rdv
+    this.scrollToTop()
+  }
+
+  onUpdateCustom() {
+    this.MeetingTeamsService.update({ ...this.meetingSelected }).subscribe(r => {
+      this.showForm = null
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
+    })
   }
 
   onUpdate() {
@@ -61,5 +80,16 @@ export class RendezVousResultatsComponent implements OnInit {
       }
     }, 15);
   }
+
+  onCancel() {
+
+  }
+  seeOffer() {
+
+  }
+  seeCV() {
+
+  }
+
 
 }

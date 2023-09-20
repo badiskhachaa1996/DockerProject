@@ -1,34 +1,19 @@
 <div class="layout-topbar">
     <a class="layout-topbar-logo" routerLink="">
-        <img
-            [src]="logo"
-            style="max-width: 150px; max-height: 80px"
-            alt="logo"
-        />
+        <img [src]="logo" style="max-width: 150px; max-height: 80px" alt="logo" />
     </a>
 
-    <a
-        class="p-link layout-menu-button layout-topbar-button"
-        href="#"
-        (click)="appMain.toggleMenu($event)"
-    >
+    <a class="p-link layout-menu-button layout-topbar-button" href="#" (click)="appMain.toggleMenu($event)">
         <i class="pi pi-bars"></i>
     </a>
 
-    <a
-        class="p-link layout-topbar-menu-button layout-topbar-button"
-        href="#"
-        (click)="appMain.toggleTopMenu($event)"
-    >
+    <a class="p-link layout-topbar-menu-button layout-topbar-button" href="#" (click)="appMain.toggleTopMenu($event)">
         <i class="pi pi-ellipsis-v"></i>
     </a>
 
-    <div
-        class="layout-topbar-menu"
-        [ngClass]="{
+    <div class="layout-topbar-menu" [ngClass]="{
             'layout-topbar-menu-mobile-active': appMain.topMenuActive
-        }"
-    >
+        }">
         <!-- <a href="#" class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
             <span>Calendar</span>
@@ -37,22 +22,23 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
-        <a href="#/notifications" class="p-link layout-topbar-button">
-            <i class="pi pi-bell"></i>
-            <div
-                class="number"
-                style="font-weight: bold; color: red; font-size: 13px"
-            >
+        <a href="#/entreprise-dashboard" class="p-link layout-topbar-button" *ngIf="isCEO">
+            <i class="pi pi-chart-bar" pTooltip="Dashboard" tooltipPosition="bottom"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#/notifications" class="p-link layout-topbar-button" >
+            <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom"></i>
+            <div class="number" style="font-weight: bold; color: red; font-size: 13px">
                 {{ Notifications }}
             </div>
             <span> Notifications</span>
         </a>
-        <a href="#/profil" class="p-link layout-topbar-button">
-            <i class="pi pi-user"></i>
+        <a href="#/profil" class="p-link layout-topbar-button" >
+            <i class="pi pi-user" pTooltip="Profil" tooltipPosition="bottom"></i>
             <span>Profil</span>
         </a>
-        <a (click)="onDisconnect()" class="p-link layout-topbar-button">
-            <i class="pi pi-power-off"></i>
+        <a (click)="onDisconnect()" class="p-link layout-topbar-button" >
+            <i class="pi pi-power-off" pTooltip="Déconnexion" tooltipPosition="bottom"></i>
             <span>Déconnexion</span>
         </a>
     </div>

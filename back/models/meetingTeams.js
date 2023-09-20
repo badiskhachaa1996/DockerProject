@@ -9,7 +9,10 @@ const matiereSchema = mongoose.Schema({
     meeting_start_date: { type: Date },
     date_creation: { type: Date, default: Date.now },
     description: { type: String },
-    statut: { type: String, default: "En cours" }
+    statut: { type: String, default: "Planifié" },
+    note: { type: String },
+    offre_id: { type: mongoose.Schema.Types.ObjectId, ref: "annonce" },
+    teams_id: { type: String },
 });
 
 //creation de la table matiere

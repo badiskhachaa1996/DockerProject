@@ -9,8 +9,10 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
 const { application } = require("express");
 const e = require("express");
-const fs = require("fs");
-const multer = require("multer");
+const multer = require('multer');
+const fs = require("fs")
+var mime = require('mime-types')
+const path = require('path');
 
 let origin = ["http://localhost:4200"];
 if (process.argv[2]) {
@@ -1354,6 +1356,67 @@ app.patch("/patch-remarque", (req, res) => {
     .catch((error) => {
       res.status(400).send(error);
     });
+});
+
+
+//Sauvegarde de la photo de profile
+const storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    let id_photo = req.body.id;
+    if (!fs.existsSync("storage/entreprise/logo/" + id_photo + "/")) {
+      fs.mkdirSync("storage/entreprise/logo/" + id_photo + "/", { recursive: true });
+    }
+    callBack(null, "storage/entreprise/logo/" + id_photo + "/");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
+//Sauvegarde de la photo de profile
+app.post("/uploadLogo", upload.single("file"), (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error("No File");
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  Entreprise.findByIdAndUpdate(req.body.id, { logoFile: file.originalname }, { new: true }, (err, doc) => {
+    if (err) {
+      console.error(err)
+      res.status(500).send(err)
+    } else
+      res.status(201).send(doc)
+  })
+
+});
+
+//Envoie de la photo de profile
+app.get("/getLogo/:id", (req, res) => {
+  Entreprise.findById(req.params.id, (err, entreprise) => {
+    console.log(entreprise,req.params.id)
+    if (entreprise && entreprise.logoFile) {
+      let pathFile = "storage/entreprise/logo/" + req.params.id + "/" + entreprise.logoFile
+      try {
+        let file = fs.readFileSync(
+          pathFile,
+          { encoding: "base64" },
+          (err2) => {
+            if (err2) {
+              return console.error(err2);
+            }
+          }
+        );
+        res.send({ file: file, documentType: mime.contentType(path.extname(pathFile)) });
+      } catch (e) {
+        res.status(500).send(e);
+      }
+    } else {
+      res.status(404).send({ error: "Image non défini" });
+    }
+  });
+
 });
 
 //export du module app pour l'utiliser dans les autres parties de l'application

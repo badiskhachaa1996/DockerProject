@@ -24,8 +24,11 @@ export class AppTopBarComponent {
   notif = false;
   Notifications = 0;
   socket = io(environment.origin.replace('/soc', ''));
+  isCEO = false
 
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService, private msalService: MsalService, private AuthService: AuthService, private ToastService: MessageService) { }
+  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, 
+    private NotificationService: NotificationService, private msalService: MsalService, 
+    private AuthService: AuthService, private ToastService: MessageService,) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -97,6 +100,7 @@ export class AppTopBarComponent {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected = jwt_decode(data.userToken)["userFromDb"];
+      this.isCEO = userconnected.type == "CEO Entreprise";
       if (userconnected) {
         this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
       }
