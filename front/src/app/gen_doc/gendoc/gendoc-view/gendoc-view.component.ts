@@ -41,6 +41,22 @@ export class GendocViewComponent implements OnInit {
  country;
  id_doc;
 
+ payementList = [
+  {
+    label: "Espèce",
+    value: "espece"
+  },
+  {
+    label: "Virement",
+    value: "virement"
+  },
+  {
+    label: "Chèque",
+    value: "cheque"
+  },
+]
+
+
  paysIsoCodes = environment.isoCodes;
 
 
@@ -51,12 +67,11 @@ export class GendocViewComponent implements OnInit {
     
     gendocService.getDoc(this.id_doc).subscribe((data) => {
       this.document = data
-      console.log(this.document)
       this.isWoman = this.document.civilite == "Madame" ? true : false
       this.country = this.paysIsoCodes.find(x => x.label == this.document.student.birth_place)
       this.type_certif = this.document.type_certif
       this.student = this.document.student
-      this.paiement_method = this.document.paiement_method
+      this.paiement_method = this.payementList.find(x => x.value == this.document.paiement_method).label
       this.school = this.document.school
       this.campus = this.document.campus
       this.formation = this.document.formation
@@ -80,9 +95,6 @@ export class GendocViewComponent implements OnInit {
           date: this.document.date,
           place_created: this.document.place_created,
       }
-
-      console.log(this.id_doc)
-      console.log(this.school)
     })
 
   }
