@@ -268,6 +268,7 @@ import { FormulaireFrontComponent } from './template/formulaire/formulaire-front
 import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
 import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
 import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
+import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
 const routes: Routes = [
     {
         path: '',
@@ -1252,6 +1253,7 @@ const routes: Routes = [
             { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
             { path: 'mes-rendez-vous', component: MesRendezVousComponent, canActivate: [AuthGuardService], },
+            { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
 
             // Generateur de Doc 

@@ -5818,6 +5818,11 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Mes Rendez-vous',
                                     icon: 'pi pi-calendar',
                                     routerLink: ['/mes-rendez-vous']
+                                },
+                                {
+                                    label: 'Suivi des candidats',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/suivi-candidat']
                                 }
                             ],
                         },

@@ -27,9 +27,12 @@ export class RendezVousResultatsComponent implements OnInit {
   rdvToUpdate: MeetingTeams
 
   statutDropdown = [
-    { label: "En cours", value: "En cours" },
+    { label: "Planifié", value: "Planifié" },
+    { label: "Validé par le candidat", value: "Validé par le candidat" },
+    { label: "Annulé", value: "Annulé" },
     { label: "Fait", value: "Fait" },
   ]
+
 
   onInitUpdate(rdv: MeetingTeams) {
     this.form.patchValue({ statut: rdv.statut })

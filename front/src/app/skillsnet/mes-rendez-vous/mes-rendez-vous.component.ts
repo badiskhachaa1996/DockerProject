@@ -30,9 +30,13 @@ export class MesRendezVousComponent implements OnInit {
   })
 
   rdvToUpdate: MeetingTeams
+  meetingSelected: MeetingTeams
+  showForm
 
   statutDropdown = [
-    { label: "En cours", value: "En cours" },
+    { label: "Planifié", value: "Planifié" },
+    { label: "Validé par le candidat", value: "Validé par le candidat" },
+    { label: "Annulé", value: "Annulé" },
     { label: "Fait", value: "Fait" },
   ]
 
@@ -40,6 +44,19 @@ export class MesRendezVousComponent implements OnInit {
     this.form.patchValue({ statut: rdv.statut })
     this.rdvToUpdate = rdv
     this.scrollToTop()
+  }
+
+  onInitCustom(rdv: MeetingTeams, type = 'Note') {
+    this.showForm = type
+    this.meetingSelected = rdv
+    this.scrollToTop()
+  }
+
+  onUpdateCustom() {
+    this.MeetingTeamsService.update({ ...this.meetingSelected }).subscribe(r => {
+      this.showForm = null
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
+    })
   }
 
   onUpdate() {
@@ -62,6 +79,16 @@ export class MesRendezVousComponent implements OnInit {
         clearInterval(scrollInterval);
       }
     }, 15);
+  }
+
+  onCancel() {
+
+  }
+  seeOffer() {
+
+  }
+  seeCV() {
+
   }
 
 
