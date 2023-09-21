@@ -65,7 +65,12 @@ app.post("/post-task", (req, res, next) => {
     .then((taskCreated) => { res.status(201).json({ task: taskCreated, success: 'Tâche créée' }); })
     .catch((error) => { console.log(error); res.status(500).send({ error: 'Impossible de créer une nouvelle tâche' }); });
 });
-
+// get all Tasks
+app.get("/gettasks", (req, res, next) => {
+    Task.find()?.populate('project_id')?.populate('attribuate_to').populate('ticketId')
+    .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
+    .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
+});
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
     console.log(req.params.id);

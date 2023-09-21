@@ -17,6 +17,7 @@ const ticket_schema = new mongoose.Schema({
     agent_id: {
         type: mongoose.Schema.Types.ObjectId, ref: "user",
     },
+   
     statut: {
         type: String,
         required: true,
@@ -87,7 +88,13 @@ const ticket_schema = new mongoose.Schema({
     },
     date_limite: {
         type: Date
-    }
+    },
+    task_id: {
+        type: mongoose.Schema.Types.ObjectId, ref: "tasks",
+   },
+   consignes: { type:[String], required: false},
+   avancement:{ type: Number, required: false },
+   validation:{ type: String, required: false},
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Ticket = mongoose.model("ticket", ticket_schema);

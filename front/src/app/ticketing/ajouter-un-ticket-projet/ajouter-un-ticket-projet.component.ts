@@ -35,7 +35,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
   taskSelected: Task;
   TicketForm = new FormGroup({
     project: new FormControl('', Validators.required),
-    task: new FormControl('', Validators.required),
+    task_id: new FormControl('', Validators.required),
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -64,51 +64,51 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     this.AuthService.getPopulate(this.token.id).subscribe(data => {
       this.USER = data;
       this.route.queryParams.subscribe(params => {
-        if (params && params.data) {
-          this.receivedTask = JSON.parse(params.data);
-          this.itsTask = true;
-          this.taskID = this.receivedTask._id;
-          const newprojet = {
-            label: `${this.receivedTask.project_id.titre}`,
-            value: [this.receivedTask.project_id._id]
-          };
-          const newtask = {
-            label: `${this.receivedTask.libelle}`,
-            value: [this.receivedTask._id]
-          };
-          this.taskListe.push(newtask);
-          this.projectListe.push(newprojet);
-          console.log(newprojet)
-          this.TicketForm.patchValue({
-            project:newprojet,
-            task: newtask,
-            description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
-            priorite: this.receivedTask.priorite,
-  
+      if (params && params.data) {
+        this.receivedTask = JSON.parse(params.data);
+        this.itsTask = true;
+        this.taskID = this.receivedTask._id;
+        const newprojet = {
+          label: `${this.receivedTask.project_id.titre}`,
+          value: [this.receivedTask.project_id._id]
+        };
+        const newtask = {
+          label: `${this.receivedTask.libelle}`,
+          value: this.receivedTask._id
+        };
+        this.taskListe.push(newtask);
+        this.projectListe.push(newprojet);
+        console.log(newprojet)
+        this.TicketForm.patchValue({
+          project:newprojet,
+          task: newtask,
+          description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
+          priorite: this.receivedTask.priorite,
+
+        })
+
+      }else{
+        this.projectService.getProjects()
+        .then(data => {
+          this.projectListe = [];
+
+          data.forEach(project => {
+            if (project?.responsable_id == this.USER?._id) {
+              const newprojet = {
+                label: `${project.titre}`,
+                value:[project._id]
+              };
+
+              console.log(newprojet);
+              this.projectListe.push(newprojet);
+              console.log(this.projectListe);
+
+
+            }
           })
-  
-        }else{
-          this.projectService.getProjects()
-          .then(data => {
-            this.projectListe = [];
-  
-            data.forEach(project => {
-              if (project?.responsable_id == this.USER?._id) {
-                const newprojet = {
-                  label: `${project.titre}`,
-                  value:[project._id]
-                };
-  
-                console.log(newprojet);
-                this.projectListe.push(newprojet);
-                console.log(this.projectListe);
-  
-  
-              }
-            })
-          })
-        }
-      });
+        })
+      }
+    });
 
     });
     this.SujetService.getAll().subscribe(data => {
@@ -144,7 +144,7 @@ export class AjouterUnTicketProjetComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id }).subscribe(data => {
+    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id ,avancement:0 }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
       let d = new Date()

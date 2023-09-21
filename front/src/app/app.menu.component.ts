@@ -235,21 +235,21 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                         {
-                            label: 'Projet ',
+                            label: 'Projects ',
                             icon: 'pi pi-fw pi-shield',
                             items: [
                                 {
-                                    label: 'Gestion des  projets',
+                                    label: 'Gestion des  projects',
                                     icon: 'pi pi-fw pi-check-circle',
                                     routerLink: ['/gestion-project'],
                                 },
                                 {
-                                    label:  'Mes Tâche' ,
+                                    label:  'Mes activités' ,
                                     icon: 'pi pi-fw pi-list',
                                     routerLink:['mytask']
                                 },
                                 {
-                                    label: 'Mes projets',
+                                    label: 'Mes projects',
                                     icon: 'pi pi-fw pi-list',
                                     routerLink: ['/myproject'],
                                 },

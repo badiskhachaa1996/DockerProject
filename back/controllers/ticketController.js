@@ -50,6 +50,7 @@ app.post("/create", (req, res) => {
                 id = id.toUpperCase()
 
                 const ticket = new Ticket({
+                    ...req.body,
                     createur_id: req.body.id,
                     sujet_id: req.body.sujet_id,
                     description: req.body.description,
@@ -286,7 +287,7 @@ app.get("/getById/:id", (req, res) => {
 });
 //Récuperer tous les tickets
 app.get("/getAll", (req, res) => {
-    Ticket.find()
+    Ticket.find()?.populate({ path: "task_id", populate: { path: "project_id"}})?.populate('agent_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -297,7 +298,7 @@ app.get("/getAll", (req, res) => {
 
 //Récupérer tous les tickets d'un User
 app.get("/getAllbyUser/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
+    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })?.populate('task_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -320,7 +321,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })?.populate({ path: "task_id", populate: { path: "project_id"}})//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -332,6 +333,7 @@ app.get("/getAccAff/:id", (req, res) => {
 
 //Update d'un ticket
 app.post("/update/:id", (req, res) => {
+    console.log("****************************")
     Ticket.findByIdAndUpdate(req.params.id,
         {
             ...req.body

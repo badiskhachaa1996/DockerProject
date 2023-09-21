@@ -28,10 +28,10 @@ export class MytaskComponent implements OnInit {
   taskdone: any[] = [];
   taskencours: any[] = [];
   taskarchiver: any[] = [];
-  task!: Task[];
+  task!: any[];
   icone:string="pi-pencil"
-  taskDetails:Task;
-  tasktoupdate: Task;
+  taskDetails:Ticket;
+  tasktoupdate: Ticket;
   ticket!: Ticket[];
   project: Project[] = [];
   items: MenuItem[];
@@ -91,25 +91,41 @@ export class MytaskComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
-        this.projectService.getTaskbyagent(this.userConnected._id)
-          .then(datatache => {
-            this.task = datatache;
-            this.task.forEach(t => {
-              if (t.ticketId[0].statut=="Traité"){
+        this.ticketService.getAccAff(this.userConnected._id)
+          .subscribe(datatache => {
+            this.ticket= datatache;
+            
+            this.ticket.forEach(t => {
+              
+              if (t.statut=="Traité"){
                 t.avancement=100
-                this.projectService.putTask(t);
+                this.ticketService.update(t).subscribe(
+                  response => {
+                    // La mise à jour a réussi, vous pouvez effectuer des actions ici
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'consigne ajouter' });
+                  },
+                  error => {
+                    // La mise à jour a échoué, gérer les erreurs ici
+                    console.error(error);
+                  }
+                );;;
               }
               
-              if (t.etat === "En attente de traitement") {
+              if (t.statut === "En attente de traitement") {
                 this.tasktodo.push(t);
+                console.log(this.tasktodo)
+                
+                           
               }
-              if (t.etat === "En cour de traitement") {
+              if (t.statut === "En cour de traitement") {
+                
                 this.taskencours.push(t);
               }
-              if (t.etat === "fin de traitement") {
+              if (t.statut === "fin de traitement") {
+
                 this.taskdone.push(t);
               }
-              if (t.etat === "archiver") {
+              if (t.statut === "archiver") {
                 this.taskarchiver.push(t);
               }
 
@@ -119,7 +135,8 @@ export class MytaskComponent implements OnInit {
     })
   }
 //afficher le details
-  showDialog(task: Task) {
+  showDialog(task: Ticket) {
+    console.log(task);
     this.taskDetails=task;
     this.visible = true;
   }
@@ -139,110 +156,163 @@ showDialogc(task:Task){
   }
   todo() {
 
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "En attente de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "En attente de traitement";
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="En attente de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
   }
 
   encours() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
 
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "En cour de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "En cour de traitement";
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="En cour de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
+
   }
 
   done() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
    
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "fin de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "fin de traitement";
+      
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="fin de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
+    
   }
   archiver() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
    
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "archiver";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "archiver";
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="archiver";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
+
   }
   //FONCTION POUR MODIFIER LE POURCETAGE
-  modifierpoucentage(task: Task) {
+  modifierpoucentage(task: Ticket) {
     if (this.pourcentage_disabled){
       this.pourcentage_disabled = false;
       this.icone="pi-check"
     }else {
       this.pourcentage_disabled = true;
       this.icone="pi-pencil"
-      this.projectService.putTask(task);
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifier' });
+      this.ticketService.update(task).subscribe(
+        response => {
+          // La mise à jour a réussi, vous pouvez effectuer des actions ici
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+        },
+        error => {
+          // La mise à jour a échoué, gérer les erreurs ici
+          console.error(error);
+        }
+      );
+  }
 
-    }
+    
     
 
   }
@@ -262,7 +332,7 @@ showDialogc(task:Task){
   }
   getColorForValidation(validation){
     switch (validation) {
-      case 'La tâche n’est pas validée':
+      case "L'activité n’est pas validée":
         return 'red'; 
     default: return'green';
 

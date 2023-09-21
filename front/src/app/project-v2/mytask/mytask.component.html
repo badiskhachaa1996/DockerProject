@@ -9,26 +9,26 @@
                             <p-table responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.identifian}}</span></th>
-                                        <th>Libelle:<span style="color:#878787" > {{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
+                                        <th>ID:<span style="color:#878787" > {{task?.task_id?.identifian}}</span></th>
+                                        <th>Libelle:<span style="color:#878787" > {{task?.task_id?.libelle}} </span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.customid}}</span></th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet :<span style="color:#878787" > {{task?.project_id?.identifian}} </span></th>
-                                        <th colspan="2"><span style="color:#878787" >Titre: {{task?.project_id?.titre}}</span></th>
+                                        <th>ID Projet :<span style="color:#878787" > {{task?.task_id?.project_id?.identifian}} </span></th>
+                                        <th colspan="2"><span style="color:#878787" >Titre: {{task?.task_id?.project_id?.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<span style="color:#878787" >{{task.date_ajout | date:'mediumDate'}} </span><br></th>
 
-                                        <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
+                                        <th style="color: red;" colspan="2">Date limite: {{task.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.number_of_hour}}</span></th>
+                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
                                         <th colspan="2" width="10000px"
-                                            [ngStyle]="{'color': getColorForStatus(task?.ticketId?.statut)}">{{
-                                            task.ticketId.statut}}</th>
+                                            [ngStyle]="{'color': getColorForStatus(task.statut)}">{{
+                                            task.statut}}</th>
                                     </tr>
                                     <br>
                                     <tr>
@@ -86,7 +86,7 @@
                             <div style="display: flex; justify-content: space-between;">
                                 <div>
                                     <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task.consignes.length}} styleClass="p-button-warning mr-2"></p-button>
+                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2"></p-button>
                                 </div>
 
                                 <div style="display: flex; justify-content: center;" (onClick)="save('info',task)">
@@ -101,9 +101,9 @@
                                         [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
                                         <p class="m-0">
 
-                                            <strong>Description :</strong> {{taskDetails?.description_task}}
+                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
                                             <br />
-                                            <strong>Note :</strong> {{taskDetail?.ticketId.note}}
+                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
                                         </p>
                                     </p-dialog>
                                 </div>
@@ -124,26 +124,26 @@
                             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>ID: <span style="color:#878787" >{{task?.identifian}}</span></th>
-                                        <th>Libelle : <span style="color:#878787" >{{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
+                                        <th>ID: <span style="color:#878787" >{{task?.task_id?.identifian}}</span></th>
+                                        <th>Libelle : <span style="color:#878787" >{{task?.task_id?.libelle}} </span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<span style="color:#878787" > {{task?.customid}}</span></th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet : <span style="color:#878787" >{{task?.project_id?.identifian}}</span> </th>
-                                        <th colspan="2">Titre:<span style="color:#878787" > {{task?.project_id?.titre}}</span></th>
+                                        <th>ID Projet : <span style="color:#878787" >{{task?.task_id?.project_id?.identifian}}</span> </th>
+                                        <th colspan="2">Titre:<span style="color:#878787" > {{task?.task_id?.project_id?.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le: <ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le: <span style="color:#878787" > {{task?.date_ajout | date:'mediumDate'}}</span></th>
 
-                                        <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
+                                        <th style="color: red;" colspan="2">Date limite: {{task[0]?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task.number_of_hour}}</span></th>
-                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task.ticketId.statut)}">
+                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
+                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task?.statut)}">
                                             {{
-                                            task.ticketId.statut}}</th>
+                                            task?.statut}}</th>
                                     </tr>
                                     <br>
                                     <tr>
@@ -192,7 +192,7 @@
                             <div style="display: flex; justify-content: space-between;">
                                 <div>
                                     <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task.consignes.length}} styleClass="p-button-warning mr-2"></p-button>
+                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2"></p-button>
                                 </div>
                                 <div style="display: flex; justify-content: center;">
                                     <p-splitButton label="Deplacer" icon="pi pi-send" (onDropdownClick)="save('info',task)"
@@ -204,9 +204,9 @@
                                     <p-dialog header="Details" [(visible)]="visible" [modal]="true" 
                                         [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
                                         <p class="m-0">
-                                            <strong>Description :</strong> {{taskDetails?.description_task}}
+                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
                                             <br />
-                                            <strong>Note :</strong> {{taskDetails?.ticketId.note}}
+                                            <strong>Note :</strong> {{taskDetails?.note}}
                                         </p>
                                     </p-dialog>
                                 </div>
@@ -225,26 +225,26 @@
                             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>ID:<span style="color:#878787" > {{task?.identifian}} </span></th>
-                                        <th>Libelle :<span style="color:#878787" > {{task?.libelle}} </span></th>
-                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
+                                        <th>ID:<span style="color:#878787" > {{task?.task_id?.identifian}} </span></th>
+                                        <th>Libelle :<span style="color:#878787" > {{task?.task_id?.libelle}} </span></th>
+                                        <th (click)="showTicket(task)">ID Ticket:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.customid}}</span></ng-container></th>
                                     </tr>
                                     <tr>
-                                        <th>ID Projet :<span style="color:#878787" > {{task?.project_id?.identifian}}</span> </th>
-                                        <th colspan="2">Titre:<span style="color:#878787" >{{task?.project_id?.titre}}</span></th>
+                                        <th>ID Projet :<span style="color:#878787" > {{task?.task_id?.project_id?.identifian}}</span> </th>
+                                        <th colspan="2">Titre:<span style="color:#878787" >{{task?.task_id?.project_id?.titre}}</span></th>
                                     </tr>
                                     <br />
                                     <tr>
-                                        <th>Assigné le:<ng-container *ngFor="let t of task.ticketId"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
+                                        <th>Assigné le:<ng-container *ngFor="let t of task"><span style="color:#878787" > {{t?.date_ajout | date:'mediumDate'}}</span><br></ng-container></th>
 
                                         <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
-                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.number_of_hour}}</span></th>
-                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task?.ticketId.statut)}">
+                                        <th>nombre d'heurs estimés:<span style="color:#878787" > {{task?.task_id?.number_of_hour}}</span></th>
+                                        <th colspan="2" [ngStyle]="{'color': getColorForStatus(task?.statut)}">
                                             {{
-                                            task.ticketId.statut}}</th>
+                                            task?.statut}}</th>
                                     </tr>
                                     <br>
                                     <tr>
@@ -298,7 +298,7 @@
                                 
                                 <div>
                                     <p-button (click)="showDialogc(task)" label="consignes"
-                                                badge={{task.consignes.length}} styleClass="p-button-warning mr-2 "></p-button>
+                                                badge={{task?.consignes?.length}} styleClass="p-button-warning mr-2 "></p-button>
                                 </div>
 
                                 <div style="display: flex; justify-content: center;">
@@ -349,9 +349,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-task>
                     <tr>
-                        <td>{{task.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td>{{task.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
-                        <td><ng-container *ngFor="let t of task.ticketId">{{t?.customid}} <br></ng-container><br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td>{{task?.task_id?.identifian}}<br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td>{{task?.task_id?.libelle}} <br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
+                        <td><ng-container *ngFor="let t of task">{{t?.customid}} <br></ng-container><br> <br> <br> <br><br> <br><br> <br> <br> <br></td>
                         <td>
 
                             <p-splitButton direction="up" label="Deplacer" icon="pi pi-send"

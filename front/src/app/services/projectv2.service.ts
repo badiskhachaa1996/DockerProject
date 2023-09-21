@@ -112,7 +112,19 @@ export class ProjectService {
       });
     });
   }
+//get all task
+getTasks(): Promise<Task[]>
+  {
+    const url = `${this.apiUrl}/gettasks`;
 
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches récuperés')
+      });
+    });
+  }
    // get task by id task
    getTask(id: string): Promise<Task>
    {

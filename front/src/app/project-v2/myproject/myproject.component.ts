@@ -10,7 +10,8 @@ import { Budget } from 'src/app/models/project/Budget';
 import { ProjectService } from 'src/app/services/projectv2.service';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-
+import { TicketService } from 'src/app/services/ticket.service';
+import { Ticket } from 'src/app/models/Ticket';
 import jwt_decode from "jwt-decode";
 
 @Component({
@@ -29,11 +30,11 @@ export class MyprojectComponent implements OnInit {
   taskdone: any[] = [];
   taskencours: any[] = [];
   taskarchiver: any[] = [];
-  task!: Task[];
+  task!: any[];
   task_v:Task;
-  taskDetails:Task;
-  actual_task:Task;
-  tasktoupdate: Task;
+  taskDetails:Ticket;
+  actual_task:Ticket;
+  tasktoupdate: Ticket;
   selectedProject: Project = null;
   collaborateurListe: any[] = [];
   userConnected: User;
@@ -57,7 +58,8 @@ export class MyprojectComponent implements OnInit {
     private userService: AuthService,
     private messageService: MessageService,
     private projectService: ProjectService,
-    private router: Router) { }
+    private router: Router,
+    private ticketService: TicketService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -182,45 +184,48 @@ export class MyprojectComponent implements OnInit {
     this.projectService.getProject(project_id)
       .then(data => {
         this.selectedProject = data;
-        this.projectService.getTasksByIdProject(data._id)
-          .then(datatache => {
-            
+        this.ticketService.getAll()
+          .subscribe(datatache => {
             this.task = datatache;
+            console.log(this.task);
             this.task.forEach(t => {
-              if (t.ticketId[0].statut == "Traité") {
+              if(t?.task_id?.project_id?._id===project_id[0]){                
+              if (t.statut == "Traité") {
                 t.avancement = 100
                 this.projectService.putTask(t);
               }
               if (collaborateur_id) {
-              if (t.attribuate_to[0]._id==collaborateur_id) {
-                if (t.etat === "En attente de traitement") {
+              if (t.agent_id?._id==collaborateur_id) {
+                if (t.statut === "En attente de traitement") {
+                  
                   this.tasktodo.push(t);
+                  console.log(this.tasktodo);
                 }
-                if (t.etat === "En cour de traitement") {
+                if (t.statut === "En cour de traitement") {
                   this.taskencours.push(t);
                 }
-                if (t.etat === "fin de traitement") {
+                if (t.statut === "fin de traitement") {
                   this.taskdone.push(t);
                 }
-                if (t.etat === "archiver") {
+                if (t.statut === "archiver") {
                   this.taskarchiver.push(t);
-                }
-              }} else {
-                if (t.etat === "En attente de traitement") {
+                }}
+              }else {
+                if (t.statut === "En attente de traitement") {
                   this.tasktodo.push(t);
                 }
-                if (t.etat === "En cour de traitement") {
+                if (t.statut === "En cour de traitement") {
                   this.taskencours.push(t);
                 }
-                if (t.etat === "fin de traitement") {
+                if (t.statut === "fin de traitement") {
                   this.taskdone.push(t);
                 }
-                if (t.etat === "archiver") {
+                if (t.statut=== "archiver") {
                   this.taskarchiver.push(t);
                 }
 
               }
-            })
+            }})
           })
       });
     this.showproject = true
@@ -229,17 +234,15 @@ export class MyprojectComponent implements OnInit {
     
 
   }
-  showDialogd(task:Task) {
+  showDialogd(task:Ticket) {
     this.taskDetails=task;
     this.visibled = true;
   }
-  showDialog(task: Task) {
+  showDialog(task: Ticket) {
     this.visible = true;
     this.actual_task=task;
     this.task_consignes=task.consignes;
-    for (let i=0; i<task.ticketId.length; i++)  {
-      this.ticketList.push(task.ticketId[i].customid +":"+ task.ticketId[i].agent_id.firstname+" "+task.ticketId[i].agent_id.lastname);
-    }  
+   
     
   
   }
@@ -250,112 +253,161 @@ export class MyprojectComponent implements OnInit {
   }
   todo() {
 
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.tasktodo.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "En attente de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "En attente de traitement";
+     
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="En attente de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Deplacer' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
   }
 
   encours() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
 
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.taskencours.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "En cour de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "En cour de traitement";
+   
       this.messageService.add({ severity: 'success', summary: 'Selected', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="En cour de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Deplacer' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
   }
 
   done() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
    
-    if (this.tasktoupdate.etat === "archiver") {
+    if (this.tasktoupdate.statut === "archiver") {
       this.taskarchiver.splice(this.taskarchiver.indexOf(this.tasktoupdate), 1);
       this.taskdone.push(this.tasktoupdate);
     }
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "fin de traitement";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "fin de traitement";
+
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="fin de traitement";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Deplacer' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
   }
   archiver() {
-    if (this.tasktoupdate.etat === "En attente de traitement") {
+    if (this.tasktoupdate.statut === "En attente de traitement") {
       this.tasktodo.splice(this.tasktodo.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "En cour de traitement") {
+    if (this.tasktoupdate.statut === "En cour de traitement") {
       this.taskencours.splice(this.taskencours.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
-    if (this.tasktoupdate.etat === "fin de traitement") {
+    if (this.tasktoupdate.statut === "fin de traitement") {
       this.taskdone.splice(this.taskdone.indexOf(this.tasktoupdate), 1);
       this.taskarchiver.push(this.tasktoupdate);
     }
    
     if (this.tasktoupdate) {
-      this.tasktoupdate.etat = "archiver";
-      this.projectService.putTask(this.tasktoupdate);
+      this.tasktoupdate.statut = "archiver";
+     
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Success' });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Attention ', detail: 'veuillez cliquer sur le bouton "Deplacer" avant de choisir ' });
 
     }
+    this.tasktoupdate.statut ="archiver";
+    this.ticketService.update(this.tasktoupdate).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Deplacer' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );
   }
-  modifierpoucentage(task: Task) {
+  modifierpoucentage(task: Ticket){
     if (this.pourcentage_disabled){
       this.pourcentage_disabled = false;
       this.icone="pi-check"
     }else {
-      this.icone="pi-pencil"
       this.pourcentage_disabled = true;
-      this.projectService.putTask(task);
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifier' });
+      this.icone="pi-pencil"
+      this.ticketService.update(task).subscribe(
+        response => {
+          // La mise à jour a réussi, vous pouvez effectuer des actions ici
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Pourcentage modifié' });
+        },
+        error => {
+          // La mise à jour a échoué, gérer les erreurs ici
+          console.error(error);
+        }
+      );
+  }}
 
-    }
-    
-
-  }
   getColorForStatus(statut: string): string {
     switch (statut) {
       case 'En attente de traitement':
@@ -368,14 +420,33 @@ export class MyprojectComponent implements OnInit {
         return 'black'; 
     }
   }
-  addConsigne(task: Task){
+  addConsigne(task: Ticket){
+    console.log(this.actual_task)
     const consigne=this.formAddConsigne.get('consigne').value;
     if(this.itsupdate){
       this.actual_task.consignes[this.indexupdate]=consigne;
-      this.projectService.putTask(this.actual_task);
+      this.ticketService.update(this.actual_task).subscribe(
+        response => {
+          // La mise à jour a réussi, vous pouvez effectuer des actions ici
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'consigne ajouter' });
+        },
+        error => {
+          // La mise à jour a échoué, gérer les erreurs ici
+          console.error(error);
+        }
+      );;
     }else{
     this.actual_task.consignes.push(consigne);
-    this.projectService.putTask(this.actual_task);
+    this.ticketService.update(this.actual_task).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'consigne ajouter' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );;
   }
   this.formAddConsigne.reset();
   this.messageService.add({ severity: 'success', summary: 'success', detail: 'Ajout réussie' })                    
@@ -389,7 +460,16 @@ export class MyprojectComponent implements OnInit {
   }
   delete_c(rir){
     this.actual_task.consignes.splice(rir, 1);
-    this.projectService.putTask(this.actual_task);
+    this.ticketService.update(this.actual_task).subscribe(
+      response => {
+        // La mise à jour a réussi, vous pouvez effectuer des actions ici
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'consigne ajouter' });
+      },
+      error => {
+        // La mise à jour a échoué, gérer les erreurs ici
+        console.error(error);
+      }
+    );;;
   }
   valider(task: Task){
     if (confirm("Êtes-vous sûr de vouloir valider?")) {
@@ -400,7 +480,7 @@ export class MyprojectComponent implements OnInit {
   }}
   getColorForValidation(validation){
     switch (validation) {
-      case 'La tâche n’est pas validée':
+      case 'La activité n’est pas validée':
         return 'red'; 
     default: return'green';
 
