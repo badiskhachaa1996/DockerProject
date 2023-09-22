@@ -135,6 +135,6 @@ export class EcoleAdmissionComponent implements OnInit {
   }
   
 
-  formationsList = []
+  formationsList = [] 
 
 }
