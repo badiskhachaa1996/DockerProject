@@ -110,18 +110,18 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteRentreeScolaire(id: string): void {
-    this.FAService.FAdelete(id).subscribe(() => {
-      // Supprimer l'école de la liste après la suppression réussie
-      const indexToRemove = this.rentrees.findIndex(rentre => rentre._id === id);
-      if (indexToRemove !== -1) {
-        this.rentrees.splice(indexToRemove, 1);
-        this.MessageService.add({ severity: "success", summary: "Rentrée scolaire supprimée avec succès" });
-      } else {
-        this.MessageService.add({ severity: "error", summary: "Échec de la suppression de la rentrée scolaire" });
-      }
-    });
-  }
+  onDeleteRentreeScolaire(id: string): void 
+  {
+    this.FAService.RAdelete(id)
+      .then((response) => {
+        this.MessageService.add({severity: 'success', summary: 'Rentrée scolaire', detail: response.success});
+        this.FAService.RAgetAll().subscribe(data => {
+          this.rentrees = data
+        })
+      })
+      .catch((error) => { console.log(error); this.MessageService.add({ severity: 'error', summary:'Rentrée scolaire', detail: error.error }); });
+    }
+  
 
   ecolesList: any[] = []
 
