@@ -35,7 +35,12 @@ export class FormationAdmissionComponent implements OnInit {
     langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
     filiere: new FormControl(''),
-  })
+    bac: new FormControl(''),
+    code: new FormControl(''),
+    code_france_competence: new FormControl(''),
+    validite: new FormControl(''),
+    organisme_referent: new FormControl(''),
+    })
 
   filiereList = [
     { value: "Informatique", label: "Informatique" },
