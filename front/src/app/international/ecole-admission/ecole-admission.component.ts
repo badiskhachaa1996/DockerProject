@@ -121,18 +121,17 @@ export class EcoleAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteEcole(id: string): void {
-    this.FAService.FAdelete(id).subscribe(() => {
-      // Supprimer l'école de la liste après la suppression réussie
-      const indexToRemove = this.ecoles.findIndex(ecole => ecole._id === id);
-      if (indexToRemove !== -1) {
-        this.ecoles.splice(indexToRemove, 1);
-        this.MessageService.add({ severity: "success", summary: "École supprimée avec succès" });
-      } else {
-        this.MessageService.add({ severity: "error", summary: "Échec de la suppression de l'école" });
-      }
-    });
-  }
+  onDeleteEcole(id: string): void 
+  {
+    this.FAService.EAdelete(id)
+      .then((response) => {
+        this.MessageService.add({severity: 'success', summary: 'École', detail: response.success});
+        this.FAService.EAgetAll().subscribe(data => {
+          this.ecoles = data
+        })
+      })
+      .catch((error) => { console.log(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
+    }
   
 
   formationsList = [] 

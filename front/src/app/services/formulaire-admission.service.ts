@@ -5,6 +5,7 @@ import { EcoleAdmission } from '../models/EcoleAdmission';
 import { FormationAdmission } from '../models/FormationAdmission';
 import { RentreeAdmission } from '../models/RentreeAdmission';
 import { TeamsInt } from '../models/TeamsInt';
+import { rejects } from 'assert';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,19 @@ export class FormulaireAdmissionService {
     return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
+  RAdelete(id: string): Promise<any> 
+  {
+    const url = `${this.apiUrl}/RA/delete/${id}`
+
+    return new Promise<any>((resolve, reject) => {
+      this.http.delete<RentreeAdmission>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Rentrée scolaire supprimé')
+      });
+    });
+  }  
+
 
 
   FAcreate(data: FormationAdmission) {
@@ -76,6 +90,8 @@ export class FormulaireAdmissionService {
   }
 
 
+
+
   EAcreate(data: EcoleAdmission) {
     let registerUrl = this.apiUrl + 'EA/create';
     return this.http.post<EcoleAdmission>(registerUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
@@ -99,4 +115,20 @@ export class FormulaireAdmissionService {
     let registerUrl = this.apiUrl + 'EA/getAll';
     return this.http.get<EcoleAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
+  
+
+  EAdelete(id: string): Promise<any> 
+  {
+    const url = `${this.apiUrl}/EA/delete/${id}`
+
+    return new Promise<any>((resolve, reject) => {
+      this.http.delete<EcoleAdmission>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('École supprimé')
+      });
+    });
+  } 
 }
+
+
