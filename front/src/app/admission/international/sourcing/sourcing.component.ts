@@ -438,8 +438,10 @@ export class SourcingComponent implements OnInit {
       _id: this.showAffectation._id,
       ...this.affectationForm.value
     }
-    if (data.agent_sourcing_id || data.team_sourcing_id)
+    if (data.agent_sourcing_id || data.team_sourcing_id) {
       data.phase_candidature = "En phase d'orientation scolaire"
+      data.date_orientation = new Date()
+    }
     this.admissionService.updateV2(data, "Affectation du dossier Sourcing").subscribe(newProspect => {
       this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
       this.showAffectation = null
@@ -631,7 +633,13 @@ export class SourcingComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
-
+    let date_cf = this.showDetails.date_cf
+    let date_visa = this.showDetails.date_visa
+    if (this.detailsForm.value.avancement_visa != 'Pas de retour' && this.detailsForm.value.avancement_visa != this.showDetails.avancement_visa)
+      date_visa = new Date()
+    let date_inscription_def = this.showDetails.date_inscription_def
+    if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
+      date_cf = new Date()
     let prospect = {
       formation: this.detailsForm.value.formation,
       campus_choix_1: this.detailsForm.value.campus_choix_1,
@@ -648,7 +656,8 @@ export class SourcingComponent implements OnInit {
       finance: this.detailsForm.value.finance,
       payement: this.payementList,
       avancement_visa: this.detailsForm.value.avancement_visa,
-      _id: this.showDetails._id
+      _id: this.showDetails._id,
+      date_cf, date_visa, date_inscription_def
 
     }
     let listIDS = []
@@ -1135,8 +1144,11 @@ export class SourcingComponent implements OnInit {
       _id: listIds,
       ...this.affectationFormList.value
     }
-    if (data.agent_sourcing_id || data.team_sourcing_id)
+    if (data.agent_sourcing_id || data.team_sourcing_id) {
       data.phase_candidature = "En phase d'orientation scolaire"
+      data.date_orientation = new Date()
+    }
+
     this.admissionService.updateMany(data, "Affectation du dossier Sourcing").subscribe(prospects => {
       prospects.forEach(newProspect => {
         this.prospects[newProspect.type_form].splice(this.prospects[newProspect.type_form].indexOf(this.showAffectation), 1, newProspect)
@@ -1166,6 +1178,25 @@ export class SourcingComponent implements OnInit {
         this.messageService.add({ severity: "success", summary: "Suppresions des leads avec succès" })
       })
     }
+  }
+  showTimeline: Boolean = false
+  dataTimeline: any[] = []
+  onShowTimeline(p: Prospect) {
+    this.dataTimeline = []
+    this.dataTimeline.push({ status: "Inscription", date: p.date_creation })
+    this.dataTimeline.push({ status: "Affectation", date: p.date_sourcing })
+    this.dataTimeline.push({ status: "Contact", date: p.contact_date })
+    this.dataTimeline.push({ status: "Décision Orientation", date: p.date_orientation })
+    this.dataTimeline.push({ status: "Décision Admission", date: p.date_admission })
+    if (p.payement && p.payement[0].date)
+      this.dataTimeline.push({ status: "Paiement", date: p.payement[0].date })
+    else
+      this.dataTimeline.push({ status: "Paiement", date: null })
+    this.dataTimeline.push({ status: "Confirmation campus France", date: p.date_cf })
+    this.dataTimeline.push({ status: "Décision visa", date: p.decision_admission })
+    this.dataTimeline.push({ status: "Inscription définitive", date: p.date_inscription_def })
+    this.showTimeline = true
+    console.log(this.dataTimeline)
   }
 
 }

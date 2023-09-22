@@ -1,44 +1,50 @@
 <div class="grid">
-    <div class="col-12">
-        <div class="card">
-            <h1 class="text-center">Dashboard</h1>
-            <div class="grid text-center">
-                <div class="col-12">
-                    Date: <strong>{{ today | date: 'dd MMMM YYYY' }}</strong> <br>
-                    Heure: <strong>{{ today | date: 'H:mm' }}</strong>
-                </div>
+	<div class="col-12">
+		<div class="card">
+			<h1 class="text-center">Dashboard</h1>
+			<div class="grid text-center">
+				<div class="col-12">
+					Date: <strong>{{ today | date: 'dd MMMM YYYY' }}</strong> <br>
+					Heure: <strong>{{ today | date: 'H:mm' }}</strong>
+				</div>
 
-                <div class="col-12 md:col-4 align-self-center">
-                    Nombre de checkin: <strong>{{numberOfChecks}}</strong> <br>
-                    Taux de checkin: <strong>{{checkPercent}}%</strong>
-                </div>
+				<div class="col-12 md:col-4 align-self-center">
+					Nombre de checkin: <strong>{{numberOfChecks}}</strong> <br>
+					Taux de checkin: <strong>{{checkPercent}}%</strong>
+				</div>
 
-                <div class="col-12 md:col-4 align-self-center">
-                    Personnels en congés: <strong>{{numberOfConge}}</strong> <br>
-                    Personnels absents: <strong>{{numberOfAbsent}}</strong>
-                </div>
+				<div class="col-12 md:col-4 align-self-center">
+					Personnels en congés: <strong>{{numberOfConge}}</strong> <br>
+					Personnels absents: <strong>{{numberOfAbsent}}</strong>
+				</div>
 
-                <div class="col-12 md:col-4">
-                    Pause: <strong>{{numberOfPause}}</strong> <br>
-                    Disponible: <strong>{{numberOfDisponible}}</strong> <br>
-                    En reunion: <strong>{{numberOfReunion}}</strong> <br>
-                    Occupé: <strong>{{numberOfOccupe}}</strong> <br>
-                </div>
-            </div>
-        </div>
+				<div class="col-12 md:col-4">
+					Pause: <strong>{{numberOfPause}}</strong> <br>
+					Disponible: <strong>{{numberOfDisponible}}</strong> <br>
+					En reunion: <strong>{{numberOfReunion}}</strong> <br>
+					Occupé: <strong>{{numberOfOccupe}}</strong> <br>
+				</div>
+			</div>
+		</div>
 
-        <!-- tableau d'affichage des données en temps réel -->
-        <div class="card">
-            <p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']" responsiveLayout="scroll">
+		<!-- tableau d'affichage des données en temps réel -->
+		<div class="card">
+			<p-table #dt1 [value]="dailyChecks" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [totalRecords]="dailyChecks.length"
+				styleClass="p-datatable-gridlines" [paginator]="true"
+				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
+				responsiveLayout="scroll">
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+							<input pInputText type="text" #filter
+								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+								class="w-full" />
 						</span>
 
-                        <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
-                        (onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut" [showClear]="true"></p-dropdown>
+						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
+							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
+							[showClear]="true"></p-dropdown>
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">
@@ -48,16 +54,10 @@
 								Nom et prénom
 							</div>
 						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heure checkin
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heure checkout
-							</div>
-						</th>
+						<th>Heure Check in Online</th>
+						<th>Heure Check in Pointeuse</th>
+						<th>Heure Check out Online</th>
+						<th>Heure Check out Pointeuse</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Heures pauses
@@ -78,47 +78,53 @@
 				<ng-template pTemplate="body" let-check>
 					<tr (click)="onGetUserChecksHistorique(check);" style="cursor: pointer;">
 						<td style="min-width: 12rem;">
-							{{check.user_id.lastname | uppercase}} {{check.user_id.firstname | titlecase}}
+							{{check?.user_id?.lastname | uppercase}} {{check?.user_id?.firstname | titlecase}}
 						</td>
 						<td style="min-width: 14rem;">
-							{{check.check_in | date: 'H:mm'}}
+							{{check?.check_in | date: 'H:mm'}}
+						</td>
+						<td style="min-width: 14rem;">
+							{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
 						</td>
 						<td style="min-width: 10rem;">
-							{{check.check_out | date: 'H:mm'}}
+							{{check?.check_out | date: 'H:mm'}}
+						</td>
+						<td style="min-width: 14rem;">
+							{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
 						</td>
 						<td style="min-width: 10rem;">
 							<ul>
-                                <li *ngFor="let pause of check.pause; let i = index">
-                                    {{pause?.in | date: 'H:mm'}} - {{pause?.out | date: 'H:mm'}}
-                                </li>
-                            </ul>
-                            <strong *ngIf="check.pause_timing">Total: {{check.pause_timing}}mn</strong>
+								<li *ngFor="let pause of check.pause; let i = index">
+									{{pause?.in | date: 'H:mm'}} - {{pause?.out | date: 'H:mm'}}
+								</li>
+							</ul>
+							<strong *ngIf="check.pause_timing">Total: {{check?.pause_timing}}mn</strong>
 						</td>
 						<td *ngIf="taux_cra" style="min-width: 12rem;">
-                            {{check.taux_cra}}%
-                        </td>
+							{{check?.taux_cra}}%
+						</td>
 						<td *ngIf="!taux_cra" style="min-width: 12rem;">
-                            0%
-                        </td>
+							0%
+						</td>
 
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Disponible'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="success"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="success"></p-tag>
+						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En congé'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="info"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="info"></p-tag>
+						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
+						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
+						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="danger"></p-tag>
+						</td>
 						<td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
-                            <p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
-                        </td>
+							<p-tag value="{{check.user_id?.statut}}" severity="warning"></p-tag>
+						</td>
 
 					</tr>
 				</ng-template>
@@ -132,18 +138,22 @@
 						<td colspan="6">Chargement des données, veuillez patienter...</td>
 					</tr>
 				</ng-template>
-            </p-table>
-        </div>
+			</p-table>
+		</div>
 
-        <!-- affichage de l'historique de pointage -->
-        <div class="card" *ngIf="showUserChecksHistorique">
-            <i class="pi pi-times-circle" (click)="showUserChecksHistorique = false" style="float: right; font-size: 20px; cursor: pointer; color: red;"></i>
-            <div style="clear: right;"></div>
+		<!-- affichage de l'historique de pointage -->
+		<div class="card" *ngIf="showUserChecksHistorique">
+			<i class="pi pi-times-circle" (click)="showUserChecksHistorique = false"
+				style="float: right; font-size: 20px; cursor: pointer; color: red;"></i>
+			<div style="clear: right;"></div>
 
-            <h3 class="text-center">
-                Historique
-            </h3>
-            <p-table #dt1 [value]="userChecksHistorique" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']" responsiveLayout="scroll">
+			<h3 class="text-center">
+				Historique
+			</h3>
+			<p-table #dt1 [value]="userChecksHistorique" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true"
+				styleClass="p-datatable-gridlines" [paginator]="true"
+				[globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email','user_id.phone']"
+				responsiveLayout="scroll">
 				<ng-template pTemplate="header">
 					<tr>
 						<th>
@@ -156,16 +166,10 @@
 								Nom et prénom
 							</div>
 						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heure checkin
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Heure checkout
-							</div>
-						</th>
+						<th>Heure Check in Online</th>
+						<th>Heure Check in Pointeuse</th>
+						<th>Heure Check out Online</th>
+						<th>Heure Check out Pointeuse</th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Heures pauses
@@ -181,30 +185,36 @@
 				<ng-template pTemplate="body" let-check>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{check.today}}
+							{{check?.today}}
 						</td>
 						<td style="min-width: 12rem;">
-							{{check.user_id.lastname | uppercase}} {{check.user_id.firstname | titlecase}}
+							{{check?.user_id?.lastname | uppercase}} {{check?.user_id?.firstname | titlecase}}
 						</td>
 						<td style="min-width: 14rem;">
-							{{check.check_in | date: 'H:mm'}}
+							{{check?.check_in | date: 'H:mm'}}
+						</td>
+						<td style="min-width: 14rem;">
+							WIP
 						</td>
 						<td style="min-width: 10rem;">
-							{{check.check_out | date: 'H:mm'}}
+							{{check?.check_out | date: 'H:mm'}}
+						</td>
+						<td style="min-width: 14rem;">
+							WIP
 						</td>
 						<td style="min-width: 10rem;">
 							<ul>
-                                <li *ngFor="let pause of check.pause; let i = index">
-                                    de {{pause?.in | date: 'H:mm'}} <br> à {{pause?.out | date: 'H:mm'}}
-                                </li>
-                            </ul>
+								<li *ngFor="let pause of check.pause; let i = index">
+									de {{pause?.in | date: 'H:mm'}} <br> à {{pause?.out | date: 'H:mm'}}
+								</li>
+							</ul>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="check.taux_cra > 0">
-                            {{check.taux_cra}}%
-                        </td>
+							{{check?.taux_cra}}%
+						</td>
 						<td style="min-width: 12rem;" *ngIf="!check.taux_cra">
-                            0%
-                        </td>
+							0%
+						</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
@@ -212,7 +222,7 @@
 						<td colspan="6">Aucun historique de pointage trouvé.</td>
 					</tr>
 				</ng-template>
-            </p-table>
-        </div>
-    </div>
+			</p-table>
+		</div>
+	</div>
 </div>

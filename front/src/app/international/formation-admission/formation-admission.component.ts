@@ -48,6 +48,7 @@ export class FormationAdmissionComponent implements OnInit {
     { value: "Hôtellerie", label: "Hôtellerie" },
     { value: "Médical", label: "Médical" },
     { value: "Service à la personne", label: "Service à la personne" },
+    { value: "Petite enfance", label: "Petite enfance" },
   ]
 
   initUpdate(rowData: FormationAdmission) {

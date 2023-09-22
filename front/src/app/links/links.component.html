@@ -1,0 +1,66 @@
+
+    <p-table #dt1  dataKey="_id" responsiveLayout="scroll"
+    [globalFilterFields]="['nom', 'niveau', 'certificateur', 'description']" [rows]="5" [pageLinks]="5"
+    [paginator]="true" rowExpandMode="single" 
+    styleClass="p-datatable-gridlines">
+    <ng-template pTemplate="caption">
+        <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+            placeholder="Recherche" />
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="nom">Global<p-sortIcon field="nom">
+                </p-sortIcon>
+            </th>
+
+            <th pSortableColumn="niveau">Board<p-sortIcon field="niveau">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="rncp">Precess<p-sortIcon field="rncp">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="certificateur">IGM<p-sortIcon field="certificateur">
+                </p-sortIcon>
+            <th pSortableColumn="duree">link 5<p-sortIcon field="duree">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="criteres">link 6<p-sortIcon field="criteres">
+                </p-sortIcon>
+            </th>
+            <th pSortableColumn="tarif">link 7<p-sortIcon field="tarif">
+                </p-sortIcon>
+            </th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-formation>
+        <tr>
+            <td>
+                
+            </td>
+            <td>
+               
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <!--<td>
+                {{ formation.description }}
+            </td>-->
+            <td>
+              
+            </td>
+            <td>
+                
+            </td>
+           
+           
+        </tr>
+    </ng-template>
+</p-table>

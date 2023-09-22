@@ -1,0 +1,107 @@
+<p-toast></p-toast>
+<div class="container-fluid">
+    <img class="top-image" src="assets/images/form-header-top.png" />
+    <div class="top-content">
+        <!--<img src="assets/images/icbs-logo.png" />-->
+        <h1 class="page-title">Mobilité Internationale</h1>
+        <div class="page-content">
+            <p>🌍 Explorez le monde avec ICBS !</p>
+            <p>Tous les étudiants alternants, quel que soit leur école, peuvent profiter d'un séjour linguistique
+                GRATUIT d'une semaine dans des destinations incroyables : Dubaï, Malte, Londres, Hammamet, Djerba et
+                Marrakech.</p>
+            <p>Nous couvrons le transport, l'hébergement et la formation en langue. ✈️</p>
+            <p>Acquérez des compétences interculturelles, élargissez votre réseau professionnel et découvrez de
+                nouvelles perspectives. </p>
+            <p>Votre avenir commence ici ! 🚀🗺️ #ICBSglobal</p>
+        </div>
+    </div>
+
+    <form class="form-container" (ngSubmit)="saveFormulaire()" [formGroup]="RegisterForm" *ngIf="!resultat">
+        <!--<div class="col-12">
+            <h1>Event title</h1>
+            <p>
+                ICBS training Institute is offering an opportunity to everyone to test their language profeciency and
+                learn several new langauges, You are invited to fill this form and join us on the 27th of May.
+            </p>
+        </div>-->
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <label>Nom et prénom <span style="color:red"> *</span></label>
+                <input pInputText formControlName="name" type="text" placeholder="Ex: John Smith" />
+            </div>
+            <div class="col-md-6 col-12">
+                <label>Date de naissance <span style="color:red"> *</span></label>
+                <input pInputText formControlName="date_naissance" type="date" placeholder="Ex: John Smith" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <label>Numéro de téléphone <span style="color:red"> *</span></label><br>
+                <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[
+            SearchCountryField.Iso2,
+            SearchCountryField.Name
+            ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.UnitedArabEmirates"
+                    [phoneValidation]="true" [separateDialCode]="separateDialCode"
+                    [numberFormat]="PhoneNumberFormat.National" name="phone" formControlName="telephone">
+                </ngx-intl-tel-input>
+            </div>
+
+            <div class="col-md-6 col-12">
+                <label>Adresse mail <span style="color:red"> *</span></label>
+                <input pInputText formControlName="mail" type="mail" placeholder="Ex: john.smith@gmail.com" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <label>Dans quelle école êtes vous inscrits? <span style="color:red"> *</span></label>
+                <input pInputText formControlName="ecole" type="text" placeholder="Ex: Studinfo" />
+            </div>
+
+            <div class="col-md-6 col-12">
+                <label>Domaine d'études <span style="color:red"> *</span></label>
+                <p-dropdown placeholder="Choissisez un Domaine" [options]="domaines" formControlName="domaine"
+                    [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <label>Par quelle destination êtes-vous intéressé(e) ? (3 max) <span style="color:red"> *</span></label>
+                <p-multiSelect placeholder="Choissisez une destination" [options]="destinations" [selectionLimit]="3"
+                    formControlName="destination" [style]="{'width':'100%'}"></p-multiSelect>
+            </div>
+            <div class="col-md-6 col-12" *ngIf="dateSejours.length!=0">
+                <label>Choisissez votre date de séjour : (3 max)<span style="color:red"> *</span></label>
+                <p-multiSelect placeholder="Choissisez une destination" [options]="dateSejours" [selectionLimit]="3"
+                    formControlName="dateSejour"></p-multiSelect>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label>Comment avez-vous entendu parler de cet avantage ? <span style="color:red"> *</span></label>
+                <p-dropdown placeholder="Choissisez une réponse" [options]="avantages" formControlName="avantage"
+                    [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button pButton type="submit" label="Envoyer" [disabled]="RegisterForm.invalid"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="grid" *ngIf="resultat">
+    <div class="col-2"></div>
+    <div class="col-8 col-offset-2">
+        <div class="card" style="text-align: center; font-family: Montserrat; color: #666666; padding: 50px">
+            <h2>Merci {{resultat.name}}!</h2>
+            <h4>
+                Votre formulaire a bien été envoyé !
+            </h4>
+        </div>
+    </div>
+</div>

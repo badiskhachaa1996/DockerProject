@@ -24,6 +24,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { environment } from 'src/environments/environment';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridMonth from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Note } from 'src/app/models/Note';
@@ -57,6 +58,13 @@ import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ServService } from 'src/app/services/service.service';
 import { Ticket } from 'src/app/models/Ticket';
+import { EventCalendarRH } from 'src/app/models/EventCalendarRH';
+import { CalendrierRhService } from 'src/app/services/calendrier-rh.service';
+import { ro } from 'date-fns/locale';
+import { PointageData } from 'src/app/models/PointageData';
+import { PointageService } from 'src/app/services/pointage.service';
+import { PointeuseData } from 'src/app/models/PointeuseData';
+import { PointeuseService } from 'src/app/services/pointeuse.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -88,6 +96,7 @@ export class DashboardComponent implements OnInit {
   isUnknow = false;
   isVisitor = false;
   isIntuns = false
+  isProspect = false
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
@@ -301,13 +310,41 @@ export class DashboardComponent implements OnInit {
     private EIService: EtudiantsIntunsService, private dailyCheckService: DailyCheckService,
     private rhService: RhService, private congeService: CongeService,
     private ActuRHService: ActualiteRHService, private TicketService: TicketService,
-    private ServiceServ: ServService
+    private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
+    private PointageService: PointageService, private PoiService: PointeuseService
   ) { }
-
-
+  histoPointage: PointageData[]
+  reader: FileReader = new FileReader();
+  machineDic = {}
   ngOnInit() {
 
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.PointageService.getAllWithUserID().subscribe(r => {
+      this.dataMachine = r
+      let UID = this.dataMachine.UserToUID[this.token.id]
+      if (this.dataMachine.DataDic[UID])
+        this.histoPointage = this.dataMachine.DataDic[UID]
+    })
+    this.PoiService.getAll().subscribe(ps => {
+      ps.forEach(m => {
+        this.machineDic[m.serial_number] = m
+      })
+    })
+    this.UserService.getProfilePicture(this.token.id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          this.reader.readAsDataURL(blob);
+        }
+      }
+    })
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
@@ -328,6 +365,7 @@ export class DashboardComponent implements OnInit {
         this.isCEO = dataUser.type == "CEO Entreprise";
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
         this.isIntuns = dataUser.type == "EtudiantsIntuns"
+        this.isProspect = dataUser.type == "Prospect"
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
@@ -553,10 +591,12 @@ export class DashboardComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   commissions: any[] = []
   loadPP(rowData) {
+    console.log(rowData)
     this.imageToShow = "../assets/images/avatar.PNG"
     console.log(rowData)
     this.CService.getProfilePicture(rowData._id).subscribe((data) => {
       if (data.error) {
+        console.error(data.error)
         this.imageToShow = "../assets/images/avatar.PNG"
       } else {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -673,6 +713,8 @@ export class DashboardComponent implements OnInit {
         this.onGetTicketsRH()
         // Charger l'assiduité
         this.OnCalcAssiduite()
+        //charger les events du Calendar
+        this.loadCalendar()
       },
       error: (error) => { console.log(error) },
     });
@@ -1073,12 +1115,12 @@ export class DashboardComponent implements OnInit {
   }
 
   getHistoPointage(value) {
-    console.log(value)
-    this.dailyCheckService.getUserChecksByDate(this.token.id, value)
-      .then((response) => {
-        this.historiqueCra = response;
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+    if (value)
+      this.dailyCheckService.getUserChecksByDate(this.token.id, value)
+        .then((response) => {
+          this.historiqueCra = response;
+        })
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
 
   actualites: ActualiteRH[]
@@ -1168,54 +1210,55 @@ export class DashboardComponent implements OnInit {
     maladie: 0
   }
   OnCalcAssiduite() {
-    this.dailyCheckService.getUserChecksByDate(this.token.id, this.dateChoose)
-      .then((response) => {
-        this.stats.assiduite = response.length
-      })
-      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
-    this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
-      .then((response) => {
-        response.forEach(c => {
-          /*
-    { label: 'Congé payé', value: 'Congé payé' },
-    { label: 'Congé sans solde', value: 'Congé sans solde' },
-    { label: 'Absence maladie', value: 'Absence maladie' },
-    { label: 'Télétravail', value: 'Télétravail' },
-    { label: 'Départ anticipé', value: 'Départ anticipé' },
-    { label: 'Autorisation', value: 'Autorisation' },
-    { label: 'Autre motif', value: 'Autre motif' },
-          */
-          let dd = new Date(c.date_debut)
-          if (dd > new Date(this.dateChoose + '-31'))
-            dd = new Date(this.dateChoose + '-31')
-          if (dd < new Date(this.dateChoose + '-01'))
-            dd = new Date(this.dateChoose + '-01')
-          let df = new Date(c.date_fin)
-          if (df < new Date(this.dateChoose + '-01'))
-            df = new Date(this.dateChoose + '-01')
-          if (df > new Date(this.dateChoose + '-31'))
-            df = new Date(this.dateChoose + '-31')
-          var Difference_In_Time = dd.getTime() - df.getTime();
-
-          // To calculate the no. of days between two dates
-          var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
-          console.log(c.type_conge, Difference_In_Days)
-          if (c.type_conge == "Congé payé")
-            this.stats.conges_pay += Difference_In_Days
-          else if (c.type_conge == "Congé sans solde")
-            this.stats.conges_ss += Difference_In_Days
-          else if (c.type_conge == "Absence maladie")
-            this.stats.maladie += Difference_In_Days
-          else
-            this.stats.absence_justifie += Difference_In_Days
-
+    if (this.dateChoose) {
+      this.dailyCheckService.getUserChecksByDate(this.token.id, this.dateChoose)
+        .then((response) => {
+          this.stats.assiduite = response.length
         })
-      })
-      .catch((error) => {
-        if (this.dateChoose)
-          this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
-      });
+        .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
+      this.congeService.getUserCongesByDate(this.token.id, this.dateChoose)
+        .then((response) => {
+          response.forEach(c => {
+            /*
+      { label: 'Congé payé', value: 'Congé payé' },
+      { label: 'Congé sans solde', value: 'Congé sans solde' },
+      { label: 'Absence maladie', value: 'Absence maladie' },
+      { label: 'Télétravail', value: 'Télétravail' },
+      { label: 'Départ anticipé', value: 'Départ anticipé' },
+      { label: 'Autorisation', value: 'Autorisation' },
+      { label: 'Autre motif', value: 'Autre motif' },
+            */
+            let dd = new Date(c.date_debut)
+            if (dd > new Date(this.dateChoose + '-31'))
+              dd = new Date(this.dateChoose + '-31')
+            if (dd < new Date(this.dateChoose + '-01'))
+              dd = new Date(this.dateChoose + '-01')
+            let df = new Date(c.date_fin)
+            if (df < new Date(this.dateChoose + '-01'))
+              df = new Date(this.dateChoose + '-01')
+            if (df > new Date(this.dateChoose + '-31'))
+              df = new Date(this.dateChoose + '-31')
+            var Difference_In_Time = dd.getTime() - df.getTime();
 
+            // To calculate the no. of days between two dates
+            var Difference_In_Days = Math.abs(Difference_In_Time / (1000 * 3600 * 24)) + 1;
+            console.log(c.type_conge, Difference_In_Days)
+            if (c.type_conge == "Congé payé")
+              this.stats.conges_pay += Difference_In_Days
+            else if (c.type_conge == "Congé sans solde")
+              this.stats.conges_ss += Difference_In_Days
+            else if (c.type_conge == "Absence maladie")
+              this.stats.maladie += Difference_In_Days
+            else
+              this.stats.absence_justifie += Difference_In_Days
+
+          })
+        })
+        .catch((error) => {
+          if (this.dateChoose)
+            this.messageService.add({ severity: 'error', summary: 'Liste des congés', detail: "Impossible de recuprer vos demande de congé, veuillez contacter un admin via le service ticketing" })
+        });
+    }
   }
 
   onCalcNumberDay() {
@@ -1225,4 +1268,127 @@ export class DashboardComponent implements OnInit {
       this.formAddConge.patchValue({ nb_jour: Difference_In_Days })
     }
   }
+  eventsRH = []
+  optionsRH = {
+    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
+    defaultDate: new Date(),
+    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    header: {
+      left: "title",
+      right: 'prev,next'
+      // left: 'prev,next'
+    },
+    locale: 'fr',
+    timeZone: 'local',
+    contentHeight: 500,
+    eventClick: this.eventClickFCRH.bind(this),
+    events: [
+
+    ],
+    defaultView: "dayGridMonth",
+    minTime: '08:00:00',
+    firstDay: 1,
+    selectable: true,
+  };
+  displayData = false
+  dataEvent: EventCalendarRH
+  eventClickFCRH(event) {
+    this.displayData = true
+    this.dataEvent = event.event.extendedProps;
+    //console.log(event)
+  }
+
+  addEvent(event: EventCalendarRH) {
+    let backgroundColor = '#1F618D'
+    let borderColor = '#17202A'
+    if (event.type == 'Jour férié France') {
+      backgroundColor = '#D4AC0D'
+      borderColor = '#D35400'
+    } else if (event.type == 'Autre événement') {
+      backgroundColor = '#9B59B6'
+      borderColor = '#8E44AD'
+    } else if (event.type == "Congé Validé") {
+      backgroundColor = '#1ABC9C'
+      borderColor = '#186A3B'
+    } else if (event.type == "Absence Non Justifié") {
+      backgroundColor = '#E74C3C'
+      borderColor = '#7B241C'
+    }
+    this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    //  this.events.push({ title: "TEST", date: new Date() })
+    this.options.events = this.eventsRH
+    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
+    //this.cd.detectChanges();
+
+  }
+
+  loadCalendar() {
+    this.eventsRH = []
+    this.CalendrierRHService.getAll().subscribe(events => {
+      events.forEach(ev => { this.addEvent(ev) })
+      this.dailyCheckService.getUserChecks(this.token.id).then(dcs => {
+        this.congeService.getAllByUserId(this.token.id).then(conges => {
+          //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
+          let congesList: Date[] = []
+          let absencesList: Date[] = []
+          let presencesList: Date[] = []
+          conges.forEach(c => {
+            let dateC = new Date(c.date_debut)
+            dateC.setDate(dateC.getDate() - 1)
+            while (dateC < new Date(c.date_fin)) {
+              congesList.push(new Date(dateC))
+              this.addEvent(new EventCalendarRH(null, dateC, "Congé Validé", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
+              dateC.setDate(dateC.getDate() + 1)
+            }
+          })
+          dcs.forEach(dc => {
+            presencesList.push(new Date(dc.check_in))
+          })
+          let dateDebut = new Date()
+          let dateEnd = new Date()
+          dateEnd.setFullYear(dateEnd.getFullYear() - 1)
+          console.log(congesList, conges)
+          while (dateEnd < dateDebut) {
+            if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
+              //Vérifier si il a été présent ou si il a été en congé 
+              if (presencesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                congesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
+                absencesList.push(dateDebut)
+                this.addEvent(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
+              } else {
+                //console.log(dateDebut,events)
+              }
+            }
+            dateDebut.setDate(dateDebut.getDate() - 1)
+          }
+        })
+      })
+    })
+
+  }
+  dataMachine
+
+  getCheckIn(user_id) {
+    let UID = this.dataMachine.UserToUID[user_id]
+    if (this.dataMachine.DataDic[UID]) {
+      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+      let date = new Date(listCheck[0].date)
+      listCheck.forEach(element => {
+        if (new Date(element.date) < date)
+          date = new Date(element.date)
+      });
+      return date
+    } else {
+      return null
+    }
+
+  }
+  displayPointeuse = false
+  onSeePointeuse() {
+    console.log('test')
+    this.displayPointeuse = true
+    console.log(this.displayPointeuse)
+  }
+
 }

@@ -98,7 +98,7 @@ import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
 import { FloatLabelComponent } from './components/floatlabel/floatlabel.component';
@@ -193,7 +193,6 @@ import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-leg
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
-
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { DemandeEventsComponent } from './demande-events/demande-events.component';
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
@@ -221,6 +220,9 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import * as fr from '@angular/common/locales/fr';
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
+import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
+import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+
 import {
   MsalInterceptor,
   MsalModule,
@@ -353,7 +355,32 @@ import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/d
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
+import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
+import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
+import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
+import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
+import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
+import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
+import { GenschoolComponent } from './gen_doc/genschool/genschool.component';
+import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
+import { GenformationComponent } from './gen_doc/genformation/genformation.component';
+import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
+import { OutputpageComponent } from './gen_doc/gendoc/outputpage/outputpage.component';
+import { QRCodeModule  } from 'angularx-qrcode';
+import { GenIntroComponent } from './gen_doc/gendoc/outputpage/gen-intro/gen-intro.component';
+import { GenOutroComponent } from './gen_doc/gendoc/outputpage/gen-outro/gen-outro.component';
+import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
+import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
+import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
+import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
+import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
+import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
 import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
+import { InformationsComponent } from './informations/informations.component';
+import { LinksComponent } from './links/links.component';
 
 @NgModule({
   imports: [
@@ -449,6 +476,8 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
     FullCalendarModule,
     NgxIntlTelInputModule,
     EditorModule,
+    QRCodeModule,
+    PdfViewerModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -713,12 +742,37 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
     MytaskComponent,
     MyprojectComponent,
     DashboardProjectV2Component,
-
-  
     BookingV2Component,
     ConfigurationPointeuseComponent,
     IMatchComponent,
-    AjouterUnTicketProjetComponent
+    AjouterUnTicketProjetComponent,
+    IMatchComponent,
+    CalendrierRhComponent,
+    ConfigurationPointageComponent,
+    CvComponent,
+    AjoutCvComponent,
+    ArchivagePointageComponent,
+    RendezVousComponent,
+    GestionMentionServiceComponent,
+    ConfigurationMIComponent,
+    FormulaireMIComponent,
+    ResultatsMIComponent,
+    GenschoolComponent,
+    GencampusComponent,
+    GenformationComponent,
+    GendocComponent,
+    OutputpageComponent,
+    GenIntroComponent,
+    GenOutroComponent,
+    RendezVousResultatsComponent,
+    GendocViewComponent,
+    FormulaireFrontComponent,
+    DashboardAlternanceComponent,
+    MesRendezVousComponent,
+    EntrepriseDashboardComponent,
+    SuiviCandidatComponent,
+    InformationsComponent,
+    LinksComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

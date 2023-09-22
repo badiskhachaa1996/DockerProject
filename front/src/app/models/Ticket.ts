@@ -35,6 +35,7 @@ export class Ticket {
         public consignes?: any[],
         public avancement?: number,
         public validation?: String,
+        public module?: string,
     ) { }
     
 

@@ -16,57 +16,53 @@ export class SkillsService {
   /* profile */
 
   // création d'un nouveau profile
-  postProfile(profile: Profile)
-  {
+  postProfile(profile: Profile) {
     const url = `${this.apiUrl}/post-profile`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.post<Profile>(url, profile, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Profile crée') 
+        complete: () => console.log('Profile crée')
       });
     });
   }
 
   // modification d'un profile
-  putProfile(profile: Profile)
-  {
+  putProfile(profile: Profile) {
     const url = `${this.apiUrl}/put-profile`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.put<Profile>(url, profile, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Profile modifié') 
+        complete: () => console.log('Profile modifié')
       });
     });
   }
 
   // recuperation de tous les profiles
-  getProfiles()
-  {
+  getProfiles() {
     const url = `${this.apiUrl}/get-profiles`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.get<Profile[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+      this.httpClient.get<Profile[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Profiles récuperés') 
+        complete: () => console.log('Profiles récuperés')
       });
     });
   }
 
   // recuperation d'un profile via un id
-  getProfile(id: string)
-  {
+  getProfile(id: string) {
     const url = `${this.apiUrl}/get-profile/${id}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<Profile>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Profile récuperé') 
+        complete: () => console.log('Profile récuperé')
       });
     });
   }
@@ -74,71 +70,66 @@ export class SkillsService {
 
   /* Compétence */
   // création d'une nouvelle compétence
-  postCompetence(competence: Competence)
-  {
+  postCompetence(competence: Competence) {
     const url = `${this.apiUrl}/post-competence`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.post<Competence>(url, competence, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Compétence crée') 
+        complete: () => console.log('Compétence crée')
       });
     });
   }
 
   // modification d'une compétence
-  putCompetence(competence: Competence)
-  {
+  putCompetence(competence: Competence) {
     const url = `${this.apiUrl}/put-competence`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.put<Competence>(url, competence, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Competence modifié') 
+        complete: () => console.log('Competence modifié')
       });
     });
   }
 
   // recuperation de la liste des competences
-  getCompetences()
-  {
+  getCompetences() {
     const url = `${this.apiUrl}/get-competences`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.get<Competence[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
+      this.httpClient.get<Competence[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Competences récuperés') 
+        complete: () => console.log('Competences récuperés')
       });
     });
   }
 
   // recuperation d'une competence via son id
-  getCompetence(id: string)
-  {
+  getCompetence(id: string) {
     const url = `${this.apiUrl}/get-competence/${id}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<Competence>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Competence récuperé') 
+        complete: () => console.log('Competence récuperé')
       });
     });
   }
 
   // recuperation de la liste des compétences d'un profile
-  getCompetenceByProfil(id: string)
-  {
+  getCompetenceByProfil(id: string) {
     const url = `${this.apiUrl}/get-competence-by-profile/${id}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<Competence[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
-        complete: () => console.log('Competences du profil récuperé') 
+        complete: () => console.log('Competences du profil récuperé')
       });
     });
   }

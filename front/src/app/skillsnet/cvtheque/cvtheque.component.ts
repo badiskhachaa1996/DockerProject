@@ -80,6 +80,66 @@ export class CvthequeComponent implements OnInit {
   selectedMultiCpt: string[] = [];
   selectedMultiOutils: string[] = [];
   selectedMultilang: string[] = [];
+  locations: any[] = [
+    { label: "100% Télétravail", value: "100% Télétravail" },
+    { label: "Aix-Marseille", value: "Aix-Marseille" },
+    { label: "Amiens", value: "Amiens" },
+    { label: "Angers", value: "Angers" },
+    { label: "Annecy", value: "Annecy" },
+    { label: "Auxerre", value: "Auxerre" },
+    { label: "Avignon", value: "Avignon" },
+    { label: "Bayonne", value: "Bayonne" },
+    { label: "Bergerac", value: "Bergerac" },
+    { label: "Besançon", value: "Besançon" },
+    { label: "Biarritz", value: "Biarritz" },
+    { label: "Bordeaux", value: "Bordeaux" },
+    { label: "Boulogne-sur-mer", value: "Boulogne-sur-mer" },
+    { label: "Brest", value: "Brest" },
+    { label: "Caen", value: "Caen" },
+    { label: "Calais", value: "Calais" },
+    { label: "Cannes", value: "Cannes" },
+    { label: "Chambéry", value: "Chambéry" },
+    { label: "Clermont-Ferrand", value: "Clermont-Ferrand" },
+    { label: "Dijon", value: "Dijon" },
+    { label: "France", value: "France" },
+    { label: "Grenoble", value: "Grenoble" },
+    { label: "La Réunion", value: "La Réunion" },
+    { label: "La Roche sur Yon", value: "La Roche sur Yon" },
+    { label: "La Rochelle", value: "La Rochelle" },
+    { label: "Le Havre", value: "Le Havre" },
+    { label: "Le Mans", value: "Le Mans" },
+    { label: "Lille", value: "Lille" },
+    { label: "Limoges", value: "Limoges" },
+    { label: "Lyon", value: "Lyon" },
+    { label: "Mâcon", value: "Mâcon" },
+    { label: "Metz", value: "Metz" },
+    { label: "Montauban", value: "Montauban" },
+    { label: "Montpellier", value: "Montpellier" },
+    { label: "Mulhouse", value: "Mulhouse" },
+    { label: "Nancy", value: "Nancy" },
+    { label: "Nantes", value: "Nantes" },
+    { label: "Nice", value: "Nice" },
+    { label: "Nîmes", value: "Nîmes" },
+    { label: "Niort", value: "Niort" },
+    { label: "Orléans", value: "Orléans" },
+    { label: "Oyonnax", value: "Oyonnax" },
+    { label: "Paris/Ile de France", value: "Paris/Ile de France" },
+    { label: "Pau", value: "Pau" },
+    { label: "Perpignan", value: "Perpignan" },
+    { label: "Poitiers", value: "Poitiers" },
+    { label: "Reims", value: "Reims" },
+    { label: "Rennes", value: "Rennes" },
+    { label: "Rodez", value: "Rodez" },
+    { label: "Rouen", value: "Rouen" },
+    { label: "Saint-Etienne", value: "Saint-Etienne" },
+    { label: "Saint-Tropez", value: "Saint-Tropez" },
+    { label: "Strasbourg", value: "Strasbourg" },
+    { label: "Toulon", value: "Toulon" },
+    { label: "Toulouse", value: "Toulouse" },
+    { label: "Troyes", value: "Troyes" },
+    { label: "Valence", value: "Valence" },
+    { label: "Guadeloupe", value: "Guadeloupe" },
+  ];
   loading: boolean = true;
 
   users: User[] = [];
@@ -95,7 +155,13 @@ export class CvthequeComponent implements OnInit {
   commercials = []
 
   @ViewChild('filter') filter: ElementRef;
-
+  etudes = [
+    { label: 'Baccalauréat', value: 'Baccalauréat' },
+    { label: 'BTS (Brevet de Technicien Supérieur)', value: 'BTS (Brevet de Technicien Supérieur)' },
+    { label: 'Bachelor', value: 'Bachelor' },
+    { label: 'Master 1er année', value: 'Master 1er année' },
+    { label: 'Master 2ème année', value: 'Master 2ème année' },
+  ]
 
 
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
@@ -125,12 +191,13 @@ export class CvthequeComponent implements OnInit {
       langues: [],
       //video_lien: [],
       mobilite_lieu: [''],
-      mobilite_autre: [''],
       centre_interets: [''],
       a_propos: [''],
       disponibilite: [''],
       user_create_type: ['Externe'],
       winner_id: [''],
+      isPublic: [true],
+      niveau_etude: ['']
     });
 
     this.EcoleService.getAll().subscribe(ecoles => {
@@ -226,11 +293,14 @@ export class CvthequeComponent implements OnInit {
     cv.experiences_associatif = this.experiences_associatif
     cv.informatique = this.informatique
     cv.createur_id = this.token.id
-
     cv.competences = [];
     formValue.competences?.forEach(cpt => {
       cv.competences.push(cpt.value);
     });
+    formValue.locations?.forEach(loc => {
+      cv.mobilite_lieu.push(loc.value);
+    })
+
 
     /*cv.outils = [];
     formValue.outils?.forEach((outil) => {
@@ -302,7 +372,7 @@ export class CvthequeComponent implements OnInit {
   formUpdateCV: FormGroup
   canEditWinner = false
   InitUpdateCV(cv) {
-    this.formUpdateCV = this.formBuilder.group({
+    /*this.formUpdateCV = this.formBuilder.group({
       competences: [],
       //outils: ['', Validators.required],
       langues: [],
@@ -313,6 +383,8 @@ export class CvthequeComponent implements OnInit {
       a_propos: [''],
       disponibilite: [''],
       winner_id: [''],
+      isPublic: [true],
+      niveau_etude: ['']
     });
     this.showUpdateCV = cv
     if (this.token.role != "Agent" && this.token.role != "user")
@@ -324,11 +396,6 @@ export class CvthequeComponent implements OnInit {
           cv_competences.push(c);
       })
     });
-
-    /*let cv_outils = [];
-    cv.outils?.forEach((outil) => {
-      cv_outils.push({ label: outil });
-    });*/
 
     let cv_langues = [];
     cv.langues?.forEach(langue => {
@@ -342,7 +409,8 @@ export class CvthequeComponent implements OnInit {
       //outils: cv_outils,
       langues: cv_langues,
       //video_lien: cv.video_lien
-    })
+    })*/
+    this.router.navigate(['generateur-cv', cv.user_id._id])
   }
 
   onUpdateCV() {

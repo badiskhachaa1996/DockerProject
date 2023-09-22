@@ -55,7 +55,19 @@ export class CvService {
     const url = `${this.apiUrl}/get-cvs`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CVs récupérés'),
+      })
+    });
+  }
+
+  getCvsPublic() {
+    const url = `${this.apiUrl}/get-cvs-public`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('CVs récupérés'),
@@ -74,6 +86,14 @@ export class CvService {
         complete: () => console.log('CV modifié'),
       })
     });
+
+  }
+
+
+
+  getByID(id: any) {
+    let cvUrl = this.apiUrl + "/get-object-cv/" + id;
+    return this.httpClient.get<any>(cvUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   // methode de recupération d'un cv via son user id
@@ -115,10 +135,15 @@ export class CvService {
     return this.httpClient.get<{ files: {}, ids: string[] }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  getPictureByUser(id) {
+    let url = `${this.apiUrl}/get-picture-by-user/${id}`;
+    return this.httpClient.get<{ file: {}}>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
   downloadCV(id) {
     const url = `${this.apiUrl}/download-cv/${id}`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),

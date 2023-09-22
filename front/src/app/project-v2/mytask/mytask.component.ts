@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import { Ticket } from 'src/app/models/Ticket';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { DataViewModule, DataViewLayoutOptions } from 'primeng/dataview';
 
 @Component({
   selector: 'app-mytask',
@@ -17,6 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./mytask.component.scss']
 })
 export class MytaskComponent implements OnInit {
+  layout: string = 'list';
   value: number = 50;
   selectedTabIndex: number = 0;
   task_consignes: any;

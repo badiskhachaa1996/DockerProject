@@ -130,7 +130,6 @@ app.post("/inscription", (req, res, next) => {
                                 .then((partenaireSaved) => {
                                     Partenaire.findOne({ nom: partenaireSaved.nom, email: partenaireSaved.email, code_partenaire: partenaireSaved.code_partenaire }).then(nouveauPartenaire => {
                                         commercial.partenaire_id = nouveauPartenaire._id
-                                        console.log(newPartenaire, nouveauPartenaire, commercial.partenaire_id)
                                         commercial.save().then((commercialsaved) => {
 
                                             let htmlmail =
@@ -143,7 +142,7 @@ app.post("/inscription", (req, res, next) => {
 
                                             let mailOptions = {
                                                 from: "ims@intedgroup.com",
-                                                to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', ''],
+                                                to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', userData.email_perso],
                                                 subject: 'Acces IMS',
                                                 html: htmlmail,
                                                 attachments: [{
@@ -155,10 +154,9 @@ app.post("/inscription", (req, res, next) => {
                                             transporterEH.sendMail(mailOptions, function (error, info) {
                                                 if (error) {
                                                     console.error(error);
-
                                                 }
+                                                console.log(info)
                                             });
-
 
 
                                             res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: newPartenaire, commercial: commercialsaved })
@@ -191,7 +189,7 @@ app.post("/inscription", (req, res, next) => {
 
                                     let mailOptions = {
                                         from: "ims@intedgroup.com",
-                                        to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', ''],
+                                        to: ['orientation.aa@intedgroup.com', 'h.elkadhi@intedgroup.com', userData.email_perso],
                                         subject: 'Acces IMS',
                                         html: htmlmail,
                                         attachments: [{
@@ -203,8 +201,8 @@ app.post("/inscription", (req, res, next) => {
                                     transporterEH.sendMail(mailOptions, function (error, info) {
                                         if (error) {
                                             console.error(error);
-
                                         }
+                                        console.log()
                                     });
 
 

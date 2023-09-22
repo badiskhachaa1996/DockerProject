@@ -21,7 +21,7 @@ export class GestionServicesComponent implements OnInit {
   });
 
   get label() { return this.serviceForm.get('label'); }
-  
+
   currentService = null;
   message = '';
   //label = '';
@@ -57,10 +57,10 @@ export class GestionServicesComponent implements OnInit {
     this.ServiceService.addService(service).subscribe(
       ((response) => {
         this.ServiceService.getAll().subscribe(
-          ((data) => { this.services = data; this.showFormAddService = false;}),
+          ((data) => { this.services = data; this.showFormAddService = false; }),
           ((error) => { console.error(error) })
         );
-      }), 
+      }),
       ((error) => { this.messageService.add({ severity: 'error', summary: 'Gestion de service', detail: 'Impossible d\'ajouter votre service.' }); })
     );
   }
@@ -72,27 +72,27 @@ export class GestionServicesComponent implements OnInit {
       this.sujetShow.push(data)
       this.sujetList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Votre sujet a bien été ajouté' });
-      this.showFormAddSujet=false;
+      this.showFormAddSujet = false;
       this.sujetForm.reset();
     }, (error) => {
       console.error(error)
     });
   }
 
-  loadServiceSujet(){
+  loadServiceSujet() {
     this.ServiceService.getAll()
-    .subscribe(
-      data => {
-        this.services = data;
-      },
-      error => {
-        console.error(error);
-      });
+      .subscribe(
+        data => {
+          this.services = data;
+        },
+        error => {
+          console.error(error);
+        });
     this.SjtService.getAll()
       .subscribe(
         data => {
           this.sujets = data;
-          this.sujetList=[];
+          this.sujetList = [];
           if (!data.message) {
             data.forEach(sujet => {
               this.sujetList.push(sujet);
@@ -120,11 +120,10 @@ export class GestionServicesComponent implements OnInit {
     this.Sujet = data;
   }
 
-  
+
   editService(data) {
     this.serviceForm.patchValue({ label: data.label })
     this.Service = data;
-    
   }
 
   onRowSelect(event) {
@@ -143,25 +142,25 @@ export class GestionServicesComponent implements OnInit {
   }
 
   toggleFormServiceAdd() {
-    this.showFormAddService=!this.showFormAddService;
-    this.showFormUpdateService=false;
+    this.showFormAddService = !this.showFormAddService;
+    this.showFormUpdateService = false;
     this.serviceForm.reset();
   }
 
   toggleFormSujetAdd() {
-    this.showFormAddSujet=!this.showFormAddSujet
-    this.showFormUpdateSujet=false;
+    this.showFormAddSujet = !this.showFormAddSujet
+    this.showFormUpdateSujet = false;
     this.sujetForm.reset();
   }
 
   toggleFormServiceUpdate() {
-    this.showFormUpdateService=true;
-    this.showFormAddService=false;
+    this.showFormUpdateService = true;
+    this.showFormAddService = false;
   }
 
   toggleFormSujetUpdate() {
-    this.showFormUpdateSujet=true;
-    this.showFormAddSujet=false;
+    this.showFormUpdateSujet = true;
+    this.showFormAddSujet = false;
   }
 
   modifyService(id) {
@@ -172,7 +171,7 @@ export class GestionServicesComponent implements OnInit {
     this.ServiceService.update(req).subscribe((data) => {
       this.services.splice(this.services.indexOf(this.Service), 1, data)
       this.serviceForm.reset();
-      this.showFormUpdateService=false;
+      this.showFormUpdateService = false;
       this.loadServiceSujet()
       this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
     }, (error) => {
@@ -187,7 +186,7 @@ export class GestionServicesComponent implements OnInit {
 
     this.SjtService.update(req).subscribe((data) => {
       this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet), 1, data)
-      this.showFormUpdateSujet=false;
+      this.showFormUpdateSujet = false;
       this.sujetForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du sujet', detail: 'Le sujet a bien été modifié' });
       this.loadServiceSujet()
@@ -195,8 +194,8 @@ export class GestionServicesComponent implements OnInit {
       console.error(error)
     });
   }
-  
-  hide(service :Service){
+
+  hide(service: Service) {
     this.ServiceService.hide(service._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des services', detail: service.label + ' est désactiver de la liste de services.' });
       this.loadServiceSujet()
@@ -205,7 +204,7 @@ export class GestionServicesComponent implements OnInit {
     });
   }
 
-  show(service :Service){
+  show(service: Service) {
     this.ServiceService.show(service._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des services', detail: service.label + ' est activer dans la liste des services.' });
       this.loadServiceSujet()
@@ -214,8 +213,8 @@ export class GestionServicesComponent implements OnInit {
     });
   }
 
-  getColor(bol :boolean){
-    if(!bol){
+  getColor(bol: boolean) {
+    if (!bol) {
       return "gray";
     }
   }

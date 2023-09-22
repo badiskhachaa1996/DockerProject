@@ -1,0 +1,161 @@
+<p-toast></p-toast>
+<div class="grid">
+
+    <div class="col-12" *ngIf="showFormAddDestination">
+        <div class="col-12">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    title="Fermer" (click)="showFormAddDestination=false" aria-hidden="true"> </i>
+                <h4 style="text-align: center;">Créer une Destination </h4>
+                <form class="p-fluid p-formgrid grid" [formGroup]="destinationFormAdd" (ngSubmit)="saveDestination()">
+                    <div class="field col-12 md:col-12">
+                        <label>Nom de la Destination <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="name" />
+                    </div>
+                    <div>
+                        <button pButton label="Créer la destination" type="submit" style="cursor: pointer;"
+                            [disabled]="destinationFormAdd.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showFormUpdateDestination">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="showFormUpdateDestination=null" aria-hidden="true"> </i>
+            <h4 style="text-align: center;">Modifier la Destination </h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="destinationFormUpdate" (ngSubmit)="updateDestination()">
+                <div class="field col-12 md:col-12">
+                    <label>Nom de la Destination</label>
+                    <input pInputTexttype="text" formControlName="name" />
+                </div>
+                <div>
+                    <button pButton label="Enregistrer" type="submit" style="cursor: pointer;"
+                        [disabled]="destinationFormUpdate.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Créer une destination" (click)="showFormAddDestination=true"></button>
+            </div>
+            <h5>Liste des destinations</h5>
+            <p-table #dt1 *ngIf="destinations" [value]="destinations" selectionMode="single" dataKey="_id" [rows]="8"
+                [rowHover]="true" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['name']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="text-align:center">Destination</th>
+                        <th style="text-align:center">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{rowData.name}}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil mr-2"
+                                (click)="onInitEditDestination(rowData);" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showFormAddDS">
+        <div class="col-12">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    title="Fermer" (click)="showFormAddDS=false" aria-hidden="true"> </i>
+                <h4 style="text-align: center;">Créer une Date de Séjour pour {{DESelected.name}} </h4>
+                <form class="p-fluid p-formgrid grid" [formGroup]="DSFormAdd" (ngSubmit)="saveDS()">
+                    <div class="field col-12 md:col-12">
+                        <label>Nom de la Date de Séjour <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="name" />
+                    </div>
+                    <div>
+                        <button pButton label="Créer la date de séjour" type="submit" style="cursor: pointer;"
+                            [disabled]="DSFormAdd.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showFormUpdateDS">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="showFormUpdateDS=null" aria-hidden="true"> </i>
+            <h4 style="text-align: center;">Modifier la Date de Séjour </h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="DSFormUpdate" (ngSubmit)="updateDS()">
+                <div class="field col-12 md:col-12">
+                    <label>Nom de la Date de Séjour</label>
+                    <input pInputTexttype="text" formControlName="name" />
+                </div>
+                <div>
+                    <button pButton label="Enregistrer" type="submit" style="cursor: pointer;"
+                        [disabled]="DSFormUpdate.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Créer une date de séjour" (click)="showFormAddDS=true"></button>
+            </div>
+            <h5>Liste des dates de séjour </h5>
+            <p-table #dt2 *ngIf="dateSejours" [value]="dateSejours" selectionMode="single" dataKey="_id" [rows]="8"
+                [rowHover]="true" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['name']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="text-align:center">Date de Séjour</th>
+                        <th style="text-align:center">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{rowData.name}}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="onInitEditDS(rowData);" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

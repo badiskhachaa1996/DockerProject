@@ -145,14 +145,11 @@
                 </div>
 
                 <div class="field col-6">
-                    <label>Mobilité - Ville</label>
-                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
-                        formControlName="mobilite_lieu" />
-                </div>
+                    <label>Test Mobilité - Ville</label>
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
+                        formControlName="locations"></p-multiSelect>
 
-                <div class="field col-6">
-                    <label>Mobilité - Pays</label>
-                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
                 </div>
 
                 <div class="field col-12">
@@ -178,6 +175,19 @@
                         [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
                         formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
                         filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label for="user">Publier votre CV sur iMATCH ?</label>
+                    <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
+                        optionValue="value" optionLabel="label"
+                        [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
+                    <!-- Rajouter filter Ecole et Spécialité -->
+                </div>
+                <div class="field col-12">
+                    <label for="user">Selectionné un niveau d'étude</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="etudes"
+                        placeholder="Selectionner un niveau" formControlName="niveau_etude" filter="true"
+                        emptyFilterMessage="Aucun niveau trouvé" filterPlaceholder="Recherche"></p-dropdown>
                 </div>
 
             </form>
@@ -225,7 +235,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -281,7 +291,6 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Intitulé</th>
-                            <th>Type</th>
                             <th>Details</th>
                             <th>Structure</th>
                             <th>Date début</th>
@@ -304,17 +313,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.type">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{exp.type}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td pEditableColumn>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -403,7 +402,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -492,7 +491,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -645,16 +644,12 @@
                         formControlName="video_lien" />
                 </div>-->
 
-
                 <div class="field col-6">
-                    <label>Mobilité - Ville</label>
-                    <input pInputText type="text" placeholder="Ex: Paris, Noisy-Le-Grand"
-                        formControlName="mobilite_lieu" />
-                </div>
+                    <label>Test Mobilité - Ville</label>
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
+                        formControlName="locations"></p-multiSelect>
 
-                <div class="field col-6">
-                    <label>Mobilité - Pays</label>
-                    <input pInputText type="text" placeholder="Ex: Toute la France" formControlName="mobilite_autre" />
                 </div>
 
                 <div class="field col-12">
@@ -681,6 +676,20 @@
                         formControlName="winner_id" filter="true" emptyFilterMessage="Aucun winner trouvé"
                         filterPlaceholder="Recherche"></p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <label for="user">Publier votre CV sur iMATCH ?</label>
+                    <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
+                        optionValue="value" optionLabel="label"
+                        [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
+                    <!-- Rajouter filter Ecole et Spécialité -->
+                </div>
+                <div class="field col-12">
+                    <label for="user">Selectionné un niveau d'étude</label>
+                    <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="etudes"
+                        placeholder="Selectionner un niveau" formControlName="niveau_etude" filter="true"
+                        emptyFilterMessage="Aucun niveau trouvé" filterPlaceholder="Recherche"></p-dropdown>
+                </div>
+
             </form>
             <div class="field col-12">
                 <h3 class="col-12">Expériences professionels</h3>
@@ -727,7 +736,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -784,7 +793,6 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Intitulé</th>
-                            <th>Type</th>
                             <th>Details</th>
                             <th>Structure</th>
                             <th>Date début</th>
@@ -807,17 +815,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.type">
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{exp.type}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                            <td pEditableColumn>
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -907,7 +905,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}
@@ -998,7 +996,7 @@
                             <td pEditableColumn>
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input type="text" pInputText [(ngModel)]="exp.details">
+                                        <textarea pInputTextarea pInputText [(ngModel)]="exp.details"></textarea>
                                     </ng-template>
                                     <ng-template pTemplate="output">
                                         {{exp.details}}

@@ -1,0 +1,56 @@
+<div class="page-container" *ngIf="type_certif?.value">
+        <div class="header" id="header_area" *ngIf="school?.name" style="background-image: url('../../../../../assets/images/gen_doc/{{school?.name}}/header.png')">
+            <h1 class="page-title" *ngIf="type_certif?.title && type_certif?.value !== 'derogation' ">ATTESTATION {{type_certif?.title}}</h1>
+            <h1 class="page-title" *ngIf="type_certif?.title && type_certif?.value === 'derogation' ">Lettre {{type_certif?.title}}</h1>
+        </div>
+        <div class="content-container">
+            <app-gen-intro  [type_certif]="type_certif"  [formContent]="formContent"  [school]="school"></app-gen-intro>
+            <div class="owner-file" [ngClass]="{'no-margin-left' : type_certif?.value === 'compl'}">
+                <h2 class="margin-bottom-is" *ngIf="formContent.student_full_name">{{formContent.civilite}} {{formContent.student_full_name}}</h2>
+                <h2><span  *ngIf="formContent.student_birth_date">Né<span *ngIf="isWoman">e</span> le </span>{{formContent.student_birth_date}} {{country?.prep}} {{country?.label}}</h2>
+            </div>
+            <app-gen-outro 
+                [isWoman]="isWoman" 
+                [type_certif]="type_certif" 
+                [school]="school"
+                [campus]="campus"
+                [formation]="formation"
+                [rentre]="rentre"
+                [paiement_method]="paiement_method"
+                [formContent]="formContent"
+                >
+            </app-gen-outro>
+            <div class="end-file"  *ngIf="type_certif?.title">
+                <p class="marginized-content">Fait pour servir et valoir ce que de droit. </p>
+                <div class="sign">
+                    <div class="date-sign-file">
+                        <p>{{formContent.place_created}}, le {{formContent?.date}}</p>
+                        <p><strong>Mme Gars Lizbeth</strong></p>
+                        <p>Responsable des admissions</p>
+                        <img *ngIf="school?.name" src="../../../../../assets/images/gen_doc/{{school?.name}}/signature.png" class="signature-image" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-file"  *ngIf="school?.name">
+            <div class="qr-files" *ngIf="id_doc">
+                <qrcode
+                    [qrdata]=" base_url + id_doc"
+                    [allowEmptyString]="true"
+                    [elementType]="'svg'"
+                    [errorCorrectionLevel]="'M'"
+                    [scale]="1"
+                    [cssClass]="'left'"
+                    [title]="'A custom title attribute'"
+                    [width]="100"
+                ></qrcode>
+                <p *ngIf="id_doc"> ID : {{id_doc}}</p>
+            </div>
+            <h3>« {{school?.name}} »</h3>
+            <p id="school-details"> Tél: {{school?.phone}} - email : {{school?.email}} - site web : {{school?.website}}</p>
+            <p>SIRET {{school?.siret}}</p>
+            <div class="adress-school">
+                <p id="school-adress">{{campus?.name}} : {{campus?.adress}}</p>
+            </div>
+    </div>
+</div>

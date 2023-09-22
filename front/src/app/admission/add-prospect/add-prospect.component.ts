@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
+import { Collaborateur } from 'src/app/models/Collaborateur';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
@@ -11,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
+import { RhService } from 'src/app/services/rh.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -118,7 +120,8 @@ export class AddProspectComponent implements OnInit {
   EcoleListRework = []
 
   constructor(private commercialService: CommercialPartenaireService, private router: Router, private ToastService: MessageService,
-    private FAService: FormulaireAdmissionService, private PService: PartenaireService, private AuthService: AuthService, private admissionService: AdmissionService) { }
+    private FAService: FormulaireAdmissionService, private PService: PartenaireService, private AuthService: AuthService,
+    private admissionService: AdmissionService, private rhService: RhService) { }
 
   ngOnInit(): void {
     if (localStorage.getItem("token") != null) {
@@ -137,6 +140,19 @@ export class AddProspectComponent implements OnInit {
             let { user_id }: any = commercial
             if (user_id && commercial.isAdmin)
               this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+          })
+          this.rhService.getCollaborateurs()
+            .then((response) => {
+              response.forEach((c: Collaborateur) => {
+                this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+              })
+            })
+            .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
+          this.PService.getAll().subscribe(commercials => {
+            this.commercialList = []
+            commercials.forEach(commercial => {
+              this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
+            })
           })
         })
       }
@@ -202,6 +218,19 @@ export class AddProspectComponent implements OnInit {
           let { user_id }: any = commercial
           if (user_id && commercial.isAdmin)
             this.commercialList.push({ label: `${user_id.lastname} ${user_id.firstname}`, value: commercial.code_commercial_partenaire })
+        })
+        this.rhService.getCollaborateurs()
+          .then((response) => {
+            response.forEach((c: Collaborateur) => {
+              this.commercialList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.matricule })
+            })
+          })
+          .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
+        this.PService.getAll().subscribe(commercials => {
+          this.commercialList = []
+          commercials.forEach(commercial => {
+            this.commercialList.push({ label: `${commercial.nom}`, value: commercial.code_partenaire })
+          })
         })
       })
     }

@@ -1,0 +1,50 @@
+<div class="card">
+    <p-fullCalendar #calendar [events]="events" [options]="options">
+    </p-fullCalendar>
+</div>
+<p-dialog class="grid" header="Ajouter un événement" [(visible)]="displayPopUp" [modal]="true"
+    [style]="{width: '75vw'}">
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onSave()">
+        <div class="field col-12">
+            <label>Type: </label>
+            <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true"
+                placeholder="Choisissez un type d'événement" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label>Note </label>
+            <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+        </div>
+        <button pButton [disabled]="formAdd.invalid" label="Ajouter l'événement"></button>
+    </form>
+</p-dialog>
+
+<p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+    [style]="{width: '75vw'}">
+    <div class="col-12 grid">
+        <div class="col-12">
+            <p>
+                {{dataEvent?.note}}
+            </p>
+        </div>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formUpdate" (ngSubmit)="onUpdate()" *ngIf="showEdit">
+            <div class="field col-12">
+                <label>Type: </label>
+                <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true"
+                    placeholder="Choisissez un type d'événement" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+            <div class="field col-12">
+                <label>Note </label>
+                <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+            </div>
+            <button pButton [disabled]="formUpdate.invalid" label="Modifier l'événement"></button>
+        </form>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-cog" [style]="{'width':'100%'}" label="Modifier l'événement"
+                (click)="onInitUpdate()"></p-button>
+        </div>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-trash" [style]="{'width':'100%'}" label="Supprimer l'événement"
+                styleClass="p-button-danger" (click)="onDelete()"></p-button>
+        </div>
+    </div>
+</p-dialog>

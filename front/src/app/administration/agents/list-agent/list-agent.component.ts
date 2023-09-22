@@ -58,7 +58,12 @@ export class ListAgentComponent implements OnInit {
       console.error(e)
     }
     this.authService.getAllAgent().subscribe((users) => {
-      this.tabUser = users;
+      //this.tabUser = users;
+      this.tabUser = users
+      /*users.forEach(u => {
+        if (new Date(u.date_creation) < new Date(2023, 7, 5) && u.service_list.length == 0)
+          this.tabUser.push(u)
+      })*/
     })
     this.servService.getAll().subscribe((services) => {
       services.forEach(serv => {

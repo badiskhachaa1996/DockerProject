@@ -649,6 +649,13 @@ export class ConsulaireComponent implements OnInit {
       ville_adresse: this.detailsForm.value.ville_adresse,
       _id: bypass._id
     }
+    let date_cf = this.showDetails.date_cf
+    let date_visa = this.showDetails.date_visa
+    if (this.detailsForm.value.avancement_visa != 'Pas de retour' && this.detailsForm.value.avancement_visa != this.showDetails.avancement_visa)
+      date_visa = new Date()
+    let date_inscription_def = this.showDetails.date_inscription_def
+    if (this.detailsForm.value.avancement_cf == 'Entretien Validé' && this.detailsForm.value.avancement_cf != this.showDetails.avancement_cf)
+      date_cf = new Date()
     let prospect = {
       formation: this.detailsForm.value.formation,
       campus_choix_1: this.detailsForm.value.campus_choix_1,
@@ -665,7 +672,8 @@ export class ConsulaireComponent implements OnInit {
       avancement_visa: this.detailsForm.value.avancement_visa,
       payement: this.payementList,
       type_form: this.detailsForm.value.type_form,
-      _id: this.showDetails._id
+      _id: this.showDetails._id,
+      date_cf, date_visa, date_inscription_def
 
     }
     let listIDS = []

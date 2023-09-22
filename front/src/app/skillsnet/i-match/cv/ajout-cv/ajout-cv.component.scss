@@ -1,0 +1,253 @@
+.main-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: white;
+  padding: 50px 50px;
+}
+
+.page-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pdf-viewer-here .page {
+  width: auto;
+}
+
+.old-cv,
+.new-cv {
+  min-width: 12.6cm;
+  height: 17.82cm;
+}
+
+.old-cv {
+  font-weight: bold;
+  min-width: 21cm;
+  margin-right: -200px;
+  height: 29.7cm;
+  transform: scale(0.7);
+  transform-origin: top left;
+}
+
+.new-cv {
+  min-width: 21cm;
+  height: 29.7cm;
+  background-color: lightblue;
+  transform: scale(0.7);
+  transform-origin: top left;
+}
+
+.input-form-cv {
+  border: 1px solid lightgray;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 0 20px;
+  min-height: 100vh;
+  flex-grow: 1;
+  min-width: 500px;
+}
+
+
+
+
+.page-container {
+  width: 210mm;
+  min-height: 297mm;
+  display: flex;
+  padding: 0mm;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+}
+
+.page-inner-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 31cm;
+  padding: 0;
+  width: 100%;
+}
+
+
+.header {
+  background: center center no-repeat;
+  background-size: cover;
+  height: 70mm;
+  padding: 10mm;
+  text-align: center;
+  font-size: 14px;
+  font-family: Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: bolder;
+  display: flex;
+  align-items: center;
+}
+
+
+
+.student-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 200px;
+  width: 200px;
+  border-radius: 150px;
+  margin-right: 20px
+}
+
+.student-name {
+  margin: 0;
+  text-align: left;
+  margin-left: 50px;
+  font-size: 44px;
+  padding: 0;
+}
+
+.title-add-cv {
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+  padding: 0;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.content-container {
+  height: 100%;
+  display: flex;
+}
+
+.sidebar {
+  width: 400px;
+  height: 100%;
+  color: white;
+  border-radius: 0 30px 0 0;
+  background-color: #29295c;
+  padding: 30px;
+  padding-top: 10px;
+}
+
+.content {
+  padding: 0 30px;
+  width: 100%;
+  font-size: 16px;
+}
+
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.section-cv h2 {
+  color: #e0222e;
+}
+
+.logo-image {
+  height: 90px;
+  position: absolute;
+  bottom: 10px;
+  right: 25px;
+}
+
+.section-content {
+  margin-bottom: 30px;
+}
+
+.section-training {
+  font-weight: 900;
+}
+
+.section-main {
+  font-style: italic;
+}
+
+
+.sidebar-content .spectialite {
+  background-color: white;
+  width: 100%;
+  border-radius: 20px;
+  padding: 10x 20px;
+  text-align: center;
+  color: #29295c;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.sidebar-title {
+  font-weight: bolder;
+  font-size: 18px;
+}
+
+.content-container {
+  position: relative;
+}
+
+
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+
+  }
+
+  .layout-sidebar {
+    display: none;
+  }
+
+  .layout-topbar {
+    display: none;
+  }
+
+
+  .main-page {
+    padding: 0;
+  }
+
+  .display-top {
+    width: 21cm;
+    min-height: 29.7cm;
+    margin: 0;
+  }
+
+  .old-cv,
+  .input-form-cv {
+    display: none;
+  }
+
+
+  .new-cv {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 21cm !important;
+    min-height: 29.7cm !important;
+    margin-top: 0 !important;
+    transform: scale(1) !important;
+    overflow: hidden;
+  }
+
+  .page-container {
+    padding: 0;
+    padding-bottom: 30px;
+    margin: 0;
+    max-height: 29.7cm !important;
+    width: 21cm !important;
+  }
+
+  .logo-image {
+    bottom: 30px;
+    right: 25px;
+  }
+}

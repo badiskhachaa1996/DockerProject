@@ -23,6 +23,8 @@ import { Conge } from 'src/app/models/Conge';
 import { PlatformLocation } from '@angular/common';
 import { AbscenceCollaborateur } from 'src/app/models/AbscenceCollaborateur';
 import { JustificatifCollaborateurService } from 'src/app/services/justificatif-collaborateur.service';
+import { Collaborateur } from 'src/app/models/Collaborateur';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -296,10 +298,13 @@ export class UserProfilComponent implements OnInit {
   get nationalite() { return this.RegisterForm.get('nationalite'); }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
 
+  dataCollab: Collaborateur
+
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService) { }
+    private TCService: TeamCommercialService, private congeService: CongeService,
+    private abscenceCollaborateurService: JustificatifCollaborateurService, private CollaborateurService: RhService) { }
 
   ngOnInit(): void {
 
@@ -321,7 +326,9 @@ export class UserProfilComponent implements OnInit {
 
     })
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
-
+      this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(c => {
+        this.dataCollab = c
+      })
       this.userco = jwt_decode(data['userToken'])['userFromDb']
       //TODO C'est quoi cette merde
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
@@ -494,6 +501,15 @@ export class UserProfilComponent implements OnInit {
         clearInterval(scrollInterval);
       }
     }, 15);
+  }
+
+  updateDNC = false
+
+  onUpdateDNC() {
+    this.dataCollab.date_naissance = new Date(this.dataCollab.date_naissance)
+    this.CollaborateurService.patchCollaborateurData(this.dataCollab).then(d=>{
+      this.updateDNC = false
+    })
   }
 
 

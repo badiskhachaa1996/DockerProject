@@ -251,8 +251,31 @@ import { MyprojectComponent } from './project-v2/myproject/myproject.component';
 import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
+import { CvComponent } from './skillsnet/i-match/cv/cv.component';
+import { AjoutCvComponent } from './skillsnet/i-match/cv/ajout-cv/ajout-cv.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
+import { CalendrierRhComponent } from './rh/calendrier-rh/calendrier-rh.component';
+import { ConfigurationPointageComponent } from './rh/configuration-pointage/configuration-pointage.component';
+import { RendezVousComponent } from './skillsnet/i-match/rendez-vous/rendez-vous.component';
+import { GestionMentionServiceComponent } from './agents/gestion-mention-service/gestion-mention-service.component';
+import { ArchivagePointageComponent } from './rh/archivage-pointage/archivage-pointage.component';
+import { ConfigurationMIComponent } from './other/formulaireMI/configuration-mi/configuration-mi.component';
+import { FormulaireMIComponent } from './other/formulaireMI/formulaire-mi/formulaire-mi.component';
+import { ResultatsMIComponent } from './other/formulaireMI/resultats-mi/resultats-mi.component';
+import { GenschoolComponent } from './gen_doc/genschool/genschool.component';
+import { GencampusComponent } from './gen_doc/gencampus/gencampus.component';
+import { GenformationComponent } from './gen_doc/genformation/genformation.component';
+import { GendocComponent } from './gen_doc/gendoc/gendoc.component';
+import { RendezVousResultatsComponent } from './skillsnet/i-match/rendez-vous-resultats/rendez-vous-resultats.component';
+import { GendocViewComponent } from './gen_doc/gendoc/gendoc-view/gendoc-view.component';
+import { FormulaireFrontComponent } from './template/formulaire/formulaire-front/formulaire-front.component';
+import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/dashboard-alternance.component';
+import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
+import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
+import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
 import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
+import { InformationsComponent } from './informations/informations.component';
+import { LinksComponent } from './links/links.component';
 const routes: Routes = [
     {
         path: '',
@@ -645,6 +668,11 @@ const routes: Routes = [
             { path: 'dashboard-project-v2', component: DashboardProjectV2Component},
             /** end */
 
+
+            /**informations */
+            { path: 'informations',component:InformationsComponent},
+            /**links */
+            { path:'Links',component:LinksComponent},
             {
                 path: 'logements',
                 canActivate: [AuthGuardService],
@@ -727,6 +755,11 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
+                path: 'dashboard-alternance',
+                component: DashboardAlternanceComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
                 path: 'liste-demande-commercial/:equipe_id',
                 component: DemandeConseillerComponent,
                 canActivate: [AuthGuardService],
@@ -777,6 +810,8 @@ const routes: Routes = [
                 component: DemandesReclamationsComponent,
             },
             { path: 'rh/dashboard', component: DashboardRhComponent },
+            { path: 'rh/calendrier', component: CalendrierRhComponent },
+            { path: 'rh/calendrier/:id', component: CalendrierRhComponent },
 
             /** end */
             {
@@ -1127,68 +1162,24 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             /*Ticketing V2*/
-            {
-                path: 'ticketing/gestion/ajout',
-                component: AjoutTicketComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/gestion/mes-tickets',
-                component: MesTicketsComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/attente-de-traitement',
-                component: ListTicketsEnAttenteDeTraitementComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/traite',
-                component: ListTicketsTraiteComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/refuse',
-                component: ListTicketsRefuseComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/suivi/non-assignes',
-                component: TicketNonAssignesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/gestion/assignes',
-                component: TicketsAssignesComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/configuration',
-                component: ConfigurationComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing/dashboard',
-                component: DashboardTicketingComponent,
-                canActivate: [AuthGuardService],
-            },
-            {
-                path: 'ticketing-igs',
-                component: AjoutTicketComponent,
-                canActivate: [AuthGuardService],
-            },
             { path: 'ticketing/gestion/ajout', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/ajout/:service_id', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/mes-tickets', component: MesTicketsComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/attente-de-traitement', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/attente-de-traitement/:service', component: ListTicketsEnAttenteDeTraitementComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/traite', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/traite/:service', component: ListTicketsTraiteComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/refuse', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/refuse/:service', component: ListTicketsRefuseComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/suivi/non-assignes/:service', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService]},
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
+            { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
+
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
@@ -1264,6 +1255,8 @@ const routes: Routes = [
             { path: 'mails/type', component: MailTypeComponent, canActivate: [AuthGuardService] },
             { path: 'mails/auto', component: MailAutoComponent, canActivate: [AuthGuardService] },
             { path: 'pointeuse/configuration', component: ConfigurationPointeuseComponent, canActivate: [AuthGuardService] },
+            { path: 'pointage/configuration', component: ConfigurationPointageComponent, canActivate: [AuthGuardService] },
+            { path: 'pointage/archivage', component: ArchivagePointageComponent, canActivate: [AuthGuardService] },
 
             //Module Booking V2
             {
@@ -1271,6 +1264,26 @@ const routes: Routes = [
                 component: BookingV2Component,
                 canActivate: [AuthGuardService],
             },
+            //Module Formulaire MI
+            { path: 'formulaireMI/configuration', component: ConfigurationMIComponent, canActivate: [AuthGuardService] },
+            { path: 'formulaireMI/resultats', component: ResultatsMIComponent, canActivate: [AuthGuardService] },
+
+
+            { path: 'generateur-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
+            { path: 'mes-rendez-vous', component: MesRendezVousComponent, canActivate: [AuthGuardService], },
+            { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
+            { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
+
+            // Generateur de Doc 
+            { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
+            { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
+            { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
+            { path: 'genDoc', component: GendocComponent, canActivate: [AuthGuardService] },
+            //Template
+            { path: 'template/formulaire', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
+            { path: 'template/formulaire/:ecole', component: FormulaireFrontComponent, canActivate: [AuthGuardService] },
         ],
     },
     {
@@ -1278,7 +1291,7 @@ const routes: Routes = [
         component: InscriptionEntrepriseComponent,
     },
     { path: 'formulaire', component: DemandeEventsComponent },
-
+    { path: 'formulaire-mi', component: FormulaireMIComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'formulaire-admission-international/:ecole', component: VersionNonIframeComponent },
@@ -1293,6 +1306,11 @@ const routes: Routes = [
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
     {
         path: 'suivre-ma-preinscription',
+        component: SuiviePreinscriptionComponent,
+        canActivate: [ProspectGuard],
+    },
+    {
+        path: 'suivre-ma-preinscription/:user_id',
         component: SuiviePreinscriptionComponent,
         canActivate: [ProspectGuard],
     },
@@ -1328,8 +1346,13 @@ const routes: Routes = [
     { path: 'questionnaire-icbs', component: FormulaireIcbsComponent },
     { path: 'admission/dubai-form', component: FormAdmissionDubaiComponent },
     { path: 'document-authentification', component: DocCheckerComponent },
-    { path: 'imatch', component: IMatchComponent }
+    // Accessible from anywhere
+    { path: 'imatch', component: IMatchComponent },
+    { path: 'rendez-vous', component: RendezVousComponent },
+    { path: 'rendez-vous/:user_id', component: RendezVousComponent },
+    { path: 'imatch/cv/:id', component: CvComponent },
 
+    { path: 'document/:id_doc', component: GendocViewComponent },
 ]
 
 
@@ -1344,4 +1367,4 @@ const routes: Routes = [
 
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

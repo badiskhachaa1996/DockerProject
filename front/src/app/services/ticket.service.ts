@@ -37,7 +37,6 @@ export class TicketService {
 
   //Update le ticket et son premier Message
   update(ticket) {
-    console.log(ticket);
     let id = ticket.id
     if (!id)
       id = ticket._id

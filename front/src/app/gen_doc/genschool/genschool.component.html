@@ -1,0 +1,150 @@
+<p-toast></p-toast>
+
+
+    <!-- Formulaire d'ajout d'école -->
+    <div class="col-12" *ngIf="showAddSchool  || showUpdateSchool">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showAddSchool = false; showUpdateSchool = false; formAddSchool.reset()" aria-hidden="true"></i>
+
+            <h4 style="text-align: center;">Nouvelle école</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddSchool">
+                <div class="field col-6">
+                    <label>Ecole</label>
+                    <input pInputText type="text" placeholder="Ex: ESPIC" formControlName="name" />
+                </div>
+                <div class="field col-6">
+                    <label>Email</label>
+                    <input pInputText type="text" placeholder="Ex: contact@espic.com" formControlName="email" />
+                </div>
+
+                <div class="field col-6">
+                    <label>Tel</label>
+                    <input pInputText type="text" placeholder="Ex: +33 6 88 44 77 55" formControlName="phone" />
+                </div>
+
+                <div class="field col-6">
+                    <label>Site Web</label>
+                    <input pInputText type="text" placeholder="Ex: www.espic.com" formControlName="website" />
+                </div>
+
+                <div class="field col-6">
+                    <label>UAI</label>
+                    <input pInputText type="text" placeholder="Ex: 021458757" formControlName="uai" />
+                </div>
+
+                
+                <div class="field col-6">
+                    <label>Siret</label>
+                    <input pInputText type="text" placeholder="Ex: 25548879797" formControlName="siret" />
+                </div>
+            </form>
+            <div>
+                <button pButton label="Valider" type="submit" [disabled]="formAddSchool.invalid"
+                    (click)="onAddSchool()"></button>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Table d'affichage des écoles -->
+<div class="col-12">
+    <div class="card">
+        <button pButton pRipple label="Ajouter une école" icon="pi pi-plus" class="mr-2 mb-2" (click)="showAddSchool = true"
+            style="float: right"></button>
+
+        <h3>Ecoles pour Generation de Doc</h3>
+        <p-table #dt1 [value]="schoolList" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedSchools"
+            [globalFilterFields]="['school.name']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Ecole
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Email
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Tel
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Site Web
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            UAI
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Siret
+                        </div>
+                    </th>
+                    <th style="width: 8rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Action
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-school>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="school"></p-tableCheckbox>
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{school.name}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{school.email}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{school.phone}}
+                    </td>
+
+                    <td style="min-width: 12rem;">
+                        {{school.website}}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{school.uai}}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{school.siret}}
+                    </td>
+                    <td class="text-center" style="min-width: 8rem;">
+                        <i class="pi pi-pencil mr-2" title="Modifier l'école" (click)="InitUpdateSchool(school)"></i>
+                        <i class="pi pi-trash" title="Suprimer l'école l'image" (click)="deleteSchool(school)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">Aucune école trouvé.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Chargement...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>
+

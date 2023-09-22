@@ -1,13 +1,19 @@
+
+
 <div class="card">
+    
     <p-tabView [(activeIndex)]="selectedTabIndex">
+        
         <p-tabPanel header="To Do">
+            
             <div class="grid col-12" style="background-color: #ffeede;">
                 <ng-container *ngFor="let task of tasktodo">
-
+                    
                     <div class="col-6 ">
                         <p-card>
                             <p-table responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
+                                    
                                     <tr>
                                         <th>ID:<span style="color:#878787" > {{task?.task_id?.identifian}}</span></th>
                                         <th>Libelle:<span style="color:#878787" > {{task?.task_id?.libelle}} </span></th>
@@ -119,7 +125,7 @@
             <div class="grid col-12" style="background-color: #e2e3cc;">
                 <ng-container *ngFor="let task of taskencours">
 
-                    <div class="col-6">
+                    <div class="col-12">
                         <p-card>
                             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
@@ -136,7 +142,7 @@
                                     <tr>
                                         <th>Assigné le: <span style="color:#878787" > {{task?.date_ajout | date:'mediumDate'}}</span></th>
 
-                                        <th style="color: red;" colspan="2">Date limite: {{task[0]?.date_limite |
+                                        <th style="color: red;" colspan="2">Date limite: {{task?.date_limite |
                                             date:'mediumDate'}} </th>
                                     </tr>
                                     <tr>
@@ -206,7 +212,7 @@
                                         <p class="m-0">
                                             <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
                                             <br />
-                                            <strong>Note :</strong> {{taskDetails?.note}}
+                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
                                         </p>
                                     </p-dialog>
                                 </div>
@@ -312,9 +318,9 @@
                                     <p-dialog header="Details" [(visible)]="visible" [modal]="true"
                                         [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
                                         <p class="m-0">
-                                            <strong>Description :</strong> {{taskDetails?.description_task}}
+                                            <strong>Description :</strong> {{taskDetails?.task_id?.description_task}}
                                             <br />
-                                            <strong>Note :</strong> {{taskDetails?.ticketId.note}}
+                                            <strong>Note :</strong> {{taskDetails?.note_assignation}}
 
 
 

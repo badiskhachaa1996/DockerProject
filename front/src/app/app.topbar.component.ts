@@ -10,6 +10,9 @@ import jwt_decode from "jwt-decode";
 import { ServService } from './services/service.service';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from './services/auth.service';
+import { User } from './models/User';
+import { CommonModule } from '@angular/common';
+
 
 const io = require("socket.io-client");
 
@@ -24,8 +27,18 @@ export class AppTopBarComponent {
   notif = false;
   Notifications = 0;
   socket = io(environment.origin.replace('/soc', ''));
+  isCEO = false
+  userConnected: User;
+  token: any;
+  user=true;
+  nom=""
+  prenom="";
+  today: Date = new Date();
 
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService, private msalService: MsalService, private AuthService: AuthService, private ToastService: MessageService) { }
+
+  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, 
+    private NotificationService: NotificationService, private msalService: MsalService, 
+    private AuthService: AuthService, private ToastService: MessageService,private UserService: AuthService,) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -38,10 +51,18 @@ export class AppTopBarComponent {
     this.Notifications = 0
 
   }
+  onGetUserConnectedInformation(): void {
+    this.UserService.getPopulate(this.token.id).subscribe({
+      next: (response) => {
+        this.userConnected = response;
+      this.nom=this.userConnected.lastname;
+    this.prenom=this.userConnected.firstname}})}
   ngOnInit() {
     let temp: any = jwt_decode(localStorage.getItem("token"))
     let url = window.location.href;
     //console.log(url)
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.onGetUserConnectedInformation();
     if (url.includes('ims.adgeducation')) //ims.adgeducation
       this.logo = "assets/images/logo_adg.png"
     if (temp.service_id) {
@@ -97,6 +118,7 @@ export class AppTopBarComponent {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected = jwt_decode(data.userToken)["userFromDb"];
+      this.isCEO = userconnected.type == "CEO Entreprise";
       if (userconnected) {
         this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
       }

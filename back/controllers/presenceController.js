@@ -488,23 +488,25 @@ app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
             let total = 0
             //{seance.libelle,classes.abbrv,matiere_id.nom,date_debut,presence,calcul}
             presences.forEach(p => {
-                let date_fin = new Date(p.seance_id.date_fin)
-                let date_debut = new Date(p.seance_id.date_debut)
-                let totalHeure = 0
-                let classes = ""
-                if (date_debut.getMonth() + 1 == parseInt(req.params.mois) && date_debut.getFullYear() == parseInt(req.params.year)) {
-                    totalHeure += date_fin.getHours() - date_debut.getHours()
-                    p.seance_id.classe_id.forEach(c => {
-                        classes = classes + c.abbrv
-                    })
-                    if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
-                        totalHeure = totalHeure + 0.5
-                    let d = { libelle: p.seance_id.libelle, classes, matiere: p.seance_id.matiere_id.nom, date_debut, presence: 'Présent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: 0 }
-                    if (formateur?.coutHbyModule && formateur?.coutHbyModule[p.seance_id.matiere_id._id])
-                        d.taux_h = formateur?.coutHbyModule[p.seance_id.matiere_id._id]
-                    r.push(d)
-                    idSeance.push(p.seance_id._id)
-                    total += totalHeure
+                if (p.seance_id) {
+                    let date_fin = new Date(p?.seance_id?.date_fin)
+                    let date_debut = new Date(p?.seance_id?.date_debut)
+                    let totalHeure = 0
+                    let classes = ""
+                    if (date_debut.getMonth() + 1 == parseInt(req.params.mois) && date_debut.getFullYear() == parseInt(req.params.year)) {
+                        totalHeure += date_fin.getHours() - date_debut.getHours()
+                        p.seance_id.classe_id.forEach(c => {
+                            classes = classes + c.abbrv
+                        })
+                        if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
+                            totalHeure = totalHeure + 0.5
+                        let d = { libelle: p.seance_id.libelle, classes, matiere: p.seance_id.matiere_id.nom, date_debut, presence: 'Présent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: 0 }
+                        if (formateur?.coutHbyModule && formateur?.coutHbyModule[p.seance_id.matiere_id._id])
+                            d.taux_h = formateur?.coutHbyModule[p.seance_id.matiere_id._id]
+                        r.push(d)
+                        idSeance.push(p.seance_id._id)
+                        total += totalHeure
+                    }
                 }
             })
             Seance.find({ formateur_id: formateur_id, _id: { $nin: idSeance } }).populate('classe_id').populate('matiere_id').then(seances => {

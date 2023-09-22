@@ -1,0 +1,34 @@
+
+@media print {
+
+    html,
+    body, 
+    .layout-main-container,
+    .layout-main,
+    app-ajout-cv {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: white !important;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust:exact;
+    
+    }
+
+    app-topbar, app-footer {
+        display: none !important;
+    }
+
+    .layout-sidebar {
+      display: none !important;
+    }
+
+    .layout-topbar {
+      display: none !important;
+    }
+
+      .bienvenue {
+      display: flex;
+      color: red;
+      font-size: 50px;
+    }
+}

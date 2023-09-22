@@ -28,7 +28,8 @@ export class ExterneComponent implements OnInit {
 
   token: any;
   constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService,
-    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService: AdmissionService) { }
+    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
+    private msalService: MsalService, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
     let url = window.location.href;

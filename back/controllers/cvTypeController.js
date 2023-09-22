@@ -63,7 +63,10 @@ app.post("/post-cv", (req, res) => {
     CvType.findOne({ user_id: cv.user_id })
         .then((response) => {
             if (response) {
-                res.status(400).send({response,message:'UN CV existe déjà'});
+                CvType.findByIdAndUpdate(response._id, { ...req.body, date_creation: new Date() }).then(r => {
+                    res.status(200).send(r);
+                })
+
             } else {
                 cv.save()
                     .then((response) => { res.status(201).send(response); })
@@ -86,7 +89,13 @@ app.put("/put-cv", (req, res) => {
 
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
-    CvType.find()?.populate('user_id').populate('competences').populate('createur_id')
+    CvType.find()?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+app.get("/get-cvs-public", (_, res) => {
+    CvType.find({ isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').sort({ _id: -1 })
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -99,10 +108,17 @@ app.get("/get-cv", (req, res) => {
         .catch((error) => { res.status(400).send(error.message); });
 });
 
+app.get("/get-object-cv/:id", (req, res) => {
+    CvType.findOne({ _id: req.params.id }).populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').then((dataCv) => {
+        res.status(200).send({ dataCv });
+    }).catch((error) => {
+        res.status(400).send("erreur :" + error);
+    })
+});
 
 // recuperation d'un cv par id du user
 app.get("/get-cv-by-user_id/:id", (req, res) => {
-    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate('competences')
+    CvType.findOne({ user_id: req.params.id })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -138,6 +154,21 @@ app.post('/uploadPicture', uploadLogo.single('file'), (req, res, next) => {
 
     }
 })
+app.get('/get-picture-by-user/:id', (req, res) => {
+    let id = req.params.id
+    let fileOne
+    console.log(id)
+    let filenames = fs.readdirSync("storage/cvPicture/" + id)
+    if (filenames)
+        fileOne = {
+            file: fs.readFileSync("storage/cvPicture/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                if (err) return console.error(err);
+            }),
+            extension: mime.contentType(path.extname("storage/cvPicture/" + id + "/" + filenames[0])),
+            url: ""
+        }
+    res.status(200).send({ fileOne })
+})
 
 app.get('/getAllPicture', (req, res) => {
     let ids = fs.readdirSync("storage/cvPicture")
@@ -156,5 +187,6 @@ app.get('/getAllPicture', (req, res) => {
     })
     res.status(200).send({ files: fileDic, ids })
 })
+
 
 module.exports = app;

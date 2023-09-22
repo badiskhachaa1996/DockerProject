@@ -103,6 +103,10 @@
         <button pButton class="ml-1" icon="pi pi-file-pdf" (click)="exportToPDF('semestriel')" type="button"
             style="float:right;" label="Exporter en pdf">
         </button>
+        <div>
+            <label>Année :</label><br>
+            <input pInputText type="text" [(ngModel)]="exInfoDiplome">
+        </div>
     </div>
     <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
@@ -291,5 +295,3 @@
         </div>
     </div>
 </div>
-
-{{NOTES|json}}

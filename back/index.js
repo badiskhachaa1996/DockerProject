@@ -113,6 +113,11 @@ const paymentController = require('./controllers/paymentController');
 const teamCommercialController = require('./controllers/teamCommercialController');
 const logementController = require('./controllers/logementController');
 const cvTypeController = require('./controllers/cvTypeController');
+const genSchoolController = require('./controllers/gen_doc/genSchoolController');
+const genCampusController = require('./controllers/gen_doc/genCampusController');
+const genDocController = require('./controllers/gen_doc/genDocController');
+const genFormationController = require('./controllers/gen_doc/genFormationController');
+const genRentreController = require('./controllers/gen_doc/genRentreController');
 const DemandeConseillerController = require('./controllers/demandeConseillerController');
 const congeController = require('./controllers/congeController');
 const devoirController = require('./controllers/devoirController');
@@ -141,6 +146,7 @@ const PAC = require('./controllers/alternantsPartenaireController')
 const rhControlleur = require('./controllers/rhController');
 const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
+const meetingTeamsController = require('./controllers/meetingTeamsController');
 
 const { User } = require("./models/user");
 
@@ -226,12 +232,24 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireAdmission/") ||
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
-      req.originalUrl === '/soc/cv/get-cvs' ||
+      req.originalUrl === '/soc/cv/get-cvs-public' ||
+      req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
+      req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
+      req.originalUrl.startsWith("/soc/cv/get-picture-by-user/") ||
       req.originalUrl === '/soc/skills/get-competences' ||
-      req.originalUrl.startsWith('/soc/RA/getByEcoleID',
-        req.originalUrl.startsWith('/soc/docGenInt/download'))
+      req.originalUrl === '/soc/skills/get-profiles' ||
+      req.originalUrl.startsWith("/soc/fIM") ||
+      req.originalUrl.startsWith('/soc/RA/getByEcoleID') ||
+      req.originalUrl.startsWith('/soc/docGenInt/download') ||
+      req.originalUrl === '/soc/meetingTeams/create' ||
+      req.originalUrl.startsWith('/soc/genDoc/get-doc')
+      /*
+          Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
+          il faut dans ce cas rajouter le chemin de la route ici
+      */
+      || req.originalUrl === '/soc/template/formulaire/getAllPopulate'
     ) {
       next();
     } else {
@@ -241,7 +259,7 @@ app.use("/", function (req, res, next) {
         .send(
           "Accès non autorisé, Wrong Token " +
           token +
-          " Vérifiez aussi que la méthode de request POST ou GET est respecté" +
+          " Vérifiez aussi que la méthode de request POST ou GET est respecté\n" +
           req.originalUrl
         );
     }
@@ -296,6 +314,15 @@ app.use("/soc/entreprise", entrepriseController);
 app.use("/soc/examen", examenController);
 
 app.use("/soc/cv", cvTypeController);
+
+
+
+app.use("/soc/genSchool", genSchoolController);
+app.use("/soc/genCampus", genCampusController);
+app.use("/soc/genDoc", genDocController);
+app.use("/soc/genFormation", genFormationController);
+app.use("/soc/genRentre", genRentreController);
+
 
 app.use("/soc/prestataire", prestataireController);
 
@@ -373,6 +400,13 @@ app.use('/soc/mail', mailController)
 app.use('/soc/target', require('./controllers/targetController'))
 app.use('/soc/candidatureLead', require('./controllers/candidatureLeadController'))
 app.use('/soc/pointeuse', require('./controllers/pointeuseController'))
+app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
+app.use('/soc/pointage', require('./controllers/pointageController'))
+app.use('/soc/fIM', require('./controllers/formulaireMIController'))
+app.use('/soc/meetingTeams', meetingTeamsController)
+
+app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
+app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
