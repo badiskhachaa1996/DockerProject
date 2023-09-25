@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.disable("x-powered-by");
 const { Annonce } = require('./../models/Annonce');
-
+const { Matching } = require("./../models/matching");
 //Création d'une annonce
 app.post("/post-annonce", (req, res) => {
     const annonce = new Annonce({ ...req.body, date_creation: new Date() });
@@ -43,5 +43,16 @@ app.put("/put-annonce", (req, res) => {
         .then((annonce) => { res.status(200).send(annonce) })
         .catch((error) => { res.status(500).send(error.message) })
 });
+
+app.delete('/delete/:id', (req, res) => {
+    Annonce.findByIdAndRemove(req.params.id)
+        .then((annonce) => {
+            Matching.remove({ offre_id: req.params.id }).then(offres => {
+                res.status(200).send({ annonce, offres })
+            })
+
+        })
+        .catch((error) => { res.status(500).send(error.message) })
+})
 
 module.exports = app;
