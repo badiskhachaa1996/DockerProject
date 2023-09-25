@@ -14,6 +14,7 @@ import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Profile } from 'src/app/models/Profile';
 import { Competence } from 'src/app/models/Competence';
 import { Router } from '@angular/router';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
 @Component({
   selector: 'app-mes-offres',
@@ -92,11 +93,18 @@ export class MesOffresComponent implements OnInit {
     { label: 'CDI' }
   ];
 
+  statutDropdown = [
+    { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: 'Clôturée', value: "Clôturée" },
+  ]
+
   token: any;
+
+  dicOffreNB = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService,
     private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService,
-    private annonceService: AnnonceService, private router: Router) { }
+    private annonceService: AnnonceService, private router: Router, private MatchingService: MatchingService) { }
 
   ngOnInit(): void {
     //Decodage du token
@@ -114,7 +122,7 @@ export class MesOffresComponent implements OnInit {
       entreprise_mail: [''],
       entreprise_phone_indicatif: [''],
       entreprise_phone: [''],
-      missionName: [''],
+      missionName: ['', Validators.required],
       profil: [this.profilsList[0]],
       competences: [''],
       outils: [''],
@@ -123,6 +131,7 @@ export class MesOffresComponent implements OnInit {
       missionType: [this.missionTypes[0]],
       debut: [''],
       source: [''],
+      statut: [''],
     });
 
     //Initialisation du formulaire de modification d'une annonce
@@ -143,6 +152,7 @@ export class MesOffresComponent implements OnInit {
       missionType: [this.missionTypes[0]],
       debut: [''],
       source: [''],
+      statut: [''],
     });
 
   }
@@ -161,6 +171,13 @@ export class MesOffresComponent implements OnInit {
     this.annonceService.getAnnoncesByUserId(this.token.id)
       .then((response: Annonce[]) => {
         this.annonces = response;
+        //Récupération du nombre de matching par Annonce
+        response.forEach(annonce => {
+          this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+            this.dicOffreNB[annonce._id] = matchs.length
+          })
+        })
+
       })
       .catch((error) => console.error(error));
 
@@ -175,6 +192,8 @@ export class MesOffresComponent implements OnInit {
       }),
       ((error) => console.error(error))
     );
+
+
 
     //Récupération de la liste des profiles
     this.skillsService.getProfiles()
@@ -677,6 +696,14 @@ export class MesOffresComponent implements OnInit {
       cont = "OA"
     let random = Math.random().toString(36).substring(5).toUpperCase();
     return label + cont + random
+  }
+
+  onDelete(annonce: Annonce) {
+    this.annonceService.delete(annonce._id).then(r => {
+      this.annonces.splice(this.annonces.indexOf(annonce), 1)
+      this.annonceSelected = null
+      this
+    })
   }
 
 }

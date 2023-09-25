@@ -1,6 +1,6 @@
 <div class="col-12">
-    <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
-        style="display: none" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+    <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile style="display: none"
+        accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 </div>
 <p-fieldset class="grid col-12" legend="Informations de l'entreprise" style="width: 100%;" *ngIf="ENTREPRISE && USER">
     <div class="grid col-12" *ngIf="!modeEdit">
@@ -10,51 +10,51 @@
             </h3>
 
             <p class="col-6" style="text-align: center;">
-                Téléphone de l'entreprise:<br>
+                <span style="font-weight: bold;">Téléphone de l'entreprise:</span><br>
                 {{ENTREPRISE.indicatif_ent}} {{ENTREPRISE.phone_ent}}
             </p>
             <p class="col-6" style="text-align: center;">
-                Email de l'entreprise:<br> {{ENTREPRISE.email}}
+                <span style="font-weight: bold;"> Email de l'entreprise:</span><br> {{ENTREPRISE.email}}
             </p>
 
             <p class="col-6" style="text-align: center;">
-                Adresse de l'entreprise: <br>
+                <span style="font-weight: bold;">Adresse de l'entreprise:</span> <br>
                 {{ENTREPRISE.code_postale_ent}}, {{ENTREPRISE.adresse_ent}},
                 {{ENTREPRISE.ville_ent}}
             </p>
             <p class="col-6" style="text-align: center;">
-                Site web:<br> {{ENTREPRISE.site_web}}
+                <span style="font-weight: bold;">Site web:</span><br> {{ENTREPRISE.site_web}}
             </p>
 
             <p class="col-6" style="text-align: center;">
-                Secteur d'activité:<br>
+                <span style="font-weight: bold;">Secteur d'activité:</span><br>
                 {{ENTREPRISE.activite}}
             </p>
             <p class="col-6" style="text-align: center;">
-                Taille de l'entreprise:<br>
+                <span style="font-weight: bold;">Taille de l'entreprise:</span><br>
                 {{ENTREPRISE.nb_salarie}}
             </p>
 
             <h5 class="col-12" style="text-align: center;font-weight: bold;">
-                Informations de contact
+                <span style="font-weight: bold;">Informations de contact</span>
             </h5>
             <p class="col-6" style="text-align: center;">
-                Prénom & NOM de la personne de contact:<br>
+                <span style="font-weight: bold;">Prénom & NOM de la personne de contact:</span><br>
                 {{USER.firstname | titlecase}} {{USER.lastname | uppercase}}
             </p>
             <p class="col-6" style="text-align: center;">
-                Adresse mail contact:<br>
+                <span style="font-weight: bold;">Adresse mail contact:</span><br>
                 {{USER.email_perso}}
             </p>
 
             <h5 class="col-12" style="text-align: center;font-weight: bold;">
-                Mentions légales
+                <span style="font-weight: bold;">Mentions légales</span>
             </h5>
             <p class="col-6" style="text-align: center;">
-                SIRET:<br> {{ENTREPRISE.siret}}
+                <span style="font-weight: bold;">SIRET:</span><br> {{ENTREPRISE.siret}}
             </p>
             <p class="col-6" style="text-align: center;">
-                RCS:<br> {{ENTREPRISE.rcs}}
+                <span style="font-weight: bold;">RCS:</span><br> {{ENTREPRISE.rcs}}
             </p>
         </div>
         <div class="col-2" *ngIf="!modeEdit">
@@ -72,8 +72,8 @@
 
         <p class="col-6" style="text-align: center;">
             Téléphone de l'entreprise:<br>
-            <input pInputText type="tel" [(ngModel)]="ENTREPRISE.indicatif_ent" placeholder="Ex: +33" autoWidth="false"
-                [style]="{'width':'100%'}">
+            <input class="mb-2" pInputText type="tel" [(ngModel)]="ENTREPRISE.indicatif_ent" placeholder="Ex: +33"
+                autoWidth="false" [style]="{'width':'100%'}">
             <input pInputText type="tel" [(ngModel)]="ENTREPRISE.phone_ent" autoWidth="false"
                 placeholder="Ex: 0213456789" [style]="{'width':'100%'}">
         </p>
@@ -85,9 +85,9 @@
 
         <p class="col-6" style="text-align: center;">
             Adresse de l'entreprise: <br>
-            <input pInputText type="text" [(ngModel)]="ENTREPRISE.code_postale_ent" autoWidth="false"
+            <input class="mb-2" pInputText type="text" [(ngModel)]="ENTREPRISE.code_postale_ent" autoWidth="false"
                 placeholder="Ex: 96420" [style]="{'width':'100%'}">
-            <input pInputText type="text" [(ngModel)]="ENTREPRISE.adresse_ent" autoWidth="false"
+            <input class="mb-2" pInputText type="text" [(ngModel)]="ENTREPRISE.adresse_ent" autoWidth="false"
                 placeholder="Ex: 20 Place de l'église" [style]="{'width':'100%'}">
             <input pInputText type="text" [(ngModel)]="ENTREPRISE.ville_ent" autoWidth="false" placeholder="Ex: Paris"
                 [style]="{'width':'100%'}">
@@ -114,26 +114,27 @@
         </h5>
         <p class="col-6" style="text-align: center;">
             Prénom & NOM de la personne de contact:<br>
-            <input pInputText type="text" [(ngModel)]="USER.firstname" autoWidth="false" [style]="{'width':'100%'}"
-                placeholder="Ex: Smith">
+            <input class="mb-2" pInputText type="text" [(ngModel)]="USER.firstname" autoWidth="false"
+                [style]="{'width':'100%'}" placeholder="Ex: Smith">
             <input pInputText type="text" [(ngModel)]="USER.lastname" autoWidth="false" [style]="{'width':'100%'}"
                 placeholder="Ex: John">
         </p>
         <p class="col-6" style="text-align: center;">
             Adresse mail contact:<br>
-            <input pInputText type="text" [(ngModel)]="USER.email_perso" autoWidth="false" [style]="{'width':'100%'}" placeholder="Ex: email@gmail.com">
+            <input pInputText type="text" [(ngModel)]="USER.email_perso" autoWidth="false" [style]="{'width':'100%'}"
+                placeholder="Ex: email@gmail.com">
         </p>
 
         <h5 class="col-12" style="text-align: center;font-weight: bold;">
             Mentions légales
         </h5>
         <p class="col-6" style="text-align: center;">
-            SIRET:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.siret" autoWidth="false" placeholder="Ex: 362 521 879 00034"
-                [style]="{'width':'100%'}">
+            SIRET:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.siret" autoWidth="false"
+                placeholder="Ex: 362 521 879 00034" [style]="{'width':'100%'}">
         </p>
         <p class="col-6" style="text-align: center;">
-            RCS:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.rcs" autoWidth="false" placeholder="RCS PARIS B 362 521 879"
-                [style]="{'width':'100%'}">
+            RCS:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.rcs" autoWidth="false"
+                placeholder="RCS PARIS B 362 521 879" [style]="{'width':'100%'}">
         </p>
         <div class="col-2 col-offset-10">
             <button pButton type="button" label="Valider les modifications" (click)="onSave()"

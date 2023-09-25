@@ -21,5 +21,7 @@ export class Annonce {
         public source?: string,
         public isClosed?: boolean,
         public custom_id?: string,
+        public date_creation?: Date,
+        public statut?: string
     ) { }
 }

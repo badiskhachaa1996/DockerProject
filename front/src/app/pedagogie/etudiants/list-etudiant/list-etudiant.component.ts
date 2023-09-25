@@ -665,7 +665,7 @@ export class ListEtudiantComponent implements OnInit {
       this.etudiantToUpdate.entreprise, this.etudiantToUpdate.etat_paiement,
       this.etudiantToUpdate.source, this.etudiantToUpdate.date_valided_by_support,
       ecole,
-      this.etudiantToUpdate.lien_livret,this.etudiantToUpdate.lien_dossier_professionel,
+      this.etudiantToUpdate.lien_livret, this.etudiantToUpdate.lien_dossier_professionel,
       this.etudiantToUpdate.lien_tableau_synthese,
       this.etudiantToUpdate.date_inscription,
       this.etudiantToUpdate.lien_bulletin,
@@ -897,7 +897,7 @@ export class ListEtudiantComponent implements OnInit {
       const formData = new FormData();
       formData.append('id', this.showUploadFile._id)
       formData.append('file', event[0])
-      console.log('IWAS HREE',formData)
+      console.log('IWAS HREE', formData)
       this.etudiantService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.confirmRighFile(event[0], this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
@@ -939,7 +939,13 @@ export class ListEtudiantComponent implements OnInit {
     })
     this.userService.getPopulate(this.token.id).subscribe(dataU => {
       let bypass: any = dataU?.service_id
-      this.isAdministration = bypass?.label.includes('dministration') || this.token.role == "Admin"
+      let service_dic = {}
+      dataU.roles_list.forEach((val) => {
+        if (!service_dic[val.module])
+          service_dic[val.module] = val.role
+      })
+      let services_list = Object.keys(service_dic)
+      this.isAdministration = bypass?.label.includes('dministration') || this.token.role == "Admin" || services_list.includes('Administration')
     })
   }
 
@@ -1323,12 +1329,10 @@ export class ListEtudiantComponent implements OnInit {
 
 
   // dynamisation des filtres
-  onTrackCampusValue(event: any): void
-  {
+  onTrackCampusValue(event: any): void {
     this.groupes = [];
     this.searchClass.forEach((classe: any) => {
-      if(classe.campus_id == event.value) 
-      {
+      if (classe.campus_id == event.value) {
         this.groupes.push(classe);
       }
     });
