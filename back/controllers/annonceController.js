@@ -5,7 +5,7 @@ const { Annonce } = require('./../models/Annonce');
 
 //Création d'une annonce
 app.post("/post-annonce", (req, res) => {
-    const annonce = new Annonce({ ...req.body });
+    const annonce = new Annonce({ ...req.body, date_creation: new Date() });
 
     annonce.save()
         .then((annonceSaved) => { res.status(201).send(annonceSaved); })
