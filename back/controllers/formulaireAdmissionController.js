@@ -58,7 +58,7 @@ app.put("/RA/update", (req, res) => {
 app.delete("/RA/delete/:id", (req, res, next) => {
     RentreeAdmission.deleteOne({ _id: req.params.id })
         .then((response) => { res.status(200).json({ success: "Rentrée scolaire supprimé" }) })
-        .catch((error) => {console.log(error); res.status(400).json({ error: "Impossible de supprimer la rentrée scolaire"});})
+        .catch((error) => {console.error(error); res.status(400).json({ error: "Impossible de supprimer la rentrée scolaire"});})
 })
 
 
@@ -140,7 +140,7 @@ app.put("/EA/update", (req, res) => {
 app.delete("/EA/delete/:id", (req, res, next) => {
     EcoleAdmission.deleteOne({ _id: req.params.id })
         .then((response) => { res.status(200).json({ success: "École supprimé" }) })
-        .catch((error) => {console.log(error); res.status(400).json({ error: "Impossible de supprimer l'école"});})
+        .catch((error) => {console.error(error); res.status(400).json({ error: "Impossible de supprimer l'école"});})
 })
 
 

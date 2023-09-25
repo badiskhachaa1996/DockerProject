@@ -218,7 +218,7 @@ export class GendocComponent implements OnInit {
           this.schoolList.push({ label: school.name, value: school._id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
     this.campusList = [];
     this.genCampusService.getCampuss()
       .then((response: GenCampus[]) => {
@@ -226,7 +226,7 @@ export class GendocComponent implements OnInit {
           this.campusList.push({ label: campus.name, value: campus._id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
     this.formationList = [];
     this.genFormationService.getFormations()
       .then((response: GenCampus[]) => {
@@ -234,7 +234,7 @@ export class GendocComponent implements OnInit {
           this.formationList.push({ label: formation.name, value: formation._id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
 
     this.UserService.getPopulate(this.token.id).subscribe((userdata) => {
       this.user = userdata
@@ -308,7 +308,7 @@ export class GendocComponent implements OnInit {
         })
         .catch((error) => {
           this.messageService.add({ severity: "error", summary: `Ajout impossible` });
-          console.log(error);
+          console.error(error);
         });
     }
   }
@@ -373,7 +373,7 @@ export class GendocComponent implements OnInit {
         .then((response: GenSchool) => {
           this.school = response
         })
-        .catch((error) => { console.log(error); })
+        .catch((error) => { console.error(error); })
     } else {
       this.school = null
     }
@@ -385,7 +385,7 @@ export class GendocComponent implements OnInit {
         .then((response: GenCampus) => {
           this.campus = response
         })
-        .catch((error) => { console.log(error); })
+        .catch((error) => { console.error(error); })
     } else {
       this.campus = null
     }
@@ -405,10 +405,10 @@ export class GendocComponent implements OnInit {
               })
 
             })
-            .catch((error) => { console.log(error); })
+            .catch((error) => { console.error(error); })
 
         })
-        .catch((error) => { console.log(error); })
+        .catch((error) => { console.error(error); })
     } else {
       this.formation = null
     }
@@ -420,7 +420,7 @@ export class GendocComponent implements OnInit {
         .then((response: GenRentre) => {
           this.rentre = response
         })
-        .catch((error) => { console.log(error); })
+        .catch((error) => { console.error(error); })
     } else {
       this.rentre = null
     }

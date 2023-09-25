@@ -196,7 +196,7 @@ export class GestionComponent implements OnInit {
   getthecrateur() {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
-      error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
+      error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
       complete: () => console.log("information de l'utilisateur connecté récuperé")
     });
   }
@@ -242,7 +242,7 @@ export class GestionComponent implements OnInit {
           this.responsableListe.push(newUser);
         });
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
   }
   //envoi du forulaire creation de project 
   addProject() {

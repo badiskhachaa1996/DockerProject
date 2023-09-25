@@ -20,7 +20,7 @@ app.post('/post-collaborateur', (req, res) => {
 
     collaborateur.save()
         .then((response) => { res.status(201).send(response) })
-        .catch((error) => { console.log(error); res.status(500).send(error); });
+        .catch((error) => { console.error(error); res.status(500).send(error); });
 });
 
 // mettre à jour les informations personnelles du collaborateur
@@ -132,7 +132,7 @@ app.patch('/add-collaborateur-skills', (req, res) => {
             // envoi des données en bd
             Collaborateur.findOneAndUpdate({ _id: id }, { ...collaborateur })
                 .then((response) => { res.status(201).send(response) })
-                .catch((error) => { console.log(error); res.status(400).send('Impossible de mettre à jour les informations du collaborateur') });
+                .catch((error) => { console.error(error); res.status(400).send('Impossible de mettre à jour les informations du collaborateur') });
         })
         .catch((error) => { res.status(400).send("Impossible d'ajouter de nouvelles compétences") });
 });

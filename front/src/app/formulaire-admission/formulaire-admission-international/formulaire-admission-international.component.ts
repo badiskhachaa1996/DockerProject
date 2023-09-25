@@ -540,7 +540,7 @@ export class FormulaireAdmissionInternationalComponent implements OnInit {
         this.diplomesOfCampus = data;
         console.log(this.diplomesOfCampus)
       },
-      (error) => { console.log(error) }
+      (error) => { console.error(error) }
     );
   }
 

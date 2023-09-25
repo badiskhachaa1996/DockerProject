@@ -103,7 +103,7 @@ export class ListEntrepriseComponent implements OnInit {
     // recuperation de l'utilisateur connecté
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
-      error: (error) => { console.log(error) },
+      error: (error) => { console.error(error) },
       complete: () => { console.log('Utilisateur connecté récupéré')}
     });
   }

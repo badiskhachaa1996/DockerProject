@@ -119,7 +119,7 @@ app.post("/post-stage", (req, res) => {
         })
         .catch((error) => { res.status(400).json({error: error, errorMsg: "Impossible de récupérer l'entreprise liée au contrat"}); });
     })
-    .catch((error) => { console.log(error); res.status(400).json({error: error, errorMsg: "Impossible de créer un nouveau stage"}) });
+    .catch((error) => { console.error(error); res.status(400).json({error: error, errorMsg: "Impossible de créer un nouveau stage"}) });
 });
 
 // modification d'un stage

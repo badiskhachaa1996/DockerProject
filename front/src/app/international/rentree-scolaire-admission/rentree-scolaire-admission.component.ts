@@ -119,7 +119,7 @@ export class RentreeScolaireAdmissionComponent implements OnInit {
           this.rentrees = data
         })
       })
-      .catch((error) => { console.log(error); this.MessageService.add({ severity: 'error', summary:'Rentrée scolaire', detail: error.error }); });
+      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary:'Rentrée scolaire', detail: error.error }); });
     }
   
 

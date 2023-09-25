@@ -131,24 +131,24 @@ export class UsersSettingsComponent implements OnInit {
         this.messageService.add({ severity: 'info', summary: 'Gestion des utilisateurs', detail: `Chargement de la liste des users` });
         this.users = response;
       })
-      .catch((error) => { console.log(error) });
+      .catch((error) => { console.error(error) });
 
     //Recuperation de la liste des étudiants
     this.etudiantService.getAll().subscribe(
       ((response) => { this.etudiants = response }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
       ((response) => { this.formateurs = response }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Recuperation de la liste des agents
     this.userService.getAllAgent().subscribe(
       ((response) => { this.agents = response }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Recuperation de la liste des services
@@ -160,7 +160,7 @@ export class UsersSettingsComponent implements OnInit {
           this.dropDownService.push({ label: service.label, value: service._id });
         });
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -185,7 +185,7 @@ export class UsersSettingsComponent implements OnInit {
           this.profilPicture = 'assets/images/avatar.PNG'
         }
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
   }
 
   //Methode pour pre-remplir le formulaire de mise à jour

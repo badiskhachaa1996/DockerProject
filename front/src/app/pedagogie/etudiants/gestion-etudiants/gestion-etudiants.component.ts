@@ -40,7 +40,7 @@ export class GestionEtudiantsComponent implements OnInit {
         //Pour le reporting
         this.onGetNumbersOfStudentsConnectedbyCampus(this.etudiants);
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -51,7 +51,7 @@ export class GestionEtudiantsComponent implements OnInit {
           this.dropdownCampus.push({ label: campus.libelle, value: campus._id });
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
   }

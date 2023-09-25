@@ -130,7 +130,7 @@ export class EcoleAdmissionComponent implements OnInit {
           this.ecoles = data
         })
       })
-      .catch((error) => { console.log(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
+      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
     }
   
 

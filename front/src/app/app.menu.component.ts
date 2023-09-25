@@ -1784,7 +1784,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -2874,7 +2874,7 @@ export class AppMenuComponent implements OnInit {
                             )
                         },
                         error: function (error: any) {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3172,7 +3172,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3307,7 +3307,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3387,7 +3387,7 @@ export class AppMenuComponent implements OnInit {
                                 });
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3614,7 +3614,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3818,7 +3818,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -3918,7 +3918,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -4080,7 +4080,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -4394,7 +4394,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: (error: any) => {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -4481,7 +4481,7 @@ export class AppMenuComponent implements OnInit {
                             ];
                         },
                         error: function (error: any) {
-                            console.log(error);
+                            console.error(error);
                         },
                         complete: () => {
                             console.log(
@@ -6672,7 +6672,7 @@ export class AppMenuComponent implements OnInit {
                 //this.showMenu=true
             },
             error: (error: any) => {
-                console.log(error);
+                console.error(error);
             },
             complete: () => {
                 console.log('Récupération des infos du user connecté réussi');
