@@ -13,6 +13,12 @@ const schema = new mongoose.Schema({
     langue: { type: [String], default: [] },
     deroulement: { type: String, },
     filiere: { type: String, },
+    bac: { type: String },
+    code: { type: String },
+    annee: { type: String },
+    code_france_competence : { type: String },
+    validite: { type: String },
+    organisme_referent: { type: String },
 });
 
 //Creation de la table ecole et export du model Ecole
