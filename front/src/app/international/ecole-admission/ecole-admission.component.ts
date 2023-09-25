@@ -121,6 +121,19 @@ export class EcoleAdmissionComponent implements OnInit {
     })
   }
 
-  formationsList = []
+  onDeleteEcole(id: string): void 
+  {
+    this.FAService.EAdelete(id)
+      .then((response) => {
+        this.MessageService.add({severity: 'success', summary: 'École', detail: response.success});
+        this.FAService.EAgetAll().subscribe(data => {
+          this.ecoles = data
+        })
+      })
+      .catch((error) => { console.log(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
+    }
+  
+
+  formationsList = [] 
 
 }

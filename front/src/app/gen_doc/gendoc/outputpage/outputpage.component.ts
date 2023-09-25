@@ -30,8 +30,7 @@ export class OutputpageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.base_url + this.id_doc)
-    console.log(this.school)
+
   }
 
 }

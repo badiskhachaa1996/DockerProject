@@ -120,7 +120,7 @@
                     <td class="text-center" style="min-width: 8rem;">
                         <i class="pi pi-pencil mr-2" title="Modifier la formation" (click)="InitUpdateFormation(formation)"></i>
                         <i class="pi pi-calendar mr-2" title="Gestion des rentrée" (click)="formationSelected = formation; onGetDateRentre(); showRentreTable = true;"></i>
-                        <i class="pi pi-trash" title="Suprimer la formation" (click)="deleteFormation(formation)"></i>
+                        <i class="pi pi-trash" *ngIf="AccessLevel=='Super-Admin'" title="Suprimer la formation" (click)="deleteFormation(formation)"></i>
                         
                     </td>
                 </tr>

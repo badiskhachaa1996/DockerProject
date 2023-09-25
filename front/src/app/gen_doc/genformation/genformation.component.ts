@@ -9,6 +9,8 @@ import { Table } from 'primeng/table';
 import { from } from 'rxjs';
 import { GenRentre } from 'src/app/models/gen_doc/GenRentre';
 import { GenRentreService } from 'src/app/services/gen_doc/genrentre.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-genformation',
@@ -40,8 +42,12 @@ export class GenformationComponent implements OnInit {
 
   formAddRentre: FormGroup;
 
+  AccessLevel = "Spectateur"
 
-  constructor(private formBuilder: FormBuilder, private genRentreService: GenRentreService,
+  user: User;
+
+
+  constructor(private formBuilder: FormBuilder, private UserService: AuthService, private genRentreService: GenRentreService,
     private messageService: MessageService, private genFormationService: GenFormationService, private router: Router) { }
 
   ngOnInit(): void {
@@ -79,6 +85,17 @@ export class GenformationComponent implements OnInit {
         this.loading = false;
       })
       .catch((error) => { console.error(error); })
+
+      this.UserService.getPopulate(this.token.id).subscribe((userdata) => {
+        this.user = userdata
+        if (userdata.roles_list)
+          userdata.roles_list.forEach(role => {
+            if (role.module == "Générateur de Document")
+              this.AccessLevel = role.role
+          })
+        if (userdata.role == "Admin")
+          this.AccessLevel = "Super-Admin"
+      })
 
   }
 

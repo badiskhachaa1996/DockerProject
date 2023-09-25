@@ -13,7 +13,9 @@
     <ng-template #alterance>
         <strong> en alternance </strong>
     </ng-template>
-    au sein de notre établissement à {{campus?.name.replace("Campus ", "")}} pour la rentrée scolaire {{rentre?.type}} 
+    <span *ngIf="!formContent.alternance">pour suivre la formation <strong>{{formation?.name}}</strong>,
+        enregistrée sous le code <strong>RNCP {{formation?.rncp}}</strong> du niveau {{formation?.niveau}} et
+        accréditée par {{formation?.accrediteur}}, </span>au sein de notre établissement à {{campus?.name.replace("Campus ", "")}} pour la rentrée scolaire {{rentre?.type}} 
     <span *ngIf="type_certif?.value !== 'derogation'"> qui débutera le {{rentre?.date_rentre}}</span>.</p>
 
     <ng-template [ngIf]="type_certif?.value !== 'derogation'" [ngIfElse]="derogation">
