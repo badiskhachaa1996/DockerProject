@@ -32,7 +32,9 @@ export class UpdateAgentComponent implements OnInit {
     { value: "International", label: "International" },
     { value: "Pedagogie", label: "Pedagogie" },
     { value: "iMatch", label: "iMatch" },
-    { value: "Générateur de Document", label: "Générateur de Document" }
+    { value: "Générateur de Document", label: "Générateur de Document" },
+    { value: "Ressources Humaines", label: "Ressources Humaines" },
+    { value: "Admin IMS", label: "Admin IMS" },
   ]
 
   dropdownRole = [

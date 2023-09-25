@@ -154,7 +154,6 @@ app.use("/", function (req, res, next) {
   if (token && token["prospectFromDb"]) {
     token = token["prospectFromDb"];
   }
-
   if (token && token.id && token.role) {
     User.findOne({ _id: token.id, role: token.role }, (err, user) => {
       if (err) {

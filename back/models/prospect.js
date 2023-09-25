@@ -1,37 +1,28 @@
 const mongoose = require("mongoose");
 const prospect_schema = new mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: true,
+        type: mongoose.Schema.Types.ObjectId, ref: "user", required: true,
     },
     date_naissance: {
         type: Date,
-        required: false,
     },
     numero_whatsapp: {
         type: String,
-        required: false,
     },
     validated_academic_level: {
         type: String,
-        required: false,
     },
     statut_actuel: {
         type: String,
-        required: false,
     },
     other: {
         type: String,
-        required: false,
     },
     languages: {
         type: String,
-        required: false,
     },
     professional_experience: {
         type: String,
-        required: false,
     },
     campus_choix_1: { type: String, required: false },
     campus_choix_2: { type: String, required: false },
@@ -39,7 +30,6 @@ const prospect_schema = new mongoose.Schema({
 
     programme: {
         type: String,
-        required: false,
     },
     formation: {
         type: String,
