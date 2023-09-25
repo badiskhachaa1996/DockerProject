@@ -41,7 +41,7 @@ export class GestionLogementComponent implements OnInit {
           this.users[user._id] = user;
         });
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Récupération de la liste des étudiants
@@ -82,7 +82,7 @@ export class GestionLogementComponent implements OnInit {
       ((response) => {
         this.reservations = response;
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Recuperation de la liste des réservations en attentes
@@ -90,7 +90,7 @@ export class GestionLogementComponent implements OnInit {
       ((response) => {
         this.reservationWaiting = response;
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Recuperation de la liste des réservation validée
@@ -98,7 +98,7 @@ export class GestionLogementComponent implements OnInit {
       ((response) => {
         this.reservationsValidated = response;
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -118,7 +118,7 @@ export class GestionLogementComponent implements OnInit {
         this.getReservations();
 
       }),
-      ((error) => { console.log(error)})
+      ((error) => { console.error(error)})
     );
   }
 
@@ -136,7 +136,7 @@ export class GestionLogementComponent implements OnInit {
         this.getReservations();
 
       }),
-      ((error) => { console.log(error)})
+      ((error) => { console.error(error)})
     );
   }
 
@@ -180,7 +180,7 @@ export class GestionLogementComponent implements OnInit {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Nouvelle réservation', detail: response.error });
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 

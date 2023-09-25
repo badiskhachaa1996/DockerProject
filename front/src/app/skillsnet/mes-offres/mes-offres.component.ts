@@ -154,7 +154,7 @@ export class MesOffresComponent implements OnInit {
       ((response) => {
         this.userConnected = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des annonces
@@ -162,7 +162,7 @@ export class MesOffresComponent implements OnInit {
       .then((response: Annonce[]) => {
         this.annonces = response;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
 
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
@@ -173,7 +173,7 @@ export class MesOffresComponent implements OnInit {
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
       }),
-      ((error) => console.log(error))
+      ((error) => console.error(error))
     );
 
     //Récupération de la liste des profiles
@@ -185,7 +185,7 @@ export class MesOffresComponent implements OnInit {
           this.profilsList.push({ label: profile.libelle, value: profile._id });
         })
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
   }
 
   //Methode qui servira à modifier le contenu de la liste de competences en fonction du profil
@@ -203,7 +203,7 @@ export class MesOffresComponent implements OnInit {
           this.competencesList.push({ label: competence.libelle, value: competence._id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
 
     // switch(label){
     //   case 'Développeur':
@@ -590,7 +590,7 @@ export class MesOffresComponent implements OnInit {
         //Recuperation de la liste des classes
         this.onGetAllClasses();
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
 
   }
 
@@ -640,7 +640,7 @@ export class MesOffresComponent implements OnInit {
         //Recuperation de la liste des classes
         this.onGetAllClasses();
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
   }
 
   // methode de remplissage du formulaire de modification

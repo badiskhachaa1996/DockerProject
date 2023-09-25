@@ -41,7 +41,6 @@ app.delete('/delete/:id', (req, res) => {
 })
 app.post('/sendEmail/:id', (req, res) => {
     ActualiteInt.findById(req.params.id).then(act => {
-        console.log(req.body.emailList)
         let mailOptions = {
             from: "noreply@intedgroup.com",
             to: req.body.emailList,

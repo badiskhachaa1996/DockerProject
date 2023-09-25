@@ -218,7 +218,7 @@ export class ListeContratsComponent implements OnInit {
       next: (response) => {
         this.collaborateur = response;
       },
-      error: (error) => { console.log(error) },
+      error: (error) => { console.error(error) },
     });
 
     this.campusService.getAll().subscribe(campus => {
@@ -293,7 +293,7 @@ export class ListeContratsComponent implements OnInit {
               }
             })
           },
-          error: (error) => { console.log(error) },
+          error: (error) => { console.error(error) },
           complete: () => { console.log('Contrats Watcher récupéré') }
         });
       }
@@ -325,7 +325,7 @@ export class ListeContratsComponent implements OnInit {
                       }
                     })
                   }),
-                  ((error) => { console.log(error); })
+                  ((error) => { console.error(error); })
                 );
 
               }, (eror) => { console.error(eror) })
@@ -488,7 +488,7 @@ export class ListeContratsComponent implements OnInit {
 
           }, (eror) => { console.error(eror) })
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     )
 
   }
@@ -733,7 +733,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddCerfa = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la convention
@@ -749,7 +749,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddConvention = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout de l'accord de prise en charge
@@ -765,7 +765,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddAccordPriseEnCharge = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la résiliation du contrat
@@ -781,7 +781,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddResiliation = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du la relance du contrat
@@ -797,7 +797,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddRelance = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
   // méthode d'ajout du livret d'apprentissage du contrat
@@ -813,7 +813,7 @@ export class ListeContratsComponent implements OnInit {
         this.showFormAddLivret = false;
         this.ngOnInit();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
   }
 
 

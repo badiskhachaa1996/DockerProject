@@ -110,7 +110,7 @@ export class GenformationComponent implements OnInit {
         console.log(response);
         this.loadingRentres = false;
        })
-      .catch((error) => { console.log(error) });
+      .catch((error) => { console.error(error) });
     }
 
 
@@ -153,7 +153,7 @@ export class GenformationComponent implements OnInit {
           })
           .catch((error) => {
             this.messageService.add({ severity: "error", summary: `Ajout impossible` });
-            console.log(error);
+            console.error(error);
           });
       }
 
@@ -210,7 +210,7 @@ export class GenformationComponent implements OnInit {
         this.onGetDateRentre();
         this.messageService.add({ severity: "success", summary: "Rentrée ajouté" });
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: "error", summary: "Impossible d'ajouter la rentrée" }); })
+      .catch((error) => { console.error(error); this.messageService.add({ severity: "error", summary: "Impossible d'ajouter la rentrée" }); })
 
     } else if (this.showFormUpdateRentre) {
         let rentre = this.rentreToUpdate;

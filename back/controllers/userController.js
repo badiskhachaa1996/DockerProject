@@ -180,7 +180,7 @@ app.post("/login", (req, res) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(404).send(error);
     });
 });
@@ -898,7 +898,7 @@ app.post("/verifyUserPassword", (req, res) => {
         .catch((error) => console.error(error));
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 });
 
@@ -923,7 +923,7 @@ app.post("/updatePwd/:id", (req, res) => {
       res.status(200).send(token);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 });
 

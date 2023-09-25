@@ -112,10 +112,10 @@ export class AddNewIndividualAccountComponent implements OnInit {
                           //Envoi du compte à LemonWay
                           this.paymentService.postIndividualAccountLemon(account)
                                              .then((response) => { console.log(response) })
-                                             .catch((error) => { console.log(error); })
+                                             .catch((error) => { console.error(error); })
 
                        })
-                       .catch((error) => { console.log(error); })
+                       .catch((error) => { console.error(error); })
 
 
   }

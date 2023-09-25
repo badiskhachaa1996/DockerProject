@@ -320,7 +320,7 @@ app.put("/updatePartenaire", (req, res, next) => {
             res.status(200).json({ message: 'Le partenaire a bien été modifié !' });
         })
         .catch((error) => {
-            console.log(error)
+            console.error(error)
             res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' });
         })
 });

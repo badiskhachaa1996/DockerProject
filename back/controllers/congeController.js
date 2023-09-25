@@ -73,9 +73,9 @@ app.delete("/delete-conge/:id", (req, res) => {
 
             Conge.deleteOne({ _id: id })
                 .then((response) => { res.status(201).send(response) })
-                .catch((error) => { console.log(error); res.status(400).send(error) })
+                .catch((error) => { console.error(error); res.status(400).send(error) })
         })
-        .catch((error) => { console.log(error); res.status(500).send(error) })
+        .catch((error) => { console.error(error); res.status(500).send(error) })
 
 });
 

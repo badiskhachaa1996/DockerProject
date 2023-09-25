@@ -136,7 +136,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                   res.status(201).send(entrepriseSaved);
                 })
                 .catch((error) => {
-                  console.log(error);
+                  console.error(error);
                   res
                     .status(400)
                     .send("Impossible de créer la nouvelle entreprise");
@@ -203,7 +203,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                         res.status(201).send(entrepriseSaved);
                       })
                       .catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         res
                           .status(400)
                           .send("Impossible de créer une nouvelle entreprise");
@@ -515,7 +515,7 @@ app.post("/createNewContrat", (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(501).json({ error });
     });
 });
@@ -529,7 +529,6 @@ app.post("/createContratAlternance", (req, res, next) => {
   });
   NewContrat.directeur_id = null;
   CAlternance.findOne(NewContrat).then((r) => {
-    console.log(r);
     if (r)
       res.status(500).send({ message: "Un contrat similaire existe déjà" });
     else
@@ -572,7 +571,7 @@ app.post("/createContratAlternance", (req, res, next) => {
                         );
                       })
                       .catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         res.status(400).send(error);
                       });
                   })
@@ -625,7 +624,7 @@ app.post("/createContratAlternance", (req, res, next) => {
                         res.status(200).send(NewContData);
                       })
                       .catch((error) => {
-                        console.log(error);
+                        console.error(error);
                         res.status(400).send(error);
                       });
                   })
@@ -744,7 +743,7 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
       res.status(200).send(CAFromDb);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(500).json({
         error: "Impossible de récupérer la liste des contrats " + error.message,
       });
@@ -759,7 +758,7 @@ app.get("/get-entreprises-by-id-ceo/:idCEO", (req, res, next) => {
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res
         .status(400)
         .json({ error: "Impossible de récuperer la liste de vos entréprises" });
@@ -782,7 +781,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
       res.status(200).send(CAFromDb);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(500).json({
         error: "Impossible de recuperer la liste des contrats " + error.message,
       });
@@ -805,7 +804,7 @@ app.get("/getAllContrats/", (req, res, next) => {
       res.status(200).send(CAFromDb);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(500).json({
         error: "Impossible de recuperer la liste des contrats " + error.message,
       });
@@ -831,7 +830,7 @@ app.get("/contrats-by-ceo/:id", (req, res) => {
         .json({ success: "Liste des contrats récuperé", contrats: response });
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       res.status(400).json({
         error: error,
         errorMsg: "Impossible de récuperer la liste des contrats",
@@ -995,7 +994,6 @@ app.get("/nettoyageCA", (req, res) => {
             ca.entreprise_id.toString() == catocheck.entreprise_id.toString() &&
             ca.fin_contrat.toString() == catocheck.fin_contrat.toString()
           )
-            console.log(ca, catocheck);
           //console.log(ca.debut_contrat == catocheck.debut_contrat, ca.fin_contrat == catocheck.fin_contrat, ca.alternant_id == catocheck.alternant_id, ca.entreprise_id == catocheck.entreprise_id)
           if (
             ca.debut_contrat.toString() == catocheck.debut_contrat.toString() &&
@@ -1038,7 +1036,6 @@ const uploadCerfa = multer({ storage: uploadCerfaStorage });
 app.post("/upload-cerfa", uploadCerfa.single("file"), (req, res) => {
   const file = req.file;
   const id = req.body.id;
-  console.log(file);
 
   if (!file) {
     res.status(400).send("Aucun fichier sélectionnée");
@@ -1076,7 +1073,6 @@ const uploadConvention = multer({ storage: uploadConventionStorage });
 app.post("/upload-convention", uploadConvention.single("file"), (req, res) => {
   const file = req.file;
   const id = req.body.id;
-  console.log(file);
 
   if (!file) {
     res.status(400).send("Aucun fichier sélectionnée");
@@ -1395,7 +1391,6 @@ app.post("/uploadLogo", upload.single("file"), (req, res, next) => {
 //Envoie de la photo de profile
 app.get("/getLogo/:id", (req, res) => {
   Entreprise.findById(req.params.id, (err, entreprise) => {
-    console.log(entreprise,req.params.id)
     if (entreprise && entreprise.logoFile) {
       let pathFile = "storage/entreprise/logo/" + req.params.id + "/" + entreprise.logoFile
       try {

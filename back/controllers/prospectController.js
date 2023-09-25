@@ -436,13 +436,13 @@ app.post("/create", (req, res, next) => {
 
                     })
                     .catch((error) => {
-                        console.log(error)
+                        console.error(error)
                         // res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur2 !', error })
                     });
             }
         })
         .catch((error) => {
-            console.log(error)
+            console.error(error)
             //res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur3 ', error }) 
         });
 
@@ -1161,9 +1161,9 @@ app.post("/post-prospect-alt", (req, res) => {
 
                         res.status(201).json({ successMsg: "Votre demande d'admission à bien été pris en compte" });
                     })
-                    .catch((error) => { console.log(error); res.status(400).json({ error: error, errMsg: 'Impossible de créer votre compte, veuillez contacter votre commecial référent' }); })
+                    .catch((error) => { console.error(error); res.status(400).json({ error: error, errMsg: 'Impossible de créer votre compte, veuillez contacter votre commecial référent' }); })
             })
-            .catch((error) => { console.log(error); res.status(400).json({ error: error, errMsg: 'Impossible de prendre en compte votre inscription, votre adresse mail existe peut être déja, veuillez contacter votre commecial référent si le problème persiste' }); })
+            .catch((error) => { console.error(error); res.status(400).json({ error: error, errMsg: 'Impossible de prendre en compte votre inscription, votre adresse mail existe peut être déja, veuillez contacter votre commecial référent si le problème persiste' }); })
 });
 
 // méthode d'envoi du mail de génération du formulaire admission

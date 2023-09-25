@@ -97,7 +97,7 @@ export class GenschoolComponent implements OnInit {
           })
           .catch((error) => {
             this.messageService.add({ severity: "error", summary: `Ajout impossible` });
-            console.log(error);
+            console.error(error);
           });
       }
 

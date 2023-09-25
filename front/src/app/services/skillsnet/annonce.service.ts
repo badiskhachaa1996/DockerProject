@@ -35,7 +35,7 @@ export class AnnonceService {
     return new Promise((resolve, reject) => {
       this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => { resolve(response); },
-        (error) => { console.log(error); reject(error); }
+        (error) => { console.error(error); reject(error); }
       );
     });
   }

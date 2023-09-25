@@ -344,7 +344,7 @@ export class ListEtudiantComponent implements OnInit {
     // recuperation des infos de l'utilisateur connecté
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
-      error: (error) => { console.log(error) },
+      error: (error) => { console.error(error) },
       complete: () => { console.log("info de l'utilisateur connecté récupéré") }
     });
 
@@ -454,7 +454,7 @@ export class ListEtudiantComponent implements OnInit {
             i++;
           });
         },
-        error: (error) => { console.log(error); }
+        error: (error) => { console.error(error); }
       });
     }
 
@@ -1137,7 +1137,7 @@ export class ListEtudiantComponent implements OnInit {
           });
           this.showFilterByCampus = true;
         })
-        .catch((error) => { console.log(error) });
+        .catch((error) => { console.error(error) });
     }
     else {
       this.showFilterByCampus = false;
@@ -1169,7 +1169,7 @@ export class ListEtudiantComponent implements OnInit {
           });
           this.showFilterByGroupe = true;
         }),
-        ((error) => { console.log(error); })
+        ((error) => { console.error(error); })
       );
     }
     else {

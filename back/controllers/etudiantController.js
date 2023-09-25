@@ -288,7 +288,7 @@ app.get("/getAllAlternants", (req, res, next) => {
             res.status(200).send(alternantsFromDb);
         })
         .catch((error) => {
-            console.log(error);
+            console.error(error);
             res.status(500).send('Impossible de recuperer la liste des étudiant');
         })
 });

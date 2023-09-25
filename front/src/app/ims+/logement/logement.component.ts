@@ -119,7 +119,7 @@ export class LogementComponent implements OnInit {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Nouvelle réservation', detail: response.error });
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -147,7 +147,7 @@ export class LogementComponent implements OnInit {
         {
           this.messageService.add({ key: 'tst', severity: 'error', summary: 'Nouvelle réservation', detail: response.error });
         }      }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 

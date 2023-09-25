@@ -69,7 +69,7 @@ export class StageComponent implements OnInit {
       next: (response) => {
         this.collaborateur = response;
       },
-      error: (error) => { console.log(error) },
+      error: (error) => { console.error(error) },
     });
 
     this.messageService.add({ severity: 'info', summary: 'Stages', detail: 'Recuperation de la liste des stages' });
@@ -412,7 +412,7 @@ export class StageComponent implements OnInit {
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
           })
-          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Convention de stage':
@@ -420,7 +420,7 @@ export class StageComponent implements OnInit {
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
           })
-          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Avenant du stage':
@@ -428,7 +428,7 @@ export class StageComponent implements OnInit {
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
           })
-          .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+          .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       default:

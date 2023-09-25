@@ -126,7 +126,7 @@ export class BookingV2Component implements OnInit {
   this.showSujet = true;
   })
   
-  .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: "Impossible de récuperer les projets, veuillez contacter un administrateur" }); });
+  .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: "Impossible de récuperer les projets, veuillez contacter un administrateur" }); });
   }
 
   // Ajout d'un nouveau sujet
@@ -150,7 +150,7 @@ export class BookingV2Component implements OnInit {
       this.showFormAddSujet = false;
       this.onGetAllClasses();
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Sujet Booking', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Sujet Booking', detail: error.error }); });
 
   }
 
@@ -188,7 +188,7 @@ export class BookingV2Component implements OnInit {
       this.showSujet = false;
       this.showFormUpdateSujet = false;
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Sujet Booking', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Sujet Booking', detail: error.error }); });
   }
   
   // Suppression d'un sujet
@@ -201,7 +201,7 @@ export class BookingV2Component implements OnInit {
       this.showSujet = false;
       this.showFormUpdateSujet = false;
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Sujet', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Sujet', detail: error.error }); });
 
   }
 
