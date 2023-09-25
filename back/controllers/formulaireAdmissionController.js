@@ -55,6 +55,12 @@ app.put("/RA/update", (req, res) => {
     }).catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
+app.delete("/RA/delete/:id", (req, res, next) => {
+    RentreeAdmission.deleteOne({ _id: req.params.id })
+        .then((response) => { res.status(200).json({ success: "Rentrée scolaire supprimé" }) })
+        .catch((error) => {console.log(error); res.status(400).json({ error: "Impossible de supprimer la rentrée scolaire"});})
+})
+
 
 app.post("/FA/create", (req, res) => {
     delete req.body._id
@@ -84,7 +90,7 @@ app.get("/FA/getByID/:id", (req, res) => {
 })
 
 app.delete("/FA/delete/:id", (req, res) => {
-    FormationAdmission.findByIdAndDelete(req.params.id)
+    FormationAdmission.deleteOne({_id: req.params.id})
         .then((formFromDb) => {
             res.status(200).send(formFromDb);
         })
@@ -129,6 +135,12 @@ app.put("/EA/update", (req, res) => {
             .then((formFromDb) => { res.status(200).send(formFromDb); })
             .catch((error) => { console.error(error); res.status(500).send(error); });
     }).catch((error) => { console.error(error); res.status(500).send(error); });
+})
+
+app.delete("/EA/delete/:id", (req, res, next) => {
+    EcoleAdmission.deleteOne({ _id: req.params.id })
+        .then((response) => { res.status(200).json({ success: "École supprimé" }) })
+        .catch((error) => {console.log(error); res.status(400).json({ error: "Impossible de supprimer l'école"});})
 })
 
 
