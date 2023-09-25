@@ -33,6 +33,11 @@ export class AddAgentComponent implements OnInit {
     { value: "Générateur de Document", label: "Générateur de Document" },
     { value: "Ressources Humaines", label: "Ressources Humaines" },
     { value: "Admin IMS", label: "Admin IMS" },
+    { value: "Administration", label: "Administration" },
+    { value: "Booking", label: "Booking" },
+    { value: "Questionnaire", label: "Questionnaire" },
+    { value: "Intuns", label: "Intuns" },
+    { value: "Gestions des emails", label: "Gestions des emails" },
   ]
   dropdownRole = [
     { value: "Agent", label: "Agent" },
