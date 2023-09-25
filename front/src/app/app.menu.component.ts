@@ -154,11 +154,11 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                               /* {
                                     label: 'Ajouter un ticket projet',
                                     icon: 'pi pi-fw pi-shield',
                                     routerLink: ['/ticketing/Ajouter-un-ticket-projet'],
-                                },
+                                },*/
                                 {
                                     label: 'Configuration',
                                     icon: 'pi pi-cog',
@@ -171,7 +171,8 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        
+                       /* {
                             label: 'Projects ',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -197,7 +198,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         },
-                        
+                        */
                        /* {
                             label: 'Gestion des agents V2',
                             icon: 'pi pi-users',
