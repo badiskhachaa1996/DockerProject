@@ -41,9 +41,12 @@
         </div>
     </div>
     <div class="grid col-12 card">
+        <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+    </div>
+    <div class="grid col-12 card">
         <h5 class="col-9">Liste des rendez-vous</h5>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="meetings" class="col-12"
-            [paginator]="true" [pageLinks]="5"
+            [paginator]="true" [pageLinks]="5" id="dt1"
             [globalFilterFields]="['statut', 'winner_id.firstname','winner_id.lastname','user_id.firstname','user_id.lastname','company_email','description']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">

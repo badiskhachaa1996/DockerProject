@@ -46,9 +46,11 @@ export class MicrosoftService {
         interactionType: InteractionType.Redirect,
         scopes: ['User.Read', 'Calendars.ReadWrite', 'Group.ReadWrite.All'],
       });
+      console.log(test)
       this.graphClient = Client.initWithMiddleware({ authProvider: authProvider });
       return this.graphClient
         .api('/me').get().then(user => {
+          console.log(user)
           return this.graphClient.api(`/users/${user.id}/calendar/events`)
             .post(event)
         })

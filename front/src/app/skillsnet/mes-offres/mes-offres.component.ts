@@ -22,7 +22,7 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
   styleUrls: ['./mes-offres.component.scss']
 })
 export class MesOffresComponent implements OnInit {
-
+  visibleSidebar = false
   annonces: Annonce[] = [];
 
   entreprises: Entreprise[] = [];
@@ -95,6 +95,7 @@ export class MesOffresComponent implements OnInit {
 
   statutDropdown = [
     { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: 'Suspendu', value: "Suspendu" },
     { label: 'Clôturée', value: "Clôturée" },
   ]
 
@@ -174,7 +175,9 @@ export class MesOffresComponent implements OnInit {
         //Récupération du nombre de matching par Annonce
         response.forEach(annonce => {
           this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
-            this.dicOffreNB[annonce._id] = matchs.length
+            let t = []
+            matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
+            this.dicOffreNB[annonce._id] = t.length
           })
         })
 
@@ -699,11 +702,12 @@ export class MesOffresComponent implements OnInit {
   }
 
   onDelete(annonce: Annonce) {
-    this.annonceService.delete(annonce._id).then(r => {
-      this.annonces.splice(this.annonces.indexOf(annonce), 1)
-      this.annonceSelected = null
-      this
-    })
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${annonce.missionName} ?`))
+      this.annonceService.delete(annonce._id).then(r => {
+        this.annonces.splice(this.annonces.indexOf(annonce), 1)
+        this.annonceSelected = null
+        this.visibleSidebar = false
+      })
   }
 
 }

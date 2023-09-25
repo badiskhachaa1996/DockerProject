@@ -10,7 +10,9 @@ import { MicrosoftService } from 'src/app/services/microsoft.service';
 import { CV } from 'src/app/models/CV';
 
 import { CvService } from 'src/app/services/skillsnet/cv.service';
-
+import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
+import jwt_decode from "jwt-decode";
+import { Annonce } from 'src/app/models/Annonce';
 
 @Component({
   selector: 'app-rendez-vous',
@@ -21,9 +23,11 @@ export class RendezVousComponent implements OnInit {
   form = new FormGroup({
     email: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
-    date: new FormControl('', Validators.required)
-  })
+    date: new FormControl('', Validators.required),
+    offre_id: new FormControl('')
 
+  })
+  annonces = []
   cv: CV;
   profilePic
   dicPicture
@@ -31,7 +35,7 @@ export class RendezVousComponent implements OnInit {
   ID: any = this.route.snapshot.paramMap.get('user_id');
   USER: { cv_id, lastname, firstname, email, email_perso, winner_email, winner_lastname, winner_firstname, winner_id, profilePic, profile, civilite }
   constructor(private route: ActivatedRoute, private McService: MicrosoftService, private UserService: AuthService,
-    private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService, private cvservice: CvService) { }
+    private ToastService: MessageService, private router: Router, private MeetingTeamService: MeetingTeamsService, private cvservice: CvService, private annonceService: AnnonceService) { }
 
   ngOnInit(): void {
     let d = new Date()
@@ -50,15 +54,22 @@ export class RendezVousComponent implements OnInit {
       }
     })
 
-
-
-
-
-
     this.cvservice.getByID(this.ID).subscribe((data) => {
       this.cv = data.dataCv;
     })
 
+    if (localStorage.getItem('token')) {
+      let token: any = jwt_decode(localStorage.getItem("token"));
+      this.UserService.getPopulate(token.id).subscribe(userConnected => {
+        this.form.patchValue({ email: userConnected.email_perso, phone: userConnected.phone })
+      })
+      this.annonceService.getAnnoncesByUserId(token.id)
+        .then((response: Annonce[]) => {
+          this.annonces = response;
+
+        })
+        .catch((error) => console.error(error));
+    }
   }
 
   onSubmit() {
@@ -119,19 +130,20 @@ export class RendezVousComponent implements OnInit {
       ], isOnlineMeeting: true,
       onlineMeetingProvider: 'teamsForBusiness'
     };
-    this.McService.createTeamsMeeting(event).then(r => {
-      if (r) {
-
-        this.MeetingTeamService.create(new MeetingTeams(null, this.USER.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone)).subscribe(mt => {
-          this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été planifié' })
+    this.MeetingTeamService.create(new MeetingTeams(null, this.USER.winner_id, this.ID, null, company_email, meeting_start_date, new Date(), description + "\nNuméro de téléphone de l'entreprise: " + this.form.value.phone, null, null, this.form.value.offre_id)).subscribe(mt => {
+      this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été enregistré sur IMS' })
+      this.McService.createTeamsMeeting(event).then(r => {
+        console.log(r)
+        if (r) {
+          this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été planifié sur TEAMS' })
           this.router.navigate(['/imatch'])
-        }, error => {
-          console.error(error)
-          this.ToastService.add({ severity: 'error', summary: 'Le rendez-vous a eu un problème', detail: error?.error })
-        })
-
-      }
+        }
+      })
+    }, error => {
+      console.error(error)
+      this.ToastService.add({ severity: 'error', summary: 'Le rendez-vous a eu un problème', detail: error?.error })
     })
+
   }
 
 }

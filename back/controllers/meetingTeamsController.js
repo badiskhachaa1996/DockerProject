@@ -18,7 +18,7 @@ app.get("/getAll", (req, res, next) => {
 });
 
 app.get("/getAllByEmail/:email", (req, res, next) => {
-    MeetingTeams.find({ company_email: req.params.email }).populate('winner_id').populate('user_id').populate('cv_id').sort({ date_creation: -1 })
+    MeetingTeams.find({ company_email: req.params.email }).populate('winner_id').populate('user_id').populate('cv_id').populate('offre_id').sort({ date_creation: -1 })
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });
