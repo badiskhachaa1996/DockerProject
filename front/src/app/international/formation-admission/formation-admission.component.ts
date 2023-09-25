@@ -42,6 +42,14 @@ export class FormationAdmissionComponent implements OnInit {
     code_france_competence: new FormControl(''),
     validite: new FormControl(''),
     organisme_referent: new FormControl(''),
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
     })
 
   filiereList = [
@@ -90,6 +98,14 @@ export class FormationAdmissionComponent implements OnInit {
     code_france_competence: new FormControl(''),
     validite: new FormControl(''),
     organisme_referent: new FormControl(''),
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
   })
 
   addForm = false

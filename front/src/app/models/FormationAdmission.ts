@@ -19,6 +19,14 @@ export class FormationAdmission {
         public code_france_competence?: string,
         public validite?: string,
         public organisme_referent?: string,
+        public campus?: string,
+        public annee_scolaire?: string,
+        public date_debut?: string,
+        public date_fin?: string,
+        public nb_heures?: string,
+        public rythme?: string,
+        public calendrier?: string,
+        public examens?: string,
     ) { }
 
 }
