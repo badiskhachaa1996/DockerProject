@@ -460,6 +460,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width: 5rem"></th>
                         <th pSortableColumn="nom">
                             Formation<p-sortIcon field="nom"> </p-sortIcon>
                         </th>
@@ -510,6 +511,20 @@
                 <ng-template pTemplate="body" let-formation>
                     <tr>
                         <td>
+                            <button
+                                type="button"
+                                pButton
+                                pRipple
+                                [pRowToggler]="formation"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'
+                                "
+                            ></button>
+                        </td>
+                        <td>
                             {{ formation.nom }}
                         </td>
                         <td>
@@ -532,29 +547,73 @@
                         </td>
                         <td>
                             <i
-                                style="padding-left: 3%"
-                                class="pi pi-eye"
+                                style="padding-left: 3%; color: rgb(0, 255, 0)"
+                                class="pi pi-eye m-1"
                                 (click)="showDescription(formation)"
                                 pTooltip="Voir la description"
                                 aria-hidden="true"
                                 tooltipPosition="bottom"
                             ></i>
                             <i
-                                style="padding-left: 3%"
-                                class="pi pi-pencil"
+                                style="
+                                    padding-left: 3%;
+                                    color: rgb(72, 72, 255);
+                                "
+                                class="pi pi-pencil m-1"
                                 (click)="initUpdate(formation); scrollToTop()"
                                 pTooltip="Modifier la formation"
                                 aria-hidden="true"
                                 tooltipPosition="bottom"
                             ></i>
                             <i
-                                style="padding-left: 3%"
-                                class="pi pi-trash"
+                                style="padding-left: 3%; color: rgb(255, 0, 0)"
+                                class="pi pi-trash m-1"
                                 (click)="delete(formation)"
                                 pTooltip="Supprimer la formation"
                                 aria-hidden="true"
                                 tooltipPosition="bottom"
                             ></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-formation>
+                    <tr>
+                        <td colspan="7">
+                            <p-table
+                                responsiveLayout="scroll"
+                                style="
+                                    display: flex;
+                                    justify-content: center;
+                                    text-align: center;
+                                "
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>RNCP</th>
+                                        <th>Code France Compétences</th>
+                                        <th>Validité</th>
+                                        <th>Organisme référent</th>
+                                        <th>Tarif</th>
+                                        <th>Déroulement</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td>{{ formation.rncp }}</td>
+                                        <td>
+                                            {{
+                                                formation.code_france_competence
+                                            }}
+                                        </td>
+                                        <td>{{ formation.validite }}</td>
+                                        <td>
+                                            {{ formation.organisme_referent }}
+                                        </td>
+                                        <td>{{ formation.tarif }}</td>
+                                        <td>{{ formation.deroulement }}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
                         </td>
                     </tr>
                 </ng-template>
