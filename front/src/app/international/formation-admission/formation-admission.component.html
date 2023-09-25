@@ -104,7 +104,7 @@
                     <label>Description </label>
                     <textarea
                         pInputTextarea
-                        placeholder="Trop bien"
+                        placeholder="Description..."
                         formControlName="description"
                     ></textarea>
                 </div>
@@ -113,7 +113,7 @@
                     <input
                         pInputText
                         type="text"
-                        placeholder="être fort"
+                        placeholder="Critères d'admission"
                         formControlName="criteres"
                     />
                 </div>
@@ -148,6 +148,61 @@
                     >
                     </p-dropdown>
                 </div>
+                <div class="field col-6">
+                    <label>Bac </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="BAC +2, +3 ou +5"
+                        formControlName="bac"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Code </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Code"
+                        formControlName="code"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Année </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Année"
+                        formControlName="annee"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Code France Compétences </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Code France Compétences"
+                        formControlName="code_france_competence"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Validité </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Validité"
+                        formControlName="validite"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Organisme référent </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Organisme référent"
+                        formControlName="organisme_referent"
+                    />
+                </div>
+
                 <div>
                     <button
                         pButton
@@ -188,7 +243,10 @@
                 (ngSubmit)="onCreate()"
             >
                 <div class="field col-6">
-                    <label>Formation <span style="color: red"> * </span></label>
+                    <label
+                        >Nom de la formation
+                        <span style="color: red"> * </span></label
+                    >
                     <input
                         pInputText
                         type="text"
@@ -247,7 +305,7 @@
                     <label>Description </label>
                     <textarea
                         pInputTextarea
-                        placeholder="Trop bien"
+                        placeholder="Description..."
                         formControlName="description"
                     ></textarea>
                 </div>
@@ -256,7 +314,7 @@
                     <input
                         pInputText
                         type="text"
-                        placeholder="être fort"
+                        placeholder="Critères d'admission"
                         formControlName="criteres"
                     />
                 </div>
@@ -287,10 +345,65 @@
                         [options]="deroulementList"
                         autoWidth="false"
                         [style]="{ width: '100%' }"
-                        placeholder="Choisissez un deroulement"
+                        placeholder="Choisissez un déroulement"
                     >
                     </p-dropdown>
                 </div>
+                <div class="field col-6">
+                    <label>BAC + </label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="BAC +2, +3 ou +5"
+                        formControlName="bac"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Code</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Code"
+                        formControlName="code"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Année</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Année"
+                        formControlName="annee"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Code France Compétences</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Code France Compétences"
+                        formControlName="code_france_competence"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Validité</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Validité"
+                        formControlName="validite"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Organisme référent</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Organisme référent"
+                        formControlName="organisme_referent"
+                    />
+                </div>
+
                 <div>
                     <button
                         pButton
@@ -354,21 +467,26 @@
                         <th pSortableColumn="niveau">
                             Niveau<p-sortIcon field="niveau"> </p-sortIcon>
                         </th>
-                        <th pSortableColumn="rncp">
-                            Code RNCP<p-sortIcon field="rncp"> </p-sortIcon>
+                        <th pSortableColumn="bac">
+                            BAC + <p-sortIcon field="bac"> </p-sortIcon>
                         </th>
-                        <th pSortableColumn="certificateur">
-                            Nature du diplôme<p-sortIcon field="certificateur">
-                            </p-sortIcon>
+                        <th pSortableColumn="code">
+                            Code<p-sortIcon field="code"> </p-sortIcon>
                         </th>
-
+                        <th pSortableColumn="annee">
+                            Année<p-sortIcon field="annee"> </p-sortIcon>
+                        </th>
                         <th pSortableColumn="duree">
-                            Durée de la formation<p-sortIcon field="duree">
-                            </p-sortIcon>
+                            Durée<p-sortIcon field="duree"> </p-sortIcon>
                         </th>
                         <!--<th pSortableColumn="description">Description de la formation<p-sortIcon field="duree">
                             </p-sortIcon>
                         </th>-->
+                        <th pSortableColumn="certificateur">
+                            Certificateur<p-sortIcon field="certificateur">
+                            </p-sortIcon>
+                        </th>
+                        <!--
                         <th pSortableColumn="criteres">
                             Critères d'admission<p-sortIcon field="criteres">
                             </p-sortIcon>
@@ -385,7 +503,7 @@
                         </th>
                         <th pSortableColumn="filiere">
                             Filière<p-sortIcon field="filiere"> </p-sortIcon>
-                        </th>
+                        </th>-->
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -398,31 +516,19 @@
                             {{ formation.niveau }}
                         </td>
                         <td>
-                            {{ formation.rncp }}
+                            {{ formation.bac }}
                         </td>
                         <td>
-                            {{ formation.certificateur }}
+                            {{ formation.code }}
+                        </td>
+                        <td>
+                            {{ formation.annee }}
                         </td>
                         <td>
                             {{ formation.duree }}
                         </td>
-                        <!--<td>
-                            {{ formation.description }}
-                        </td>-->
                         <td>
-                            {{ formation.criteres }}
-                        </td>
-                        <td>
-                            {{ formation.tarif }}
-                        </td>
-                        <td>
-                            {{ formation.langue }}
-                        </td>
-                        <td>
-                            {{ formation.deroulement }}
-                        </td>
-                        <td>
-                            {{ formation.filiere }}
+                            {{ formation.certificateur }}
                         </td>
                         <td>
                             <i
