@@ -440,7 +440,7 @@
                     'certificateur',
                     'description'
                 ]"
-                [rows]="5"
+                [rows]="8"
                 [pageLinks]="5"
                 [paginator]="true"
                 rowExpandMode="single"
@@ -557,6 +557,16 @@
                             <i
                                 style="
                                     padding-left: 3%;
+                                    color: rgb(255, 181, 44);
+                                "
+                                class="pi pi-calendar m-1"
+                                pTooltip="Dates de la formation"
+                                aria-hidden="true"
+                                tooltipPosition="bottom"
+                            ></i>
+                            <i
+                                style="
+                                    padding-left: 3%;
                                     color: rgb(72, 72, 255);
                                 "
                                 class="pi pi-pencil m-1"
@@ -578,7 +588,16 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-formation>
                     <tr>
-                        <td colspan="7">
+                        <td colspan="10">
+                            <h5
+                                style="
+                                    text-align: center;
+                                    color: red;
+                                    font-weight: bold;
+                                "
+                            >
+                                Informations supplémentaires
+                            </h5>
                             <p-table
                                 responsiveLayout="scroll"
                                 style="
@@ -611,6 +630,103 @@
                                         </td>
                                         <td>{{ formation.tarif }}</td>
                                         <td>{{ formation.deroulement }}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <br />
+                            <h5
+                                style="
+                                    text-align: center;
+                                    color: red;
+                                    font-weight: bold;
+                                "
+                            >
+                                Informations sur la rentrée scolaire
+                            </h5>
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-gridlines"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Campus</th>
+                                        <th>Année scolaire</th>
+                                        <th>Date de début</th>
+                                        <th>Date de fin</th>
+                                        <th>Nombre d'heures</th>
+                                        <th>Rythme</th>
+                                        <th>Calendrier</th>
+                                        <th>Examens</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-formation>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <br />
+                            <h5
+                                style="
+                                    text-align: center;
+                                    color: red;
+                                    font-weight: bold;
+                                "
+                            >
+                                Description de la formation
+                            </h5>
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-gridlines"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Description</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-formation>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td style="text-align: center">
+                                            {{ formation.description }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <br />
+                            <h5
+                                style="
+                                    text-align: center;
+                                    color: red;
+                                    font-weight: bold;
+                                "
+                            >
+                                Note
+                            </h5>
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-gridlines"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Note</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-formation>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td style="text-align: center"></td>
                                     </tr>
                                 </ng-template>
                             </p-table>
