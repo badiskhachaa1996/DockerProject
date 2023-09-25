@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from "jwt-decode";
-import { Tache } from 'src/app/models/project/Tache';
+import { Task } from 'src/app/models/project/Task';
 
 @Component({
   selector: 'app-task-management',
@@ -28,9 +28,9 @@ export class TaskManagementComponent implements OnInit {
 
   /** Tasks */
   showProjectTaches: boolean = false;
-  projectTaches: Tache[] = [];
-  taches: Tache[] = [];
-  tacheSelected: Tache;
+  projectTaches: Task[] = [];
+  taches: Task[] = [];
+  tacheSelected: Task;
   showFormAddTache: boolean = false;
   formAddTache: FormGroup;
   showFormUpdateTache: boolean = false;
@@ -169,10 +169,10 @@ export class TaskManagementComponent implements OnInit {
   onAddTask(): void
   {
     const formValue = this.formAddTache.value;
-    const tache = new Tache();
+    const tache = new Task();
 
     tache.libelle = formValue.libelle;
-    tache.percent = 0;
+    //tache.percent = 0;
     tache.attribuate_to = [];
 
     formValue.attribuateTo.forEach((data: any) => {
@@ -182,8 +182,8 @@ export class TaskManagementComponent implements OnInit {
     tache.project_id        = this.projectSelected._id;
     tache.number_of_hour    = formValue.number_of_hour;
     tache.date_limite       = formValue.dateLimite;
-    tache.created_at        = new Date();
-    tache.creator_id        = this.userConnected._id;
+    //tache.created_at        = new Date();
+    //tache.creator_id        = this.userConnected._id;
 
     this.projectService.postTask(tache)
     .then((response) => { 
@@ -197,7 +197,7 @@ export class TaskManagementComponent implements OnInit {
 
 
   // methode de remplissage du formulaire de mise à jour d'une tâche
-  onFillFormUpdateTache(tache: Tache): void
+  onFillFormUpdateTache(tache: Task): void
   {
     this.tacheSelected = tache;
 
@@ -211,12 +211,12 @@ export class TaskManagementComponent implements OnInit {
   onUpdateTask()
   {
     const formValue = this.formUpdateTache.value;
-    const tache = new Tache();
+    const tache = new Task();
 
     tache._id               = this.tacheSelected._id;
     tache.libelle           = formValue.libelle;
     tache.number_of_hour    = formValue.number_of_hour;
-    tache.percent           = this.tacheSelected.percent;
+    //tache.percent           = this.tacheSelected.percent;
     tache.attribuate_to     = [];
 
     formValue.attribuateTo.forEach((data: any) => {
@@ -225,8 +225,8 @@ export class TaskManagementComponent implements OnInit {
 
     tache.project_id = this.tacheSelected.project_id;
     tache.date_limite = this.tacheSelected.date_limite;
-    tache.created_at = this.tacheSelected.created_at;
-    tache.creator_id = this.tacheSelected.creator_id;
+    //tache.created_at = this.tacheSelected.created_at;
+    //tache.creator_id = this.tacheSelected.creator_id;
 
     this.projectService.putTask(tache)
     .then((response) => {

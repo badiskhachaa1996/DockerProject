@@ -1,0 +1,169 @@
+<div class="card">
+    <p-tabView>
+        <p-tabPanel header="École">
+            <h5>Liste des écoles</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="ecoles" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['titre', 'email', 'adresse', 'site_web']" [rows]="5" [pageLinks]="5"
+                [paginator]="true" rowExpandMode="single" [totalRecords]="ecoles.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" /></ng-template>
+                        <ng-template >
+                        <p-dropdown formControlName="école"  filter="true" placeholder="école"
+                [showClear]="true" ></p-dropdown>
+                </ng-template>
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="titre">Nom de l'école<p-sortIcon field="titre">
+                            </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="adresse">Adresse<p-sortIcon field="adresse">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="campus">Campus<p-sortIcon field="campus">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email">Adresse email de contact<p-sortIcon field="email">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="site_web">Site WEB<p-sortIcon field="site_web">
+                            </p-sortIcon>
+                        <th pSortableColumn="url_form">Params URL<p-sortIcon field="url_form">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-ecole>
+                    <tr>
+                        <td>
+                            {{ ecole.titre }}
+                        </td>
+                        <td>
+                            {{ ecole.adresse }}
+                        </td>
+                        <td>
+                            {{ ecole.campus }}
+                        </td>
+                        <td>
+                            {{ ecole.email }}
+                        </td>
+                        <td>
+                            {{ ecole.site_web }}
+                        </td>
+                        <td>
+                            {{ ecole.url_form }}
+                        </td>
+                        <td>
+                            <i style="padding-left: 3%;" class="pi pi-list"
+                                (click)="initFormations(ecole);scrollToTop()" pTooltip="Attribuer les formations"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;" class="pi pi-pencil" (click)="initUpdate(ecole);scrollToTop()"
+                                pTooltip="Modifier l'école" aria-hidden="true" tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+        <p-tabPanel header=" Formation">
+            <p-table #dt1 [value]="formations" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['nom', 'niveau', 'certificateur', 'description']" [rows]="5" [pageLinks]="5"
+            [paginator]="true" rowExpandMode="single" [totalRecords]="formations.length"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Recherche" />
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="nom">Nom de formation<p-sortIcon field="nom">
+                        </p-sortIcon>
+                    </th>
+
+                    <th pSortableColumn="niveau">Niveau<p-sortIcon field="niveau">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="rncp">Code RNCP<p-sortIcon field="rncp">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="certificateur">Certificateur<p-sortIcon field="certificateur">
+                        </p-sortIcon>
+                    <th pSortableColumn="duree">Durée de la formation<p-sortIcon field="duree">
+                        </p-sortIcon>
+                    </th>
+                    <!--<th pSortableColumn="description">Description de la formation<p-sortIcon field="duree">
+                        </p-sortIcon>
+                    </th>-->
+                    <th pSortableColumn="criteres">Critères d'admission<p-sortIcon field="criteres">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="tarif">Tarif<p-sortIcon field="tarif">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="langue">Langues<p-sortIcon field="langue">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="deroulement">Déroulement<p-sortIcon field="deroulement">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="filiere">Filière<p-sortIcon field="filiere">
+                    </p-sortIcon>
+                </th>
+                    <th>Action </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-formation>
+                <tr>
+                    <td>
+                        {{ formation.nom }}
+                    </td>
+                    <td>
+                        {{ formation.niveau }}
+                    </td>
+                    <td>
+                        {{ formation.rncp }}
+                    </td>
+                    <td>
+                        {{ formation.certificateur }}
+                    </td>
+                    <td>
+                        {{ formation.duree }}
+                    </td>
+                    <!--<td>
+                        {{ formation.description }}
+                    </td>-->
+                    <td>
+                        {{ formation.criteres }}
+                    </td>
+                    <td>
+                        {{ formation.tarif }}
+                    </td>
+                    <td>
+                        {{ formation.langue }}
+                    </td>
+                    <td>
+                        {{ formation.deroulement }}
+                    </td>
+                    <td>
+                        {{ formation.filiere }}
+                    </td>
+                    <td>
+                        <i style="padding-left: 3%;" class="pi pi-eye" (click)="showDescription(formation)"
+                            pTooltip="Voir la description" aria-hidden="true" tooltipPosition="bottom"></i>
+                        <i style="padding-left: 3%;" class="pi pi-pencil"
+                            (click)="initUpdate(formation);scrollToTop()" pTooltip="Modifier la formation"
+                            aria-hidden="true" tooltipPosition="bottom"></i>
+                        <i style="padding-left: 3%;" class="pi pi-trash" (click)="delete(formation);"
+                            pTooltip="Supprimer la formation" aria-hidden="true" tooltipPosition="bottom"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </p-tabPanel>
+
+    </p-tabView>
+</div>

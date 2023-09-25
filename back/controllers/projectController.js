@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des Sujets
-const { Project } = require("./../models/project/Project");
+//const { Project } = require("./../models/project/Project");
 const { Task } = require("./../models/project/Task");
 const nodemailer = require('nodemailer');
 const { json } = require("body-parser");
@@ -107,6 +107,12 @@ app.get("/get-task/:id", (req, res, next) => {
 // get task by id task
 app.get("/get-tasks-by-id-user/:id", (req, res, next) => {
     Task.find({ attribuate_to: { $in: req.params.id } })?.populate('project_id')?.populate('attribuate_to')
+    .then((taskFromDb) => { res.status(200).send(taskFromDb) })
+    .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
+});
+// get task by id ticket
+app.get("/get-tasks-by-id-ticket/:id", (req, res, next) => {
+    Task.find({ ticketId: { $in: req.params.id } })?.populate('project_id')?.populate('attribuate_to')
     .then((taskFromDb) => { res.status(200).send(taskFromDb) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });

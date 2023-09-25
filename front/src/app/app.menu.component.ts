@@ -154,11 +154,16 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                /*{
+                                {
+                                    label: 'Ajouter un ticket projet',
+                                    icon: 'pi pi-fw pi-shield',
+                                    routerLink: ['/ticketing/Ajouter-un-ticket-projet'],
+                                },
+                                {
                                     label: 'Configuration',
                                     icon: 'pi pi-cog',
                                     routerLink: ['/ticketing/configuration'],
-                                },*/
+                                },
                                 {
                                     label: 'Dashboard',
                                     icon: 'pi pi-home',
@@ -166,7 +171,52 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
+                        {
+                            label: 'Projects ',
+                            icon: 'pi pi-fw pi-shield',
+                            items: [
+                                {
+                                    label: 'Gestion des  projects',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    routerLink: ['/gestion-project'],
+                                },
+                                {
+                                    label:  'Mes activités' ,
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink:['mytask']
+                                },
+                                {
+                                    label: 'Mes projects',
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink: ['/myproject'],
+                                },
+                                {
+                                    label: 'Dasboard',
+                                    icon: 'pi pi-fw pi-users',
+                                    routerLink: ['/dashboard-project-v2'],
+                                },
+                            ]
+                        },
+                        
+                       /* {
+                            label: 'Gestion des agents V2',
+                            icon: 'pi pi-users',
+                            items: [
+                                {
+                                    label: 'Ajouter un agent',
+                                    icon: 'pi pi-plus',
+                                    routerLink: ['/agent/ajout'],
+                                },
+                                {
+                                    label: 'Liste des agents',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/agent/list'],
+                                },
+                            ],
+                        },*
                         /*{
+                            label: 'Projet - Ancienne Version',
+                        {
                             label: 'Projet',
                             icon: 'pi pi-fw pi-shield',
                             items: [
@@ -186,7 +236,34 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/team'],
                                 },
                             ],
-                        },*/
+                        },
+                        {
+                            label: 'Projects ',
+                            icon: 'pi pi-fw pi-shield',
+                            items: [
+                                {
+                                    label: 'Gestion des  projects',
+                                    icon: 'pi pi-fw pi-check-circle',
+                                    routerLink: ['/gestion-project'],
+                                },
+                                {
+                                    label:  'Mes activités' ,
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink:['mytask']
+                                },
+                                {
+                                    label: 'Mes projects',
+                                    icon: 'pi pi-fw pi-list',
+                                    routerLink: ['/myproject'],
+                                },
+                                {
+                                    label: 'Dasboard',
+                                    icon: 'pi pi-fw pi-users',
+                                    routerLink: ['/dashboard-project-v2'],
+                                },
+                            ]
+                        },
+                        },
                         {
                             label: 'Ressources humaines',
                             icon: 'pi pi-users',

@@ -99,7 +99,6 @@ import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
 import { FloatLabelComponent } from './components/floatlabel/floatlabel.component';
@@ -194,7 +193,6 @@ import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-leg
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
-
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { DemandeEventsComponent } from './demande-events/demande-events.component';
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
@@ -350,6 +348,10 @@ import { ConfigurationTargetComponent } from './crm/target/configuration-target/
 import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboard-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
+import { MytaskComponent } from './project-v2/mytask/mytask.component';
+import { MyprojectComponent } from './project-v2/myproject/myproject.component';
+import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { ConfigurationPointeuseComponent } from './rh/configuration-pointeuse/configuration-pointeuse.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
@@ -376,6 +378,9 @@ import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/
 import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
 import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
 import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
+import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
+import { InformationsComponent } from './informations/informations.component';
+import { LinksComponent } from './links/links.component';
 
 @NgModule({
   imports: [
@@ -471,7 +476,8 @@ import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candida
     FullCalendarModule,
     NgxIntlTelInputModule,
     EditorModule,
-    QRCodeModule,PdfViewerModule,
+    QRCodeModule,
+    PdfViewerModule,
     MsalModule.forRoot(
       new PublicClientApplication({
         auth: {
@@ -732,8 +738,14 @@ import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candida
     DashboardTargetComponent,
     DocCheckerComponent,
     LeadCandidatureComponent,
+    GestionComponent,
+    MytaskComponent,
+    MyprojectComponent,
+    DashboardProjectV2Component,
     BookingV2Component,
     ConfigurationPointeuseComponent,
+    IMatchComponent,
+    AjouterUnTicketProjetComponent,
     IMatchComponent,
     CalendrierRhComponent,
     ConfigurationPointageComponent,
@@ -759,6 +771,8 @@ import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candida
     MesRendezVousComponent,
     EntrepriseDashboardComponent,
     SuiviCandidatComponent,
+    InformationsComponent,
+    LinksComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

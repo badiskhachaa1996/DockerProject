@@ -48,6 +48,10 @@ export class TicketService {
     let registreUrl = this.apiUrl + "deleteById/" + id;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getById(id: string) {
+    let registreUrl = this.apiUrl + "getById/" + id;
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   //Avoir tous les tickets d'un User via son ID
   getAllByUser(id: string) {
     let registreUrl = this.apiUrl + "getAllbyUser/" + id;

@@ -35,7 +35,7 @@
         <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAddEtudiant()">
             <div class="field col-12 md:col-12">
                 <label>Groupe</label>
-                <p-dropdown [options]="groupeList" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
+                <p-dropdown [options]="groupeList" emptyFilterMessage="Aucun groupe trouvé" filterPlaceholder="Groupe"
                     filter="true" formControlName="groupe"></p-dropdown>
             </div>
             <!--<div class="field col-12 md:col-6">
