@@ -245,6 +245,10 @@ import { DashboardTargetComponent } from './crm/target/dashboard-target/dashboar
 import { ConfigurationTargetComponent } from './crm/target/configuration-target/configuration-target.component';
 import { DocCheckerComponent } from './international/generation-doc/doc-checker/doc-checker.component';
 import { LeadCandidatureComponent } from './admission/lead/lead-candidature/lead-candidature.component';
+import { GestionComponent } from './project-v2/gestion-des-projects/gestion/gestion.component';
+import { MytaskComponent } from './project-v2/mytask/mytask.component';
+import { MyprojectComponent } from './project-v2/myproject/myproject.component';
+import { DashboardProjectV2Component } from './project-v2/dashboard-project-v2/dashboard-project-v2.component';
 import { BookingV2Component } from './booking-v2/booking-v2.component';
 import { IMatchComponent } from './skillsnet/i-match/i-match.component';
 import { CvComponent } from './skillsnet/i-match/cv/cv.component';
@@ -269,6 +273,9 @@ import { DashboardAlternanceComponent } from './commercial/dashboard-alternance/
 import { MesRendezVousComponent } from './skillsnet/mes-rendez-vous/mes-rendez-vous.component';
 import { EntrepriseDashboardComponent } from './skillsnet/entreprise-dashboard/entreprise-dashboard.component';
 import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candidat.component';
+import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
+import { InformationsComponent } from './informations/informations.component';
+import { LinksComponent } from './links/links.component';
 const routes: Routes = [
     {
         path: '',
@@ -654,7 +661,18 @@ const routes: Routes = [
                 component: TeamComponent,
             },
             /** end */
+            /** IMS Project-V2 */
+            { path: 'gestion-project',  component: GestionComponent},
+            { path: 'mytask', component: MytaskComponent},
+            { path: 'myproject', component: MyprojectComponent},
+            { path: 'dashboard-project-v2', component: DashboardProjectV2Component},
+            /** end */
 
+
+            /**informations */
+            { path: 'informations',component:InformationsComponent},
+            /**links */
+            { path:'Links',component:LinksComponent},
             {
                 path: 'logements',
                 canActivate: [AuthGuardService],
@@ -1156,10 +1174,12 @@ const routes: Routes = [
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/non-assignes/:service', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
+            { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService]},
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
+
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',
