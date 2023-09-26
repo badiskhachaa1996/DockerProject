@@ -277,6 +277,8 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
+import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
+import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 const routes: Routes = [
     {
         path: '',
@@ -1350,6 +1352,8 @@ const routes: Routes = [
     { path: 'document-authentification', component: DocCheckerComponent },
     // Accessible from anywhere
     { path: 'imatch', component: IMatchComponent },
+    { path: 'imatch/cvtheque', component: ImatchCandidatComponent },
+    { path: 'imatch/offre', component: ImatchEntrepriseComponent },
     { path: 'rendez-vous', component: RendezVousComponent },
     { path: 'rendez-vous/:user_id', component: RendezVousComponent },
     { path: 'imatch/cv/:id', component: CvComponent },

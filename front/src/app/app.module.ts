@@ -382,6 +382,11 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
+import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
+import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
+import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
+import { HeaderImatchComponent } from './skillsnet/i-match/header-imatch/header-imatch.component';
+import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 
 @NgModule({
   imports: [
@@ -775,6 +780,11 @@ import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
     InformationsComponent,
     LinksComponent,
     VoirCvComponent,
+    ImatchEntrepriseComponent,
+    ImatchCandidatComponent,
+    CandidatListComponent,
+    HeaderImatchComponent,
+    EntrepriseListComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
