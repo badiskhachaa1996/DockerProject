@@ -61,14 +61,16 @@
             </div>
             <span> Notifications</span>
         </a>
-        <a href="#/profil" class="p-link layout-topbar-button" >
-            <i class="pi pi-user" pTooltip="Profil" tooltipPosition="bottom"></i>
-            <span>Profil</span>
-        </a>
-        <a (click)="onDisconnect()" class="p-link layout-topbar-button" >
+        <div class="center" >
+            <img #img src="{{ imageToShow }}"alt="Logo" aria-haspopup="true" class="max-w-full" class="p-link layout-topbar-button" aria-haspopup="true"  style="width: 35px; height: 35px;border-radius: 50%;"  tooltipPosition="bottom"  />
+            <p-contextMenu [target]="img" [model]="items" ></p-contextMenu>
+            
+        </div>
+        
+        <!--<a (click)="onDisconnect()" class="p-link layout-topbar-button" >
             <i class="pi pi-power-off" pTooltip="Déconnexion" tooltipPosition="bottom"></i>
             <span>Déconnexion</span>
-        </a>
+        </a>-->
     </div>
     
 </div>

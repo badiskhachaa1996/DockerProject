@@ -81,13 +81,18 @@ export class MesRendezVousComponent implements OnInit {
     }, 15);
   }
 
-  onCancel() {
+  onCancel(rdv: MeetingTeams) {
+    rdv.statut = "Annulé"
+    this.MeetingTeamsService.update({ ...rdv }).subscribe(r => {
+      this.form.reset()
+      this.rdvToUpdate = null
+      this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
+    })
+  }
+  seeOffer(rdv: MeetingTeams) {
 
   }
-  seeOffer() {
-
-  }
-  seeCV() {
+  seeCV(rdv: MeetingTeams) {
 
   }
 

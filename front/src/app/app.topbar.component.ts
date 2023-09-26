@@ -1,17 +1,21 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AppMainComponent } from './app.main.component';
-
+import { ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
 import { environment } from 'src/environments/environment';
+import { switchMap } from 'rxjs/operators';
 import jwt_decode from "jwt-decode";
 import { ServService } from './services/service.service';
 import { MsalService } from '@azure/msal-angular';
 import { AuthService } from './services/auth.service';
 import { User } from './models/User';
 import { CommonModule } from '@angular/common';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { OnInit } from '@angular/core';
+
 
 
 const io = require("socket.io-client");
@@ -21,7 +25,8 @@ const io = require("socket.io-client");
   templateUrl: './app.topbar.component.html',
 
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit {
+  items: MenuItem[] | undefined;
 
   logo = "assets/images/logo-ims-new.png"
   notif = false;
@@ -30,15 +35,16 @@ export class AppTopBarComponent {
   isCEO = false
   userConnected: User;
   token: any;
-  user=true;
-  nom=""
-  prenom="";
+  user = true;
+  nom = ""
+  statutUser = "Disponible";
+  prenom = "";
   today: Date = new Date();
+  imageToShow: any = "../assets/images/avatar.PNG";
 
-
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, 
-    private NotificationService: NotificationService, private msalService: MsalService, 
-    private AuthService: AuthService, private ToastService: MessageService,private UserService: AuthService,) { }
+  constructor(public appMain: AppMainComponent, private CService: CommercialPartenaireService, private serv: ServService, private router: Router,
+    private NotificationService: NotificationService, private msalService: MsalService,
+    private AuthService: AuthService, private ToastService: MessageService, private UserService: AuthService, private messageService: MessageService,) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -55,13 +61,68 @@ export class AppTopBarComponent {
     this.UserService.getPopulate(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
-      this.nom=this.userConnected.lastname;
-    this.prenom=this.userConnected.firstname}})}
+        this.nom = this.userConnected.lastname;
+        this.prenom = this.userConnected.firstname
+        this.statutUser=this.userConnected.statut;
+      }
+    })
+  }
+  reader: FileReader = new FileReader();
+  loadPP(rowData) {
+    console.log(rowData)
+    this.imageToShow = "../assets/images/avatar.PNG"
+    console.log(rowData)
+    this.CService.getProfilePicture(rowData._id).subscribe((data) => {
+      if (data.error) {
+        console.error(data.error)
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+  }
+  // méthode de mise à jour du statut
+  onUpdateStatus(statut): void {
+    this.UserService.pathUserStatut(statut, this.userConnected._id)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
+        this.onGetUserConnectedInformation();
+      })
+      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
+  }
+
   ngOnInit() {
+
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
+    this.UserService.getProfilePicture(this.token.id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          this.reader.readAsDataURL(blob);
+        }
+      }
+    })
     let temp: any = jwt_decode(localStorage.getItem("token"))
     let url = window.location.href;
     //console.log(url)
-    this.token = jwt_decode(localStorage.getItem('token'));
+
     this.onGetUserConnectedInformation();
     if (url.includes('ims.adgeducation')) //ims.adgeducation
       this.logo = "assets/images/logo_adg.png"
@@ -125,5 +186,72 @@ export class AppTopBarComponent {
     }, (error) => {
       console.error(error)
     })
+    this.items = [
+      {
+        label: "Disponible",
+        items: [
+          {
+            label: 'Disponible',
+            command: () => {
+              this.onUpdateStatus('Disponible');
+            }
+          },
+          {
+            label: 'Absent',
+            command: () => {
+              this.onUpdateStatus('Absent');
+            }
+          },
+          {
+            label: 'En pause',
+            command: () => {
+              this.onUpdateStatus('En pause');
+
+            }
+
+          },
+          {
+            label: 'Occupé',
+            command: () => {
+              this.onUpdateStatus('Occupé');
+
+            }
+
+          },
+          {
+            label: 'En congé',
+            command: () => {
+              this.onUpdateStatus('En congé');
+
+            }
+
+          },
+          {
+            label: 'En réunion',
+            command: () => {
+              this.onUpdateStatus('En réunion');
+
+            }
+
+          },
+        ]
+        ,
+
+      },
+      {
+        label: 'Profil',
+        icon: 'pi pi-fw pi-user',
+        routerLink: '/profil'
+
+      },
+
+      {
+        label: 'Déconnexion',
+        command: () => {
+          this.onDisconnect();
+
+        }
+      }
+    ];
   }
 }

@@ -33,7 +33,7 @@
                     Localisation <p-sortIcon field="user_id"></p-sortIcon>
                 </th>
                 <th pSortableColumn="type" scope="col" style="text-align: center;">
-                    Type de Pointage disponible <p-sortIcon field="type"></p-sortIcon>
+                    Type de Pointage <p-sortIcon field="type"></p-sortIcon>
                 </th>
             </tr>
         </ng-template>
@@ -87,35 +87,31 @@
                             <div class="col-6 md:col-3">
                                 <button pButton pRipple (click)="onCheckIn()" label="Check in" class="p-button-primary mb-2"
                                     [disabled]="dailyCheck != null"></button> <br>
-                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause"
-                                        class="p-button-warning mb-2"
-                                        [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
-                                <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
-                                        label="Fin de la pause" class="p-button-warning mb-2"
-                                        [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
-                                <a href="#departAnticipe" (click)="selectedTabIndex = 5;onUpdateStatus('Absent')"
-                                    *ngIf="dailyCheck != null && dailyCheck.check_out == null"><button pButton pRipple
-                                        label="Départ anticipé" class="p-button-help mb-2"></button></a> <br
-                                    *ngIf="dailyCheck != null && dailyCheck.check_out == null">
-                                <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"
-                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
+                                
+                                    <h5>Heure de check In </h5>
+                                    <h6><strong>Online</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
+                                    <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
+                                
                             </div>
                             <div class="col-6 md:col-3">
-                                <h5>Heure de check In </h5>
-                                <h6><strong>Online</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
-                                <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
-                                <h6>Temps passé au <br> travail:
-                                    <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
-                                </h6>
-                                <h6>Temps passé en <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
-                                <h6>Taux de remplissage du <br> CRA: <strong>{{craPercent}}%</strong></h6>
+                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()" label="Pause"
+                                    class="p-button-warning mb-2"
+                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                            <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
+                                    label="Fin de la pause" class="p-button-warning mb-2"
+                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button> <br></span>
+                                
+                                
+                               
                             </div>
-                            <div class="col-6 md:col-3 flex align-items-center justify-content-center">
-                                <h5 style="text-align: center;">
+                            <div class="col-6 md:col-3 ">
+                                <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"
+                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
+                                <!--<h5 style="text-align: center;">
                                     Statut actuel <span pTooltip="Modifier le statut" (click)="showFormUpdateStatut = true"><i
                                             class="pi pi-pencil" style="color: #4338CA"></i></span><br>
                                     <!-- formulaire pour mettre à jour le statut de l'utilisateur -->
-                                    <div *ngIf="showFormUpdateStatut">
+                                <!--    <div *ngIf="showFormUpdateStatut">
                                         <hr>
                                         <form [formGroup]="formUpdateStatut" class="p-fluid p-formgrid"
                                             (ngSubmit)="onUpdateStatus()">
@@ -131,14 +127,34 @@
                                         <hr>
                                     </div>
                                     <!-- end dialogue -->
-                                    <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
+                            <!--      <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
                                 </h5>
-            
+                            -->
                             </div>
                             <div class="col-6 md:col-3" style="text-align: center">
-                                <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
-                                <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>-->
-                                <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>
+                                <h6>Temps passé au <br> travail:
+                                    <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
+                                </h6>
+                                <h6>Temps passé en <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
+                                <h6>Taux de remplissage du <br> CRA: <strong>{{craPercent}}%</strong></h6>
+                                <!--<img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
+                                <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
+                                <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>-->
+                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" card">
+                        <div class="grid col-12">
+                            <div class="col-4 text-center">
+                                <p-button styleClass="p-button-secondary">Historique</p-button>
+
+                            </div>
+                            <div class="col-4 d-flex text-center">
+                                <p-button styleClass="p-button-warning">Congé</p-button>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p-button styleClass="p-button-help">Assiduité</p-button>
                             </div>
                         </div>
                     </div>
@@ -279,7 +295,7 @@
 
 
 
-                <p-tabPanel header="Suivre mon assiduité">
+                <!--<p-tabPanel header="Suivre mon assiduité">
                     <div class="grid">
                         <div class="col-6">
                             <div>
@@ -535,9 +551,9 @@
                     </p-table>
                 </p-tabPanel>-->
 
-                <p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">*
+         <!--     <!----> <!--<p-tabPanel header="Demande de congé / autorisation" id="departAnticipe">*
                     <!-- formulaire de modification d'une demande de congé -->
-                    <div *ngIf="showUpdateCongeForm">
+          <!--         <div *ngIf="showUpdateCongeForm">
                         <i class="pi pi-times-circle"
                             style="color: red; font-size: 20px; cursor: pointer; float: right;"
                             (click)="showUpdateCongeForm = false; showOtherTextArea = false"></i>
@@ -585,7 +601,7 @@
                     </div>
 
                     <!-- formulaire de demande de congé -->
-                    <div *ngIf="showAddCongeForm">
+             <!--       <div *ngIf="showAddCongeForm">
                         <i class="pi pi-times-circle"
                             style="color: red; font-size: 20px; cursor: pointer; float: right;"
                             (click)="showAddCongeForm = false; showOtherTextArea = false;"></i>
@@ -737,9 +753,9 @@
         </p-table>
         </p-tabPanel>
 
-        <p-tabPanel header="Historique de pointage et CRA">
+       <!-- <p-tabPanel header="Historique de pointage et CRA">
             <!-- affichage du CRA d'un historique de pointage -->
-            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+        <!--   <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                 *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
             <div style="clear: both;"></div>
 
@@ -773,7 +789,7 @@
             </p-table>
 
             <!-- affichage de l'historique de pointage -->
-            <h5 class="mt-5">Historique de pointage et CRA</h5>
+         <!--   <h5 class="mt-5">Historique de pointage et CRA</h5>
             <div class="m-2">
                 <label htmlFor="">Choisissez un mois et une année</label> <br>
                 <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -830,7 +846,7 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </p-tabPanel>
+        </p-tabPanel>-->
         <p-tabPanel header="Calendrier">
             <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
             </p-fullCalendar>
@@ -845,7 +861,7 @@
                 </div>
             </p-dialog>
         </p-tabPanel>
-        <p-tabPanel header="Mes favoris">
+        <!--<p-tabPanel header="Mes favoris">
             <div class="card" *ngIf="showForm">
                 <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                     (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
@@ -881,7 +897,7 @@
                     </div>
                 </div>
             </div>
-        </p-tabPanel>
+        </p-tabPanel>-->
         </p-tabView>
     </div>
 
