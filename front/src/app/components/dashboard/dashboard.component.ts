@@ -102,6 +102,9 @@ export class DashboardComponent implements OnInit {
   dataEtudiant: Etudiant = null
   dataFormateur: Formateur = null
   dataIntuns: EtudiantIntuns;
+  visible:boolean=false;
+  visibleA:boolean=false;
+  visibleC:boolean=false;
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
@@ -480,6 +483,15 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  showHistorique(){
+    this.visible=true
+  }
+  showAssiduite(){
+    this.visibleA=true
+  }
+  showConge(){
+    this.visibleC=true
+  }
   SCIENCE() {
     console.log("PAS TOUCHE")
 
