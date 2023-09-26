@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
@@ -10,14 +11,14 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
   styleUrls: ['./ecole-admission.component.scss']
 })
 export class EcoleAdmissionComponent implements OnInit {
-
+  seeAction = true
   ecoles: EcoleAdmission[] = []
   langueList = [
     { label: 'Français', value: 'Français' },
     { label: 'English', value: 'English' },
   ]
   selectedEcole: EcoleAdmission
-  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService) { }
+  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService, private route: ActivatedRoute) { }
   campusList = [
     { label: 'Paris', value: 'Paris' },
     { label: 'Montpellier', value: 'Montpellier' },
@@ -25,16 +26,25 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'Maroc', value: 'Maroc' },
     { label: 'Malte', value: 'Malte' },
     { label: 'Dubai', value: 'Dubai' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Marne', value: 'Marne' },
     { label: 'En ligne', value: 'En ligne' }
+  ]
+  campusFilter = [
+    { label: 'Tous les campus', value: null },
+    ...this.campusList
   ]
   ngOnInit(): void {
     this.FAService.EAgetAll().subscribe(data => {
-      console.log(data)
       this.ecoles = data
     })
     this.FAService.FAgetAll().subscribe(data => {
       this.formationsList = data
     })
+    this.route.url.subscribe(r => {
+      this.seeAction = !(r[0].path == "informations")
+    })
+
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -121,19 +131,24 @@ export class EcoleAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteEcole(id: string): void 
-  {
+  onDeleteEcole(id: string): void {
     this.FAService.EAdelete(id)
       .then((response) => {
-        this.MessageService.add({severity: 'success', summary: 'École', detail: response.success});
+        this.MessageService.add({ severity: 'success', summary: 'École', detail: response.success });
         this.FAService.EAgetAll().subscribe(data => {
           this.ecoles = data
         })
       })
-      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
-    }
-  
+      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary: 'École', detail: error.error }); });
+  }
 
-  formationsList = [] 
 
+  formationsList = []
+  showSideBar = false
+  selectedEcoleDetails: EcoleAdmission
+  showDetails(data: EcoleAdmission) {
+    this.selectedEcoleDetails = data
+    this.showSideBar = true
+    console.log(data)
+  }
 }

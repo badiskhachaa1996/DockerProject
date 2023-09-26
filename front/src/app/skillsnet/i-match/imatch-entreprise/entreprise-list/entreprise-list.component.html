@@ -1,0 +1,157 @@
+<div class="container" style="text-align: center;">
+    <img class="steps-imatch" src="../../../assets/images/imatch/steps-offre.svg">
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <span class="p-input-icon-left w-100">
+                <i class="pi pi-search cv-search"></i>
+                <input claas="rounded-circle" pInputText type="text" #filter (input)="updateFilter()"
+                    [(ngModel)]="researchValue" placeholder="Ex: John" class="w-full cv-input-text" />
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col-12">
+            <div class="row">
+                <div class="field col-md col-12">
+                    <p-multiSelect [options]="profiles" [(ngModel)]="selectedProfiles" defaultLabel="Profil"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        (onChange)="updateFilter()" class="w-100"></p-multiSelect>
+                </div>
+                <div class="field col-md col-12">
+                    <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        (onChange)="updateFilter()" class="w-100"></p-multiSelect>
+                </div>
+                <div class="field col-md col-12">
+                    <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" [(ngModel)]="dispoFilter"
+                        (onSelect)="updateFilter()" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+                        [style]="{'width':'100%'}" placeholder="Disponibilité"></p-calendar>
+                </div>
+                <div class="field col-md col-12">
+                    <p-multiSelect [options]="skills" [(ngModel)]="selectedSkills" defaultLabel="Compétences"
+                        autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
+                        (onChange)="updateFilter()"></p-multiSelect>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-12">
+            <div class="field col-md col-12">
+                <button type="button" pButton pRipple icon="pi pi-filter-slash" (click)="clearFilter()" class="mr-2"
+                    autoWidth="false" [style]="{'width':'100%'}" pTooltip="Supprimer les filtres"
+                    tooltipPosition="bottom" class="cv-clear-button ">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offre-list">
+    <div class="container">
+        <div class="row">
+            <div class="col-4" *ngFor="let offre of filteredOffres">
+                <div class="offre-card row">
+                    <div class="col-5">
+                        <div *ngIf="!dicPicture;then offre_image else default_image">
+                        </div>
+                        <ng-template #offre_image>
+                            <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');">
+                            </div>
+                        </ng-template>
+                        <ng-template #default_image>
+                            <div class="img-card"
+                                style="background-image: url('../../../assets/images/imatch/entreprise.png');">
+                            </div>
+                        </ng-template>
+                        <a class="offres-btns details" href="javascript:void(0)" (click)="showDetails = true; annonceSelected = offre"><i class="pi pi-list"></i>Détails</a>
+                    </div>
+                    <div class="col-7 card-right">
+                        <div class="offre-card-main">
+                            <h4 class="offre-card-title">{{offre.missionName}} <br *ngIf="offre?.missionName?.length<14">&nbsp;</h4>
+                            <p class="offre-card-lieu">📍 {{offre.entreprise_ville }}</p>
+                        </div>
+                        <a class="offres-btns postuler" href="javascript:void(0)" (click)="showPostuler = true; annonceSelected = offre"><i class="pi pi-arrow-right"></i>Postuler</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showDetails" class="offre-details-card">
+    <div class="container">
+        <div class="modal-content">
+            <span class="close" (click)="showDetails = false">&times;</span>
+            <div *ngIf="!dicPicture;then offre_image else default_image">
+            </div>
+            <ng-template #offre_image>
+                    <img class="img-modal"
+                   src="{{dicPicture[cv._id].url}}">
+            </ng-template>
+            <ng-template #default_image>
+                <img class="img-modal"
+                   src="../../../assets/images/imatch/entreprise.png">
+            </ng-template>
+            <h4>Profil :</h4>
+            <p>{{annonceSelected?.profil.libelle}}</p>
+            <h4>Compétences :</h4>
+            <p><span *ngFor="let compet of annonceSelected?.competences">{{compet.libelle}}, </span></p>
+            <h4>Lieu :</h4>
+            <p>{{annonceSelected?.entreprise_ville}}</p>
+            <h4>Description :</h4>
+            <p>{{annonceSelected?.missionDesc}}</p>
+            <div class="btns-postuler">
+                <div class="btn btn-retour" (click)="showDetails = false">Retour</div>
+                <div class="btn btn-postuler" (click)="showPostuler = true ; showDetails = false"><i class="pi pi-arrow-right"></i>Postuler</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="showPostuler" class="offre-details-card">
+    <div class="container">
+        <div class="modal-content">
+            <span class="close" (click)="showPostuler = false">&times;</span>
+            <h2>Postuler pour le poste :</h2>
+            <h3>{{annonceSelected?.missionName || "Nom du poste"}}</h3>
+            <form class="form-container" [formGroup]="form" (submit)="onSubmit()">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Prénom et Nom</label>
+                            <input pInputText type="text" formControlName="full_name" autoWidth="false"
+                                [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Adresse e-mail</label>
+                            <input pInputText type="text" formControlName="email_adress" autoWidth="false"
+                                [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Numéro de téléphone</label>
+                            <input pInputText type="text" formControlName="phone" autoWidth="false"
+                                [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="email">Joindre un CV</label>
+                            <input pInputText type="text" formControlName="cv" autoWidth="false"
+                                [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <div class="btns-postuler">
+                    <div class="btn btn-retour" (click)="showPostuler = false">Retour</div>
+                    <button pButton type="submit" [disabled]="form.invalid" label="Envoyer"
+                    autoWidth="false" class="btn btn-envoyer"></button>
+                </div>
+            </form>
+            <p class="information">Vous avez déjà un compte, <a href="#/login">cliquez ici</a> pour postuler via votre portail.</p>
+        </div>
+    </div>
+</div>
