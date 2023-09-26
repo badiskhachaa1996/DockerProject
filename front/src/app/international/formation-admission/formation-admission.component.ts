@@ -5,6 +5,9 @@ import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
+import { Campus } from 'src/app/models/Campus';
+import { CampusService } from 'src/app/services/campus.service';
+import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
 
 @Component({
   selector: 'app-formation-admission',
@@ -15,11 +18,28 @@ export class FormationAdmissionComponent implements OnInit {
 
   formations: FormationAdmission[] = []
   selectedFormation: FormationAdmission
-  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService) { }
+  dropdownCampus: any[] = []
+  rentreeScolaire = []
+  constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService, private MessageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
     this.FAService.FAgetAll().subscribe(data => {
       this.formations = data
+    })
+    
+    // permet de récupérer la liste des campus
+    this.CampusService.getAll().subscribe(campus => {
+      console.log(campus)
+      campus.forEach(c => {
+        this.dropdownCampus.push({ label: c.libelle, value: c._id })
+      })
+    })
+
+    // permet de récupérer la liste des rentrées scolaire
+    this.RAService.RAgetAll().subscribe(rentrees => {
+      rentrees.forEach(rentree => {
+        this.rentreeScolaire.push({ label: rentree.nom, value: rentree._id })
+      })
     })
   }
 
@@ -50,6 +70,7 @@ export class FormationAdmissionComponent implements OnInit {
     rythme: new FormControl(''),
     calendrier: new FormControl(''),
     examens: new FormControl(''),
+    note: new FormControl(''),
     })
 
   filiereList = [
@@ -106,6 +127,7 @@ export class FormationAdmissionComponent implements OnInit {
     rythme: new FormControl(''),
     calendrier: new FormControl(''),
     examens: new FormControl(''),
+    note: new FormControl(''),
   })
 
   addForm = false
