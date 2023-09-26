@@ -122,12 +122,12 @@ export class ExamenComponent implements OnInit {
                 this.users[user._id] = user;
                 if (user && user._id == formateur.user_id) {
                   this.dropdownFormateur.push({
-                    label: user.firstname + " " + user.lastname,
+                    label: user?.firstname + " " + user?.lastname,
                     value: formateur._id,
                   });
                   this.formateurs[formateur._id] = formateur;
                   this.filterFormateur.push({
-                    label: user.firstname + " " + user.lastname,
+                    label: user?.firstname + " " + user?.lastname,
                     value: formateur._id,
                   })
                 }
@@ -385,8 +385,8 @@ export class ExamenComponent implements OnInit {
           if (oldNote.indexOf(etu._id) == -1 && etu.user_id)
             this.tableauNotes.push({
               id: etu.custom_id,
-              etudiant_f: etu.user_id.firstname,
-              etudiant_l: etu.user_id.lastname,
+              etudiant_f: etu?.user_id?.firstname,
+              etudiant_l: etu?.user_id?.lastname,
               note: NaN,
               appreciation: '',
               date_note: null,
@@ -537,7 +537,7 @@ export class ExamenComponent implements OnInit {
           if (f && f.user_id) {
             let user: any = f.user_id
             this.filterFormateur.push({
-              label: user.firstname + " " + user.lastname,
+              label: user?.firstname + " " + user?.lastname,
               value: f._id,
             })
           }
@@ -572,8 +572,8 @@ export class ExamenComponent implements OnInit {
           if (oldNote.indexOf(etu._id) == -1 && etu.user_id)
             tableauNotes.push({
               id: etu.custom_id,
-              etudiant_f: etu.user_id.firstname,
-              etudiant_l: etu.user_id.lastname,
+              etudiant_f: etu?.user_id?.firstname,
+              etudiant_l: etu?.user_id?.lastname,
               note: '',
               _id: etu.user_id._id + "NEW",
               isAbsent: false,

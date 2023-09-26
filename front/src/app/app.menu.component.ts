@@ -4532,7 +4532,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Suivi',
                             icon: 'pi pi-reply',
                             items: [
@@ -4547,32 +4547,22 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/suivi-candidat']
                                 }
                             ],
-                        },
+                        },*/
                         {
                             label: 'Offres',
                             icon: 'pi pi-star',
                             routerLink: ['/mes-offres']
                         },
                         {
-                            label: 'Candidats',
-                            icon: 'pi pi-chart-line',
-                            items: [
-                                {
-                                    label: 'Cvthèque',
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: ['/cvtheque-interne']
-                                },
-                                {
-                                    label: 'Cvthèque Externe',
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: ['/imatch'],
-                                },
-                            ]
+                            label: 'Cvthèque',
+                            icon: 'pi pi-briefcase',
+                            routerLink: ['/imatch'],
                         },
                         {
-                            label: 'Rapport',
-                            icon: 'pi pi-chart-line',
-                            routerLink: ['/dashboard-alternance'],
+                            label: "Matching",
+                            icon: 'pi pi-users',
+                            routerLink: ['/suivi-candidat']
+
                         },
                         {
                             label: 'Ticketing',
@@ -4589,6 +4579,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
+                        },
+                        {
+                            label: 'Repporting',
+                            icon: 'pi pi-chart-line',
+                            routerLink: ['/dashboard-alternance'],
                         },
                     ];
                 }
