@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AppMainComponent } from './app.main.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { NotificationService } from './services/notification.service';
@@ -63,7 +63,7 @@ export class AppTopBarComponent implements OnInit {
         this.userConnected = response;
         this.nom = this.userConnected.lastname;
         this.prenom = this.userConnected.firstname
-        this.statutUser=this.userConnected.statut;
+        this.statutUser = this.userConnected.statut;
       }
     })
   }
@@ -93,9 +93,12 @@ export class AppTopBarComponent implements OnInit {
   }
   // méthode de mise à jour du statut
   onUpdateStatus(statut): void {
+    this.userConnected.statut = statut
+    this.items[0].label = statut
     this.UserService.pathUserStatut(statut, this.userConnected._id)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
+        
         this.onGetUserConnectedInformation();
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
@@ -180,78 +183,85 @@ export class AppTopBarComponent implements OnInit {
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
+      this.items = [
+        {
+          label: this.userConnected.statut,
+          items: [
+            {
+              label: 'Disponible',
+              command: () => {
+                this.onUpdateStatus('Disponible');
+              }
+            },
+            {
+              label: 'Absent',
+              command: () => {
+                this.onUpdateStatus('Absent');
+              }
+            },
+            {
+              label: 'En pause',
+              command: () => {
+                this.onUpdateStatus('En pause');
+
+              }
+
+            },
+            {
+              label: 'Occupé',
+              command: () => {
+                this.onUpdateStatus('Occupé');
+
+              }
+
+            },
+            {
+              label: 'En congé',
+              command: () => {
+                this.onUpdateStatus('En congé');
+
+              }
+
+            },
+            {
+              label: 'En réunion',
+              command: () => {
+                this.onUpdateStatus('En réunion');
+
+              }
+
+            },
+          ]
+          ,
+
+        },
+        {
+          label: 'Profil',
+          icon: 'pi pi-fw pi-user',
+          routerLink: '/profil'
+
+        },
+
+        {
+          label: 'Déconnexion',
+          command: () => {
+            this.onDisconnect();
+
+          }
+        }
+      ];
       if (userconnected) {
         this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
       }
     }, (error) => {
       console.error(error)
     })
-    this.items = [
-      {
-        label: "Disponible",
-        items: [
-          {
-            label: 'Disponible',
-            command: () => {
-              this.onUpdateStatus('Disponible');
-            }
-          },
-          {
-            label: 'Absent',
-            command: () => {
-              this.onUpdateStatus('Absent');
-            }
-          },
-          {
-            label: 'En pause',
-            command: () => {
-              this.onUpdateStatus('En pause');
 
-            }
+  }
 
-          },
-          {
-            label: 'Occupé',
-            command: () => {
-              this.onUpdateStatus('Occupé');
-
-            }
-
-          },
-          {
-            label: 'En congé',
-            command: () => {
-              this.onUpdateStatus('En congé');
-
-            }
-
-          },
-          {
-            label: 'En réunion',
-            command: () => {
-              this.onUpdateStatus('En réunion');
-
-            }
-
-          },
-        ]
-        ,
-
-      },
-      {
-        label: 'Profil',
-        icon: 'pi pi-fw pi-user',
-        routerLink: '/profil'
-
-      },
-
-      {
-        label: 'Déconnexion',
-        command: () => {
-          this.onDisconnect();
-
-        }
-      }
-    ];
+  onLeftMouseClick(event: MouseEvent, contextMenu: ContextMenu): void {
+    event.stopPropagation();
+    event.preventDefault();
+    contextMenu.show(event);
   }
 }

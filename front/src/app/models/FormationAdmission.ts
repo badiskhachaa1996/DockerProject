@@ -27,6 +27,7 @@ export class FormationAdmission {
         public rythme?: string,
         public calendrier?: string,
         public examens?: string,
+        public note?: string,
     ) { }
 
 }
