@@ -149,7 +149,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Bac </label>
+                    <label>BAC+ </label>
                     <input
                         pInputText
                         type="text"
@@ -202,7 +202,79 @@
                         formControlName="organisme_referent"
                     />
                 </div>
-
+                <div class="field col-6">
+                    <label>Campus </label>
+                    <p-dropdown
+                        formControlName="campus"
+                        [options]="dropdownCampus"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez un campust"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Année scolaire </label>
+                    <p-dropdown
+                        formControlName="annee_scolaire"
+                        [options]="rentreeScolaire"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez une année scolaire"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Date de début </label>
+                    <p-calendar formControlName="date_debut"></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label>Date de fin </label>
+                    <p-calendar formControlName="date_fin"></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label>Nombres d'heures</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Nombres d'heures"
+                        formControlName="nb_heures"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Rythme</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Rythme"
+                        formControlName="rythme"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Calendrier</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="En cours de développement"
+                        formControlName="calendrier"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Examens </label>
+                    <p-calendar
+                        dateFormat="mm.yy"
+                        formControlName="examens"
+                    ></p-calendar>
+                </div>
+                <div class="field col-12">
+                    <label>Note</label>
+                    <textarea
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                        formControlName="note"
+                    ></textarea>
+                </div>
                 <div>
                     <button
                         pButton
@@ -403,7 +475,80 @@
                         formControlName="organisme_referent"
                     />
                 </div>
-
+                <div class="field col-6">
+                    <label>Campus </label>
+                    <p-dropdown
+                        formControlName="campus"
+                        [options]="dropdownCampus"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez un campus"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Année scolaire </label>
+                    <p-dropdown
+                        formControlName="annee_scolaire"
+                        [options]="rentreeScolaire"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez une année scolaire"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label>Date de début </label>
+                    <p-calendar formControlName="date_debut"></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label>Date de fin </label>
+                    <p-calendar formControlName="date_fin"></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label>Nombres d'heures</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Nombres d'heures"
+                        formControlName="nb_heures"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Rythme</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Rythme"
+                        formControlName="rythme"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Calendrier</label>
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="En cours de développement"
+                        formControlName="calendrier"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label>Examens </label>
+                    <p-calendar
+                        dateFormat="mm.yy"
+                        formControlName="examens"
+                    ></p-calendar>
+                </div>
+                <div class="field col-12">
+                    <label>Note</label>
+                    <textarea
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                        formControlName="note"
+                    ></textarea>
+                </div>
+                <br />
                 <div>
                     <button
                         pButton
@@ -557,16 +702,6 @@
                             <i
                                 style="
                                     padding-left: 3%;
-                                    color: rgb(255, 181, 44);
-                                "
-                                class="pi pi-calendar m-1"
-                                pTooltip="Dates de la formation"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>
-                            <i
-                                style="
-                                    padding-left: 3%;
                                     color: rgb(72, 72, 255);
                                 "
                                 class="pi pi-pencil m-1"
@@ -663,14 +798,31 @@
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{ formation.campus.libelle }}</td>
+                                        <td>
+                                            {{ formation.annee_scolaire.nom }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                formation.date_debut
+                                                    | date : "dd/MM/yyyy"
+                                            }}
+                                        </td>
+                                        <td>
+                                            {{
+                                                formation.date_fin
+                                                    | date : "dd/MM/yyyy"
+                                            }}
+                                        </td>
+                                        <td>{{ formation.nb_heures }}</td>
+                                        <td>{{ formation.rythme }}</td>
+                                        <td>En cours de développement</td>
+                                        <td>
+                                            {{
+                                                formation.examens
+                                                    | date : "MM/yyyy"
+                                            }}
+                                        </td>
                                     </tr>
                                 </ng-template>
                             </p-table>
@@ -697,7 +849,7 @@
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td style="text-align: center">
+                                        <td>
                                             {{ formation.description }}
                                         </td>
                                     </tr>
@@ -719,14 +871,14 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th>Note</th>
+                                        <th>{{ Note }}</th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-formation>
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td style="text-align: center"></td>
+                                        <td>{{ formation.note }}</td>
                                     </tr>
                                 </ng-template>
                             </p-table>
