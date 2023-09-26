@@ -78,7 +78,7 @@ app.put("/FA/update", (req, res) => {
 })
 
 app.get("/FA/getAll", (req, res, next) => {
-    FormationAdmission.find()
+    FormationAdmission.find().populate('campus').populate('annee_scolaire')
         .then((formFromDb) => { res.status(200).send(formFromDb); })
         .catch((error) => { console.error(error); res.status(500).send(error); });
 });

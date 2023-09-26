@@ -20,13 +20,14 @@ const schema = new mongoose.Schema({
     validite: { type: String },
     organisme_referent: { type: String },
     campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus"},
-    annee_scolaire: { type: String },
+    annee_scolaire: { type: mongoose.Schema.Types.ObjectId, ref: "rentreeAdmission"},
     date_debut: { type: Date },
     date_fin: { type: Date },
     nb_heures: { type: String },
     rythme: { type: String }, 
     calendrier: { type: String },
     examens: { type: Date }, 
+    note: { type: String },
 });
 
 //Creation de la table ecole et export du model Ecole
