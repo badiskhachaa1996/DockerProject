@@ -151,4 +151,10 @@ export class EcoleAdmissionComponent implements OnInit {
     this.showSideBar = true
     console.log(data)
   }
+
+  convertAdresse(adresse: string) {
+    while (adresse.indexOf('\n') != -1)
+      adresse = adresse.replace('\n', '<br>')
+    return adresse
+  }
 }

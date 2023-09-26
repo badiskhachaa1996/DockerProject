@@ -277,6 +277,7 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
+import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 const routes: Routes = [
@@ -1277,6 +1278,7 @@ const routes: Routes = [
             { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
             { path: 'mes-rendez-vous', component: MesRendezVousComponent, canActivate: [AuthGuardService], },
+            { path: 'mes-disponibilites', component: CalendrierEtudiantComponent, canActivate: [AuthGuardService], },
             { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
 

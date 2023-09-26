@@ -29,6 +29,10 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
+        <a href="#/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant">
+            <i class="pi pi-calendar" pTooltip="Mes disponibilités" tooltipPosition="bottom"></i>
+            <span>Mes disponibilités</span>
+        </a>
         <a href="#/mes-rendez-vous" class="p-link layout-topbar-button" *ngIf="isCEO">
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>

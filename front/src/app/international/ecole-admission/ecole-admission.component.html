@@ -147,11 +147,11 @@
     <!-- Listing des équipes -->
     <div class="col-12">
         <div class="card">
-            <div style="float: right">
+            <div style="float: right" *ngIf="seeAction">
                 <button style="margin-left: 2px" pButton icon="pi pi-plus-circle" label="Crée une école"
                     (click)="initCreate()"></button>
             </div>
-            <h5>Liste des écoles</h5>
+            <h5 *ngIf="seeAction">Liste des écoles</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="ecoles" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['titre', 'email', 'adresse', 'site_web']" [rows]="5" [pageLinks]="5"
@@ -232,9 +232,7 @@
 <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedEcoleDetails=null">
     <div *ngIf="selectedEcoleDetails">
         <h5 style="font-weight: bold;">Addresse</h5>
-        <ul>
-            <li *ngFor="let f of selectedEcoleDetails.adresse">{{f}}</li>
-        </ul>
+        <p [innerHTML]="convertAdresse(selectedEcoleDetails.adresse)"></p>
 
         <h5 style="font-weight: bold;">Params URL</h5>
         <p>{{ selectedEcoleDetails?.url_form }}</p>
