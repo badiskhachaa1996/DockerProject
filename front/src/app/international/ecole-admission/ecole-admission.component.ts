@@ -25,11 +25,16 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'Maroc', value: 'Maroc' },
     { label: 'Malte', value: 'Malte' },
     { label: 'Dubai', value: 'Dubai' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Marne', value: 'Marne' },
     { label: 'En ligne', value: 'En ligne' }
+  ]
+  campusFilter = [
+    { label: 'Tous les campus', value: null },
+    ...this.campusList
   ]
   ngOnInit(): void {
     this.FAService.EAgetAll().subscribe(data => {
-      console.log(data)
       this.ecoles = data
     })
     this.FAService.FAgetAll().subscribe(data => {
@@ -121,19 +126,24 @@ export class EcoleAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteEcole(id: string): void 
-  {
+  onDeleteEcole(id: string): void {
     this.FAService.EAdelete(id)
       .then((response) => {
-        this.MessageService.add({severity: 'success', summary: 'École', detail: response.success});
+        this.MessageService.add({ severity: 'success', summary: 'École', detail: response.success });
         this.FAService.EAgetAll().subscribe(data => {
           this.ecoles = data
         })
       })
-      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary:'École', detail: error.error }); });
-    }
-  
+      .catch((error) => { console.error(error); this.MessageService.add({ severity: 'error', summary: 'École', detail: error.error }); });
+  }
 
-  formationsList = [] 
 
+  formationsList = []
+  showSideBar = false
+  selectedEcoleDetails: EcoleAdmission
+  showDetails(data: EcoleAdmission) {
+    this.selectedEcoleDetails = data
+    this.showSideBar = true
+    console.log(data)
+  }
 }
