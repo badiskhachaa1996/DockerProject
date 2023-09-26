@@ -177,10 +177,10 @@ i {
 
     h4 {
         font-weight: 700;
-        font-size: 18px;
+        font-size: 14px;
     }
     p {
-        font-size: 18px;
+        font-size: 14px;
         margin-bottom: 30px;
     }
 
@@ -244,5 +244,14 @@ i {
 
     .btn-envoyer {
         background-color: #F28627;
+    }
+
+    .btn-postuler {
+        background-color: #37BAD4;
+        color: white;
+    }
+
+    .btn-postuler:hover {
+        background-color: #159BB6;
     }
 }

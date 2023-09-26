@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-7 card-right">
                         <div class="offre-card-main">
-                            <h4 class="offre-card-title">{{offre.missionName}} <br *ngIf="offre.missionName.length<14">&nbsp;</h4>
+                            <h4 class="offre-card-title">{{offre.missionName}} <br *ngIf="offre?.missionName?.length<14">&nbsp;</h4>
                             <p class="offre-card-lieu">📍 {{offre.entreprise_ville }}</p>
                         </div>
                         <a class="offres-btns postuler" href="javascript:void(0)" (click)="showPostuler = true; annonceSelected = offre"><i class="pi pi-arrow-right"></i>Postuler</a>
@@ -101,6 +101,10 @@
             <p>{{annonceSelected?.entreprise_ville}}</p>
             <h4>Description :</h4>
             <p>{{annonceSelected?.missionDesc}}</p>
+            <div class="btns-postuler">
+                <div class="btn btn-retour" (click)="showDetails = false">Retour</div>
+                <div class="btn btn-postuler" (click)="showPostuler = true ; showDetails = false"><i class="pi pi-arrow-right"></i>Postuler</div>
+            </div>
         </div>
     </div>
 </div>
