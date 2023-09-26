@@ -142,9 +142,9 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
         alt.nomcomplet = alt.user_id?.firstname + " " + alt.user_id?.lastname
         this.listAlternantDD.push(alt)
-      }, (error) => { console.log(error) })
+      }, (error) => { console.error(error) })
 
-    }, (error) => { console.log(error) });
+    }, (error) => { console.error(error) });
     this.formationService.getAll().subscribe(data => {
 
       data.forEach(element => {
@@ -373,7 +373,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
             });
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
 
 

@@ -330,11 +330,11 @@ export class ListGroupeComponent implements OnInit {
         // recuperation de la liste des classes
         this.classeService.getAllPopulate().subscribe({
           next: (response) => { this.classes = response; },
-          error: (error) => { console.log(error); },
+          error: (error) => { console.error(error); },
           complete: () => { console.log('Liste des classes récupérer'); }
         });
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Calendrier', detail: error.error }); })
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Calendrier', detail: error.error }); })
   }
 
   // méthode de téléchargement du calendrier

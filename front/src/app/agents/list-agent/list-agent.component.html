@@ -27,6 +27,12 @@
                 <th pSortableColumn="service_id" scope="col" style="text-align: center;">
                     Service <p-sortIcon field="service_id"></p-sortIcon>
                 </th>
+                <th pSortableColumn="role" scope="col" style="text-align: center;">
+                    Role <p-sortIcon field="role"></p-sortIcon>
+                </th>
+                <th pSortableColumn="type" scope="col" style="text-align: center;">
+                    Type <p-sortIcon field="type"></p-sortIcon>
+                </th>
                 <th>
                     Accès<br>
                     Module : Role
@@ -58,6 +64,12 @@
                 </td>
                 <td>
                     {{agent?.service_id?.label}}
+                </td>
+                <td>
+                    {{agent.role}}
+                </td>
+                <td>
+                    {{agent.type}}
                 </td>
                 <td>
                     <ng-container *ngFor="let role of agent.roles_list">

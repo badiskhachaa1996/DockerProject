@@ -1,0 +1,122 @@
+<div class="new-cv" *ngIf="CV">
+    <div class="page-container" id="page-certif">
+        <div class="page-inner-content">
+            <div class="header" id="header_area"
+                style="background-image: url('../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/bg-header.png')">
+                <div class="student-image"
+                    style="background-image: url('../../../../../assets/images/imatch/female.png')"></div>
+                <div class="student-identity">
+                    <h1 class="student-name" id="lname">{{user?.lastname || 'NOM' | uppercase }}</h1>
+                    <h1 class="student-name" id="fname">{{user?.firstname || 'Prénom' | titlecase }}</h1>
+                    <h1 class="student-name"><strong
+                            *ngIf="selectedMultiCpt && selectedMultiCpt.length!=0">{{CV.competences[0]?.profile?.libelle
+                            || "Profile non spécifié"}}</strong></h1>
+
+                </div>
+            </div>
+            <div class="content-container">
+                <div class="sidebar">
+                    <div class="sidebar-inner">
+                        <div class="sidebar-section">
+                            <h2 class="sidebar-title">Compétences</h2>
+                            <div class="sidebar-content">
+                                <div *ngIf="selectedMultiCpt">
+                                    <p class="spectialite" *ngFor="let option of CV.competences">
+                                        {{option.label}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar-section">
+                            <h2 class="sidebar-title">A propos</h2>
+                            <div class="sidebar-content">{{CV?.a_propos}}</div>
+                        </div>
+                        <div class="sidebar-section">
+                            <h2 class="sidebar-title">Langues</h2>
+                            <div *ngIf="selectedMultilang">
+                                <div class="spectialite" *ngFor="let option of CV.langues">
+                                    {{option.label}}<br></div>
+                            </div>
+
+                        </div>
+                        <div class="sidebar-section">
+                            <h2 class="sidebar-title">Centres d'intérêts</h2>
+                            <div class="sidebar-content">{{CV?.centre_interets}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="content">
+                    <div class="section-cv">
+                        <h2>Education</h2>
+                        <div class="section-content" *ngFor="let exp of CV.education">
+                            <div class="section-title">
+                                <div class="section-training">{{exp?.intitule_experience}}</div>
+                                <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                    date:'YYYY'}}</div>
+                            </div>
+                            <div class="section-main">{{exp?.structure}}</div>
+                            <div class="section-details">
+                                <p>
+                                    {{exp?.details}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-cv">
+                        <h2>Experiences Professionnelles</h2>
+                        <div class="section-content" *ngFor="let exp of CV.experiences_pro">
+                            <div class="section-title">
+                                <div class="section-training">{{exp?.intitule_experience}}</div>
+                                <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                    date:'YYYY'}}</div>
+                            </div>
+                            <div class="section-main">{{exp?.structure}}</div>
+                            <div class="section-details">
+                                <p>
+                                    {{exp?.type}} : {{exp?.details}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-cv">
+                        <h2>Experiences Associatif</h2>
+                        <div class="section-content" *ngFor="let exp of CV.experiences_associatif">
+                            <div class="section-title">
+                                <div class="section-training">{{exp?.intitule_experience}}</div>
+                                <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                    date:'YYYY'}}</div>
+                            </div>
+                            <div class="section-main">{{exp?.structure}}</div>
+                            <div class="section-details">
+                                <p>
+                                    {{exp?.type}} : {{exp?.details}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-cv">
+                        <h2>Informatique</h2>
+                        <div class="section-content" *ngFor="let exp of CV.informatique">
+                            <div class="section-title">
+                                <div class="section-training">{{exp?.intitule_experience}}</div>
+                                <div class="section-date">{{exp?.date_debut| date:'YYYY'}}-{{exp?.date_fin|
+                                    date:'YYYY'}}</div>
+                            </div>
+                            <div class="section-main">{{exp?.structure}}</div>
+                            <div class="section-details">
+                                <p>
+                                    {{exp?.type}} : {{exp?.details}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img class="logo-image" src="../../../../../assets/images/imatch/gen-cv/{{ecoleImage}}/logo.png" />
+            </div>
+
+        </div>
+
+    </div>
+</div>

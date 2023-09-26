@@ -716,7 +716,7 @@ export class DashboardComponent implements OnInit {
         //charger les events du Calendar
         this.loadCalendar()
       },
-      error: (error) => { console.log(error) },
+      error: (error) => { console.error(error) },
     });
   }
 
@@ -728,7 +728,7 @@ export class DashboardComponent implements OnInit {
         this.onGetUserConnectedInformation();
         this.showFormUpdateStatut = false;
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
   }
 
   // verification et recuperation du dailyCheck
@@ -797,7 +797,7 @@ export class DashboardComponent implements OnInit {
                 }
 
               })
-              .catch((error) => { console.log(error); });
+              .catch((error) => { console.error(error); });
           }
         }
       })
@@ -818,7 +818,7 @@ export class DashboardComponent implements OnInit {
         this.onCheckDailyCheck(response.user_id);
         this.onUpdateStatus('Disponible')
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
 
   // méthode de pause
@@ -834,7 +834,7 @@ export class DashboardComponent implements OnInit {
         this.onCheckDailyCheck(response.user_id);
         this.onUpdateStatus('En pause')
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
 
   // méthode de fin de la pause
@@ -852,7 +852,7 @@ export class DashboardComponent implements OnInit {
         this.onCheckDailyCheck(response.user_id);
         this.onUpdateStatus('Disponible')
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
   }
 
   // methôde de checkout
@@ -874,7 +874,7 @@ export class DashboardComponent implements OnInit {
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check Out', detail: 'Impossible de prendre en compte votre checkout' }); });
   }
 
   // pour créer des champs de formulaires à la volée pour la partie CRA
@@ -1317,7 +1317,7 @@ export class DashboardComponent implements OnInit {
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
     this.options.events = this.eventsRH
-    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
+    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrement
     //this.cd.detectChanges();
 
   }

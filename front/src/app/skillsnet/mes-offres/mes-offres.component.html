@@ -12,7 +12,7 @@
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">
 				<div class="p-formgrid grid">
 					<div class="field col-12" *ngIf="token.role == 'Admin' || token.role == 'Commercial'">
-						<label>Offre interne ?</label>
+						<label>Offre interne ?<span style="color:red"> *</span></label>
 						<p-selectButton [options]="entrepriseType" formControlName="is_interne"></p-selectButton>
 					</div>
 
@@ -55,7 +55,7 @@
 							placeholder="Numéro de téléphone de l'entreprise" />
 					</div>
 					<div class="field col-12">
-						<label htmlFor="title">Titre de la mission</label>
+						<label htmlFor="title">Titre de la mission<span style="color:red"> *</span></label>
 						<input pInputText id="title" type="text" formControlName="missionName"
 							placeholder="Développeur Full-Stack" />
 					</div>
@@ -131,6 +131,12 @@
 						<input pInputText id="source" type="text" formControlName="source" />
 					</div>
 
+					<div class="field col-12">
+						<label htmlFor="source">Statut</label>
+						<p-dropdown id="type" [options]="statutDropdown" formControlName="statut"
+							[style]="{'width':'100%'}" autoWidth="false"
+							placeholder="Choisissez un statut"></p-dropdown>
+					</div>
 					<div>
 						<button pButton type="submit" label="Ajouter l'offre" icon="pi pi-plus"
 							[disabled]="form.invalid"></button>
@@ -268,6 +274,13 @@
 						<input pInputText id="source" type="text" formControlName="source" />
 					</div>
 
+					<div class="field col-12">
+						<label htmlFor="source">Statut</label>
+						<p-dropdown id="type" [options]="statutDropdown" formControlName="statut"
+							[style]="{'width':'100%'}" autoWidth="false"
+							placeholder="Choisissez un statut"></p-dropdown>
+					</div>
+
 					<div>
 						<button pButton type="submit" label="Modifier l'offre" icon="pi pi-pencil"
 							[disabled]="formUpdate.invalid"></button>
@@ -288,7 +301,8 @@
 
 			<h3>Mes offres</h3>
 
-			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName,custom_id" layout="grid">
+			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName,custom_id"
+				layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<span class="p-input-icon-left mb-2 md:mb-0">
@@ -376,10 +390,14 @@
 						</ul>
 
 						<hr />
-						<button pButton type="button" label="Modifier" icon="pi pi-pencil"
+						<button pButton type="button" label="Modifier" icon="pi pi-pencil" [style]="{'width':'100%'}"
+							autoWidth="false" class="mb-2"
 							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
 						<button class="ml-1" pButton type="button" label="Matching V1" icon="pi pi-link"
+							[style]="{'width':'100%'}" autoWidth="false"
 							(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button pButton type="button" label="Supprimer" icon="pi pi-ban" [style]="{'width':'100%'}"
+							class="mt-2" autoWidth="false" (click)="onDelete(annonceSelected)"></button>
 
 					</p-sidebar>
 
@@ -415,10 +433,14 @@
 						</ul>
 
 						<hr />
-						<button pButton type="button" label="Modifier" icon="pi pi-pencil"
+						<button pButton type="button" label="Modifier" icon="pi pi-pencil" [style]="{'width':'100%'}"
+							autoWidth="false" class="mb-2"
 							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
 						<button class="ml-1" pButton type="button" label="Matching V1" icon="pi pi-link"
+							[style]="{'width':'100%'}" autoWidth="false"
 							(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button pButton type="button" label="Supprimer" icon="pi pi-ban" [style]="{'width':'100%'}"
+							class="mt-2" autoWidth="false" (click)="onDelete(annonceSelected)"></button>
 					</p-sidebar>
 
 				</ng-template>
@@ -431,7 +453,11 @@
 									<i class="pi pi-tag mr-2"></i>
 									<span class="font-semibold">{{ annonce.missionType }}</span>
 								</div>
-								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY' }}</span>
+								<div class="flex align-items-right" pTooltip="Date de création" icon="pi pi-pencil">
+									<i class="pi pi-clock mr-2"></i>
+									<span class="font-semibold">{{ annonce.date_creation | date: 'mediumDate' }}</span>
+								</div>
+								<!--<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY' }}</span>-->
 							</div>
 							<div class="text-center">
 
@@ -452,18 +478,18 @@
 									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
 
 								<div class="text-2xl font-bold">{{ annonce.missionName | slice: 0:20 }}</div>
-								<div class="mb-3">{{ annonce.missionDesc | slice: 0:20 }}...</div>
-								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
-								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
+								<div class="text-2xl font-bold">{{ annonce.statut }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{
-									annonce.entreprise_name }}</span>
-								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{
-									annonce.entreprise_id?.r_sociale }}</span>
-								<button pButton type="button"
+								<button pButton type="button" class="mr-2"
 									(click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play"
-									title="Plus de détails"></button>
+									tooltipPosition="bottom" pTooltip="Details"></button>
+								<button pButton type="button" pTooltip="Modifier" icon="pi pi-pencil" class="mr-2"
+									tooltipPosition="bottom"
+									(click)="annonceSelected = annonce; onFillForm(); showFormUpdate = true;"></button>
+								<p-button label="Matching" icon="pi pi-users" badgeClass="p-badge-danger"
+									(click)="annonceSelected = annonce; InitMatching(annonce)"
+									[badge]="dicOffreNB[annonce._id]"></p-button>
 							</div>
 						</div>
 					</div>
@@ -500,10 +526,14 @@
 						</ul>
 
 						<hr />
-						<button pButton type="button" label="Modifier" icon="pi pi-pencil"
+						<button pButton type="button" label="Modifier" icon="pi pi-pencil" [style]="{'width':'100%'}"
+							autoWidth="false" class="mb-2"
 							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
 						<button class="ml-1" pButton type="button" label="Matching V1" icon="pi pi-link"
+							[style]="{'width':'100%'}" autoWidth="false"
 							(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button pButton type="button" label="Supprimer" icon="pi pi-ban" [style]="{'width':'100%'}"
+							class="mt-2" autoWidth="false" (click)="onDelete(annonceSelected)"></button>
 					</p-sidebar>
 
 					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000"
@@ -538,10 +568,14 @@
 						</ul>
 
 						<hr />
-						<button pButton type="button" label="Modifier" icon="pi pi-pencil"
+						<button pButton type="button" label="Modifier" icon="pi pi-pencil" [style]="{'width':'100%'}"
+							autoWidth="false" class="mb-2"
 							(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
-						<button class="ml-1" pButton type="button" label="Matching V1" icon="pi pi-link"
+						<button pButton type="button" label="Matching V1" icon="pi pi-link" [style]="{'width':'100%'}"
+							class="mb-2" autoWidth="false"
 							(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
+						<button pButton type="button" label="Supprimer" icon="pi pi-ban" [style]="{'width':'100%'}"
+							class="mt-2" autoWidth="false" (click)="onDelete(annonceSelected)"></button>
 					</p-sidebar>
 
 				</ng-template>

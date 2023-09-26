@@ -123,10 +123,10 @@ export class LeadInformationsPersonnelComponent implements OnInit {
             this.passwordForm.reset();
             this.showUpdatePassword = false;
             this.ToastService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
-          }), ((error) => { console.log(error) })
+          }), ((error) => { console.error(error) })
         }),
       ), ((error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     else {

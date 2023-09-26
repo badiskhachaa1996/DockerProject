@@ -311,7 +311,7 @@ export class AjoutCvComponent implements OnInit {
           }
         })
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
 
     // recuperation de la liste des compétences
     this.skillsService.getCompetences()
@@ -320,7 +320,7 @@ export class AjoutCvComponent implements OnInit {
           this.competencesList.push({ label: competence.libelle, value: competence._id, profile: competence.profile_id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
 
   }
 
@@ -420,7 +420,7 @@ export class AjoutCvComponent implements OnInit {
         })
         .catch((error) => {
           this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
-          console.log(error);
+          console.error(error);
         });
 
     } else {
@@ -434,7 +434,7 @@ export class AjoutCvComponent implements OnInit {
         })
         .catch((error) => {
           this.messageService.add({ severity: "error", summary: `Ajout impossible, ce utilisateur à peut être un CV existant, si le problème persiste veuillez contacter un administrateur` });
-          console.log(error);
+          console.error(error);
         });
     }
   }

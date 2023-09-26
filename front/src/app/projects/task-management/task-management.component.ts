@@ -78,7 +78,7 @@ export class TaskManagementComponent implements OnInit {
     // récuperation de l'utilisateur actuellement connecté
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => { this.userConnected = response; },
-      error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
+      error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer l'utilisateur connecté, veuillez contacter un administrateur" }); },
       complete: () => console.log("information de l'utilisateur connecté récuperé")
     });
 
@@ -91,17 +91,17 @@ export class TaskManagementComponent implements OnInit {
         this.dropdownUser.push({ label: `${user.firstname} ${user.lastname}`, value: user._id });
       });
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
 
     // récuperation de la liste des projects
     this.projectService.getProjects()
     .then((response) => { this.projects = response; })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: "Impossible de récuperer les projets, veuillez contacter un administrateur" }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: "Impossible de récuperer les projets, veuillez contacter un administrateur" }); });
 
     // recuperation de la liste des taches
     this.projectService.getTasks()
     .then((response) => { this.taches = response; })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'tache', detail: "Impossible de récuperer les tâches, veuillez contacter un administrateur" }); });
   }
 
 
@@ -124,7 +124,7 @@ export class TaskManagementComponent implements OnInit {
       this.showFormAddProject = false;
       this.onGetAllClasses();
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
   }
 
   // au clic du bouton de modification
@@ -140,7 +140,7 @@ export class TaskManagementComponent implements OnInit {
         this.messageService.add({severity:'success', summary:'Projet', detail: response.success});
         this.onGetAllClasses();
       })
-      .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
+      .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
 
       // après la validation
       delete this.clonedProjects[project._id];
@@ -162,7 +162,7 @@ export class TaskManagementComponent implements OnInit {
       this.projectTaches = response;
       this.showProjectTaches = true;
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
   }
 
   // ajout d'une nouvelle tâche
@@ -192,7 +192,7 @@ export class TaskManagementComponent implements OnInit {
       this.showFormAddTache = false;
       this.onGetAllClasses();
      })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
   }
 
 
@@ -236,7 +236,7 @@ export class TaskManagementComponent implements OnInit {
       this.showProjectTaches = false;
       this.showFormUpdateTache = false;
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
 
   }
 
@@ -252,6 +252,6 @@ export class TaskManagementComponent implements OnInit {
       this.showFormAddProject = false;
       this.onGetAllClasses();
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Tâche', detail: error.error }); });
   }
 }

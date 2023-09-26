@@ -41,12 +41,12 @@ export class SuiviePreinscriptionComponent implements OnInit {
             this.showUpdatePassword = false;
             this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
 
-          }), ((error) => { console.log(error) })
+          }), ((error) => { console.error(error) })
 
 
         }),
       ), ((error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     else {

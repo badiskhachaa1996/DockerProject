@@ -40,7 +40,7 @@ export class ListEntrepriseCeoComponent implements OnInit {
     // recuperation de la liste des entreprises du CEO connecté
     this.entrepriseService.getEntreprisesByIdCEO(this.token.id)
     .then((response) => { this.entreprises = response; this.loading = false;})
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); });
 
     // méthode d'initialisation du formulaire des remarques
     this.formRemarque = this.formBuilder.group({
@@ -58,7 +58,7 @@ export class ListEntrepriseCeoComponent implements OnInit {
         this.contracts = response; 
         this.showContractForEnterprise = true; 
       },
-      error: (error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.error }); },
+      error: (error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Contrats', detail: error.error }); },
       complete: () => { console.log('Liste des contrats récupéré')}
     });
   }

@@ -27,7 +27,7 @@ app.post("/postIndividualAccount", (req, res, next) => {
                             res.status(201).send(accountSaved);
                        })
                        .catch((error) => { 
-                        console.log(error);
+                        console.error(error);
                         res.status(400).send('Impossible de créer un nouveau compte bancaire'); })
             }
             else

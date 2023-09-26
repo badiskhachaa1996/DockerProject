@@ -57,7 +57,7 @@ export class TeamComponent implements OnInit {
     //Récupération de la liste des équipes
     this.teamService.getTeams()
     .then((response) => { this.teams = response; })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Équipes', detail: "Impossible de récupérer la liste des équipes, veuillez contacter un administrator "}); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Équipes', detail: "Impossible de récupérer la liste des équipes, veuillez contacter un administrator "}); });
 
     //Récupération de la liste des salariés
     this.userService.getAllSalarie()
@@ -68,7 +68,7 @@ export class TeamComponent implements OnInit {
         this.dropdownUser.push({ label: `${user.firstname} ${user.lastname}`, value: user._id });
       });
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Utilisateur', detail: "Impossible de récuperer la liste des salariés, veuillez contacter un administrateur" }); });
 
   }
 
@@ -89,7 +89,7 @@ export class TeamComponent implements OnInit {
       this.showFormAddTeam = false;
       this.onGetAllClasses();
     }) 
-    .catch((error) =>{ console.log(error); this.messageService.add({severity: 'error', summary: 'Team', detail: error.error }); });
+    .catch((error) =>{ console.error(error); this.messageService.add({severity: 'error', summary: 'Team', detail: error.error }); });
   }
 
 
@@ -105,7 +105,7 @@ export class TeamComponent implements OnInit {
       this.messageService.add({severity: 'success', summary: 'Team', detail: "Mis à jour réussi"});
       this.onGetAllClasses();
     })
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Projet', detail: error.error }); });
 
     delete this.clonedTeams[team._id];
     this.messageService.add({severity:'success', summary: 'Team', detail:'Mis à jour réussi'});

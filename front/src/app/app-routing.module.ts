@@ -276,6 +276,7 @@ import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candida
 import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
+import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
 const routes: Routes = [
     {
         path: '',
@@ -662,17 +663,17 @@ const routes: Routes = [
             },
             /** end */
             /** IMS Project-V2 */
-            { path: 'gestion-project',  component: GestionComponent},
-            { path: 'mytask', component: MytaskComponent},
-            { path: 'myproject', component: MyprojectComponent},
-            { path: 'dashboard-project-v2', component: DashboardProjectV2Component},
+            { path: 'gestion-project', component: GestionComponent },
+            { path: 'mytask', component: MytaskComponent },
+            { path: 'myproject', component: MyprojectComponent },
+            { path: 'dashboard-project-v2', component: DashboardProjectV2Component },
             /** end */
 
 
             /**informations */
-            { path: 'informations',component:InformationsComponent},
+            { path: 'informations', component: InformationsComponent },
             /**links */
-            { path:'Links',component:LinksComponent},
+            { path: 'Links', component: LinksComponent },
             {
                 path: 'logements',
                 canActivate: [AuthGuardService],
@@ -1174,7 +1175,7 @@ const routes: Routes = [
             { path: 'ticketing/suivi/non-assignes', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/suivi/non-assignes/:service', component: TicketNonAssignesComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/gestion/assignes', component: TicketsAssignesComponent, canActivate: [AuthGuardService] },
-            { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService]},
+            { path: 'ticketing/Ajouter-un-ticket-projet', component: AjouterUnTicketProjetComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/configuration', component: ConfigurationComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
@@ -1270,6 +1271,7 @@ const routes: Routes = [
 
 
             { path: 'generateur-cv', component: AjoutCvComponent, canActivate: [AuthGuardService], },
+            { path: 'cv/:cv_id', component: VoirCvComponent, canActivate: [AuthGuardService], },
             { path: 'generateur-cv/:id', component: AjoutCvComponent, canActivate: [AuthGuardService], },
             { path: 'imatch/rendez-vous', component: RendezVousResultatsComponent, canActivate: [AuthGuardService], },
             { path: 'mes-rendez-vous', component: MesRendezVousComponent, canActivate: [AuthGuardService], },

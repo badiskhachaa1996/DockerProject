@@ -72,7 +72,7 @@ export class StageCeoComponent implements OnInit {
     // recuperation de la liste des entreprises
     this.entrepriseService.getEntreprisesByIdCEO(this.token.id)
     .then((response) => { this.entreprises = response; this.loading = false;})
-    .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); });
+    .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary:'Entreprise', detail: error.error }); });
   }
 
   // récupération de la liste des stage d'une entreprises
@@ -114,7 +114,7 @@ export class StageCeoComponent implements OnInit {
         .then((response) => {
           this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
         })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Convention de stage':
@@ -122,7 +122,7 @@ export class StageCeoComponent implements OnInit {
         .then((response) => {
           this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
         })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       case 'Avenant du stage':
@@ -130,7 +130,7 @@ export class StageCeoComponent implements OnInit {
         .then((response) => {
           this.messageService.add({ severity: 'success', summary: 'Document', detail: response.successMsg });
         })
-        .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
+        .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Document', detail: error.error }); });
         this.onGetAllDatas();
         break;
       default:

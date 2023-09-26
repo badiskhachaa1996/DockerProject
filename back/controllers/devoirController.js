@@ -39,7 +39,7 @@ app.get("/getAll", (req, res) => {
             res.status(201).send(groupes)
         })
 
-    }, err => { console.log(err); res.status(500).send(err) })
+    }, err => { console.error(err); res.status(500).send(err) })
 })
 
 app.get("/getAllByFormateurID/:formateur_id", (req, res) => {
@@ -63,12 +63,12 @@ app.get("/getAllByFormateurID/:formateur_id", (req, res) => {
             //console.log(rd,groupes)
             res.status(201).send(groupes)
         })
-    }, err => { console.log(err); res.status(500).send(err) })
+    }, err => { console.error(err); res.status(500).send(err) })
 })
 
 app.get("/getAllByClasseID/:classe_id", (req, res) => {
     Devoir.find({ groupe_id: { $in: req.params.classe_id }, date_debut: { $lt: new Date() } }).populate({ path: 'formateur_id', populate: { path: 'user_id' } }).then(devoirs => {
         res.send(devoirs)
-    }, err => { console.log(err); res.status(500).send(err) })
+    }, err => { console.error(err); res.status(500).send(err) })
 })
 module.exports = app;

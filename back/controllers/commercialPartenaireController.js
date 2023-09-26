@@ -119,7 +119,6 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         commercialPartenaire.user_id = userCreated._id;
-                        console.log(userCreated._id, commercialPartenaire.user_id)
                         commercialPartenaire.save()
                             .then((commercialPartenaireCreated) => { res.status(201).json({ success: 'Commercial crée' }) })
                             .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce commercial' }); });
@@ -202,7 +201,6 @@ const upload = multer({ storage: storage, limits: { fileSize: 20000000 } });
 //Sauvegarde de la photo de profile
 app.post("/file", upload.single("file"), (req, res, next) => {
     const file = req.file;
-    console.log(file, req.body.id);
     if (!file) {
         const error = new Error("No File");
         error.httpStatusCode = 400;
@@ -214,7 +212,7 @@ app.post("/file", upload.single("file"), (req, res, next) => {
                 fs.unlinkSync("storage/Partenaire/photo/" + req.body.id + "/" + cp?.pathImageProfil);
             //file removed
         } catch (err2) {
-            console.log(err2, "Pas de fichier existant")
+            console.error(err2, "Pas de fichier existant")
         }
     });
     Partenaire.findOneAndUpdate(
@@ -225,7 +223,6 @@ app.post("/file", upload.single("file"), (req, res, next) => {
         },
         (errUser, user) => {
             console.error(errUser);
-            console.log(user, "dab")
             //Renvoie de la photo de profile au Front pour pouvoir l'afficher
             res.send({ message: "Photo mise à jour" });
         }

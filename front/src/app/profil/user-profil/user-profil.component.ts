@@ -221,12 +221,12 @@ export class UserProfilComponent implements OnInit {
             this.toggleUpdatepwd = false;
             this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
 
-          }), ((error) => { console.log(error) })
+          }), ((error) => { console.error(error) })
 
 
         }),
       ), ((error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     else {
@@ -417,7 +417,7 @@ export class UserProfilComponent implements OnInit {
     //Recuperation de l'utilisateur connecté actuellement
     this.AuthService.getInfoById(this.decodeToken.id).subscribe(
       ((response) => { this.userConnectedNow = response; }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Initialisation du formulaire de demande de congés

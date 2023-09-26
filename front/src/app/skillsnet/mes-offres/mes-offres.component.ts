@@ -14,6 +14,7 @@ import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Profile } from 'src/app/models/Profile';
 import { Competence } from 'src/app/models/Competence';
 import { Router } from '@angular/router';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
 @Component({
   selector: 'app-mes-offres',
@@ -21,7 +22,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./mes-offres.component.scss']
 })
 export class MesOffresComponent implements OnInit {
-
+  visibleSidebar = false
   annonces: Annonce[] = [];
 
   entreprises: Entreprise[] = [];
@@ -92,11 +93,19 @@ export class MesOffresComponent implements OnInit {
     { label: 'CDI' }
   ];
 
+  statutDropdown = [
+    { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: 'Suspendu', value: "Suspendu" },
+    { label: 'Clôturée', value: "Clôturée" },
+  ]
+
   token: any;
+
+  dicOffreNB = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService,
     private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService,
-    private annonceService: AnnonceService, private router: Router) { }
+    private annonceService: AnnonceService, private router: Router, private MatchingService: MatchingService) { }
 
   ngOnInit(): void {
     //Decodage du token
@@ -114,7 +123,7 @@ export class MesOffresComponent implements OnInit {
       entreprise_mail: [''],
       entreprise_phone_indicatif: [''],
       entreprise_phone: [''],
-      missionName: [''],
+      missionName: ['', Validators.required],
       profil: [this.profilsList[0]],
       competences: [''],
       outils: [''],
@@ -123,6 +132,7 @@ export class MesOffresComponent implements OnInit {
       missionType: [this.missionTypes[0]],
       debut: [''],
       source: [''],
+      statut: [''],
     });
 
     //Initialisation du formulaire de modification d'une annonce
@@ -143,6 +153,7 @@ export class MesOffresComponent implements OnInit {
       missionType: [this.missionTypes[0]],
       debut: [''],
       source: [''],
+      statut: [''],
     });
 
   }
@@ -154,15 +165,24 @@ export class MesOffresComponent implements OnInit {
       ((response) => {
         this.userConnected = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des annonces
     this.annonceService.getAnnoncesByUserId(this.token.id)
       .then((response: Annonce[]) => {
         this.annonces = response;
+        //Récupération du nombre de matching par Annonce
+        response.forEach(annonce => {
+          this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+            let t = []
+            matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
+            this.dicOffreNB[annonce._id] = t.length
+          })
+        })
+
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
 
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
@@ -173,8 +193,10 @@ export class MesOffresComponent implements OnInit {
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
       }),
-      ((error) => console.log(error))
+      ((error) => console.error(error))
     );
+
+
 
     //Récupération de la liste des profiles
     this.skillsService.getProfiles()
@@ -185,7 +207,7 @@ export class MesOffresComponent implements OnInit {
           this.profilsList.push({ label: profile.libelle, value: profile._id });
         })
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
   }
 
   //Methode qui servira à modifier le contenu de la liste de competences en fonction du profil
@@ -203,7 +225,7 @@ export class MesOffresComponent implements OnInit {
           this.competencesList.push({ label: competence.libelle, value: competence._id });
         })
       })
-      .catch((error) => { console.log(error); })
+      .catch((error) => { console.error(error); })
 
     // switch(label){
     //   case 'Développeur':
@@ -590,7 +612,7 @@ export class MesOffresComponent implements OnInit {
         //Recuperation de la liste des classes
         this.onGetAllClasses();
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
 
   }
 
@@ -640,7 +662,7 @@ export class MesOffresComponent implements OnInit {
         //Recuperation de la liste des classes
         this.onGetAllClasses();
       })
-      .catch((error) => { console.log(error); });
+      .catch((error) => { console.error(error); });
   }
 
   // methode de remplissage du formulaire de modification
@@ -677,6 +699,15 @@ export class MesOffresComponent implements OnInit {
       cont = "OA"
     let random = Math.random().toString(36).substring(5).toUpperCase();
     return label + cont + random
+  }
+
+  onDelete(annonce: Annonce) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${annonce.missionName} ?`))
+      this.annonceService.delete(annonce._id).then(r => {
+        this.annonces.splice(this.annonces.indexOf(annonce), 1)
+        this.annonceSelected = null
+        this.visibleSidebar = false
+      })
   }
 
 }

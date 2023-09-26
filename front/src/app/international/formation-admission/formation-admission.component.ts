@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { log } from 'console';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormationAdmission } from 'src/app/models/FormationAdmission';
@@ -35,7 +36,21 @@ export class FormationAdmissionComponent implements OnInit {
     langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
     filiere: new FormControl(''),
-  })
+    bac: new FormControl(''),
+    code: new FormControl(''),
+    annee: new FormControl(''),
+    code_france_competence: new FormControl(''),
+    validite: new FormControl(''),
+    organisme_referent: new FormControl(''),
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
+    })
 
   filiereList = [
     { value: "Informatique", label: "Informatique" },
@@ -77,6 +92,20 @@ export class FormationAdmissionComponent implements OnInit {
     langue: new FormControl([], Validators.required),
     deroulement: new FormControl(''),
     filiere: new FormControl(''),
+    bac: new FormControl(''),
+    code: new FormControl(''),
+    annee: new FormControl(''),
+    code_france_competence: new FormControl(''),
+    validite: new FormControl(''),
+    organisme_referent: new FormControl(''),
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
   })
 
   addForm = false
@@ -87,6 +116,7 @@ export class FormationAdmissionComponent implements OnInit {
 
   onCreate() {
     this.FAService.FAcreate({ ...this.createForm.value }).subscribe(data => {
+      console.log(data)
       this.formations.push(data)
       this.addForm = null
       this.createForm.reset()
