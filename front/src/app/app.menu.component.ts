@@ -6278,33 +6278,89 @@ export class AppMenuComponent implements OnInit {
                     });
                 }
                 if (services_list.includes('iMatch')) {
-                    this.items.push({
-                        label: 'iMatch',
-                        icon: 'pi pi-star',
-                        items: [
+                    let role = service_dic['iMatch']
+                    if (role == "Super-Admin") {
+                        this.items.push(
                             {
-                                label: 'Gestions des entreprises',
-                                icon: 'pi pi-home',
+                                label: 'iMatch',
+                                icon: 'pi pi-star',
                                 items: [
                                     {
-                                        label: 'Ajouter une entreprise',
-                                        icon: 'pi pi-user-plus',
-                                        routerLink: ['/ajout-entreprise']
+                                        label: "Offres d'emplois",
+                                        icon: 'pi pi-volume-up',
+                                        routerLink: ['/offres'],
                                     },
                                     {
-                                        label: 'Liste des entreprises',
-                                        icon: 'pi pi-sort-alpha-down',
-                                        routerLink: ['/entreprises']
+                                        label: 'Mes offres',
+                                        icon: 'pi pi-user',
+                                        routerLink: ['/mes-offres'],
                                     },
-                                ]
+                                    {
+                                        label: 'Cvthèque',
+                                        icon: 'pi pi-briefcase',
+                                        routerLink: ['/cvtheque-interne']
+                                    },
+                                    {
+                                        label: 'Gestion des compétences',
+                                        icon: 'pi pi-book',
+                                        routerLink: ['/skills-management'],
+                                    },
+                                    {
+                                        label: 'Gestions des externes',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/skillsnet/externe'],
+                                    },
+                                    {
+                                        label: 'Gestions des événements',
+                                        icon: 'pi pi-flag',
+                                        routerLink: ['/evenements'],
+                                    },
+                                    {
+                                        label: 'Cvthèque Externe',
+                                        icon: 'pi pi-briefcase',
+                                        routerLink: ['/imatch'],
+                                    },
+                                    {
+                                        label: 'Générateur de CV',
+                                        icon: 'pi pi-cog',
+                                        routerLink: ['/generateur-cv'],
+                                    },
+                                    {
+                                        label: 'Rendez-vous',
+                                        icon: 'pi pi-calendar',
+                                        routerLink: ['/imatch/rendez-vous']
+                                    }
+                                ],
                             },
-                            {
-                                label: 'Générateur de documents',
-                                icon: 'pi pi-folder',
-                                routerLink: ['/genDoc']
-                            },
-                        ],
-                    })
+                        )
+                    } else
+                        this.items.push({
+                            label: 'iMatch',
+                            icon: 'pi pi-star',
+                            items: [
+                                {
+                                    label: 'Gestions des entreprises',
+                                    icon: 'pi pi-home',
+                                    items: [
+                                        {
+                                            label: 'Ajouter une entreprise',
+                                            icon: 'pi pi-user-plus',
+                                            routerLink: ['/ajout-entreprise']
+                                        },
+                                        {
+                                            label: 'Liste des entreprises',
+                                            icon: 'pi pi-sort-alpha-down',
+                                            routerLink: ['/entreprises']
+                                        },
+                                    ]
+                                },
+                                {
+                                    label: 'Générateur de documents',
+                                    icon: 'pi pi-folder',
+                                    routerLink: ['/genDoc']
+                                },
+                            ],
+                        })
                 }
                 if (services_list.includes('Générateur de Document')) {
                     let role = service_dic['Générateur de Document']
