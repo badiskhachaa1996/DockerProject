@@ -66,6 +66,7 @@ import { PointageService } from 'src/app/services/pointage.service';
 import { PointeuseData } from 'src/app/models/PointeuseData';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
 
+
 @Component({
   templateUrl: './dashboard.component.html',
 })
@@ -298,6 +299,7 @@ export class DashboardComponent implements OnInit {
   expandedRows = {};
   showOtherTextArea: boolean = false;
   congeJustifile: any;
+  paramValue:number;
   //* end check in variables
 
   constructor(
@@ -320,7 +322,7 @@ export class DashboardComponent implements OnInit {
   reader: FileReader = new FileReader();
   machineDic = {}
   ngOnInit() {
-
+    
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
     }, false);
@@ -480,6 +482,20 @@ export class DashboardComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+    });
+    
+    this.route.queryParams.subscribe(params => {
+      // Convertissez la valeur du paramètre en nombre en utilisant parseInt ou parseFloat
+      this.paramValue = parseInt(params['param'], 10); // 10 est la base (base 10 pour les nombres)
+      console.log('Valeur du paramètre :', this.paramValue);
+      
+      // Assurez-vous que la conversion s'est bien passée
+      if (this.paramValue){
+        this.selectedTabIndex=this.paramValue;
+        this.paramValue=0;
+      }else{
+        this.selectedTabIndex=0
+      }
     });
   }
 

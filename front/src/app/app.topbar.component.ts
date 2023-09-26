@@ -27,7 +27,7 @@ const io = require("socket.io-client");
 })
 export class AppTopBarComponent implements OnInit {
   items: MenuItem[] | undefined;
-
+  menuCalenders: MenuItem[] | undefined;
   logo = "assets/images/logo-ims-new.png"
   notif = false;
   Notifications = 0;
@@ -191,18 +191,21 @@ export class AppTopBarComponent implements OnInit {
           items: [
             {
               label: 'Disponible',
+              icon:'pi pi-check-circle',
               command: () => {
                 this.onUpdateStatus('Disponible');
               }
             },
             {
               label: 'Absent',
+              icon:'pi pi-times-circle',
               command: () => {
                 this.onUpdateStatus('Absent');
               }
             },
             {
               label: 'En pause',
+              icon:'pi pi-stop-circle',
               command: () => {
                 this.onUpdateStatus('En pause');
 
@@ -211,6 +214,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'Occupé',
+              icon:'pi pi-minus-circle',
               command: () => {
                 this.onUpdateStatus('Occupé');
 
@@ -219,6 +223,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'En congé',
+              icon:'pi pi-arrow-circle-right',
               command: () => {
                 this.onUpdateStatus('En congé');
 
@@ -227,6 +232,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'En réunion',
+              icon:'pi pi-circle-fill',
               command: () => {
                 this.onUpdateStatus('En réunion');
 
@@ -246,6 +252,7 @@ export class AppTopBarComponent implements OnInit {
 
         {
           label: 'Déconnexion',
+          icon:'pi pi-power-off',
           command: () => {
             this.onDisconnect();
 
@@ -258,10 +265,47 @@ export class AppTopBarComponent implements OnInit {
     }, (error) => {
       console.error(error)
     })
-
+    this.menuCalenders = [
+      {
+        label:"CRA",
+        command: () => {
+          this.router.navigate(['/'], { queryParams: { param: 1 } });
+        }
+      },
+      {
+        label:"Calendrier",
+        command: () => {
+          this.router.navigate(['/'], { queryParams: { param: 2 } });
+        }
+      },
+      {
+        label:"Historique",
+        command: () => {
+          this.router.navigate(['/'], { queryParams: { param: 3 } });
+        }
+      },
+      {
+        label:"Congé",
+        command: () => {
+          this.router.navigate(['/'], { queryParams: { param: 4 } });
+        }
+      },
+      {
+        label:"Assiduité",
+        command: () => {
+            this.router.navigate(['/'], { queryParams: { param: 5 } });
+          }
+        
+      },
+    ];
   }
 
   onLeftMouseClick(event: MouseEvent, contextMenu: ContextMenu): void {
+    event.stopPropagation();
+    event.preventDefault();
+    contextMenu.show(event);
+  }
+  onLeftMouseClickC(event: MouseEvent, contextMenu: ContextMenu): void {
     event.stopPropagation();
     event.preventDefault();
     contextMenu.show(event);

@@ -1,5 +1,5 @@
 <div class="layout-topbar">
-    <a class="layout-topbar-logo" routerLink="">
+    <a class="layout-topbar-logo margin: 0;" routerLink="">
         <img [src]="logo" style="max-width: 150px; max-height: 80px" alt="logo" />
     </a>
 
@@ -13,12 +13,6 @@
 
     <h4 style="display: block;margin-left: auto;margin-right: auto;justify-content: center;margin-top: 10dp;"> Bienvenu
         {{prenom | titlecase}} {{nom|uppercase}}</h4>
-
-
-
-
-
-
 
 
     <div class="layout-topbar-menu" [ngClass]="{
@@ -43,19 +37,24 @@
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>
         </a>
+        <div class="layout-topbar-button">
+            <i #cra class="pi pi-calendar"  (click)="onLeftMouseClick($event,contextMenu1)"></i>
+            <p-contextMenu #contextMenu1 [target]="cra" [model]="menuCalenders" [appendTo]="'body'"></p-contextMenu>
+        </div>
         <a href="https://links.intedgroup.com/" class="p-link layout-topbar-button">
-            <i class="pi pi-globe" pTooltip="links" tooltipPosition="bottom"></i>
+            <i class="pi pi-globe" pTooltip="Links" tooltipPosition="bottom"></i>
 
-            <span> links</span>
+            <span> Links</span>
         </a>
+        
         <a href="#/informations" class="p-link layout-topbar-button">
-            <i class="pi pi-th-large" pTooltip="Informations" tooltipPosition="bottom"></i>
+            <i class="pi pi-th-large" pTooltip="Informations"  tooltipPosition="bottom"></i>
 
             <span> Informations</span>
         </a>
         <a href="#/ticketing/gestion/ajout" class="p-link layout-topbar-button">
             <i class="pi pi-tag" pTooltip="Ticketing" tooltipPosition="bottom"></i>
-
+            
             <span> Ticketing</span>
         </a>
         <a href="#/entreprise-dashboard" class="p-link layout-topbar-button" *ngIf="isCEO">
