@@ -54,7 +54,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Filière </label>
+                    <label>Filière<span style="color: red"> * </span> </label>
                     <p-dropdown
                         formControlName="filiere"
                         [options]="filiereList"
@@ -65,7 +65,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Niveau </label>
+                    <label>Niveau<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -74,7 +74,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>RNCP</label>
+                    <label>RNCP<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -83,7 +83,9 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Certificateur </label>
+                    <label
+                        >Certificateur<span style="color: red"> * </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -92,7 +94,11 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Durée de la formation </label>
+                    <label
+                        >Durée de la formation<span style="color: red">
+                            *
+                        </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -101,7 +107,9 @@
                     />
                 </div>
                 <div class="field col-12">
-                    <label>Description </label>
+                    <label
+                        >Description<span style="color: red"> * </span>
+                    </label>
                     <textarea
                         pInputTextarea
                         placeholder="Description..."
@@ -109,7 +117,9 @@
                     ></textarea>
                 </div>
                 <div class="field col-6">
-                    <label>Critères d'admission </label>
+                    <label
+                        >Critères d'admission<span style="color: red"> * </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -118,7 +128,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Tarif </label>
+                    <label>Tarif<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -138,7 +148,9 @@
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
-                    <label>Déroulement </label>
+                    <label
+                        >Déroulement<span style="color: red"> * </span>
+                    </label>
                     <p-dropdown
                         formControlName="deroulement"
                         [options]="deroulementList"
@@ -149,7 +161,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>BAC+ </label>
+                    <label>BAC<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -158,7 +170,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Code </label>
+                    <label>Code<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -167,16 +179,19 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Année </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Année"
+                    <label>Année<span style="color: red"> * </span> </label>
+                    <p-dropdown
                         formControlName="annee"
-                    />
+                        [options]="anneeList"
+                        optionLabel="annee"
+                    ></p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Code France Compétences </label>
+                    <label
+                        >Code France Compétences<span style="color: red">
+                            *
+                        </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -185,7 +200,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Validité </label>
+                    <label>Validité<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -194,7 +209,9 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Organisme référent </label>
+                    <label
+                        >Organisme référent<span style="color: red"> * </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -203,18 +220,20 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Campus </label>
+                    <label>Campus<span style="color: red"> * </span> </label>
                     <p-dropdown
                         formControlName="campus"
                         [options]="dropdownCampus"
                         autoWidth="false"
                         [style]="{ width: '100%' }"
-                        placeholder="Choisissez un campust"
+                        placeholder="Choisissez un campus"
                     >
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Année scolaire </label>
+                    <label
+                        >Année scolaire<span style="color: red"> * </span>
+                    </label>
                     <p-dropdown
                         formControlName="annee_scolaire"
                         [options]="rentreeScolaire"
@@ -225,15 +244,23 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Date de début </label>
+                    <label
+                        >Date de début<span style="color: red"> * </span>
+                    </label>
                     <p-calendar formControlName="date_debut"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label>Date de fin </label>
+                    <label
+                        >Date de fin<span style="color: red"> * </span>
+                    </label>
                     <p-calendar formControlName="date_fin"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label>Nombres d'heures</label>
+                    <label
+                        >Nombres d'heures<span style="color: red">
+                            *
+                        </span></label
+                    >
                     <input
                         pInputText
                         type="text"
@@ -242,7 +269,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Rythme</label>
+                    <label>Rythme<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -251,7 +278,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Calendrier</label>
+                    <label>Calendrier<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -260,14 +287,14 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Examens </label>
+                    <label>Examens<span style="color: red"> * </span> </label>
                     <p-calendar
                         dateFormat="mm.yy"
                         formControlName="examens"
                     ></p-calendar>
                 </div>
                 <div class="field col-12">
-                    <label>Note</label>
+                    <label>Note<span style="color: red"> * </span></label>
                     <textarea
                         rows="5"
                         cols="30"
@@ -327,7 +354,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Filière </label>
+                    <label>Filière<span style="color: red"> * </span> </label>
                     <p-dropdown
                         formControlName="filiere"
                         [options]="filiereList"
@@ -338,7 +365,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Niveau </label>
+                    <label>Niveau<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -347,7 +374,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>RNCP</label>
+                    <label>RNCP<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -356,7 +383,9 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Certificateur </label>
+                    <label
+                        >Certificateur<span style="color: red"> * </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -365,7 +394,11 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Durée de la formation </label>
+                    <label
+                        >Durée de la formation<span style="color: red">
+                            *
+                        </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -374,7 +407,9 @@
                     />
                 </div>
                 <div class="field col-12">
-                    <label>Description </label>
+                    <label
+                        >Description<span style="color: red"> * </span>
+                    </label>
                     <textarea
                         pInputTextarea
                         placeholder="Description..."
@@ -382,7 +417,9 @@
                     ></textarea>
                 </div>
                 <div class="field col-6">
-                    <label>Critères d'admission </label>
+                    <label
+                        >Critères d'admission<span style="color: red"> * </span>
+                    </label>
                     <input
                         pInputText
                         type="text"
@@ -391,7 +428,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Tarif </label>
+                    <label>Tarif<span style="color: red"> * </span> </label>
                     <input
                         pInputText
                         type="text"
@@ -411,7 +448,9 @@
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
-                    <label>Déroulement </label>
+                    <label
+                        >Déroulement<span style="color: red"> * </span>
+                    </label>
                     <p-dropdown
                         formControlName="deroulement"
                         [options]="deroulementList"
@@ -422,7 +461,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>BAC + </label>
+                    <label>BAC<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -431,7 +470,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Code</label>
+                    <label>Code<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -440,16 +479,22 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Année</label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Année"
+                    <label>Année<span style="color: red"> * </span> </label>
+                    <p-dropdown
                         formControlName="annee"
-                    />
+                        [options]="anneeList"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez une année"
+                    >
+                    </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Code France Compétences</label>
+                    <label
+                        >Code France Compétences<span style="color: red">
+                            *
+                        </span></label
+                    >
                     <input
                         pInputText
                         type="text"
@@ -458,7 +503,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Validité</label>
+                    <label>Validité<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -467,7 +512,11 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Organisme référent</label>
+                    <label
+                        >Organisme référent<span style="color: red">
+                            *
+                        </span></label
+                    >
                     <input
                         pInputText
                         type="text"
@@ -476,7 +525,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Campus </label>
+                    <label>Campus<span style="color: red"> * </span> </label>
                     <p-dropdown
                         formControlName="campus"
                         [options]="dropdownCampus"
@@ -487,7 +536,9 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Année scolaire </label>
+                    <label
+                        >Année scolaire<span style="color: red"> * </span>
+                    </label>
                     <p-dropdown
                         formControlName="annee_scolaire"
                         [options]="rentreeScolaire"
@@ -498,15 +549,23 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label>Date de début </label>
+                    <label
+                        >Date de début<span style="color: red"> * </span>
+                    </label>
                     <p-calendar formControlName="date_debut"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label>Date de fin </label>
+                    <label
+                        >Date de fin<span style="color: red"> * </span>
+                    </label>
                     <p-calendar formControlName="date_fin"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label>Nombres d'heures</label>
+                    <label
+                        >Nombres d'heures<span style="color: red">
+                            *
+                        </span></label
+                    >
                     <input
                         pInputText
                         type="text"
@@ -515,7 +574,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Rythme</label>
+                    <label>Rythme<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -524,7 +583,7 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Calendrier</label>
+                    <label>Calendrier<span style="color: red"> * </span></label>
                     <input
                         pInputText
                         type="text"
@@ -533,14 +592,14 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Examens </label>
+                    <label>Examens<span style="color: red"> * </span> </label>
                     <p-calendar
                         dateFormat="mm.yy"
                         formControlName="examens"
                     ></p-calendar>
                 </div>
                 <div class="field col-12">
-                    <label>Note</label>
+                    <label>Note<span style="color: red"> * </span></label>
                     <textarea
                         rows="5"
                         cols="30"
@@ -579,12 +638,7 @@
                 [value]="formations"
                 dataKey="_id"
                 responsiveLayout="scroll"
-                [globalFilterFields]="[
-                    'nom',
-                    'niveau',
-                    'certificateur',
-                    'description'
-                ]"
+                [globalFilterFields]="['bac', 'annee', 'certificateur']"
                 [rows]="8"
                 [pageLinks]="5"
                 [paginator]="true"
@@ -614,7 +668,7 @@
                             Niveau<p-sortIcon field="niveau"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="bac">
-                            BAC + <p-sortIcon field="bac"> </p-sortIcon>
+                            BAC <p-sortIcon field="bac"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="code">
                             Code<p-sortIcon field="code"> </p-sortIcon>
@@ -691,14 +745,14 @@
                             {{ formation.certificateur }}
                         </td>
                         <td>
-                            <i
+                            <!--<i
                                 style="padding-left: 3%; color: rgb(0, 255, 0)"
                                 class="pi pi-eye m-1"
                                 (click)="showDescription(formation)"
                                 pTooltip="Voir la description"
                                 aria-hidden="true"
                                 tooltipPosition="bottom"
-                            ></i>
+                            ></i>-->
                             <i
                                 style="
                                     padding-left: 3%;
@@ -726,8 +780,7 @@
                         <td colspan="10">
                             <h5
                                 style="
-                                    text-align: center;
-                                    color: red;
+                                    color: rgb(48, 121, 230);
                                     font-weight: bold;
                                 "
                             >
@@ -739,6 +792,7 @@
                                     display: flex;
                                     justify-content: center;
                                     text-align: center;
+                                    justify-content: left;
                                 "
                             >
                                 <ng-template pTemplate="header">
@@ -771,8 +825,7 @@
                             <br />
                             <h5
                                 style="
-                                    text-align: center;
-                                    color: red;
+                                    color: rgb(48, 121, 230);
                                     font-weight: bold;
                                 "
                             >
@@ -829,8 +882,7 @@
                             <br />
                             <h5
                                 style="
-                                    text-align: center;
-                                    color: red;
+                                    color: rgb(48, 121, 230);
                                     font-weight: bold;
                                 "
                             >
@@ -858,8 +910,7 @@
                             <br />
                             <h5
                                 style="
-                                    text-align: center;
-                                    color: red;
+                                    color: rgb(48, 121, 230);
                                     font-weight: bold;
                                 "
                             >

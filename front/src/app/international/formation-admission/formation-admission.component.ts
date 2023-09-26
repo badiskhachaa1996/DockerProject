@@ -20,6 +20,8 @@ export class FormationAdmissionComponent implements OnInit {
   selectedFormation: FormationAdmission
   dropdownCampus: any[] = []
   rentreeScolaire = []
+
+
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService, private MessageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class FormationAdmissionComponent implements OnInit {
         this.rentreeScolaire.push({ label: rentree.nom, value: rentree._id })
       })
     })
+
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -86,6 +89,20 @@ export class FormationAdmissionComponent implements OnInit {
     { value: "Service à la personne", label: "Service à la personne" },
     { value: "Petite enfance", label: "Petite enfance" },
   ]
+
+  anneeList = 
+  [
+    { value: "Année 1", label: "Anneé 1"},
+    { value: "Année 2", label: "Anneé 2"},
+    { value: "Année 3", label: "Anneé 3"},
+    { value: "Année 4", label: "Anneé 4"},
+    { value: "Année 5", label: "Anneé 5"},
+  ];
+
+  filtreBac = 
+  [
+    { value: null, label: "Bac"}
+  ];
 
   initUpdate(rowData: FormationAdmission) {
     this.selectedFormation = rowData
@@ -183,4 +200,5 @@ export class FormationAdmissionComponent implements OnInit {
     this.formationSelected = formation,
       this.showDescriptionBool = true
   }
+
 }
