@@ -52,7 +52,7 @@
         <div class="row">
             <div class="col-4" *ngFor="let offre of filteredOffres">
                 <div class="offre-card row">
-                    <div class="col-5">
+                    <div class="col-5 card-right">
                         <div *ngIf="!dicPicture;then offre_image else default_image">
                         </div>
                         <ng-template #offre_image>
@@ -68,7 +68,8 @@
                     </div>
                     <div class="col-7 card-right">
                         <div class="offre-card-main">
-                            <h4 class="offre-card-title">{{offre.missionName}} <br *ngIf="offre?.missionName?.length<14">&nbsp;</h4>
+                            <h4 *ngIf="offre?.missionName?.length<43" class="offre-card-title">{{offre.missionName.slice(0, 42)}} <br *ngIf="offre?.missionName?.length<15">&nbsp;<br *ngIf="offre?.missionName?.length<30">&nbsp;</h4>
+                            <h4 *ngIf="offre?.missionName?.length>43" class="offre-card-title">{{offre.missionName.slice(0, 42)}}...</h4>
                             <p class="offre-card-lieu">📍 {{offre.entreprise_ville }}</p>
                         </div>
                         <a class="offres-btns postuler" href="javascript:void(0)" (click)="showPostuler = true; annonceSelected = offre"><i class="pi pi-arrow-right"></i>Postuler</a>
