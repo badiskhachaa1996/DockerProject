@@ -168,12 +168,11 @@
                 </div>
                 <div class="field col-6">
                     <label>Année </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Année"
+                    <p-dropdown
                         formControlName="annee"
-                    />
+                        [options]="anneeList"
+                        optionLabel="annee"
+                    ></p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Code France Compétences </label>
@@ -440,13 +439,15 @@
                     />
                 </div>
                 <div class="field col-6">
-                    <label>Année</label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Année"
+                    <label>Année </label>
+                    <p-dropdown
                         formControlName="annee"
-                    />
+                        [options]="anneeList"
+                        autoWidth="false"
+                        [style]="{ width: '100%' }"
+                        placeholder="Choisissez une année"
+                    >
+                    </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Code France Compétences</label>
