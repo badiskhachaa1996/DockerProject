@@ -5,103 +5,55 @@
                 Modifier les informations de {{ selectedEcole.titre }}
             </h4>
             <div style="text-align: center">
-                <small style="text-align: center; font-size: 12px"
-                    >Tous les champs marqués d'un astérix
-                    <span style="color: red"> * </span> sont obligatoires</small
-                >
+                <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
+                    <span style="color: red"> * </span> sont obligatoires</small>
             </div>
 
-            <i
-                class="pi pi-times-circle"
-                style="
+            <i class="pi pi-times-circle" style="
                     float: right;
                     font-size: 20px;
                     color: red;
                     cursor: pointer;
-                "
-                (click)="selectedEcole = null; updateForm.reset()"
-                aria-hidden="true"
-            ></i>
+                " (click)="selectedEcole = null; updateForm.reset()" aria-hidden="true"></i>
 
-            <form
-                class="p-fluid p-formgrid grid"
-                [formGroup]="updateForm"
-                (ngSubmit)="onUpdate()"
-            >
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
                 <div class="field col-8">
-                    <label
-                        >Nom de l'école
-                        <span style="color: red"> * </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="ESTYA"
-                        formControlName="titre"
-                    />
+                    <label>Nom de l'école
+                        <span style="color: red"> * </span></label>
+                    <input pInputText type="text" placeholder="ESTYA" formControlName="titre" />
                 </div>
                 <div class="field col-4">
-                    <label
-                        >Params URL <span style="color: red"> * </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="estya"
-                        formControlName="url_form"
-                    />
+                    <label>Params URL <span style="color: red"> * </span></label>
+                    <input pInputText type="text" placeholder="estya" formControlName="url_form" />
                 </div>
                 <div class="field col-12">
                     <label>Adresse </label>
-                    <textarea
-                        pInputTextarea
-                        placeholder="20 Rue du Président 14000 Caen"
-                        formControlName="adresse"
-                    ></textarea>
+                    <textarea pInputTextarea placeholder="20 Rue du Président 14000 Caen"
+                        formControlName="adresse"></textarea>
                 </div>
 
                 <div class="field col-6">
                     <label>Adresse mail de contact</label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="contact@ecole.com"
-                        formControlName="email"
-                    />
+                    <input pInputText type="text" placeholder="contact@ecole.com" formControlName="email" />
                 </div>
                 <div class="field col-6">
                     <label>Site Web </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="https://ims.intedgroup.com/#/"
-                        formControlName="site_web"
-                    />
+                    <input pInputText type="text" placeholder="https://ims.intedgroup.com/#/"
+                        formControlName="site_web" />
                 </div>
 
                 <div class="field col-6">
                     <label>Langue du Formulaire </label>
-                    <p-selectButton
-                        formControlName="langue"
-                        [options]="langueList"
-                    ></p-selectButton>
+                    <p-selectButton formControlName="langue" [options]="langueList"></p-selectButton>
                 </div>
                 <div class="field col-6">
                     <label>Campus </label>
-                    <p-multiSelect
-                        formControlName="campus"
-                        [options]="campusList"
-                        placeholder="Choissisez les campus"
-                    ></p-multiSelect>
+                    <p-multiSelect formControlName="campus" [options]="campusList"
+                        placeholder="Choissisez les campus"></p-multiSelect>
                 </div>
 
                 <div>
-                    <button
-                        pButton
-                        label="Valider"
-                        type="submit"
-                        [disabled]="updateForm.invalid"
-                    ></button>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
                 </div>
             </form>
         </div>
@@ -111,101 +63,53 @@
         <div class="card col-12">
             <h4 style="text-align: center">Ajout d'une nouvelle école</h4>
             <div style="text-align: center">
-                <small style="text-align: center; font-size: 12px"
-                    >Tous les champs marqués d'un astérix
-                    <span style="color: red"> * </span> sont obligatoires</small
-                >
+                <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
+                    <span style="color: red"> * </span> sont obligatoires</small>
             </div>
 
-            <i
-                class="pi pi-times-circle"
-                style="
+            <i class="pi pi-times-circle" style="
                     float: right;
                     font-size: 20px;
                     color: red;
                     cursor: pointer;
-                "
-                (click)="addForm = false; createForm.reset()"
-                aria-hidden="true"
-            ></i>
+                " (click)="addForm = false; createForm.reset()" aria-hidden="true"></i>
 
-            <form
-                class="p-fluid p-formgrid grid"
-                [formGroup]="createForm"
-                (ngSubmit)="onCreate()"
-            >
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
                 <div class="field col-8">
-                    <label
-                        >Nom de l'école
-                        <span style="color: red"> * </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="ESTYA"
-                        formControlName="titre"
-                    />
+                    <label>Nom de l'école
+                        <span style="color: red"> * </span></label>
+                    <input pInputText type="text" placeholder="ESTYA" formControlName="titre" />
                 </div>
                 <div class="field col-4">
-                    <label
-                        >Params URL <span style="color: red"> * </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="estya"
-                        formControlName="url_form"
-                    />
+                    <label>Params URL <span style="color: red"> * </span></label>
+                    <input pInputText type="text" placeholder="estya" formControlName="url_form" />
                 </div>
                 <div class="field col-12">
                     <label>Adresse </label>
-                    <textarea
-                        pInputTextarea
-                        placeholder="20 Rue du Président 14000 Caen"
-                        formControlName="adresse"
-                    ></textarea>
+                    <textarea pInputTextarea placeholder="20 Rue du Président 14000 Caen"
+                        formControlName="adresse"></textarea>
                 </div>
 
                 <div class="field col-6">
                     <label>Adresse mail de contact</label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="contact@ecole.com"
-                        formControlName="email"
-                    />
+                    <input pInputText type="text" placeholder="contact@ecole.com" formControlName="email" />
                 </div>
                 <div class="field col-6">
                     <label>Site Web </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="https://ims.intedgroup.com/#/"
-                        formControlName="site_web"
-                    />
+                    <input pInputText type="text" placeholder="https://ims.intedgroup.com/#/"
+                        formControlName="site_web" />
                 </div>
                 <div class="field col-6">
                     <label>Campus </label>
-                    <p-multiSelect
-                        formControlName="campus"
-                        [options]="campusList"
-                        placeholder="Choissisez les campus"
-                    ></p-multiSelect>
+                    <p-multiSelect formControlName="campus" [options]="campusList"
+                        placeholder="Choissisez les campus"></p-multiSelect>
                 </div>
                 <div class="field col-6">
                     <label>Langue du Formulaire </label>
-                    <p-selectButton
-                        formControlName="langue"
-                        [options]="langueList"
-                    ></p-selectButton>
+                    <p-selectButton formControlName="langue" [options]="langueList"></p-selectButton>
                 </div>
                 <div>
-                    <button
-                        pButton
-                        label="Valider"
-                        type="submit"
-                        [disabled]="createForm.invalid"
-                    ></button>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
                 </div>
             </form>
         </div>
@@ -217,47 +121,25 @@
                 Attribuer les formations à {{ affectedFormations.titre }}
             </h4>
             <div style="text-align: center">
-                <small style="text-align: center; font-size: 12px"
-                    >Tous les champs marqués d'un astérix
-                    <span style="color: red"> * </span> sont obligatoires</small
-                >
+                <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
+                    <span style="color: red"> * </span> sont obligatoires</small>
             </div>
 
-            <i
-                class="pi pi-times-circle"
-                style="
+            <i class="pi pi-times-circle" style="
                     float: right;
                     font-size: 20px;
                     color: red;
                     cursor: pointer;
-                "
-                (click)="affectedEcole = null; affectedForm.reset()"
-                aria-hidden="true"
-            ></i>
+                " (click)="affectedEcole = null; affectedForm.reset()" aria-hidden="true"></i>
 
-            <form
-                class="p-fluid p-formgrid grid"
-                [formGroup]="affectedForm"
-                (ngSubmit)="onAffect()"
-            >
+            <form class="p-fluid p-formgrid grid" [formGroup]="affectedForm" (ngSubmit)="onAffect()">
                 <div class="field col-12">
-                    <label
-                        >Formations <span style="color: red"> * </span></label
-                    >
-                    <p-multiSelect
-                        [options]="formationsList"
-                        optionLabel="nom"
-                        filter="true"
-                        formControlName="formations"
-                    ></p-multiSelect>
+                    <label>Formations <span style="color: red"> * </span></label>
+                    <p-multiSelect [options]="formationsList" optionLabel="nom" filter="true"
+                        formControlName="formations"></p-multiSelect>
                 </div>
                 <div>
-                    <button
-                        pButton
-                        label="Valider"
-                        type="submit"
-                        [disabled]="affectedForm.invalid"
-                    ></button>
+                    <button pButton label="Valider" type="submit" [disabled]="affectedForm.invalid"></button>
                 </div>
             </form>
         </div>
@@ -266,39 +148,23 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right">
-                <button
-                    style="margin-left: 2px"
-                    pButton
-                    icon="pi pi-plus-circle"
-                    label="Crée une école"
-                    (click)="initCreate()"
-                ></button>
+                <button style="margin-left: 2px" pButton icon="pi pi-plus-circle" label="Crée une école"
+                    (click)="initCreate()"></button>
             </div>
             <h5>Liste des écoles</h5>
             <p-toast></p-toast>
-            <p-table
-                #dt1
-                [value]="ecoles"
-                dataKey="_id"
-                responsiveLayout="scroll"
-                [globalFilterFields]="['titre', 'email', 'adresse', 'site_web']"
-                [rows]="5"
-                [pageLinks]="5"
-                [paginator]="true"
-                rowExpandMode="single"
-                [totalRecords]="ecoles.length"
-                styleClass="p-datatable-gridlines"
-            >
+            <p-table #dt1 [value]="ecoles" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['titre', 'email', 'adresse', 'site_web']" [rows]="5" [pageLinks]="5"
+                [paginator]="true" rowExpandMode="single" [totalRecords]="ecoles.length"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
-                    <input
-                        pInputText
-                        type="text"
-                        #filter
-                        (input)="
+                    <input pInputText type="text" #filter (input)="
                             dt1.filterGlobal($event.target.value, 'contains')
-                        "
-                        placeholder="Recherche"
-                    />
+                        " placeholder="Recherche" />
+                    <p-dropdown filter="true" [options]="campusFilter"
+                        (onChange)="dt1.filter($event.value, 'campus','contains')"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                        [style]="{'margin':'5px'}"></p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -307,9 +173,6 @@
                             </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="adresse">
-                            Adresse<p-sortIcon field="adresse"> </p-sortIcon>
-                        </th>
                         <th pSortableColumn="campus">
                             Campus<p-sortIcon field="campus"> </p-sortIcon>
                         </th>
@@ -321,10 +184,6 @@
                             Site WEB<p-sortIcon field="site_web"> </p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="url_form">
-                            Params URL<p-sortIcon field="url_form">
-                            </p-sortIcon>
-                        </th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -332,9 +191,6 @@
                     <tr>
                         <td>
                             {{ ecole.titre }}
-                        </td>
-                        <td>
-                            {{ ecole.adresse }}
                         </td>
                         <td>
                             {{ ecole.campus }}
@@ -346,31 +202,17 @@
                             {{ ecole.site_web }}
                         </td>
                         <td>
-                            {{ ecole.url_form }}
-                        </td>
-                        <td>
-                            <i
-                                style="cursor: pointer; color: rgb(22, 225, 22)"
-                                class="pi pi-list m-1"
-                                (click)="initFormations(ecole); scrollToTop()"
-                                pTooltip="Attribuer les formations"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>
-                            <i
-                                style="color: #3b82f6; cursor: pointer"
-                                class="pi pi-pencil m-1"
-                                (click)="initUpdate(ecole); scrollToTop()"
-                                pTooltip="Modifier l'école"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>
-                            <i
-                                class="pi pi-trash m-1"
-                                pTooltip="Supprimer"
-                                (click)="onDeleteEcole(ecole._id)"
-                                style="cursor: pointer; color: #ef4444"
-                            ></i>
+                            <i style="cursor: pointer; color: rgb(2, 0, 117)" class="pi pi-eye m-1"
+                                (click)="showDetails(ecole);" pTooltip="Voir plus d'informations" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i style="cursor: pointer; color: rgb(22, 225, 22)" class="pi pi-list m-1"
+                                (click)="initFormations(ecole); scrollToTop()" pTooltip="Attribuer les formations"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="color: #3b82f6; cursor: pointer" class="pi pi-pencil m-1"
+                                (click)="initUpdate(ecole); scrollToTop()" pTooltip="Modifier l'école"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i class="pi pi-trash m-1" pTooltip="Supprimer" (click)="onDeleteEcole(ecole._id)"
+                                style="cursor: pointer; color: #ef4444"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -378,3 +220,20 @@
         </div>
     </div>
 </div>
+
+<p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedEcoleDetails=null">
+    <div *ngIf="selectedEcoleDetails">
+        <h5 style="font-weight: bold;">Addresse</h5>
+        <p>{{selectedEcoleDetails.adresse}}</p>
+
+        <h5 style="font-weight: bold;">Params URL</h5>
+        <p>{{ selectedEcoleDetails?.url_form }}</p>
+
+        <h5 *ngIf="selectedEcoleDetails.formations.length!=0" style="font-weight: bold;">Listes des formations</h5>
+        <ul>
+            <li *ngFor="let f of selectedEcoleDetails.formations">{{f?.nom}}</li>
+        </ul>
+
+    </div>
+
+</p-sidebar>
