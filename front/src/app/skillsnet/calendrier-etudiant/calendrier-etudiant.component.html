@@ -4,13 +4,19 @@
 <p-dialog header="Ajout d'une indisponibilité" [(visible)]="displayModal" [modal]="true" [style]="{width: '75vw'}"
     [draggable]="false" [resizable]="false">
     <form [formGroup]="form" (ngSubmit)="onAddIndispo()" class="p-fluid p-formgrid grid">
+        <div class="col-12">
+            <label For="postal_adresse">Libelle:</label>
+            <input pInputText type="text" formControlName="libelle"/>
+        </div>
         <div class="field md:col-6 col-12">
             <label For="postal_adresse">De:</label>
-            <p-calendar formControlName="from" placeholder="Ex: 20/01/2000" dateFormat="dd/mm/yy" showTime="true" appendTo="body" ></p-calendar>
+            <p-calendar formControlName="from" placeholder="Ex: 20/01/2000" dateFormat="dd/mm/yy" showTime="true"
+                appendTo="body"></p-calendar>
         </div>
         <div class="field md:col-6 col-12">
             <label For="postal_adresse">À:</label>
-            <p-calendar formControlName="from" placeholder="Ex: 20/01/2000" dateFormat="dd/mm/yy" showTime="true" appendTo="body" ></p-calendar>
+            <p-calendar formControlName="from" placeholder="Ex: 20/01/2000" dateFormat="dd/mm/yy" showTime="true"
+                appendTo="body"></p-calendar>
         </div>
         <div>
             <button pButton label="Se rendre indisponible" type="submit" [disabled]="form.invalid"></button>

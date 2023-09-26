@@ -67,6 +67,7 @@ export class CalendrierEtudiantComponent implements OnInit {
   displayModal = false
   form = new FormGroup({
     user_id: new FormControl(''),
+    libelle: new FormControl('Indisponible'),
     type: new FormControl('Indisponible'),
     from: new FormControl(new Date(), Validators.required),
     to: new FormControl(new Date(), Validators.required),
@@ -83,7 +84,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     } else {
       end.setHours(start.getHours() + 1)
     }
-    console.log(start,end)
+    console.log(start, end)
     this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
   }
 
@@ -116,6 +117,10 @@ export class CalendrierEtudiantComponent implements OnInit {
   }
 
   onAddIndispo() {
-
+    this.DispoEtuService.create({ ...this.form.value }).subscribe(r => {
+      this.addEvent(r.libelle, new Date(r.from), new Date(r.to), { ...r }, r.type)
+      this.displayModal = false
+      this.form.reset()
+    })
   }
 }
