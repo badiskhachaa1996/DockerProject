@@ -168,6 +168,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th *ngIf="!seeAction">
+
+                        </th>
                         <th pSortableColumn="titre">
                             Nom de l'école<p-sortIcon field="titre">
                             </p-sortIcon>
@@ -184,11 +187,16 @@
                             Site WEB<p-sortIcon field="site_web"> </p-sortIcon>
                         </th>
 
-                        <th>Action</th>
+                        <th *ngIf="seeAction">Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-ecole>
                     <tr>
+                        <td *ngIf="!seeAction" style="text-align: center;">
+                            <i style="cursor: pointer; color: rgb(2, 0, 117)" class="pi pi-eye"
+                                (click)="showDetails(ecole);" pTooltip="Voir plus d'informations" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                        </td>
                         <td>
                             {{ ecole.titre }}
                         </td>
@@ -201,7 +209,7 @@
                         <td>
                             {{ ecole.site_web }}
                         </td>
-                        <td>
+                        <td *ngIf="seeAction">
                             <i style="cursor: pointer; color: rgb(2, 0, 117)" class="pi pi-eye m-1"
                                 (click)="showDetails(ecole);" pTooltip="Voir plus d'informations" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
@@ -224,7 +232,9 @@
 <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedEcoleDetails=null">
     <div *ngIf="selectedEcoleDetails">
         <h5 style="font-weight: bold;">Addresse</h5>
-        <p>{{selectedEcoleDetails.adresse}}</p>
+        <ul>
+            <li *ngFor="let f of selectedEcoleDetails.adresse">{{f}}</li>
+        </ul>
 
         <h5 style="font-weight: bold;">Params URL</h5>
         <p>{{ selectedEcoleDetails?.url_form }}</p>
