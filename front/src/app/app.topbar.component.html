@@ -10,22 +10,23 @@
         <i class="pi pi-ellipsis-v"></i>
     </a>
 
-    
-       <h4 style="display: block;margin-left: auto;margin-right: auto;justify-content: center;margin-top: 10dp;"> Bienvenu {{prenom | titlecase}} {{nom|uppercase}}</h4>
-      
-        
-     
 
-   
+    <h4 style="display: block;margin-left: auto;margin-right: auto;justify-content: center;margin-top: 10dp;"> Bienvenu
+        {{prenom | titlecase}} {{nom|uppercase}}</h4>
 
-   
+
+
+
+
+
+
 
     <div class="layout-topbar-menu" [ngClass]="{
             'layout-topbar-menu-mobile-active': appMain.topMenuActive
         }">
-        
-        
-        
+
+
+
         <!-- <a href="#" class="p-link layout-topbar-button">
             <i class="pi pi-calendar"></i>
             <span>Calendar</span>
@@ -34,43 +35,49 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
-        <a href="https://links.intedgroup.com/" class="p-link layout-topbar-button" >
+        <a href="#/mes-rendez-vous" class="p-link layout-topbar-button" *ngIf="isCEO">
+            <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
+            <span>Mes rendez-vous</span>
+        </a>
+        <a href="https://links.intedgroup.com/" class="p-link layout-topbar-button">
             <i class="pi pi-globe" pTooltip="links" tooltipPosition="bottom"></i>
-            
+
             <span> links</span>
         </a>
-        <a href="#/informations" class="p-link layout-topbar-button" >
+        <a href="#/informations" class="p-link layout-topbar-button">
             <i class="pi pi-th-large" pTooltip="Informations" tooltipPosition="bottom"></i>
-            
+
             <span> Informations</span>
         </a>
-        <a href="#/ticketing/gestion/ajout" class="p-link layout-topbar-button" >
+        <a href="#/ticketing/gestion/ajout" class="p-link layout-topbar-button">
             <i class="pi pi-tag" pTooltip="Ticketing" tooltipPosition="bottom"></i>
-            
+
             <span> Ticketing</span>
         </a>
         <a href="#/entreprise-dashboard" class="p-link layout-topbar-button" *ngIf="isCEO">
             <i class="pi pi-chart-bar" pTooltip="Dashboard" tooltipPosition="bottom"></i>
             <span>Dashboard</span>
         </a>
-        
-        <a href="#/notifications" class="p-link layout-topbar-button" >
+
+        <a href="#/notifications" class="p-link layout-topbar-button">
             <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom"></i>
             <div class="number" style="font-weight: bold; color: red; font-size: 13px">
                 {{ Notifications }}
             </div>
             <span> Notifications</span>
         </a>
-        <div class="center" >
-            <img #img src="{{ imageToShow }}"alt="Logo" aria-haspopup="true" class="max-w-full" class="p-link layout-topbar-button" aria-haspopup="true"  style="width: 35px; height: 35px;border-radius: 50%;"  tooltipPosition="bottom"  />
-            <p-contextMenu [target]="img" [model]="items" ></p-contextMenu>
-            
+        <div class="center">
+            <img #imgprofile src="{{ imageToShow }}" alt="Logo" aria-haspopup="true" class="max-w-full"
+                class="p-link layout-topbar-button" aria-haspopup="true" (click)="onLeftMouseClick($event,contextMenu)"
+                style="width: 35px; height: 35px;border-radius: 50%;margin-top: 4px;" tooltipPosition="bottom" />
+            <p-contextMenu #contextMenu [target]="imgprofile" [model]="items" [appendTo]="'body'"></p-contextMenu>
+
         </div>
-        
+
         <!--<a (click)="onDisconnect()" class="p-link layout-topbar-button" >
             <i class="pi pi-power-off" pTooltip="Déconnexion" tooltipPosition="bottom"></i>
             <span>Déconnexion</span>
         </a>-->
     </div>
-    
+
 </div>
