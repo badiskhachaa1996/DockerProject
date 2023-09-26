@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EcoleAdmission } from 'src/app/models/EcoleAdmission';
 import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
@@ -10,14 +11,14 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
   styleUrls: ['./ecole-admission.component.scss']
 })
 export class EcoleAdmissionComponent implements OnInit {
-
+  seeAction = true
   ecoles: EcoleAdmission[] = []
   langueList = [
     { label: 'Français', value: 'Français' },
     { label: 'English', value: 'English' },
   ]
   selectedEcole: EcoleAdmission
-  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService) { }
+  constructor(private FAService: FormulaireAdmissionService, private MessageService: MessageService, private route: ActivatedRoute) { }
   campusList = [
     { label: 'Paris', value: 'Paris' },
     { label: 'Montpellier', value: 'Montpellier' },
@@ -40,6 +41,10 @@ export class EcoleAdmissionComponent implements OnInit {
     this.FAService.FAgetAll().subscribe(data => {
       this.formationsList = data
     })
+    this.route.url.subscribe(r => {
+      this.seeAction = !(r[0].path == "informations")
+    })
+
   }
 
   updateForm: FormGroup = new FormGroup({
