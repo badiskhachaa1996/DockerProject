@@ -33,6 +33,7 @@ export class AppTopBarComponent implements OnInit {
   Notifications = 0;
   socket = io(environment.origin.replace('/soc', ''));
   isCEO = false
+  isEtudiant = false
   userConnected: User;
   token: any;
   user = true;
@@ -98,7 +99,7 @@ export class AppTopBarComponent implements OnInit {
     this.UserService.pathUserStatut(statut, this.userConnected._id)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Statut', detail: 'Votre statut à bien été mis à jour' });
-        
+
         this.onGetUserConnectedInformation();
       })
       .catch((error) => { console.log(error); this.messageService.add({ severity: 'error', summary: 'Statut', detail: 'Impossible de mettre à jour votre statut' }); });
@@ -183,6 +184,7 @@ export class AppTopBarComponent implements OnInit {
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
+      this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
       this.items = [
         {
           label: this.userConnected.statut,

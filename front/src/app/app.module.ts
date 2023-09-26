@@ -382,6 +382,7 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
+import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
 
 @NgModule({
   imports: [
@@ -775,6 +776,7 @@ import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
     InformationsComponent,
     LinksComponent,
     VoirCvComponent,
+    CalendrierEtudiantComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

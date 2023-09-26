@@ -406,6 +406,7 @@ app.use('/soc/meetingTeams', meetingTeamsController)
 
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
+app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
 io.on("connection", (socket) => {
   //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
   socket.on("userLog", (user) => {
