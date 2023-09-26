@@ -18,8 +18,8 @@
     <div class="col-12 card grid" *ngIf="showForm=='Note'">
         <div class="field col-12">
             <label For="description">Note de réunion
-                <span style="color: red"> * </span></label>
-            <textarea pInputTextarea
+                <span style="color: red"> * </span></label><br>
+            <textarea pInputTextarea style="width: 100%;"
                 placeholder="Ex: Bonne présentation et écoute active mais stressez pendant l'entretien"
                 [(ngModel)]="meetingSelected.note" autoResize rows="3" cols="30"></textarea>
         </div>
@@ -31,9 +31,9 @@
     <div class="col-12 card grid" *ngIf="showForm=='Details RDV'">
         <div class="field col-12">
             <label For="description">Details de la Réunion
-                <span style="color: red"> * </span></label>
+                <span style="color: red"> * </span></label><br>
             <textarea pInputTextarea placeholder="Ex: Venir 5 min en avance" [(ngModel)]="meetingSelected.description"
-                autoResize rows="3" cols="30"></textarea>
+                style="width: 100%;" autoResize rows="3" cols="30"></textarea>
         </div>
         <div class="col-12">
             <button [style]="{ width: '100%' }" autoWidth="false" (click)="onUpdateCustom()" pButton
@@ -126,3 +126,70 @@
         </p-table>
     </div>
 </div>
+
+
+<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="annonceSelected?.is_interne">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected.entreprise_id?.r_sociale }} - {{ annonceSelected.entreprise_id?.ville_ent
+        }} ({{ annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <h5 style="font-weight: bold">Outils</h5>
+    <p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+    <ul>
+        <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+    </ul>
+
+    <hr />
+</p-sidebar>
+
+<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000" *ngIf="!annonceSelected?.is_interne">
+    <h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
+    <hr />
+    <p>
+        {{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{
+        annonceSelected?.workplaceType }}) <br />
+        Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}
+    </p>
+
+    <h5 style="font-weight: bold">Description</h5>
+    <p>
+        {{ annonceSelected?.missionDesc }} <br />
+        Type de contrat: <span style="font-weight: bold; font-size: 13px">{{
+            annonceSelected?.missionType }}</span> <br />
+        <span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY'
+            }}</span>
+    </p>
+
+    <h5 style="font-weight: bold">Compétences</h5>
+    <p>Vous devez avoir des connaissances dans les domaines suivants:</p>
+    <ul>
+        <li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
+    </ul>
+
+    <h5 style="font-weight: bold">Outils</h5>
+    <p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+    <ul>
+        <li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
+    </ul>
+
+    <hr />
+</p-sidebar>

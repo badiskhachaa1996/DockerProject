@@ -1317,7 +1317,7 @@ export class DashboardComponent implements OnInit {
     this.eventsRH.push({ title: event.type, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
     //  this.events.push({ title: "TEST", date: new Date() })
     this.options.events = this.eventsRH
-    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrementF
+    this.eventsRH = Object.assign([], this.eventsRH) //Parceque Angular est trop c*n pour voir le changement de la variable autrement
     //this.cd.detectChanges();
 
   }

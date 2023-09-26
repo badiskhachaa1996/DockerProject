@@ -11,6 +11,10 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridMonth from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { ViewportScroller } from '@angular/common';
+import { Annonce } from 'src/app/models/Annonce';
+import { Router } from '@angular/router';
+import { CvService } from 'src/app/services/skillsnet/cv.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-mes-rendez-vous',
   templateUrl: './mes-rendez-vous.component.html',
@@ -19,19 +23,26 @@ import { ViewportScroller } from '@angular/common';
 export class MesRendezVousComponent implements OnInit {
   token;
   meetings: MeetingTeams[] = []
-  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService, private AuthService: AuthService, private viewportScroller: ViewportScroller) { }
-
+  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService,
+    private AuthService: AuthService, private viewportScroller: ViewportScroller, private router: Router,
+    private CVService: CvService) { }
+  user: User
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
-      this.MeetingTeamsService.getAllByEmail(user.email_perso).subscribe(mts => {
-        this.meetings = mts
-        mts.forEach(mt => {
-          this.addEvent(mt)
-        })
-      })
+      this.user = user
+      this.loadEvents()
     })
 
+  }
+  loadEvents() {
+    this.events = []
+    this.MeetingTeamsService.getAllByEmail(this.user.email_perso).subscribe(mts => {
+      this.meetings = mts
+      mts.forEach(mt => {
+        this.addEvent(mt)
+      })
+    })
   }
 
   form = new FormGroup({
@@ -64,6 +75,7 @@ export class MesRendezVousComponent implements OnInit {
   onUpdateCustom() {
     this.MeetingTeamsService.update({ ...this.meetingSelected }).subscribe(r => {
       this.showForm = null
+      this.loadEvents()
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
     })
   }
@@ -90,19 +102,31 @@ export class MesRendezVousComponent implements OnInit {
     }, 15);
   }
 
-  onCancel(rdv: MeetingTeams) {
-    rdv.statut = "Annulé"
-    this.MeetingTeamsService.update({ ...rdv }).subscribe(r => {
+  onCancel(rdv: MeetingTeams) {   
+    this.MeetingTeamsService.update({ ...rdv, statut: 'Annulé' }).subscribe(r => {
       this.form.reset()
       this.rdvToUpdate = null
+      this.loadEvents()
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
     })
   }
-  seeOffer(rdv: MeetingTeams) {
 
+  annonceSelected: Annonce
+  visibleSidebar = false
+  seeOffer(rdv: MeetingTeams) {
+    this.annonceSelected = rdv.offre_id;
+    this.visibleSidebar = true
   }
   seeCV(rdv: MeetingTeams) {
-
+    if (rdv?.cv_id)
+      this.router.navigate(['cv', rdv.cv_id._id])
+    else
+      this.CVService.getCvbyUserId(rdv.user_id._id).subscribe(r => {
+        if (r)
+          this.router.navigate(['cv', r._id])
+        else
+          this.ToastService.add({ severity: 'error', summary: "Impossible de trouver le CV", detail: "L'étudiant l'a peut être supprimé, merci de le contacter à " + rdv?.user_id?.email + " ou " + rdv?.user_id?.email_perso })
+      })
   }
 
   options = {

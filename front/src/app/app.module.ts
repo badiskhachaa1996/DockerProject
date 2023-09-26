@@ -381,6 +381,7 @@ import { SuiviCandidatComponent } from './skillsnet/suivi-candidat/suivi-candida
 import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-projet/ajouter-un-ticket-projet.component';
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
+import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
 
 @NgModule({
   imports: [
@@ -773,6 +774,7 @@ import { LinksComponent } from './links/links.component';
     SuiviCandidatComponent,
     InformationsComponent,
     LinksComponent,
+    VoirCvComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
