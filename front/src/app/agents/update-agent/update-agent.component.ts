@@ -82,7 +82,7 @@ export class UpdateAgentComponent implements OnInit {
     indicatif: new FormControl(''),
     phone: new FormControl(''),
     mention: new FormControl('', Validators.required),
-    service_id: new FormControl('', Validators.required),
+    service_id: new FormControl(''),
     _id: new FormControl('', Validators.required)
   })
 
