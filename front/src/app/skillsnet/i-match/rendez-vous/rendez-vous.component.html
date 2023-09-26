@@ -1,12 +1,12 @@
 <div class="imatch-main-page" *ngIf="USER">
     <div class="page-content">
         <div class="top-header container">
-            <a routerLink="/imatch" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour aux
+            <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour aux
                 CVs</a>
         </div>
         <div class="header">
             <div class="container">
-                <a href="" class="btn-cancel"><i class="pi pi-arrow-left"></i>Annuler le rendez-vous</a>
+                <a href="{{'#/imatch/cv/' + USER.cv_id}}" class="btn-cancel"><i class="pi pi-arrow-left"></i>Annuler le rendez-vous</a>
                 <div class="rendez-vous-header">
                     <h1 class="rendez-vous-title">PRENDRE<br>RENDEZ-VOUS
                         <hr>

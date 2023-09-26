@@ -383,6 +383,11 @@ import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
 import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
+import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
+import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
+import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
+import { HeaderImatchComponent } from './skillsnet/i-match/header-imatch/header-imatch.component';
+import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 
 @NgModule({
   imports: [
@@ -777,6 +782,11 @@ import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/cal
     LinksComponent,
     VoirCvComponent,
     CalendrierEtudiantComponent,
+    ImatchEntrepriseComponent,
+    ImatchCandidatComponent,
+    CandidatListComponent,
+    HeaderImatchComponent,
+    EntrepriseListComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

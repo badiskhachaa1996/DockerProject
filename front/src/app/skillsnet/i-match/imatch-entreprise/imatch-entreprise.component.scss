@@ -1,0 +1,45 @@
+.imatch-main-page {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    box-shadow: inset 0px 10px 0px 0px #0A2E40;
+    padding-top: 10px;
+    min-height: 100vh;
+}
+
+
+.imatch-btn-top {
+    background-color: white;
+    padding: 20px;
+    filter: drop-shadow(0 20px 10px #0000001a);
+    margin-bottom: 20px;
+}
+
+.top-btns {
+    display: flex;
+    justify-content: center;
+
+    a {
+        margin: 20px;
+        background-color: #EAEAEA;
+        padding: 10px 100px;
+        border-radius: 50px;
+        width: 300px;
+        text-align: center;
+        color: #777777;
+    }
+
+    a:hover {
+        text-decoration: none;
+        background-color: #f7f7f7;
+        filter: drop-shadow(0 0px 10px #0000001a);
+    }
+
+    .active {
+        background-color: white;
+        filter: drop-shadow(0 0px 10px #0000003d);
+    }
+}
+
+
+
