@@ -186,6 +186,10 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="user_id.civilite" style="text-align:center">
+                    Civilité <p-sortIcon field="user_id.civilite"></p-sortIcon>
+                </th>
                 <th pSortableColumn="user_id.lastname" style="text-align:center">
                     Nom <p-sortIcon field="user_id.lastname"></p-sortIcon>
                 </th>
@@ -198,21 +202,39 @@
                 <th pSortableColumn="created_by.lastname" style="text-align:center">
                     Crée par <p-sortIcon field="created_by.lastname"></p-sortIcon>
                 </th>
+                <th pSortableColumn="created_at" style="text-align:center">
+                    Crée le <p-sortIcon field="created_at"></p-sortIcon>
+                </th>
                 <th>Action</th>
         </ng-template>
         <ng-template pTemplate="body" let-extern let-expanded="expanded">
             <tr>
+                <td>
+                    <button type="button" pButton pRipple [pRowToggler]="extern"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
+                <td>
+                    {{ extern.user_id?.civilite | titlecase}}
+                </td>
                 <td>
                     {{ extern.user_id?.lastname | uppercase}}
                 </td>
                 <td>
                     {{ extern.user_id?.firstname | titlecase}}
                 </td>
-                <td>
-                    {{ (extern.user_id?.type=='Externe-InProgress')?"Non complété":"Complété" }}
+                <td *ngIf="extern.user_id?.type=='Externe-InProgress'">
+                    <p-tag icon="pi pi-times" severity="danger" value="Non complété"></p-tag>
+                </td>
+                <td *ngIf="extern.user_id?.type!='Externe-InProgress'">
+                    <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Complété"></p-tag>
                 </td>
                 <td>
                     {{ extern.created_by?.firstname | titlecase}} {{ extern.created_by?.lastname|uppercase}}
+                </td>
+                <td>
+                    {{extern.created_at | date:"mediumDate"}}
                 </td>
                 <td>
                     <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
@@ -222,5 +244,30 @@
                 </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="rowexpansion" let-user>
+            <tr>
+                <td colspan="8">
+                    <p-table>
+                        <ng-template pTemplate="header">
+            <tr>
+                <th>Adresse Email</th>
+                <th>Numéro de téléphone</th>
+                <th>Adresse</th>
+                <th>CV</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td>{{user.user_id.email_perso}}</td>
+                <td>{{user.user_id.phone}}</td>
+                <td>{{user.user_id.pays_adresse}} {{ user.user_id.ville_adresse }} {{ user.user_id.numero_adresse }} {{ user.user_id.rue_adresse }}
+                    <br /> {{ user.user_id.postal_adresse }}</td>
+                <td><a (click)="downloadCV(user.user_id._id)">Télécharger le CV</a></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    </td>
+    </tr>
+    </ng-template>
     </p-table>
 </div>

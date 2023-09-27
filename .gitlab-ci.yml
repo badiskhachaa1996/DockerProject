@@ -52,7 +52,7 @@ build_angular:
 
   script:
       - cd front
-      - ng build --configuration=dev --aot
+      - node --max-old-space-size=8096 node_modules/@angular/cli/bin/ng build --configuration=dev --aot
   only:
     - Version1-2
   artifacts:

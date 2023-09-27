@@ -21,6 +21,36 @@ export class FormationAdmissionComponent implements OnInit {
   selectedFormation: FormationAdmission
   dropdownCampus: any[] = []
   rentreeScolaire = []
+  showFormRentreeScolaire: boolean = false
+
+  bacList =
+    [
+      { label: "Bac +2", value: "Bac +2" },
+      { label: "Bac +3", value: "Bac +3" },
+      { label: "Bac +4", value: "Bac +4" },
+      { label: "Bac +5", value: "Bac +5" }
+    ]
+
+  bacFilter =
+    [
+      { label: "Tous les bac", value: null },
+      ...this.bacList
+    ]
+
+  anneesList =
+    [
+      { label: "Année 1", value: "Année 1" },
+      { label: "Année 2", value: "Année 2" },
+      { label: "Année 3", value: "Année 3" },
+      { label: "Année 4", value: "Année 4" },
+      { label: "Année 5", value: "Année 5" },
+    ]
+
+  anneeFilter =
+    [
+      { label: "Toutes les années", value: null },
+      ...this.anneesList
+    ]
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
     private MessageService: MessageService, private CampusService: CampusService, private route: ActivatedRoute) { }
 
@@ -92,19 +122,14 @@ export class FormationAdmissionComponent implements OnInit {
     { value: "Petite enfance", label: "Petite enfance" },
   ]
 
-  anneeList = 
-  [
-    { value: "Année 1", label: "Anneé 1"},
-    { value: "Année 2", label: "Anneé 2"},
-    { value: "Année 3", label: "Anneé 3"},
-    { value: "Année 4", label: "Anneé 4"},
-    { value: "Année 5", label: "Anneé 5"},
-  ];
-
-  filtreBac = 
-  [
-    { value: null, label: "Bac"}
-  ];
+  anneeList =
+    [
+      { label: "Année 1", value: "Anneé 1" },
+      { label: "Année 2", value: "Anneé 2" },
+      { label: "Année 3", value: "Anneé 3" },
+      { label: "Année 4", value: "Anneé 4" },
+      { label: "Année 5", value: "Anneé 5" },
+    ];
 
   initUpdate(rowData: FormationAdmission) {
     this.selectedFormation = rowData
@@ -119,6 +144,46 @@ export class FormationAdmissionComponent implements OnInit {
       this.MessageService.add({ severity: "success", summary: `Mis à jour de la formation ${data.nom} avec succès` })
     })
   }
+
+  onBlur(formation: FormationAdmission) {
+    this.FAService.FAupdate({ ...formation }).subscribe(data => {
+    })
+  }
+
+  onDeleteRentreeScolaire(id: string): void {
+    this.FAService.RAdelete(id)
+      .then((response) => {
+        this.FAService.RAgetAll().subscribe(data => {
+          this.rentreeScolaire = data
+        })
+      })
+  }
+
+  onAddRentreeScolaire() {
+    if (this.formations == null) {
+      this.formations = []
+    }
+    this.formations.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
+
+  }
+
+  onCreateRA() {
+    this.FAService.RAcreate({ ...this.createFormRA.value }).subscribe(data => {
+      console.log(data)
+    })
+  }
+
+  createFormRA: FormGroup = new FormGroup({
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
+    note: new FormControl(''),
+  })
 
   createForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
@@ -138,15 +203,6 @@ export class FormationAdmissionComponent implements OnInit {
     code_france_competence: new FormControl(''),
     validite: new FormControl(''),
     organisme_referent: new FormControl(''),
-    campus: new FormControl(''),
-    annee_scolaire: new FormControl(''),
-    date_debut: new FormControl(''),
-    date_fin: new FormControl(''),
-    nb_heures: new FormControl(''),
-    rythme: new FormControl(''),
-    calendrier: new FormControl(''),
-    examens: new FormControl(''),
-    note: new FormControl(''),
   })
 
   addForm = false

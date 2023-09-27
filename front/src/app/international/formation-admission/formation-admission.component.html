@@ -1,17 +1,9 @@
-<p-dialog
-    header="Description de la formation"
-    [(visible)]="showDescriptionBool"
-    [modal]="true"
-    [style]="{ width: '80%' }"
->
+<p-dialog header="Description de la formation" [(visible)]="showDescriptionBool" [modal]="true"
+    [style]="{ width: '80%' }">
     <p class="m-0">{{ formationSelected?.description }}</p>
     <ng-template pTemplate="footer">
-        <p-button
-            icon="pi pi-check"
-            (click)="showDescriptionBool = false"
-            label="Ok"
-            styleClass="p-button-text"
-        ></p-button>
+        <p-button icon="pi pi-check" (click)="showDescriptionBool = false" label="Ok"
+            styleClass="p-button-text"></p-button>
     </ng-template>
 </p-dialog>
 <div class="grid">
@@ -21,294 +13,154 @@
                 Modifier les informations de {{ selectedFormation.nom }}
             </h4>
             <div style="text-align: center">
-                <small style="text-align: center; font-size: 12px"
-                    >Tous les champs marqués d'un astérix
-                    <span style="color: red"> * </span> sont obligatoires</small
-                >
+                <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
+                    <span style="color: red"> * </span> sont obligatoires</small>
             </div>
 
-            <i
-                class="pi pi-times-circle"
-                style="
+            <i class="pi pi-times-circle" style="
                     float: right;
                     font-size: 20px;
                     color: red;
                     cursor: pointer;
-                "
-                (click)="selectedFormation = null; updateForm.reset()"
-                aria-hidden="true"
-            ></i>
+                " (click)="selectedFormation = null; updateForm.reset()" aria-hidden="true"></i>
 
-            <form
-                class="p-fluid p-formgrid grid"
-                [formGroup]="updateForm"
-                (ngSubmit)="onUpdate()"
-            >
+            <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
                 <div class="field col-6">
                     <label>Formation <span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="BTS Science Informatique Organisation"
-                        formControlName="nom"
-                    />
+                    <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
+                        formControlName="nom" />
                 </div>
                 <div class="field col-6">
                     <label>Filière<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="filiere"
-                        [options]="filiereList"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez une filière"
-                    >
+                    <p-dropdown formControlName="filiere" [options]="filiereList" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez une filière">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Niveau<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="3"
-                        formControlName="niveau"
-                    />
+                    <input pInputText type="text" placeholder="3" formControlName="niveau" />
                 </div>
                 <div class="field col-6">
                     <label>RNCP<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Niveau 7"
-                        formControlName="rncp"
-                    />
+                    <input pInputText type="text" placeholder="Niveau 7" formControlName="rncp" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Certificateur<span style="color: red"> * </span>
+                    <label>Certificateur<span style="color: red"> * </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="FEDE"
-                        formControlName="certificateur"
-                    />
+                    <input pInputText type="text" placeholder="FEDE" formControlName="certificateur" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Durée de la formation<span style="color: red">
+                    <label>Durée de la formation<span style="color: red">
                             *
                         </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="2 semaines"
-                        formControlName="duree"
-                    />
+                    <input pInputText type="text" placeholder="2 semaines" formControlName="duree" />
                 </div>
                 <div class="field col-12">
-                    <label
-                        >Description<span style="color: red"> * </span>
+                    <label>Description<span style="color: red"> * </span>
                     </label>
-                    <textarea
-                        pInputTextarea
-                        placeholder="Description..."
-                        formControlName="description"
-                    ></textarea>
+                    <textarea pInputTextarea placeholder="Description..." formControlName="description"></textarea>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Critères d'admission<span style="color: red"> * </span>
+                    <label>Critères d'admission<span style="color: red"> * </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Critères d'admission"
-                        formControlName="criteres"
-                    />
+                    <input pInputText type="text" placeholder="Critères d'admission" formControlName="criteres" />
                 </div>
                 <div class="field col-6">
                     <label>Tarif<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="500€"
-                        formControlName="tarif"
-                    />
+                    <input pInputText type="text" placeholder="500€" formControlName="tarif" />
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red"> * </span></label>
-                    <p-multiSelect
-                        [options]="languesList"
-                        placeholder="Choisissez les langues"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        formControlName="langue"
-                    >
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" autoWidth="false"
+                        [style]="{ width: '100%' }" formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Déroulement<span style="color: red"> * </span>
+                    <label>Déroulement<span style="color: red"> * </span>
                     </label>
-                    <p-dropdown
-                        formControlName="deroulement"
-                        [options]="deroulementList"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez un deroulement"
-                    >
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez un deroulement">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>BAC<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="BAC +2, +3 ou +5"
-                        formControlName="bac"
-                    />
+                    <input pInputText type="text" placeholder="BAC +2, +3 ou +5" formControlName="bac" />
                 </div>
                 <div class="field col-6">
                     <label>Code<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Code"
-                        formControlName="code"
-                    />
+                    <input pInputText type="text" placeholder="Code" formControlName="code" />
                 </div>
                 <div class="field col-6">
                     <label>Année<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="annee"
-                        [options]="anneeList"
-                        optionLabel="annee"
-                    ></p-dropdown>
+                    <p-dropdown formControlName="annee" [options]="anneeList"></p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Code France Compétences<span style="color: red">
+                    <label>Code France Compétences<span style="color: red">
                             *
                         </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Code France Compétences"
-                        formControlName="code_france_competence"
-                    />
+                    <input pInputText type="text" placeholder="Code France Compétences"
+                        formControlName="code_france_competence" />
                 </div>
                 <div class="field col-6">
                     <label>Validité<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Validité"
-                        formControlName="validite"
-                    />
+                    <input pInputText type="text" placeholder="Validité" formControlName="validite" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Organisme référent<span style="color: red"> * </span>
+                    <label>Organisme référent<span style="color: red"> * </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Organisme référent"
-                        formControlName="organisme_referent"
-                    />
+                    <input pInputText type="text" placeholder="Organisme référent"
+                        formControlName="organisme_referent" />
                 </div>
                 <div class="field col-6">
                     <label>Campus<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="campus"
-                        [options]="dropdownCampus"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez un campus"
-                    >
+                    <p-dropdown formControlName="campus" [options]="dropdownCampus" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez un campus">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Année scolaire<span style="color: red"> * </span>
+                    <label>Année scolaire<span style="color: red"> * </span>
                     </label>
-                    <p-dropdown
-                        formControlName="annee_scolaire"
-                        [options]="rentreeScolaire"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez une année scolaire"
-                    >
+                    <p-dropdown formControlName="annee_scolaire" [options]="rentreeScolaire" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez une année scolaire">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Date de début<span style="color: red"> * </span>
+                    <label>Date de début<span style="color: red"> * </span>
                     </label>
                     <p-calendar formControlName="date_debut"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Date de fin<span style="color: red"> * </span>
+                    <label>Date de fin<span style="color: red"> * </span>
                     </label>
                     <p-calendar formControlName="date_fin"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Nombres d'heures<span style="color: red">
+                    <label>Nombres d'heures<span style="color: red">
                             *
-                        </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Nombres d'heures"
-                        formControlName="nb_heures"
-                    />
+                        </span></label>
+                    <input pInputText type="text" placeholder="Nombres d'heures" formControlName="nb_heures" />
                 </div>
                 <div class="field col-6">
                     <label>Rythme<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Rythme"
-                        formControlName="rythme"
-                    />
+                    <input pInputText type="text" placeholder="Rythme" formControlName="rythme" />
                 </div>
                 <div class="field col-6">
                     <label>Calendrier<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="En cours de développement"
-                        formControlName="calendrier"
-                    />
+                    <input pInputText type="text" placeholder="En cours de développement"
+                        formControlName="calendrier" />
                 </div>
                 <div class="field col-6">
                     <label>Examens<span style="color: red"> * </span> </label>
-                    <p-calendar
-                        dateFormat="mm.yy"
-                        formControlName="examens"
-                    ></p-calendar>
+                    <p-calendar dateFormat="mm.yy" formControlName="examens"></p-calendar>
                 </div>
                 <div class="field col-12">
                     <label>Note<span style="color: red"> * </span></label>
-                    <textarea
-                        rows="5"
-                        cols="30"
-                        pInputTextarea
-                        formControlName="note"
-                    ></textarea>
+                    <textarea rows="5" cols="30" pInputTextarea formControlName="note"></textarea>
                 </div>
                 <div>
-                    <button
-                        pButton
-                        label="Valider"
-                        type="submit"
-                        [disabled]="updateForm.invalid"
-                    ></button>
+                    <button pButton label="Valider" type="submit" [disabled]="updateForm.invalid"></button>
                 </div>
             </form>
         </div>
@@ -318,344 +170,329 @@
         <div class="card col-12">
             <h4 style="text-align: center">Ajout d'une nouvelle formation</h4>
             <div style="text-align: center">
-                <small style="text-align: center; font-size: 12px"
-                    >Tous les champs marqués d'un astérix
-                    <span style="color: red"> * </span> sont obligatoires</small
-                >
+                <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
+                    <span style="color: red"> * </span> sont obligatoires</small>
             </div>
 
-            <i
-                class="pi pi-times-circle"
-                style="
+            <i class="pi pi-times-circle" style="
                     float: right;
                     font-size: 20px;
                     color: red;
                     cursor: pointer;
-                "
-                (click)="addForm = false; createForm.reset()"
-                aria-hidden="true"
-            ></i>
+                " (click)="addForm = false; createForm.reset()" aria-hidden="true"></i>
 
-            <form
-                class="p-fluid p-formgrid grid"
-                [formGroup]="createForm"
-                (ngSubmit)="onCreate()"
-            >
+            <form class="p-fluid p-formgrid grid" [formGroup]="createForm" (ngSubmit)="onCreate()">
                 <div class="field col-6">
-                    <label
-                        >Nom de la formation
-                        <span style="color: red"> * </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="BTS Science Informatique Organisation"
-                        formControlName="nom"
-                    />
+                    <label>Nom de la formation
+                        <span style="color: red"> * </span></label>
+                    <input pInputText type="text" placeholder="BTS Science Informatique Organisation"
+                        formControlName="nom" />
                 </div>
                 <div class="field col-6">
                     <label>Filière<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="filiere"
-                        [options]="filiereList"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez une filière"
-                    >
+                    <p-dropdown formControlName="filiere" [options]="filiereList" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez une filière">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>Niveau<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="3"
-                        formControlName="niveau"
-                    />
+                    <input pInputText type="text" placeholder="3" formControlName="niveau" />
                 </div>
                 <div class="field col-6">
                     <label>RNCP<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Niveau 7"
-                        formControlName="rncp"
-                    />
+                    <input pInputText type="text" placeholder="Niveau 7" formControlName="rncp" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Certificateur<span style="color: red"> * </span>
+                    <label>Certificateur<span style="color: red"> * </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="FEDE"
-                        formControlName="certificateur"
-                    />
+                    <input pInputText type="text" placeholder="FEDE" formControlName="certificateur" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Durée de la formation<span style="color: red">
+                    <label>Durée de la formation<span style="color: red">
                             *
                         </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="2 semaines"
-                        formControlName="duree"
-                    />
+                    <input pInputText type="text" placeholder="2 semaines" formControlName="duree" />
                 </div>
                 <div class="field col-12">
-                    <label
-                        >Description<span style="color: red"> * </span>
+                    <label>Description<span style="color: red"> * </span>
                     </label>
-                    <textarea
-                        pInputTextarea
-                        placeholder="Description..."
-                        formControlName="description"
-                    ></textarea>
+                    <textarea pInputTextarea placeholder="Description..." formControlName="description"></textarea>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Critères d'admission<span style="color: red"> * </span>
+                    <label>Critères d'admission<span style="color: red"> * </span>
                     </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Critères d'admission"
-                        formControlName="criteres"
-                    />
+                    <input pInputText type="text" placeholder="Critères d'admission" formControlName="criteres" />
                 </div>
                 <div class="field col-6">
                     <label>Tarif<span style="color: red"> * </span> </label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="500€"
-                        formControlName="tarif"
-                    />
+                    <input pInputText type="text" placeholder="500€" formControlName="tarif" />
                 </div>
                 <div class="field col-6">
                     <label>Langue<span style="color: red"> * </span></label>
-                    <p-multiSelect
-                        [options]="languesList"
-                        placeholder="Choisissez les langues"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        formControlName="langue"
-                    >
+                    <p-multiSelect [options]="languesList" placeholder="Choisissez les langues" autoWidth="false"
+                        [style]="{ width: '100%' }" formControlName="langue">
                     </p-multiSelect>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Déroulement<span style="color: red"> * </span>
+                    <label>Déroulement<span style="color: red"> * </span>
                     </label>
-                    <p-dropdown
-                        formControlName="deroulement"
-                        [options]="deroulementList"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez un déroulement"
-                    >
+                    <p-dropdown formControlName="deroulement" [options]="deroulementList" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez un déroulement">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label>BAC<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="BAC +2, +3 ou +5"
-                        formControlName="bac"
-                    />
+                    <input pInputText type="text" placeholder="BAC +2, +3 ou +5" formControlName="bac" />
                 </div>
                 <div class="field col-6">
                     <label>Code<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Code"
-                        formControlName="code"
-                    />
+                    <input pInputText type="text" placeholder="Code" formControlName="code" />
                 </div>
                 <div class="field col-6">
                     <label>Année<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="annee"
-                        [options]="anneeList"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez une année"
-                    >
+                    <p-dropdown formControlName="annee" [options]="anneeList" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez une année">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Code France Compétences<span style="color: red">
+                    <label>Code France Compétences<span style="color: red">
                             *
-                        </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Code France Compétences"
-                        formControlName="code_france_competence"
-                    />
+                        </span></label>
+                    <input pInputText type="text" placeholder="Code France Compétences"
+                        formControlName="code_france_competence" />
                 </div>
                 <div class="field col-6">
                     <label>Validité<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Validité"
-                        formControlName="validite"
-                    />
+                    <input pInputText type="text" placeholder="Validité" formControlName="validite" />
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Organisme référent<span style="color: red">
+                    <label>Organisme référent<span style="color: red">
                             *
-                        </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Organisme référent"
-                        formControlName="organisme_referent"
-                    />
+                        </span></label>
+                    <input pInputText type="text" placeholder="Organisme référent"
+                        formControlName="organisme_referent" />
                 </div>
                 <div class="field col-6">
                     <label>Campus<span style="color: red"> * </span> </label>
-                    <p-dropdown
-                        formControlName="campus"
-                        [options]="dropdownCampus"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez un campus"
-                    >
+                    <p-dropdown formControlName="campus" [options]="dropdownCampus" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez un campus">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Année scolaire<span style="color: red"> * </span>
+                    <label>Année scolaire<span style="color: red"> * </span>
                     </label>
-                    <p-dropdown
-                        formControlName="annee_scolaire"
-                        [options]="rentreeScolaire"
-                        autoWidth="false"
-                        [style]="{ width: '100%' }"
-                        placeholder="Choisissez une année scolaire"
-                    >
+                    <p-dropdown formControlName="annee_scolaire" [options]="rentreeScolaire" autoWidth="false"
+                        [style]="{ width: '100%' }" placeholder="Choisissez une année scolaire">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Date de début<span style="color: red"> * </span>
+                    <label>Date de début<span style="color: red"> * </span>
                     </label>
                     <p-calendar formControlName="date_debut"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Date de fin<span style="color: red"> * </span>
+                    <label>Date de fin<span style="color: red"> * </span>
                     </label>
                     <p-calendar formControlName="date_fin"></p-calendar>
                 </div>
                 <div class="field col-6">
-                    <label
-                        >Nombres d'heures<span style="color: red">
+                    <label>Nombres d'heures<span style="color: red">
                             *
-                        </span></label
-                    >
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Nombres d'heures"
-                        formControlName="nb_heures"
-                    />
+                        </span></label>
+                    <input pInputText type="text" placeholder="Nombres d'heures" formControlName="nb_heures" />
                 </div>
                 <div class="field col-6">
                     <label>Rythme<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="Rythme"
-                        formControlName="rythme"
-                    />
+                    <input pInputText type="text" placeholder="Rythme" formControlName="rythme" />
                 </div>
                 <div class="field col-6">
                     <label>Calendrier<span style="color: red"> * </span></label>
-                    <input
-                        pInputText
-                        type="text"
-                        placeholder="En cours de développement"
-                        formControlName="calendrier"
-                    />
+                    <input pInputText type="text" placeholder="En cours de développement"
+                        formControlName="calendrier" />
                 </div>
                 <div class="field col-6">
                     <label>Examens<span style="color: red"> * </span> </label>
-                    <p-calendar
-                        dateFormat="mm.yy"
-                        formControlName="examens"
-                    ></p-calendar>
+                    <p-calendar dateFormat="mm.yy" formControlName="examens"></p-calendar>
                 </div>
                 <div class="field col-12">
                     <label>Note<span style="color: red"> * </span></label>
-                    <textarea
-                        rows="5"
-                        cols="30"
-                        pInputTextarea
-                        formControlName="note"
-                    ></textarea>
+                    <textarea rows="5" cols="30" pInputTextarea formControlName="note"></textarea>
                 </div>
                 <br />
                 <div>
-                    <button
-                        pButton
-                        label="Valider"
-                        type="submit"
-                        [disabled]="createForm.invalid"
-                    ></button>
+                    <button pButton label="Valider" type="submit" [disabled]="createForm.invalid"></button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!--Formulaire configiration rentrée scolaire-->
+    <div class="col-12" *ngIf="showFormRentreeScolaire">
+        <i class="pi pi-times-circle m-1" style="float:right; color: red; cursor: pointer;"
+            (click)="showFormRentreeScolaire = false" aria-hidden="true"> </i>
+        <div class="card">
+            <h3 class="text-center" style="font-weight: bold;">Configuration: Rentrée scolaire</h3>
+            <div class="grid">
+                <p-table #dt2 dataKey="_id" [value]="formations" class="col-12" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="campus" style="text-align: center;"> Campus <p-sortIcon field="campus">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="annee_scolaire" style="text-align: center;"> Année scolaire <p-sortIcon
+                                    field="annee_scolaire">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_debut" style="text-align: center;"> Date de début <p-sortIcon
+                                    field="date_debut"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_fin" style="text-align: center;"> Date de fin<p-sortIcon
+                                    field="date_fin"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_fin" style="text-align: center;"> Nombres d'heures<p-sortIcon
+                                    field="date_fin"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="rythme" style="text-align: center;"> Rythmes<p-sortIcon
+                                    field="rythme"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="calendrier" style="text-align: center;"> Calendrier<p-sortIcon
+                                    field="calendrier"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="examens$" style="text-align: center;"> Examens<p-sortIcon
+                                    field="examens"></p-sortIcon>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Action
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-formation let-ri="rowIndex">
+                        <tr [pEditableRow]="formation">
+                            <td [pEditableColumn]="formation.nom" pEditableColumnField="nom">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.nom"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.nom }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.annee" pEditableColumnField="annee">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.annee"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.annee }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.date_debut" pEditableColumnField="date_debut">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.date_debut"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.date_debut | date : "dd/MM/yyyy" }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.date_fin" pEditableColumnField="date_fin">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.date_fin"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.date_fin | date : "dd/MM/yyyy" }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.nb_heures" pEditableColumnField="nb_heures">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.nb_heures"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.nb_heures }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.rythme" pEditableColumnField="rythme">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.rythme"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.rythme }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                En cours de développement
+                            </td>
+                            <td [pEditableColumn]="formation.examens" pEditableColumnField="examens">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.examens"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.examens | date : "MM/yyyy"}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer la rentrée scolaire" tooltipPosition="bottom"
+                                    class="pi pi-trash m-1" aria-hidden="true" style="color: red;"
+                                    (click)="onDeleteRentreeScolaire(id)">
+                                </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div class="col-6">
+                    <button type="button" (click)="onAddRentreeScolaire()" pButton
+                        label="Ajouter une rentrée scolaire"></button>
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="onCreateRA()" pButton label="Sauvegarder"></button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Listing des équipes -->
     <div class="col-12">
         <div class="card">
             <div style="float: right" *ngIf="seeAction">
-                <button
-                    style="margin-left: 2px"
-                    pButton
-                    icon="pi pi-plus-circle"
-                    label="Crée une formation"
-                    (click)="initCreate()"
-                ></button>
+                <button style="margin-left: 2px" pButton icon="pi pi-plus-circle" label="Crée une formation"
+                    (click)="initCreate()"></button>
             </div>
             <h5 *ngIf="seeAction">Liste des formations</h5>
             <p-toast></p-toast>
-            <p-table
-                #dt1
-                [value]="formations"
-                dataKey="_id"
-                responsiveLayout="scroll"
-                [globalFilterFields]="['bac', 'annee', 'certificateur']"
-                [rows]="8"
-                [pageLinks]="5"
-                [paginator]="true"
-                rowExpandMode="single"
-                [totalRecords]="formations.length"
-                styleClass="p-datatable-gridlines"
-            >
+            <p-table #dt1 [value]="formations" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['nom', 'code', 'certificateur']" [rows]="8" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="formations.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
-                    <input
-                        pInputText
-                        type="text"
-                        #filter
-                        (input)="
+                    <input pInputText type="text" #filter (input)="
                             dt1.filterGlobal($event.target.value, 'contains')
-                        "
-                        placeholder="Recherche"
-                    />
+                        " placeholder="Rechercher par formation, code ou certificateur" style="width: 350px;" />
+                    <p-dropdown filter="true" [options]="bacFilter"
+                        (onChange)="dt1.filter($event.value, 'bac','contains')" emptyFilterMessage="Pas de bac trouvé"
+                        filterPlaceholder="Bac" [style]="{'margin':'5px'}"></p-dropdown>
+                    <p-dropdown filter="true" [options]="anneeFilter"
+                        (onChange)="dt1.filter($event.value, 'annee','contains')"
+                        emptyFilterMessage="Pas d'année trouvé" filterPlaceholder="Année"
+                        [style]="{'margin':'5px'}"></p-dropdown>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -710,18 +547,12 @@
                 <ng-template pTemplate="body" let-formation>
                     <tr>
                         <td>
-                            <button
-                                type="button"
-                                pButton
-                                pRipple
-                                [pRowToggler]="formation"
-                                class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="
+                            <button type="button" pButton pRipple [pRowToggler]="formation"
+                                class="p-button-text p-button-rounded p-button-plain" [icon]="
                                     expanded
                                         ? 'pi pi-chevron-down'
                                         : 'pi pi-chevron-right'
-                                "
-                            ></button>
+                                "></button>
                         </td>
                         <td>
                             {{ formation.nom }}
@@ -745,197 +576,159 @@
                             {{ formation.certificateur }}
                         </td>
                         <td *ngIf="seeAction">
-                            <!--<i
-                                style="padding-left: 3%; color: rgb(0, 255, 0)"
-                                class="pi pi-eye m-1"
-                                (click)="showDescription(formation)"
-                                pTooltip="Voir la description"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>-->
-                            <i
-                                style="
-                                    padding-left: 3%;
-                                    color: rgb(72, 72, 255);
-                                "
-                                class="pi pi-pencil m-1"
-                                (click)="initUpdate(formation); scrollToTop()"
-                                pTooltip="Modifier la formation"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>
-                            <i
-                                style="padding-left: 3%; color: rgb(255, 0, 0)"
-                                class="pi pi-trash m-1"
-                                (click)="delete(formation)"
-                                pTooltip="Supprimer la formation"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>
+                            <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
+                                pTooltip="Rentrée scolaire" (click)="showFormRentreeScolaire = true" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                                " class="pi pi-pencil m-1" (click)="initUpdate(formation); scrollToTop()"
+                                pTooltip="Modifier la formation" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
+                                (click)="delete(formation)" pTooltip="Supprimer la formation" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-formation>
                     <tr>
                         <td colspan="10">
-                            <h5
-                                style="
+                            <h5 style="
                                     color: rgb(48, 121, 230);
                                     font-weight: bold;
-                                "
-                            >
+                                ">
                                 Informations supplémentaires
                             </h5>
-                            <p-table
-                                responsiveLayout="scroll"
-                                style="
+                            <p-table responsiveLayout="scroll" style="
                                     display: flex;
                                     justify-content: center;
                                     text-align: center;
                                     justify-content: left;
-                                "
-                            >
+                                ">
                                 <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>RNCP</th>
-                                        <th>Code France Compétences</th>
-                                        <th>Validité</th>
-                                        <th>Organisme référent</th>
-                                        <th>Tarif</th>
-                                        <th>Déroulement</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                    <tr>
-                                        <td>{{ formation.rncp }}</td>
-                                        <td>
-                                            {{
-                                                formation.code_france_competence
-                                            }}
-                                        </td>
-                                        <td>{{ formation.validite }}</td>
-                                        <td>
-                                            {{ formation.organisme_referent }}
-                                        </td>
-                                        <td>{{ formation.tarif }}</td>
-                                        <td>{{ formation.deroulement }}</td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <br />
-                            <h5
-                                style="
+                    <tr>
+                        <th>RNCP</th>
+                        <th>Code France Compétences</th>
+                        <th>Validité</th>
+                        <th>Organisme référent</th>
+                        <th>Tarif</th>
+                        <th>Déroulement</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ formation.rncp }}</td>
+                        <td>
+                            {{
+                            formation.code_france_competence
+                            }}
+                        </td>
+                        <td>{{ formation.validite }}</td>
+                        <td>
+                            {{ formation.organisme_referent }}
+                        </td>
+                        <td>{{ formation.tarif }}</td>
+                        <td>{{ formation.deroulement }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <br />
+            <h5 style="
                                     color: rgb(48, 121, 230);
                                     font-weight: bold;
-                                "
-                            >
-                                Informations sur la rentrée scolaire
-                            </h5>
-                            <p-table
-                                responsiveLayout="scroll"
-                                styleClass="p-datatable-gridlines"
-                            >
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Campus</th>
-                                        <th>Année scolaire</th>
-                                        <th>Date de début</th>
-                                        <th>Date de fin</th>
-                                        <th>Nombre d'heures</th>
-                                        <th>Rythme</th>
-                                        <th>Calendrier</th>
-                                        <th>Examens</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-formation>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                    <tr>
-                                        <td>{{ formation.campus.libelle }}</td>
-                                        <td>
-                                            {{ formation.annee_scolaire.nom }}
-                                        </td>
-                                        <td>
-                                            {{
-                                                formation.date_debut
-                                                    | date : "dd/MM/yyyy"
-                                            }}
-                                        </td>
-                                        <td>
-                                            {{
-                                                formation.date_fin
-                                                    | date : "dd/MM/yyyy"
-                                            }}
-                                        </td>
-                                        <td>{{ formation.nb_heures }}</td>
-                                        <td>{{ formation.rythme }}</td>
-                                        <td>En cours de développement</td>
-                                        <td>
-                                            {{
-                                                formation.examens
-                                                    | date : "MM/yyyy"
-                                            }}
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <br />
-                            <h5
-                                style="
-                                    color: rgb(48, 121, 230);
-                                    font-weight: bold;
-                                "
-                            >
-                                Description de la formation
-                            </h5>
-                            <p-table
-                                responsiveLayout="scroll"
-                                styleClass="p-datatable-gridlines"
-                            >
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Description</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-formation>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                    <tr>
-                                        <td>
-                                            {{ formation.description }}
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <br />
-                            <h5
-                                style="
-                                    color: rgb(48, 121, 230);
-                                    font-weight: bold;
-                                "
-                            >
-                                Note
-                            </h5>
-                            <p-table
-                                responsiveLayout="scroll"
-                                styleClass="p-datatable-gridlines"
-                            >
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>{{ Note }}</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-formation>
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage">
-                                    <tr>
-                                        <td>{{ formation.note }}</td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                                ">
+                Informations sur la rentrée scolaire
+            </h5>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Campus</th>
+                        <th>Année scolaire</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
+                        <th>Nombre d'heures</th>
+                        <th>Rythme</th>
+                        <th>Calendrier</th>
+                        <th>Examens</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-formation>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ formation.campus.libelle }}</td>
+                        <td>
+                            {{ formation.annee_scolaire.nom }}
+                        </td>
+                        <td>
+                            {{
+                            formation.date_debut
+                            | date : "dd/MM/yyyy"
+                            }}
+                        </td>
+                        <td>
+                            {{
+                            formation.date_fin
+                            | date : "dd/MM/yyyy"
+                            }}
+                        </td>
+                        <td>{{ formation.nb_heures }}</td>
+                        <td>{{ formation.rythme }}</td>
+                        <td>En cours de développement</td>
+                        <td>
+                            {{
+                            formation.examens
+                            | date : "MM/yyyy"
+                            }}
                         </td>
                     </tr>
                 </ng-template>
+            </p-table>
+            <br />
+            <h5 style="
+                                    color: rgb(48, 121, 230);
+                                    font-weight: bold;
+                                ">
+                Description de la formation
+            </h5>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Description</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-formation>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>
+                            {{ formation.description }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <br />
+            <h5 style="
+                                    color: rgb(48, 121, 230);
+                                    font-weight: bold;
+                                ">
+                Note
+            </h5>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{ Note }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-formation>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ formation.note }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </td>
+            </tr>
+            </ng-template>
             </p-table>
         </div>
     </div>

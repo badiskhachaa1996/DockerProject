@@ -20,7 +20,7 @@ app.post("/addService", (req, res) => {
 
 app.get("/getAll", (req, res) => {
     //Récupérer tous les services
-    Service.find()
+    Service.find().sort({ index: 1 })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -41,7 +41,7 @@ app.get("/getById/:id", (req, res) => {
 });
 app.get("/getByLabel/:label", (req, res) => {
     //Récupérer un service par id
-    console.log( req.params.label )
+    console.log(req.params.label)
     Service.findOne({
         label: { $regex: req.params.label }
     }).then((dataService) => {
@@ -56,8 +56,7 @@ app.post("/updateById/:id", (req, res) => {
     //Mettre à jour un service par id
     Service.findByIdAndUpdate(req.params.id,
         {
-            label: req.body.label,
-
+            ...req.body
         }, { new: true }, (err, service) => {
             if (err) {
                 res.send(err)

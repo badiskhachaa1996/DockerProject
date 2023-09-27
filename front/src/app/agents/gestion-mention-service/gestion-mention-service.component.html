@@ -85,8 +85,9 @@
             </div>
             <h5>Liste des services</h5>
             <p-table #dt1 *ngIf="services" [value]="services" selectionMode="single" dataKey="_id" [rows]="8"
-                [rowHover]="true" [paginator]="true" [pageLinks]="5" [globalFilterFields]="['label']"
-                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                [reorderableColumns]="true" [rowHover]="true" [paginator]="true" [pageLinks]="5"
+                (onRowReorder)="onRowReorder($event)" [globalFilterFields]="['label']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -100,17 +101,24 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="text-align:center">Service</th>
-                        <th style="text-align:center">Action</th>
+                        <th style="width:3rem"></th>
+                        <th style="text-align:center" pReorderableColumn>Service</th>
+                        <th style="text-align:center" pReorderableColumn>Action</th>
+                    </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData>
-                    <tr>
+                <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                    <tr [pReorderableRow]="index">
+                        <td>
+                            <span class="pi pi-bars" pReorderableRowHandle></span>
+                        </td>
                         <td>
                             {{rowData.label}}
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="editService(rowData);toggleFormServiceUpdate();" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="deleteService(rowData);" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

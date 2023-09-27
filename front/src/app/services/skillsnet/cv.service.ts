@@ -15,7 +15,7 @@ export class CvService {
   postCv(cv: CV) {
     const url = `${this.apiUrl}/post-cv`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<CV>((resolve, reject) => {
       this.httpClient.post<CV>(url, cv, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
