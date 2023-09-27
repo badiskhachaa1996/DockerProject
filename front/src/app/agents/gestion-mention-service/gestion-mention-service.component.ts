@@ -28,6 +28,9 @@ export class GestionMentionServiceComponent implements OnInit {
       .subscribe(
         data => {
           this.services = data;
+          this.services.forEach((element, idx) => {
+            element.index = idx
+          });
         },
         error => {
           console.error(error);
@@ -86,6 +89,20 @@ export class GestionMentionServiceComponent implements OnInit {
   toggleFormServiceUpdate() {
     this.showFormUpdateService = true;
     this.showFormAddService = false;
+  }
+
+  deleteService(rowData) {
+    this.ServiceService.delete(rowData._id).subscribe(s => {
+      this.services.splice(this.services.indexOf(rowData), 1)
+      this.messageService.add({ severity: "success", summary: "Suppression du service avec succès" })
+    })
+
+  }
+
+  onRowReorder(event) {
+    console.log(event)
+    console.log(this.services[event.dragIndex], this.services[event.dropIndex])
+    this.ServiceService.update({ id: this.services[event.dropIndex]._id, index: event.dropIndex }).subscribe()
   }
 
 }
