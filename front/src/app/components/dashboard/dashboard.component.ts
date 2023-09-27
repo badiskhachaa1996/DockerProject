@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
+import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { Product } from '../../dev-components/api-template/product';
 import { ProductService } from '../../dev-components/service-template/productservice';
 import { Subscription } from 'rxjs';
@@ -103,9 +104,9 @@ export class DashboardComponent implements OnInit {
   dataEtudiant: Etudiant = null
   dataFormateur: Formateur = null
   dataIntuns: EtudiantIntuns;
-  visible:boolean=false;
-  visibleA:boolean=false;
-  visibleC:boolean=false;
+  visible: boolean = false;
+  visibleA: boolean = false;
+  visibleC: boolean = false;
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
@@ -299,9 +300,14 @@ export class DashboardComponent implements OnInit {
   expandedRows = {};
   showOtherTextArea: boolean = false;
   congeJustifile: any;
-  paramValue:number;
+  paramValue: number;
   //* end check in variables
-
+  menuCalenders: MenuItem[] | undefined;
+  showCRA: boolean = false;
+  showCalender: boolean = false;
+  showHis: boolean = false;
+  showCon: boolean = false;
+  showAassiduite: boolean = false;
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
@@ -322,7 +328,7 @@ export class DashboardComponent implements OnInit {
   reader: FileReader = new FileReader();
   machineDic = {}
   ngOnInit() {
-    
+
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
     }, false);
@@ -483,30 +489,83 @@ export class DashboardComponent implements OnInit {
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
     });
-    
+
     this.route.queryParams.subscribe(params => {
       // Convertissez la valeur du paramètre en nombre en utilisant parseInt ou parseFloat
       this.paramValue = parseInt(params['param'], 10); // 10 est la base (base 10 pour les nombres)
       console.log('Valeur du paramètre :', this.paramValue);
-      
+
       // Assurez-vous que la conversion s'est bien passée
-      if (this.paramValue){
-        this.selectedTabIndex=this.paramValue;
-        this.paramValue=0;
-      }else{
-        this.selectedTabIndex=0
+      if (this.paramValue) {
+        this.selectedTabIndex = this.paramValue;
+        this.paramValue = 0;
+      } else {
+        this.selectedTabIndex = 0
       }
     });
+    this.menuCalenders = [
+      {
+        label:"CRA",
+        command: () => {
+          if (this.showCRA==false){
+            this.showCRA = true;
+          }else{
+            this.showCRA=false
+          };
+        }
+      },
+      {
+        label:"Calendrier",
+        command: () => {
+          if (this.showCalender==false){
+            this.showCalender = true;
+          }else{
+            this.showCalender=false
+          };
+        }
+      },
+      {
+        label:"Historique",
+        command: () => {
+          if (this.showHis==false){
+            this.showHis = true;
+          }else{
+            this.showHis=false
+          };
+        }
+      },
+      {
+        label:"Congé",
+        command: () => {
+          if (this.showCon==false){
+            this.showCon = true;
+          }else{
+            this.showCon=false
+          };
+        }
+      },
+      {
+        label:"Assiduité",
+        command: () => {
+          if (this.showAassiduite==false){
+            this.showAassiduite = true;
+          }else{
+            this.showAassiduite=false
+          };
+          }
+        
+      },
+    ];
   }
 
-  showHistorique(){
-    this.visible=true
+  showHistorique() {
+    this.visible = true
   }
-  showAssiduite(){
-    this.visibleA=true
+  showAssiduite() {
+    this.visibleA = true
   }
-  showConge(){
-    this.visibleC=true
+  showConge() {
+    this.visibleC = true
   }
   SCIENCE() {
     console.log("PAS TOUCHE")
@@ -1417,6 +1476,11 @@ export class DashboardComponent implements OnInit {
     console.log('test')
     this.displayPointeuse = true
     console.log(this.displayPointeuse)
+  }
+  onLeftMouseClick(event: MouseEvent, contextMenu: ContextMenu): void {
+    event.stopPropagation();
+    event.preventDefault();
+    contextMenu.show(event);
   }
 
 }

@@ -79,7 +79,11 @@
 
         <!-- Tabs avec les cra etc -->
         <div class="card">
-            <p-button>+</p-button>
+            <div style="text-align: right;">
+                <i #ico class="pi pi-pencil" (click)="onLeftMouseClick($event,contextMenu)"  tooltipPosition="bottom" style="color: rgb(34, 0, 255); font-size: 20px;" ></i>
+                <p-contextMenu #contextMenu [target]="ico" [model]="menuCalenders" [appendTo]="'body'"></p-contextMenu>
+            </div>
+
             <p-tabView [(activeIndex)]="selectedTabIndex">
                 <p-tabPanel header="Actualités">
                     <p-table [value]="actualites" dataKey="_id" [rows]="4" [rowHover]="true"
@@ -115,74 +119,54 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-tabPanel>
-            <!--    <p-tabPanel header="CRA">
+                </p-tabPanel>               
+                    <p-tabPanel header="CRA"  *ngIf="showCRA">
 
-                    <div class="card">
-                        <div class="grid">
-                            <div class="col-6 md:col-3">
-                                <button pButton pRipple (click)="onCheckIn()" label="Check in"
-                                    class="p-button-warning mb-2" [disabled]="dailyCheck != null"></button> <br>
+                        <div class="card">
+                            <div class="grid">
+                                <div class="col-6 md:col-3">
+                                    <button pButton pRipple (click)="onCheckIn()" label="Check in"
+                                        class="p-button-warning mb-2" [disabled]="dailyCheck != null"></button> <br>
 
 
-                                <h6><strong>Online :</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
-                                <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
+                                    <h6><strong>Online :</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
+                                    <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
 
-                            </div>
-                            <div class="col-6 md:col-3">
-                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
-                                        label="Pause" class="p-button-help mb-2"
+                                </div>
+                                <div class="col-6 md:col-3">
+                                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
+                                            label="Pause" class="p-button-help mb-2"
+                                            [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
+                                        <br></span>
+                                    <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
+                                            label="Fin de la pause" class="p-button-warning mb-2"
+                                            [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
+                                        <br></span>
+
+
+
+                                </div>
+                                <div class="col-6 md:col-3 ">
+                                    <button pButton pRipple label="Check out" (click)="onCheckOut()"
+                                        class="p-button-danger"
                                         [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                    <br></span>
-                                <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
-                                        label="Fin de la pause" class="p-button-warning mb-2"
-                                        [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                    <br></span>
+                                    
 
-
-
-                            </div>
-                            <div class="col-6 md:col-3 ">
-                                <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"
-                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                <!--<h5 style="text-align: center;">
-                                    Statut actuel <span pTooltip="Modifier le statut" (click)="showFormUpdateStatut = true"><i
-                                            class="pi pi-pencil" style="color: #4338CA"></i></span><br>
-                                    <!-- formulaire pour mettre à jour le statut de l'utilisateur -->
-                                <!--    <div *ngIf="showFormUpdateStatut">
-                                        <hr>
-                                        <form [formGroup]="formUpdateStatut" class="p-fluid p-formgrid"
-                                            (ngSubmit)="onUpdateStatus()">
-                                            <div class="field">
-                                                <label htmlFor="statut">Mettre à jour votre statut</label>
-                                                <p-dropdown [options]="statutList" placeholder="Sélectionnez votre nouveau statut"
-                                                    [showClear]="true" formControlName="statut"></p-dropdown>
-                                            </div>
-                                            <div class="field">
-                                                <button pButton type="submit" label="Valider" class="p-button-outlined"></button>
-                                            </div>
-                                        </form>
-                                        <hr>
-                                    </div>
-                                    <!-- end dialogue -->
-                                <!--      <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
-                                </h5>
-                            -->
-            <!--                </div>
-                            <div class="col-6 md:col-3" style="text-align: center">
-                                <h6>Temps <br> travail:
-                                    <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
-                                </h6>
-                                <h6>Temps <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
-                                <h6>Remplissage <br> CRA: <strong>{{craPercent}}%</strong></h6>
-                                <!--<img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
+                                </div>
+                                <div class="col-6 md:col-3" style="text-align: center">
+                                    <h6>Temps <br> travail:
+                                        <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
+                                    </h6>
+                                    <h6>Temps <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
+                                    <h6>Remplissage <br> CRA: <strong>{{craPercent}}%</strong></h6>
+                                    <!--<img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
                                 <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
                                 <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>-->
 
-                 <!--          </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <!--<div class=" card">
+                        <!--<div class=" card">
                         <div class="grid col-12">
                             <div class="col-4 text-center">
                                 <p-button styleClass="p-button-secondary"
@@ -190,7 +174,7 @@
                                 <p-dialog header="" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
                                     [draggable]="false" [resizable]="false">
                                     <!-- affichage du CRA d'un historique de pointage -->
-                     <!--               <i class="pi pi-times-circle"
+                        <!--               <i class="pi pi-times-circle"
                                         style="color: red; font-size: 20px; cursor: pointer; float: right;"
                                         *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
                                     <div style="clear: both;"></div>
@@ -227,7 +211,7 @@
                                     </p-table>
 
                                     <!-- affichage de l'historique de pointage -->
-                    <!--               <h5 class="mt-5">Historique de pointage et CRA</h5>
+                        <!--               <h5 class="mt-5">Historique de pointage et CRA</h5>
                                     <div class="m-2">
                                         <label htmlFor="">Choisissez un mois et une année</label> <br>
                                         <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -298,7 +282,7 @@
 
 
                                     <!-- formulaire de modification d'une demande de congé -->
-                     <!--               <div *ngIf="showUpdateCongeForm">
+                        <!--               <div *ngIf="showUpdateCongeForm">
                                         <i class="pi pi-times-circle"
                                             style="color: red; font-size: 20px; cursor: pointer; float: right;"
                                             (click)="showUpdateCongeForm = false; showOtherTextArea = false"></i>
@@ -350,7 +334,7 @@
                                     </div>
 
                                     <!-- formulaire de demande de congé -->
-                     <!--               <div *ngIf="showAddCongeForm">
+                        <!--               <div *ngIf="showAddCongeForm">
                                         <i class="pi pi-times-circle"
                                             style="color: red; font-size: 20px; cursor: pointer; float: right;"
                                             (click)="showAddCongeForm = false; showOtherTextArea = false;"></i>
@@ -556,103 +540,112 @@
                         </div>
                     </div> 
         </div>-->
-     <!--  <div *ngIf="showFormAddCra">
-            <div class="add-button-div mb-2">
-                <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
-                    style="color: red; font-size: 20px; float: right; cursor: pointer;"></i>
-            </div>
-            <div style="clear: both;"></div>
+                        <div *ngIf="showFormAddCra">
+                            <div class="add-button-div mb-2">
+                                <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
+                                    style="color: red; font-size: 20px; float: right; cursor: pointer;"></i>
+                            </div>
+                            <div style="clear: both;"></div>
 
-            <form class="p-fluid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
-                <div formArrayName="cras" *ngFor="let cra of getCras().controls; let i = index; let c = count">
-                    <div class="p-formgrid grid" [formGroupName]="i">
-                        <div class="field col-12 md:col-5">
-                            <input pInputText type="text" id="tache" formControlName="tache"
-                                placeholder="Veuillez décrire la tâche">
+                            <form class="p-fluid" [formGroup]="formAddCra" (ngSubmit)="onAddCra()">
+                                <div formArrayName="cras"
+                                    *ngFor="let cra of getCras().controls; let i = index; let c = count">
+                                    <div class="p-formgrid grid" [formGroupName]="i">
+                                        <div class="field col-12 md:col-5">
+                                            <input pInputText type="text" id="tache" formControlName="tache"
+                                                placeholder="Veuillez décrire la tâche">
+                                        </div>
+                                        <div class="field col-12 md:col-5">
+                                            <input pInputText type="number" id="duration" formControlName="duration"
+                                                placeholder="Durée en minute">
+                                        </div>
+                                        <div class="field col-12 md:col-2" *ngIf="c > 1">
+                                            <button pButton pRipple pTooltip="Supprimer la ligne" type="button"
+                                                icon="pi pi-trash" class="p-button-outlined p-button-danger mb-2"
+                                                (click)="onDeleteCraField()"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button pButton pRipple type="button" icon="pi pi-plus"
+                                    class="p-button-outlined p-button-success mb-2" (click)="onAddCraField()"></button>
+
+                                <div class="col-2">
+                                    <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2"
+                                        [disabled]="formAddCra.invalid"></button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="field col-12 md:col-5">
-                            <input pInputText type="number" id="duration" formControlName="duration"
-                                placeholder="Durée en minute">
-                        </div>
-                        <div class="field col-12 md:col-2" *ngIf="c > 1">
-                            <button pButton pRipple pTooltip="Supprimer la ligne" type="button" icon="pi pi-trash"
-                                class="p-button-outlined p-button-danger mb-2" (click)="onDeleteCraField()"></button>
-                        </div>
-                    </div>
-                </div>
-                <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-outlined p-button-success mb-2"
-                    (click)="onAddCraField()"></button>
 
-                <div class="col-2">
-                    <button pButton pRipple type="submit" label="Ajouter" class="p-button-primary mb-2"
-                        [disabled]="formAddCra.invalid"></button>
-                </div>
-            </form>
-        </div>
+                        <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2"
+                            style="float: right;" (click)="showFormAddCra = true;"
+                            *ngIf="dailyCheck != null && !showFormAddCra"></button>
+                        <div style="clear: both;"></div>
+                        <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true"
+                            styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Durée</th>
+                                    <th>Tâche</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                                <tr [pEditableRow]="cra">
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input pInputText type="number" [(ngModel)]="cra.number_minutes">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{cra.number_minutes}} mn
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input pInputText type="text" [(ngModel)]="cra.task">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{cra.task}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                            icon="pi pi-pencil" (click)="onRowEditInit(cra)"
+                                            class="p-button-rounded p-button-text"></button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                            icon="pi pi-check" (click)="onRowEditSave(cra)"
+                                            class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                            icon="pi pi-times" (click)="onRowEditCancel(cra, ri)"
+                                            class="p-button-rounded p-button-text p-button-danger"></button>
+                                        <button pButton pRipple type="button" icon="pi pi-trash"
+                                            class="p-button-rounded p-button-text p-button-danger"
+                                            (click)="onDeleteCra(cra._id)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="3">Aucun CRA pour le moment.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="3">Chargement des CRA, merci de patienter...</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-tabPanel>
 
-        <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;"
-            (click)="showFormAddCra = true;" *ngIf="dailyCheck != null && !showFormAddCra"></button>
-        <div style="clear: both;"></div>
-        <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true"
-            styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Durée</th>
-                    <th>Tâche</th>
-                    <th>Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
-                <tr [pEditableRow]="cra">
-                    <td>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="number" [(ngModel)]="cra.number_minutes">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{cra.number_minutes}} mn
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        <p-cellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="cra.task">
-                            </ng-template>
-                            <ng-template pTemplate="output">
-                                {{cra.task}}
-                            </ng-template>
-                        </p-cellEditor>
-                    </td>
-                    <td>
-                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                            (click)="onRowEditInit(cra)" class="p-button-rounded p-button-text"></button>
-                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                            (click)="onRowEditSave(cra)"
-                            class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                            (click)="onRowEditCancel(cra, ri)"
-                            class="p-button-rounded p-button-text p-button-danger"></button>
-                        <button pButton pRipple type="button" icon="pi pi-trash"
-                            class="p-button-rounded p-button-text p-button-danger"
-                            (click)="onDeleteCra(cra._id)"></button>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="3">Aucun CRA pour le moment.</td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="loadingbody">
-                <tr>
-                    <td colspan="3">Chargement des CRA, merci de patienter...</td>
-                </tr>
-            </ng-template>
-        </p-table>
-        </p-tabPanel>
 
-        <p-tabPanel header="Calendrier">
+
+
+
+                
+        <p-tabPanel header="Calendrier" *ngIf="showCalender">
             <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
             </p-fullCalendar>
             <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
@@ -674,9 +667,9 @@
 
 
 
-        <p-tabPanel header="Historique">
+        <p-tabPanel header="Historique" *ngIf="showHis">
             <!-- affichage du CRA d'un historique de pointage -->
-      <!--      <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+              <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                 *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
             <div style="clear: both;"></div>
 
@@ -710,7 +703,7 @@
             </p-table>
 
             <!-- affichage de l'historique de pointage -->
-        <!--    <h5 class="mt-5">Historique de pointage et CRA</h5>
+                <h5 class="mt-5">Historique de pointage et CRA</h5>
             <div class="m-2">
                 <label htmlFor="">Choisissez un mois et une année</label> <br>
                 <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -768,7 +761,7 @@
                 </ng-template>
             </p-table>
         </p-tabPanel>
-        <!--<p-tabPanel header="Mes demandes">
+                    <!--<p-tabPanel header="Mes demandes">
                     <button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2"
                         (click)="AddTicket()" style="float: right;"></button>
                     <div style="clear: both;"></div>
@@ -793,7 +786,7 @@
                                 (onChange)="dt1.filter($event.value, 'operation', 'equals');"
                                 emptyFilterMessage="Pas d'opération trouvé"
                                 filterPlaceholder="Choisissez une operation"></p-dropdown>-->
-        <!--</div>
+                <!--</div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
@@ -911,7 +904,7 @@
                     <tr>
                         <th> Nom </th>
                         <th>Lien </th> <!--TODO-->
-        <!--
+                <!--
                         <th> Action </th>
                     </tr>
                     </ng-template>
@@ -939,7 +932,7 @@
                     <tr>
                         <th> Nom </th>
                         <th>Lien </th> <!--TODO-->
-        <!--   <th> Action </th>
+                <!--   <th> Action </th>
                     </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-document let-idx="rowIndex">
@@ -997,9 +990,9 @@
                     </p-table>
                 </p-tabPanel>-->
 
-    <!--   <p-tabPanel header="Congé" id="departAnticipe">*
+           <p-tabPanel header="Congé" *ngIf="showCon" id="departAnticipe">*
             <!-- formulaire de modification d'une demande de congé -->
-     <!--       <div *ngIf="showUpdateCongeForm">
+                      <div *ngIf="showUpdateCongeForm">
                 <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                     (click)="showUpdateCongeForm = false; showOtherTextArea = false"></i>
                 <div style="float: right"></div>
@@ -1044,7 +1037,7 @@
             </div>
 
             <!-- formulaire de demande de congé -->
-    <!--        <div *ngIf="showAddCongeForm">
+                        <div *ngIf="showAddCongeForm">
                 <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                     (click)="showAddCongeForm = false; showOtherTextArea = false;"></i>
                 <div style="float: right"></div>
@@ -1193,7 +1186,7 @@
     </ng-template>
     </p-table>
     </p-tabPanel>
-    <p-tabPanel header="Assiduité">
+    <p-tabPanel header="Assiduité" *ngIf="showAassiduite">
         <div class="grid">
             <div class="col-6">
                 <div>
@@ -1257,10 +1250,10 @@
                 </div>
             </div>
         </p-tabPanel>-->
-    </p-tabView>
-</div>
+            </p-tabView>
+        </div>
 
-</div>
+    </div>
 
 </div>
 
