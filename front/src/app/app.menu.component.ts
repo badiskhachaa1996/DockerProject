@@ -23,6 +23,11 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 @Component({
     selector: 'app-menu',
     template: `
+        <div class="nav-burger">
+            <a class="p-link layout-menu-button layout-topbar-button" href="#" (click)="appMain.toggleMenu($event)">
+                <i class="pi pi-bars"></i>
+            </a>
+        </div>
         <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
         <!-- <div class="layout-menu-container">  
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">

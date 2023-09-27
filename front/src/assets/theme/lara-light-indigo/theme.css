@@ -2684,10 +2684,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   padding: 1.25rem;
 }
 
-.fc {
-  /* FullCalendar 4 */
-  /* FullCalendar 5 */
-}
+
 .fc.fc-unthemed .fc-view-container th {
   background: #f8f9fa;
   border: 1px solid #dee2e6;
@@ -4773,11 +4770,12 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 }
 .p-panelmenu .p-panelmenu-header > a {
   padding: 1.25rem;
-  border: 1px solid #dee2e6;
-  color: #6c757d;
-  background: #f8f9fa;
+  border: 1px solid #B7DFE7;
+  color: #1E526C;
+  background: #F1FDFF;
   font-weight: 700;
-  border-radius: 6px;
+  border-radius: 0 6px 6px 0;
+  padding-left: 2rem;
   transition: box-shadow 0.2s;
 }
 .p-panelmenu .p-panelmenu-header > a .p-panelmenu-icon {
@@ -4789,7 +4787,9 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 .p-panelmenu .p-panelmenu-header > a:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
+  border: 1px solid #F1FDFF;
+  color: #0A2E40;
+  box-shadow: 0 0 0 0.1rem #37BAD4;
 }
 .p-panelmenu .p-panelmenu-header:not(.p-highlight):not(.p-disabled) > a:hover {
   background: #e9ecef;
@@ -4800,9 +4800,8 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   margin-bottom: 0;
 }
 .p-panelmenu .p-panelmenu-header.p-highlight > a {
-  background: #f8f9fa;
-  border-color: #dee2e6;
-  color: #343a40;
+  border-color: #37BAD4;
+  color: #0A2E40;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -4827,6 +4826,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   padding: 0.75rem 1.25rem;
   color: #495057;
   border-radius: 0;
+  padding-left: 2rem;
   transition: box-shadow 0.2s;
   user-select: none;
 }
