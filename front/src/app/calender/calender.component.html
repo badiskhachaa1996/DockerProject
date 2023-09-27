@@ -79,9 +79,8 @@
 
         <!-- Tabs avec les cra etc -->
         <div class="card">
-            <p-button>+</p-button>
             <p-tabView [(activeIndex)]="selectedTabIndex">
-                <p-tabPanel header="Actualités">
+            <!--    <p-tabPanel header="Actualités">
                     <p-table [value]="actualites" dataKey="_id" [rows]="4" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
@@ -115,8 +114,8 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </p-tabPanel>
-            <!--    <p-tabPanel header="CRA">
+                </p-tabPanel> -->
+                <p-tabPanel header="CRA">
 
                     <div class="card">
                         <div class="grid">
@@ -168,7 +167,7 @@
                                 <!--      <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
                                 </h5>
                             -->
-            <!--                </div>
+                            </div>
                             <div class="col-6 md:col-3" style="text-align: center">
                                 <h6>Temps <br> travail:
                                     <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
@@ -179,7 +178,7 @@
                                 <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
                                 <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>-->
 
-                 <!--          </div>
+                            </div>
                         </div>
                     </div>
                     <!--<div class=" card">
@@ -556,7 +555,7 @@
                         </div>
                     </div> 
         </div>-->
-     <!--  <div *ngIf="showFormAddCra">
+        <div *ngIf="showFormAddCra">
             <div class="add-button-div mb-2">
                 <i class="pi pi-times-circle" pTooltip="Fermer" (click)="showFormAddCra = false;"
                     style="color: red; font-size: 20px; float: right; cursor: pointer;"></i>
@@ -676,7 +675,7 @@
 
         <p-tabPanel header="Historique">
             <!-- affichage du CRA d'un historique de pointage -->
-      <!--      <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                 *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
             <div style="clear: both;"></div>
 
@@ -710,7 +709,7 @@
             </p-table>
 
             <!-- affichage de l'historique de pointage -->
-        <!--    <h5 class="mt-5">Historique de pointage et CRA</h5>
+            <h5 class="mt-5">Historique de pointage et CRA</h5>
             <div class="m-2">
                 <label htmlFor="">Choisissez un mois et une année</label> <br>
                 <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -997,9 +996,9 @@
                     </p-table>
                 </p-tabPanel>-->
 
-    <!--   <p-tabPanel header="Congé" id="departAnticipe">*
+        <p-tabPanel header="Congé" id="departAnticipe">*
             <!-- formulaire de modification d'une demande de congé -->
-     <!--       <div *ngIf="showUpdateCongeForm">
+            <div *ngIf="showUpdateCongeForm">
                 <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                     (click)="showUpdateCongeForm = false; showOtherTextArea = false"></i>
                 <div style="float: right"></div>
@@ -1044,7 +1043,7 @@
             </div>
 
             <!-- formulaire de demande de congé -->
-    <!--        <div *ngIf="showAddCongeForm">
+            <div *ngIf="showAddCongeForm">
                 <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                     (click)="showAddCongeForm = false; showOtherTextArea = false;"></i>
                 <div style="float: right"></div>
