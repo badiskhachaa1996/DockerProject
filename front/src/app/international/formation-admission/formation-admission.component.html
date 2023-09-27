@@ -326,6 +326,150 @@
             </form>
         </div>
     </div>
+
+    <!--Formulaire configiration rentrée scolaire-->
+    <div class="col-12" *ngIf="showFormRentreeScolaire">
+        <i class="pi pi-times-circle m-1" style="float:right; color: red; cursor: pointer;"
+            (click)="showFormRentreeScolaire = false" aria-hidden="true"> </i>
+        <div class="card">
+            <h3 class="text-center" style="font-weight: bold;">Configuration: Rentrée scolaire</h3>
+            <div class="grid">
+                <p-table #dt2 dataKey="_id" [value]="formations" class="col-12" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="campus" style="text-align: center;"> Campus <p-sortIcon field="campus">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="annee_scolaire" style="text-align: center;"> Année scolaire <p-sortIcon
+                                    field="annee_scolaire">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_debut" style="text-align: center;"> Date de début <p-sortIcon
+                                    field="date_debut"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_fin" style="text-align: center;"> Date de fin<p-sortIcon
+                                    field="date_fin"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="date_fin" style="text-align: center;"> Nombres d'heures<p-sortIcon
+                                    field="date_fin"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="rythme" style="text-align: center;"> Rythmes<p-sortIcon
+                                    field="rythme"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="calendrier" style="text-align: center;"> Calendrier<p-sortIcon
+                                    field="calendrier"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="examens$" style="text-align: center;"> Examens<p-sortIcon
+                                    field="examens"></p-sortIcon>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Action
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-formation let-ri="rowIndex">
+                        <tr [pEditableRow]="formation">
+                            <td [pEditableColumn]="formation.nom" pEditableColumnField="nom">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.nom"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.nom }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.annee" pEditableColumnField="annee">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.annee"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.annee }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.date_debut" pEditableColumnField="date_debut">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.date_debut"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.date_debut | date : "dd/MM/yyyy" }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.date_fin" pEditableColumnField="date_fin">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.date_fin"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.date_fin | date : "dd/MM/yyyy" }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.nb_heures" pEditableColumnField="nb_heures">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.nb_heures"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.nb_heures }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td [pEditableColumn]="formation.rythme" pEditableColumnField="rythme">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.rythme"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.rythme }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                En cours de développement
+                            </td>
+                            <td [pEditableColumn]="formation.examens" pEditableColumnField="examens">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="date" [(ngModel)]="formation.examens"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{formation.examens | date : "MM/yyyy"}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td>
+                                <i pTooltip="Supprimer la rentrée scolaire" tooltipPosition="bottom"
+                                    class="pi pi-trash m-1" aria-hidden="true" style="color: red;"
+                                    (click)="onDeleteRentreeScolaire(id)">
+                                </i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div class="col-6">
+                    <button type="button" (click)="onAddRentreeScolaire()" pButton
+                        label="Ajouter une rentrée scolaire"></button>
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="onCreateRA()" pButton label="Sauvegarder"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Listing des équipes -->
     <div class="col-12">
         <div class="card">
@@ -341,7 +485,7 @@
                 <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="
                             dt1.filterGlobal($event.target.value, 'contains')
-                        " placeholder="Rechercher par certificateur" style="width: 250px;" />
+                        " placeholder="Rechercher par formation, code ou certificateur" style="width: 350px;" />
                     <p-dropdown filter="true" [options]="bacFilter"
                         (onChange)="dt1.filter($event.value, 'bac','contains')" emptyFilterMessage="Pas de bac trouvé"
                         filterPlaceholder="Bac" [style]="{'margin':'5px'}"></p-dropdown>
@@ -432,17 +576,10 @@
                             {{ formation.certificateur }}
                         </td>
                         <td *ngIf="seeAction">
-                            <!--<i
-                                style="padding-left: 3%; color: rgb(0, 255, 0)"
-                                class="pi pi-eye m-1"
-                                (click)="showDescription(formation)"
-                                pTooltip="Voir la description"
-                                aria-hidden="true"
-                                tooltipPosition="bottom"
-                            ></i>-->
-                            <i style="
-                                    padding-left: 3%;
-                                    color: rgb(72, 72, 255);
+                            <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
+                                pTooltip="Rentrée scolaire" (click)="showFormRentreeScolaire = true" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(72, 72, 255);
                                 " class="pi pi-pencil m-1" (click)="initUpdate(formation); scrollToTop()"
                                 pTooltip="Modifier la formation" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"

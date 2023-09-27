@@ -21,6 +21,7 @@ export class FormationAdmissionComponent implements OnInit {
   selectedFormation: FormationAdmission
   dropdownCampus: any[] = []
   rentreeScolaire = []
+  showFormRentreeScolaire: boolean = false
 
   bacList =
     [
@@ -144,6 +145,46 @@ export class FormationAdmissionComponent implements OnInit {
     })
   }
 
+  onBlur(formation: FormationAdmission) {
+    this.FAService.FAupdate({ ...formation }).subscribe(data => {
+    })
+  }
+
+  onDeleteRentreeScolaire(id: string): void {
+    this.FAService.RAdelete(id)
+      .then((response) => {
+        this.FAService.RAgetAll().subscribe(data => {
+          this.rentreeScolaire = data
+        })
+      })
+  }
+
+  onAddRentreeScolaire() {
+    if (this.formations == null) {
+      this.formations = []
+    }
+    this.formations.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
+
+  }
+
+  onCreateRA() {
+    this.FAService.RAcreate({ ...this.createFormRA.value }).subscribe(data => {
+      console.log(data)
+    })
+  }
+
+  createFormRA: FormGroup = new FormGroup({
+    campus: new FormControl(''),
+    annee_scolaire: new FormControl(''),
+    date_debut: new FormControl(''),
+    date_fin: new FormControl(''),
+    nb_heures: new FormControl(''),
+    rythme: new FormControl(''),
+    calendrier: new FormControl(''),
+    examens: new FormControl(''),
+    note: new FormControl(''),
+  })
+
   createForm: FormGroup = new FormGroup({
     nom: new FormControl('', Validators.required),
     niveau: new FormControl(''),
@@ -162,15 +203,6 @@ export class FormationAdmissionComponent implements OnInit {
     code_france_competence: new FormControl(''),
     validite: new FormControl(''),
     organisme_referent: new FormControl(''),
-    campus: new FormControl(''),
-    annee_scolaire: new FormControl(''),
-    date_debut: new FormControl(''),
-    date_fin: new FormControl(''),
-    nb_heures: new FormControl(''),
-    rythme: new FormControl(''),
-    calendrier: new FormControl(''),
-    examens: new FormControl(''),
-    note: new FormControl(''),
   })
 
   addForm = false
