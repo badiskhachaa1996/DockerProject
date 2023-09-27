@@ -45,6 +45,27 @@ export class CalendrierEtudiantComponent implements OnInit {
         this.addEvent(mt.libelle, new Date(mt.from), new Date(mt.to), { ...mt }, mt.type)
       })
     })
+    let date_start = new Date()
+    date_start.setMonth(date_start.getMonth() - 1)
+    date_start.setDate(1)
+    date_start.setHours(8)
+    date_start.setMinutes(0)
+    date_start.setSeconds(0)
+    let date_end = new Date()
+    date_end.setMonth(date_end.getMonth() + 1)
+    date_end.setDate(31)
+    date_end.setHours(8)
+    date_end.setMinutes(0)
+    date_end.setSeconds(0)
+    while (date_start < date_end) {
+      if (date_start.getHours() > 20) {
+        date_start.setHours(8)
+        date_start.setDate(date_start.getDate() + 1)
+      }
+      if (!this.eventsExist(new Date(date_start), new Date(date_start.getTime() + 3600000)))
+        this.addEvent("Disponible", new Date(date_start), new Date(date_start.getTime() + 3600000), { type: "Disponible" }, "Disponible")
+      date_start.setHours(date_start.getHours() + 1)
+    }
     //Détecter tous les events dans la journée et si y'a aucun alors rajouter un event Disponible
   }
 
@@ -55,11 +76,19 @@ export class CalendrierEtudiantComponent implements OnInit {
     header: {
       left: 'prev,next',
       center: 'title',
-      right: 'today,dayGridMonth,timeGridWeek,timeGridDay'
+      right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
     locale: 'fr',
     events: [],
     minTime: '08:00:00',
+    maxTime: '20:00:00',
+    views: {
+      timeGridFourDay: {
+        type: 'timeGrid',
+        duration: { days: 5 },
+        buttonText: 'Semaine de travail'
+      }
+    },
     firstDay: 1,
     eventClick: this.eventClickFCRH.bind(this),
     dateClick: this.dateClickFC.bind(this),
@@ -73,6 +102,10 @@ export class CalendrierEtudiantComponent implements OnInit {
     to: new FormControl(new Date(), Validators.required),
   })
   eventClickFCRH(event) {
+    this.displayModal = true
+    let start = new Date(event.event.start)
+    let end = new Date(event.event.end)
+    this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
   }
   dateClickFC(event: { dateStr: string, allDay: Boolean }) {
     this.displayModal = true
@@ -84,7 +117,6 @@ export class CalendrierEtudiantComponent implements OnInit {
     } else {
       end.setHours(start.getHours() + 1)
     }
-    console.log(start, end)
     this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
   }
 
@@ -122,5 +154,13 @@ export class CalendrierEtudiantComponent implements OnInit {
       this.displayModal = false
       this.form.reset()
     })
+  }
+  eventsExist(date_start, date_end) {
+    let r = false
+    this.events.forEach(e => {
+      if (new Date(date_start) <= new Date(e.start) && new Date(e.end) <= new Date(date_end))
+        r = true
+    })
+    return r
   }
 }
