@@ -295,4 +295,7 @@ export class IMatchComponent implements OnInit {
     this.router.navigate(['rendez-vous/', cv.user_id._id])
   }
 
+  navigate(next_route) {
+    this.router.navigate(['imatch/', next_route])
+  }
 }

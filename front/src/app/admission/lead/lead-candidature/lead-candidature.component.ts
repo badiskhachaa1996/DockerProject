@@ -277,7 +277,7 @@ export class LeadCandidatureComponent implements OnInit {
               <div class="page-container">
               <div class="container">
                   <div class="header">
-                      <div class="logo"><img src="assets/images/logo_candidature.png"></div>
+                      <div class="logo"><img src="assets/images/logo_ieg.png"></div>
                       <div class="title">
                           <h1>DOSSIER DE CANDIDATURE</h1>
                           <h2>Année Universitaire : <span id="annee-universitaire">2023 / 2024</span></h2>

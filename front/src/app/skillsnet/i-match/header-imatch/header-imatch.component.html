@@ -4,8 +4,8 @@
         <hr class="imatch-main">
     </div>
         <div class="header-top-container ">
-            <a class="btn-cv btn-cv-2" target="_blank" href="#">Déposer mon CV</a>
-            <a class="btn-cv  btn-cv-1 margin-both" target="_blank" href="#">Comment ça marche ?</a>
-            <a class="btn-cv   btn-cv-3" target="_blank" href="#">Déposer mon Offre</a>
+            <a class="btn-cv  btn-cv-1" target="_blank" href="#">Comment ça marche ?</a>
+            <a *ngIf="portail === 'etudiant'" class="btn-cv btn-cv-2" target="_blank" href="#">Déposer mon CV</a>
+            <a *ngIf="portail === 'entreprise'" class="btn-cv   btn-cv-3" target="_blank" href="#">Déposer mon Offre</a>
         </div>
 </div>
