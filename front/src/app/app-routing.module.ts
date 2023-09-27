@@ -303,7 +303,7 @@ const routes: Routes = [
             {
                 path: 'notes',
                 component: BulletinComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'notesDev',
@@ -338,27 +338,27 @@ const routes: Routes = [
             {
                 path: 'annee-scolaire',
                 component: ListAnneeScolaireComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-annee-scolaire',
                 component: AddAnneeScolaireComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ecole',
                 component: ListEcoleComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ecole/:id',
                 component: ListEcoleComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-ecole',
                 component: AddEcoleComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'campus',
@@ -368,47 +368,47 @@ const routes: Routes = [
             {
                 path: 'campus/:id',
                 component: ListCampusComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-campus',
                 component: AddCampusComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService,],
             },
             {
                 path: 'diplomes',
                 component: ListDiplomeComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'diplomes/:id',
                 component: ListDiplomeComponent,
-                canActivate: [AuthGuardService, AdministrationGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-diplome',
                 component: AddDiplomeComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'groupes',
                 component: ListGroupeComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-groupe',
                 component: AddGroupeComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'admin/agents',
                 component: ListAgentComponent,
-                canActivate: [AuthGuardService, AdminGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'admin/ajout-agent',
                 component: AddAgentComponent,
-                canActivate: [AuthGuardService, AdminGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'gestion-tickets',
@@ -423,37 +423,37 @@ const routes: Routes = [
             {
                 path: 'admin/gestion-services',
                 component: GestionServicesComponent,
-                canActivate: [AuthGuardService, AdminGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'matieres',
                 component: MatieresComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'matieres/:id',
                 component: MatieresComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-formateur',
                 component: AddFormateurComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'formateurs',
                 component: ListFormateursComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'progression-pedagogique/:formateur_id',
                 component: ProgressionPedagogiqueComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-etudiant',
                 component: AddEtudiantComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'etudiants',
@@ -463,12 +463,12 @@ const routes: Routes = [
             {
                 path: 'gestion-etudiants',
                 component: GestionEtudiantsComponent,
-                canActivate: [AuthGuardService, AdminGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'etudiants/:code',
                 component: ListEtudiantComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'ajout-entreprise',
@@ -478,12 +478,12 @@ const routes: Routes = [
             {
                 path: 'assignation-inscrit',
                 component: ProspectsComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'validation-inscrit',
                 component: ReinscritComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'entreprises',
@@ -493,22 +493,22 @@ const routes: Routes = [
             {
                 path: 'gestion-preinscriptions',
                 component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService, AdmissionGuardService],
+                canActivate: [AuthGuardService],
             }, //Admission
             {
                 path: 'ajout-lead',
                 component: AddProspectComponent,
-                canActivate: [AuthGuardService, AdmissionGuardService],
+                canActivate: [AuthGuardService],
             }, //Admission
             {
                 path: 'gestion-preinscriptions-filtered/:statut',
                 component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService, AdmissionGuardService],
+                canActivate: [AuthGuardService],
             }, //Admissio
             {
                 path: 'gestion-preinscriptions-filter/:statut',
                 component: GestionPreinscriptionsComponent,
-                canActivate: [AuthGuardService, AdmissionGuardService],
+                canActivate: [AuthGuardService],
             }, //Admissio
             {
                 path: 'gestion-preinscriptions/:code',
@@ -518,12 +518,12 @@ const routes: Routes = [
             {
                 path: 'ajout-seance',
                 component: AddSeanceComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'seances',
                 component: ListSeancesComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
             {
@@ -574,7 +574,7 @@ const routes: Routes = [
             {
                 path: 'devoirs',
                 component: DevoirsComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'rendu-devoirs',
@@ -684,11 +684,11 @@ const routes: Routes = [
             },
             {
                 path: 'gestion-reservations',
-                canActivate: [AuthGuardService, AdminGuardService],
+                canActivate: [AuthGuardService],
                 component: GestionLogementComponent,
             },
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
-            { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
+            { path: 'gestion-reservations', canActivate: [AuthGuardService], component: GestionLogementComponent },
 
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
@@ -697,7 +697,7 @@ const routes: Routes = [
             { path: 'cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
-            { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
+            { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
@@ -746,7 +746,7 @@ const routes: Routes = [
             {
                 path: 'equipe-commercial',
                 component: GestionEquipeComponent,
-                canActivate: [AuthGuardService, ResponsableCommercialGuard],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'detail-equipe-commercial/:equipe_id',
@@ -883,7 +883,7 @@ const routes: Routes = [
             {
                 path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id',
                 component: BulletinComponent,
-                canActivate: [AuthGuardService, PedagogieGuardService],
+                canActivate: [AuthGuardService],
             },
             {
                 path: 'formulaire-formateur',
