@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-
+import { CvService } from 'src/app/services/skillsnet/cv.service';
+import { saveAs as importedSaveAs } from "file-saver";
 @Component({
   selector: 'app-externe-skillsnet',
   templateUrl: './externe-skillsnet.component.html',
@@ -72,7 +73,8 @@ export class ExterneSkillsnetComponent implements OnInit {
   showUpdate = false
   token;
 
-  constructor(public ExSnService: ExterneSNService, private router: Router, private messageService: MessageService, private AuthService: AuthService) { }
+  constructor(public ExSnService: ExterneSNService, private router: Router, private messageService: MessageService,
+    private AuthService: AuthService, private CvService: CvService) { }
 
   ngOnInit(): void {
     try {
@@ -150,6 +152,13 @@ export class ExterneSkillsnetComponent implements OnInit {
 
   seeMatching(id: string) {
     this.router.navigate(['matching-externe', id])
+  }
+
+  downloadCV(user_id) {
+    this.CvService.downloadCV(user_id).then((data: any) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), 'cv.pdf')
+    })
   }
 
 }
