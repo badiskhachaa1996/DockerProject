@@ -115,83 +115,63 @@
     </div>
 
     <div class="col-12">
-        <div class="card">
-            <div style="float: right; padding-top: 3%">
-                <i pTooltip="Modifier vos informations" tooltipPosition="bottom" class="pi pi-cog"
-                    (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre photo de profil" tooltipPosition="bottom" class="pi pi-fw pi-image"
-                    (click)="clickFile()" style="font-size: 15px" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
-                    (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
-                    aria-hidden="true"></i>
-            </div>
+        <div class="card col-12">
             <h2>Profil</h2>
-            <div style="text-align: center">
-                <figure>
-                    <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px" />
-                    <figcaption>
-                        {{ userco.civilite == "Monsieur" ? "M." : "Mme" }}
-                        {{ userco.firstname }}
-                        <strong>{{ userco.lastname }}</strong>
-                        <br />
-                        <span *ngIf="userco.role !== 'user'">
-                            <strong style="color: red">{{
-                                userco.role
-                                }}</strong> </span><br />
-                        <span>{{ userco.mention }}</span>
-                    </figcaption>
-                </figure>
-            </div>
+            <div style="display: flex;">
+                <div class="card col-6">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="col-12 md:col-12">
+                            <strong>Adresse email personelle:</strong>
+                            {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
+                        </div>
+                        <div class="col-12 md:col-12">
+                            <strong>Adresse email entreprise:</strong>
+                            {{ userco?.email ? userco.email : userco?.email }}
+                        </div>
 
-            <!-- Info user -->
-            <div class="card">
-                <div class="p-fluid p-formgrid grid">
-                    <div class="col-12 md:col-6">
-                        <strong>Adresse email:</strong>
-                        {{ userco?.email ? userco.email : userco?.email_perso }}
-                    </div>
+                        <div class="col-12 md:col-12" *ngIf="userco.phone">
+                            <strong>Téléphone:</strong> {{ userco?.indicatif }}
+                            {{ userco?.phone }}
+                        </div>
 
-                    <div class="col-12 md:col-6" *ngIf="userco.phone">
-                        <strong>Téléphone:</strong> {{ userco?.indicatif }}
-                        {{ userco?.phone }}
-                    </div>
+                        <div class="col-12 md:col-12" *ngIf="userco.rue_adresse">
+                            <strong>Adresse:</strong> {{ userco.numero_adresse }}
+                            {{ userco.rue_adresse }} {{ userco.postal_adresse }},
+                            {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
+                        </div>
 
-                    <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">
-                        <strong>Adresse:</strong> {{ userco.numero_adresse }}
-                        {{ userco.rue_adresse }} {{ userco.postal_adresse }},
-                        {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
-                    </div>
+                        <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
+                            <strong>Date de naissance:</strong>
+                            {{ InfoUser.date_naissance | date : "mediumDate" }}
+                        </div>
 
-                    <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
-                        <strong>Date de naissance:</strong>
-                        {{ InfoUser.date_naissance | date : "mediumDate" }}
-                    </div>
+                        <div class="col-12 md:col-6" *ngIf="dataCollab && dataCollab.date_naissance">
+                            <strong>Date de naissance: </strong>
+                            <a *ngIf="!updateDNC" (click)="updateDNC= true">{{ dataCollab.date_naissance | date :
+                                "mediumDate" }}</a>
+                            <p-calendar *ngIf="updateDNC" dateFormat="d/mm/yy" [(ngModel)]="dataCollab.date_naissance"
+                                (onSelect)="onUpdateDNC()"></p-calendar>
+                        </div>
 
-                    <div class="col-12 md:col-6" *ngIf="dataCollab && dataCollab.date_naissance">
-                        <strong>Date de naissance: </strong>
-                        <a *ngIf="!updateDNC" (click)="updateDNC= true">{{ dataCollab.date_naissance | date : "mediumDate" }}</a>
-                        <p-calendar *ngIf="updateDNC" dateFormat="d/mm/yy" [(ngModel)]="dataCollab.date_naissance" (onSelect)="onUpdateDNC()"></p-calendar>
-                    </div>
+                        <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.nationalite">
+                            <strong>Nationnalité:</strong>
+                            {{ InfoUser.nationalite }}
+                        </div>
 
-                    <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.nationalite">
-                        <strong>Nationnalité:</strong>
-                        {{ InfoUser.nationalite }}
-                    </div>
+                        <div class="col-12 md:col-4" *ngIf="userco.type && userco.type != 'user'">
+                            <strong>Statut:</strong> {{ userco.type }}
+                        </div>
 
-                    <div class="col-12 md:col-4" *ngIf="userco.type && userco.type != 'user'">
-                        <strong>Statut:</strong> {{ userco.type }}
-                    </div>
-
-                    <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-12 md:col-4" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id]
                         ">
-                        <strong>Groupe:</strong>
-                        {{ formationDic[InfoUser.classe_id].abbrv }}
-                    </div>
+                            <strong>Groupe:</strong>
+                            {{ formationDic[InfoUser.classe_id].abbrv }}
+                        </div>
 
-                    <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-12 md:col-4" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id] &&
@@ -199,15 +179,15 @@
                                 formationDic[InfoUser.classe_id].diplome_id
                             ]
                         ">
-                        <strong>Diplome:</strong>
-                        {{
-                        diplomeDic[
-                        formationDic[InfoUser.classe_id].diplome_id
-                        ].titre
-                        }}
-                    </div>
+                            <strong>Diplome:</strong>
+                            {{
+                            diplomeDic[
+                            formationDic[InfoUser.classe_id].diplome_id
+                            ].titre
+                            }}
+                        </div>
 
-                    <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-12 md:col-4" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id] &&
@@ -220,71 +200,98 @@
                                 ].campus_id
                             ]
                         ">
-                        <strong>Campus:</strong>
-                        {{
-                        campusDic[
-                        diplomeDic[
-                        formationDic[InfoUser.classe_id].diplome_id
-                        ].campus_id
-                        ].libelle
-                        }}
-                    </div>
+                            <strong>Campus:</strong>
+                            {{
+                            campusDic[
+                            diplomeDic[
+                            formationDic[InfoUser.classe_id].diplome_id
+                            ].campus_id
+                            ].libelle
+                            }}
+                        </div>
 
-                    <div class="col-12 md:col-4" *ngIf="InfoUser && userco.entreprise">
-                        <strong>Entreprise:</strong>
-                        {{ entrepriseDic[userco.entreprise]?.r_sociale }}
-                    </div>
+                        <div class="col-12 md:col-4" *ngIf="InfoUser && userco.entreprise">
+                            <strong>Entreprise:</strong>
+                            {{ entrepriseDic[userco.entreprise]?.r_sociale }}
+                        </div>
 
-                    <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-12 md:col-4" *ngIf="
                             infoCommercial &&
                             infoCommercial.code_commercial_partenaire
                         ">
-                        <strong>ID Commercial:</strong>
-                        {{ infoCommercial.code_commercial_partenaire }}
-                    </div>
+                            <strong>ID Commercial:</strong>
+                            {{ infoCommercial.code_commercial_partenaire }}
+                        </div>
 
-                    <div class="col-12" *ngIf="
+                        <div class="col-12" *ngIf="
                             demandeConseiller &&
                             demandeConseiller.conseiller_id &&
                             demandeConseiller.activated
                         ">
-                        <strong>Conseiller:</strong>
-                        {{
-                        demandeConseiller.conseiller_id.firstname
-                        | titlecase
-                        }}
-                        {{
-                        demandeConseiller.conseiller_id.lastname | uppercase
-                        }}
-                    </div>
-                    <div class="col-12" *ngIf="
+                            <strong>Conseiller:</strong>
+                            {{
+                            demandeConseiller.conseiller_id.firstname
+                            | titlecase
+                            }}
+                            {{
+                            demandeConseiller.conseiller_id.lastname | uppercase
+                            }}
+                        </div>
+                        <div class="col-12" *ngIf="
                             demandeConseiller && !demandeConseiller.activated
                         ">
-                        <strong>Conseiller:</strong> Votre demande est en
-                        attente de validation
+                            <strong>Conseiller:</strong> Votre demande est en
+                            attente de validation
+                        </div>
                     </div>
-                </div>
-                <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
-                    <div class="col-12"></div>
+                    <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
+                        <div class="col-12"></div>
 
-                    <div *ngIf="PreinscriptionData.formation" class="col-12 md:col-6">
-                        <strong>Formation:</strong>
-                        {{ PreinscriptionData.formation }}
-                    </div>
-                    <div *ngIf="PreinscriptionData.campus_choix_1" class="col-12 md:col-6">
-                        <strong>Choix Campus:</strong>
-                        {{ PreinscriptionData.campus_choix_1 }}
-                    </div>
-                    <div *ngIf="
+                        <div *ngIf="PreinscriptionData.formation" class="col-12 md:col-6">
+                            <strong>Formation:</strong>
+                            {{ PreinscriptionData.formation }}
+                        </div>
+                        <div *ngIf="PreinscriptionData.campus_choix_1" class="col-12 md:col-6">
+                            <strong>Choix Campus:</strong>
+                            {{ PreinscriptionData.campus_choix_1 }}
+                        </div>
+                        <div *ngIf="
                             PreinscriptionData.etat_traitement &&
                             PreinscriptionData.etat_traitement
                         " class="col-12 md:col-6">
-                        <strong>Traitement du dossier:</strong>
-                        {{ PreinscriptionData?.etat_traitement }}, Le
-                        {{ PreinscriptionData?.date_traitement | date }}
+                            <strong>Traitement du dossier:</strong>
+                            {{ PreinscriptionData?.etat_traitement }}, Le
+                            {{ PreinscriptionData?.date_traitement | date }}
+                        </div>
                     </div>
                 </div>
+
+                <div style="text-align: center" class=" card col-6">
+                    <figure>
+                        <img  [src]="imageToShow" (click)="clickFile()" alt="Profil" width="150" height="150" style="border-radius: 50px" />
+                        <figcaption>
+                            {{ userco?.service_id?.label }}
+                            <br />
+                            <span *ngIf="userco.role !== 'user'">
+                                <strong style="color: red">{{
+                                    userco.role
+                                    }}</strong> </span><br />
+                            <span>{{ userco.mention }}</span>
+                        </figcaption>
+                    </figure>
+                </div>
+                
             </div>
+            <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
+                <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
+                    (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Modifier</p-button>
+                
+                <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
+                    (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
+                    aria-hidden="true"></i>
+            </div>
+            <!-- Info user -->
+
 
             <!--<div class="card" *ngIf="
                     (demandeConseiller == null ||
