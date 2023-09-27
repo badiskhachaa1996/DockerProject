@@ -280,6 +280,7 @@ import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
 import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
+import { CalenderComponent } from './calender/calender.component';
 const routes: Routes = [
     {
         path: '',
@@ -672,7 +673,8 @@ const routes: Routes = [
             { path: 'dashboard-project-v2', component: DashboardProjectV2Component },
             /** end */
 
-
+            /**Calender */
+            { path: 'calendar', component:CalenderComponent},
             /**informations */
             { path: 'informations', component: InformationsComponent },
             /**links */
