@@ -622,7 +622,7 @@
     <!-- Listing des équipes -->
     <div class="col-12">
         <div class="card">
-            <div style="float: right">
+            <div style="float: right" *ngIf="seeAction">
                 <button
                     style="margin-left: 2px"
                     pButton
@@ -631,7 +631,7 @@
                     (click)="initCreate()"
                 ></button>
             </div>
-            <h5>Liste des formations</h5>
+            <h5 *ngIf="seeAction">Liste des formations</h5>
             <p-toast></p-toast>
             <p-table
                 #dt1
@@ -704,7 +704,7 @@
                         <th pSortableColumn="filiere">
                             Filière<p-sortIcon field="filiere"> </p-sortIcon>
                         </th>-->
-                        <th>Action</th>
+                        <th *ngIf="seeAction">Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-formation>
@@ -744,7 +744,7 @@
                         <td>
                             {{ formation.certificateur }}
                         </td>
-                        <td>
+                        <td *ngIf="seeAction">
                             <!--<i
                                 style="padding-left: 3%; color: rgb(0, 255, 0)"
                                 class="pi pi-eye m-1"

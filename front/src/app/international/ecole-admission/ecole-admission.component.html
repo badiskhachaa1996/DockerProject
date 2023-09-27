@@ -147,11 +147,11 @@
     <!-- Listing des équipes -->
     <div class="col-12">
         <div class="card">
-            <div style="float: right">
+            <div style="float: right" *ngIf="seeAction">
                 <button style="margin-left: 2px" pButton icon="pi pi-plus-circle" label="Crée une école"
                     (click)="initCreate()"></button>
             </div>
-            <h5>Liste des écoles</h5>
+            <h5 *ngIf="seeAction">Liste des écoles</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="ecoles" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['titre', 'email', 'adresse', 'site_web']" [rows]="5" [pageLinks]="5"
@@ -168,7 +168,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th *ngIf="!seeAction">
+                        <th style="width: 5rem" *ngIf="!seeAction">
 
                         </th>
                         <th pSortableColumn="titre">
@@ -193,9 +193,11 @@
                 <ng-template pTemplate="body" let-ecole>
                     <tr>
                         <td *ngIf="!seeAction" style="text-align: center;">
-                            <i style="cursor: pointer; color: rgb(2, 0, 117)" class="pi pi-eye"
-                                (click)="showDetails(ecole);" pTooltip="Voir plus d'informations" aria-hidden="true"
-                                tooltipPosition="bottom"></i>
+                            <button type="button" pButton pRipple [pRowToggler]="ecole"
+                                pTooltip="Voir plus d'informations"
+                                class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+                            "></button>
                         </td>
                         <td>
                             {{ ecole.titre }}
@@ -224,26 +226,35 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="rowexpansion" let-ecole>
+                    <tr>
+                        <td colspan="6">
+                            <div>
+                                <h5 style="
+                                color: rgb(48, 121, 230);
+                                font-weight: bold;
+                            ">Adresse</h5>
+                                <p [innerHTML]="convertAdresse(ecole.adresse)"></p>
+
+                                <h5 *ngIf="ecole.formations.length!=0" style="
+                                color: rgb(48, 121, 230);
+                                font-weight: bold;
+                            ">Listes
+                                    des formations</h5>
+                                <ul>
+                                    <li *ngFor="let f of ecole.formations">{{f?.nom}}</li>
+                                </ul>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
             </p-table>
         </div>
     </div>
 </div>
 
 <p-sidebar [(visible)]="showSideBar" styleClass="w-30rem" position="right" (onHide)="selectedEcoleDetails=null">
-    <div *ngIf="selectedEcoleDetails">
-        <h5 style="font-weight: bold;">Addresse</h5>
-        <ul>
-            <li *ngFor="let f of selectedEcoleDetails.adresse">{{f}}</li>
-        </ul>
 
-        <h5 style="font-weight: bold;">Params URL</h5>
-        <p>{{ selectedEcoleDetails?.url_form }}</p>
-
-        <h5 *ngIf="selectedEcoleDetails.formations.length!=0" style="font-weight: bold;">Listes des formations</h5>
-        <ul>
-            <li *ngFor="let f of selectedEcoleDetails.formations">{{f?.nom}}</li>
-        </ul>
-
-    </div>
 
 </p-sidebar>

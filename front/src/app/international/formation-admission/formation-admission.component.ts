@@ -8,6 +8,7 @@ import { FormulaireAdmissionService } from 'src/app/services/formulaire-admissio
 import { Campus } from 'src/app/models/Campus';
 import { CampusService } from 'src/app/services/campus.service';
 import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-formation-admission',
@@ -15,20 +16,19 @@ import { RentreeAdmission } from 'src/app/models/RentreeAdmission';
   styleUrls: ['./formation-admission.component.scss']
 })
 export class FormationAdmissionComponent implements OnInit {
-
+  seeAction = true
   formations: FormationAdmission[] = []
   selectedFormation: FormationAdmission
   dropdownCampus: any[] = []
   rentreeScolaire = []
-
-
-  constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService, private MessageService: MessageService, private CampusService: CampusService) { }
+  constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
+    private MessageService: MessageService, private CampusService: CampusService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.FAService.FAgetAll().subscribe(data => {
       this.formations = data
     })
-    
+
     // permet de récupérer la liste des campus
     this.CampusService.getAll().subscribe(campus => {
       console.log(campus)
@@ -43,7 +43,9 @@ export class FormationAdmissionComponent implements OnInit {
         this.rentreeScolaire.push({ label: rentree.nom, value: rentree._id })
       })
     })
-
+    this.route.url.subscribe(r => {
+      this.seeAction = !(r[0].path == "informations")
+    })
   }
 
   updateForm: FormGroup = new FormGroup({
@@ -74,7 +76,7 @@ export class FormationAdmissionComponent implements OnInit {
     calendrier: new FormControl(''),
     examens: new FormControl(''),
     note: new FormControl(''),
-    })
+  })
 
   filiereList = [
     { value: "Informatique", label: "Informatique" },

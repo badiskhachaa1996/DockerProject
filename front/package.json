@@ -3,8 +3,9 @@
     "version": "13.1.1",
     "scripts": {
         "ng": "ng",
-        "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve",
-        "build": "ng build",
+        "start": "node --max_old_space_size=10000 ./node_modules/@angular/cli/bin/ng serve",
+        "build": "ng build --max_old_space_size=8384",
+        "commentignore": "--max_old_space_size=8384",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },

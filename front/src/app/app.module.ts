@@ -382,6 +382,7 @@ import { AjouterUnTicketProjetComponent } from './ticketing/ajouter-un-ticket-pr
 import { InformationsComponent } from './informations/informations.component';
 import { LinksComponent } from './links/links.component';
 import { VoirCvComponent } from './skillsnet/voir-cv/voir-cv.component';
+import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/calendrier-etudiant.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
@@ -781,6 +782,7 @@ import { CalenderComponent } from './calender/calender.component';
     InformationsComponent,
     LinksComponent,
     VoirCvComponent,
+    CalendrierEtudiantComponent,
     ImatchEntrepriseComponent,
     ImatchCandidatComponent,
     CandidatListComponent,
