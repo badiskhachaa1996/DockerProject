@@ -1,6 +1,3 @@
-<div class="container" style="text-align: center;">
-    <img class="steps-imatch" src="../../../assets/images/imatch/steps-offre.svg">
-</div>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -115,7 +112,7 @@
     <div class="container">
         <div class="modal-content">
             <span class="close" (click)="showPostuler = false">&times;</span>
-            <h2>Postuler pour le poste :</h2>
+            <h2>Postuler pour :</h2>
             <h3>{{annonceSelected?.missionName || "Nom du poste"}}</h3>
             <form class="form-container" [formGroup]="form" (submit)="onSubmit()">
                 <div class="row">
