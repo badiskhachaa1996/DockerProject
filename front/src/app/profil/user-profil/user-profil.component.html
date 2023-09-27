@@ -145,22 +145,22 @@
                             {{ InfoUser.date_naissance | date : "mediumDate" }}
                         </div>
 
-                        <div class="col-12 md:col-6" *ngIf="dataCollab && dataCollab.date_naissance">
+                    <!--<div class="col-12 md:col-6" *ngIf="dataCollab && dataCollab.date_naissance">
                             <strong>Date de naissance: </strong>
                             <a *ngIf="!updateDNC" (click)="updateDNC= true">{{ dataCollab.date_naissance | date :
                                 "mediumDate" }}</a>
                             <p-calendar *ngIf="updateDNC" dateFormat="d/mm/yy" [(ngModel)]="dataCollab.date_naissance"
                                 (onSelect)="onUpdateDNC()"></p-calendar>
-                        </div>
+                        </div> -->
 
                         <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.nationalite">
                             <strong>Nationnalité:</strong>
                             {{ InfoUser.nationalite }}
                         </div>
 
-                        <div class="col-12 md:col-4" *ngIf="userco.type && userco.type != 'user'">
+                        <!--<div class="col-12 md:col-4" *ngIf="userco.type && userco.type != 'user'">
                             <strong>Statut:</strong> {{ userco.type }}
-                        </div>
+                        </div>-->
 
                         <div class="col-12 md:col-4" *ngIf="
                             InfoUser &&
@@ -268,14 +268,14 @@
 
                 <div style="text-align: center" class=" card col-6">
                     <figure>
-                        <img  [src]="imageToShow" (click)="clickFile()" alt="Profil" width="150" height="150" style="border-radius: 50px" />
+                        <img  [src]="imageToShow" (click)="clickFile()" alt="Profil" width="200" height="200" style="border-radius: 50px" />
                         <figcaption>
                             {{ userco?.service_id?.label }}
                             <br />
-                            <span *ngIf="userco.role !== 'user'">
+                           <!-- <span *ngIf="userco.role !== 'user'">
                                 <strong style="color: red">{{
                                     userco.role
-                                    }}</strong> </span><br />
+                                    }}</strong> </span>--><br />
                             <span>{{ userco.mention }}</span>
                         </figcaption>
                     </figure>
