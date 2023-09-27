@@ -84,10 +84,9 @@
                     (click)="toggleFormServiceAdd()"></button>
             </div>
             <h5>Liste des services</h5>
-            <p-table #dt1 *ngIf="services" [value]="services" selectionMode="single" dataKey="_id" [rows]="8"
-                [reorderableColumns]="true" [rowHover]="true" [paginator]="true" [pageLinks]="5"
-                (onRowReorder)="onRowReorder($event)" [globalFilterFields]="['label']" responsiveLayout="scroll"
-                styleClass="p-datatable-gridlines">
+            <p-table #dt1 *ngIf="services" [value]="services" selectionMode="single" dataKey="_id"
+                [reorderableColumns]="true" [rowHover]="true" (onRowReorder)="onRowReorder($event)"
+                [globalFilterFields]="['label']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
