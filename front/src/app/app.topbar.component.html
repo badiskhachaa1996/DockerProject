@@ -33,10 +33,9 @@
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>
         </a>
-        <div class="layout-topbar-button">
-            <i #cra class="pi pi-calendar"  (click)="onLeftMouseClick($event,contextMenu1)"></i>
-            <p-contextMenu #contextMenu1 [target]="cra" [model]="menuCalenders" [appendTo]="'body'"></p-contextMenu>
-        </div>
+        <a href="#/calendar" class="p-link layout-topbar-button">
+            <i #cra class="pi pi-calendar"  ></i>
+        </a>
         <a href="https://links.intedgroup.com/" class="p-link layout-topbar-button">
             <i class="pi pi-globe" pTooltip="Links" tooltipPosition="bottom"></i>
 
