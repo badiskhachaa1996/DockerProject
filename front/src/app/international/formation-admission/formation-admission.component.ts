@@ -21,6 +21,35 @@ export class FormationAdmissionComponent implements OnInit {
   selectedFormation: FormationAdmission
   dropdownCampus: any[] = []
   rentreeScolaire = []
+
+  bacList =
+    [
+      { label: "Bac +2", value: "Bac +2" },
+      { label: "Bac +3", value: "Bac +3" },
+      { label: "Bac +4", value: "Bac +4" },
+      { label: "Bac +5", value: "Bac +5" }
+    ]
+
+  bacFilter =
+    [
+      { label: "Tous les bac", value: null },
+      ...this.bacList
+    ]
+
+  anneesList =
+    [
+      { label: "Année 1", value: "Année 1" },
+      { label: "Année 2", value: "Année 2" },
+      { label: "Année 3", value: "Année 3" },
+      { label: "Année 4", value: "Année 4" },
+      { label: "Année 5", value: "Année 5" },
+    ]
+
+  anneeFilter =
+    [
+      { label: "Toutes les années", value: null },
+      ...this.anneesList
+    ]
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
     private MessageService: MessageService, private CampusService: CampusService, private route: ActivatedRoute) { }
 
@@ -92,19 +121,14 @@ export class FormationAdmissionComponent implements OnInit {
     { value: "Petite enfance", label: "Petite enfance" },
   ]
 
-  anneeList = 
-  [
-    { value: "Année 1", label: "Anneé 1"},
-    { value: "Année 2", label: "Anneé 2"},
-    { value: "Année 3", label: "Anneé 3"},
-    { value: "Année 4", label: "Anneé 4"},
-    { value: "Année 5", label: "Anneé 5"},
-  ];
-
-  filtreBac = 
-  [
-    { value: null, label: "Bac"}
-  ];
+  anneeList =
+    [
+      { label: "Année 1", value: "Anneé 1" },
+      { label: "Année 2", value: "Anneé 2" },
+      { label: "Année 3", value: "Anneé 3" },
+      { label: "Année 4", value: "Anneé 4" },
+      { label: "Année 5", value: "Anneé 5" },
+    ];
 
   initUpdate(rowData: FormationAdmission) {
     this.selectedFormation = rowData
