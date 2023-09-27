@@ -123,8 +123,9 @@
                 <div class="row">
                     <div class="col-12">
                         <label>Civilité</label>
-                        <p-dropdown [options]="civiliteList" formControlName="civilite" optionValue="label" placeholder="Choisissez une civilité"
-                            optionLabel="label" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
+                        <p-dropdown [options]="civiliteList" formControlName="civilite" optionValue="label"
+                            placeholder="Choisissez une civilité" optionLabel="label" autoWidth="false"
+                            [style]="{'width':'100%'}"></p-dropdown>
                     </div>
                     <div class="col-12">
                         <label>Nom</label>
@@ -146,19 +147,25 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label for="email">Numéro de téléphone</label>
-                        <input pInputText type="text" formControlName="phone" autoWidth="false"
-                            [style]="{'width':'100%'}">
+                        <label for="email">Numéro de téléphone</label><br>
+                        <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [searchCountryField]="[
+                      SearchCountryField.Iso2,
+                      SearchCountryField.Name
+                    ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
+                            [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National"
+                            name="phone" formControlName="phone"> </ngx-intl-tel-input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label for="email">Joindre un CV</label>
+                        <label for="email">Joindre un CV</label><br>
                         <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
                             (change)="onUpload($event)" chooseLabel="Browse" />
                     </div>
                 </div>
-                <div class="row col-12" *ngIf="pdfSrc" style="height: 200px;">
+                <div class="row col-12" *ngIf="pdfSrc" style="height: 400px;">
                     <i class="pi pi-times-circle"
                         style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
                         pTooltip="Supprimer" (click)="deleteDoc()" aria-hidden="true"> </i>

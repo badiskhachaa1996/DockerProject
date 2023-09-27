@@ -15,6 +15,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
+import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-entreprise-list',
@@ -22,6 +23,11 @@ import { SkillsService } from 'src/app/services/skillsnet/skills.service';
   styleUrls: ['./entreprise-list.component.scss', '../../../../../assets/css/bootstrap.min.css']
 })
 export class EntrepriseListComponent implements OnInit {
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries: CountryISO[] = [CountryISO.France, CountryISO.Tunisia];
 
   civiliteList: any = [
     { label: 'Monsieur' },
@@ -242,7 +248,7 @@ export class EntrepriseListComponent implements OnInit {
   }
 
   onSubmit() {
-    this.ExterneService.create({ ...this.form.value }, null).subscribe(externe => {
+    this.ExterneService.create({ ...this.form.value, phone: this.form.value.phone.internationalNumber }, null).subscribe(externe => {
       if (this.uploadedFiles.length != 0) {
         console.log(this.uploadedFiles)
         let formData = new FormData();
