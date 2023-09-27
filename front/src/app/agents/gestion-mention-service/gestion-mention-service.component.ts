@@ -102,7 +102,7 @@ export class GestionMentionServiceComponent implements OnInit {
   onRowReorder(event) {
     console.log(event)
     console.log(this.services[event.dragIndex], this.services[event.dropIndex])
-    this.ServiceService.update({ id: this.services[event.dropIndex]._id, index: event.dropIndex }).subscribe()
+    this.ServiceService.update({ id: this.services[event.dropIndex]._id, index: (event.dropIndex - 1) }).subscribe()
   }
 
 }
