@@ -35,11 +35,15 @@ app.post('/create/:id', (req, res) => {
     let passwordClear = "INTED@" + req.body.lastname + new Date().getSeconds().toString()
     newUser.password = bcrypt.hashSync(passwordClear, 8)
     newUser.type = "Externe-InProgress"
-    newUser.verifedEmail = true
+    //newUser.verifedEmail = true
+    let created_by = req.params?.id
+
     newUser.save().then(userCreated => {
+        if (created_by == null || created_by == "null")
+            created_by = userCreated._id
         let newObj = new ExterneSkillsnet({
             user_id: userCreated._id,
-            created_by: req.params.id,
+            created_by,
             created_at: new Date()
         })
         newObj.save().then(doc => {

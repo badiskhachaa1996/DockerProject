@@ -158,6 +158,11 @@ export class CalendrierEtudiantComponent implements OnInit {
   eventsExist(date_start, date_end) {
     let r = false
     this.events.forEach(e => {
+      /*
+          date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end
+          e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end
+          e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end
+      */
       if (new Date(date_start) <= new Date(e.start) && new Date(e.end) <= new Date(date_end))
         r = true
     })

@@ -12,6 +12,7 @@ app.disable("x-powered-by");
 // upload du cv brute
 const cvStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
+        console.log(req.body, req.file)
         let id = req.body.id;
         let storage = `storage/cv/${id}`;
 
@@ -28,7 +29,6 @@ const cvStorage = multer.diskStorage({
 const uploadCV = multer({ storage: cvStorage });
 app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
     const file = req.file;
-
     if (!file) {
         const error = new Error('Aucun fichier chargé');
         error.httpStatusCode = 400;

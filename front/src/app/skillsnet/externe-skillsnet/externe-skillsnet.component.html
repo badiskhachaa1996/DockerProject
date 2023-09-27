@@ -186,6 +186,10 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
+                <th style="width: 3rem"></th>
+                <th pSortableColumn="user_id.civilite" style="text-align:center">
+                    Civilité <p-sortIcon field="user_id.civilite"></p-sortIcon>
+                </th>
                 <th pSortableColumn="user_id.lastname" style="text-align:center">
                     Nom <p-sortIcon field="user_id.lastname"></p-sortIcon>
                 </th>
@@ -203,13 +207,25 @@
         <ng-template pTemplate="body" let-extern let-expanded="expanded">
             <tr>
                 <td>
+                    <button type="button" pButton pRipple [pRowToggler]="extern"
+                        class="p-button-text p-button-rounded p-button-plain"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                    </button>
+                </td>
+                <td>
+                    {{ extern.user_id?.civilite | titlecase}}
+                </td>
+                <td>
                     {{ extern.user_id?.lastname | uppercase}}
                 </td>
                 <td>
                     {{ extern.user_id?.firstname | titlecase}}
                 </td>
-                <td>
-                    {{ (extern.user_id?.type=='Externe-InProgress')?"Non complété":"Complété" }}
+                <td *ngIf="extern.user_id?.type=='Externe-InProgress'">
+                    <p-tag icon="pi pi-times" severity="danger" value="Non complété"></p-tag>
+                </td>
+                <td *ngIf="extern.user_id?.type!='Externe-InProgress'">
+                    <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Complété"></p-tag>
                 </td>
                 <td>
                     {{ extern.created_by?.firstname | titlecase}} {{ extern.created_by?.lastname|uppercase}}

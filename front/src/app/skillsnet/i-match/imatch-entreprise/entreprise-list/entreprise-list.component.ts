@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { Annonce } from 'src/app/models/Annonce';
+import { CV } from 'src/app/models/CV';
+import { Competence } from 'src/app/models/Competence';
+import { Entreprise } from 'src/app/models/Entreprise';
+import { Matching } from 'src/app/models/Matching';
+import { Profile } from 'src/app/models/Profile';
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
+import { CvService } from 'src/app/services/skillsnet/cv.service';
+import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 
 @Component({
@@ -12,11 +23,18 @@ import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 })
 export class EntrepriseListComponent implements OnInit {
 
+  civiliteList: any = [
+    { label: 'Monsieur' },
+    { label: 'Madame' },
+    { label: 'Autre' },
+  ];
+  pdfSrc
   form = new FormGroup({
-    full_name: new FormControl('', Validators.required),
-    email_adress: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
-    cv: new FormControl('', Validators.required)
+    civilite: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required)
   })
 
   offres = []
@@ -95,7 +113,9 @@ export class EntrepriseListComponent implements OnInit {
 
   showPostuler = false;
 
-  constructor(private skillsService: SkillsService, private annonceService: AnnonceService, private entrepriseService: EntrepriseService,) {}
+  constructor(private skillsService: SkillsService, private annonceService: AnnonceService,
+    private entrepriseService: EntrepriseService, private cvService: CvService, private AuthService: AuthService,
+    private ExterneService: ExterneSNService, private MatchingService: MatchingService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
 
@@ -109,10 +129,71 @@ export class EntrepriseListComponent implements OnInit {
   selectedLocations = []
   dispoFilter = null
   selectedSkills = []
-  
+
 
   updateFilter() {
+    this.filteredOffres = []
+    this.offres.forEach((offre: Annonce) => {
+      let bufferUser: any = offre.entreprise_id
+      let entreprise: Entreprise = bufferUser
+      if (entreprise && (entreprise.r_sociale.toLowerCase().includes(this.researchValue.toLowerCase())))
+        this.filteredOffres.push(offre)
+      else if (offre.entreprise_name && offre.entreprise_name.includes(this.researchValue.toLowerCase()))
+        this.filteredOffres.push(offre)
+      else if (offre.missionName && offre.missionName.includes(this.researchValue.toLowerCase()))
+        this.filteredOffres.push(offre)
+      else if (offre.missionDesc && offre.missionDesc.includes(this.researchValue.toLowerCase()))
+        this.filteredOffres.push(offre)
+    })
+    let newFiltered = []
+    this.filteredOffres.forEach((offre: Annonce) => {
+      let added = true
 
+      if (this.selectedProfiles.length != 0) {
+        let bufferProfil: any = offre.profil
+        if (bufferProfil) {
+          let profil: Profile = bufferProfil
+          let temp = false
+          this.selectedProfiles.forEach(p => {
+            if (profil._id == p)
+              temp = true
+          })
+          if (!temp)
+            added = false
+        } else {
+          added = false
+        }
+      }
+
+      if (this.selectedLocations.length != 0) {
+        this.selectedLocations.forEach(p => {
+          if (!offre.entreprise_ville || !offre.entreprise_ville.includes(p))
+            added = false;
+        })
+      }
+
+      if (this.dispoFilter) {
+        let db = new Date(this.dispoFilter)
+        let df = new Date(this.dispoFilter)
+        df.setMonth(df.getMonth() + 1)
+        if (!(db <= new Date(offre.debut)))
+          added = false;
+      }
+
+      if (this.selectedSkills.length != 0) {
+        let tempSkill = []
+        offre.competences.forEach((skill: any) => {
+          tempSkill.push(skill.libelle)
+        })
+        if (!(this.selectedSkills.every(elem => tempSkill.includes(elem))))
+          added = false;
+      }
+
+      if (added)
+        newFiltered.push(offre)
+
+    })
+    this.filteredOffres = newFiltered
   }
 
   clearFilter() {
@@ -123,19 +204,81 @@ export class EntrepriseListComponent implements OnInit {
     this.selectedLocations = []
   }
 
-    // recuperation de toute les classes necessaire au fonctionnement du module
-    onGetAllClasses(): void {
-  
-      //Recuperation de la liste des annonces
-      this.annonceService.getAnnonces()
-        .then((response: Annonce[]) => {
-          response.forEach(offre => {
-              this.offres.push(offre)
-          })
-          this.filteredOffres = this.offres
-        })
-        .catch((error) => console.error(error));
+  // recuperation de toute les classes necessaire au fonctionnement du module
+  onGetAllClasses(): void {
 
+    //Recuperation de la liste des annonces
+    this.annonceService.getAnnonces()
+      .then((response: Annonce[]) => {
+        response.forEach(offre => {
+          this.offres.push(offre)
+        })
+        this.filteredOffres = this.offres
+      })
+      .catch((error) => console.error(error));
+
+    this.skillsService.getCompetences().then((competences: Competence[]) => {
+      competences.forEach(competence => {
+        this.skills.push({ label: competence.libelle, value: competence.libelle })
+      })
+    })
+    this.skillsService.getProfiles().then((profiles: Profile[]) => {
+      profiles.forEach(profil => {
+        this.profiles.push({ label: profil.libelle, value: profil._id })
+      })
+    })
+
+  }
+  uploadedFiles: any;
+  onUpload(event: any) {
+    if (event.target.files.length > 0) {
+      this.uploadedFiles = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.pdfSrc = reader.result as string;
+      }
+      reader.readAsDataURL(event.target.files[0])
     }
+  }
+
+  onSubmit() {
+    this.ExterneService.create({ ...this.form.value }, null).subscribe(externe => {
+      if (this.uploadedFiles.length != 0) {
+        console.log(this.uploadedFiles)
+        let formData = new FormData();
+
+        formData.append('id', externe.user_id._id);
+        formData.append('file', this.uploadedFiles);
+        this.cvService.postCVBrute(formData)
+          .then(() => {
+
+          })
+          .catch((error) => {
+            console.error(error)
+          });
+      }
+      let bufferExt: any = externe.user_id
+      this.cvService.postCv({ user_id: externe.user_id._id, date_creation: new Date(), createur_id: bufferExt._id }).then(newCv => {
+        this.MatchingService.create({
+          offre_id: this.annonceSelected._id,
+          matcher_id: externe.user_id._id,
+          cv_id: newCv._id,
+          type_matching: "Candidat",
+          date_creation: new Date()
+        }).subscribe(m => {
+          this.ToastService.add({ severity: 'success', summary: "Matching crée" })
+          this.form.reset();
+          this.showPostuler = false;
+        })
+      })
+
+    })
+
+  }
+
+  deleteDoc() {
+    this.uploadedFiles = null
+    this.pdfSrc = null
+  }
 
 }
