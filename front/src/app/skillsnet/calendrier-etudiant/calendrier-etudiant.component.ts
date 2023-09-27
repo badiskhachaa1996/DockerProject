@@ -44,28 +44,31 @@ export class CalendrierEtudiantComponent implements OnInit {
       mts.forEach(mt => {
         this.addEvent(mt.libelle, new Date(mt.from), new Date(mt.to), { ...mt }, mt.type)
       })
-    })
-    let date_start = new Date()
-    date_start.setMonth(date_start.getMonth() - 1)
-    date_start.setDate(1)
-    date_start.setHours(8)
-    date_start.setMinutes(0)
-    date_start.setSeconds(0)
-    let date_end = new Date()
-    date_end.setMonth(date_end.getMonth() + 1)
-    date_end.setDate(31)
-    date_end.setHours(8)
-    date_end.setMinutes(0)
-    date_end.setSeconds(0)
-    while (date_start < date_end) {
-      if (date_start.getHours() > 20) {
-        date_start.setHours(8)
-        date_start.setDate(date_start.getDate() + 1)
+      let date_start = new Date()
+      date_start.setMonth(date_start.getMonth() - 1)
+      date_start.setDate(1)
+      date_start.setHours(8)
+      date_start.setMinutes(0)
+      date_start.setSeconds(0)
+      date_start.setMilliseconds(0)
+      let date_end = new Date()
+      date_end.setMonth(date_end.getMonth() + 1)
+      date_end.setDate(31)
+      date_end.setHours(8)
+      date_end.setMinutes(0)
+      date_end.setSeconds(0)
+      date_end.setMilliseconds(0)
+      while (date_start < date_end) {
+        if (date_start.getHours() > 19) {
+          date_start.setHours(8)
+          date_start.setDate(date_start.getDate() + 1)
+        }
+        if (!this.eventsExist(new Date(date_start), new Date(date_start.getTime() + 3600000)))
+          this.addEvent("Disponible", new Date(date_start), new Date(date_start.getTime() + 3600000), { type: "Disponible" }, "Disponible")
+        date_start.setHours(date_start.getHours() + 1)
       }
-      if (!this.eventsExist(new Date(date_start), new Date(date_start.getTime() + 3600000)))
-        this.addEvent("Disponible", new Date(date_start), new Date(date_start.getTime() + 3600000), { type: "Disponible" }, "Disponible")
-      date_start.setHours(date_start.getHours() + 1)
-    }
+    })
+
     //Détecter tous les events dans la journée et si y'a aucun alors rajouter un event Disponible
   }
 
@@ -79,16 +82,19 @@ export class CalendrierEtudiantComponent implements OnInit {
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
     locale: 'fr',
+    weekends: false,
     events: [],
     minTime: '08:00:00',
-    maxTime: '20:00:00',
-    views: {
+    maxTime: '19:00:00',
+    /*views: {
       timeGridFourDay: {
+        weekends: false,
         type: 'timeGrid',
-        duration: { days: 5 },
+        firstDay: 1,
+        dayCount: 5,
         buttonText: 'Semaine de travail'
       }
-    },
+    },*/
     firstDay: 1,
     eventClick: this.eventClickFCRH.bind(this),
     dateClick: this.dateClickFC.bind(this),
@@ -105,6 +111,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     this.displayModal = true
     let start = new Date(event.event.start)
     let end = new Date(event.event.end)
+    console.log(start, end)
     this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
   }
   dateClickFC(event: { dateStr: string, allDay: Boolean }) {
@@ -131,8 +138,8 @@ export class CalendrierEtudiantComponent implements OnInit {
       borderColor = '#D35400'
     } else if (type == 'Teams') {
       //VIOLET
-      backgroundColor = ' #66ffff'
-      borderColor = '#00b3b3'
+      backgroundColor = ' #6264A7'
+      borderColor = '#2e2f52'
     } else if (type == 'Indisponible') {
       backgroundColor = '#cc3300'
       borderColor = ' #cc0000'
@@ -157,14 +164,23 @@ export class CalendrierEtudiantComponent implements OnInit {
   }
   eventsExist(date_start, date_end) {
     let r = false
+    date_start = new Date(date_start)
+    date_end = new Date(date_end)
     this.events.forEach(e => {
       /*
-          date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end
-          e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end
-          e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end
+(date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
+        (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
+        (e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end) ||
+        !(e.start < date_start && e.end < date_start && e.start < date_end && e.end < date_end) ||
+        !(date_start < e.start && date_start < e.end && date_end < e.start && date_end < e.end)
       */
-      if (new Date(date_start) <= new Date(e.start) && new Date(e.end) <= new Date(date_end))
+      if ((date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
+        (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
+        (e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end)
+      ) {
         r = true
+      }
+
     })
     return r
   }
