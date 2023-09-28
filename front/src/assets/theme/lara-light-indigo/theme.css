@@ -5726,10 +5726,15 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   }
 
   .p-panelmenu .p-panelmenu-header.p-highlight, .p-toggleable-content {
-    width: 250px;
+    width: 300px;
     .p-menuitem-text {
       display: block;
     }
-
   }
+
+  
+  .p-panelmenu .p-submenu-list {
+    padding-left: 20px !important;
+  }
+
 }
