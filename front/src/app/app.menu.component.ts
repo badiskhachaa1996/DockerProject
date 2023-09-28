@@ -6453,11 +6453,6 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/rh/conges-autorisations'],
                                 },
                                 {
-                                    label: 'Actualité et notifications',
-                                    icon: 'pi pi-tags',
-                                    routerLink: ['/rh/actualite-notifications'],
-                                },
-                                {
                                     label: 'Gestion des demandes et reclamation',
                                     icon: 'pi pi-check-square',
                                     items: [
@@ -6557,6 +6552,11 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/agent/list'],
                                         },
                                     ],
+                                },
+                                {
+                                    label: 'Actualité et notifications',
+                                    icon: 'pi pi-tags',
+                                    routerLink: ['/rh/actualite-notifications'],
                                 },
                                 {
                                     label: 'Développeur',

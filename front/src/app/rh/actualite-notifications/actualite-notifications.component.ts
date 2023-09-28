@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
 import jwt_decode from "jwt-decode";
 import { ActualiteRHService } from 'src/app/services/actualite-rh.service';
+import { ActualiteRH } from 'src/app/models/ActualiteRH';
 @Component({
   selector: 'app-actualite-notifications',
   templateUrl: './actualite-notifications.component.html',
@@ -19,19 +20,21 @@ export class ActualiteNotificationsComponent implements OnInit {
   constructor(private activiteService: ActualiteRHService, private ToastService: MessageService,
     private AuthService: AuthService, private route: ActivatedRoute) { }
   activites = []
-  EditActivite: ActualiteInt
+  EditActivite: ActualiteRH
   AddActivite = false
   emailList = []
-  showEmail: ActualiteInt
+  showEmail: ActualiteRH
   formEdit = new FormGroup({
     _id: new FormControl('', Validators.required),
     titre: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
+    campus: new FormControl('', Validators.required),
   })
   formAdd = new FormGroup({
     titre: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    date_creation: new FormControl(new Date())
+    date_creation: new FormControl(new Date()),
+    campus: new FormControl('', Validators.required),
   })
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -40,7 +43,18 @@ export class ActualiteNotificationsComponent implements OnInit {
     })
   }
 
-  onInitUpdate(act: ActualiteInt) {
+  campusDropdown = [
+    { label: 'IEG', value: 'IEG' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Tunis', value: 'Tunis' },
+    { label: 'Intuns', value: 'Intuns ' }
+  ]
+
+  onInitUpdate(act: ActualiteRH) {
     this.EditActivite = act
     this.formEdit.patchValue({ ...act })
   }
