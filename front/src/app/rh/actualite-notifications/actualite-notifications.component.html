@@ -12,6 +12,11 @@
                 <input type="text" formControlName="titre" pInputText>
             </div>
             <div class="field col-12">
+                <label>Campus: </label>
+                <p-dropdown [options]="campusDropdown" placeholder="Choisissez un campus" autoWidth="false"
+                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
+            </div>
+            <div class="field col-12">
                 <label>Contenu de l'activité </label>
                 <textarea pInputTextarea formControlName="description" autoResize rows="3" cols="30"></textarea>
             </div>
@@ -27,6 +32,11 @@
             <div class="field col-12">
                 <label>Titre: </label>
                 <input type="text" formControlName="titre" pInputText>
+            </div>
+            <div class="field col-12">
+                <label>Campus: </label>
+                <p-dropdown [options]="campusDropdown" placeholder="Choisissez un campus" autoWidth="false"
+                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
             </div>
             <div class="field col-12">
                 <label>Contenu de l'activité </label>
@@ -70,7 +80,7 @@
             <ng-template pTemplate="body" let-actualite>
                 <tr>
                     <td>
-                        {{actualite?.date_creation | date :'medium' }}
+                        {{actualite?.date_creation | date :'mediumDate' }}
                     </td>
                     <td>
                         {{actualite?.titre}}

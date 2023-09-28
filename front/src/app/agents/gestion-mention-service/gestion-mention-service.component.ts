@@ -96,7 +96,6 @@ export class GestionMentionServiceComponent implements OnInit {
       this.services.splice(this.services.indexOf(rowData), 1)
       this.messageService.add({ severity: "success", summary: "Suppression du service avec succès" })
     })
-
   }
 
   onRowReorder(event) {
