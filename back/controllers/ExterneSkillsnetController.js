@@ -73,11 +73,11 @@ app.post('/create/:id', (req, res) => {
                             html: htmlmail,
                             attachments: attachments
                         };
-                        /*transporter.sendMail(mailOptions, function (error, info) {
+                        transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.error(error);
                             }
-                        });*/
+                        });
                         res.send(newDoc)
                     })
                 })

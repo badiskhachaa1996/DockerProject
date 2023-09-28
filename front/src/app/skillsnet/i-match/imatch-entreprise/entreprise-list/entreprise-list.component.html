@@ -147,15 +147,17 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label for="email">Numéro de téléphone</label><br>
-                        <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
+                        <label for="email">Numéro de téléphone (avec indicatif)</label><br>
+                        <input pInputText placeholder="Ex: +33 623568978" type="phone" formControlName="phone"
+                            autoWidth="false" [style]="{'width':'100%'}">
+                        <!--<ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
                             [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
                             [searchCountryField]="[
                       SearchCountryField.Iso2,
                       SearchCountryField.Name
                     ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
                             [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National"
-                            name="phone" formControlName="phone"> </ngx-intl-tel-input>
+                            name="phone" formControlName="phone"> </ngx-intl-tel-input>-->
                     </div>
                 </div>
                 <div class="row">
@@ -171,11 +173,26 @@
                         pTooltip="Supprimer" (click)="deleteDoc()" aria-hidden="true"> </i>
                     <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
                         class="pdf-viewer-here"></pdf-viewer>
+                </div><br>
+                <div class="row col-12 grid">
+                    <p style="text-align: center;">J'ai pris connaissances et lu les <a href="/#/mentions-legales"
+                            target="_blank">mentions légales</a> et accepte que mes données soient
+                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande ?</p>
+                    <div class="field-radiobutton col-6">
+                        <p-radioButton name="consent" value="Oui" formControlName="consent"
+                            inputId="consent3"></p-radioButton>
+                        <label for="consent3">Oui</label>
+                    </div>
+                    <div class="field-radiobutton col-6">
+                        <p-radioButton name="consent" value="Non" formControlName="consent"
+                            inputId="consent4"></p-radioButton>
+                        <label for="consent4">Non</label>
+                    </div>
                 </div>
                 <div class="btns-postuler">
                     <div class="btn btn-retour" (click)="showPostuler = false">Retour</div>
-                    <button pButton type="submit" [disabled]="form.invalid" label="Envoyer" autoWidth="false"
-                        class="btn btn-envoyer"></button>
+                    <button pButton type="submit" [disabled]="form.invalid ||    form.value.consent!='Oui'"
+                        label="Envoyer pour créer votre compte" autoWidth="false" class="btn btn-envoyer"></button>
                 </div>
             </form>
             <p class="information">Vous avez déjà un compte, <a href="#/login">cliquez ici</a> pour postuler via votre
