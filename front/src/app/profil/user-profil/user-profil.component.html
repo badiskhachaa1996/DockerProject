@@ -121,14 +121,13 @@
                 <div class="card col-6">
                     <div class="p-fluid p-formgrid grid">
                         <div class="col-12 md:col-12">
-                            <strong>Adresse email personelle:</strong>
-                            {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
-                        </div>
-                        <div class="col-12 md:col-12">
                             <strong>Adresse email entreprise:</strong>
                             {{ userco?.email ? userco.email : userco?.email }}
                         </div>
-
+                        <div class="col-12 md:col-12">
+                            <strong>Adresse email personnelle:</strong>
+                            {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
+                        </div>
                         <div class="col-12 md:col-12" *ngIf="userco.phone">
                             <strong>Téléphone:</strong> {{ userco?.indicatif }}
                             {{ userco?.phone }}
