@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
@@ -17,6 +17,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { User } from 'src/app/models/User';
 import { DisponibiliteEtudiant } from 'src/app/models/DisponibiliteEtudiant';
 import { CalendrierEtudiantService } from 'src/app/services/calendrier-etudiant.service';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendrier-etudiant',
@@ -71,7 +72,7 @@ export class CalendrierEtudiantComponent implements OnInit {
 
     //Détecter tous les events dans la journée et si y'a aucun alors rajouter un event Disponible
   }
-
+  @ViewChild('calendar') calendarComponent: FullCalendarComponent;
   options = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     defaultDate: new Date(),
@@ -82,10 +83,10 @@ export class CalendrierEtudiantComponent implements OnInit {
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
     locale: 'fr',
-    weekends: false,
     events: [],
     minTime: '08:00:00',
     maxTime: '19:00:00',
+    defaultView: 'timeGridWeek',
     /*views: {
       timeGridFourDay: {
         weekends: false,
@@ -98,6 +99,8 @@ export class CalendrierEtudiantComponent implements OnInit {
     firstDay: 1,
     eventClick: this.eventClickFCRH.bind(this),
     dateClick: this.dateClickFC.bind(this),
+    datesRender: this.onChangeView.bind(this),// Version du FullCalendar inférieur à 6
+    datesSet: this.onChangeView.bind(this) // Version du FullCalendar Supérieur à 5
   }
   displayModal = false
   form = new FormGroup({
@@ -151,6 +154,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     //  this.events.push({ title: "TEST", date: new Date() })
     this.options.events = this.events
     this.events = Object.assign([], this.events) //Parceque Angular est trop c*n pour voir le changement de la variable autrement
+    this.eventsDefault = this.events
     //this.cd.detectChanges();
 
   }
@@ -164,9 +168,12 @@ export class CalendrierEtudiantComponent implements OnInit {
   }
   eventsExist(date_start, date_end) {
     let r = false
-    date_start = new Date(date_start)
-    date_end = new Date(date_end)
-    this.events.forEach(e => {
+
+    let cs = new Date(date_start).getTime() //date to check = req.body.date_debut
+    let ce = new Date(date_end).getTime() //date to check = req.body.date_fin
+    this.events.forEach(ev => {
+      let s = new Date(ev.start).getTime() // debut = temp.date_debut
+      let e = new Date(ev.end).getTime() // fin = temp.date_fin
       /*
 (date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
         (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
@@ -174,14 +181,34 @@ export class CalendrierEtudiantComponent implements OnInit {
         !(e.start < date_start && e.end < date_start && e.start < date_end && e.end < date_end) ||
         !(date_start < e.start && date_start < e.end && date_end < e.start && date_end < e.end)
       */
-      if ((date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
-        (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
-        (e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end)
-      ) {
+      if ((cs == s && e == cs) || (cs >= s && cs < e) || (ce > s && ce <= e)) {
         r = true
       }
 
     })
     return r
+  }
+  eventsDefault = []
+  onChangeView(event) {
+    console.log(event, event.view.type)
+    if (event.view.type == 'dayGridMonth') {
+      this.eventsDefault = this.events
+      let newEvents = []
+      console.log(this.events)
+      this.events.forEach(val => {
+        if (val.extendedProps.type != 'Disponible') {
+          val.title = "Indisponible"
+          val.backgroundColor = '#cc3300'
+          val.borderColor = ' #cc0000'
+          newEvents.push(val)
+        }
+
+      })
+      this.events = Object.assign([], newEvents)
+      this.options.events = newEvents
+    } else {
+      this.events = Object.assign([], this.eventsDefault)
+      this.options.events = this.eventsDefault
+    }
   }
 }

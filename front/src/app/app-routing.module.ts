@@ -667,18 +667,18 @@ const routes: Routes = [
             },
             /** end */
             /** IMS Project-V2 */
-            { path: 'gestion-project', component: GestionComponent },
-            { path: 'mytask', component: MytaskComponent },
-            { path: 'myproject', component: MyprojectComponent },
-            { path: 'dashboard-project-v2', component: DashboardProjectV2Component },
+            { path: 'gestion-project', component: GestionComponent, canActivate: [AuthGuardService] },
+            { path: 'mytask', component: MytaskComponent, canActivate: [AuthGuardService] },
+            { path: 'myproject', component: MyprojectComponent, canActivate: [AuthGuardService] },
+            { path: 'dashboard-project-v2', component: DashboardProjectV2Component, canActivate: [AuthGuardService] },
             /** end */
 
             /**Calender */
-            { path: 'calendar', component:CalenderComponent},
+            { path: 'calendar', component: CalenderComponent, canActivate: [AuthGuardService] },
             /**informations */
-            { path: 'informations', component: InformationsComponent },
+            { path: 'informations', component: InformationsComponent, canActivate: [AuthGuardService] },
             /**links */
-            { path: 'Links', component: LinksComponent },
+            { path: 'Links', component: LinksComponent, canActivate: [AuthGuardService] },
             {
                 path: 'logements',
                 canActivate: [AuthGuardService],
@@ -704,7 +704,7 @@ const routes: Routes = [
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
-            { path: 'skillsnet/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'imatch/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
             { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
@@ -776,7 +776,7 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
             },
             {
-                path: 'skillsnet/externe',
+                path: 'imatch/externe',
                 component: ExterneSkillsnetComponent,
                 canActivate: [AuthGuardService],
             },
