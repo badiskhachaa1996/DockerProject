@@ -4,9 +4,14 @@
 <p-dialog header="Ajout d'une indisponibilité" [(visible)]="displayModal" [modal]="true" [style]="{width: '75vw'}"
     [draggable]="false" [resizable]="false">
     <form [formGroup]="form" (ngSubmit)="onAddIndispo()" class="p-fluid p-formgrid grid">
-        <div class="col-12">
+        <div class="field md:col-6 col-12">
             <label For="postal_adresse">Libelle:</label>
             <input pInputText type="text" formControlName="libelle" />
+        </div>
+        <div class="field md:col-6 col-12">
+            <label For="postal_adresse">Type:</label>
+            <p-dropdown [options]="typeList" formControlName="type" placeholder="Choisissez un type" autoWidth="false"
+                [style]="{'width':'100%'}"></p-dropdown>
         </div>
         <div class="field md:col-6 col-12">
             <label For="postal_adresse">De:</label>

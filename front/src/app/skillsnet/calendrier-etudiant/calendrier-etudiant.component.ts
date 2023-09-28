@@ -27,6 +27,13 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 export class CalendrierEtudiantComponent implements OnInit {
   token;
   user: User;
+
+  typeList = [
+    { label: "Indisponible", value: "Indisponible" },
+    { label: "Disponible", value: "Disponible" },
+    { label: "Réunion Teams", value: "Teams" },
+    { label: "Entretien", value: "Other" }
+  ]
   constructor(private DispoEtuService: CalendrierEtudiantService, private ToastService: MessageService,
     private AuthService: AuthService, private viewportScroller: ViewportScroller, private router: Router,
     private CVService: CvService) { }
@@ -68,6 +75,9 @@ export class CalendrierEtudiantComponent implements OnInit {
           this.addEvent("Disponible", new Date(date_start), new Date(date_start.getTime() + 3600000), { type: "Disponible" }, "Disponible")
         date_start.setHours(date_start.getHours() + 1)
       }
+      if (this.actualView == 'dayGridMonth') {
+        this.onChangeView({ view: { type: "dayGridMonth" } })
+      }
     })
 
     //Détecter tous les events dans la journée et si y'a aucun alors rajouter un event Disponible
@@ -106,7 +116,7 @@ export class CalendrierEtudiantComponent implements OnInit {
   form = new FormGroup({
     user_id: new FormControl(''),
     libelle: new FormControl('Indisponible'),
-    type: new FormControl('Indisponible'),
+    type: new FormControl('Indisponible', Validators.required),
     from: new FormControl(new Date(), Validators.required),
     to: new FormControl(new Date(), Validators.required),
   })
@@ -114,8 +124,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     this.displayModal = true
     let start = new Date(event.event.start)
     let end = new Date(event.event.end)
-    console.log(start, end)
-    this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
+    this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible", libelle: "Indisponible" })
   }
   dateClickFC(event: { dateStr: string, allDay: Boolean }) {
     this.displayModal = true
@@ -161,7 +170,7 @@ export class CalendrierEtudiantComponent implements OnInit {
 
   onAddIndispo() {
     this.DispoEtuService.create({ ...this.form.value }).subscribe(r => {
-      this.addEvent(r.libelle, new Date(r.from), new Date(r.to), { ...r }, r.type)
+      this.loadEvents()
       this.displayModal = false
       this.form.reset()
     })
@@ -189,8 +198,9 @@ export class CalendrierEtudiantComponent implements OnInit {
     return r
   }
   eventsDefault = []
+  actualView = 'dayGridMonth'
   onChangeView(event) {
-    console.log(event, event.view.type)
+    this.actualView = event.view.type
     if (event.view.type == 'dayGridMonth') {
       this.eventsDefault = this.events
       let newEvents = []
