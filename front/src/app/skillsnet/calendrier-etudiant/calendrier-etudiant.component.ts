@@ -163,7 +163,11 @@ export class CalendrierEtudiantComponent implements OnInit {
     //  this.events.push({ title: "TEST", date: new Date() })
     this.options.events = this.events
     this.events = Object.assign([], this.events) //Parceque Angular est trop c*n pour voir le changement de la variable autrement
-    this.eventsDefault = this.events
+    if (this.actualView != 'dayGridMonth') {
+      this.eventsDefault = this.events
+    } else {
+      this.eventsDefault.push({ title, start, end, backgroundColor, borderColor, extendedProps })
+    }
     //this.cd.detectChanges();
 
   }
@@ -198,7 +202,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     return r
   }
   eventsDefault = []
-  actualView = 'dayGridMonth'
+  actualView = 'timeGridWeek'
   onChangeView(event) {
     this.actualView = event.view.type
     if (event.view.type == 'dayGridMonth') {
