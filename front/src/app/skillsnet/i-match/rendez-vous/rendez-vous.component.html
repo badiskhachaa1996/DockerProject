@@ -1,12 +1,14 @@
 <div class="imatch-main-page" *ngIf="USER">
     <div class="page-content">
         <div class="top-header container">
-            <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour aux
+            <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i
+                    class="pi pi-arrow-left"></i>Retour aux
                 CVs</a>
         </div>
         <div class="header">
             <div class="container">
-                <a href="{{'#/imatch/cv/' + USER.cv_id}}" class="btn-cancel"><i class="pi pi-arrow-left"></i>Annuler le rendez-vous</a>
+                <a href="{{'#/imatch/cv/' + USER.cv_id}}" class="btn-cancel"><i class="pi pi-arrow-left"></i>Annuler le
+                    rendez-vous</a>
                 <div class="rendez-vous-header">
                     <h1 class="rendez-vous-title">PRENDRE<br>RENDEZ-VOUS
                         <hr>
@@ -56,13 +58,14 @@
                     <div class="row">
                         <div class="col-12">
                             <label for="date">Date de rendez-vous</label>
-                            <p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
-                                [showTime]="true"></p-calendar>
+                            <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+                            <!--<p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
+                                [showTime]="true"></p-calendar>-->
                         </div>
                         <div class="col-12" *ngIf="annonces.length!=0">
                             <label for="date">Offre</label>
-                            <p-dropdown id="type" [options]="annonces" formControlName="offre_id" optionValue="_id" optionLabel="missionName"
-                                [style]="{'width':'100%'}" autoWidth="false"
+                            <p-dropdown id="type" [options]="annonces" formControlName="offre_id" optionValue="_id"
+                                optionLabel="missionName" [style]="{'width':'100%'}" autoWidth="false"
                                 placeholder="Choisissez une offre"></p-dropdown>
                         </div>
                     </div>
@@ -73,3 +76,22 @@
         </div>
     </div>
 </div>
+
+<p-dialog header="Rendez-vous" [(visible)]="displayModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field md:col-6 col-12">
+            <label For="postal_adresse">De:</label>
+            <p-calendar [(ngModel)]="date_start" placeholder="Ex: 20/01/2000" showTime="true" (onSelect)="chooseDate()" (onBlur)="chooseDate()"
+                appendTo="body"></p-calendar>
+        </div>
+        <div class="field md:col-6 col-12">
+            <label For="postal_adresse">À:</label>
+            <p-calendar [(ngModel)]="date_fin" placeholder="Ex: 20/01/2000" disabled="true" showTime="true"
+                appendTo="body"></p-calendar>
+        </div>
+        <div>
+            <button pButton label="Prendrez rendez-vous" type="submit" [disabled]="!checkValider" (click)="onSelectRDV()"></button>
+        </div>
+    </div>
+</p-dialog>
