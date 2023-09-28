@@ -1050,7 +1050,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Cvthèque Externe',
                                     icon: 'pi pi-briefcase',
-                                    routerLink: ['/imatch/cvtheque'],
+                                    routerLink: ['/imatch'],
                                 },
                                 {
                                     label: 'Générateur de CV',
@@ -1698,7 +1698,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque Externe',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/imatch/cvtheque'],
+                                            routerLink: ['/imatch'],
                                         },
                                         {
                                             label: 'Générateur de CV',
@@ -2402,7 +2402,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque Externe',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/imatch/cvtheque'],
+                                            routerLink: ['/imatch'],
                                         },
                                         {
                                             label: 'Générateur de CV',
@@ -3782,7 +3782,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Cvthèque Externe',
                                             icon: 'pi pi-briefcase',
-                                            routerLink: ['/imatch/cvtheque'],
+                                            routerLink: ['/imatch'],
                                         },
                                         {
                                             label: 'Générateur de CV',
@@ -6318,7 +6318,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Cvthèque Externe',
                                         icon: 'pi pi-briefcase',
-                                        routerLink: ['/imatch/cvtheque'],
+                                        routerLink: ['/imatch'],
                                     },
                                     {
                                         label: 'Générateur de CV',
