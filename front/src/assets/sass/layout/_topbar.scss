@@ -1,7 +1,7 @@
 .layout-topbar {
     position: fixed;
     height: 5rem;
-    z-index: 997;
+    z-index: 800;
     left: 0;
     top: 0;
     width: 100%;
@@ -27,9 +27,6 @@
             margin-right: .5rem;
         }
 
-        &:focus {
-            @include focused();
-        }
     }
 
     .layout-topbar-button {
@@ -49,9 +46,6 @@
             background-color: var(--surface-hover);
         }
 
-        &:focus {
-            @include focused();
-        }
 
         i {
             font-size: 1.5rem;

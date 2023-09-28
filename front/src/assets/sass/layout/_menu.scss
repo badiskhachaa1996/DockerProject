@@ -5,6 +5,7 @@
     overflow-y: auto;
     user-select: none;
     top: 4rem;
+    z-index: 600;
     transition: transform $transitionDuration, left $transitionDuration;
     background-color: #F2F2F2;
     padding: 1.5rem;
@@ -16,6 +17,10 @@
 
 .nav-burger {
     padding: 2rem;
+    padding-right: 0;
+    text-align: right;
+    width: 0;
+    transition: width .3s ease;
     a {
         color: #ACACAC;
         i {
@@ -23,7 +28,18 @@
             font-size: 1.3rem;
         }
     }
-  
+}
+
+
+
+.layout-static-sidebar-inactive {
+        
+    .nav-burger {
+        width: 100%;
+    }
+
+    
+
 }
 
 .layout-menu {

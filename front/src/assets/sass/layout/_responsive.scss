@@ -29,12 +29,12 @@
 
             &.layout-static-sidebar-inactive {
                 .layout-sidebar {
-                    transform: translateX(-100%);
+                    transform: translateX(-220px);
                     left: 0;
                 }
 
                 .layout-main-container {
-                    margin-left: 0;
+                    margin-left: 80px;
                 }
             }
         }

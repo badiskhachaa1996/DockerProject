@@ -118,7 +118,6 @@
 .p-link:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #C7D2FE;
 }
 
 .p-component-overlay-enter {
@@ -5706,4 +5705,31 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 }
 .p-button.p-button-danger:enabled:focus {
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f7a2a2, 0 1px 2px 0 black;
+}
+
+
+.layout-static-sidebar-inactive {
+
+  .layout-sidebar {
+    overflow: initial;
+  }
+        
+  .p-panelmenu .p-panelmenu-panel {
+    width: 80px;
+    margin-left: 200px;
+  }
+
+  .p-panelmenu .p-panelmenu-header > a {
+    .p-menuitem-text {
+      display: none;
+    }
+  }
+
+  .p-panelmenu .p-panelmenu-header.p-highlight, .p-toggleable-content {
+    width: 250px;
+    .p-menuitem-text {
+      display: block;
+    }
+
+  }
 }
