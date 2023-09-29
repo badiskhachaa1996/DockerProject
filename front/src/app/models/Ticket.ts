@@ -35,8 +35,11 @@ export class Ticket {
         public avancement?: number,
         public validation?: String,
         public module?: string,
+        public resum?: string,
+        public type?: string,
+        public origin?: boolean
     ) { }
-    
+
 
 
 }
