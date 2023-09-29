@@ -12,7 +12,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./formulaire-mi.component.scss', '../../../../assets/css/bootstrap.min.css']
 })
 export class FormulaireMIComponent implements OnInit {
-
   separateDialCode = false;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
@@ -32,7 +31,7 @@ export class FormulaireMIComponent implements OnInit {
     { label: 'Autre', value: 'Autre' },
   ]
   ecole = this.route.snapshot.paramMap.get('ecole');
-  ecole_str = { str: "", hashtag: "" }
+  ecole_str = { str: this.route.snapshot.paramMap.get('ecole'), hashtag: this.route.snapshot.paramMap.get('ecole') }
   avantages = [
     { label: 'Facebook', value: 'Facebook' },
     { label: 'Instagram', value: 'Instagram' },
@@ -96,7 +95,8 @@ export class FormulaireMIComponent implements OnInit {
   ngOnInit(): void {
     this.loadData()
     if (this.ecole) {
-
+      this.ecole_str.hashtag = this.ecole.replace(' ', '').toLocaleUpperCase()
+      this.ecole_str.str = this.ecole
     }
   }
 

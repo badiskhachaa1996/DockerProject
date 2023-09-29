@@ -389,6 +389,7 @@ import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candi
 import { HeaderImatchComponent } from './skillsnet/i-match/header-imatch/header-imatch.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 import { CalenderComponent } from './calender/calender.component';
+import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 
 @NgModule({
   imports: [
@@ -789,6 +790,7 @@ import { CalenderComponent } from './calender/calender.component';
     HeaderImatchComponent,
     EntrepriseListComponent,
     CalenderComponent,
+    NewListTicketsComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
