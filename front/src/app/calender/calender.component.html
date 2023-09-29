@@ -826,11 +826,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
-<<<<<<< HEAD
-                                <th>Activité</th>
-=======
                                 <th>Tâche</th>
->>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Action</th>
                             </tr>
                         </ng-template>
@@ -883,14 +879,12 @@
                             </tr>
                         </ng-template>
                     </p-table>
-<<<<<<< HEAD
                     <!-- affichage de l'activité -->
 
                     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                         *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
                     <div style="clear: both;"></div>
 
-=======
                 </p-tabPanel>
 
                 <p-tabPanel header="Calendrier">
@@ -921,7 +915,6 @@
                         *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
                     <div style="clear: both;"></div>
 
->>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                     <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4"
                         [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
                         responsiveLayout="scroll">
@@ -931,11 +924,7 @@
                             </tr>
                             <tr>
                                 <th>Durée</th>
-<<<<<<< HEAD
                                 <th>Activité</th>
-=======
-                                <th>Tâche</th>
->>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra>
@@ -956,14 +945,9 @@
                         </ng-template>
                     </p-table>
 
-<<<<<<< HEAD
 
 
                     <h5 class="mt-5">Historique :</h5>
-=======
-                    <!-- affichage de l'historique de pointage -->
-                    <h5 class="mt-5">Historique de pointage et CRA</h5>
->>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                     <div class="m-2">
                         <label htmlFor="">Choisissez un mois et une année</label> <br>
                         <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -973,7 +957,6 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
-<<<<<<< HEAD
 
                                 <th>Taux CRA</th>
 
@@ -1062,8 +1045,6 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
-=======
->>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Heure Check in Online</th>
                                 <th>Heure Check in Pointeuse</th>
                                 <th>Heure Check out Online</th>
