@@ -1040,7 +1040,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Gestions des externes',
                                     icon: 'pi pi-users',
-                                    routerLink: ['/skillsnet/externe'],
+                                    routerLink: ['/imatch/externe'],
                                 },
                                 {
                                     label: 'Gestions des événements',
@@ -1688,7 +1688,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/skillsnet/externe'],
+                                            routerLink: ['/imatch/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
@@ -2392,7 +2392,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/skillsnet/externe'],
+                                            routerLink: ['/imatch/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
@@ -3772,7 +3772,7 @@ export class AppMenuComponent implements OnInit {
                                         {
                                             label: 'Gestions des externes',
                                             icon: 'pi pi-users',
-                                            routerLink: ['/skillsnet/externe'],
+                                            routerLink: ['/imatch/externe'],
                                         },
                                         {
                                             label: 'Gestions des événements',
@@ -4258,7 +4258,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                     ];
-                } else if (response.role.startsWith('Externe')) {
+                } else if (response?.type?.startsWith('Externe')) {
                     this.items = [
                         {
                             label: 'Espace Personnel',
@@ -4272,7 +4272,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Offres',
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/offres'],
+                                    routerLink: ['/imatch/offres'],
                                 },
                                 {
                                     label: 'Mes Matching',
@@ -4601,7 +4601,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'Formateur')
+                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'Formateur' && !response.type.includes('Externe'))
                     this.items = [
                         {
                             label: 'Espace Personnel',
@@ -6308,7 +6308,7 @@ export class AppMenuComponent implements OnInit {
                                     {
                                         label: 'Gestions des externes',
                                         icon: 'pi pi-users',
-                                        routerLink: ['/skillsnet/externe'],
+                                        routerLink: ['/imatch/externe'],
                                     },
                                     {
                                         label: 'Gestions des événements',

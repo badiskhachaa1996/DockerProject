@@ -18,6 +18,8 @@ import { ClasseService } from 'src/app/services/classe.service';
 import * as html2pdf from 'html2pdf.js';
 import { DatePipe } from '@angular/common';
 import { Presence } from 'src/app/models/Presence';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
@@ -352,5 +354,26 @@ export class DetailsEtudiantComponent implements OnInit {
       else
         this.messageService.add({ severity: 'success', summary: "L'absence sera caché sur l'espace assiduité de l'étudiant" })
     })
+  }
+
+  initExportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.AssiduiteListe.forEach(Assiduit => {
+      let t = {}
+      t['Module'] = this.matiereDic[Assiduit.seance_id.matiere_id]?.nom
+      t['Date de la seance'] = Assiduit.seance_id.date_debut
+      t['Seance'] = Assiduit.seance_id.libelle.replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','')
+      t['Présence'] = Assiduit.isPresent ? 'Présent' : Assiduit.justificatif ? 'Absence Justifié' : 'Absent'
+      t['Date Signature'] = Assiduit.date_signature
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "assiduite_" + this.Etudiant_userdata.lastname + "_" + this.Etudiant_userdata.firstname + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
   }
 }
