@@ -126,8 +126,7 @@
                             <div class="grid">
                                 <div class="col-6 md:col-3">
                                     <button pButton pRipple (click)="onCheckIn()" label="Check in"
-                                    class="p-button-warning mb-2" [disabled]="dailyCheck != null"
-                                    [style.background-color]="dailyCheck != null ? 'gray' : ''"></button> <br>
+                                        class="p-button-warning mb-2" [disabled]="dailyCheck != null"></button> <br>
 
 
                                     <h6><strong>Online :</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
@@ -1721,8 +1720,7 @@
                         <div class="grid">
                             <div class="col-6 md:col-3">
                                 <button pButton pRipple (click)="onCheckIn()" label="Check in"
-                                    class="p-button-warning mb-2" [disabled]="dailyCheck != null"
-                                    [style.background-color]="dailyCheck != null ? 'gray' : ''"></button> <br>
+                                    class="p-button-primary mb-2" [disabled]="dailyCheck != null"></button> <br>
                                 <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
                                         label="Pause" class="p-button-warning mb-2"
                                         [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>

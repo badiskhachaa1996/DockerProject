@@ -152,7 +152,7 @@ showDialogc(task:Task){
   
 }
 
-  save(severity: string, task: Task) {
+  save(severity: string, task: Ticket) {
     this.tasktoupdate = task;
     this.messageService.add({ severity: severity, summary: 'Success', detail: 'Deplacer' });
   }
