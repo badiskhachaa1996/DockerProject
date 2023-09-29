@@ -4258,7 +4258,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         },
                     ];
-                } else if (response.type.startsWith('Externe')) {
+                } else if (response?.type?.startsWith('Externe')) {
                     this.items = [
                         {
                             label: 'Espace Personnel',

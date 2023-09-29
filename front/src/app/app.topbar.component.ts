@@ -133,7 +133,7 @@ export class AppTopBarComponent implements OnInit {
       this.logo = "assets/images/logo_adg.png"
     if (temp.service_id) {
       this.serv.getAServiceByid(temp.service_id).subscribe(service => {
-        let serviceName = service.dataService.label
+        let serviceName = service?.dataService?.label
         if (serviceName && serviceName.includes("Admission")) {
           this.NotificationService.getAdmissionNotifi().subscribe(notifAdmission => {
             if (notifAdmission.length != 0) {
@@ -183,13 +183,13 @@ export class AppTopBarComponent implements OnInit {
       })
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
-      let userconnected = jwt_decode(data.userToken)["userFromDb"];
+      let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
-      this.isExterne = userconnected.type.includes('Externe')
+      this.isExterne = userconnected?.type?.includes('Externe')
       this.items = [
         {
-          label: this.userConnected.statut,
+          label: this.userConnected.statut || "Disponible",
           items: [
             {
               label: 'Disponible',

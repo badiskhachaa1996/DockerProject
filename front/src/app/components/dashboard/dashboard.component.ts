@@ -387,7 +387,7 @@ export class DashboardComponent implements OnInit {
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
         this.isIntuns = dataUser.type == "EtudiantsIntuns"
         this.isProspect = dataUser.type == "Prospect"
-        this.isExterne = dataUser.type.includes('Externe')
+        this.isExterne = dataUser?.type?.includes('Externe')
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
