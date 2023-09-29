@@ -76,7 +76,16 @@ export class CalenderComponent implements OnInit {
   matieres: Matiere[] = [];
   classes: Classe[] = [];
   formateurs: Formateur[] = [];
-
+  searchCampus = [
+    { label: 'IEG', value: 'IEG' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Tunis', value: 'Tunis' },
+    { label: 'Intuns', value: 'Intuns' }
+  ]
   @ViewChild('calendar') private calendar: FullCalendar;
 
   token: any;
@@ -98,9 +107,9 @@ export class CalenderComponent implements OnInit {
   dataEtudiant: Etudiant = null
   dataFormateur: Formateur = null
   dataIntuns: EtudiantIntuns;
-  visible:boolean=false;
-  visibleA:boolean=false;
-  visibleC:boolean=false;
+  visible: boolean = false;
+  visibleA: boolean = false;
+  visibleC: boolean = false;
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
@@ -295,7 +304,7 @@ export class CalenderComponent implements OnInit {
   expandedRows = {};
   showOtherTextArea: boolean = false;
   congeJustifile: any;
-  paramValue:number;
+  paramValue: number;
   //* end check in variables
 
   constructor(
@@ -1422,6 +1431,18 @@ export class CalenderComponent implements OnInit {
     console.log('test')
     this.displayPointeuse = true
     console.log(this.displayPointeuse)
+  }
+
+  onConvertText(description: string) {
+    if (description.length > 500)
+      description = description.substring(0, 500) + "..."
+    return description
+  }
+  seeDescriptionActu = false
+  seeActu: ActualiteRH
+  seeMore(act: ActualiteRH) {
+    this.seeActu = act
+    this.seeDescriptionActu = true
   }
 
 }

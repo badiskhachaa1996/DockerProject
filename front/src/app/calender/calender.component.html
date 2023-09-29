@@ -826,7 +826,11 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
+<<<<<<< HEAD
                                 <th>Activité</th>
+=======
+                                <th>Tâche</th>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Action</th>
                             </tr>
                         </ng-template>
@@ -879,12 +883,45 @@
                             </tr>
                         </ng-template>
                     </p-table>
+<<<<<<< HEAD
                     <!-- affichage de l'activité -->
 
                     <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
                         *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
                     <div style="clear: both;"></div>
 
+=======
+                </p-tabPanel>
+
+                <p-tabPanel header="Calendrier">
+                    <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
+                    </p-fullCalendar>
+                    <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+                        [style]="{width: '75vw'}">
+                        <div class="col-12 grid">
+                            <div class="col-12">
+                                <p>
+                                    {{dataEvent?.note}}
+                                </p>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </p-tabPanel>
+
+
+
+
+
+
+
+
+                <p-tabPanel header="Historique">
+                    <!-- affichage du CRA d'un historique de pointage -->
+                    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                        *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                    <div style="clear: both;"></div>
+
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                     <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4"
                         [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
                         responsiveLayout="scroll">
@@ -894,7 +931,11 @@
                             </tr>
                             <tr>
                                 <th>Durée</th>
+<<<<<<< HEAD
                                 <th>Activité</th>
+=======
+                                <th>Tâche</th>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra>
@@ -915,9 +956,14 @@
                         </ng-template>
                     </p-table>
 
+<<<<<<< HEAD
 
 
                     <h5 class="mt-5">Historique :</h5>
+=======
+                    <!-- affichage de l'historique de pointage -->
+                    <h5 class="mt-5">Historique de pointage et CRA</h5>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                     <div class="m-2">
                         <label htmlFor="">Choisissez un mois et une année</label> <br>
                         <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -927,6 +973,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
+<<<<<<< HEAD
 
                                 <th>Taux CRA</th>
 
@@ -1015,6 +1062,8 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
+=======
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Heure Check in Online</th>
                                 <th>Heure Check in Pointeuse</th>
                                 <th>Heure Check out Online</th>
@@ -2193,11 +2242,17 @@
                     </p-table>
                 </p-tabPanel>
                 <p-tabPanel header="Actualités">
-                    <p-table [value]="actualites" dataKey="_id" [rows]="4" [rowHover]="true"
+                    <p-table [value]="actualites" dataKey="_id" [rows]="4" [rowHover]="true" #dtactua
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <p-multiSelect [options]="searchCampus" placeholder="Choisissez les campus"
+                                (onChange)="dtactua.filter($event.value, 'campus','in');">
+                            </p-multiSelect>
+                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
+                                <th>Campus</th>
                                 <th>Titre de l'actualité</th>
                                 <th>Contenu de l'actualité</th>
                             </tr>
@@ -2205,24 +2260,30 @@
                         <ng-template pTemplate="body" let-actualite>
                             <tr>
                                 <td>
-                                    {{actualite?.date_creation | date :'medium' }}
+                                    {{actualite?.date_creation | date :'mediumDate' }}
+                                </td>
+                                <td>
+                                    {{actualite.campus}}
                                 </td>
                                 <td>
                                     {{actualite?.titre}}
                                 </td>
                                 <td>
-                                    {{actualite?.description}}
+                                    {{onConvertText(actualite?.description)}}
+                                    <i pTooltip="Voir plus de détails" tooltipPosition="bottom" class="pi pi-eye" style="color: blue;cursor: pointer;"
+                                        *ngIf="actualite?.description.length>500" (click)="seeMore(actualite);"
+                                        aria-hidden="true"></i>
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="3">Aucune information pour le moment.</td>
+                                <td colspan="4">Aucune information pour le moment.</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="loadingbody">
                             <tr>
-                                <td colspan="3">Chargement des informations, merci de patienter...</td>
+                                <td colspan="4">Chargement des informations, merci de patienter...</td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -2872,3 +2933,7 @@
         </div>
     </div>
 </div>-->
+
+<p-dialog header="Description de l'actualité" [(visible)]="seeDescriptionActu" [style]="{width: '50vw'}">
+    <p *ngIf="seeActu">{{ seeActu.description}}</p>
+</p-dialog>

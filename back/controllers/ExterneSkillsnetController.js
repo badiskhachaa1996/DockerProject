@@ -51,13 +51,18 @@ app.post('/create/:id', (req, res) => {
                 newObj.save().then(doc => {
                     ExterneSkillsnet.findById(doc._id).populate('user_id').populate('created_by').then(newDoc => {
                         let htmlmail = `
-                        <p style="font-size:20px; color:black">Bonjour,</p>
+                        <p style="font-size:20px; color:black">Bonjour,</p><br>
                         <p>   </p>
-                        <p style="font-size:20px; color:black">Votre compte SkillsNet a été crée sur la plateforme <a href='${origin[0]}/#/formulaire-externe'>IMS</a>.</p>
-                        <p style="font-size:20px; color:black">Merci de compléter votre profil sur <a href='${origin}/#/formulaire-externe'>cette page</a></p>
-                        <p style="font-size:20px; color:black">Vos identifiants sont votre adresse email et votre mot de passe est : <strong>${passwordClear}</strong></p>
+                        <p style="font-size:20px; color:black">
+                        Nous sommes ravis de vous informer que votre compte iMatch a été créé avec succès. <br>
+                        Vous pouvez désormais vous connecter pour suivre vos candidatures et postuler à d'autres offres sur <a href='https://ims.intedgroup.com/#/imatch/offres'></a><br>
+                        Voici vos informations de connexion : adresse e-mail : ${userCreated.email_perso} Mot de passe : ${passwordClear} !<br>
+                        Grâce à notre portail, vous pouvez générer gratuitement un CV et postuler directement aux offres disponibles de plus, un conseiller sera à votre disposition pour vous aider à trouver l'opportunité qui vous convient. <br>
+                        Pour plus d'informations, veuillez contacter <a href="mailto:ims.support@intedgroup.com">ims.support@intedgroup.com</a><br>
+                        Nous vous souhaitons bonne chance dans vos démarches.<br>
+                        </p>
                         <p>   </p>
-                        <p style="font-size:20px;">Cordialement,</p>
+                        <p style="font-size:20px;">Cordialement,</p><br>
                         
                         <footer> <img src="cid:red"/></footer>
                         `
@@ -73,11 +78,11 @@ app.post('/create/:id', (req, res) => {
                             html: htmlmail,
                             attachments: attachments
                         };
-                        /*transporter.sendMail(mailOptions, function (error, info) {
+                        transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.error(error);
                             }
-                        });*/
+                        });
                         res.send(newDoc)
                     })
                 })
@@ -87,7 +92,7 @@ app.post('/create/:id', (req, res) => {
                 if (newDoc)
                     res.send(newDoc)
                 else
-                    res.send({user_id:userFind})
+                    res.send({ user_id: userFind })
             })
         }
     })

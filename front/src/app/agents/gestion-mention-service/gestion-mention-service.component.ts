@@ -96,13 +96,14 @@ export class GestionMentionServiceComponent implements OnInit {
       this.services.splice(this.services.indexOf(rowData), 1)
       this.messageService.add({ severity: "success", summary: "Suppression du service avec succès" })
     })
-
   }
 
   onRowReorder(event) {
-    console.log(event)
-    console.log(this.services[event.dragIndex], this.services[event.dropIndex])
-    this.ServiceService.update({ id: this.services[event.dropIndex]._id, index: (event.dropIndex - 1) }).subscribe()
+    this.services.forEach((s, idx) => {
+      s.index = idx
+      this.ServiceService.update({ ...s, id: s._id }).subscribe(r => {
+      })
+    })
   }
 
 }

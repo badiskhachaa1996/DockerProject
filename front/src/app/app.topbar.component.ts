@@ -34,6 +34,7 @@ export class AppTopBarComponent implements OnInit {
   socket = io(environment.origin.replace('/soc', ''));
   isCEO = false
   isEtudiant = false
+  isExterne = false
   userConnected: User;
   token: any;
   user = true;
@@ -132,8 +133,8 @@ export class AppTopBarComponent implements OnInit {
       this.logo = "assets/images/logo_adg.png"
     if (temp.service_id) {
       this.serv.getAServiceByid(temp.service_id).subscribe(service => {
-        let serviceName = service.dataService.label
-        if (serviceName.includes("Admission")) {
+        let serviceName = service?.dataService?.label
+        if (serviceName && serviceName.includes("Admission")) {
           this.NotificationService.getAdmissionNotifi().subscribe(notifAdmission => {
             if (notifAdmission.length != 0) {
               this.Notifications = notifAdmission.length
@@ -182,30 +183,31 @@ export class AppTopBarComponent implements OnInit {
       })
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
-      let userconnected = jwt_decode(data.userToken)["userFromDb"];
+      let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
+      this.isExterne = userconnected?.type?.includes('Externe')
       this.items = [
         {
-          label: this.userConnected.statut,
+          label: this.userConnected.statut || "Disponible",
           items: [
             {
               label: 'Disponible',
-              icon:'pi pi-check-circle',
+              icon: 'pi pi-check-circle',
               command: () => {
                 this.onUpdateStatus('Disponible');
               }
             },
             {
               label: 'Absent',
-              icon:'pi pi-times-circle',
+              icon: 'pi pi-times-circle',
               command: () => {
                 this.onUpdateStatus('Absent');
               }
             },
             {
               label: 'En pause',
-              icon:'pi pi-stop-circle',
+              icon: 'pi pi-stop-circle',
               command: () => {
                 this.onUpdateStatus('En pause');
 
@@ -214,7 +216,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'Occupé',
-              icon:'pi pi-minus-circle',
+              icon: 'pi pi-minus-circle',
               command: () => {
                 this.onUpdateStatus('Occupé');
 
@@ -223,7 +225,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'En congé',
-              icon:'pi pi-arrow-circle-right',
+              icon: 'pi pi-arrow-circle-right',
               command: () => {
                 this.onUpdateStatus('En congé');
 
@@ -232,7 +234,7 @@ export class AppTopBarComponent implements OnInit {
             },
             {
               label: 'En réunion',
-              icon:'pi pi-circle-fill',
+              icon: 'pi pi-circle-fill',
               command: () => {
                 this.onUpdateStatus('En réunion');
 
@@ -252,7 +254,7 @@ export class AppTopBarComponent implements OnInit {
 
         {
           label: 'Déconnexion',
-          icon:'pi pi-power-off',
+          icon: 'pi pi-power-off',
           command: () => {
             this.onDisconnect();
 
@@ -267,35 +269,35 @@ export class AppTopBarComponent implements OnInit {
     })
     this.menuCalenders = [
       {
-        label:"CRA",
+        label: "CRA",
         command: () => {
           this.router.navigate(['/'], { queryParams: { param: 1 } });
         }
       },
       {
-        label:"Calendrier",
+        label: "Calendrier",
         command: () => {
           this.router.navigate(['/'], { queryParams: { param: 2 } });
         }
       },
       {
-        label:"Historique",
+        label: "Historique",
         command: () => {
           this.router.navigate(['/'], { queryParams: { param: 3 } });
         }
       },
       {
-        label:"Congé",
+        label: "Congé",
         command: () => {
           this.router.navigate(['/'], { queryParams: { param: 4 } });
         }
       },
       {
-        label:"Assiduité",
+        label: "Assiduité",
         command: () => {
-            this.router.navigate(['/'], { queryParams: { param: 5 } });
-          }
-        
+          this.router.navigate(['/'], { queryParams: { param: 5 } });
+        }
+
       },
     ];
   }

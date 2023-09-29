@@ -40,7 +40,8 @@ export class EntrepriseListComponent implements OnInit {
     lastname: new FormControl('', Validators.required),
     firstname: new FormControl('', Validators.required),
     email_perso: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required)
+    phone: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]),
+    consent: new FormControl('Non', Validators.required)
   })
 
   offres = []
@@ -248,7 +249,7 @@ export class EntrepriseListComponent implements OnInit {
   }
 
   onSubmit() {
-    this.ExterneService.create({ ...this.form.value, phone: this.form.value.phone.internationalNumber }, null).subscribe(externe => {
+    this.ExterneService.create({ ...this.form.value }, null).subscribe(externe => {
       if (this.uploadedFiles.length != 0) {
         console.log(this.uploadedFiles)
         let formData = new FormData();
@@ -272,7 +273,11 @@ export class EntrepriseListComponent implements OnInit {
           type_matching: "Candidat",
           date_creation: new Date()
         }).subscribe(m => {
-          this.ToastService.add({ severity: 'success', summary: "Matching crée" })
+          this.ToastService.add({ severity: 'success', summary: "Matching crée", detail: 'Un compte a été crée, vos identifiants ont été envoyés sur votre adresse email' })
+          this.form.reset();
+          this.showPostuler = false;
+        }, error => {
+          this.ToastService.add({ severity: 'error', summary: "Matching déjà crée", detail: 'Un matching existe déjà entre vous et cette offre.' })
           this.form.reset();
           this.showPostuler = false;
         })

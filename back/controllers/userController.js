@@ -1166,7 +1166,7 @@ app.get("/delete/:user_id", (req, res) => {
   let token = jwt.decode(req.header("token"));
   if (token.role == "Admin")
     User.findByIdAndRemove(req.params.user_id).then((r) => {
-      res.send(r);
+      res.send(r); console.log(r, 'compte supprimé')
     });
   //Chercher dans les autres tables si son ID ne traine pas dans les Models Formateur, Etudiant, Prospects, Commercial etc
   else res.status(403).send("Vous n'avez pas l'accès necessaire.");

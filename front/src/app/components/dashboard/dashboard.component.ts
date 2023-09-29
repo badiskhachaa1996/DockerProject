@@ -99,6 +99,7 @@ export class DashboardComponent implements OnInit {
   isVisitor = false;
   isIntuns = false
   isProspect = false
+  isExterne = false
 
   dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
@@ -204,7 +205,16 @@ export class DashboardComponent implements OnInit {
       numVisible: 1
     }
   ];
-
+  searchCampus = [
+    { label: 'IEG', value: 'IEG' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Tunis', value: 'Tunis' },
+    { label: 'Intuns', value: 'Intuns' }
+  ]
   carousselImages: any = [
     {
       "previewImageSrc": "assets/logement/original/accueil4.jpg",
@@ -377,6 +387,7 @@ export class DashboardComponent implements OnInit {
         this.isVisitor = dataUser.type == "Visitor" && dataUser.role == "Watcher";
         this.isIntuns = dataUser.type == "EtudiantsIntuns"
         this.isProspect = dataUser.type == "Prospect"
+        this.isExterne = dataUser?.type?.includes('Externe')
 
         this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
           if (dataEtu) {
@@ -1482,5 +1493,15 @@ export class DashboardComponent implements OnInit {
     event.preventDefault();
     contextMenu.show(event);
   }
-
+  onConvertText(description: string) {
+    if (description.length > 500)
+      description = description.substring(0, 500) + "..."
+    return description
+  }
+  seeDescriptionActu = false
+  seeActu: ActualiteRH
+  seeMore(act: ActualiteRH) {
+    this.seeActu = act
+    this.seeDescriptionActu = true
+  }
 }

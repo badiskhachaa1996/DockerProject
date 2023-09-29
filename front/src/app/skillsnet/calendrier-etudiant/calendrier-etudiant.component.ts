@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
@@ -17,6 +17,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { User } from 'src/app/models/User';
 import { DisponibiliteEtudiant } from 'src/app/models/DisponibiliteEtudiant';
 import { CalendrierEtudiantService } from 'src/app/services/calendrier-etudiant.service';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendrier-etudiant',
@@ -26,6 +27,13 @@ import { CalendrierEtudiantService } from 'src/app/services/calendrier-etudiant.
 export class CalendrierEtudiantComponent implements OnInit {
   token;
   user: User;
+
+  typeList = [
+    { label: "Indisponible", value: "Indisponible" },
+    { label: "Disponible", value: "Disponible" },
+    { label: "Réunion Teams", value: "Teams" },
+    { label: "Entretien", value: "Other" }
+  ]
   constructor(private DispoEtuService: CalendrierEtudiantService, private ToastService: MessageService,
     private AuthService: AuthService, private viewportScroller: ViewportScroller, private router: Router,
     private CVService: CvService) { }
@@ -67,11 +75,14 @@ export class CalendrierEtudiantComponent implements OnInit {
           this.addEvent("Disponible", new Date(date_start), new Date(date_start.getTime() + 3600000), { type: "Disponible" }, "Disponible")
         date_start.setHours(date_start.getHours() + 1)
       }
+      if (this.actualView == 'dayGridMonth') {
+        this.onChangeView({ view: { type: "dayGridMonth" } })
+      }
     })
 
     //Détecter tous les events dans la journée et si y'a aucun alors rajouter un event Disponible
   }
-
+  @ViewChild('calendar') calendarComponent: FullCalendarComponent;
   options = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     defaultDate: new Date(),
@@ -82,10 +93,10 @@ export class CalendrierEtudiantComponent implements OnInit {
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
     locale: 'fr',
-    weekends: false,
     events: [],
     minTime: '08:00:00',
     maxTime: '19:00:00',
+    defaultView: 'timeGridWeek',
     /*views: {
       timeGridFourDay: {
         weekends: false,
@@ -98,12 +109,14 @@ export class CalendrierEtudiantComponent implements OnInit {
     firstDay: 1,
     eventClick: this.eventClickFCRH.bind(this),
     dateClick: this.dateClickFC.bind(this),
+    datesRender: this.onChangeView.bind(this),// Version du FullCalendar inférieur à 6
+    datesSet: this.onChangeView.bind(this) // Version du FullCalendar Supérieur à 5
   }
   displayModal = false
   form = new FormGroup({
     user_id: new FormControl(''),
     libelle: new FormControl('Indisponible'),
-    type: new FormControl('Indisponible'),
+    type: new FormControl('Indisponible', Validators.required),
     from: new FormControl(new Date(), Validators.required),
     to: new FormControl(new Date(), Validators.required),
   })
@@ -111,8 +124,7 @@ export class CalendrierEtudiantComponent implements OnInit {
     this.displayModal = true
     let start = new Date(event.event.start)
     let end = new Date(event.event.end)
-    console.log(start, end)
-    this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible" })
+    this.form.patchValue({ user_id: this.token.id, from: start, to: end, type: "Indisponible", libelle: "Indisponible" })
   }
   dateClickFC(event: { dateStr: string, allDay: Boolean }) {
     this.displayModal = true
@@ -151,22 +163,30 @@ export class CalendrierEtudiantComponent implements OnInit {
     //  this.events.push({ title: "TEST", date: new Date() })
     this.options.events = this.events
     this.events = Object.assign([], this.events) //Parceque Angular est trop c*n pour voir le changement de la variable autrement
+    if (this.actualView != 'dayGridMonth') {
+      this.eventsDefault = this.events
+    } else {
+      this.eventsDefault.push({ title, start, end, backgroundColor, borderColor, extendedProps })
+    }
     //this.cd.detectChanges();
 
   }
 
   onAddIndispo() {
     this.DispoEtuService.create({ ...this.form.value }).subscribe(r => {
-      this.addEvent(r.libelle, new Date(r.from), new Date(r.to), { ...r }, r.type)
+      this.loadEvents()
       this.displayModal = false
       this.form.reset()
     })
   }
   eventsExist(date_start, date_end) {
     let r = false
-    date_start = new Date(date_start)
-    date_end = new Date(date_end)
-    this.events.forEach(e => {
+
+    let cs = new Date(date_start).getTime() //date to check = req.body.date_debut
+    let ce = new Date(date_end).getTime() //date to check = req.body.date_fin
+    this.events.forEach(ev => {
+      let s = new Date(ev.start).getTime() // debut = temp.date_debut
+      let e = new Date(ev.end).getTime() // fin = temp.date_fin
       /*
 (date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
         (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
@@ -174,14 +194,37 @@ export class CalendrierEtudiantComponent implements OnInit {
         !(e.start < date_start && e.end < date_start && e.start < date_end && e.end < date_end) ||
         !(date_start < e.start && date_start < e.end && date_end < e.start && date_end < e.end)
       */
-      if ((date_start < e.start && date_end < e.end && date_start < e.end && e.start < date_end) ||
-        (e.start < date_start && e.end < date_end && e.start < date_end && date_start < e.end) ||
-        (e.start < date_start && date_end < e.end && date_start < e.end && e.start < date_end)
-      ) {
+      if ((cs == s && e == cs) || (cs >= s && cs < e) || (ce > s && ce <= e)) {
+        r = true
+      } else if (new Date(ev.start).getDate() == new Date(date_start).getDate() && new Date(ev.start).getMonth() == new Date(date_start).getMonth() && new Date(ev.start).getHours() == new Date(date_start).getHours() && new Date(ev.start).getMinutes() == new Date(date_start).getMinutes()) {
         r = true
       }
 
     })
     return r
+  }
+  eventsDefault = []
+  actualView = 'timeGridWeek'
+  onChangeView(event) {
+    this.actualView = event.view.type
+    if (event.view.type == 'dayGridMonth') {
+      this.eventsDefault = this.events
+      let newEvents = []
+      console.log(this.events)
+      this.events.forEach(val => {
+        if (val.extendedProps.type != 'Disponible') {
+          val.title = "Indisponible"
+          val.backgroundColor = '#cc3300'
+          val.borderColor = ' #cc0000'
+          newEvents.push(val)
+        }
+
+      })
+      this.events = Object.assign([], newEvents)
+      this.options.events = newEvents
+    } else {
+      this.events = Object.assign([], this.eventsDefault)
+      this.options.events = this.eventsDefault
+    }
   }
 }

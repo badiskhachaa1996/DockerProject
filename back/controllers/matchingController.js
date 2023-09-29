@@ -6,14 +6,21 @@ app.disable("x-powered-by");
 const { Matching } = require("./../models/matching");
 
 app.post('/create', (req, res) => {
-    let event = new Matching({
-        ...req.body
+    Matching.find({ offre_id: req.body.offre_id, cv_id: req.body.cv_id }).then(match => {
+        if (match) {
+            res.status(403).send(match)
+        } else {
+            let event = new Matching({
+                ...req.body
+            })
+            event.save().then(doc => {
+                Matching.findById(doc._id).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(newDoc => {
+                    res.send(newDoc)
+                })
+            })
+        }
     })
-    event.save().then(doc => {
-        Matching.findById(doc._id).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(newDoc => {
-            res.send(newDoc)
-        })
-    })
+
 })
 
 app.put('/update/:id', (req, res) => {
