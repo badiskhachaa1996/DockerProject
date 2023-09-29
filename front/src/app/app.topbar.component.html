@@ -26,7 +26,7 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
-        <a href="#/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant">
+        <a href="#/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant || isExterne">
             <i class="pi pi-calendar" pTooltip="Mes disponibilités" tooltipPosition="bottom"></i>
             <span>Mes disponibilités</span>
         </a>
@@ -34,23 +34,23 @@
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>
         </a>
-        <a href="#/calendar" class="p-link layout-topbar-button">
-            <i #cra class="pi pi-calendar"  ></i>
+        <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="!isEtudiant && !isExterne && !isCEO">
+            <i #cra class="pi pi-calendar"></i>
         </a>
         <a href="https://links.intedgroup.com/" class="p-link layout-topbar-button">
             <i class="pi pi-globe" pTooltip="Links" tooltipPosition="bottom"></i>
 
             <span> Links</span>
         </a>
-        
+
         <a href="#/informations" class="p-link layout-topbar-button">
-            <i class="pi pi-th-large" pTooltip="Informations"  tooltipPosition="bottom"></i>
+            <i class="pi pi-th-large" pTooltip="Informations" tooltipPosition="bottom"></i>
 
             <span> Informations</span>
         </a>
         <a href="#/ticketing/gestion/ajout" class="p-link layout-topbar-button">
             <i class="pi pi-tag" pTooltip="Ticketing" tooltipPosition="bottom"></i>
-            
+
             <span> Ticketing</span>
         </a>
         <a href="#/entreprise-dashboard" class="p-link layout-topbar-button" *ngIf="isCEO">

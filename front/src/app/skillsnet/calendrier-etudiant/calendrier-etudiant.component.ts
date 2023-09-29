@@ -196,6 +196,8 @@ export class CalendrierEtudiantComponent implements OnInit {
       */
       if ((cs == s && e == cs) || (cs >= s && cs < e) || (ce > s && ce <= e)) {
         r = true
+      } else if (new Date(ev.start).getDate() == new Date(date_start).getDate() && new Date(ev.start).getMonth() == new Date(date_start).getMonth() && new Date(ev.start).getHours() == new Date(date_start).getHours() && new Date(ev.start).getMinutes() == new Date(date_start).getMinutes()) {
+        r = true
       }
 
     })
