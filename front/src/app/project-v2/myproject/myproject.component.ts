@@ -247,7 +247,7 @@ export class MyprojectComponent implements OnInit {
   
   }
 
-  save(severity: string, task: Task) {
+  save(severity: string, task: any) {
     this.tasktoupdate = task;
     this.messageService.add({ severity: severity, summary: 'Success', detail: 'Deplacer' });
   }

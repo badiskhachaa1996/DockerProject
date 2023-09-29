@@ -71,7 +71,7 @@ const ticket_schema = new mongoose.Schema({
         }], default: []
     },
     priorite: {
-        type: String
+        type: Boolean
     }, note: { type: String },
     documents_service: {
         type: [{
@@ -95,6 +95,9 @@ const ticket_schema = new mongoose.Schema({
    consignes: { type:[String], required: false},
    avancement:{ type: Number, required: false },
    validation:{ type: String, required: false},
+   module: { type: String, required: false},
+   resum: { type: String, required: false},
+   type : { type: String, required: false},
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Ticket = mongoose.model("ticket", ticket_schema);

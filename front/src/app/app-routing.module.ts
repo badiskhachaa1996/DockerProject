@@ -281,6 +281,7 @@ import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/cal
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { CalenderComponent } from './calender/calender.component';
+import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 const routes: Routes = [
     {
         path: '',
@@ -1185,7 +1186,8 @@ const routes: Routes = [
             { path: 'ticketing/dashboard', component: DashboardTicketingComponent, canActivate: [AuthGuardService] },
             { path: 'ticketing-igs', component: AjoutTicketComponent, canActivate: [AuthGuardService] },
             { path: 'configuration/service-mention', component: GestionMentionServiceComponent, canActivate: [AuthGuardService] },
-
+            /* Ticketing V3 */
+            { path: 'ticketing/mes-tickets', component: NewListTicketsComponent, canActivate: [AuthGuardService] },
             /* Gestion Agent V2 */
             {
                 path: 'agent/ajout',

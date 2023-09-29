@@ -6,7 +6,6 @@ export class Ticket {
         public sujet_id?: any,
         public date_ajout?: Date,
         public agent_id?: any,
-        
         public statut?: string,
         public date_affec_accep?: Date,
         public temp_traitement?: string,
@@ -24,7 +23,7 @@ export class Ticket {
             nom?: string,
             path?: string,
         }[],
-        public priorite?: string,
+        public priorite?: boolean,
         public note?: string,
         public documents_service?: {
             _id?: string,
@@ -36,8 +35,11 @@ export class Ticket {
         public avancement?: number,
         public validation?: String,
         public module?: string,
+        public resum?: string,
+        public type?: string,
+        public origin?: boolean
     ) { }
-    
+
 
 
 }
