@@ -72,7 +72,7 @@
 
 
 <!-- Checking area -->
-<div class="grid" *ngIf="isAdmin">
+<div class="grid" *ngIf="isAdmin || isAgent">
     <div class="col-12">
         <!-- info user -->
 
@@ -118,8 +118,8 @@
                                     <i pTooltip="Voir plus de détails" tooltipPosition="bottom" class="pi pi-eye"
                                         style="color: blue;cursor: pointer;" *ngIf="actualite?.description.length>500"
                                         (click)="seeMore(actualite);" aria-hidden="true"></i>
-                                    <p-dialog header="Description de l'actualité" [(visible)]="seeDescriptionActu" modal="true"
-                                        [style]="{width: '50vw'}">
+                                    <p-dialog header="Description de l'actualité" [(visible)]="seeDescriptionActu"
+                                        modal="true" [style]="{width: '50vw'}">
                                         <p *ngIf="seeActu">{{ seeActu.description}}</p>
                                     </p-dialog>
                                 </td>
@@ -1731,7 +1731,7 @@
 </div>
 
 
-<div *ngIf="!isEtudiant && !isAdmin &&!isProspect && !isCEO">
+<div *ngIf="!isEtudiant && !isAdmin &&!isProspect && !isCEO && !isAgent">
     <div class="col-12">
         <!-- info user -->
 
