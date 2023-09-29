@@ -31,9 +31,11 @@ export class AjoutTicketComponent implements OnInit {
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
-    description: new FormControl('', Validators.required),
-    priorite: new FormControl('', Validators.required),
-    module : new FormControl('', Validators.required),
+    description: new FormControl('',),
+    resum: new FormControl('', Validators.required),
+    priorite: new FormControl("false" ),
+    module : new FormControl('', ),
+    type : new FormControl('',),
   })
   token;
   sujetDropdown: any[] = [
@@ -63,14 +65,20 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
   ];
-
+  IMS_Type_Dropdown: any[] = [
+    { label: 'Création', value: "Création" },
+    { label: 'Evolution', value: "Evolution" },
+    { label: 'Correction', value: "Correction" },
+  ]
   showModuleDropdown: boolean = false;
+  showTypeDropdown:boolean = false;
   onAdd() {
     let documents = []
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id }).subscribe(data => {
+    console.log(this.TicketForm.value.priorite)
+    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id,priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
       let d = new Date()
@@ -173,13 +181,20 @@ export class AjoutTicketComponent implements OnInit {
 
   onSubjectChange() {
     const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
- 
+    
+    if (this.serviceDic[this.TicketForm.get('service_id').value]==="Support informatique"){
+      this.showTypeDropdown=true;
+    }else {
+      this.showTypeDropdown=false;
+    }
     if(selectedSubject === "IMS") {
         this.showModuleDropdown = true;
+        this.showTypeDropdown=true;
         this.TicketForm.get('module').setValidators([Validators.required]);
         this.TicketForm.get('module').updateValueAndValidity();
     }
     else {
+        
         this.TicketForm.get('module').clearValidators();
         this.TicketForm.get('module').updateValueAndValidity();
         this.TicketForm.get('module').reset();

@@ -37,8 +37,7 @@ const ticket_schema = new mongoose.Schema({
         default: null
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     isReverted: {
         type: Boolean
@@ -71,7 +70,7 @@ const ticket_schema = new mongoose.Schema({
         }], default: []
     },
     priorite: {
-        type: Boolean
+        type: Boolean, default: false
     }, note: { type: String },
     documents_service: {
         type: [{

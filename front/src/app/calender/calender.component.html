@@ -115,72 +115,298 @@
                         </ng-template>
                     </p-table>
                 </p-tabPanel> -->
-                <p-tabPanel header="CRA">
+                <p-tabPanel header="Pointage">
+                    <div class="grid">
+                        <div class="col-12 md:col-4">
+                            <button pButton pRipple (click)="onCheckIn()" label="Checkin" class="p-button-warning mb-2"
+                                [disabled]="dailyCheck != null" style="width: 150px; height: 80px;"></button> <br>
 
-                    <div class="card">
-                        <div class="grid">
-                            <div class="col-6 md:col-3">
-                                <button pButton pRipple (click)="onCheckIn()" label="Check in"
-                                    class="p-button-warning mb-2" [disabled]="dailyCheck != null"></button> <br>
-
-
-                                <h6><strong>Online :</strong> {{dailyCheck?.check_in | date: 'HH:mm'}} </h6>
-                                <h6><strong>Pointeuse</strong> {{getCheckIn(user?._id) | date:'H:mm'}} </h6>
-
-                            </div>
-                            <div class="col-6 md:col-3">
-                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
-                                        label="Pause" class="p-button-help mb-2"
-                                        [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                    <br></span>
-                                <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
-                                        label="Fin de la pause" class="p-button-warning mb-2"
-                                        [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                    <br></span>
-
-
-
-                            </div>
-                            <div class="col-6 md:col-3 ">
-                                <button pButton pRipple label="Check out" (click)="onCheckOut()" class="p-button-danger"
-                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
-                                <!--<h5 style="text-align: center;">
-                                    Statut actuel <span pTooltip="Modifier le statut" (click)="showFormUpdateStatut = true"><i
-                                            class="pi pi-pencil" style="color: #4338CA"></i></span><br>
-                                    <!-- formulaire pour mettre à jour le statut de l'utilisateur -->
-                                <!--    <div *ngIf="showFormUpdateStatut">
-                                        <hr>
-                                        <form [formGroup]="formUpdateStatut" class="p-fluid p-formgrid"
-                                            (ngSubmit)="onUpdateStatus()">
-                                            <div class="field">
-                                                <label htmlFor="statut">Mettre à jour votre statut</label>
-                                                <p-dropdown [options]="statutList" placeholder="Sélectionnez votre nouveau statut"
-                                                    [showClear]="true" formControlName="statut"></p-dropdown>
-                                            </div>
-                                            <div class="field">
-                                                <button pButton type="submit" label="Valider" class="p-button-outlined"></button>
-                                            </div>
-                                        </form>
-                                        <hr>
-                                    </div>
-                                    <!-- end dialogue -->
-                                <!--      <span style="color: green; font-weight: bolder;">{{userConnected?.statut}}</span>
-                                </h5>
-                            -->
-                            </div>
-                            <div class="col-6 md:col-3" style="text-align: center">
-                                <h6>Temps <br> travail:
-                                    <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
-                                </h6>
-                                <h6>Temps <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
-                                <h6>Remplissage <br> CRA: <strong>{{craPercent}}%</strong></h6>
-                                <!--<img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
-                                <!--<h6 style="font-style: italic;">{{userConnected?.mention}}</h6>
-                                <h6 *ngIf="userConnected?.service_id">Service: <i>{{userConnected?.service_id?.label}}</i></h6>-->
-
-                            </div>
+                            <h6>Temps <br> travail:
+                                <strong>{{workingHour}}</strong>h<strong>{{workingMinute}}</strong>mn
+                            </h6>
                         </div>
+                        <div class="col-12 md:col-4">
+                            <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
+                                    label="Pause" class="p-button-help mb-2"
+                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"
+                                    style="width: 150px; height: 80px;"></button>
+                                <br></span>
+                            <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
+                                    label="Fin de la pause" class="p-button-warning mb-2"
+                                    [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
+                                <br></span>
+                            <h6>Temps <br> pause: <strong>{{pauseTiming}}</strong>mn</h6>
+
+
+                        </div>
+                        <div class="col-12 md:col-4 ">
+                            <button pButton pRipple label="Checkout" (click)="onCheckOut()" class="p-button-danger"
+                                [disabled]="dailyCheck == null || dailyCheck.check_out != null"
+                                style="width: 150px; height: 80px;"></button>
+                            <h6>Remplissage <br> CRA: <strong>{{craPercent}}%</strong></h6>
+                        </div>
+
                     </div>
+
+                    <div>
+
+                        <div class="col-12">
+                            <p-button (click)="showAssiduite()" style="width: 100px; height: 50px;">Activité
+                                &nbsp;&nbsp;&nbsp;</p-button>
+                        </div>
+                        <div *ngIf="visibleA">
+
+                            <p-table [value]="historiqueCra" dataKey="_id" [rows]="1" [rowHover]="true"
+                                styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                                    <tr>
+
+                                        <th>Checkin IMS</th>
+                                        <th>Checkin Pointeuse</th>
+                                        <th>Pause</th>
+                                        <th>Checkout IMS</th>
+                                        <th>Checkout Pointeuse</th>
+
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-cra>
+                                    <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
+
+                                        <td>{{cra.check_in | date:'H:mm'}}</td>
+                                        <td>WIP</td>
+                                        <td *ngIf="cra.pause_timing">
+                                            <ul>
+                                                <li *ngFor="let pause of cra.pause; let i = index">
+                                                    de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
+                                                </li>
+                                            </ul>
+                                            <br>Total: {{ cra.pause_timing }}mn
+                                        </td>
+                                        <td>{{cra.check_out | date:'H:mm'}}</td>
+                                        <td>WIP</td>
+                                        <td *ngIf="!cra.pause_timing">
+                                            0mn
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="8">Vous n'avez aucun pointage enregistré pour le moment.</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="loadingbody">
+                                    <tr>
+                                        <td colspan="8">Chargement de votre historique, merci de patienter...</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <br> <br>
+                        <!-- affichage du CRA d'un historique de pointage -->
+                        <i class="pi pi-times-circle"
+                            style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                            *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                        <div style="clear: both;"></div>
+
+                        <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id"
+                            [rows]="4" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
+                            responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+
+                                <tr>
+                                    <th>Pause</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-cra>
+                                <td *ngIf="cra.pause_timing">
+                                    <ul>
+                                        <li *ngFor="let pause of cra.pause; let i = index">
+                                            de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
+                                        </li>
+                                    </ul>
+                                    <br>Total: {{ cra?.pause_timing }}mn
+                                </td>
+                                <td *ngIf="!cra?.pause_timing">
+                                    0mn
+                                </td>
+
+
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="2">Vous n'avez aucune pause enregistré pour le jour sélectionné.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="2">Chargement de vos pause, merci de patienter...</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+
+                        <div class="col-12 ">
+                            <p-button style="width: 100px; height: 50px;" styleClass="p-button-info"
+                                (click)="showHistorique()">Historique</p-button>
+                            <div class="col-12" *ngIf="visible">
+                                <!-- affichage du CRA d'un historique de pointage -->
+                                <h5 class="mt-5">Historique :</h5>
+                                <div class="m-2">
+                                    <label htmlFor="">Choisissez un mois et une année</label> <br>
+                                    <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
+                                </div>
+                                <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true"
+                                    styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Heure Check in Online</th>
+                                            <th>Heure Check in Pointeuse</th>
+                                            <th>Heure Check out Online</th>
+                                            <th>Heure Check out Pointeuse</th>
+                                            <th>Heures pauses</th>
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-cra>
+                                        <tr  (click)="historiqueCraSelected = cra; showDailySelectedCra = true" >
+                                            <td>{{cra.today}}</td>
+                                            <td>{{cra.check_in | date:'H:mm'}}</td>
+                                            <td>WIP</td>
+                                            <td>{{cra.check_out | date:'H:mm'}}</td>
+                                            <td>WIP</td>
+                                            <td *ngIf="cra.pause_timing">
+                                                <ul>
+                                                    <li *ngFor="let pause of cra.pause; let i = index">
+                                                        de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
+                                                    </li>
+                                                </ul>
+                                                <br>Total: {{ cra.pause_timing }}mn
+                                            </td>
+                                            <td *ngIf="!cra.pause_timing">
+                                                0mn
+                                            </td>
+
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="8">Vous n'avez aucun pointage enregistré pour le moment.</td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="loadingbody">
+                                        <tr>
+                                            <td colspan="8">Chargement de votre historique, merci de patienter...</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                            <br>
+                            <br>
+                            <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                    *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                <div style="clear: both;"></div>
+
+                <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4"
+                    [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
+                    responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        
+                        <tr>
+                            <th>Pause</th>
+                            
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-cra>
+                        
+                        <td >
+                            0mn
+                        </td>
+                              
+                        
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="2">Vous n'avez aucune pause enregistré pour le jour sélectionné.</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="loadingbody">
+                        <tr>
+                            <td colspan="2">Chargement de vos pause, merci de patienter...</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                        </div>
+
+                    </div>
+
+                    <!--<button pButton pRipple label="Ajouter" class="p-button-primary p-button-outlined mb-2" style="float: right;"
+            (click)="showFormAddCra = true;" *ngIf="dailyCheck != null && !showFormAddCra"></button>
+        <div style="clear: both;"></div>
+        <p-table [value]="dailyCheck?.cra" dataKey="_id" editMode="row" [rows]="4" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Durée</th>
+                    <th>Tâche</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="cra">
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="number" [(ngModel)]="cra.number_minutes">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{cra.number_minutes}} mn
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="cra.task">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{cra.task}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(cra)" class="p-button-rounded p-button-text"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(cra)"
+                            class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="onRowEditCancel(cra, ri)"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                        <button pButton pRipple type="button" icon="pi pi-trash"
+                            class="p-button-rounded p-button-text p-button-danger"
+                            (click)="onDeleteCra(cra._id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="3">Aucun CRA pour le moment.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="3">Chargement des CRA, merci de patienter...</td>
+                </tr>
+            </ng-template>
+        </p-table>-->
+                </p-tabPanel>
+                <p-tabPanel header="CRA">
                     <!--<div class=" card">
                         <div class="grid col-12">
                             <div class="col-4 text-center">
@@ -568,7 +794,7 @@
                                 <div class="p-formgrid grid" [formGroupName]="i">
                                     <div class="field col-12 md:col-5">
                                         <input pInputText type="text" id="tache" formControlName="tache"
-                                            placeholder="Veuillez décrire la tâche">
+                                            placeholder="Veuillez décrire l'activité">
                                     </div>
                                     <div class="field col-12 md:col-5">
                                         <input pInputText type="number" id="duration" formControlName="duration"
@@ -600,7 +826,11 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
+<<<<<<< HEAD
+                                <th>Activité</th>
+=======
                                 <th>Tâche</th>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Action</th>
                             </tr>
                         </ng-template>
@@ -653,6 +883,14 @@
                             </tr>
                         </ng-template>
                     </p-table>
+<<<<<<< HEAD
+                    <!-- affichage de l'activité -->
+
+                    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                        *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                    <div style="clear: both;"></div>
+
+=======
                 </p-tabPanel>
 
                 <p-tabPanel header="Calendrier">
@@ -683,6 +921,7 @@
                         *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
                     <div style="clear: both;"></div>
 
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                     <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4"
                         [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
                         responsiveLayout="scroll">
@@ -692,7 +931,106 @@
                             </tr>
                             <tr>
                                 <th>Durée</th>
+<<<<<<< HEAD
+                                <th>Activité</th>
+=======
                                 <th>Tâche</th>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-cra>
+                            <tr>
+                                <td>{{cra.number_minutes}}mn</td>
+                                <td>{{cra.task}}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="2">Vous n'avez aucun CRA enregistré pour le jour sélectionné.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="2">Chargement de votre CRA, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+<<<<<<< HEAD
+
+
+                    <h5 class="mt-5">Historique :</h5>
+=======
+                    <!-- affichage de l'historique de pointage -->
+                    <h5 class="mt-5">Historique de pointage et CRA</h5>
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
+                    <div class="m-2">
+                        <label htmlFor="">Choisissez un mois et une année</label> <br>
+                        <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
+                    </div>
+                    <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Date</th>
+<<<<<<< HEAD
+
+                                <th>Taux CRA</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-cra>
+                            <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
+                                <td>{{cra.today}}</td>
+
+
+
+                                <td>{{ cra.taux_cra }}%</td>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="8">Vous n'avez aucun pointage enregistré pour le moment.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="8">Chargement de votre historique, merci de patienter...</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+                <p-tabPanel header="Calendrier">
+                    <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
+                    </p-fullCalendar>
+                    <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+                        [style]="{width: '75vw'}">
+                        <div class="col-12 grid">
+                            <div class="col-12">
+                                <p>
+                                    {{dataEvent?.note}}
+                                </p>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="Historique">
+                    <!-- affichage du CRA d'un historique de pointage -->
+                    <i class="pi pi-times-circle" style="color: red; font-size: 20px; cursor: pointer; float: right;"
+                        *ngIf="showDailySelectedCra" (click)="showDailySelectedCra = false"></i>
+                    <div style="clear: both;"></div>
+
+                    <p-table *ngIf="showDailySelectedCra" [value]="historiqueCraSelected.cra" dataKey="_id" [rows]="4"
+                        [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Cra du {{historiqueCraSelected.today}}</th>
+                            </tr>
+                            <tr>
+                                <th>Durée</th>
+                                <th>Activité</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra>
@@ -714,7 +1052,7 @@
                     </p-table>
 
                     <!-- affichage de l'historique de pointage -->
-                    <h5 class="mt-5">Historique de pointage et CRA</h5>
+                    <h5 class="mt-5">Historique</h5>
                     <div class="m-2">
                         <label htmlFor="">Choisissez un mois et une année</label> <br>
                         <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
@@ -724,6 +1062,8 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Date</th>
+=======
+>>>>>>> db3ec149c9922ec3e16ddbfa98ec8f1a7e2b33fb
                                 <th>Heure Check in Online</th>
                                 <th>Heure Check in Pointeuse</th>
                                 <th>Heure Check out Online</th>

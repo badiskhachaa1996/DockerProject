@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
@@ -152,7 +151,7 @@ export class CalenderComponent implements OnInit {
   }
 
   dernotes: Note[] = [];
-
+  classbutonchekin:String="p-button-warning mb-2"
   //Options du calendrier formateur
   optionsforma = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -284,6 +283,7 @@ export class CalenderComponent implements OnInit {
   clonedCras: { [s: string]: any } = {};
   craPercent: string = '0';
   historiqueCra: DailyCheck[] = [];
+  lastCras: any;
   historiqueCraSelected: DailyCheck;
   showDailySelectedCra: boolean = false;
   congeStatutList: any[] = [
@@ -460,6 +460,8 @@ export class CalenderComponent implements OnInit {
     this.dailyCheckService.getUserChecks(this.token.id)
       .then((response) => {
         this.historiqueCra = response;
+        this.lastCras=response[response.length-1];
+        console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
 
@@ -503,10 +505,14 @@ export class CalenderComponent implements OnInit {
     });
   }
   showHistorique() {
-    this.visible = true
+    if (this.visible==false){
+      this.visible = true}
+      else{this.visible = false}
   }
   showAssiduite() {
-    this.visibleA = true
+    if (this.visibleA==false){
+    this.visibleA = true}
+    else{this.visibleA = false}
   }
   showConge() {
     this.visibleC = true
@@ -842,6 +848,7 @@ export class CalenderComponent implements OnInit {
     check.user_id = this.user._id;
     check.check_in = new Date();
     check.isInPause = false;
+    this.classbutonchekin="p-button-secondary mb-2"
 
     this.dailyCheckService.postCheckIn(check)
       .then((response) => {
@@ -902,6 +909,8 @@ export class CalenderComponent implements OnInit {
         this.dailyCheckService.getUserChecks(this.token.id)
           .then((response) => {
             this.historiqueCra = response;
+            this.lastCras=response[response.length-1];
+            console.log(this.lastCras);
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
       })
@@ -1150,6 +1159,8 @@ export class CalenderComponent implements OnInit {
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
           this.historiqueCra = response;
+          this.lastCras=response[response.length-1];
+          console.log(this.lastCras);
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }

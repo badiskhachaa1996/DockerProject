@@ -89,6 +89,11 @@ app.post("/create", (req, res) => {
                 });
 
                 ticket.save((err, doc) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(404).send(err)
+                    }
+                    else
                     res.send({ message: "Votre ticket a été crée!", doc });
                     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
                         //console.log(users)
@@ -685,6 +690,11 @@ app.post("/createForUser", (req, res) => {
             });
 
             ticket.save((err, doc) => {
+                if (err) {
+                    console.error(err);
+                    res.status(404).send(err)
+                }
+                else
                 res.send({ message: "Votre ticket a été crée!", doc });
             });
         } else {
@@ -706,6 +716,11 @@ app.post("/createForUser", (req, res) => {
                 });
 
                 ticket.save((err, doc) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(404).send(err)
+                    }
+                    else
                     res.send({ message: "Votre ticket a été crée!", doc });
                 });
             })
