@@ -363,7 +363,7 @@ export class DetailsEtudiantComponent implements OnInit {
       let t = {}
       t['Module'] = this.matiereDic[Assiduit.seance_id.matiere_id]?.nom
       t['Date de la seance'] = Assiduit.seance_id.date_debut
-      t['Seance'] = Assiduit.seance_id.libelle
+      t['Seance'] = Assiduit.seance_id.libelle.replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','')
       t['Présence'] = Assiduit.isPresent ? 'Présent' : Assiduit.justificatif ? 'Absence Justifié' : 'Absent'
       t['Date Signature'] = Assiduit.date_signature
       dataExcel.push(t)
