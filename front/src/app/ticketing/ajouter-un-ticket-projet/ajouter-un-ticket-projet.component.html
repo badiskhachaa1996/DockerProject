@@ -33,7 +33,7 @@
         </div>
         <div class="col-12">
             <label>Pièce Jointe:</label>
-            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true" chooseIcon="pi pi-paperclip"
                 maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
             </p-fileUpload>
             <div>

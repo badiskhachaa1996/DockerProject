@@ -90,7 +90,7 @@ export class MesTicketsComponent implements OnInit {
   onSubmitUpdate() {
     let documents = this.TicketForm.value.documents
     this.uploadedFiles.forEach(element => {
-      documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
+      documents.push({ path: element.name, nom: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
     this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
       this.TicketService.getAllMine(this.token.id).subscribe(data => {
@@ -140,9 +140,9 @@ export class MesTicketsComponent implements OnInit {
   }
 
   downloadFileService(index, ri: Ticket) {
-    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+    this.TicketService.downloadFileService(ri._id, ri.documents_service[index]._id, ri.documents_service[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents_service[index].path)
     }, (error) => {
       console.error(error)
       this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
