@@ -60,17 +60,26 @@ export class NewListTicketsComponent implements OnInit {
   ]
 
   updateTicketList() {
-    this.TicketService.getAllMine(this.token.id).subscribe(data => {
+    this.TicketService.getAllMine(this.token.id).subscribe((data: Ticket[]) => {
       this.tickets = data
-      data.forEach(e => { e.origin = true })
+      data.forEach(e => {
+        e.origin = true
+        e.documents_service.forEach(ds => { ds.by = "Agent" })
+        e.documents = e.documents.concat(e.documents_service)
+      })
       let tempDate = new Date()
-      tempDate.setHours(tempDate.getHours() - 24)
+      tempDate.setDate(tempDate.getDate() - 1)
       this.stats = {
         en_attente: Math.trunc(data.reduce((total, next) => total + (next?.date_ajout > tempDate ? 1 : 0), 0))
       }
     })
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
-      data.forEach(e => { e.origin = false })
+      data.forEach(e => { 
+        e.origin = false 
+        e.documents_service.forEach(ds => { ds.by = "Agent" })
+        e.documents = e.documents.concat(e.documents_service)
+      })
+      
       this.tickets = this.tickets.concat(data)
       this.defaultTicket = this.tickets
     })
@@ -351,18 +360,19 @@ export class NewListTicketsComponent implements OnInit {
     this.ticketsOnglets.splice(this.ticketsOnglets.indexOf(ticket), 1)
   }
   filterType = "Tous les tickets"
-  filterStatutTicket = "Tous les tickets"
+  filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
     this.tickets = []
     this.defaultTicket.forEach((t: Ticket) => {
       let r = true
-      if (this.filterStatutTicket == "Urgent") {
+      if (this.filterStatutTicket.includes("Urgent")) {
         r = (t.priorite)
-      } else if (this.filterStatutTicket == "Tickets > 24 heures") {
+      }
+      if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
         let tempDate = new Date()
-        tempDate.setHours(tempDate.getHours() - 24)
-        if (!(t.date_ajout > tempDate))
+        tempDate.setDate(tempDate.getDate() - 1)
+        if (!(new Date(t.date_ajout).getTime() > tempDate.getTime()))
           r = false
       }
       if (this.filterType == "Assignés")
