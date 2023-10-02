@@ -189,7 +189,7 @@ export class AppTopBarComponent implements OnInit {
       this.isExterne = userconnected?.type?.includes('Externe')
       this.items = [
         {
-          label: this.userConnected.statut || "Disponible",
+          label: this.userConnected?.statut || "Disponible",
           items: [
             {
               label: 'Disponible',
