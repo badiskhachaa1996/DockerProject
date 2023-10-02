@@ -50,7 +50,9 @@
         </a>
         <a href="#/ticketing/mes-tickets" class="p-link layout-topbar-button">
             <i class="pi pi-tag" pTooltip="Ticketing" tooltipPosition="bottom"></i>
-
+            <div class="number" style="font-weight: bold; color: red; font-size: 13px">
+                {{ Notifications }}
+            </div>
             <span> Ticketing</span>
         </a>
         <a href="#/entreprise-dashboard" class="p-link layout-topbar-button" *ngIf="isCEO">
@@ -58,13 +60,13 @@
             <span>Dashboard</span>
         </a>
 
-        <a href="#/notifications" class="p-link layout-topbar-button">
+        <!--<a href="#/notifications" class="p-link layout-topbar-button">
             <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom"></i>
             <div class="number" style="font-weight: bold; color: red; font-size: 13px">
                 {{ Notifications }}
             </div>
             <span> Notifications</span>
-        </a>
+        </a>-->
         <div class="center">
             <img #imgprofile src="{{ imageToShow }}" alt="Logo" aria-haspopup="true" class="max-w-full"
                 class="p-link layout-topbar-button" aria-haspopup="true" (click)="onLeftMouseClick($event,contextMenu)"
