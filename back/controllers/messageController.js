@@ -51,13 +51,16 @@ app.post("/create", (req, res) => {
     });
 
     message.save((err, msg) => {
-        res.send({ message: "Votre message a été crée!", doc: msg });
+        if (err) {
+            res.status(500).send(err)
+        } else
+            res.send({ message: "Votre message a été crée!", doc: msg });
         Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
                 if (msg.isRep) {
                     //Envoie du mail, pour avertir d'un nouveau message sur son ticket
-                    let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket N°<strong> ' + tickFromDb.customid + ' </strong> et qui a pour détail <br><strong>' + tickFromDb.description + ' </strong></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
+                    let htmlemail = '<p style="color:black"> Bonjour  ' + gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket N°<strong> ' + tickFromDb.customid + ' </strong> et qui a pour détail <br><strong>' + tickFromDb.description + ' </strong></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'ims@intedgroup.com',
                         to: userFromDb.email,
@@ -131,7 +134,7 @@ app.get("/getAll", (req, res) => {
 });
 //Récuperer tous les messages d'un ticket
 app.get("/getAllByTicketID/:id", (req, res) => {
-    Message.find({ ticket_id: req.params.id })
+    Message.find({ ticket_id: req.params.id }).populate('user_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
