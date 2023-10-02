@@ -157,7 +157,7 @@ export class TicketService {
   }
 
   addFileService(formdata: FormData) {
-    let registreUrl = this.apiUrl + "addFile";
+    let registreUrl = this.apiUrl + "addFileService";
     return this.http.post<Ticket[]>(registreUrl, formdata, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }

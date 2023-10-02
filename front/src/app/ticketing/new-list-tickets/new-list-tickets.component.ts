@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
-import { MessageService } from 'primeng/api';
+import { MessageService as ToastService } from 'primeng/api';
 import { Ticket } from 'src/app/models/Ticket';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
@@ -14,6 +14,8 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { Notification } from 'src/app/models/notification';
 import { Router } from '@angular/router';
+import { MessageService } from 'src/app/services/message.service';
+import { Message } from 'src/app/models/Message';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -25,10 +27,11 @@ export class NewListTicketsComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
-  constructor(private TicketService: TicketService, private ToastService: MessageService,
+  constructor(private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
-    private NotifService: NotificationService, private Socket: SocketService, private router: Router) { }
+    private NotifService: NotificationService, private Socket: SocketService, private router: Router, private MessageService: MessageService) { }
   tickets = []
+  ticketsOnglets = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
@@ -50,17 +53,35 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Traité', value: "Traité" },
   ]
 
+  statutDropdown = [
+    { label: 'En attente', value: "En attente de traitement" },
+    { label: 'En cours', value: "En cours de traitement" },
+    { label: 'Traité', value: "Traité" },
+  ]
+
   updateTicketList() {
-    this.TicketService.getAllMine(this.token.id).subscribe(data => {
+    this.TicketService.getAllMine(this.token.id).subscribe((data: Ticket[]) => {
       this.tickets = data
-      data.forEach(e => { e.origin = true })
+      data.forEach(e => {
+        e.origin = true
+        e.documents_service.forEach(ds => { ds.by = "Agent" })
+        e.documents = e.documents.concat(e.documents_service)
+      })
+      let tempDate = new Date()
+      tempDate.setDate(tempDate.getDate() - 1)
       this.stats = {
-        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.statut == 'En attente de traitement' ? 1 : 0), 0))
+        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.date_ajout > tempDate ? 1 : 0), 0))
       }
     })
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
-      data.forEach(e => { e.origin = false })
+      data.forEach(e => { 
+        e.origin = false 
+        e.documents_service.forEach(ds => { ds.by = "Agent" })
+        e.documents = e.documents.concat(e.documents_service)
+      })
+      
       this.tickets = this.tickets.concat(data)
+      this.defaultTicket = this.tickets
     })
   }
   ngOnInit(): void {
@@ -145,9 +166,9 @@ export class NewListTicketsComponent implements OnInit {
   }
 
   downloadFileService(index, ri: Ticket) {
-    this.TicketService.downloadFile(ri._id, ri.documents[index]._id, ri.documents[index].path).subscribe((data) => {
+    this.TicketService.downloadFileService(ri._id, ri.documents_service[index]._id, ri.documents_service[index].path).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents[index].path)
+      saveAs(new Blob([byteArray], { type: data.documentType }), ri.documents_service[index].path)
     }, (error) => {
       console.error(error)
       this.ToastService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
@@ -162,8 +183,22 @@ export class NewListTicketsComponent implements OnInit {
   }
 
   uploadedFiles: File[] = []
-  onUpload(event: { files: File[] }, fileUpload: FileUpload) {
+  onUpload(event: { files: File[] }, fileUpload: FileUpload, ticket: Ticket) {
     this.uploadedFiles.push(event.files[0])
+    let documents = ticket.documents_service
+    this.uploadedFiles.forEach(element => {
+      let tempid = new mongoose.Types.ObjectId().toString()
+      documents.push({ path: element.name, nom: element.name, _id: tempid })
+      let formData = new FormData()
+      formData.append('ticket_id', ticket._id)
+      formData.append('document_id', tempid)
+      formData.append('file', element)
+      formData.append('path', element.name)
+      this.TicketService.addFileService(formData).subscribe(data => {
+        this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
+      })
+    });
+    this.TicketService.update({ documents_service: documents, _id: this.ticketTraiter._id }).subscribe(r => { this.uploadedFiles = [] })
     fileUpload.clear()
   }
 
@@ -222,9 +257,13 @@ export class NewListTicketsComponent implements OnInit {
   seeMoreObj = { str: "", type: "" }
   seeMoreBool = false
   ticketTraiter: Ticket
+  TicketFormTraiter = new FormGroup({
+    user_id: new FormControl(''),
+    description: new FormControl('')
+  })
   onTraiter(ticket, index) {
-    this.ticketTraiter = ticket
-    this.TicketForm.patchValue({ ...ticket })
+    if (!this.ticketsOnglets.includes(ticket))
+      this.ticketsOnglets.push(ticket)
   }
   onUpdateTraiter() {
     let date_fin_traitement = null
@@ -256,7 +295,7 @@ export class NewListTicketsComponent implements OnInit {
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
         formData.append('ticket_id', this.TicketForm.value._id)
-        formData.append('document_id', documents_service[idx]._id)
+        formData.append('document_id', documents_service[idx + this.TicketForm.value.documents_service.length]._id)
         formData.append('file', element)
         formData.append('path', element.name)
         this.TicketService.addFile(formData).subscribe(data => {
@@ -279,6 +318,70 @@ export class NewListTicketsComponent implements OnInit {
     if (ticket.type)
       r = r + " - " + ticket.type
     return r
+  }
+  messageList = []
+  loadCommentaires(event: any) {
+    console.log(event)
+    if (event._id) {
+      this.MessageService.getAllByTicketID(event._id).subscribe(messages => {
+        this.messageList = messages
+        console.log(this.messageList)
+      })
+    }
+    else if (event.index != 0)
+      this.MessageService.getAllByTicketID(this.ticketsOnglets[event.index - 1]._id).subscribe(messages => {
+        this.messageList = messages
+      })
+  }
+
+  onAjoutCommentaire(ticket: Ticket) {
+    this.ticketTraiter = ticket
+    this.TicketForm.patchValue({ ticket_id: this.ticketTraiter._id })
+  }
+
+  onAddCommentaire() {
+    this.MessageService.create({ ...this.TicketFormTraiter.value, user_id: this.token.id, ticket_id: this.ticketTraiter._id, id: this.token.id }).subscribe(m => {
+      this.ToastService.add({ severity: 'success', summary: "Ajout du commentaire avec succès" })
+
+      this.MessageService.getAllByTicketID(this.ticketTraiter._id).subscribe(messages => {
+        this.messageList = messages
+        this.ticketTraiter = null
+        this.TicketFormTraiter.reset()
+      })
+    })
+  }
+
+  updateTicketStatut(ticket: Ticket) {
+    this.TicketService.update({ ...ticket }).subscribe(t => {
+
+    })
+  }
+  deleteTicket(ticket: Ticket) {
+    this.ticketsOnglets.splice(this.ticketsOnglets.indexOf(ticket), 1)
+  }
+  filterType = "Tous les tickets"
+  filterStatutTicket = []
+  defaultTicket = []
+  onFilterTicket() {
+    this.tickets = []
+    this.defaultTicket.forEach((t: Ticket) => {
+      let r = true
+      if (this.filterStatutTicket.includes("Urgent")) {
+        r = (t.priorite)
+      }
+      if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
+        let tempDate = new Date()
+        tempDate.setDate(tempDate.getDate() - 1)
+        if (!(new Date(t.date_ajout).getTime() > tempDate.getTime()))
+          r = false
+      }
+      if (this.filterType == "Assignés")
+        r = !(t.origin)
+      else if (this.filterType == "Crées")
+        r = (t.origin)
+      if (r)
+        this.tickets.push(t)
+    })
   }
 }
 

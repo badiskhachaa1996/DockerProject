@@ -25,7 +25,7 @@
         </div>
         <div class="field col-12">
             <label>Pièce Jointe:</label>
-            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true" chooseIcon="pi pi-paperclip"
                 maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
             </p-fileUpload>
             <div>
@@ -39,6 +39,7 @@
             </div>
         </div>
         <div class="col-12">
+            
             <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Enregister les modifications"
                 type="submit" [disabled]="TicketForm.invalid"></button>
         </div>

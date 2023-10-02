@@ -29,6 +29,7 @@ export class Ticket {
             _id?: string,
             nom?: string,
             path?: string,
+            by?: any
         }[],
         public task_id?: any,
         public consignes?: any[],
