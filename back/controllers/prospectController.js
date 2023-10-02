@@ -1337,7 +1337,7 @@ app.post('/getDataForDashboardInternational', (req, res) => {
 })
 
 app.get('/getDataForDashboardInternationalBasique', (req, res) => {
-    Prospect.find().populate('user_id').then(prospectList => {
+    Prospect.find().populate('user_id').limit(500).then(prospectList => {
         let ProspectFiltered = []
         let stats_paiements = {
             preinscription: {
