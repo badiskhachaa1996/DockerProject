@@ -71,7 +71,7 @@ export class CalenderComponent implements OnInit {
   classe: Classe[] = [];
   paimentS1 = false
   paimentAn = false
-
+  items: MenuItem[];
   seances: Seance[] = [];
   matieres: Matiere[] = [];
   classes: Classe[] = [];
@@ -286,6 +286,8 @@ export class CalenderComponent implements OnInit {
   lastCras: any;
   historiqueCraSelected: DailyCheck;
   showDailySelectedCra: boolean = false;
+  showDailySelectedCra1: boolean = false
+  showDailySelectedCra2: boolean = false
   congeStatutList: any[] = [
     { label: 'Congé payé', value: 'Congé payé' },
     { label: 'Congé sans solde', value: 'Congé sans solde' },
@@ -326,6 +328,7 @@ export class CalenderComponent implements OnInit {
   histoPointage: PointageData[];
   reader: FileReader = new FileReader();
   machineDic = {}
+  
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -503,6 +506,21 @@ export class CalenderComponent implements OnInit {
         this.selectedTabIndex = 0
       }
     });
+    this.items = [
+      {
+          label: "Aujourd'hui",
+          icon: 'pi pi-refresh',
+          command: () => {
+            this.showAssiduite()
+          }
+      },
+      {
+          label: 'Historique',
+          icon: 'pi pi-times',
+          command: () => {
+            this.showHistorique()
+          }
+      }];
   }
   showHistorique() {
     if (this.visible==false){
@@ -1005,7 +1023,10 @@ export class CalenderComponent implements OnInit {
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
     }
   }
-
+  //selection du cra
+  selectCra(cra: any) {
+    this.historiqueCraSelected = cra;
+  }
   // recuperation des demandes de congé du user
   onGetConges(id: string): void {
     this.congeService.getAllByUserId(id)
@@ -1017,7 +1038,7 @@ export class CalenderComponent implements OnInit {
   // Recuperation des tickets RH
   onGetTicketsRH() {
     this.ServiceServ.getAServiceByLabel('Ressources Humaines').subscribe(r => {
-      this.TicketService.getAllByServiceAndCreateurID(r.dataService._id, this.token.id).subscribe(tickets => {
+      this.TicketService.getAllByServiceAndCreateurID(r?.dataService?._id, this.token.id).subscribe(tickets => {
         this.tickets = tickets
       })
     })
