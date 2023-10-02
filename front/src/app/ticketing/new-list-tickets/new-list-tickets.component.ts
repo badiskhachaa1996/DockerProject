@@ -70,7 +70,7 @@ export class NewListTicketsComponent implements OnInit {
       let tempDate = new Date()
       tempDate.setDate(tempDate.getDate() - 1)
       this.stats = {
-        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.date_ajout > tempDate ? 1 : 0), 0))
+        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.date_ajout < tempDate ? 1 : 0), 0))
       }
     })
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
@@ -372,7 +372,7 @@ export class NewListTicketsComponent implements OnInit {
       if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
         let tempDate = new Date()
         tempDate.setDate(tempDate.getDate() - 1)
-        if (!(new Date(t.date_ajout).getTime() > tempDate.getTime()))
+        if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
       if (this.filterType == "Assignés")
