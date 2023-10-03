@@ -16,6 +16,7 @@ import { Notification } from 'src/app/models/notification';
 import { Router } from '@angular/router';
 import { MessageService } from 'src/app/services/message.service';
 import { Message } from 'src/app/models/Message';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -27,25 +28,28 @@ export class NewListTicketsComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
+  USER: User
   constructor(private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
     private NotifService: NotificationService, private Socket: SocketService, private router: Router, private MessageService: MessageService) { }
-  tickets = []
+  tickets: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
     description: new FormControl('',),
-    resum: new FormControl('', Validators.required),
+    resum: new FormControl(''),
     priorite: new FormControl("false"),
     module: new FormControl('',),
     type: new FormControl('',),
     documents: new FormControl([]),
+    agent_id: new FormControl('',),
     _id: new FormControl('', Validators.required)
   })
   stats = {
-    en_attente: 0
+    en_attente: 0,
+    en_cours: 0
   }
   token: any;
   filterService = [{ label: 'Tous les services', value: null }]
@@ -71,11 +75,6 @@ export class NewListTicketsComponent implements OnInit {
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
-      let tempDate = new Date()
-      tempDate.setDate(tempDate.getDate() - 1)
-      this.stats = {
-        en_attente: Math.trunc(data.reduce((total, next) => total + (next?.date_ajout < tempDate ? 1 : 0), 0))
-      }
     })
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
       data.forEach(e => {
@@ -85,7 +84,19 @@ export class NewListTicketsComponent implements OnInit {
       })
 
       this.tickets = this.tickets.concat(data)
+      this.tickets.sort((a, b) => {
+        if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+          return -1
+        else
+          return 1
+      })
       this.defaultTicket = this.tickets
+      let tempDate = new Date()
+      tempDate.setDate(tempDate.getDate() - 1)
+      this.stats = {
+        en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+        en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+      }
     })
   }
   ngOnInit(): void {
@@ -102,6 +113,10 @@ export class NewListTicketsComponent implements OnInit {
       data.forEach(element => {
         this.sujetDic[element._id] = element.label
       });
+    })
+    this.AuthService.getPopulate(this.token.id).subscribe(r => {
+      this.USER = r
+      this.ticketsOnglets = r.savedTicket
     })
   }
 
@@ -128,11 +143,7 @@ export class NewListTicketsComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    let agent_id = this.token.id
-    if (this.ticketAssign)
-      agent_id = null
-
-    this.TicketService.update({ ...this.TicketForm.value, documents, agent_id }).subscribe(data => {
+    this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
@@ -157,6 +168,12 @@ export class NewListTicketsComponent implements OnInit {
     this.SujetService.getAllByServiceID(this.TicketForm.value.service_id).subscribe(data => {
       data.forEach(val => {
         this.sujetDropdown.push({ label: val.label, value: val._id })
+      })
+    })
+    this.AuthService.getAllByServiceFromList(this.TicketForm.value.service_id).subscribe(data => {
+      this.dropdownMember = []
+      data.forEach(u => {
+        this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
       })
     })
   }
@@ -275,8 +292,13 @@ export class NewListTicketsComponent implements OnInit {
     description: new FormControl('')
   })
   onTraiter(ticket, index) {
-    if (!this.ticketsOnglets.includes(ticket))
+    if (!this.ticketsOnglets.includes(ticket)) {
       this.ticketsOnglets.push(ticket)
+      this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
+      })
+      this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
+    }
+
   }
   onUpdateTraiter() {
     let date_fin_traitement = null
@@ -368,8 +390,10 @@ export class NewListTicketsComponent implements OnInit {
   }
   deleteTicket(ticket: Ticket) {
     this.ticketsOnglets.splice(this.ticketsOnglets.indexOf(ticket), 1)
+    this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
+    })
   }
-  filterType = ['Assignés','Crées']
+  filterType = ['Assignés', 'Crées']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -377,7 +401,7 @@ export class NewListTicketsComponent implements OnInit {
     this.defaultTicket.forEach((t: Ticket) => {
       let r = true
       if (this.filterStatutTicket.includes("Urgent")) {
-        r = (t.priorite)
+        r = t.priorite
       }
       if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
         let tempDate = new Date()
@@ -385,10 +409,15 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType.includes("Assignés") && t.origin)
+      if (this.filterType.includes("Assignés") && !this.filterType.includes("Crées"))
+        if (t.origin)
+          r = false
+      if (this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
+        if (!t.origin)
+          r = false
+      if (!this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
         r = false
-      if (this.filterType.includes("Crées") && !t.origin)
-        r = false
+
       if (r)
         this.tickets.push(t)
     })
@@ -446,6 +475,7 @@ export class NewListTicketsComponent implements OnInit {
   };
 
   ticketAssign: Ticket;
+  dropdownMember = []
   onAssign(ticket: Ticket) {
     this.ticketAssign = ticket
     this.TicketForm.patchValue({ ...ticket, service_id: ticket.sujet_id.service_id._id })
@@ -454,6 +484,12 @@ export class NewListTicketsComponent implements OnInit {
         this.sujetDropdown.push({ label: val.label, value: val._id })
       })
       this.TicketForm.patchValue({ sujet_id: ticket.sujet_id._id })
+    })
+    this.AuthService.getAllByServiceFromList(ticket.sujet_id.service_id._id).subscribe(data => {
+      this.dropdownMember = []
+      data.forEach(u => {
+        this.dropdownMember.push({ label: `${u.lastname} ${u.firstname}`, value: u._id })
+      })
     })
   }
 }
