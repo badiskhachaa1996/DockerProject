@@ -36,9 +36,14 @@ export class NewListTicketsComponent implements OnInit {
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
-    description: new FormControl('', Validators.required),
-    priorite: new FormControl('', Validators.required),
+    description: new FormControl('',),
+    resum: new FormControl('', Validators.required),
+    priorite: new FormControl("false"),
+    module: new FormControl('',),
+    type: new FormControl('',),
     documents: new FormControl([]),
+    note_assignation: new FormControl('',),
+    date_limite: new FormControl('',),
     _id: new FormControl('', Validators.required)
   })
   stats = {
@@ -58,7 +63,8 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'En cours', value: "En cours de traitement" },
     { label: 'Traité', value: "Traité" },
   ]
-
+  sujetDic = {}
+  serviceDic = {}
   updateTicketList() {
     this.TicketService.getAllMine(this.token.id).subscribe((data: Ticket[]) => {
       this.tickets = data
@@ -74,12 +80,12 @@ export class NewListTicketsComponent implements OnInit {
       }
     })
     this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
-      data.forEach(e => { 
-        e.origin = false 
+      data.forEach(e => {
+        e.origin = false
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
-      
+
       this.tickets = this.tickets.concat(data)
       this.defaultTicket = this.tickets
     })
@@ -91,7 +97,13 @@ export class NewListTicketsComponent implements OnInit {
       data.forEach(val => {
         this.serviceDropdown.push({ label: val.label, value: val._id })
         this.filterService.push({ label: val.label, value: val._id })
+        this.serviceDic[val._id] = val.label
       })
+    })
+    this.SujetService.getAll().subscribe(data => {
+      data.forEach(element => {
+        this.sujetDic[element._id] = element.label
+      });
     })
   }
 
@@ -118,10 +130,12 @@ export class NewListTicketsComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
-      this.TicketService.getAllMine(this.token.id).subscribe(data => {
-        this.tickets = data
-      })
+    let agent_id = this.token.id
+    if (this.ticketAssign)
+      agent_id = null
+
+    this.TicketService.update({ ...this.TicketForm.value, documents,agent_id }).subscribe(data => {
+      this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
         //ERREUR ICI
@@ -135,6 +149,7 @@ export class NewListTicketsComponent implements OnInit {
       });
       this.TicketForm.reset()
       this.ticketUpdate = null
+      this.ticketAssign = null
       this.ToastService.add({ severity: 'success', summary: "Modification du Ticket avec succès" })
     })
   }
@@ -381,6 +396,69 @@ export class NewListTicketsComponent implements OnInit {
         r = (t.origin)
       if (r)
         this.tickets.push(t)
+    })
+  }
+
+  moduleDropdown: any[] = [
+    { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
+    { label: 'Module Pédagogie', value: "Module Pédagogie" },
+    { label: 'Module Administration', value: "Module Administration" },
+    { label: 'Module Admission', value: "Module Admission" },
+    { label: 'Module Commerciale', value: "Module Commerciale" },
+    { label: 'Module Partenaires', value: "Module Partenaires" },
+    { label: 'Module iMatch', value: "Module iMatch" },
+    { label: 'Module Booking', value: "Module Booking" },
+    { label: 'Module Questionnaire', value: "Module Questionnaire" },
+    { label: 'Module International', value: "Module International" },
+    { label: 'Module CRM', value: "Module CRM" },
+    { label: 'Module Intuns', value: "Module Intuns" },
+    { label: 'Module Gestions des emails', value: "Module Gestions des emails" },
+    { label: 'Module Admin IMS', value: "Module Admin IMS" },
+    { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
+    { label: 'Module Ticketing', value: "Module Ticketing" },
+    { label: 'Espace Personnel', value: "Espace Personnel" },
+  ];
+
+  IMS_Type_Dropdown: any[] = [
+    { label: 'Création', value: "Création" },
+    { label: 'Evolution', value: "Evolution" },
+    { label: 'Correction', value: "Correction" },
+  ]
+  showModuleDropdown: boolean = false;
+  showTypeDropdown: boolean = false;
+
+  onSubjectChange() {
+    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value];
+
+    if (this.serviceDic[this.TicketForm.get('service_id').value] === "Support informatique") {
+      this.showTypeDropdown = true;
+    } else {
+      this.showTypeDropdown = false;
+    }
+    if (selectedSubject === "IMS") {
+      this.showModuleDropdown = true;
+      this.showTypeDropdown = true;
+      this.TicketForm.get('module').setValidators([Validators.required]);
+      this.TicketForm.get('module').updateValueAndValidity();
+    }
+    else {
+
+      this.TicketForm.get('module').clearValidators();
+      this.TicketForm.get('module').updateValueAndValidity();
+      this.TicketForm.get('module').reset();
+      this.showModuleDropdown = false;
+    }
+  };
+
+  ticketAssign: Ticket;
+  onAssign(ticket: Ticket) {
+    this.ticketAssign = ticket
+    this.TicketForm.patchValue({ ...ticket, service_id: ticket.sujet_id.service_id._id })
+    this.SujetService.getAllByServiceID(ticket.sujet_id.service_id._id).subscribe(data => {
+      data.forEach(val => {
+        this.sujetDropdown.push({ label: val.label, value: val._id })
+      })
+      this.TicketForm.patchValue({ sujet_id: ticket.sujet_id._id })
     })
   }
 }

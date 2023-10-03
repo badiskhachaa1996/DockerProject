@@ -10,15 +10,32 @@
         </div>
         <div class="field col-12 md:col-4">
             <label For="sujet">Sujet <span style="color: red;"> * </span></label>
-            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id"
+            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id" (onChange)="onSubjectChange()"
                 placeholder="Choisissez un sujet"></p-dropdown>
         </div>
-        <div class="field col-12 md:col-4">
-            <label For="sujet">Priorité <span style="color: red;"> * </span></label>
-            <p-dropdown [options]="prioriteDropdown" formControlName="priorite"
-                placeholder="Choisissez une priorité"></p-dropdown>
+        <div class="field col-12 md:col-4 ">
+            <label For="sujet">Priorité :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <br>
+            <p-checkbox label="Urgent" formControlName="priorite" value='true' inputId="ny"></p-checkbox>
+
         </div>
-        <div class="field col-12">
+        <div class="field col-12 md:col-6" *ngIf="showModuleDropdown">
+            <label For="module">Module <span style="color: red"> * </span></label>
+            <p-dropdown [options]="moduleDropdown" formControlName="module"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="showTypeDropdown">
+            <label For="type">Type <span style="color: red"> * </span></label>
+            <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"
+                placeholder="Choisissez le type"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="resum">Résumé :
+                <span style="color: red"> * </span></label>
+            <textarea pInputTextarea placeholder="Résumé" formControlName="resum" autoResize
+                rows="2" cols="20" maxlength="40"></textarea>
+        </div>
+        <div class="field col-12  md:col-6">
             <label For="description">Description du ticket <span style="color: red;"> * </span></label>
             <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize
                 rows="3" cols="30"></textarea>
@@ -46,6 +63,80 @@
     </form>
 </div>
 
+
+<div class="col-12 card grid" *ngIf="ticketAssign">
+    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+        (click)="ticketAssign=null" aria-hidden="true"> </i>
+    <h4 class="col-12" style="text-align: center;">Assigner un ticket </h4>
+    <form [formGroup]="TicketForm" (ngSubmit)="onSubmitUpdate()" class="p-fluid p-formgrid grid col-12">
+        <div class="field col-12 md:col-4">
+            <label For="service">Service <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="serviceDropdown" formControlName="service_id" placeholder="Choisissez un service"
+                (onChange)="onSelectService()"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4">
+            <label For="sujet">Sujet <span style="color: red;"> * </span></label>
+            <p-dropdown [options]="sujetDropdown" formControlName="sujet_id" (onChange)="onSubjectChange()"
+                placeholder="Choisissez un sujet"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-4 ">
+            <label For="sujet">Priorité :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <br>
+            <p-checkbox label="Urgent" formControlName="priorite" value='true' inputId="ny"></p-checkbox>
+
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="showModuleDropdown">
+            <label For="module">Module <span style="color: red"> * </span></label>
+            <p-dropdown [options]="moduleDropdown" formControlName="module"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="showTypeDropdown">
+            <label For="type">Type <span style="color: red"> * </span></label>
+            <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"
+                placeholder="Choisissez le type"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="resum">Résumé :
+                <span style="color: red"> * </span></label>
+            <textarea pInputTextarea placeholder="Résumé" formControlName="resum" autoResize
+                rows="2" cols="20" maxlength="40"></textarea>
+        </div>
+        <div class="field col-12  md:col-6">
+            <label For="description">Description du ticket <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize
+                rows="3" cols="30"></textarea>
+        </div>
+        <div class="field col-12  md:col-6">
+            <label For="description">Note de la réassignation <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Description du justificatif" formControlName="note_assignation" autoResize
+                rows="3" cols="30"></textarea>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label htmlFor="date_limite">Date limite <span style="color: red">*</span></label>
+            <p-calendar formControlName="date_limite" [showIcon]="true" [showButtonBar]="true"></p-calendar>
+        </div>
+        <div class="field col-12">
+            <label>Pièce Jointe:</label>
+            <p-fileUpload (uploadHandler)="onUpload($event, fu)" #fu mode="basic" customUpload="true"
+                chooseIcon="pi pi-paperclip" maxFileSize="1000000" [style]="{'width':'100%'}" autoWidth="false"
+                [auto]="true">
+            </p-fileUpload>
+            <div>
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes
+                        <i class="pi pi-trash" style="float:right; color: red; cursor: pointer;"
+                            pTooltip="Supprimer le fichier" tooltipPosition="bottom"
+                            (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))" aria-hidden="true"> </i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-12">
+            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Enregister les modifications"
+                type="submit" [disabled]="TicketForm.invalid"></button>
+        </div>
+    </form>
+</div>
 <div class="grid col-12 card">
     <div class="col-3">
         <div class="card mb-0">
@@ -243,8 +334,8 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{ticket.createur_id.lastname|uppercase}}</td>
-                        <td>{{ticket.agent_id}}</td>
+                        <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
+                        <td>{{ticket.agent_id.firstname|titlecase}} {{ticket.agent_id.lastname|uppercase}}</td>
                         <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
                         <td></td>
                         <td> {{onConvertText(ticket.note)}}
@@ -288,6 +379,7 @@
             <tr>
                 <th> Nom </th>
                 <th>Lien </th> <!--TODO-->
+                <th> Ajouter par </th>
                 <th> Action </th>
             </tr>
             </ng-template>
@@ -296,6 +388,12 @@
                     <td>{{document.path}}</td>
                     <td>
                         <a (click)="downloadFile(idx,ticket)">Télécharger le document</a>
+                    </td>
+                    <td>
+                        <p *ngIf="document.by">{{ticket.agent_id.firstname|titlecase}}
+                            {{ticket.agent_id.lastname|uppercase}}</p>
+                        <p *ngIf="!document.by">{{ticket.createur_id.firstname|titlecase}}
+                            {{ticket.createur_id.lastname|uppercase}}</p>
                     </td>
                     <td>
                         <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
@@ -442,8 +540,8 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{ticket.createur_id.lastname|uppercase}}</td>
-                        <td>{{ticket.agent_id}}</td>
+                        <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
+                        <td>{{ticket.agent_id.firstname|titlecase}} {{ticket.agent_id.lastname|uppercase}}</td>
                         <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
                         <td></td>
                         <td> {{onConvertText(ticket.note)}}
@@ -513,6 +611,7 @@
                     <tr>
                         <th> Nom </th>
                         <th>Lien </th> <!--TODO-->
+                        <th> Ajouter par </th>
                         <th> Action </th>
                     </tr>
                 </ng-template>
@@ -521,6 +620,12 @@
                         <td>{{document.path}}</td>
                         <td>
                             <a (click)="downloadFile(idx,ticket)">Télécharger le document</a>
+                        </td>
+                        <td>
+                            <p *ngIf="document.by">{{ticket.agent_id.firstname|titlecase}}
+                                {{ticket.agent_id.lastname|uppercase}}</p>
+                            <p *ngIf="!document.by">{{ticket.createur_id.firstname|titlecase}}
+                                {{ticket.createur_id.lastname|uppercase}}</p>
                         </td>
                         <td>
                             <i pTooltip="Supprimer le document" tooltipPosition="bottom" class="pi pi-trash mr-2"
@@ -546,7 +651,7 @@
                     </div>
                 </div>
             </div>
-           <!-- <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines"
+            <!-- <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines"
                 *ngIf="ticket.documents_service.length!=0">
                 <ng-template pTemplate="header">
                     <tr>
