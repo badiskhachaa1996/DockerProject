@@ -72,6 +72,7 @@ export class CalenderComponent implements OnInit {
   paimentS1 = false
   paimentAn = false
   items: MenuItem[];
+  itemsCra: MenuItem[] = [];
   seances: Seance[] = [];
   matieres: Matiere[] = [];
   classes: Classe[] = [];
@@ -279,7 +280,10 @@ export class CalenderComponent implements OnInit {
     { label: 'En pause', value: 'En pause' },
   ];
   formAddCra: FormGroup;
+  formAddCraTicket: FormGroup;
   showFormAddCra: boolean = false;
+  showFormAddCraTicket: boolean = false;
+  ticketListe: any[] = [];
   clonedCras: { [s: string]: any } = {};
   craPercent: string = '0';
   historiqueCra: DailyCheck[] = [];
@@ -323,6 +327,7 @@ export class CalenderComponent implements OnInit {
     private rhService: RhService, private congeService: CongeService,
     private ActuRHService: ActualiteRHService, private TicketService: TicketService,
     private ServiceServ: ServService, private CalendrierRHService: CalendrierRhService,
+    private ticketService: TicketService,
     private PointageService: PointageService, private PoiService: PointeuseService
   ) { }
   histoPointage: PointageData[];
@@ -458,6 +463,11 @@ export class CalenderComponent implements OnInit {
     this.formAddCra = this.formBuilder.group({
       cras: this.formBuilder.array([this.onCreateCraField()]),
     });
+    //initialisation du formulaire d'ajout de cra ticket
+    this.formAddCraTicket=this.formBuilder.group({
+      ticket: ['' , Validators.required],
+      duration:['' , Validators.required],
+    })
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
@@ -509,18 +519,30 @@ export class CalenderComponent implements OnInit {
     this.items = [
       {
           label: "Aujourd'hui",
-          icon: 'pi pi-refresh',
           command: () => {
             this.showAssiduite()
           }
       },
       {
           label: 'Historique',
-          icon: 'pi pi-times',
           command: () => {
             this.showHistorique()
           }
       }];
+      this.itemsCra = [
+        {
+            label: "ticket",
+            command: () => {
+              this.showFormAddCraTicket=true
+              
+            }
+        },
+        {
+            label: 'Autre',
+            command: () => {
+              this.showFormAddCra = true;
+            }
+        }];
   }
   showHistorique() {
     if (this.visible==false){
@@ -760,6 +782,12 @@ export class CalenderComponent implements OnInit {
     this.UserService.getPopulate(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        this.ticketService.getAccAff(this.userConnected._id)
+        .subscribe(datatache => {
+          this.ticketListe = datatache.map(ticket => ({
+            ...ticket, 
+            label: ` ${ticket.customid}  ${ticket.statut}`
+          }))});
         // recupere la liste des congés
         this.onGetConges(this.userConnected._id);
         // verification du check in journalier
@@ -899,6 +927,7 @@ export class CalenderComponent implements OnInit {
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
     this.dailyCheck.isInPause = false;
+    this.dailyCheck.pause_timing = this.pauseTiming +this.dailyCheck.pause_timing;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
@@ -948,6 +977,7 @@ export class CalenderComponent implements OnInit {
   // récupère les compétences
   getCras(): FormArray {
     return this.formAddCra.get('cras') as FormArray;
+    return this.formAddCraTicket.get('cras') as FormArray;
   }
 
   // ajoute de nouveaux champs au formulaire
@@ -975,6 +1005,25 @@ export class CalenderComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
         this.formAddCra.reset();
         this.showFormAddCra = false;
+        // recuperation du check journalier
+        this.onCheckDailyCheck(response.user_id);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Cra', detail: 'Impossible de mettre à jour votre CRA' }); });
+  }
+  onAddCraTicket(): void {
+    const formValue = this.formAddCraTicket.value;
+    // ajout des données formulaire au dailycheck
+console.log(formValue);
+    
+      this.dailyCheck.cra.push({ task:this.formAddCraTicket.get('ticket').value.label, number_minutes:this.formAddCraTicket.get('duration').value });
+    
+
+    this.dailyCheckService.patchCheckIn(this.dailyCheck)
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
+        
+        this.formAddCraTicket.reset();
+        this.showFormAddCraTicket = false;
         // recuperation du check journalier
         this.onCheckDailyCheck(response.user_id);
       })
