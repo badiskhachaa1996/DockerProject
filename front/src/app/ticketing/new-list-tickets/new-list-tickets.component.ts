@@ -292,11 +292,17 @@ export class NewListTicketsComponent implements OnInit {
     description: new FormControl('')
   })
   onTraiter(ticket, index) {
-    if (!this.ticketsOnglets.includes(ticket)) {
+    let ids = []
+    this.ticketsOnglets.forEach((r: Ticket) => {
+      ids.push(r._id)
+    })
+    if (!ids.includes(ticket._id)) {
       this.ticketsOnglets.push(ticket)
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
+    }else{
+      this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
   }

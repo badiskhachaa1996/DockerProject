@@ -187,7 +187,7 @@
                             </p-sortIcon>
                         </th>
                         <th style="text-align:center">
-                            Délais
+                            Délai
                         </th>
                         <th style="text-align:center">Action</th>
                     </tr>
@@ -400,7 +400,7 @@
                             </p-sortIcon>
                         </th>
                         <th style="text-align:center">
-                            Délais
+                            Délai
                         </th>
                     </tr>
                 </ng-template>
@@ -451,8 +451,9 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket3>
                     <tr>
-                        <h5 *ngIf="!ticket.origin">Détails affectation </h5>
+                        
                         <td colspan="10">
+                            <h5 *ngIf="!ticket.origin">Détails affectation </h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
                                 *ngIf="!ticket.origin">
                                 <ng-template pTemplate="header">
