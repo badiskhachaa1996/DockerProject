@@ -64,6 +64,8 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Module Gestions des emails', value: "Module Gestions des emails" },
     { label: 'Module Admin IMS', value: "Module Admin IMS" },
     { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
+    { label: 'Module Ticketing', value: "Module Ticketing" },
+    { label: 'Espace Personnel', value: "Espace Personnel" },
   ];
   IMS_Type_Dropdown: any[] = [
     { label: 'Création', value: "Création" },

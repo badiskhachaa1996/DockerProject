@@ -19,7 +19,9 @@ let transporter = nodemailer.createTransport({
         pass: 'InTeDGROUP@@0908',
     },
 });
-
+function entierAleatoire(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 //Création d'un nouveau ticket
 app.post("/create", (req, res) => {
     Ticket.find({ sujet_id: req.body.sujet_id }).then(tkt => {
@@ -45,9 +47,7 @@ app.post("/create", (req, res) => {
                     nb = "0" + nb
 
 
-                id = id + u.lastname.slice(0, 1) + u.firstname.slice(0, 1) + sujet.service_id.label.slice(0, 1) + sujet.label.slice(0, 1)
-                id = id + day + month + year + nb
-                id = id.toUpperCase()
+                id = "IGTR" + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString() + entierAleatoire(0, 9).toString()
 
                 const ticket = new Ticket({
                     ...req.body,
@@ -94,7 +94,7 @@ app.post("/create", (req, res) => {
                         res.status(404).send(err)
                     }
                     else
-                    res.send({ message: "Votre ticket a été crée!", doc });
+                        res.send({ message: "Votre ticket a été crée!", doc });
                     User.find({ roles_list: { $elemMatch: { module: 'Ticketing', role: 'Super-Admin' } } }).then(users => {
                         //console.log(users)
                         let emailList = []
@@ -293,7 +293,7 @@ app.get("/getById/:id", (req, res) => {
 });
 //Récuperer tous les tickets
 app.get("/getAll", (req, res) => {
-    Ticket.find()?.populate({ path: "task_id", populate: { path: "project_id"}})?.populate('agent_id')
+    Ticket.find()?.populate({ path: "task_id", populate: { path: "project_id" } })?.populate('agent_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -327,7 +327,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })?.populate({ path: "task_id", populate: { path: "project_id"}})//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } }).populate({ path: "etudiant_id", populate: { path: "classe_id", populate: { path: "diplome_id" } } }).populate({ path: "etudiant_id", populate: { path: "ecole_id" } })?.populate({ path: "task_id", populate: { path: "project_id" } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -695,7 +695,7 @@ app.post("/createForUser", (req, res) => {
                     res.status(404).send(err)
                 }
                 else
-                res.send({ message: "Votre ticket a été crée!", doc });
+                    res.send({ message: "Votre ticket a été crée!", doc });
             });
         } else {
             let newUser = new User({
@@ -721,7 +721,7 @@ app.post("/createForUser", (req, res) => {
                         res.status(404).send(err)
                     }
                     else
-                    res.send({ message: "Votre ticket a été crée!", doc });
+                        res.send({ message: "Votre ticket a été crée!", doc });
                 });
             })
         }
@@ -771,7 +771,7 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
 });
 
 app.get("/getAllAssigne/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: req.params.id }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
@@ -807,7 +807,7 @@ app.get("/getAllAttenteDeTraitement", (req, res) => {
 });
 //Récupérer tous les tickets d'un User
 app.get("/getAllMine/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
