@@ -247,6 +247,7 @@ export class DetailsEtudiantComponent implements OnInit {
             color: '#495057'
           }
         }
+
       },
       scales: {
         x: {
@@ -356,16 +357,43 @@ export class DetailsEtudiantComponent implements OnInit {
     })
   }
 
+  saveGraph() {
+    var a = document.createElement('a');
+    a.href = this.chart.getBase64Image();
+    a.download = "bar_chart_assiduite_" + this.Etudiant_userdata.lastname + "_" + this.Etudiant_userdata.firstname + '_export_' + new Date().toLocaleDateString("fr-FR") + '.png';
+
+    // Trigger the download
+    a.click();
+
+    var a2 = document.createElement('a');
+    a2.href = this.chart2.getBase64Image();
+    a2.download = "pie_chart_assiduite_" + this.Etudiant_userdata.lastname + "_" + this.Etudiant_userdata.firstname + '_export_' + new Date().toLocaleDateString("fr-FR") + '.png';
+
+    // Trigger the download
+    a2.click();
+  }
+
+
+
   initExportExcel() {
     let dataExcel = []
+    let mois = ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
     //Clean the data
+    this.AssiduiteListe.sort((a, b) => {
+      if (new Date(a.seance_id.date_debut) > new Date(b.seance_id.date_debut))
+        return +1
+      else
+        return -1
+    })
     this.AssiduiteListe.forEach(Assiduit => {
       let t = {}
       t['Module'] = this.matiereDic[Assiduit.seance_id.matiere_id]?.nom
-      t['Date de la seance'] = Assiduit.seance_id.date_debut
-      t['Seance'] = Assiduit.seance_id.libelle.replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','').replace(' - ESTYA','').replace('Paris','').replace(' - Marne','')
+      t['Mois'] = mois[new Date(Assiduit.seance_id.date_debut).getMonth()]
+      t['Date de la seance'] = new Date(Assiduit.seance_id.date_debut).toLocaleString()
+      t['Seance'] = Assiduit.seance_id.libelle.replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '').replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '').replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '').replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '').replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '').replace(' - ESTYA', '').replace('Paris', '').replace(' - Marne', '')
       t['Présence'] = Assiduit.isPresent ? 'Présent' : Assiduit.justificatif ? 'Absence Justifié' : 'Absent'
-      t['Date Signature'] = Assiduit.date_signature
+      if (Assiduit.date_signature)
+        t['Date Signature'] = new Date(Assiduit.date_signature).toLocaleString()
       dataExcel.push(t)
     })
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);

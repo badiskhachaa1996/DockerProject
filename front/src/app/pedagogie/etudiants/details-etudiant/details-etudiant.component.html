@@ -98,6 +98,8 @@
         <h4>Listes des présences</h4>
         <p-button *ngIf="isNotEtudiant" label="Générer l'attestation" icon="pi pi-file" iconPos="left" class="mr-2"
             (click)="initGenerer()"></p-button>
+        <p-button *ngIf="isNotEtudiant" label="Sauvegarder les graphiques" icon="pi pi-chart" iconPos="left" class="mr-2"
+            (click)="saveGraph()"></p-button>
         <p-button *ngIf="isNotEtudiant" label="Générer un document Excel" icon="pi pi-file-excel" iconPos="left"
             (click)="initExportExcel()"></p-button>
         <!-- && (EtudiantDetail?.statut_dossier?.includes('Paiement Semestre 1 non finalisé')  || EtudiantDetail.isAlternant) -->

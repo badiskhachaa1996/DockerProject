@@ -390,6 +390,7 @@ import { HeaderImatchComponent } from './skillsnet/i-match/header-imatch/header-
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 
 @NgModule({
   imports: [
@@ -791,6 +792,7 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
     EntrepriseListComponent,
     CalenderComponent,
     NewListTicketsComponent,
+    ReadMoreComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

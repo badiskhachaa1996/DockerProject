@@ -1,4 +1,5 @@
 import { Service } from "./Service";
+import { Ticket } from "./Ticket";
 
 export class User {
     indicateur: any;
@@ -49,7 +50,8 @@ export class User {
             filename?: string,
             path?: string,
             note?: string
-        }[]
+        }[],
+        public savedTicket?: Ticket[]
     ) { }
 
 

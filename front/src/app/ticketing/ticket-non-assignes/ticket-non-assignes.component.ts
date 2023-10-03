@@ -11,7 +11,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
-import {Task} from 'src/app/models/project/Task';
+import { Task } from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
 import { User } from 'src/app/models/User';
 @Component({
@@ -20,7 +20,7 @@ import { User } from 'src/app/models/User';
   styleUrls: ['./ticket-non-assignes.component.scss']
 })
 export class TicketNonAssignesComponent implements OnInit {
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService, private projectService: ProjectService, 
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private UserService: AuthService, private projectService: ProjectService,
     private ServService: ServService, private Socket: SocketService, private SujetService: SujetService, private NotifService: NotificationService) { }
   tickets = []
   ticketUpdate: Ticket;
@@ -30,7 +30,7 @@ export class TicketNonAssignesComponent implements OnInit {
     description: new FormControl('', Validators.required),
     priorite: new FormControl('', Validators.required),
     _id: new FormControl('', Validators.required)
-    
+
   })
   task!: Task[];
   userDic = {}
@@ -88,7 +88,7 @@ export class TicketNonAssignesComponent implements OnInit {
   }
   memberSelected: string;
   onAffectation() {
-    this.TicketService.update({ ...this.formAffectation.value, statut: "En attente de traitement" }).subscribe(data => {
+    this.TicketService.update({ ...this.formAffectation.value, statut: "En attente de traitement", assigne_by: this.token.id }).subscribe(data => {
       let d = new Date()
       let month = (d.getUTCMonth() + 1).toString()
       if (d.getUTCMonth() + 1 < 10)
@@ -105,14 +105,14 @@ export class TicketNonAssignesComponent implements OnInit {
       this.tickets.splice(this.tickets.indexOf(this.TicketAffecter), 1)
       //verfier si c'est une tache alors modifier la tache
       this.projectService.getTaskbyticket(this.TicketAffecter._id)
-      .then(data => {if (data) { data.attribuate_to=this.formAffectation.value.agent_id ;data.etat="En attente de traitement"; this.projectService.putTask(data); }});
+        .then(data => { if (data) { data.attribuate_to = this.formAffectation.value.agent_id; data.etat = "En attente de traitement"; this.projectService.putTask(data); } });
       this.TicketAffecter = null
       this.ToastService.add({ severity: 'success', summary: "Affectation du ticket avec succès" })
     })
-    
 
-    
-    
+
+
+
   }
 
   getAttente(temp_date) {

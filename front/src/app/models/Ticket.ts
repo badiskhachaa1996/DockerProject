@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export class Ticket {
 
     constructor(
@@ -38,7 +40,8 @@ export class Ticket {
         public module?: string,
         public resum?: string,
         public type?: string,
-        public origin?: boolean
+        public origin?: boolean,
+        public assigne_by?: User
     ) { }
 
 
