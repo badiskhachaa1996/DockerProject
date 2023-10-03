@@ -771,7 +771,7 @@ app.get("/getCountTicketUserQueue/:id", (req, res) => {
 });
 
 app.get("/getAllAssigne/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: req.params.id }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
@@ -807,7 +807,7 @@ app.get("/getAllAttenteDeTraitement", (req, res) => {
 });
 //Récupérer tous les tickets d'un User
 app.get("/getAllMine/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
