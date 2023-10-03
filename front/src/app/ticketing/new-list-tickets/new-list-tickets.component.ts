@@ -42,8 +42,6 @@ export class NewListTicketsComponent implements OnInit {
     module: new FormControl('',),
     type: new FormControl('',),
     documents: new FormControl([]),
-    note_assignation: new FormControl('',),
-    date_limite: new FormControl('',),
     _id: new FormControl('', Validators.required)
   })
   stats = {
