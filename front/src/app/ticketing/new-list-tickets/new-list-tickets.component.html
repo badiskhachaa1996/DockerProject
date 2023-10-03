@@ -162,35 +162,25 @@
     <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;">
         <p-tabPanel header="Liste">
             <div class="grid">
-                <div class="col-3 col-offset-3">
-                    <div class="field-radiobutton">
-                        <p-radioButton name="filterType" value="Tous les tickets" [(ngModel)]="filterType"
-                            (onClick)="onFilterTicket()" inputId="type1"></p-radioButton>
-                        <label for="city1">Tous les tickets</label>
-                    </div>
-                    <div class="field-radiobutton">
-                        <p-radioButton name="filterType" value="Assignés" [(ngModel)]="filterType"
-                            (onClick)="onFilterTicket()" inputId="type2"></p-radioButton>
-                        <label for="city1">Assignés</label>
-                    </div>
-                    <div class="field-radiobutton">
-                        <p-radioButton name="filterType" value="Crées" [(ngModel)]="filterType"
-                            (onClick)="onFilterTicket()" inputId="type3"></p-radioButton>
-                        <label for="city1">Crées</label>
-                    </div>
+                <div class="col-3">
+                    <p-checkbox name="filterType" value="Assignés" [(ngModel)]="filterType" (onClick)="onFilterTicket()"
+                        inputId="type2"></p-checkbox>
+                    <label for="city1">Assignés</label>
                 </div>
                 <div class="col-3">
-                    <br>
-                    <div class="field-radiobutton">
-                        <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
-                            [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
-                        <label for="city1">Tickets > 24 heures</label>
-                    </div>
-                    <div class="field-radiobutton">
-                        <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
-                            (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
-                        <label for="city1">Urgent</label>
-                    </div>
+                    <p-checkbox name="filterType" value="Crées" [(ngModel)]="filterType" (onClick)="onFilterTicket()"
+                        inputId="type3"></p-checkbox>
+                    <label for="city1">Crées</label>
+                </div>
+                <div class="col-3">
+                    <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
+                        [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
+                    <label for="city1">Tickets > 24 heures</label>
+                </div>
+                <div class="col-3">
+                    <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
+                        (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
+                    <label for="city1">Urgent</label>
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
@@ -309,7 +299,7 @@
                 <ng-template pTemplate="rowexpansion" let-ticket>
                     <tr>
                         <td colspan="10">
-                            <h5>Détails affectation</h5>
+                            <h5 *ngIf="!ticket.origin">Détails affectation</h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                     <tr>
@@ -483,15 +473,13 @@
                         </td>
                         <td [ngStyle]="{'border':(ticket.priorite)?'1px solid red':'1px solid #dee2e6'}">
                             {{onConvertText(ticket.resum)}}
-                            <i pTooltip="Voir plus de détails" tooltipPosition="bottom" class="pi pi-eye"
-                                style="color: blue;cursor: pointer;" *ngIf="ticket?.resum?.length>20"
-                                (click)="seeMore(ticket.resum,'Résumé');" aria-hidden="true"></i>
+                            <a *ngIf="ticket?.resum?.length>20" style="color: blue;cursor: pointer;"
+                                (click)="seeMore(ticket.resum,'Résumé',ri);">Lire la suite</a>
                         </td>
                         <td [ngStyle]="{'border':(ticket.priorite)?'1px solid red':'1px solid #dee2e6'}">
                             {{onConvertText(ticket.description)}}
-                            <i pTooltip="Voir plus de détails" tooltipPosition="bottom" class="pi pi-eye"
-                                style="color: blue;cursor: pointer;" *ngIf="ticket?.description?.length>20"
-                                (click)="seeMore(ticket.description,'Description');" aria-hidden="true"></i>
+                            <a *ngIf="ticket?.description?.length>20" style="color: blue;cursor: pointer;"
+                                (click)="seeMore(ticket.description,'Description',ri);">Lire la suite</a>
                         </td>
                         <td [ngStyle]="{'border':(ticket.priorite)?'1px solid red':'1px solid #dee2e6'}">
                             <p-tag *ngIf="ticket.statut == null" icon="pi pi-times" severity="danger"
@@ -514,9 +502,10 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket3>
                     <tr>
-                        <h5>Détails affectation </h5>
+                        <h5 *ngIf="!ticket.origin">Détails affectation </h5>
                         <td colspan="10">
-                            <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines">
+                            <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
+                                *ngIf="!ticket.origin">
                                 <ng-template pTemplate="header">
                     <tr>
                         <th> Crée par </th>
@@ -624,7 +613,7 @@
             </p-table>
             <div class="col-12">
                 <div class="field col-6">
-                    <p-fileUpload (uploadHandler)="onUpload($event, fu,ticket)" #fu mode="basic" customUpload="true"
+                    <p-fileUpload (uploadHandler)="onUpload($event, fu2,ticket)" #fu2 mode="basic" customUpload="true"
                         chooseIcon="pi pi-paperclip" chooseIcon="pi pi-paperclip" maxFileSize="10000000"
                         chooseLabel="Ajouter un document" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
                     </p-fileUpload>

@@ -132,7 +132,7 @@ export class NewListTicketsComponent implements OnInit {
     if (this.ticketAssign)
       agent_id = null
 
-    this.TicketService.update({ ...this.TicketForm.value, documents,agent_id }).subscribe(data => {
+    this.TicketService.update({ ...this.TicketForm.value, documents, agent_id }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
@@ -318,9 +318,6 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
 
-  ReAssign(ticket: Ticket) {
-
-  }
   goToAddTicket() {
     this.router.navigate(['ticketing/gestion/ajout'])
   }
@@ -372,7 +369,7 @@ export class NewListTicketsComponent implements OnInit {
   deleteTicket(ticket: Ticket) {
     this.ticketsOnglets.splice(this.ticketsOnglets.indexOf(ticket), 1)
   }
-  filterType = "Tous les tickets"
+  filterType = ['Assignés','Crées']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -388,10 +385,10 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType == "Assignés")
-        r = !(t.origin)
-      else if (this.filterType == "Crées")
-        r = (t.origin)
+      if (this.filterType.includes("Assignés") && t.origin)
+        r = false
+      if (this.filterType.includes("Crées") && !t.origin)
+        r = false
       if (r)
         this.tickets.push(t)
     })
