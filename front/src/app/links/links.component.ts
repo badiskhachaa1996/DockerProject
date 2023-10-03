@@ -15,7 +15,7 @@ export class LinksComponent implements OnInit {
   token: any;
   userConnected: User;
   targetProducts!: [];
-  sourceProducts!:[];
+  sourceProducts!:any[];
   showd: boolean = false;
   formAddLinks : FormGroup;
   constructor(
@@ -26,9 +26,15 @@ export class LinksComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.sourceProducts = [];
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
-        this.userConnected = response;}});
+        this.userConnected = response;
+        this.linksService.getLinks(this.userConnected._id).then((links) => {
+          this.sourceProducts.push(links);
+        })
+      }});
+      console.log(this.sourceProducts);
     this.formAddLinks = this.formBuilder.group({
       nom: ['', Validators.required],
       lien: ['', Validators.required],

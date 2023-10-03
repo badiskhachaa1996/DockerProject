@@ -1,20 +1,21 @@
 
-<p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links" [dragdrop]="true">
+<p-orderList [value]="sourceProducts[0]" [listStyle]="{ 'max-height': '30rem' }" header="My Links" [dragdrop]="true">
     <ng-template let-product pTemplate="item">
-        <div class="flex flex-wrap p-2 align-items-center gap-3">
-            <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-4rem shadow-2 flex-shrink-0 border-round" />
+       
+        <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="product?.lien">
+            
             <div class="flex-1 flex flex-column gap-2">
-                <span class="font-bold">{{ product.name }}</span>
+                <span class="font-bold">{{product.nom}}</span>
                 <div class="flex align-items-center gap-2">
                     <i class="pi pi-tag text-sm"></i>
-                    <span>{{ product.category }}</span>
+                    <a [href]="product?.lien" target="_blank">{{ product?.lien }}</a>
                 </div>
             </div>
-            <span class="font-bold text-900">{{ '$' + product.price }}</span>
         </div>
     </ng-template>
     
 </p-orderList>
+
 <div>
 <p-button (onClick)="showdialog()">ajouter </p-button>
 <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">

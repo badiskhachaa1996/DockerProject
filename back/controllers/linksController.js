@@ -10,9 +10,9 @@ app.post("/create-links", (req, res) => {
     .then((linksCreated) => { res.status(201).json({ links: linksCreated, success: 'links crée' }) })
     .catch((error) => { console.error(error); res.status(500).json({ error: 'Impossible de créer le link, si le problème persite veuillez créer un ticket au service IMS' }); })
 });
-app.get('/get-project/:id', (req, res, next) => {
-    Project.findOne({ _id: req.params.id })?.populate('creator_id')
-    .then((project) => { res.status(200).send(project); })
-    .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperer le projet'}); })
+app.get('/get-links/:id', (req, res, next) => {
+    Links.find({ user_id: req.params.id })
+    .then((links) => { res.status(200).send(links); })
+    .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de récuperer le lien'}); })
 });
 module.exports = app;

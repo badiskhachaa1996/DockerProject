@@ -11,7 +11,6 @@ export class LinksService {
     constructor(private httpClient: HttpClient) { }
 
     postLinks(links: Links): Promise<any> {
-        console.log("2222222")
         console.log(links);
         const url = `${this.apiUrl}/create-links`;
 
@@ -22,5 +21,18 @@ export class LinksService {
                 complete: () => console.log('links crée')
             });
         });
+    }
+    //RECUPERATION D4UN lien PAR ID
+    getLinks(id: string): Promise<Links>
+    {
+      const url = `${this.apiUrl}/get-links/${id}`;
+  
+      return new Promise<Links>((resolve, reject) => {
+        this.httpClient.get<Links>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+          next: (response) => resolve(response),
+          error: (error) => reject(error),
+          complete: () => console.log('Links récuperé')
+        });
+      });
     }
 }
