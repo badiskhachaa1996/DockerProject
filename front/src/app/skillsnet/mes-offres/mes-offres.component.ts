@@ -95,7 +95,6 @@ export class MesOffresComponent implements OnInit {
 
   statutDropdown = [
     { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
-    { label: 'Suspendu', value: "Suspendu" },
     { label: 'Clôturée', value: "Clôturée" },
   ]
 
