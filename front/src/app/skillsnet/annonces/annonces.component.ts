@@ -163,7 +163,8 @@ export class AnnoncesComponent implements OnInit {
     });
 
   }
-
+  dicPicture = {}
+  dicOffreNB = {}
   // recuperation de toute les classes necessaire au fonctionnement du module
   onGetAllClasses(): void {
     //Recuperation de l'utilisateur connecté
@@ -178,6 +179,24 @@ export class AnnoncesComponent implements OnInit {
     this.annonceService.getAnnonces()
       .then((response: Annonce[]) => {
         this.annonces = response;
+        let agent_id = []
+        response.forEach(annonce => {
+          this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+            let t = []
+            matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
+            this.dicOffreNB[annonce._id] = t.length
+          })
+          if (annonce && annonce.user_id) {
+            let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
+            if (!agent_id.includes(annonce.user_id._id)){
+              this.userFilter.push(temp)
+              agent_id.push(annonce.user_id._id)
+            }
+              
+          }
+
+        })
+
       })
       .catch((error) => console.error(error));
 
@@ -186,12 +205,26 @@ export class AnnoncesComponent implements OnInit {
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
+          this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
       }),
       ((error) => console.error(error))
     );
+
+    this.entrepriseService.getAllLogo().subscribe(data => {
+      this.dicPicture = data.files // {id:{ file: string, extension: string }}
+      data.ids.forEach(id => {
+        const reader = new FileReader();
+        const byteArray = new Uint8Array(atob(data.files[id].file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.files[id].extension })
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          this.dicPicture[id].url = reader.result;
+        }
+      })
+    })
 
     //Récupération de la liste des profiles
     this.skillsService.getProfiles()
@@ -200,6 +233,7 @@ export class AnnoncesComponent implements OnInit {
 
         response.forEach((profile: Profile) => {
           this.profilsList.push({ label: profile.libelle, value: profile._id });
+          this.profilFilter.push({ label: profile.libelle, value: profile._id });
         })
       })
       .catch((error) => { console.error(error); });
@@ -219,7 +253,7 @@ export class AnnoncesComponent implements OnInit {
         response.forEach((competence: Competence) => {
           this.competencesList.push({ label: competence.libelle, value: competence._id });
         })
-        if(this.annonceSelected){
+        if (this.annonceSelected) {
           let competences = []
           this.annonceSelected.competences.forEach(element => {
             let buffer: any = element
@@ -410,6 +444,95 @@ export class AnnoncesComponent implements OnInit {
       cont = "OS"
     let random = Math.random().toString(36).substring(5).toUpperCase();
     return label + cont + random
+  }
+
+  statutFilter = [
+    { label: "Choisissez un statut", value: null },
+    { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: 'Clôturée', value: "Clôturée" },
+  ]
+  typeMissionFilter = [
+    { label: "Choisissez un type de mission", value: null },
+    { label: 'Stage', value: 'Stage' },
+    { label: 'Alternance', value: 'Alternance' },
+    { label: 'Professionnalisation', value: 'Professionnalisation' },
+    { label: 'CDD', value: 'CDD' },
+    { label: 'CDI', value: 'CDI' }
+  ]
+  profilFilter = [
+    { label: "Choisissez un profil", value: null },
+  ]
+  entrepriseFilter = [
+    { label: "Choisissez une entreprise", value: null },
+  ]
+  locations = [
+    { label: "Choisissez une ville", value: null },
+    { label: "100% Télétravail", value: "100% Télétravail" },
+    { label: "Aix-Marseille", value: "Aix-Marseille" },
+    { label: "Amiens", value: "Amiens" },
+    { label: "Angers", value: "Angers" },
+    { label: "Annecy", value: "Annecy" },
+    { label: "Auxerre", value: "Auxerre" },
+    { label: "Avignon", value: "Avignon" },
+    { label: "Bayonne", value: "Bayonne" },
+    { label: "Bergerac", value: "Bergerac" },
+    { label: "Besançon", value: "Besançon" },
+    { label: "Biarritz", value: "Biarritz" },
+    { label: "Bordeaux", value: "Bordeaux" },
+    { label: "Boulogne-sur-mer", value: "Boulogne-sur-mer" },
+    { label: "Brest", value: "Brest" },
+    { label: "Caen", value: "Caen" },
+    { label: "Calais", value: "Calais" },
+    { label: "Cannes", value: "Cannes" },
+    { label: "Chambéry", value: "Chambéry" },
+    { label: "Clermont-Ferrand", value: "Clermont-Ferrand" },
+    { label: "Dijon", value: "Dijon" },
+    { label: "France", value: "France" },
+    { label: "Grenoble", value: "Grenoble" },
+    { label: "La Réunion", value: "La Réunion" },
+    { label: "La Roche sur Yon", value: "La Roche sur Yon" },
+    { label: "La Rochelle", value: "La Rochelle" },
+    { label: "Le Havre", value: "Le Havre" },
+    { label: "Le Mans", value: "Le Mans" },
+    { label: "Lille", value: "Lille" },
+    { label: "Limoges", value: "Limoges" },
+    { label: "Lyon", value: "Lyon" },
+    { label: "Mâcon", value: "Mâcon" },
+    { label: "Metz", value: "Metz" },
+    { label: "Montauban", value: "Montauban" },
+    { label: "Montpellier", value: "Montpellier" },
+    { label: "Mulhouse", value: "Mulhouse" },
+    { label: "Nancy", value: "Nancy" },
+    { label: "Nantes", value: "Nantes" },
+    { label: "Nice", value: "Nice" },
+    { label: "Nîmes", value: "Nîmes" },
+    { label: "Niort", value: "Niort" },
+    { label: "Orléans", value: "Orléans" },
+    { label: "Oyonnax", value: "Oyonnax" },
+    { label: "Paris/Ile de France", value: "Paris/Ile de France" },
+    { label: "Pau", value: "Pau" },
+    { label: "Perpignan", value: "Perpignan" },
+    { label: "Poitiers", value: "Poitiers" },
+    { label: "Reims", value: "Reims" },
+    { label: "Rennes", value: "Rennes" },
+    { label: "Rodez", value: "Rodez" },
+    { label: "Rouen", value: "Rouen" },
+    { label: "Saint-Etienne", value: "Saint-Etienne" },
+    { label: "Saint-Tropez", value: "Saint-Tropez" },
+    { label: "Strasbourg", value: "Strasbourg" },
+    { label: "Toulon", value: "Toulon" },
+    { label: "Toulouse", value: "Toulouse" },
+    { label: "Troyes", value: "Troyes" },
+    { label: "Valence", value: "Valence" },
+    { label: "Guadeloupe", value: "Guadeloupe" },
+  ]
+
+  userFilter = [
+    { label: "Choisissez la personne qui a crée l'offre", value: null }
+  ]
+
+  updateFilter() {
+
   }
 
 

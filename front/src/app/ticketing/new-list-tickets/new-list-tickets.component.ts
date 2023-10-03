@@ -393,7 +393,7 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
     })
   }
-  filterType = ['Assignés', 'Crées']
+  filterType = ['Assignes', 'Crees']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -409,13 +409,13 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType.includes("Assignés") && !this.filterType.includes("Crées"))
+      if (this.filterType.includes("Assignes") && !this.filterType.includes("Crees"))
         if (t.origin)
           r = false
-      if (this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
+      if (this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
         if (!t.origin)
           r = false
-      if (!this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
+      if (!this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
         r = false
 
       if (r)

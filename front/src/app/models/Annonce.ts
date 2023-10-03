@@ -2,7 +2,7 @@ export class Annonce {
     constructor(
         public is_interne?: boolean,
         public _id?: string,
-        public user_id?: string,
+        public user_id?: any,
         public missionType?: string,
         public debut?: Date,
         public missionName?: string,
