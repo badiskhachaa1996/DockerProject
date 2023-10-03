@@ -10,7 +10,6 @@ const { Ticket } = require("../models/ticket");
 
 //CREATION PROJECT
 app.post("/create-project", (req, res) => {
-    console.log("je suuuuis la")
     const project = new Project({ ...req.body });
 
     project.save()

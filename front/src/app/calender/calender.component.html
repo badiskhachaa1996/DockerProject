@@ -185,7 +185,7 @@
                                         <td>WIP</td>
                                         <td *ngIf="cra.pause_timing">
 
-                                            Total: {{ cra.pause_timing }}mn
+                                             {{ cra.pause_timing }}mn
                                         </td>
                                         <td>{{cra.check_out | date:'H:mm'}}</td>
                                         <td>WIP</td>
@@ -224,7 +224,7 @@
                                                     de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
                                                 </li>
                                             </ul>
-                                            <br> &nbsp;&nbsp;&nbsp; Total: {{ cra?.pause_timing }}mn
+                                            <br> &nbsp;&nbsp;&nbsp;  {{ cra?.pause_timing }}mn
                                         </td>
                                         <td *ngIf="!cra?.pause_timing">
                                             0mn
@@ -286,7 +286,7 @@
                                             <td>WIP</td>
                                             <td *ngIf="cra.pause_timing>0">
 
-                                                &nbsp;&nbsp;&nbsp;Total: {{ cra.pause_timing }}mn
+                                                &nbsp;&nbsp;&nbsp; {{ cra.pause_timing }}mn
                                             </td>
                                             <td *ngIf="!cra.pause_timing>0  ">
                                                 0 mn
@@ -327,7 +327,7 @@
                                                         de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
                                                     </li>
                                                 </ul>
-                                                <br>Total: {{ cra.pause_timing }}mn
+                                                <br> {{ cra.pause_timing }}mn
                                             </td>
                                             <td *ngIf="!cra.pause_timing">
                                                 0mn
@@ -840,11 +840,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>Durée</th>
-<<<<<<< HEAD
                                 <th>Activité</th>
-=======
-                                <th>Tâche</th>
->>>>>>> bea6c90d9f98df80d1868391310dc2afcf577302
                                 <th>Action</th>
                             </tr>
                         </ng-template>
@@ -944,7 +940,7 @@
                         responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Cra du {{historiqueCraSelected.today}}</th>
+                                <th colspan="2" style="text-align: center;" >Cra du {{historiqueCraSelected.today}}</th>
                             </tr>
                             <tr>
                                 <th>Durée</th>
@@ -2687,7 +2683,7 @@
                                     de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
                                 </li>
                             </ul>
-                            <br>Total: {{ cra.pause_timing }}mn
+                            <br> {{ cra.pause_timing }}mn
                         </td>
                         <td *ngIf="!cra.pause_timing">
                             0mn

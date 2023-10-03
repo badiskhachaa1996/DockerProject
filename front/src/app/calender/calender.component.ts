@@ -509,14 +509,12 @@ export class CalenderComponent implements OnInit {
     this.items = [
       {
           label: "Aujourd'hui",
-          icon: 'pi pi-refresh',
           command: () => {
             this.showAssiduite()
           }
       },
       {
           label: 'Historique',
-          icon: 'pi pi-times',
           command: () => {
             this.showHistorique()
           }
@@ -899,6 +897,7 @@ export class CalenderComponent implements OnInit {
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
     this.dailyCheck.isInPause = false;
+    this.dailyCheck.pause_timing = this.pauseTiming +this.dailyCheck.pause_timing;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {

@@ -130,6 +130,7 @@ const progressionPedaController = require('./controllers/progressionPedaControll
 const QSController = require('./controllers/questionnaireSatisfactionController');
 const projectController = require('./controllers/projectController');
 const projetController = require('./controllers/projectv2Controller');
+const linksController = require('./controllers/linksController');
 const teamController = require('./controllers/teamController');
 const EvenementsController = require('./controllers/evenementController')
 const ExtSkillsnetController = require('./controllers/ExterneSkillsnetController')
@@ -365,6 +366,7 @@ app.use('/soc/progressionPeda', progressionPedaController);
 app.use('/soc/qs', QSController)
 app.use('/soc/project', projectController);
 app.use('/soc/projet', projetController);
+app.use('/soc/links', linksController);
 app.use('/soc/team', teamController);
 app.use('/soc/matching', MatchingController)
 app.use('/soc/stage', stageController)
@@ -374,6 +376,7 @@ app.use('/soc/factureCommission', factureCommissionController)
 app.use("/soc/progressionPeda", progressionPedaController);
 app.use("/soc/qs", QSController);
 app.use("/soc/project", projectController);
+app.use("/soc/links", linksController);
 app.use("/soc/projet", projetController);
 app.use("/soc/team", teamController);
 app.use("/soc/matching", MatchingController);

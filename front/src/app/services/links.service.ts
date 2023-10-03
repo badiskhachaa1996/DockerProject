@@ -12,7 +12,7 @@ export class LinksService {
 
     postLinks(links: Links): Promise<any> {
         console.log("2222222")
-
+        console.log(links);
         const url = `${this.apiUrl}/create-links`;
 
         return new Promise<any>((resolve, reject) => {
