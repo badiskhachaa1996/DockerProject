@@ -3,6 +3,12 @@
         <img [src]="logo" style="max-width: 150px; max-height: 80px" alt="logo" />
     </a>
 
+    <div class="nav-burger-mobile">
+        <a class="p-link layout-menu-button layout-topbar-button" href="#" (click)="appMain.toggleMenu($event)">
+            <i class="pi pi-bars"></i>
+        </a>
+    </div>
+
     <a class="p-link layout-topbar-menu-button layout-topbar-button" href="#" (click)="appMain.toggleTopMenu($event)">
         <i class="pi pi-ellipsis-v"></i>
     </a>
@@ -26,7 +32,7 @@
             <i class="pi pi-exclamation-triangle"></i>
             <span> Support - IGS</span>
         </a>-->
-        <a href="#/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant || isExterne">
+        <a href="#/mes-disponibilites" class="p-link layout-topbar-button" *ngIf="isEtudiant || isExterne || isReinscrit">
             <i class="pi pi-calendar" pTooltip="Mes disponibilités" tooltipPosition="bottom"></i>
             <span>Mes disponibilités</span>
         </a>
@@ -34,7 +40,7 @@
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>
         </a>
-        <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="!isEtudiant && !isExterne && !isCEO">
+        <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="!isEtudiant && !isExterne && !isCEO && !isReinscrit">
             <i #cra class="pi pi-calendar"></i>
         </a>
         <a href="#/Links" class="p-link layout-topbar-button">

@@ -292,11 +292,17 @@ export class NewListTicketsComponent implements OnInit {
     description: new FormControl('')
   })
   onTraiter(ticket, index) {
-    if (!this.ticketsOnglets.includes(ticket)) {
+    let ids = []
+    this.ticketsOnglets.forEach((r: Ticket) => {
+      ids.push(r._id)
+    })
+    if (!ids.includes(ticket._id)) {
       this.ticketsOnglets.push(ticket)
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
+    } else {
+      this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
   }
@@ -393,7 +399,7 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
     })
   }
-  filterType = ['Assignés', 'Crées']
+  filterType = ['Crees']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -409,13 +415,13 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType.includes("Assignés") && !this.filterType.includes("Crées"))
+      if (this.filterType.includes("Assignes") && !this.filterType.includes("Crees"))
         if (t.origin)
           r = false
-      if (this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
+      if (this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
         if (!t.origin)
           r = false
-      if (!this.filterType.includes("Crées") && !this.filterType.includes("Assignés"))
+      if (!this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
         r = false
 
       if (r)
@@ -492,5 +498,6 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
   }
+  activeIndex1 = 0
 }
 

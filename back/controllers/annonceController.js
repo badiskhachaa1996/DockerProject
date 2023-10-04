@@ -15,7 +15,7 @@ app.post("/post-annonce", (req, res) => {
 
 //Recuperation de la liste des annonces
 app.get("/get-annonces", (_, res) => {
-    Annonce.find()?.populate('entreprise_id')?.populate('profil')?.populate('competences')
+    Annonce.find()?.populate('entreprise_id')?.populate('profil')?.populate('competences').populate("user_id")
         .then((annonces) => { res.status(200).send(annonces); })
         .catch((error) => { res.status(500).send(error.message); });
 });

@@ -15,6 +15,7 @@ import { User } from './models/User';
 import { CommonModule } from '@angular/common';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { OnInit } from '@angular/core';
+import { EtudiantService } from './services/etudiant.service';
 
 
 
@@ -35,6 +36,7 @@ export class AppTopBarComponent implements OnInit {
   isCEO = false
   isEtudiant = false
   isExterne = false
+  isReinscrit = false
   userConnected: User;
   token: any;
   user = true;
@@ -46,7 +48,8 @@ export class AppTopBarComponent implements OnInit {
 
   constructor(public appMain: AppMainComponent, private CService: CommercialPartenaireService, private serv: ServService, private router: Router,
     private NotificationService: NotificationService, private msalService: MsalService,
-    private AuthService: AuthService, private ToastService: MessageService, private UserService: AuthService, private messageService: MessageService,) { }
+    private AuthService: AuthService, private ToastService: MessageService, private UserService: AuthService, private messageService: MessageService,
+    private EtuService: EtudiantService) { }
 
   //Methode de deconnexion
   onDisconnect() {
@@ -186,7 +189,12 @@ export class AppTopBarComponent implements OnInit {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
+      this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {
+        this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
+      })
+
       this.isExterne = userconnected?.type?.includes('Externe')
+
       this.items = [
         {
           label: this.userConnected?.statut || "Disponible",

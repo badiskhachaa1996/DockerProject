@@ -297,21 +297,46 @@
 
 			<h3>Offres</h3>
 
-			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName,custom_id,source"
+			<p-dataView #dv [value]="annoncesFiltered" [paginator]="true" [rows]="9"
+				filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 				layout="grid">
 				<ng-template pTemplate="header">
-					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-						<span class="p-input-icon-left mb-2 md:mb-0">
-							<i class="pi pi-search"></i>
-							<input type="search" pInputText placeholder="Filtrer par poste"
-								(input)="dv.filter($event.target.value)">
-						</span>
-						<span class="p-input-icon-left mb-2 md:mb-0">
-							<i class="pi pi-search"></i>
-							<input type="search" pInputText placeholder="Filtrer par source"
-								(input)="dv.filter($event.target.value, 'contains')">
-						</span>
+					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
+						<p-dropdown placeholder="Département" [options]="statutFilter" [(ngModel)]="filter_value.statut"
+							(onChange)="updateFilter()">
+						</p-dropdown>
+
+						<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
+							[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
+						</p-dropdown>
+
+						<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" [(ngModel)]="filter_value.profil"
+							(onChange)="updateFilter()"> 
+						</p-multiSelect>
+
+						<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter"
+							[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
+						</p-dropdown>
+
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+					</div>
+					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+						<input pInputText type="text" #filter (input)="dv.filter($event.target.value, 'contains')"
+							[(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
+
+						<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true"
+							placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
+							(onChange)="updateFilter()"></p-multiSelect>
+
+						<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()"
+							[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+							[style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+
+						<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'100%'}" filter="true"
+							[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>
+
+						<button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
+							(click)="clearFilter()"></button>
 					</div>
 				</ng-template>
 
@@ -447,46 +472,42 @@
 
 				<ng-template let-annonce pTemplate="gridItem">
 					<div class="col-12 md:col-4">
-						<div class="card m-3 border-1 surface-border">
-							<div class="flex align-items-center justify-content-between">
-								<div class="flex align-items-center">
-									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">{{ annonce.missionType }}</span>
+						<div class="offre-card row grid mt-3">
+							<div class="col-5 card-right">
+								<div
+									*ngIf="dicPicture && annonce.entreprise_id?._id && dicPicture[annonce.entreprise_id?._id] ;then offre_image else default_image">
 								</div>
-								<span [class]="'sm:ml-2 product-badge'">{{ annonce.debut | date: 'dd/MM/YY'}}</span>
+								<ng-template #offre_image>
+									<div class="img-card"
+										style="background-image: url('{{dicPicture[annonce.entreprise_id?._id].url}}');">
+									</div>
+								</ng-template>
+								<ng-template #default_image>
+									<div class="img-card"
+										style="background-image: url('../../../assets/images/imatch/entreprise.png');">
+									</div>
+								</ng-template>
+								<a class="offres-btns details"
+									(click)="visibleSidebar = true; annonceSelected = annonce"><i
+										class="pi pi-list"></i>Détails</a>
 							</div>
-							<div class="text-center">
-
-								<img style="border: none;" src="assets/skillsnet/cdd.png"
-									*ngIf="annonce.missionType == 'CDD'" alt="{{annonce.missionType}}"
-									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
-								<img style="border: none;" src="assets/skillsnet/cdi.png"
-									*ngIf="annonce.missionType == 'CDI'" alt="{{annonce.missionType}}"
-									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
-								<img style="border: none;" src="assets/skillsnet/pro.png"
-									*ngIf="annonce.missionType == 'Professionnalisation'" alt="{{annonce.missionType}}"
-									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
-								<img style="border: none;" src="assets/skillsnet/alternance.png"
-									*ngIf="annonce.missionType == 'Alternance'" alt="{{annonce.missionType}}"
-									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
-								<img style="border: none;" src="assets/skillsnet/stage.png"
-									*ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}"
-									class="my-4 md:my-0 w-9 md:w-10rem mr-5" />
-
-								<div class="text-2xl font-bold">{{ annonce.missionName | slice: 0:20 }}</div>
-								<div>{{ annonce.missionDesc | slice: 0:20 }}...</div>
-								<div class="mb-3">{{ annonce.debut | date: 'dd/MM/YY' }}</div>
-								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
-								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
-							</div>
-							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{
-									annonce.entreprise_name }}<br>{{ annonce.custom_id }}</span>
-								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{
-									annonce.entreprise_id?.r_sociale }}<br>{{ annonce.custom_id }}</span>
-								<button pButton type="button"
-									(click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play"
-									title="Plus de détails"></button>
+							<div class="col-7 card-right">
+								<div class="offre-card-main">
+									<h4 *ngIf="annonce?.missionName?.length<43" class="offre-card-title">
+										{{annonce.missionName.slice(0, 42)}} <br
+											*ngIf="annonce?.missionName?.length<15">&nbsp;<br
+											*ngIf="annonce?.missionName?.length<30">&nbsp;</h4>
+									<h4 *ngIf="annonce?.missionName?.length>43" class="offre-card-title">
+										{{annonce.missionName.slice(0, 42)}}...</h4>
+									<p class="offre-card-lieu">📍 {{annonce?.entreprise_ville }}</p>
+								</div>
+								<!--<a class="offres-btns postuler" [badge]="dicOffreNB[annonce._id]"
+									(click)="showPostuler = true; annonceSelected = annonce"><i
+										class="pi pi-arrow-right"></i>Postuler</a>-->
+								<p-button label="Matching" icon="pi pi-users" badgeClass="p-badge-danger"
+									(click)="annonceSelected = annonce; InitMatching(annonce)"
+									[style]="{'width':'100%'}" autoWidth="false"
+									[badge]="dicOffreNB[annonce._id]"></p-button>
 							</div>
 						</div>
 					</div>

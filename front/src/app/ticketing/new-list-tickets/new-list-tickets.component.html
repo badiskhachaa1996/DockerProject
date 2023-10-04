@@ -116,16 +116,16 @@
         <button pButton label="Ajouter un ticket" icon="pi pi-plus" (click)="goToAddTicket()"
             style="margin-top: 6rem;"></button>
     </div>-->
-    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;">
+    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;" [(activeIndex)]="activeIndex1">
         <p-tabPanel header="Liste">
             <div class="grid">
                 <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterType" value="Assignés" [(ngModel)]="filterType"
+                    <p-checkbox name="filterType" value="Assignes" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type2"></p-checkbox>
                     <label for="city1">Assignés</label>
                 </div>
                 <div class="col-6 md:col-2 field-checkbox">
-                    <p-checkbox name="filterType" value="Crées" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
+                    <p-checkbox name="filterType" value="Crees" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
                 </div>
@@ -187,7 +187,7 @@
                             </p-sortIcon>
                         </th>
                         <th style="text-align:center">
-                            Délais
+                            Délai
                         </th>
                         <th style="text-align:center">Action</th>
                     </tr>
@@ -400,7 +400,7 @@
                             </p-sortIcon>
                         </th>
                         <th style="text-align:center">
-                            Délais
+                            Délai
                         </th>
                     </tr>
                 </ng-template>
@@ -451,8 +451,9 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket3>
                     <tr>
-                        <h5 *ngIf="!ticket.origin">Détails affectation </h5>
+                        
                         <td colspan="10">
+                            <h5 *ngIf="!ticket.origin">Détails affectation </h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
                                 *ngIf="!ticket.origin">
                                 <ng-template pTemplate="header">

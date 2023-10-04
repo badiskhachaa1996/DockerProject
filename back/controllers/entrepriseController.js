@@ -1411,8 +1411,27 @@ app.get("/getLogo/:id", (req, res) => {
       res.status(404).send({ error: "Image non défini" });
     }
   });
+  
 
 });
+
+app.get('/getAllLogo', (req, res) => {
+  let ids = fs.readdirSync("storage/entreprise/logo")
+  let fileDic = {}
+  ids.forEach(id => {
+      let filenames = fs.readdirSync("storage/entreprise/logo/" + id)
+      if (filenames)
+          fileDic[id] = {
+              file: fs.readFileSync("storage/entreprise/logo/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+                  if (err) return console.error(err);
+              }),
+              extension: mime.contentType(path.extname("storage/entreprise/logo/" + id + "/" + filenames[0])),
+              url: ""
+          }
+  })
+  res.status(200).send({ files: fileDic, ids })
+})
+
 
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;
