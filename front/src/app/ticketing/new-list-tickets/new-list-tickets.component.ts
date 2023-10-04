@@ -498,5 +498,6 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
   }
+  activeIndex1 = 0
 }
 

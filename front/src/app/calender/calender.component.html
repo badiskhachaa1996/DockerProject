@@ -1910,22 +1910,6 @@
     </div>
 </div>
 
-<div *ngIf="isReinscrit">
-    <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\validation_dossier.jpg" style="max-width: 60%;">
-        </div>
-        <h2>Votre demande de reinscription est en cours de traitement.</h2>
-        <h3 *ngIf="dataEtudiant && !dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de la
-            validation par
-            l'administration. <a href="mailto:m.hue@intedgroup.com">Merci de contacté m.hue@intedgroup.com</a></h3>
-        <h3 *ngIf="dataEtudiant && dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de
-            l'assignation au groupe
-            scolaire par la pédagogie.</h3>
-    </div>
-</div>
-
-
 <div *ngIf="isCEO">
     <h2 *ngIf="user" style="text-align: center;">
         Bonjour {{user.firstname | titlecase}} {{user.lastname | uppercase}}, Bienvenue sur votre espace entreprise

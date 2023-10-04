@@ -35,6 +35,7 @@ export class AppTopBarComponent implements OnInit {
   isCEO = false
   isEtudiant = false
   isExterne = false
+  isReinscrit = false
   userConnected: User;
   token: any;
   user = true;
@@ -186,7 +187,9 @@ export class AppTopBarComponent implements OnInit {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
+      this.isReinscrit = true
       this.isExterne = userconnected?.type?.includes('Externe')
+      
       this.items = [
         {
           label: this.userConnected?.statut || "Disponible",

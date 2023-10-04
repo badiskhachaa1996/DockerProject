@@ -26,6 +26,7 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 export class AnnoncesComponent implements OnInit {
 
   annonces: Annonce[] = [];
+  annoncesFiltered: Annonce[] = [];
 
   entreprises: Entreprise[] = [];
   entreprisesWithCEO: Entreprise[] = [];
@@ -179,6 +180,7 @@ export class AnnoncesComponent implements OnInit {
     this.annonceService.getAnnonces()
       .then((response: Annonce[]) => {
         this.annonces = response;
+        this.annoncesFiltered = response
         let agent_id = []
         response.forEach(annonce => {
           this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
@@ -188,11 +190,11 @@ export class AnnoncesComponent implements OnInit {
           })
           if (annonce && annonce.user_id) {
             let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
-            if (!agent_id.includes(annonce.user_id._id)){
+            if (!agent_id.includes(annonce.user_id._id)) {
               this.userFilter.push(temp)
               agent_id.push(annonce.user_id._id)
             }
-              
+
           }
 
         })
@@ -460,13 +462,13 @@ export class AnnoncesComponent implements OnInit {
     { label: 'CDI', value: 'CDI' }
   ]
   profilFilter = [
-    { label: "Choisissez un profil", value: null },
+    //{ label: "Choisissez un profil", value: null },
   ]
   entrepriseFilter = [
     { label: "Choisissez une entreprise", value: null },
   ]
   locations = [
-    { label: "Choisissez une ville", value: null },
+    //{ label: "Choisissez une ville", value: null },
     { label: "100% Télétravail", value: "100% Télétravail" },
     { label: "Aix-Marseille", value: "Aix-Marseille" },
     { label: "Amiens", value: "Amiens" },
@@ -531,8 +533,63 @@ export class AnnoncesComponent implements OnInit {
     { label: "Choisissez la personne qui a crée l'offre", value: null }
   ]
 
-  updateFilter() {
+  filter_value = {
+    statut: "",
+    typeMission: "",
+    profil: [],
+    entreprise: '',
+    locations: [],
+    user: '',
+    date: '',
+    search: ''
+  }
 
+  updateFilter() {
+    this.annoncesFiltered = []
+    console.log(this.filter_value)
+    this.annonces.forEach(val => {
+      let r = true
+      if (this.filter_value.statut && this.filter_value.statut != val.statut)
+        r = false
+      else if (this.filter_value.typeMission && this.filter_value.typeMission != val.missionType)
+        r = false
+      else if (this.filter_value.profil.length != 0 && (!val.profil || !this.filter_value.profil.includes(val.profil._id)))
+        r = false
+      else if (this.filter_value.entreprise && this.filter_value.entreprise != val.entreprise_id._id)
+        r = false
+      else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
+        r = false
+      else if (this.filter_value.user && this.filter_value.user != val.user_id._id)
+        r = false
+      else if (this.filter_value.date && new Date(this.filter_value.date).getTime() > new Date(val.debut).getTime())
+        r = false, console.log("date")
+      else if (this.filter_value.search) {
+        if (!val.custom_id.includes(this.filter_value.search) &&
+          !val.entreprise_name.includes(this.filter_value.search) &&
+          !val.missionDesc.includes(this.filter_value.search) &&
+          !val.missionName.includes(this.filter_value.search) &&
+          !val.entreprise_mail.includes(this.filter_value.search))
+          r = false
+      }
+
+      if (r)
+        this.annoncesFiltered.push(val)
+    })
+
+  }
+
+  clearFilter() {
+    this.filter_value = {
+      statut: "",
+      typeMission: "",
+      profil: [],
+      entreprise: '',
+      locations: [],
+      user: '',
+      date: '',
+      search: ''
+    }
+    this.annoncesFiltered = this.annonces
   }
 
 
