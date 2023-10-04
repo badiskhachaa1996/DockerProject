@@ -22,7 +22,7 @@ const annonceSchema = mongoose.Schema({
     isClosed: { type: Boolean, required: false },
     custom_id: { type: String, required: false, default: 'OSA50655' },
     date_creation: { type: Date, required: false, default: Date.now },
-    statut: { type: String, required: false },
+    statut: { type: String, default:'Active' },
 });
 
 const Annonce = mongoose.model('annonce', annonceSchema);

@@ -91,6 +91,7 @@ export class NewListTicketsComponent implements OnInit {
           return 1
       })
       this.defaultTicket = this.tickets
+      this.onFilterTicket()
       let tempDate = new Date()
       tempDate.setDate(tempDate.getDate() - 1)
       this.stats = {
@@ -301,7 +302,7 @@ export class NewListTicketsComponent implements OnInit {
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
-    }else{
+    } else {
       this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
@@ -399,7 +400,7 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
     })
   }
-  filterType = ['Assignes', 'Crees']
+  filterType = ['Crees']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -498,5 +499,6 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
   }
+  activeIndex1 = 0
 }
 

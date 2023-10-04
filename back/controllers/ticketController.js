@@ -73,12 +73,7 @@ app.post("/create", (req, res) => {
                     from: 'ims@intedgroup.com',
                     to: u.email,
                     subject: '[IMS - Ticketing] - Création d\'un ticket ',
-                    html: htmlemail,
-                    attachments: [{
-                        filename: 'signature.png',
-                        path: 'assets/ims-intedgroup-logo.png',
-                        cid: 'red' //same cid value as in the html img src
-                    }]
+                    html: htmlemail
                 };
 
 
@@ -112,12 +107,7 @@ app.post("/create", (req, res) => {
                             from: 'ims@intedgroup.com',
                             to: emailList,
                             subject: '[IMS - Ticketing] - Création d\'un ticket ',
-                            html: htmlemail,
-                            attachments: [{
-                                filename: 'signature.png',
-                                path: 'assets/ims-intedgroup-logo.png',
-                                cid: 'red' //same cid value as in the html img src
-                            }]
+                            html: htmlemail
                         };
 
 

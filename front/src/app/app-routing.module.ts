@@ -282,6 +282,7 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 const routes: Routes = [
     {
         path: '',
@@ -698,6 +699,7 @@ const routes: Routes = [
             { path: 'matching-externe/:id', component: POVHorsCommercialComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:offre_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque-interne', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'new-cvtheque-interne', component: NewCvthequeInterneComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque-interne/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
             { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService] },

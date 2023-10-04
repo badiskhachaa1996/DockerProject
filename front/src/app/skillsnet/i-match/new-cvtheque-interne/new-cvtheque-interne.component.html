@@ -1,0 +1,109 @@
+<div class="col-12">
+    <p-dataView #dv [value]="users" layout="grid">
+        <ng-template pTemplate="header">
+            <div class="flex flex-column md:flex-row md:justify-content-between">
+                <span class="p-input-icon-left mb-2 md:mb-0">
+                    <i class="pi pi-search"></i>
+                    <input type="search" pInputText placeholder="Recherche" (input)="dv.filter($event.target.value)">
+                </span>
+                <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="listItem">
+            <p-table #dt1 [value]="users" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
+                [paginator]="true"
+                [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                responsiveLayout="scroll">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="civilite" style="text-align: center;">Civilité <p-sortIcon
+                                field="civilite"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="firstname" style="text-align: center;">Prénom <p-sortIcon
+                                field="firstname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="lastname" style="text-align: center;">Nom <p-sortIcon
+                                field="lastname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
+                                field="type"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="profil" style="text-align: center;">Profil <p-sortIcon
+                                field="profil"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="winner" style="text-align: center;">Winner <p-sortIcon
+                                field="winner"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cv>
+                    <tr>
+                        <td style="min-width: 12rem;">
+                            {{cv.user_id?.civilite}}
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            {{cv.user_id?.firstname | titlecase}}
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            {{cv.user_id?.lastname | uppercase}}
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            {{cv.user_id?.type}}
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            P
+                        </td>
+                        <td style="min-width: 12rem;">
+                            W
+                        </td>
+                        <td class="text-center" style="min-width: 8rem;">
+                            <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
+                                tooltipPosition="bottom"></i>
+                            <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
+                                tooltipPosition="bottom"></i>
+                            <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV"
+                                tooltipPosition="bottom"></i>
+                            <i class="pi pi-users mr-2" pTooltip="Matching"
+                                tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5">Aucun cv trouvé.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="5">Chargement...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+        <ng-template let-user pTemplate="gridItem">
+            <div class="col-12 md:col-4">
+                <div class="product-grid-item card">
+                    {{user| json}}
+                </div>
+
+            </div>
+        </ng-template>
+    </p-dataView>
+</div>

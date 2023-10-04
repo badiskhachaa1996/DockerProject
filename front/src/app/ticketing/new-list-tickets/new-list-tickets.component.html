@@ -116,7 +116,7 @@
         <button pButton label="Ajouter un ticket" icon="pi pi-plus" (click)="goToAddTicket()"
             style="margin-top: 6rem;"></button>
     </div>-->
-    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;">
+    <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;" [(activeIndex)]="activeIndex1">
         <p-tabPanel header="Liste">
             <div class="grid">
                 <div class="col-6 md:col-2 field-checkbox">
@@ -140,8 +140,7 @@
                     <label for="city1">Urgent</label>
                 </div>
                 <div class="col-6 md:col-4 grid">
-                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets en cours &nbsp;&nbsp;&nbsp;&nbsp;</span> {{stats.en_cours}}</p>
-                    <p class="col-12" style="text-align: center;border:1px lightgray solid;"><span style="font-weight: bold;">Ticket > 24 heures &nbsp;&nbsp;&nbsp;&nbsp;</span> {{stats.en_attente }}</p>
+                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets selectionnés &nbsp;&nbsp;&nbsp;&nbsp;</span> {{tickets.length}}</p>
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"

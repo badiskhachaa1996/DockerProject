@@ -297,38 +297,46 @@
 
 			<h3>Offres</h3>
 
-			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9"
+			<p-dataView #dv [value]="annoncesFiltered" [paginator]="true" [rows]="9"
 				filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 				layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-						<p-dropdown placeholder="Département" [options]="statutFilter"
-							(onChange)="dv.filter($event.value,'equals')">
+						<p-dropdown placeholder="Département" [options]="statutFilter" [(ngModel)]="filter_value.statut"
+							(onChange)="updateFilter()">
 						</p-dropdown>
+
 						<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
-							(onChange)="dv.filter($event.value,'equals')">
+							[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 						</p-dropdown>
-						<p-dropdown placeholder="Profil" [options]="profilFilter"
-							(onChange)="dv.filter($event.value,'equals')">
-						</p-dropdown>
+
+						<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" [(ngModel)]="filter_value.profil"
+							(onChange)="updateFilter()"> 
+						</p-multiSelect>
+
 						<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter"
-							(onChange)="dv.filter($event.value,'equals')">
+							[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
 						</p-dropdown>
 
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<input pInputText type="text" #filter (input)="dv.filter($event.target.value, 'contains')"
-							placeholder="Recherche" />
-						<p-dropdown [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true"
-							(onChange)="dv.filter($event.value, 'equals')"></p-dropdown>
+							[(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
+
+						<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true"
+							placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
+							(onChange)="updateFilter()"></p-multiSelect>
+
 						<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()"
-							(onBlur)="updateFilter()" inputId="range" autoWidth="false" [style]="{'width':'100%'}"
-							placeholder="Date de début"></p-calendar>
+							[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+							[style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+
 						<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'100%'}" filter="true"
-							(onChange)="dv.filter($event.value, 'equals')"></p-dropdown>
+							[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>
+
 						<button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
-							(click)="clear(dv)"></button>
+							(click)="clearFilter()"></button>
 					</div>
 				</ng-template>
 
