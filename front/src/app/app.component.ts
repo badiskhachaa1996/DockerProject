@@ -40,16 +40,11 @@ export class AppComponent {
                     if (response)
                         this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
                             localStorage.setItem("token", data.token)
+                            console.log(response, data)
                             //this.socket.isAuth()
-                            if (data.message) {
-                                localStorage.setItem("modify", "true")
-                                this.router.navigate(['completion-profil'])
-                            } else {
-                                this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-                                    this.ss.connected()
-                                });
-
-                            }
+                            this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+                                this.ss.connected()
+                            });
 
                         }, (error) => {
                             console.error(error)
@@ -68,15 +63,10 @@ export class AppComponent {
                 this.AuthService.AuthMicrosoft(payload.account.username, payload.account.name).subscribe((data) => {
                     localStorage.setItem("token", data.token)
                     //this.socket.isAuth()
-                    if (data.message) {
-                        localStorage.setItem("modify", "true")
-                        this.router.navigate(['completion-profil'])
-                    } else {
-                        this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-                            this.ss.connected()
-                        });
-
-                    }
+                    console.log(payload, data)
+                    this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+                        this.ss.connected()
+                    });
 
                 }, (error) => {
                     console.error(error)

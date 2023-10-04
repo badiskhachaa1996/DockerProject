@@ -13,7 +13,7 @@
         <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
-                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans la barre en haut</p>
         <p>Merci de votre patience!</p>
     </div>
 </div>
@@ -1909,22 +1909,6 @@
         </div>
     </div>
 </div>
-
-<div *ngIf="isReinscrit">
-    <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\validation_dossier.jpg" style="max-width: 60%;">
-        </div>
-        <h2>Votre demande de reinscription est en cours de traitement.</h2>
-        <h3 *ngIf="dataEtudiant && !dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de la
-            validation par
-            l'administration. <a href="mailto:m.hue@intedgroup.com">Merci de contacté m.hue@intedgroup.com</a></h3>
-        <h3 *ngIf="dataEtudiant && dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de
-            l'assignation au groupe
-            scolaire par la pédagogie.</h3>
-    </div>
-</div>
-
 
 <div *ngIf="isCEO">
     <h2 *ngIf="user" style="text-align: center;">
