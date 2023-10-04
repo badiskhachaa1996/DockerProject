@@ -91,6 +91,7 @@ export class NewListTicketsComponent implements OnInit {
           return 1
       })
       this.defaultTicket = this.tickets
+      this.onFilterTicket()
       let tempDate = new Date()
       tempDate.setDate(tempDate.getDate() - 1)
       this.stats = {
