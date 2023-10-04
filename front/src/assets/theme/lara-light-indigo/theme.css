@@ -4797,6 +4797,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
 }
 .p-panelmenu .p-panelmenu-header.p-highlight {
   margin-bottom: 0;
+  transition: width 0.2s;
 }
 .p-panelmenu .p-panelmenu-header.p-highlight > a {
   border-color: #37BAD4;
@@ -5715,6 +5716,7 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   }
         
   .p-panelmenu .p-panelmenu-panel {
+    transition: width 0.2s;
     width: 80px;
     margin-left: 200px;
   }
@@ -5731,8 +5733,6 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
       display: block;
     }
   }
-
-  
   .p-panelmenu .p-submenu-list {
     padding-left: 20px !important;
   }
