@@ -45,7 +45,17 @@
     }
 }
 
+.nav-burger-mobile {
+    display: none;
+}
+
+
 @media (max-width: 1000px) {
+
+    .nav-burger-mobile {
+        display: block;
+    }
+    
     .layout-wrapper {
         .layout-main-container {
             margin-left: 0;
@@ -55,7 +65,7 @@
             transform: translateX(-100%);
             left: 0;
             top: 0;
-            height: 100vh;
+            padding-top: 0;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
         }
@@ -84,4 +94,13 @@
     .body-overflow-hidden {
         overflow: hidden;
     }
+
+    .layout-main-container {
+        padding: 5rem 1rem 1rem 1rem;
+    }
+
+    .footer-content {
+        text-align: center;
+    }
+
 }
