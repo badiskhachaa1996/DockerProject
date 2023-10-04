@@ -13,6 +13,22 @@ export class MicrosoftService {
 
   constructor() { }
 
+  getInfo() {
+    let pca = new PublicClientApplication({
+      auth: {
+        clientId: environment.clientId,
+        authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
+        redirectUri: '/',
+        postLogoutRedirectUri: '/login'
+      },
+      cache: {
+        cacheLocation: "localStorage",
+        storeAuthStateInCookie: window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1, // set to true for IE 11
+      },
+    })
+    console.log(pca.getAllAccounts())
+  }
+
   createTeamsMeeting(event) {
     /*
     { 
