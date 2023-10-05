@@ -2,6 +2,7 @@
     <div class="page-content">
         <div class="top-header container">
             <a routerLink="/imatch/cvtheque" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-arrow-left"></i>Retour</a>
+            <a *ngIf="showEditBtn" (click)="gotoEdit()" class="btn-cv btn-cv-1 btn-cv-shadow-1"><i class="pi pi-cog"></i>Modifier</a>
             <a (click)="takeARendezVous()" class="btn-cv btn-cv-2 btn-cv-shadow-1">Prendre un rendez-vous</a>
         </div>
         <div class="header">

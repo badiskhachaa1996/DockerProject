@@ -18,9 +18,11 @@ export class CvComponent implements OnInit {
   user: User;
   dicPicture
   profilePic
+  showEditBtn = false
 
   constructor(private UserService: AuthService, private cvservice: CvService, private route: ActivatedRoute, private router: Router) {
     const id = this.route.snapshot.paramMap.get('id')
+
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
       this.user = data.dataCv.user_id
@@ -46,13 +48,13 @@ export class CvComponent implements OnInit {
 
     this.cvservice.getPictureByUser(id).subscribe(data => {
       this.dicPicture = data // {id:{ file: string, extension: string }}
-        const reader = new FileReader();
-        const byteArray = new Uint8Array(atob(data["fileOne"].file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: data["fileOne"].extension })
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          this.profilePic = reader.result;
-        }
+      const reader = new FileReader();
+      const byteArray = new Uint8Array(atob(data["fileOne"].file).split('').map(char => char.charCodeAt(0)));
+      let blob: Blob = new Blob([byteArray], { type: data["fileOne"].extension })
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        this.profilePic = reader.result;
+      }
     })
   }
   takeARendezVous() {
@@ -60,6 +62,13 @@ export class CvComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('seeEditBTNCV')) {
+      localStorage.removeItem('seeEditBTNCV')
+      this.showEditBtn = true
+    }
+  }
 
+  gotoEdit(){
+    this.router.navigate(['generateur-cv/', this.user._id])
   }
 }
