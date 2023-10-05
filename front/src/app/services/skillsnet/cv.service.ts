@@ -54,7 +54,7 @@ export class CvService {
   getCvs() {
     const url = `${this.apiUrl}/get-cvs`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<CV[]>((resolve, reject) => {
       this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
@@ -137,7 +137,7 @@ export class CvService {
 
   getPictureByUser(id) {
     let url = `${this.apiUrl}/get-picture-by-user/${id}`;
-    return this.httpClient.get<{ file: {}}>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+    return this.httpClient.get<{ file: {} }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   downloadCV(id) {
@@ -151,5 +151,17 @@ export class CvService {
       })
     });
 
+  }
+
+  deleteCV(id) {
+    const url = `${this.apiUrl}/delete-cv/${id}`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.delete<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CV supprimé'),
+      })
+    });
   }
 }

@@ -1,20 +1,179 @@
 <div class="col-12">
-    <p-dataView #dv [value]="users" layout="grid">
-        <ng-template pTemplate="header">
-            <div class="flex flex-column md:flex-row md:justify-content-between">
-                <span class="p-input-icon-left mb-2 md:mb-0">
-                    <i class="pi pi-search"></i>
-                    <input type="search" pInputText placeholder="Recherche" (input)="dv.filter($event.target.value)">
-                </span>
-                <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+    <div class="grid col-12 card" *ngIf="cvToUpdate">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+            (click)="cvToUpdate = null" aria-hidden="true"> </i>
+        <form class="grid" [formGroup]="formUpdate">
+
+            <div class="p-fluid p-formgrid grid col-12">
+                <div class="field col-12">
+                    <label For="Civilite">Civilité<span style="color:red"> *</span></label>
+                    <p-dropdown [options]="civiliteList" formControlName="civilite"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Nom<span style="color:red"> *</span></label>
+                    <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="firstname">Prénom<span style="color:red"> *</span></label>
+                    <input pInputText id="firstname" formControlName="firstname" type="text" placeholder="Prénom" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="phone">Téléphone</label>
+                    <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="email_perso">Mail personnel<span style="color:red"> *</span></label>
+                    <input pInputText id="phone" formControlName="email_perso" type="email"
+                        placeholder="s.hue@gmail.com" />
+                </div>
+
+                <div class="field col-12 md:col-7">
+                    <label For="pays">Pays de résidence</label>
+                    <p-dropdown [options]="paysList" formControlName="pays_adresse"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label For="ville">Ville</label>
+                    <input pInputText id="ville" formControlName="ville_adresse" type="text" placeholder="Paris" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="numero_adresse">Numéro de rue</label>
+                    <input pInputText id="numero_adresse" formControlName="numero_adresse" type="number"
+                        placeholder="15" />
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="rue_adresse">Rue</label>
+                    <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text"
+                        placeholder="rue du louvre" />
+                </div>
+                <div class="field md:col-6 col-12">
+                    <label For="postal_adresse">Code postale</label>
+                    <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
+                        placeholder="94200" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="nationnalite" [options]="nationList"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-12">
+                    <button pButton label="Sauvegardez les modifications" [disabled]="formUpdate.invalid"
+                        (click)="saveUpdate()"></button>
+                </div>
             </div>
-        </ng-template>
+        </form>
+    </div>
+    <div class="grid col-12 card" *ngIf="cvToAdd">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+            (click)="cvToAdd = false" aria-hidden="true"> </i>
+        <form class="grid" [formGroup]="formAdd">
+            <div class="p-fluid p-formgrid grid col-12">
+                <div class="field col-12">
+                    <label For="Civilite">Civilité<span style="color:red"> *</span></label>
+                    <p-dropdown [options]="civiliteList" formControlName="civilite"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Nom<span style="color:red"> *</span></label>
+                    <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="firstname">Prénom<span style="color:red"> *</span></label>
+                    <input pInputText id="firstname" formControlName="firstname" type="text" placeholder="Prénom" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="phone">Téléphone</label>
+                    <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="email_perso">Mail personnel<span style="color:red"> *</span></label>
+                    <input pInputText id="phone" formControlName="email_perso" type="email"
+                        placeholder="s.hue@gmail.com" />
+                </div>
+
+                <div class="field col-12 md:col-7">
+                    <label For="pays">Pays de résidence</label>
+                    <p-dropdown [options]="paysList" formControlName="pays_adresse"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label For="ville">Ville</label>
+                    <input pInputText id="ville" formControlName="ville_adresse" type="text" placeholder="Paris" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="numero_adresse">Numéro de rue</label>
+                    <input pInputText id="numero_adresse" formControlName="numero_adresse" type="number"
+                        placeholder="15" />
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="rue_adresse">Rue</label>
+                    <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text"
+                        placeholder="rue du louvre" />
+                </div>
+                <div class="field md:col-6 col-12">
+                    <label For="postal_adresse">Code postale</label>
+                    <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
+                        placeholder="94200" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="nationnalite" [options]="nationList"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="col-12">
+                    <button pButton label="Ajout du CV" [disabled]="formAdd.invalid" (click)="saveAdd()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="grid col-12 card" *ngIf="matchingToSee.length!=0">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
+            (click)="matchingToSee = []" aria-hidden="true"> </i>
+        <p-table #dt3 [value]="matchingToSee" dataKey="_id" [rows]="8" [rowHover]="true"
+            styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true" rowExpandMode="single"
+            [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem" scope="col">Offre</th>
+                    <th style="width: 3rem" scope="col">Type Matching</th>
+                    <th style="width: 3rem" scope="col">Matcher</th>
+                    <th style="width: 3rem" scope="col">Statut Matching</th>
+                    <th style="width: 3rem" scope="col">Taux Matching</th>
+                    <th style="width: 3rem" scope="col">Entretien</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-match>
+                <tr>
+                    <td>
+                        {{match.offre_id.custom_id}}
+                    </td>
+                    <td>
+                        {{match.type_matching}}
+                    </td>
+                    <td>
+                        {{match.matcher_id.firstname | titlecase}} {{match.matcher_id.lastname | uppercase}}
+                    </td>
+                    <td>
+                        {{match.statut}}
+                    </td>
+                    <td>
+                        WIP
+                    </td>
+                    <td>
+                        WIP
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <p-dataView #dv [value]="['']" layout="grid">
         <ng-template pTemplate="listItem">
-            <p-table #dt1 [value]="users" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
-                [paginator]="true"
+            <p-table #dt1 [value]="cvs" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
+                style="width: 100%;" [paginator]="true" rowExpandMode="single"
                 [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
                 responsiveLayout="scroll">
                 <ng-template pTemplate="caption">
+
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
@@ -22,35 +181,49 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
+                        <button pButton label="Ajouter" (click)="cvToAdd=true"></button>
+                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="civilite" style="text-align: center;">Civilité <p-sortIcon
-                                field="civilite"></p-sortIcon>
+                        <th style="width: 3rem" scope="col"></th>
+                        <th pSortableColumn="source" style="text-align: center;">Source <p-sortIcon
+                                field="source"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="firstname" style="text-align: center;">Prénom <p-sortIcon
-                                field="firstname"></p-sortIcon>
+                        <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
+                                field="user_id.civilite"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="lastname" style="text-align: center;">Nom <p-sortIcon
-                                field="lastname"></p-sortIcon>
+                        <th pSortableColumn="user_id.firstname" style="text-align: center;">Prénom <p-sortIcon
+                                field="user_id.firstname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id.lastname" style="text-align: center;">Nom <p-sortIcon
+                                field="user_id.lastname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
                                 field="type"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="profil" style="text-align: center;">Profil <p-sortIcon
-                                field="profil"></p-sortIcon>
+                        <th pSortableColumn="profil_id.libelle" style="text-align: center;">Profil <p-sortIcon
+                                field="profil_id.libelle"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="winner" style="text-align: center;">Winner <p-sortIcon
-                                field="winner"></p-sortIcon>
+                        <th pSortableColumn="winner_id.firstname" style="text-align: center;">Winner <p-sortIcon
+                                field="winne.firstnamer"></p-sortIcon>
                         </th>
                         <th>
                             Action
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-cv>
+                <ng-template pTemplate="body" let-cv let-expanded="expanded">
                     <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="cv"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{cv.source}}
+                        </td>
                         <td style="min-width: 12rem;">
                             {{cv.user_id?.civilite}}
                         </td>
@@ -68,20 +241,31 @@
                         </td>
 
                         <td style="min-width: 12rem;">
-                            P
+                            {{cv.competences[0]?.profile_id?.libelle}}
                         </td>
                         <td style="min-width: 12rem;">
-                            W
+                            {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
                         </td>
                         <td class="text-center" style="min-width: 8rem;">
                             <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
+                                (click)="onInitUpdate(cv)" tooltipPosition="bottom"></i>
+                            <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer" (click)="deleteCV(cv)"
                                 tooltipPosition="bottom"></i>
-                            <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
+                            <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV" (click)="goToCV(cv)"
                                 tooltipPosition="bottom"></i>
-                            <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV"
-                                tooltipPosition="bottom"></i>
-                            <i class="pi pi-users mr-2" pTooltip="Matching"
-                                tooltipPosition="bottom"></i>
+                            <ng-container *ngIf="dicMatching[cv?._id]; then badge1 else no_badge1">
+
+                            </ng-container>
+                            <ng-template #badge1>
+                                <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
+                                    [value]="dicMatching[cv?._id]" tooltipPosition="bottom"
+                                    (click)="onLoadMatching(cv?.user_id?._id)"></i>
+                            </ng-template>
+                            <ng-template #no_badge1>
+                                <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
+                                    value="0" tooltipPosition="bottom" (click)="onLoadMatching(cv?.user_id?._id)"></i>
+                            </ng-template>
+
                         </td>
                     </tr>
                 </ng-template>
@@ -90,17 +274,166 @@
                         <td colspan="5">Aucun cv trouvé.</td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="loadingbody">
+                <ng-template pTemplate="rowexpansion" let-cv>
                     <tr>
-                        <td colspan="5">Chargement...</td>
+                        <td colspan="9">
+                            <h5>Détails</h5>
+                            <br>
+                            <p-table responsiveLayout="scroll" [value]="['']">
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Email école
+                        </th>
+                        <th>
+                            Email personnel
+                        </th>
+                        <th>
+                            Téléphone
+                        </th>
+                        <th>
+                            Adresse
+                        </th>
+                        <th>
+                            CV Externe
+                        </th>
+                        <th>
+                            Nationalité
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <tr>
+                        <td>
+                            {{cv?.user_id?.email}}
+                        </td>
+                        <td>
+                            {{cv?.user_id?.email_perso}}
+                        </td>
+                        <td>
+                            {{cv?.user_id?.phone}}
+                        </td>
+                        <td>
+                            {{cv?.user_id?.numero_adresse}} {{cv?.user_id?.rue_adresse}} {{cv?.user_id?.postal_adresse}}
+                            {{cv?.user_id?.ville_adresse}} {{cv?.user_id?.pays_adresse}}
+                        </td>
+                        <td>
+                            <a (click)="downloadOldCV(cv)">Téléchargé l'ancien CV</a>
+                        </td>
+                        <td>
+                            {{cv?.user_id?.nationnalite}}
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
+            <br>
+            <p-table responsiveLayout="scroll" [value]="['']">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Crée par
+                        </th>
+                        <th>
+                            Crée le
+                        </th>
+                        <th>
+                            Modifié le
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <tr>
+                        <td>
+                            {{cv?.createur_id?.firstname | titlecase}} {{cv?.createur_id?.lastname | uppercase}}
+                        </td>
+                        <td>
+                            {{cv?.date_creation | date:'mediumDate'}}
+                        </td>
+                        <td>
+                            WIP
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </td>
+            </tr>
         </ng-template>
-        <ng-template let-user pTemplate="gridItem">
-            <div class="col-12 md:col-4">
-                <div class="product-grid-item card">
-                    {{user| json}}
+        </p-table>
+        </ng-template>
+        <ng-template pTemplate="gridItem">
+            <div class="p-datatable-header ng-star-inserted" style="width: 100%;">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <button pButton label="Ajouter" (click)="cvToAdd=true"></button>
+                    <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                </div>
+            </div>
+            <div class="col-12 md:col-4" *ngFor="let cv of cvs">
+                <div class="cv-card">
+                    <div class="cv-card-main">
+                        <div class="cv-card-information">
+
+                            <div *ngIf="dicPicture && dicPicture[cv?._id]?.url;then cv_image else default_image">
+                            </div>
+                            <ng-template #cv_image>
+                                <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');">
+                                </div>
+                            </ng-template>
+                            <ng-template #default_image>
+                                <div *ngIf="cv?.user_id?.civilite == 'Madame'; then is_madame else other"></div>
+                                <ng-template #is_madame>
+                                    <div class="img-card"
+                                        style="background-image: url('../../../assets/images/imatch/female.png');">
+                                    </div>
+                                </ng-template>
+                                <ng-template #other>
+                                    <div class="img-card"
+                                        style="background-image: url('../../../assets/images/imatch/male.png');">
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                            <div class="cv-card-details">
+                                <div class="card-main-info">
+                                    <div class="cv-card-title">
+                                        <h4 style="font-weight: bold; width: 100%">
+                                            {{cv?.competences[0]?.profile_id?.libelle || "Profil"}}
+                                        </h4>
+                                        <h5 style="width: 100%">{{cv?.user_id?.firstname | titlecase}}
+                                            {{cv?.user_id?.lastname | uppercase}}</h5>
+                                    </div>
+                                </div>
+                                <div class="card-main-data">
+                                    <p *ngIf='cv.mobilite_lieu'>📍 {{cv?.mobilite_lieu}}</p>
+                                    <p *ngIf='!cv.mobilite_lieu'>📍 France</p>
+                                    <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo"></p>
+                                    <ng-template #not_dispo>
+                                        <p>⏱ {{cv?.disponibilite | date : 'MMMM YYYY'}}</p>
+                                    </ng-template>
+                                    <ng-template #dispo_immediat>
+                                        <p>⏱ Disponible Immédiatement</p>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cv-card-footer">
+                        <a class="cv" (click)="goToCV(cv)">CV</a>
+                        <ng-container *ngIf="dicMatching[cv?._id]; then badge else no_badge">
+
+                        </ng-container>
+                        <ng-template #badge>
+                            <a class="meeting" pBadge [value]="dicMatching[cv?._id]"
+                                (click)="onLoadMatching(cv?.user_id?._id)">Matching</a>
+                        </ng-template>
+                        <ng-template #no_badge>
+                            <a class="meeting" pBadge value="0" (click)="onLoadMatching(cv?.user_id?._id)">Matching</a>
+                        </ng-template>
+                    </div>
                 </div>
 
             </div>

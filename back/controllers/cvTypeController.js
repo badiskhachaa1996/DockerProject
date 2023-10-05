@@ -63,7 +63,7 @@ app.post("/post-cv", (req, res) => {
     CvType.findOne({ user_id: cv.user_id })
         .then((response) => {
             if (response) {
-                CvType.findByIdAndUpdate(response._id, { ...req.body, date_creation: new Date() }).then(r => {
+                CvType.findByIdAndUpdate(response._id, { ...req.body, date_creation: new Date(), last_modified_at: new Date() }).then(r => {
                     res.status(200).send(r);
                 })
 
@@ -79,9 +79,7 @@ app.post("/post-cv", (req, res) => {
 
 // modif de cv
 app.put("/put-cv", (req, res) => {
-
-    const cv = new CvType({ ...req.body });
-    CvType.findByIdAndUpdate(cv._id, cv, { new: true })
+    CvType.findByIdAndUpdate(cv._id, { ...req.body, last_modified_at: new Date() }, { new: true })
         .then((reponse) => { res.status(201).send(reponse); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -89,21 +87,27 @@ app.put("/put-cv", (req, res) => {
 
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
-    CvType.find()?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id')
+    CvType.find({ user_id: { $ne: null } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').populate('profil_id').populate('winner_id')
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 app.get("/get-cvs-public", (_, res) => {
-    CvType.find({ isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').sort({ _id: -1 })
+    CvType.find({ user_id: { $ne: null }, isPublic: { $ne: false } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').sort({ _id: -1 })
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 
 // recuperation d'un cv par id du cv
-app.get("/get-cv", (req, res) => {
+app.get("/get-cv/:id", (req, res) => {
     CvType.findOne({ _id: req.params.id })?.populate('user_id').populate('competences')
+        .then((response) => { res.status(200).send(response); })
+        .catch((error) => { res.status(400).send(error.message); });
+});
+
+app.delete("/delete-cv/:id", (req, res) => {
+    CvType.findByIdAndRemove(req.params.id)
         .then((response) => { res.status(200).send(response); })
         .catch((error) => { res.status(400).send(error.message); });
 });
