@@ -41,7 +41,7 @@ export class EntrepriseListComponent implements OnInit {
     firstname: new FormControl('', Validators.required),
     email_perso: new FormControl('', Validators.required),
     phone: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]),
-    consent: new FormControl('Non', Validators.required)
+    consent: new FormControl(false, Validators.required)
   })
 
   offres = []

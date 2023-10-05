@@ -1,42 +1,184 @@
+<p-tabView>
+    <p-tabPanel header="My Links">
+        <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links"
+            [dragdrop]="true">
+            <ng-template let-links  pTemplate="item">
 
-<p-orderList [value]="sourceProducts[0]" [listStyle]="{ 'max-height': '30rem' }" header="My Links" [dragdrop]="true">
-    <ng-template let-product pTemplate="item">
-       
-        <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="product?.lien">
-            
-            <div class="flex-1 flex flex-column gap-2">
-                <span class="font-bold">{{product.nom}}</span>
-                <div class="flex align-items-center gap-2">
-                    <i class="pi pi-tag text-sm"></i>
-                    <a [href]="product?.lien" target="_blank">{{ product?.lien }}</a>
+                <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
+
+                    <div class="flex-1 flex flex-column gap-2">
+                        <span class="font-bold">{{links?.nom}}</span>
+                        <div class="flex align-items-center gap-2">
+                            <i class="pi pi-link text-sm"></i>
+                            <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </ng-template>
+
+        </p-orderList>
+
+        <div >
+            <p-button (onClick)="showdialog()">ajouter </p-button>
+            <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+                
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks()">
+
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+                
+            </p-dialog>
+
         </div>
-    </ng-template>
-    
-</p-orderList>
+    </p-tabPanel>
+    <p-tabPanel header="Global Links">
+        <p-dialog header="My Links" [(visible)]="showm" [style]="{width: '50vw'}">
+        <form class="p-formgrid grid p-fluid" [formGroup]="formUpdateLinks" (ngSubmit)="UpdateLinks()">
 
-<div>
-<p-button (onClick)="showdialog()">ajouter </p-button>
-<p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
-    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
-                                            (ngSubmit)="addLinks()">
+            <div class="field col-12 md:col-6">
+                <label htmlFor="nom">nom :</label>
+                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                    cols="40"></textarea>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="lien">lien :</label>
+                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize rows="2"
+                    cols="40"></textarea>
+            </div>
+            <button pButton pRipple type="submit" class="my-2" label="Modifier"
+                [disabled]="formUpdateLinks.invalid"></button>
+        </form>
+    </p-dialog>
 
-                                            <div class="field col-12 md:col-6">
-                                                <label htmlFor="nom">nom :</label>
-                                                <textarea formControlName="nom" pInputTextarea
-                                                    placeholder="Donnez une nom " autoResize rows="2"
-                                                    cols="40"></textarea>
-                                            </div>
-                                            <div class="field col-12 md:col-6">
-                                                <label htmlFor="lien">lien :</label>
-                                                <textarea formControlName="lien" pInputTextarea
-                                                    placeholder="Donnez une lien " autoResize rows="2"
-                                                    cols="40"></textarea>
-                                            </div>
-                                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
-                                                [disabled]="formAddLinks.invalid"></button>
-                                        </form>
-</p-dialog>
+        <div class=" card xl:flex ">
 
-</div>
+            <p-orderList [value]="classe1" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="Global"
+                >
+                <ng-template let-links  pTemplate="item">
+                    
+                    <div class="flex flex-wrap p-2 align-items-center gap-3">
+                        <div class="flex-1 flex flex-column gap-2">
+                            <span class="font-bold">{{ links?.nom }}</span>
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-link text-sm"></i>
+                                <span>{{ links?.lien }}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
+                                pTooltip="Mettre à jour la demande" (click)="SetUpdateLinks(links)"
+                                class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                (click)="onDeleteConge(conge._id)"
+                                class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button></span>
+                    </div>
+                </ng-template>
+            </p-orderList>
+            <p-orderList [value]="classe2" [listStyle]="{ 'max-height': '30rem' ,'width': '300px'}" header="Board"
+                >
+                <ng-template let-product pTemplate="item">
+                    <div class="flex flex-wrap p-2 align-items-center gap-3">
+                        
+                        <div class="flex-1 flex flex-column gap-2">
+                            <span class="font-bold">{{ product.nom }}</span>
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-link text-sm"></i>
+                                <span>{{ product.lien}}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-900">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                                (click)="SetUpdateLinks(product)"
+                                class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                (click)="onDeleteConge(conge._id)"
+                                class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-orderList>
+            <p-orderList [value]="classe3" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="Process"
+               >
+                <ng-template let-product pTemplate="item">
+                    <div class="flex flex-wrap p-2 align-items-center gap-3">
+                        
+                        <div class="flex-1 flex flex-column gap-2">
+                            <span class="font-bold">{{ product.nom }}</span>
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-link text-sm"></i>
+                                <span>{{ product.lien }}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-900">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                                (click)="SetUpdateLinks(product)"
+                                class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                (click)="onDeleteConge(conge._id)"
+                                class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-orderList>
+        </div>
+        <div class="card xl:flex xl:justify-content-center">
+            <p-orderList [value]="classe4" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="IGM events"
+                >
+                <ng-template let-product pTemplate="item">
+                    <div class="flex flex-wrap p-2 align-items-center gap-3">
+                     
+                        <div class="flex-1 flex flex-column gap-2">
+                            <span class="font-bold">{{ product.nom }}</span>
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-link text-sm"></i>
+                                <span>{{ product.lien }}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-900">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                                (click)="SetUpdateLinks(product)"
+                                class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                (click)="onDeleteConge(conge._id)"
+                                class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-orderList>
+            <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="IGM links"
+                >
+                <ng-template let-product pTemplate="item">
+                    <div class="flex flex-wrap p-2 align-items-center gap-3">
+                        
+                        <div class="flex-1 flex flex-column gap-2">
+                            <span class="font-bold">{{ product?.nom }}</span>
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-link text-sm"></i>
+                                <span>{{ product.lien }}</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-900">
+                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                                (click)="SetUpdateLinks(product)"
+                                class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
+                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                (click)="onDeleteConge(conge._id)"
+                                class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
+                        </span>
+                    </div>
+                </ng-template>
+            </p-orderList>
+            
+        </div>
+    </p-tabPanel>
+</p-tabView>
