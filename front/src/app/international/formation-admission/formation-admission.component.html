@@ -10,7 +10,7 @@
     <div class="col-12 grid" *ngIf="selectedFormation">
         <div class="card col-12">
             <h4 style="text-align: center">
-                Modifier les informations de {{ selectedFormation.nom }}
+                Modifier les informations de {{ selectedFormation?.nom }}
             </h4>
             <div style="text-align: center">
                 <small style="text-align: center; font-size: 12px">Tous les champs marqués d'un astérix
@@ -113,48 +113,7 @@
                     <input pInputText type="text" placeholder="Organisme référent"
                         formControlName="organisme_referent" />
                 </div>
-                <div class="field col-6">
-                    <label>Campus<span style="color: red"> * </span> </label>
-                    <p-dropdown formControlName="campus" [options]="dropdownCampus" autoWidth="false"
-                        [style]="{ width: '100%' }" placeholder="Choisissez un campus">
-                    </p-dropdown>
-                </div>
-                <div class="field col-6">
-                    <label>Année scolaire<span style="color: red"> * </span>
-                    </label>
-                    <p-dropdown formControlName="annee_scolaire" [options]="rentreeScolaire" autoWidth="false"
-                        [style]="{ width: '100%' }" placeholder="Choisissez une année scolaire">
-                    </p-dropdown>
-                </div>
-                <div class="field col-6">
-                    <label>Date de début<span style="color: red"> * </span>
-                    </label>
-                    <p-calendar formControlName="date_debut"></p-calendar>
-                </div>
-                <div class="field col-6">
-                    <label>Date de fin<span style="color: red"> * </span>
-                    </label>
-                    <p-calendar formControlName="date_fin"></p-calendar>
-                </div>
-                <div class="field col-6">
-                    <label>Nombres d'heures<span style="color: red">
-                            *
-                        </span></label>
-                    <input pInputText type="text" placeholder="Nombres d'heures" formControlName="nb_heures" />
-                </div>
-                <div class="field col-6">
-                    <label>Rythme<span style="color: red"> * </span></label>
-                    <input pInputText type="text" placeholder="Rythme" formControlName="rythme" />
-                </div>
-                <div class="field col-6">
-                    <label>Calendrier<span style="color: red"> * </span></label>
-                    <input pInputText type="text" placeholder="En cours de développement"
-                        formControlName="calendrier" />
-                </div>
-                <div class="field col-6">
-                    <label>Examens<span style="color: red"> * </span> </label>
-                    <p-calendar dateFormat="mm.yy" formControlName="examens"></p-calendar>
-                </div>
+                
                 <div class="field col-12">
                     <label>Note<span style="color: red"> * </span></label>
                     <textarea rows="5" cols="30" pInputTextarea formControlName="note"></textarea>
@@ -273,48 +232,13 @@
                     <input pInputText type="text" placeholder="Organisme référent"
                         formControlName="organisme_referent" />
                 </div>
-                <div class="field col-6">
-                    <label>Campus<span style="color: red"> * </span> </label>
-                    <p-dropdown formControlName="campus" [options]="dropdownCampus" autoWidth="false"
-                        [style]="{ width: '100%' }" placeholder="Choisissez un campus">
-                    </p-dropdown>
-                </div>
-                <div class="field col-6">
-                    <label>Année scolaire<span style="color: red"> * </span>
-                    </label>
-                    <p-dropdown formControlName="annee_scolaire" [options]="rentreeScolaire" autoWidth="false"
-                        [style]="{ width: '100%' }" placeholder="Choisissez une année scolaire">
-                    </p-dropdown>
-                </div>
-                <div class="field col-6">
-                    <label>Date de début<span style="color: red"> * </span>
-                    </label>
-                    <p-calendar formControlName="date_debut"></p-calendar>
-                </div>
-                <div class="field col-6">
-                    <label>Date de fin<span style="color: red"> * </span>
-                    </label>
-                    <p-calendar formControlName="date_fin"></p-calendar>
-                </div>
-                <div class="field col-6">
-                    <label>Nombres d'heures<span style="color: red">
-                            *
-                        </span></label>
-                    <input pInputText type="text" placeholder="Nombres d'heures" formControlName="nb_heures" />
-                </div>
-                <div class="field col-6">
-                    <label>Rythme<span style="color: red"> * </span></label>
-                    <input pInputText type="text" placeholder="Rythme" formControlName="rythme" />
-                </div>
-                <div class="field col-6">
-                    <label>Calendrier<span style="color: red"> * </span></label>
-                    <input pInputText type="text" placeholder="En cours de développement"
-                        formControlName="calendrier" />
-                </div>
-                <div class="field col-6">
-                    <label>Examens<span style="color: red"> * </span> </label>
-                    <p-calendar dateFormat="mm.yy" formControlName="examens"></p-calendar>
-                </div>
+                
+                
+        
+                
+                
+                
+                
                 <div class="field col-12">
                     <label>Note<span style="color: red"> * </span></label>
                     <textarea rows="5" cols="30" pInputTextarea formControlName="note"></textarea>
@@ -370,18 +294,18 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-formation let-ri="rowIndex">
-                        <tr [pEditableRow]="formation">
-                            <td [pEditableColumn]="formation.nom" pEditableColumnField="nom">
+                        <tr [pEditableRow]="formation.campus">
+                            <td [pEditableColumn]="true" pEditableColumnField="campus">
                                 <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <input pInputText type="text" [(ngModel)]="formation.nom"
-                                            (blur)="onBlur(formation)" />
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{ formation.nom }}
-                                    </ng-template>
+                                  <ng-template pTemplate="input">
+                                    <p-multiSelect [options]="dropdownCampus" [(ngModel)]="formation.campus" [style]="{'width':'100%'}"></p-multiSelect>
+                                  </ng-template>
+                                  <ng-template pTemplate="output">
+                                    {{ formation?.campus }}
+                                  </ng-template>
                                 </p-cellEditor>
-                            </td>
+                              </td>
+                              
                             <td [pEditableColumn]="formation.annee" pEditableColumnField="annee">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
@@ -437,17 +361,25 @@
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
-                            <td>
-                                En cours de développement
+                            <td [pEditableColumn]="formation?.calendrier" pEditableColumnField="rythme">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="text" [(ngModel)]="formation.calendrier"
+                                            (blur)="onBlur(formation)" />
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{ formation.calendrier }}
+                                    </ng-template>
+                                </p-cellEditor>
                             </td>
                             <td [pEditableColumn]="formation.examens" pEditableColumnField="examens">
                                 <p-cellEditor>
                                     <ng-template pTemplate="input">
-                                        <input pInputText type="date" [(ngModel)]="formation.examens"
+                                        <input pInputText type="url" [(ngModel)]="formation.examens"
                                             (blur)="onBlur(formation)" />
                                     </ng-template>
                                     <ng-template pTemplate="output">
-                                        {{formation.examens | date : "MM/yyyy"}}
+                                        {{formation.examens}}
                                     </ng-template>
                                 </p-cellEditor>
                             </td>
@@ -493,6 +425,10 @@
                         (onChange)="dt1.filter($event.value, 'annee','contains')"
                         emptyFilterMessage="Pas d'année trouvé" filterPlaceholder="Année"
                         [style]="{'margin':'5px'}"></p-dropdown>
+                        <p-dropdown filter="true" [options]="Filtercompuse"
+                        (onChange)="dt1.filter($event.value, 'campus','contains')" emptyFilterMessage="Pas de campus trouvé"
+                        filterPlaceholder="Campus" [style]="{'margin':'5px'}"></p-dropdown>
+
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -654,9 +590,9 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{ formation.campus.libelle }}</td>
+                        <td>{{ formation?.campus }}</td>
                         <td>
-                            {{ formation.annee_scolaire.nom }}
+                            {{ formation.annee }}
                         </td>
                         <td>
                             {{
@@ -672,12 +608,9 @@
                         </td>
                         <td>{{ formation.nb_heures }}</td>
                         <td>{{ formation.rythme }}</td>
-                        <td>En cours de développement</td>
+                        <td>{{formation.calendrier}}</td>
                         <td>
-                            {{
-                            formation.examens
-                            | date : "MM/yyyy"
-                            }}
+                            {{formation.examens}}
                         </td>
                     </tr>
                 </ng-template>
