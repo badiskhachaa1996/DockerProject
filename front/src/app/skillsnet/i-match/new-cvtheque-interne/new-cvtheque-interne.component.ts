@@ -10,6 +10,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { Matching } from 'src/app/models/Matching';
+import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
+import { MeetingTeams } from 'src/app/models/MeetingTeams';
 @Component({
   selector: 'app-new-cvtheque-interne',
   templateUrl: './new-cvtheque-interne.component.html',
@@ -24,9 +26,13 @@ export class NewCvthequeInterneComponent implements OnInit {
   dicPicture = {}
   dicMatching = {}
   constructor(private AuthService: AuthService, private CVService: CvService, private MatchingService: MatchingService, private router: Router,
-    private ToastService: MessageService) { }
+    private ToastService: MessageService, private RDVService: MeetingTeamsService) { }
 
   ngOnInit(): void {
+    this.updateAllCVs()
+  }
+
+  updateAllCVs() {
     this.CVService.getCvs().then(cvs => {
       this.cvs = cvs
     })
@@ -43,6 +49,7 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
     })
     this.MatchingService.getAll().subscribe(matchings => {
+      this.dicMatching = {}
       matchings.forEach(m => {
         if (m.cv_id)
           if (this.dicMatching[m.cv_id._id])
@@ -64,6 +71,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   deleteCV(cv: CV) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce CV ?')) {
       this.CVService.deleteCV(cv._id).then(r => {
+        this.updateAllCVs()
         //TODO IF TYPE GNGNGN SUPPRIMER LEXTERNE
       })
     }
@@ -132,7 +140,9 @@ export class NewCvthequeInterneComponent implements OnInit {
   saveUpdate() {
     this.AuthService.update({ ...this.formUpdate.value }).subscribe(r => {
       this.formUpdate.reset()
+      this.CVService.putCv({ ...this.cvToUpdate, last_modified_at: new Date() }).then()
       this.cvToUpdate = null
+      this.updateAllCVs()
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour réussi' })
     })
   }
@@ -142,18 +152,35 @@ export class NewCvthequeInterneComponent implements OnInit {
         this.ToastService.add({ severity: 'success', summary: 'Création du cv avec succès.' })
         this.formAdd.reset()
         this.cvToAdd = false
-        this.cvs.push(cv)
+        this.updateAllCVs()
       })
     })
 
   }
-
   onLoadMatching(user_id) {
-    this.MatchingService.getAllByCVUSERID(user_id).subscribe(matchings => {
+    /*this.MatchingService.getAllByCVUSERID(user_id).subscribe(matchings => {
       this.matchingToSee = matchings
+    })*/
+    this.MatchingService.generateMatchingV1USERID(user_id).subscribe(r => {
+      this.matchingToSee = r
     })
-  }
+    this.RDVService.getAllByUserID(user_id).subscribe(rdvs => {
+      console.log(rdvs)
+      rdvs.forEach(rd => {
+        if (rd.offre_id)
+          this.rdvDic[rd.offre_id._id] = rd
+      })
+    })
 
+  }
+  rdvDic = {}
   matchingToSee: Matching[] = []
+  displayRDV = false
+  dataRDV = null
+  seeRDV(rdv: MeetingTeams) {
+    console.log(rdv)
+    this.displayRDV = true
+    this.dataRDV = rdv
+  }
 
 }

@@ -264,6 +264,7 @@ export class EntrepriseListComponent implements OnInit {
             console.error(error)
           });
       }
+      
       let bufferExt: any = externe.user_id
       this.cvService.postCv({ user_id: externe.user_id._id, date_creation: new Date(), createur_id: bufferExt._id }).then(newCv => {
         this.MatchingService.create({

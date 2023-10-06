@@ -79,7 +79,7 @@ app.post("/post-cv", (req, res) => {
 
 // modif de cv
 app.put("/put-cv", (req, res) => {
-    CvType.findByIdAndUpdate(cv._id, { ...req.body, last_modified_at: new Date() }, { new: true })
+    CvType.findByIdAndUpdate(req.body._id, { ...req.body, last_modified_at: new Date() }, { new: true })
         .then((reponse) => { res.status(201).send(reponse); })
         .catch((error) => { res.status(400).send(error.message); });
 });

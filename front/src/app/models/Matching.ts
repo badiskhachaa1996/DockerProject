@@ -11,7 +11,8 @@ export class Matching {
         public statut?: string,
         public type_matching?: string,
         public date_creation?: Date,
-        public remarque?: string
+        public remarque?: string,
+        public taux?: number
     ) { }
 
 }

@@ -89,6 +89,26 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
         }
     })
 })
+
+app.get('/generateMatchingV1USERID/:user_id', (req, res) => {
+    CvType.findOne({ user_id: req.params?.user_id }).then(cv => {
+        Matching.find({ cv_id: cv._id }).populate('cv_id').populate('offre_id').then(match => {
+            match.forEach(m => {
+                let score = 0
+                let max_score = 0
+                m.offre_id.competences.forEach(skill => {
+                    if (customIncludes(cv.competences, skill))
+                        score += 1
+                })
+                max_score += m.offre_id.competences.length
+                m.taux = score * 100 / max_score
+                console.log(m.taux)
+            })
+            res.send(match)
+        })
+    })
+
+})
 function customIncludes(listObj, Obj) {
     let r = false
     listObj.forEach(buffer => {
