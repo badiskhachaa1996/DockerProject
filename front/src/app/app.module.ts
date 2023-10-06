@@ -386,7 +386,6 @@ import { CalendrierEtudiantComponent } from './skillsnet/calendrier-etudiant/cal
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/imatch-candidat.component';
 import { CandidatListComponent } from './skillsnet/i-match/imatch-candidat/candidat-list/candidat-list.component';
-import { HeaderImatchComponent } from './skillsnet/i-match/header-imatch/header-imatch.component';
 import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/entreprise-list/entreprise-list.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
@@ -789,7 +788,6 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
     ImatchEntrepriseComponent,
     ImatchCandidatComponent,
     CandidatListComponent,
-    HeaderImatchComponent,
     EntrepriseListComponent,
     CalenderComponent,
     NewListTicketsComponent,

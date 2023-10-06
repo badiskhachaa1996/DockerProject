@@ -320,7 +320,7 @@ export class CvthequeComponent implements OnInit {
       let formData = new FormData();
       formData.append('id', cv.user_id);
       formData.append('file', this.uploadedFiles);
-
+      cv.source = 'Interne'
       //ajout du cv
       this.cvService.postCv(cv)
         .then((response: CV) => {
@@ -344,6 +344,7 @@ export class CvthequeComponent implements OnInit {
 
     } else {
       //ajout du cv
+      cv.source = 'Interne'
       this.cvService.postCv(cv)
         .then((response: CV) => {
           this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
@@ -432,7 +433,7 @@ export class CvthequeComponent implements OnInit {
       cv.langues.push(langue.label);
     });
     //cv.video_lien = formValue.video_lien
-
+    cv.source = 'Interne'
     this.cvService.putCv(cv).then(data => {
       this.cvLists.splice(this.cvLists.indexOf(this.showUpdateCV), 1, cv)
       this.messageService.add({ severity: 'success', summary: "Mis à jour du CV avec succès" })

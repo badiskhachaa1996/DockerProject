@@ -162,23 +162,28 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label for="email">Joindre un CV</label><br>
-                        <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
-                            (change)="onUpload($event)" chooseLabel="Browse" />
+
+                        <label for="file-upload" class="upload-cv" (click)="file.click()">
+                            <i class="pi pi-cloud-upload"></i>Joindre un CV
+                        </label><span style="margin-left: 10px;">{{file.files.item(0)?.name}}</span>
+                        <input #file multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                            (change)="onUpload($event)" chooseLabel="Browse" inputId="file-upload"/>
+
                     </div>
                 </div>
-                <div class="row col-12" *ngIf="pdfSrc" style="height: 400px;">
+                <!-- <div class="row col-12" *ngIf="pdfSrc" style="height: 400px;">
                     <i class="pi pi-times-circle"
                         style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
                         pTooltip="Supprimer" (click)="deleteDoc()" aria-hidden="true"> </i>
                     <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
                         class="pdf-viewer-here"></pdf-viewer>
-                </div><br>
+                </div><br> -->
                 <div class="row col-12 grid">
-                    <p style="text-align: center;">J'ai pris connaissances et lu les <a href="/#/mentions-legales"
+                    <p><p-checkbox formControlName="consent" value="consent" inputId="consent3"></p-checkbox>
+                        <span style="margin-left: 10px;">J'ai pris connaissances et lu les </span><a href="/#/mentions-legales"
                             target="_blank">mentions légales</a> et accepte que mes données soient
-                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande ?</p>
-                    <div class="field-radiobutton col-6">
+                        utiliseés dans le cadre de mon accompagnement et dans le traitement de ma demande.</p>
+                    <!-- <div class="field-radiobutton col-6">
                         <p-radioButton name="consent" value="Oui" formControlName="consent"
                             inputId="consent3"></p-radioButton>
                         <label for="consent3">Oui</label>
@@ -187,12 +192,12 @@
                         <p-radioButton name="consent" value="Non" formControlName="consent"
                             inputId="consent4"></p-radioButton>
                         <label for="consent4">Non</label>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="btns-postuler">
                     <div class="btn btn-retour" (click)="showPostuler = false">Retour</div>
-                    <button pButton type="submit" [disabled]="form.invalid ||    form.value.consent!='Oui'"
-                        label="Envoyer pour créer votre compte" autoWidth="false" class="btn btn-envoyer"></button>
+                    <button pButton type="submit" [disabled]="form.invalid ||    !form.value.consent"
+                        label="Créer mon compte" class="btn btn-envoyer"></button>
                 </div>
             </form>
             <p class="information">Vous avez déjà un compte, <a href="#/login">cliquez ici</a> pour postuler via votre

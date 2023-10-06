@@ -35,6 +35,10 @@ export class MatchingService {
     let url = this.apiUrl + 'generateMatchingV1/' + offre_id;
     return this.httpClient.get<{ cv: CV, taux: number }[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  generateMatchingV1USERID(user_id: string) {
+    let url = this.apiUrl + 'generateMatchingV1USERID/' + user_id;
+    return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   getAllByOffreID(offre_id:string) {
     let url = this.apiUrl + 'getAllByOffreID/' + offre_id;
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

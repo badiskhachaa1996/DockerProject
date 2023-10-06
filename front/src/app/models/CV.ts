@@ -79,5 +79,7 @@ export class CV {
         public picture?: string,
         public isPublic?: Boolean,
         public niveau_etude?: string,
+        public last_modified_at?: Date,
+        public source?: string
     ) { }
 }

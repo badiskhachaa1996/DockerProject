@@ -86,7 +86,9 @@ const cvTypeSchema = mongoose.Schema({
     winner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false }, //Commercial ()
     picture: { type: String, required: false },
     isPublic: { type: Boolean, default: true },
-    niveau_etude: { type: String }
+    niveau_etude: { type: String },
+    last_modified_at: { type: Date },
+    source: { type: String, default: 'Interne' }
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

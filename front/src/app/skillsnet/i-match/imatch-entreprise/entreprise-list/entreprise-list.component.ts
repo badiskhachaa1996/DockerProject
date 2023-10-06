@@ -41,7 +41,7 @@ export class EntrepriseListComponent implements OnInit {
     firstname: new FormControl('', Validators.required),
     email_perso: new FormControl('', Validators.required),
     phone: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]),
-    consent: new FormControl('Non', Validators.required)
+    consent: new FormControl(false, Validators.required)
   })
 
   offres = []
@@ -264,6 +264,7 @@ export class EntrepriseListComponent implements OnInit {
             console.error(error)
           });
       }
+      
       let bufferExt: any = externe.user_id
       this.cvService.postCv({ user_id: externe.user_id._id, date_creation: new Date(), createur_id: bufferExt._id }).then(newCv => {
         this.MatchingService.create({
