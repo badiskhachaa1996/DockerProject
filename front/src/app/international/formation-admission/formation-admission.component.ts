@@ -19,10 +19,25 @@ export class FormationAdmissionComponent implements OnInit {
   seeAction = true
   formations: FormationAdmission[] = []
   selectedFormation: FormationAdmission
-  dropdownCampus: any[] = []
+  dropdownCampus= [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Congo Brazzaville', value: 'Congo Brazzaville' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Malte', value: 'Malte' },
+    { label: 'Dubai', value: 'Dubai' },
+    { label: 'UK', value: 'UK' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
   rentreeScolaire = []
   showFormRentreeScolaire: boolean = false
-
+  campusFilter: string | null = null;
+  Filtercompuse =
+    [
+      { label: "Tous les campus", value: null },
+      ...this.dropdownCampus
+    ]
   bacList =
     [
       { label: "Bac +2", value: "Bac +2" },
@@ -56,16 +71,11 @@ export class FormationAdmissionComponent implements OnInit {
 
   ngOnInit(): void {
     this.FAService.FAgetAll().subscribe(data => {
+      
       this.formations = data
     })
 
-    // permet de récupérer la liste des campus
-    this.CampusService.getAll().subscribe(campus => {
-      console.log(campus)
-      campus.forEach(c => {
-        this.dropdownCampus.push({ label: c.libelle, value: c._id })
-      })
-    })
+   
 
     // permet de récupérer la liste des rentrées scolaire
     this.RAService.RAgetAll().subscribe(rentrees => {
@@ -198,6 +208,7 @@ export class FormationAdmissionComponent implements OnInit {
     deroulement: new FormControl(''),
     filiere: new FormControl(''),
     bac: new FormControl(''),
+    campus: new FormControl(''),
     code: new FormControl(''),
     annee: new FormControl(''),
     code_france_competence: new FormControl(''),

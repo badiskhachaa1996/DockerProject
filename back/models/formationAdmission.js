@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
     code_france_competence : { type: String },
     validite: { type: String },
     organisme_referent: { type: String },
-    campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus"},
+    campus: { type: [String], default: []},
     annee_scolaire: { type: mongoose.Schema.Types.ObjectId, ref: "rentreeAdmission"},
     date_debut: { type: Date },
     date_fin: { type: Date },
