@@ -281,6 +281,12 @@ app.get("/nstuget/:id", (req, res, next) => {
     });
 });
 
+app.get('/getAllAgentByService/:service_id', (req, res) => {
+  User.find({ service_list: { $in: req.params.service_id } }).then(r => {
+    res.send(r)
+  })
+})
+
 //Recuperation de la liste des users pour la cv theque
 app.get("/get-all-for-cv", (_, res) => {
   User.find({
