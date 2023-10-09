@@ -55,6 +55,8 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
+    NDA:new FormControl(''),
+    UAI:new FormControl(''),
     langue: new FormControl('Français')
   })
 
@@ -79,6 +81,8 @@ export class EcoleAdmissionComponent implements OnInit {
     site_web: new FormControl(''),
     url_form: new FormControl('', Validators.required),
     campus: new FormControl([], Validators.required),
+    NDA:new FormControl(''),
+    UAI:new FormControl(''),
     langue: new FormControl('Français')
   })
 
