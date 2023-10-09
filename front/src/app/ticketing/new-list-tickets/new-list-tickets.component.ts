@@ -68,37 +68,44 @@ export class NewListTicketsComponent implements OnInit {
   sujetDic = {}
   serviceDic = {}
   updateTicketList() {
-    this.TicketService.getAllMine(this.token.id).subscribe((data: Ticket[]) => {
-      this.tickets = data
-      data.forEach(e => {
+    this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
+      this.tickets = dataM
+      dataM.forEach(e => {
         e.origin = true
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
-    })
-    this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
-      data.forEach(e => {
-        e.origin = false
-        e.documents_service.forEach(ds => { ds.by = "Agent" })
-        e.documents = e.documents.concat(e.documents_service)
-      })
+      this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
+        data.forEach(e => {
+          e.origin = false
+          e.documents_service.forEach(ds => { ds.by = "Agent" })
+          e.documents = e.documents.concat(e.documents_service)
+        })
 
-      this.tickets = this.tickets.concat(data)
-      this.tickets.sort((a, b) => {
-        if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-          return -1
-        else
-          return 1
+        this.tickets = this.tickets.concat(data)
+        this.tickets.sort((a, b) => {
+          if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+            return -1
+          else
+            return 1
+        })
+        this.defaultTicket.sort((a, b) => {
+          if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+            return -1
+          else
+            return 1
+        })
+        this.defaultTicket = this.tickets
+        this.onFilterTicket()
+        let tempDate = new Date()
+        tempDate.setDate(tempDate.getDate() - 2)
+        this.stats = {
+          en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+          en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+        }
       })
-      this.defaultTicket = this.tickets
-      this.onFilterTicket()
-      let tempDate = new Date()
-      tempDate.setDate(tempDate.getDate() - 1)
-      this.stats = {
-        en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-        en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
-      }
     })
+
   }
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
@@ -299,10 +306,13 @@ export class NewListTicketsComponent implements OnInit {
     })
     if (!ids.includes(ticket._id)) {
       this.ticketsOnglets.push(ticket)
+
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
+        this.activeIndex1 = this.ticketsOnglets.length
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
     } else {
+      this.activeIndex1 = ids.indexOf(ticket._id) + 1
       this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
@@ -392,7 +402,7 @@ export class NewListTicketsComponent implements OnInit {
 
   updateTicketStatut(ticket: Ticket) {
     this.TicketService.update({ ...ticket }).subscribe(t => {
-
+      this.updateTicketList()
     })
   }
   deleteTicket(ticket: Ticket) {
@@ -412,7 +422,7 @@ export class NewListTicketsComponent implements OnInit {
       }
       if (this.filterStatutTicket.includes("Tickets > 24 heures")) {
         let tempDate = new Date()
-        tempDate.setDate(tempDate.getDate() - 1)
+        tempDate.setDate(tempDate.getDate() - 2)
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }

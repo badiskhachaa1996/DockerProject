@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -14,6 +14,7 @@ import { CV } from 'src/app/models/CV';
 import { Annonce } from 'src/app/models/Annonce';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Matching } from 'src/app/models/Matching';
+import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 
 @Component({
   selector: 'app-matching',
@@ -21,6 +22,7 @@ import { Matching } from 'src/app/models/Matching';
   styleUrls: ['./matching.component.scss']
 })
 export class MatchingComponent implements OnInit {
+  @Input() ID = '';
   token;
   offre: Annonce;
   matcher: User;
@@ -34,10 +36,7 @@ export class MatchingComponent implements OnInit {
 
   showUpdateStatut = false
 
-  matchingsPotentiel: {
-    cv: CV,
-    taux: number
-  }[] = []
+  matchingsPotentiel: Matching[] = []
 
   formUpdateStatut: FormGroup = new FormGroup({
     statut: new FormControl('', [Validators.required]),
@@ -46,8 +45,8 @@ export class MatchingComponent implements OnInit {
   })
 
   constructor(private MatchingService: MatchingService, private route: ActivatedRoute,
-    private AnnonceService: AnnonceService, private UserService: AuthService, private messageService: MessageService) { }
-
+    private AnnonceService: AnnonceService, private UserService: AuthService, private messageService: MessageService, private RDVService: MeetingTeamsService) { }
+  rdvDic = {}
   ngOnInit(): void {
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
@@ -61,16 +60,38 @@ export class MatchingComponent implements OnInit {
         this.isNotWinner = (u.role == "Commercial" || u.type == "Commercial" || u.type == "CEO Entreprise" || u.type == "Entreprise")
       this.isCommercial = u.role == "Commercial" || u.type == "Commercial"
     })
-    this.AnnonceService.getAnnonce(this.route.snapshot.paramMap.get('offre_id')).then(offre => {
-      this.offre = offre
-      this.MatchingService.generateMatchingV1(offre._id).subscribe(cvs => {
-        this.matchingsPotentiel = cvs
+    if (this.route.snapshot.paramMap.get('offre_id'))
+      this.AnnonceService.getAnnonce(this.route.snapshot.paramMap.get('offre_id')).then(offre => {
+        this.offre = offre
+        this.MatchingService.generateMatchingV1(offre._id).subscribe(cvs => {
+          this.matchingsPotentiel = cvs
+        })
+        this.MatchingService.getAllByOffreID(offre._id).subscribe(matched => {
+          this.matching = matched
+        })
+        this.RDVService.getAllByOffreID(offre._id).subscribe(rdvs => {
+          rdvs.forEach(rd => {
+            if (rd.user_id)
+              this.rdvDic[rd.user_id._id] = rd
+          })
+        })
       })
-      this.MatchingService.getAllByOffreID(offre._id).subscribe(matched => {
-        this.matching = matched
+    else if (this.ID)
+      this.AnnonceService.getAnnonce(this.ID).then(offre => {
+        this.offre = offre
+        this.MatchingService.generateMatchingV1(offre._id).subscribe(cvs => {
+          this.matchingsPotentiel = cvs
+        })
+        this.MatchingService.getAllByOffreID(offre._id).subscribe(matched => {
+          this.matching = matched
+        })
+        this.RDVService.getAllByOffreID(offre._id).subscribe(rdvs => {
+          rdvs.forEach(rd => {
+            if (rd.user_id)
+              this.rdvDic[rd.user_id._id] = rd
+          })
+        })
       })
-    })
-
 
   }
 
@@ -80,7 +101,7 @@ export class MatchingComponent implements OnInit {
     //this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
   }
 
-  AcceptMatching(cv: CV) {
+  AcceptMatching(cv: CV, taux = 0) {
     let type_matching = "Automatique"
     if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise")
       type_matching = "Entreprise"
@@ -91,16 +112,18 @@ export class MatchingComponent implements OnInit {
     let matching = {
       offre_id: this.offre._id,
       matcher_id: this.token.id,
-      cv_id: cv._id,
+      cv_id: cv?._id,
       type_matching,
-      date_creation: new Date()
+      date_creation: new Date(),
+      taux,
+      accepted: true
     }
     this.MatchingService.create(matching).subscribe(match => {
       this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
       this.matching.push(match)
       this.matchingsPotentiel.forEach((m, idx) => {
-        let b1: any = m.cv.user_id
-        let b2: any = m.cv.user_id
+        let b1: any = m.cv_id.user_id
+        let b2: any = m.cv_id.user_id
         if (b1._id == b2._id)
           this.matchingsPotentiel.splice(idx, 1)
       })
@@ -135,6 +158,20 @@ export class MatchingComponent implements OnInit {
       this.showUpdateStatut = false
       this.messageService.add({ summary: 'Mis à jour du statut de matching avec succès', severity: 'success' })
     })
+  }
+  hideAndSeek(match, idx) {
+    console.log(idx)
+    let offre_id = this.ID
+    if (!offre_id)
+      offre_id = this.route.snapshot.paramMap.get('offre_id')
+    if (match._id)
+      this.MatchingService.update(match._id, { hide: !match.hide }).subscribe(matching => {
+        this.matchingsPotentiel.splice(idx, 1, matching)
+      })
+    else
+      this.MatchingService.create({ ...match, matcher_id: this.token.id, offre_id, hide: true }).subscribe(matching => {
+        this.matchingsPotentiel.splice(idx, 1, matching)
+      })
   }
 
 }

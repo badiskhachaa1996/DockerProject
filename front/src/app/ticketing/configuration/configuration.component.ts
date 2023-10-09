@@ -145,7 +145,12 @@ export class ConfigurationComponent implements OnInit {
         })
       })
     })
-
+  }
+  responsableList = []
+  AddResponsable(service: Service) {
+    this.UserService.getAllAgentByTicketing(service._id).subscribe(users => {
+      this.responsableList = users
+    })
   }
 
   customIncludes(listUser: User[], agent: User) {

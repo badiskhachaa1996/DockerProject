@@ -22,6 +22,7 @@ export class Annonce {
         public isClosed?: boolean,
         public custom_id?: string,
         public date_creation?: Date,
-        public statut?: string
+        public statut?: string,
+        public modified_at?: Date
     ) { }
 }
