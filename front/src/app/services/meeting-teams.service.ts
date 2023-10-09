@@ -39,4 +39,8 @@ export class MeetingTeamsService {
     let registreUrl = this.apiUrl + "getAllByUserID/" + user_id;
     return this.httpClient.get<MeetingTeams[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllByOffreID(offer_id) {
+    let registreUrl = this.apiUrl + "getAllByOffreID/" + offer_id;
+    return this.httpClient.get<MeetingTeams[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }
