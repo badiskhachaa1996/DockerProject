@@ -128,6 +128,8 @@
     <div class="grid col-12 card" *ngIf="matchingToSee.length!=0">
         <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
             (click)="matchingToSee = []" aria-hidden="true"> </i>
+        <h4 style="width: 100%;text-align: center;">Tableau Matching de {{userMatchingData.firstname | titlecase}} {{userMatchingData.lastname | uppercase}}
+        </h4>
         <p-table #dt3 [value]="matchingToSee" dataKey="_id" [rows]="8" [rowHover]="true"
             styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true" rowExpandMode="single"
             [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
@@ -161,7 +163,7 @@
                     </td>
                     <td *ngIf="rdvDic[match.offre_id._id]">
                         <i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
-                            style="color: greenyellow;cursor: pointer;" pTooltip="Voir l'entretien"
+                            style="color: green;cursor: pointer;" pTooltip="Voir l'entretien"
                             (click)="seeRDV(rdvDic[match.offre_id._id])"></i>
                     </td>
                     <td *ngIf="!rdvDic[match.offre_id._id]">
@@ -187,16 +189,34 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
-                        <button pButton label="Ajouter" (click)="cvToAdd=true"></button>
-                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
+                            [(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
+                        </p-multiSelect>
+                        <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true"
+                            placeholder="Choisissez un lieu" [(ngModel)]="filter_value.locations"
+                            (onChange)="updateFilter()"></p-multiSelect>
+
+                        <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()"
+                            [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range"
+                            autoWidth="false" [style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+
+                        <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList"
+                            [(ngModel)]="filter_value.competences" (onChange)="updateFilter()">
+                        </p-multiSelect>
+                        <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes"
+                            [(ngModel)]="filter_value.niveau" (onChange)="updateFilter()">
+                        </p-multiSelect>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <button class="mr-3" style="height: 37px;" pButton label="Ajouter"
+                                (click)="cvToAdd=true"></button>
+                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
-                        <th pSortableColumn="source" style="text-align: center;">Source <p-sortIcon
-                                field="source"></p-sortIcon>
-                        </th>
+
                         <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
                                 field="user_id.civilite"></p-sortIcon>
                         </th>
@@ -227,9 +247,7 @@
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
-                        <td style="min-width: 12rem;">
-                            {{cv.source}}
-                        </td>
+
                         <td style="min-width: 12rem;">
                             {{cv.user_id?.civilite}}
                         </td>
@@ -265,7 +283,7 @@
                             <ng-template #badge1>
                                 <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
                                     [value]="dicMatching[cv?._id]" tooltipPosition="bottom"
-                                    (click)="onLoadMatching(cv?.user_id?._id)"></i>
+                                    (click)="onLoadMatching(cv?.user_id)"></i>
                             </ng-template>
                             <ng-template #no_badge1>
                                 <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
@@ -337,6 +355,9 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>
+                            Source
+                        </th>
+                        <th>
                             Crée par
                         </th>
                         <th>
@@ -349,6 +370,9 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
+                        <td style="min-width: 12rem;">
+                            {{cv.source}}
+                        </td>
                         <td>
                             {{cv?.createur_id?.firstname | titlecase}} {{cv?.createur_id?.lastname | uppercase}}
                         </td>
@@ -375,8 +399,12 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <button pButton label="Ajouter" (click)="cvToAdd=true"></button>
-                    <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <button class="mr-3" style="height: 37px;" pButton label="Ajouter"
+                            (click)="cvToAdd=true"></button>
+                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                    </div>
+
                 </div>
             </div>
             <div class="col-12 md:col-4" *ngFor="let cv of cvs">

@@ -23,6 +23,7 @@ const annonceSchema = mongoose.Schema({
     custom_id: { type: String, required: false, default: 'OSA50655' },
     date_creation: { type: Date, required: false, default: Date.now },
     statut: { type: String, default:'Active' },
+    modified_at: { type: Date, required: false, default: Date.now },
 });
 
 const Annonce = mongoose.model('annonce', annonceSchema);

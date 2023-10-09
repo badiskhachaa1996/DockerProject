@@ -43,24 +43,27 @@
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
-				<th style="width: 3rem"></th>
 				<th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
-					Nom <p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="cv_id.user_id.firstname" style="text-align:center">
-					Prénom <p-sortIcon field="cv_id.user_id.firstname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="taux" style="text-align:center">
-					Matcher <p-sortIcon field="taux"></p-sortIcon>
+					Nom Prénom<p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
 				</th>
 				<th style="text-align:center">
 					Type Matching
 				</th>
+				<th pSortableColumn="taux" style="text-align:center">
+					Matcher <p-sortIcon field="taux"></p-sortIcon>
+				</th>
+
 				<th style="text-align:center">
 					Statut du Matching
 				</th>
 				<th pSortableColumn="date_creation" style="text-align:center">
 					Date du matching <p-sortIcon field="date_creation"></p-sortIcon>
+				</th>
+				<th pSortableColumn="taux" style="text-align:center">
+					Taux <p-sortIcon field="taux"></p-sortIcon>
+				</th>
+				<th>
+					Entretien
 				</th>
 				<th>
 					Action
@@ -69,21 +72,13 @@
 		<ng-template pTemplate="body" let-match let-expanded="expanded">
 			<tr>
 				<td>
-					<button type="button" pButton pRipple [pRowToggler]="match"
-						class="p-button-text p-button-rounded p-button-plain"
-						[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-				</td>
-				<td>
-					{{ match.cv_id.user_id?.lastname | uppercase}}
-				</td>
-				<td>
-					{{ match.cv_id.user_id?.firstname | titlecase}}
-				</td>
-				<td>
-					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+					{{ match.cv_id.user_id?.lastname | uppercase}} {{ match.cv_id.user_id?.firstname | titlecase}}
 				</td>
 				<td>
 					{{match.type_matching}}
+				</td>
+				<td>
+					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
 				</td>
 				<td>
 					{{match.statut}}
@@ -92,34 +87,50 @@
 					{{match.date_creation|date:medium}}
 				</td>
 				<td>
-					<i *ngIf="isCommercial" pTooltip="Changer le statut" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
-						(click)="InitUpdateStatut(match)" aria-hidden="true"></i>
-					<i *ngIf="!isCommercial && match.statut=='Validé par l\'étudiant'" pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
-						(click)="UpdateStatut(match)" aria-hidden="true"></i>
+					{{match.taux}}%
+				</td>
+				<td *ngIf="rdvDic[match.cv_id.user_id._id]">
+					<i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
+						style="color: green;cursor: pointer;" pTooltip="Voir l'entretien"
+						(click)="seeRDV(rdvDic[match.cv_id.user_id._id])"></i>
+				</td>
+				<td *ngIf="!rdvDic[match.cv_id.user_id._id]">
+					<i class="pi false-icon pi-times-circle" tooltipPosition="bottom" style="color: red;"
+						pTooltip="Pas d'entretien"></i>
+				</td>
+				<td>
+					<i pTooltip="Prendre rendez-vous" style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar"
+						aria-hidden="true"></i>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						aria-hidden="true"></i>
+					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+						aria-hidden="true"></i>
+					<i pTooltip="Annuler" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban"
+						aria-hidden="true"></i>
 				</td>
 			</tr>
 		</ng-template>
 		<ng-template pTemplate="rowexpansion" let-match>
-            <tr>
-                <td colspan="7">
-                    <div class="p-3">
-                        <p-table responsiveLayout="scroll" *ngIf="isCommercial || token.role=='Admin'">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>Remarque</th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td>{{match.remarque}}</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-                </td>
-            </tr>
+			<tr>
+				<td colspan="7">
+					<div class="p-3">
+						<p-table responsiveLayout="scroll" *ngIf="isCommercial || token.role=='Admin'">
+							<ng-template pTemplate="header">
+			<tr>
+				<th>Remarque</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="emptymessage">
+			<tr>
+				<td>{{match.remarque}}</td>
+			</tr>
 		</ng-template>
 	</p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+</p-table>
 </div>
 <div class="card" *ngIf="offre">
 	<h5>Liste des matchings potentiels sur {{offre.missionName}} de {{offre.entreprise_name}}</h5>
@@ -138,45 +149,31 @@
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
-				<th style="width: 3rem"></th>
 				<th pSortableColumn="cv.user_id.lastname" style="text-align:center">
-					Nom <p-sortIcon field="cv.user_id.lastname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="cv.user_id.firstname" style="text-align:center">
-					Prénom <p-sortIcon field="cv.user_id.firstname"></p-sortIcon>
+					Nom Prénom<p-sortIcon field="cv.user_id.lastname"></p-sortIcon>
 				</th>
 				<th pSortableColumn="taux" style="text-align:center">
 					Taux <p-sortIcon field="taux"></p-sortIcon>
 				</th>
 				<th>Action</th>
 		</ng-template>
-		<ng-template pTemplate="body" let-match let-expanded="expanded">
-			<tr>
+		<ng-template pTemplate="body" let-match let-expanded="expanded" let-ri="rowIndex">
+			<tr [ngClass]="{'hidden':match.hide}">
 				<td>
-					<button type="button" pButton pRipple [pRowToggler]="match"
-						class="p-button-text p-button-rounded p-button-plain"
-						[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-				</td>
-				<td>
-					{{ match.cv.user_id?.lastname | uppercase}}
-				</td>
-				<td>
-					{{ match.cv.user_id?.firstname | titlecase}}
+					{{ match.cv_id?.user_id?.lastname | uppercase}} {{ match.cv_id?.user_id?.firstname | titlecase}}
 				</td>
 				<td>
 					{{ match.taux |number:'1.0-0' }}%
 				</td>
 				<td>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						aria-hidden="true"></i>
 					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
-						(click)="AcceptMatching(match.cv)" aria-hidden="true"></i>
-				</td>
-			</tr>
-		</ng-template>
-		<ng-template pTemplate="rowexpansion" let-match>
-			<tr>
-				<td colspan="7">
-					<p>A Afficher: Détails du CV</p>
-					<p>Mettre en vert les compétences qui sont dans l'offre</p>
+						(click)="AcceptMatching(match.cv_id, match.taux)" aria-hidden="true"></i>
+					<i *ngIf="!match.hide" pTooltip="Cacher" style="margin-left: 2%; cursor: pointer;"
+						(click)="hideAndSeek(match,ri)" class="pi pi-eye-slash" aria-hidden="true"></i>
+					<i *ngIf="match.hide" pTooltip="Afficher" style="margin-left: 2%; cursor: pointer;" (click)="hideAndSeek(match,ri)"
+						class="pi pi-eye" aria-hidden="true"></i>
 				</td>
 			</tr>
 		</ng-template>

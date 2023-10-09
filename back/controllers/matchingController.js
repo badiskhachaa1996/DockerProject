@@ -6,9 +6,9 @@ app.disable("x-powered-by");
 const { Matching } = require("./../models/matching");
 
 app.post('/create', (req, res) => {
-    Matching.find({ offre_id: req.body.offre_id, cv_id: req.body.cv_id }).then(match => {
+    Matching.findOne({ offre_id: req.body.offre_id, cv_id: req.body.cv_id }).then(match => {
         if (match) {
-            res.status(403).send(match)
+            res.status(400).send(match)
         } else {
             let event = new Matching({
                 ...req.body
@@ -42,7 +42,7 @@ app.get('/getAll', (req, res) => {
 })
 
 app.get('/getAllByOffreID/:offre_id', (req, res) => {
-    Matching.find({ offre_id: req.params.offre_id }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(docs => {
+    Matching.find({ offre_id: req.params.offre_id, accepted: true }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(docs => {
         res.send(docs)
     })
 })
@@ -81,9 +81,16 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
                                 score += 1
                         })
                         max_score += offre.outils.length
-                        r.push({ cv, taux: score * 100 / max_score })
+                        let result = score * 100 / max_score
+                        if (score == 0 && max_score == 0)
+                            result = 0
+                        r.push({ cv_id: cv, taux: result })
                     })
-                    res.send(r)
+                    Matching.find({ offre_id: req.params.offre_id, accepted: false }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(match => {
+                        let re = r.concat(match)
+                        res.send(re)
+                    })
+
                 })
             })
         }

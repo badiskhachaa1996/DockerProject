@@ -1018,15 +1018,15 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-star',
                             items: [
                                 {
-                                    label: "Offres d'emplois",
+                                    label: "Offres",
                                     icon: 'pi pi-volume-up',
                                     routerLink: ['/offres'],
                                 },
-                                {
+                                /*{
                                     label: 'Mes offres',
                                     icon: 'pi pi-user',
                                     routerLink: ['/mes-offres'],
-                                },
+                                },*/
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
@@ -1666,15 +1666,15 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-star',
                                     items: [
                                         {
-                                            label: "Offres d'emplois",
+                                            label: "Offres",
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        {
+                                        /*{
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
                                             routerLink: ['/mes-offres'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -2370,15 +2370,15 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-star',
                                     items: [
                                         {
-                                            label: "Offres d'emplois",
+                                            label: "Offres",
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        {
+                                        /*{
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
                                             routerLink: ['/mes-offres'],
-                                        },
+                                        },*/
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -3750,15 +3750,15 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-star',
                                     items: [
                                         {
-                                            label: "Offres d'emplois",
+                                            label: "Offres",
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        {
-                                            label: 'Mes offres',
-                                            icon: 'pi pi-user',
-                                            routerLink: ['/mes-offres'],
-                                        },
+                                        /*{
+                                      label: 'Mes offres',
+                                      icon: 'pi pi-user',
+                                      routerLink: ['/mes-offres'],
+                                  },*/
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -6286,15 +6286,15 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
-                                        label: "Offres d'emplois",
+                                        label: "Offres",
                                         icon: 'pi pi-volume-up',
                                         routerLink: ['/offres'],
                                     },
-                                    {
+                                    /*{
                                         label: 'Mes offres',
                                         icon: 'pi pi-user',
                                         routerLink: ['/mes-offres'],
-                                    },
+                                    },*/
                                     {
                                         label: 'Cvthèque',
                                         icon: 'pi pi-briefcase',

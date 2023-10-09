@@ -24,7 +24,7 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
   styleUrls: ['./annonces.component.scss']
 })
 export class AnnoncesComponent implements OnInit {
-
+  activeIndex1 = 0
   annonces: Annonce[] = [];
   annoncesFiltered: Annonce[] = [];
 
@@ -191,7 +191,8 @@ export class AnnoncesComponent implements OnInit {
           if (annonce && annonce.user_id) {
             let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
             if (!agent_id.includes(annonce.user_id._id)) {
-              this.userFilter.push(temp)
+              //this.userFilter.push(temp)
+              this.entrepriseFilter.push(temp)
               agent_id.push(annonce.user_id._id)
             }
 
@@ -207,7 +208,7 @@ export class AnnoncesComponent implements OnInit {
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
-          this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
+          //this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
@@ -389,7 +390,9 @@ export class AnnoncesComponent implements OnInit {
   }
 
   // methode de remplissage du formulaire de modification
-  onFillForm() {
+  onFillForm(annonce = null) {
+    if (annonce)
+      this.annonceSelected = annonce
     this.formUpdate.patchValue({
       is_interne: this.annonceSelected.is_interne,
       // entreprise_id:                this.annonceSelected.entreprise_id,
@@ -411,9 +414,16 @@ export class AnnoncesComponent implements OnInit {
     this.formUpdate.patchValue({ profil: { label: profile.libelle, value: profile._id } })
     this.chargeCompetence({ value: { label: profile.libelle, value: profile._id } })
   }
-
+  matchingList = []
   InitMatching(annonce: Annonce) {
-    this.router.navigate(['matching', annonce._id])
+    if (!this.matchingList.includes(annonce)) {
+      this.matchingList.push(annonce)
+      this.activeIndex1 = this.matchingList.length
+    } else {
+      this.activeIndex1 = this.matchingList.indexOf(annonce) + 1
+    }
+
+    //this.router.navigate(['matching', annonce._id])
   }
 
   InitPostulate(annonce: Annonce) {
@@ -450,7 +460,8 @@ export class AnnoncesComponent implements OnInit {
 
   statutFilter = [
     { label: "Choisissez un statut", value: null },
-    { label: "Active (offre d'emploi est actuellement ouverte aux candidatures)", value: "Active" },
+    { label: "Active", value: "Active" },
+    { label: "Expiré", value: "Expiré" },
     { label: 'Clôturée', value: "Clôturée" },
   ]
   typeMissionFilter = [
@@ -465,7 +476,8 @@ export class AnnoncesComponent implements OnInit {
     //{ label: "Choisissez un profil", value: null },
   ]
   entrepriseFilter = [
-    { label: "Choisissez une entreprise", value: null },
+    { label: "Choisissez l'auteur", value: null },
+    { label: "Entreprise", value: "Entreprise" },
   ]
   locations = [
     //{ label: "Choisissez une ville", value: null },
@@ -534,34 +546,41 @@ export class AnnoncesComponent implements OnInit {
   ]
 
   filter_value = {
-    statut: "",
-    typeMission: "",
+    statut: null,
+    typeMission: null,
     profil: [],
-    entreprise: '',
+    entreprise: null,
     locations: [],
-    user: '',
+    user: null,
     date: '',
     search: ''
   }
 
   updateFilter() {
     this.annoncesFiltered = []
-    console.log(this.filter_value)
     this.annonces.forEach(val => {
       let r = true
-      if (this.filter_value.statut && this.filter_value.statut != val.statut)
+      if (this.filter_value.statut && this.filter_value.statut != this.getStatut(val))
         r = false
       else if (this.filter_value.typeMission && this.filter_value.typeMission != val.missionType)
         r = false
       else if (this.filter_value.profil.length != 0 && (!val.profil || !this.filter_value.profil.includes(val.profil._id)))
         r = false
-      else if (this.filter_value.entreprise && this.filter_value.entreprise != val.entreprise_id._id)
-        r = false
+      else if (this.filter_value.entreprise) {
+        if (this.filter_value.entreprise == "Entreprise") {
+          if (val.user_id != null)
+            r = false
+        } else {
+          if (this.filter_value.entreprise != val.user_id._id)
+            r = false
+        }
+
+      }
       else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
         r = false
       else if (this.filter_value.user && this.filter_value.user != val.user_id._id)
         r = false
-      else if (this.filter_value.date && new Date(this.filter_value.date).getTime() > new Date(val.debut).getTime())
+      else if (this.filter_value.date && new Date(this.filter_value.date).getTime() >= new Date(val.debut).getTime())
         r = false, console.log("date")
       else if (this.filter_value.search) {
         if (!val.custom_id.includes(this.filter_value.search) &&
@@ -577,20 +596,35 @@ export class AnnoncesComponent implements OnInit {
     })
 
   }
-
+  displayFilter = false
   clearFilter() {
     this.filter_value = {
-      statut: "",
-      typeMission: "",
+      statut: null,
+      typeMission: null,
       profil: [],
-      entreprise: '',
+      entreprise: null,
       locations: [],
-      user: '',
+      user: null,
       date: '',
       search: ''
     }
     this.annoncesFiltered = this.annonces
   }
+  getStatut(annonce: Annonce) {
+    let d = new Date(annonce.debut).getTime() + (2628000000 * 3)
+    if (d > new Date().getTime() && annonce.statut == "Active") {
+      return 'Active'
+    } else if (d < new Date().getTime() && annonce.statut != "Clôturée")
+      return 'Expiré'
+    else
+      return "Clôturée"
+  }
 
+  onDeleteOffre(annonce: Annonce) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?'))
+      this.annonceService.delete(annonce._id).then(r => {
+
+      })
+  }
 
 }

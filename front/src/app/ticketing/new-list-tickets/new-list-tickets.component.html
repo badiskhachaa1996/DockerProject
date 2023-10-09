@@ -132,7 +132,7 @@
                 <div class="col-6 md:col-2 field-checkbox">
                     <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
                         [(ngModel)]="filterStatutTicket" inputId="statut2"></p-checkbox>
-                    <label for="city1">Tickets > 24 heures</label>
+                    <label for="city1">Tickets > 48 heures</label>
                 </div>
                 <div class="col-6 md:col-2 field-checkbox">
                     <p-checkbox name="filterStatutTicket" value="Urgent" [(ngModel)]="filterStatutTicket"
@@ -140,7 +140,9 @@
                     <label for="city1">Urgent</label>
                 </div>
                 <div class="col-6 md:col-4 grid">
-                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets selectionnés &nbsp;&nbsp;&nbsp;&nbsp;</span> {{tickets.length}}</p>
+                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span
+                            style="font-weight: bold;">Tickets selectionnés &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        {{tickets.length}}</p>
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
@@ -367,8 +369,9 @@
         </p-tabPanel>
 
         <p-tabPanel [header]="ticket?.customid" *ngFor="let ticket of ticketsOnglets">
-            <i class="pi pi-times-circle mb-2" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                title="Fermer" (click)="deleteTicket(ticket)" aria-hidden="true" pTooltip="Supprimer l'onglet"
+            <i class="pi pi-times-circle"
+                style="text-align:right; font-size: 20px; color: red; cursor: pointer;width: 100%;" title="Fermer"
+                (click)="deleteTicket(ticket)" aria-hidden="true" pTooltip="Supprimer l'onglet"
                 tooltipPosition="bottom"> </i>
             <p-table #dt3 dataKey="_id" [value]="[ticket]" rowExpandMode="single" selectionMode="single" class="col-12"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
@@ -450,7 +453,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-ticket3>
                     <tr>
-                        
+
                         <td colspan="10">
                             <h5 *ngIf="!ticket.origin">Détails affectation </h5>
                             <p-table [value]="['']" class="col-12" styleClass="p-datatable-gridlines"
@@ -483,7 +486,7 @@
             </ng-template>
             </p-table>
             <div class="col-12 card" *ngIf="ticketTraiter">
-                <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                <i class="pi pi-times-circle" style="color: red; cursor: pointer; width: 100%;text-align: right;"
                     (click)="ticketTraiter = null" aria-hidden="true"> </i>
                 <h3 class="text-center" style="font-weight: bold;">
                     {{ ticketTraiter.customid | uppercase }}
@@ -522,11 +525,26 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <h5 class="col-12" style="text-align: center;">Statut:</h5>
-            <div class="col-6 col-offset-3">
+            <h5 class="col-12">Statut:</h5>
+            <div class="col-6">
                 <p-dropdown [options]="statutDropdown" placeholder="Choisissez un statut" [filter]="true"
                     [style]="{'width':'100%'}" autoWidth="false" [(ngModel)]="ticket.statut"
                     (onChange)="updateTicketStatut(ticket)"></p-dropdown>
+            </div>
+            <div class="col-6">
+                <p-fileUpload (uploadHandler)="onUpload($event, fu2,ticket)" #fu2 mode="basic" customUpload="true"
+                    chooseIcon="pi pi-paperclip" chooseIcon="pi pi-paperclip" maxFileSize="10000000"
+                     [auto]="true">
+                </p-fileUpload>
+                <div>
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes <i
+                                class="pi pi-trash" style="float:right; color: red; cursor: pointer;"
+                                pTooltip="Supprimer le fichier" tooltipPosition="bottom"
+                                (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))" aria-hidden="true">
+                            </i></li>
+                    </ul>
+                </div>
             </div>
             <p-table dataKey="_id" [value]="ticket.documents" class="col-12" styleClass="p-datatable-gridlines"
                 *ngIf="ticket.documents.length!=0">
@@ -557,23 +575,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <div class="col-12">
-                <div class="field col-6">
-                    <p-fileUpload (uploadHandler)="onUpload($event, fu2,ticket)" #fu2 mode="basic" customUpload="true"
-                        chooseIcon="pi pi-paperclip" chooseIcon="pi pi-paperclip" maxFileSize="10000000"
-                        chooseLabel="Ajouter un document" [style]="{'width':'100%'}" autoWidth="false" [auto]="true">
-                    </p-fileUpload>
-                    <div>
-                        <ul *ngIf="uploadedFiles.length">
-                            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes <i
-                                    class="pi pi-trash" style="float:right; color: red; cursor: pointer;"
-                                    pTooltip="Supprimer le fichier" tooltipPosition="bottom"
-                                    (click)="uploadedFiles.splice(uploadedFiles.indexOf(file))" aria-hidden="true">
-                                </i></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <!-- <p-table dataKey="_id" [value]="ticket.documents_service" class="col-12" styleClass="p-datatable-gridlines"
                 *ngIf="ticket.documents_service.length!=0">
                 <ng-template pTemplate="header">
