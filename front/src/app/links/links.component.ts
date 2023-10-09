@@ -16,6 +16,7 @@ export class LinksComponent implements OnInit {
   userConnected: User;
   targetProducts!: [];
   sourceProducts!: any[];
+  role: boolean;
   classe1: any[] = [];
   classe2: any[]=[];
   classe3: any[]=[];
@@ -38,6 +39,11 @@ export class LinksComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+    this.userConnected.roles_list.forEach(element => {
+          if (element.module="Links"){
+            this.role=true 
+          }
+        });
         this.linksService.getAllLinks().then((links) => {
           links.forEach((link) => {
             if (link?.classe === "classe1") {
