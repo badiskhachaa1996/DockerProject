@@ -56,7 +56,7 @@
                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize rows="2"
                     cols="40"></textarea>
             </div>
-            <button  *ngIf="role === 'Admin'" pButton pRipple type="submit" class="my-2" label="Modifier"
+            <button  *ngIf="role" pButton pRipple type="submit" class="my-2" label="Modifier"
                 [disabled]="formUpdateLinks.invalid"></button>
         </form>
     </p-dialog>
@@ -75,10 +75,10 @@
                                 <span>{{ links?.lien }}</span>
                             </div>
                         </div>
-                        <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
-                                pTooltip="Mettre à jour la demande" (click)="SetUpdateLinks(links)"
+                        <span class="font-bold text-900"><button *ngIf="role" pButton pRipple icon="pi pi-pencil"
+                                pTooltip="Mettre à jour le lien" (click)="SetUpdateLinks(links)"
                                 class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                            <button *ngIf="role" pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
                                 (click)="onDeleteConge(conge._id)"
                                 class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button></span>
                     </div>
@@ -97,10 +97,10 @@
                             </div>
                         </div>
                         <span class="font-bold text-900">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                            <button *ngIf="role" pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour le lien"
                                 (click)="SetUpdateLinks(product)"
                                 class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                            <button *ngIf="role" pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
                                 (click)="onDeleteConge(conge._id)"
                                 class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                         </span>
@@ -120,10 +120,10 @@
                             </div>
                         </div>
                         <span class="font-bold text-900">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                            <button *ngIf="role" pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour le lein"
                                 (click)="SetUpdateLinks(product)"
                                 class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                            <button *ngIf="role" pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
                                 (click)="onDeleteConge(conge._id)"
                                 class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                         </span>
@@ -145,10 +145,10 @@
                             </div>
                         </div>
                         <span class="font-bold text-900">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                            <button *ngIf="role" pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour le lien"
                                 (click)="SetUpdateLinks(product)"
                                 class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                            <button *ngIf="role" pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
                                 (click)="onDeleteConge(conge._id)"
                                 class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                         </span>
@@ -168,10 +168,10 @@
                             </div>
                         </div>
                         <span class="font-bold text-900">
-                            <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                            <button *ngIf="role"pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour le lien"
                                 (click)="SetUpdateLinks(product)"
                                 class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                            <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                            <button *ngIf="role" pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
                                 (click)="onDeleteConge(conge._id)"
                                 class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                         </span>

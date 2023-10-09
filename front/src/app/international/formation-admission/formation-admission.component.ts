@@ -77,10 +77,11 @@ export class FormationAdmissionComponent implements OnInit {
       
       this.formations = data
     })
-    this.FAService.RAgetAll().subscribe(data1 =>
+    this.FAService.RAgetAll().subscribe(data1 =>{
       
-      this.rentres=data1
-      
+      this.rentres=data1;
+      console.log(data1);
+    }
       );
       
 
