@@ -148,8 +148,10 @@ const rhControlleur = require('./controllers/rhController');
 const bookingController = require('./controllers/bookingController');
 const mailController = require('./controllers/mailController');
 const meetingTeamsController = require('./controllers/meetingTeamsController');
-
+// const rembouresementController = require ('./controllers/rembouresementController')
 const { User } = require("./models/user");
+const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
+
 
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
@@ -406,7 +408,9 @@ app.use('/soc/calendrierRH', require('./controllers/eventCalendarRHController'))
 app.use('/soc/pointage', require('./controllers/pointageController'))
 app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
-
+// app.use('/soc/demanderemboursement',rembouresementController)
+app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
+//app.use('/soc/demanderemboursement', rembouresementController )
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))
 app.use('/soc/disponbiliteEtudiant', require('./controllers/disponibiliteEtudiantController'))
