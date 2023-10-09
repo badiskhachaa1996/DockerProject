@@ -18,7 +18,10 @@ import { ActivatedRoute } from '@angular/router';
 export class FormationAdmissionComponent implements OnInit {
   seeAction = true
   formations: FormationAdmission[] = []
-  selectedFormation: FormationAdmission
+  rentres:RentreeAdmission[] = [];
+  formationtoShow:FormationAdmission;
+  selectedFormation: FormationAdmission;
+  rentreeAdmissionList :any;
   dropdownCampus= [
     { label: 'Paris', value: 'Paris' },
     { label: 'Montpellier', value: 'Montpellier' },
@@ -74,6 +77,12 @@ export class FormationAdmissionComponent implements OnInit {
       
       this.formations = data
     })
+    this.FAService.RAgetAll().subscribe(data1 =>
+      
+      this.rentres=data1
+      
+      );
+      
 
    
 
@@ -160,9 +169,12 @@ export class FormationAdmissionComponent implements OnInit {
     })
   }
 
-  onDeleteRentreeScolaire(id: string): void {
-    this.FAService.RAdelete(id)
-      .then((response) => {
+  onDeleteRentreeScolaire(id: number): void {
+    console.log("i am here")
+    console.log(id)
+    this.formationtoShow.rentree.splice(id, 1);
+    this.FAService.FAupdate(this.formationtoShow)
+      .subscribe((response) => {
         this.FAService.RAgetAll().subscribe(data => {
           this.rentreeScolaire = data
         })
@@ -170,17 +182,27 @@ export class FormationAdmissionComponent implements OnInit {
   }
 
   onAddRentreeScolaire() {
-    if (this.formations == null) {
-      this.formations = []
-    }
-    this.formations.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
+  
+    
+    this.formationtoShow.rentree.push({ campus: "", annee_scolaire: "", date_debut: "", date_fin: "", nb_heures: "", rythme: "", calendrier: "", examens: "" })
 
   }
 
   onCreateRA() {
+    this.formationtoShow.rentree.push(this.createFormRA.value)
+  this.FAService.FAupdate(this.formationtoShow).subscribe(data => {
+    console.log(data)
+  })
+
+    
     this.FAService.RAcreate({ ...this.createFormRA.value }).subscribe(data => {
       console.log(data)
     })
+  }
+  rScolaire(formation:FormationAdmission){
+    this.showFormRentreeScolaire = true;
+    this.formationtoShow=formation;
+
   }
 
   createFormRA: FormGroup = new FormGroup({

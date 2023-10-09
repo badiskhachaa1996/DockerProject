@@ -19,15 +19,17 @@ export class FormationAdmission {
         public code_france_competence?: string,
         public validite?: string,
         public organisme_referent?: string,
-        public campus?: string,
-        public annee_scolaire?: string,
-        public date_debut?: string,
-        public date_fin?: string,
-        public nb_heures?: string,
-        public rythme?: string,
-        public calendrier?: string,
-        public examens?: string,
         public note?: string,
+        public rentree?:[ {
+            campus: string,
+            annee_scolaire?: string,
+            date_debut?: string,
+            date_fin?: string,
+            nb_heures?: string,
+            rythme?: string,
+            calendrier?: string,
+            examens?: string,
+        }],
     ) { }
 
 }
