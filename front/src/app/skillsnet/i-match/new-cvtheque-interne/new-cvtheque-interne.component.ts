@@ -54,6 +54,10 @@ export class NewCvthequeInterneComponent implements OnInit {
         })
       })
       .catch((error) => { console.error(error); })
+    this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      if (user.savedMatching)
+        this.matchingList = user.savedMatching
+    })
   }
 
   updateAllCVs() {
@@ -191,18 +195,18 @@ export class NewCvthequeInterneComponent implements OnInit {
 
     })
   }
-  onLoadMatching(user_id: User) {
+  onLoadMatching(cv: CV) {
     let ids = []
     this.matchingList.forEach(u => {
       ids.push(u._id)
     })
-    if (!ids.includes(user_id)) {
-      this.activeIndex1 = this.matchingList.length
+    if (!ids.includes(cv._id)) {
+      this.matchingList.push(cv)
       this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
         this.activeIndex1 = this.matchingList.length
       })
     } else {
-      this.activeIndex1 = ids.indexOf(user_id) + 1
+      this.activeIndex1 = ids.indexOf(cv._id) + 1
     }
 
   }
