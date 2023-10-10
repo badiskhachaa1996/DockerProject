@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CV } from 'src/app/models/CV';
 import { User } from 'src/app/models/User';
@@ -14,13 +14,15 @@ export class VoirCvComponent implements OnInit {
   user: User
   ecoleImage = 'espic'
   CV: CV
+  @Input() CV_ID = ""
   ID = this.route.snapshot.paramMap.get('cv_id');
 
   constructor(private route: ActivatedRoute, private CVService: CvService) { }
 
   ngOnInit(): void {
+    if (this.CV_ID)
+      this.ID = this.CV_ID
     this.CVService.getByID(this.ID).subscribe(cv => {
-      console.log(cv)
       this.CV = cv.dataCv
       this.user = this.CV.user_id
     })

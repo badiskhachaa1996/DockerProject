@@ -147,6 +147,13 @@
 				</span>
 			</div>
 		</ng-template>
+		<ng-template pTemplate="caption">
+			<div class="flex justify-content-center align-items-center">
+				<label class="mr-2">Voir les favoris seulement</label>
+				<p-columnFilter type="boolean" field="favoris"></p-columnFilter>
+			</div>
+			
+		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
 				<th pSortableColumn="cv.user_id.lastname" style="text-align:center">
@@ -172,9 +179,9 @@
 					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
 						(click)="AcceptMatching(match.cv_id, match.taux)" aria-hidden="true"></i>
 
-					<i *ngIf="match.favoris" pTooltip="Enlever des favoris" style="margin-left: 2%; cursor: pointer;color:yellow"
+					<i *ngIf="match.favoris" pTooltip="Enlever des favoris" style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)"
 						(click)="myFavorite(match,ri)" class="pi pi-star-fill" aria-hidden="true"></i>
-					<i *ngIf="!match.favoris" pTooltip="Ajouter au favoris" style="margin-left: 2%; cursor: pointer;color:yellow"
+					<i *ngIf="!match.favoris" pTooltip="Ajouter au favoris" style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)"
 						(click)="myFavorite(match,ri)" class="pi pi-star" aria-hidden="true"></i>
 
 					<i *ngIf="!match.hide" pTooltip="Cacher" style="margin-left: 2%; cursor: pointer;"

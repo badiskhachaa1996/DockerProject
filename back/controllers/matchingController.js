@@ -110,7 +110,7 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
 
 app.get('/generateMatchingV1USERID/:user_id', (req, res) => {
     CvType.findOne({ user_id: req.params?.user_id }).then(cv => {
-        Matching.find({ cv_id: cv._id }).populate('cv_id').populate('offre_id').then(match => {
+        Matching.find({ cv_id: cv._id }).populate('cv_id').populate({ path: 'offre_id', populate: 'entreprise_id' }).populate({ path: 'offre_id', populate: 'competences' }).populate({ path: 'offre_id', populate: 'user_id' }).then(match => {
             match.forEach(m => {
                 let score = 0
                 let max_score = 0

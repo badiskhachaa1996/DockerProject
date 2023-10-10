@@ -1,11 +1,11 @@
-<h4 style="width: 100%;text-align: center;">Tableau Matching
-</h4>
+<h4 style="width: 100%;text-align: center;">Tableau Matching</h4>
 <p-table #dt3 [value]="matchingToSee" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
     style="width: 100%;" [paginator]="true" rowExpandMode="single"
     [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
     responsiveLayout="scroll">
     <ng-template pTemplate="header">
         <tr>
+            <th style="width: 3rem" scope="col"></th>
             <th style="width: 3rem" scope="col">Offre</th>
             <th style="width: 3rem" scope="col">Type Matching</th>
             <th style="width: 3rem" scope="col">Matcher</th>
@@ -14,8 +14,13 @@
             <th style="width: 3rem" scope="col">Entretien</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-match>
+    <ng-template pTemplate="body" let-match let-expanded="expanded">
         <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="match"
+                    class="p-button-text p-button-rounded p-button-plain"
+                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
             <td>
                 {{match.offre_id.custom_id}}
             </td>
@@ -41,6 +46,53 @@
             </td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="rowexpansion" let-match>
+        <tr>
+            <td colspan="9">
+                <div class="competences-block">
+                    <h4 class="mb-2">Compétences</h4>
+                    <div class="grid gx-5 competence">
+                        <div class="col-12 md:col-4">
+                            <p>{{match.offre_id.competences[0]?.libelle | titlecase}}</p>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <p>{{matchoffre_id.competences[1]?.libelle | titlecase}}</p>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <p>{{match.offre_id.competences[2]?.libelle | titlecase}}</p>
+                        </div>
+                    </div>
+                </div>
+                <h4>Description</h4>
+                <p>
+                    {{match.offre_id.missionDesc}}
+                </p>
+                <p-table responsiveLayout="scroll" [value]="['sq']" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+        <tr>
+            <th scope="col">Entreprise</th>
+            <th scope="col">Déroulement</th>
+            <th scope="col">Crée le</th>
+            <th scope="col">Auteur</th>
+            <th scope="col">Modifié le</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+        <tr>
+            <td>{{match.offre_id.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
+            <td>{{match.offre_id.workplaceType}}</td>
+            <td>{{match.offre_id.date_creation | date:'dd MMMM yy'}}</td>
+            <td>{{match.offre_id.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
+                titlecase}}</td>
+            <td>
+                {{match.offre_id.modified_at| date:'dd MMMM yy'}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+</td>
+</tr>
+</ng-template>
 </p-table>
 
 

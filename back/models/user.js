@@ -139,7 +139,7 @@ const user_schema = new mongoose.Schema({
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "annonce" }], default: []
     },
     savedMatching: {
-        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "matching" }], default: []
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
     }
 
 

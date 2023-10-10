@@ -219,7 +219,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
   User.findOne({ _id: req.params.id })
-    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate("savedMatching")
+    .populate("service_id").populate('savedTicket').populate("savedAnnonces").populate({ path: "savedMatching", populate: { path: 'user_id' } }).populate({ path: "savedMatching", populate: { path: 'competences', populate: { path: "profile_id" } } })
     ?.then((userfromDb) => {
       res.status(200).send(userfromDb);
     })
