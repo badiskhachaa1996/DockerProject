@@ -414,10 +414,10 @@
                     <p-dropdown filter="true" [options]="bacFilter"
                         (onChange)="dt1.filter($event.value, 'bac','contains')" emptyFilterMessage="Pas de BAC trouvé"
                         filterPlaceholder="Bac" [style]="{'margin':'5px'}"></p-dropdown>
-                    <!--<p-dropdown filter="true" [options]="anneeFilter"
-                        (onChange)="dt1.filter($event.value, 'annee','contains')"
-                        emptyFilterMessage="Pas d'année trouvé" filterPlaceholder="Année"
-                        [style]="{'margin':'5px'}"></p-dropdown>-->
+                    <p-dropdown filter="true" [options]="anneeFilter"
+                        (onChange)="dt1.filter($event.value, 'filiere','contains')"
+                        emptyFilterMessage="Pas de filiere trouvé" filterPlaceholder="Année"
+                        [style]="{'margin':'5px'}"></p-dropdown>
                         <p-dropdown filter="true" [options]="Filtercompuse"
                         (onChange)="dt1.filter($event.value, 'campus','contains')" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Campus" [style]="{'margin':'5px'}"></p-dropdown>
