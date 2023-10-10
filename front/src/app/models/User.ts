@@ -1,3 +1,4 @@
+import { Annonce } from "./Annonce";
 import { Service } from "./Service";
 import { Ticket } from "./Ticket";
 
@@ -51,7 +52,8 @@ export class User {
             path?: string,
             note?: string
         }[],
-        public savedTicket?: Ticket[]
+        public savedTicket?: Ticket[],
+        public savedAnnonces?: Annonce[]
     ) { }
 
 

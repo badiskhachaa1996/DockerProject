@@ -14,7 +14,8 @@ export class Matching {
         public remarque?: string,
         public taux?: number,
         public hide?: boolean,
-        public accepted?: boolean
+        public accepted?: boolean,
+        public favoris?: boolean
     ) { }
 
 }

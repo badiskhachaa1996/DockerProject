@@ -22,6 +22,12 @@ export class MatchingService {
 
   }
 
+  delete(id:string){
+    let url = this.apiUrl + 'delete/' + id;
+    return this.httpClient.delete<Matching>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+      
+  }
+
   getByID(id: string) {
     let url = this.apiUrl + 'getByID/' + id;
     return this.httpClient.get<Matching>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

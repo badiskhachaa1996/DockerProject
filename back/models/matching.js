@@ -12,6 +12,7 @@ const matiereSchema = mongoose.Schema({
     taux: { type: Number, default: 0 },
     hide: { type: Boolean, default: false },
     accepted: { type: Boolean, default: false },
+    favoris: { type: Boolean, default: false },
 });
 
 //creation de la table matiere
