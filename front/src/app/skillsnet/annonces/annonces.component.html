@@ -279,23 +279,11 @@
 	</div>
 
 	<!-- Affichage des offres -->
+
 	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1">
 		<p-tabPanel header="Offres">
 			<div class="col-12">
 				<div class="card">
-					<div *ngIf="token.role != 'Watcher'">
-						<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-							(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
-						<!--<button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"
-					*ngIf="canAddOrEdit"></button>-->
-					</div>
-
-					<div *ngIf="token.role == 'Watcher'">
-						<button disabled pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-							(click)="showForm = true" style="float: right" *ngIf="canAddOrEdit"></button>
-						<button disabled pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2"
-							style="float: right" *ngIf="canAddOrEdit"></button>
-					</div>
 
 					<p-dataView #dv [value]="['']" [paginator]="true" [rows]="9"
 						filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
@@ -322,6 +310,8 @@
 								</p-dropdown>
 
 								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+									(click)="showForm = true"></button>
 							</div>
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 								<input pInputText type="text" #filter
@@ -343,9 +333,9 @@
 								<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'100%'}"
 									filter="true" [(ngModel)]="filter_value.user" *ngIf="filter_value.user"
 									(onChange)="updateFilter()"></p-dropdown>-->
-								<button pButton label="Voir les filtres" class="p-button" icon="pi pi-filter"
+								<button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
 									(click)="displayFilter=true"></button>
-								<button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
+								<button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
 									(click)="clearFilter()"></button>
 							</div>
 						</ng-template>
@@ -463,7 +453,8 @@
 											<p>
 												{{annonce.missionDesc}}
 											</p>
-											<p-table responsiveLayout="scroll" [value]="['sq']" styleClass="p-datatable-gridlines">
+											<p-table responsiveLayout="scroll" [value]="['sq']"
+												styleClass="p-datatable-gridlines">
 												<ng-template pTemplate="header">
 									<tr>
 										<th scope="col">Entreprise</th>
@@ -476,7 +467,7 @@
 								<ng-template pTemplate="body">
 									<tr>
 										<td>{{annonce.entreprise_id?.r_sociale}}</td>
-										<td>WIP</td>
+										<td>{{annonce.workplaceType}}</td>
 										<td>{{annonce.date_creation | date:'mediumDate'}}</td>
 										<td>{{annonce.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
 											titlecase}}</td>

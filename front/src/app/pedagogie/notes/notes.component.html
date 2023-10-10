@@ -381,9 +381,22 @@
 
                 <div style="float: left; margin-left: 20px;">
                     <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
-                    <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
+                    <ng-container
+                        *ngIf="semestreForGenerateBulletin=='Annuel'; then bulletin_annuel else bulletin_semestriel">
+
+                    </ng-container>
+                    <p #bulletin_semestriel
+                        *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
+
                         Bulletin du {{ semestreForGenerateBulletin }} <br>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
+                        <br>
+                    </p>
+                    <p #bulletin_annuel *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
+                        Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
+
+                        Bulletin {{ semestreForGenerateBulletin }} <br>
                         <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>
