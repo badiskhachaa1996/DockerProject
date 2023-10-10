@@ -114,6 +114,9 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
+      console.log(user.savedAnnonces)
+      if (user.savedAnnonces)
+        this.matchingList = user.savedAnnonces
       if (!this.canAddOrEdit)
         this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
       this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
@@ -416,14 +419,33 @@ export class AnnoncesComponent implements OnInit {
   }
   matchingList = []
   InitMatching(annonce: Annonce) {
-    if (!this.matchingList.includes(annonce)) {
+    let ids = []
+    this.matchingList.forEach(m => {
+      ids.push(m._id)
+    })
+    if (!ids.includes(annonce._id)) {
       this.matchingList.push(annonce)
-      this.activeIndex1 = this.matchingList.length
+      this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+        this.activeIndex1 = this.matchingList.length
+      })
     } else {
-      this.activeIndex1 = this.matchingList.indexOf(annonce) + 1
+      this.activeIndex1 = ids.indexOf(annonce._id) + 1
     }
+  }
 
-    //this.router.navigate(['matching', annonce._id])
+  deleteOnglet(annonce: Annonce) {
+    this.matchingList.splice(this.matchingList.indexOf(annonce), 1)
+    this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+
+    })
+  }
+
+  handleClose(e) {
+    this.matchingList.splice(e.index - 1, 1)
+    this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+
+    })
+    //this.deleteOnglet(this.matchingList[e.index - 1])
   }
 
   InitPostulate(annonce: Annonce) {

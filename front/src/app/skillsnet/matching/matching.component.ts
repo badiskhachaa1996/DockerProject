@@ -45,7 +45,9 @@ export class MatchingComponent implements OnInit {
   })
 
   constructor(private MatchingService: MatchingService, private route: ActivatedRoute,
-    private AnnonceService: AnnonceService, private UserService: AuthService, private messageService: MessageService, private RDVService: MeetingTeamsService) { }
+    private AnnonceService: AnnonceService, private UserService: AuthService,
+    private messageService: MessageService, private RDVService: MeetingTeamsService,
+    private router: Router) { }
   rdvDic = {}
   ngOnInit(): void {
     try {
@@ -161,17 +163,66 @@ export class MatchingComponent implements OnInit {
   }
   hideAndSeek(match, idx) {
     console.log(idx)
+    let favoris = false
+    if (!match?.hide != false)
+      favoris = match?.favoris
     let offre_id = this.ID
     if (!offre_id)
       offre_id = this.route.snapshot.paramMap.get('offre_id')
     if (match._id)
-      this.MatchingService.update(match._id, { hide: !match.hide }).subscribe(matching => {
-        this.matchingsPotentiel.splice(idx, 1, matching)
+      this.MatchingService.update(match._id, { hide: !match.hide, favoris }).subscribe(matching => {
+        this.matchingsPotentiel.splice(idx, 1)
+        if (matching.hide)
+          this.matchingsPotentiel.push(matching)
+        else
+          this.matchingsPotentiel.unshift(matching)
       })
     else
       this.MatchingService.create({ ...match, matcher_id: this.token.id, offre_id, hide: true }).subscribe(matching => {
-        this.matchingsPotentiel.splice(idx, 1, matching)
+        this.matchingsPotentiel.splice(idx, 1)
+        if (matching.hide)
+          this.matchingsPotentiel.push(matching)
+        else
+          this.matchingsPotentiel.unshift(matching)
       })
+  }
+  myFavorite(match, idx) {
+    let hide = false
+    if (!match?.favoris != false)
+      hide = match?.hide
+    let offre_id = this.ID
+    if (!offre_id)
+      offre_id = this.route.snapshot.paramMap.get('offre_id')
+    if (match._id)
+      this.MatchingService.update(match._id, { favoris: !match?.favoris, hide }).subscribe(matching => {
+        this.matchingsPotentiel.splice(idx, 1)
+        if (matching.favoris)
+          this.matchingsPotentiel.unshift(matching)
+        else
+          this.matchingsPotentiel.push(matching)
+      })
+    else
+      this.MatchingService.create({ ...match, matcher_id: this.token.id, offre_id, favoris: true }).subscribe(matching => {
+        this.matchingsPotentiel.splice(idx, 1)
+        if (matching.favoris)
+          this.matchingsPotentiel.unshift(matching)
+        else
+          this.matchingsPotentiel.push(matching)
+      })
+  }
+
+  cancelMatching(match: Matching) {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce matching ?"))
+      this.MatchingService.delete(match._id).subscribe(r => {
+        this.matching.splice(this.matching.indexOf(match), 1)
+        this.matchingsPotentiel.push(r)
+      })
+  }
+  seeCV(cv_id: string) {
+    this.router.navigate(['cv', cv_id])
+  }
+  takeRDV(match: Matching) {
+    this.router.navigate(['rendez-vous/', match?.cv_id?.user_id?._id])
   }
 
 }
