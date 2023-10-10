@@ -282,6 +282,7 @@ import { ImatchCandidatComponent } from './skillsnet/i-match/imatch-candidat/ima
 import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise/imatch-entreprise.component';
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
+import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
 const routes: Routes = [
     {
         path: '',
@@ -634,6 +635,16 @@ const routes: Routes = [
                 path: 'inscription-entreprise',
                 component: InscriptionEntrepriseComponent,
             },
+
+
+            {
+                path: 'ajout-remboussement',
+                component: AddRemboussementComponent,
+                canActivate: [AuthGuardService],
+            }, //Remboursement
+
+
+
             /** Paths Lemon Way */
 
             { path: 'mon-compte-bancaire', component: MyAccountComponent },
@@ -1286,7 +1297,7 @@ const routes: Routes = [
             { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
 
-            // Generateur de Doc 
+            // Generateur de Doc
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },
             { path: 'genFormation', component: GenformationComponent, canActivate: [AuthGuardService] },
@@ -1365,6 +1376,8 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+
+
 ]
 
 
