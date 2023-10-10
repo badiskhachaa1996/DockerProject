@@ -391,6 +391,7 @@ import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
+import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
 
 @NgModule({
   imports: [
@@ -793,6 +794,7 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
     NewListTicketsComponent,
     ReadMoreComponent,
     NewCvthequeInterneComponent,
+    MatchingViewerComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -214,7 +214,7 @@
                     {{ticket.customid}}
                 </td>
                 <td>
-                    {{ticket.date_ajout | date:'mediumDate'}}
+                    {{ticket.date_ajout | date:'dd MMMM yy'}}
                 </td>
                 <td>
                     {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname | uppercase}}
@@ -278,13 +278,13 @@
         <ng-template pTemplate="body">
             <tr>
                 <td>{{ticket.description}}</td>
-                <td>{{ticket.date_fin_traitement| date:'mediumDate'}}</td>
+                <td>{{ticket.date_fin_traitement| date:'dd MMMM yy'}}</td>
                 <td>
                     {{getTraitement(ticket)}}
                 </td>
                 <td>{{ticket.note}}</td>
                 <td>{{ticket.note_assignation}}</td>
-                <td>{{ticket.date_limite | date:'mediumDate'}}</td>
+                <td>{{ticket.date_limite | date:'dd MMMM yy'}}</td>
             </tr>
         </ng-template>
     </p-table>

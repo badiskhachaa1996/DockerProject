@@ -282,11 +282,6 @@ export class NewListTicketsComponent implements OnInit {
       }
     }, 15);
   }
-  onConvertText(description: string) {
-    if (description && description.length > 20)
-      description = description.substring(0, 20) + "..."
-    return description
-  }
 
   seeMore(str: string, type = "Description") {
     this.seeMoreObj = { str, type }

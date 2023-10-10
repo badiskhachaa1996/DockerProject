@@ -87,7 +87,7 @@
                         {{ doc?.user_id?.lastname | uppercase }} {{ doc?.user_id?.firstname | titlecase }}
                     </td>
                     <td>
-                        {{ doc.date | date:'mediumDate' }}
+                        {{ doc.date | date:'dd MMMM yy' }}
                     </td>
                     <td>
                         <a (click)="downloadFile(doc.filename,doc._id)">Télécharger le document</a>

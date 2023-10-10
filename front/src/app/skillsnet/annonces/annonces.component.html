@@ -296,39 +296,45 @@
 										[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
 									</p-dropdown>
 								</div>
-								<div>
+								<div *ngIf="filter_value.typeMission">
 									<label style="text-align: center;" class="mr-2">Type de mission</label>
 									<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
-										*ngIf="filter_value.typeMission" [(ngModel)]="filter_value.typeMission"
-										(onChange)="updateFilter()">
+										[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 									</p-dropdown>
 								</div>
 
+								<div *ngIf="filter_value.profil.length!=0">
+									<label style="text-align: center;" class="mr-2">Profil</label>
+									<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
+										[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
+									</p-multiSelect>
+								</div>
 
-								<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
-									*ngIf="filter_value.profil.length!=0" [(ngModel)]="filter_value.profil"
-									(onChange)="updateFilter()">
-								</p-multiSelect>
+								<div *ngIf="filter_value.entreprise">
+									<label style="text-align: center;" class="mr-2">Auteur</label>
+									<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
+										[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
+									</p-dropdown>
+								</div>
 
-								<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
-									*ngIf="filter_value.entreprise" [(ngModel)]="filter_value.entreprise"
-									(onChange)="updateFilter()">
-								</p-dropdown>
+								<div *ngIf="filter_value.locations.length!=0">
+									<label style="text-align: center;" class="mr-2">Lieu</label>
+									<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+										filter="true" placeholder="Choisissez une ville"
+										[(ngModel)]="filter_value.locations"
+										(onChange)="updateFilter()"></p-multiSelect>
+								</div>
 
-								<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
-									filter="true" placeholder="Choisissez une ville"
-									*ngIf="filter_value.locations.length!=0" [(ngModel)]="filter_value.locations"
-									(onChange)="updateFilter()"></p-multiSelect>
+								<div *ngIf="filter_value.date">
+									<label style="text-align: center;" class="mr-2">Disponibilité</label>
+									<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
+										(onSelect)="updateFilter()" [(ngModel)]="filter_value.date"
+										(onBlur)="updateFilter()" inputId="range" autoWidth="false"
+										[style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+								</div>
 
-								<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
-									(onSelect)="updateFilter()" [(ngModel)]="filter_value.date"
-									*ngIf="filter_value.date" (onBlur)="updateFilter()" inputId="range"
-									autoWidth="false" [style]="{'width':'100%'}"
-									placeholder="Date de début"></p-calendar>
 							</div>
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-
-
 								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
 									(click)="showForm = true"></button>
@@ -408,7 +414,7 @@
 											{{annonce.entreprise_ville}}
 										</td>
 										<td style="min-width: 12rem;">
-											{{annonce.debut | date:'mediumDate'}}
+											{{annonce.debut | date:'dd MMMM yy'}}
 										</td>
 										<td class="text-center" style="min-width: 8rem;">
 											<i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
@@ -469,11 +475,11 @@
 									<tr>
 										<td>{{annonce.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
 										<td>{{annonce.workplaceType}}</td>
-										<td>{{annonce.date_creation | date:'mediumDate'}}</td>
+										<td>{{annonce.date_creation | date:'dd MMMM yy'}}</td>
 										<td>{{annonce.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
 											titlecase}}</td>
 										<td>
-											{{annonce.modified_at| date:'mediumDate'}}
+											{{annonce.modified_at| date:'dd MMMM yy'}}
 										</td>
 									</tr>
 								</ng-template>
@@ -651,29 +657,29 @@
 	<h3>Filtres</h3>
 	<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
 		<p-dropdown placeholder="Statut" [options]="statutFilter" [(ngModel)]="filter_value.statut" class="mb-2"
-			[style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter();">
+			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter();">
 		</p-dropdown>
 
 		<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter" [(ngModel)]="filter_value.typeMission"
-			class="mb-2" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+			appendTo="body" class="mb-2" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
 
 		<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" [(ngModel)]="filter_value.profil"
-			class="mb-2" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+			appendTo="body" class="mb-2" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-multiSelect>
 
 		<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" [(ngModel)]="filter_value.entreprise" class="mb-2"
-			[style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
-		<input pInputText type="text" #filter (input)="dv.filter($event.target.value, 'contains')" style="width: 27em;"
-			class="mb-2" [(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
+		<input pInputText type="text" style="width: 27em;" class="mb-2" [(ngModel)]="filter_value.search"
+			(onBlur)="updateFilter()" placeholder="Recherche" />
 
 		<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
-			placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
+			appendTo="body" placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
 			(onChange)="updateFilter()"></p-multiSelect>
 
 		<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()" class="mb-2"
-			[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+			appendTo="body" [(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
 			[style]="{'width':'27em'}" placeholder="Date de début"></p-calendar>
 
 		<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"

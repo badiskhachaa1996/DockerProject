@@ -264,7 +264,7 @@
                             {{ facture.nature }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ facture.date_paiement| date:'mediumDate' }}
+                            {{ facture.date_paiement| date:'dd MMMM yy' }}
                         </td>
                         <td>
                             {{facture.partenaire_id?.nom}}

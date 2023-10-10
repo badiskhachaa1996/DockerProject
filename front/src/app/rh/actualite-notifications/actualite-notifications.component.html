@@ -14,13 +14,14 @@
             <div class="field col-12">
                 <label>Campus: </label>
                 <p-dropdown [options]="campusDropdown" placeholder="Choisissez un campus" autoWidth="false"
-                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
+                    [filter]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
             </div>
             <div class="field col-12">
-                <label>Contenu de l'activité </label>
+                <label>Description</label>
                 <textarea pInputTextarea formControlName="description" autoResize rows="3" cols="30"></textarea>
             </div>
-            <button pButton [disabled]="formEdit.invalid" label="Mettre à jour l'actualité"></button>
+            <button pButton [disabled]="formEdit.invalid" label="Mettre à jour l'actualité"
+                style="width: 25%;"></button>
         </form>
     </div>
     <div class="grid col-12 card" *ngIf="AddActivite">
@@ -36,41 +37,45 @@
             <div class="field col-12">
                 <label>Campus: </label>
                 <p-dropdown [options]="campusDropdown" placeholder="Choisissez un campus" autoWidth="false"
-                    [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
+                    [filter]="true" [style]="{'width':'100%'}" formControlName="campus"></p-dropdown>
             </div>
             <div class="field col-12">
-                <label>Contenu de l'activité </label>
+                <label>Description</label>
                 <textarea pInputTextarea formControlName="description" autoResize rows="3" cols="30"></textarea>
             </div>
-            <button pButton [disabled]="formAdd.invalid" label="Ajouter l'actualité"></button>
+            <button pButton [disabled]="formAdd.invalid" label="Ajouter l'actualité" style="width: 25%;"></button>
         </form>
     </div>
     <div class="grid col-12 card">
-        <h5 class="col-9">Actualité et notifications</h5>
         <div class="col-3 grid">
-            <button class="col-12" style="float: right;" pButton label="Ajouter une actualité"
+            <button class="col-12" style="float: right;" pButton icon="pi pi-plus"
                 (click)="AddActivite = true;"></button>
         </div>
         <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="activites" class="col-12"
             [paginator]="true" [pageLinks]="5" [globalFilterFields]="['titre', 'description']" responsiveLayout="scroll"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <span class="p-input-icon-left mb-2">
+                <span class="p-input-icon-left mb-2 mr-2">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" class="w-full" />
                 </span>
+                <p-dropdown [options]="campusFilter" placeholder="Choisissez un campus" autoWidth="false" (onChange)="dt1.filter($event.value, 'campus','contains')"
+                    [filter]="true" [style]="{'width':'25%'}"></p-dropdown>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                        Date de l'actualité <p-sortIcon field="date_creation"></p-sortIcon>
+                        Date<p-sortIcon field="date_creation"></p-sortIcon>
                     </th>
                     <th pSortableColumn="titre" scope="col" style="text-align: center;">
-                        Titre de l'actualité <p-sortIcon field="titre"></p-sortIcon>
+                        Titre<p-sortIcon field="titre"></p-sortIcon>
                     </th>
                     <th pSortableColumn="description" scope="col" style="text-align: center;">
-                        Contenu de l'actualité <p-sortIcon field="description"></p-sortIcon>
+                        Description <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="campus" scope="col" style="text-align: center;">
+                        Campus <p-sortIcon field="campus"></p-sortIcon>
                     </th>
                     <th>
                         Action
@@ -80,13 +85,16 @@
             <ng-template pTemplate="body" let-actualite>
                 <tr>
                     <td>
-                        {{actualite?.date_creation | date :'mediumDate' }}
+                        {{actualite?.date_creation | date :'dd MMMM yy' }}
                     </td>
                     <td>
-                        {{actualite?.titre}}
+                        <app-read-more [string]="actualite?.titre" [size_max]=30></app-read-more>
                     </td>
                     <td>
-                        {{actualite?.description}}
+                        <app-read-more [string]="actualite.description" [size_max]=40></app-read-more>
+                    </td>
+                    <td>
+                        {{actualite?.campus}}
                     </td>
                     <td>
                         <i pTooltip="Supprimer l'actualité" tooltipPosition="bottom" class="pi pi-trash mr-2"

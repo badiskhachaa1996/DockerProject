@@ -218,7 +218,7 @@
                                         (blur)="onChangeCreate(ri,'date_naissance',$event.target.value)">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
+                                    {{lead?.date_naissance | date:'dd MMMM yy'}}&nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -506,7 +506,7 @@
                                         (blur)="onChangeUpdate(ri,'date_naissance',$event.target.value)">
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{lead?.date_naissance | date:'mediumDate'}}&nbsp;
+                                    {{lead?.date_naissance | date:'dd MMMM yy'}}&nbsp;
                                 </ng-template>
                             </p-cellEditor>
                         </td>

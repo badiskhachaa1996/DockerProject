@@ -40,7 +40,7 @@
             <ng-template pTemplate="body" let-point>
                 <tr>
                     <td>
-                        {{dicPointages[point][0].date | date:'mediumDate' }}
+                        {{dicPointages[point][0].date | date:'dd MMMM yy' }}
                     </td>
                     <td>
                         {{dicPointages[point][0].machine }}
@@ -76,7 +76,7 @@
             Dernier Mis à jour : {{date_dernier_maj | date : "short"}}
         </h3>
         <h3 *ngIf="date_dernier_maj">
-            Date : {{ date_dernier_maj | date : "mediumDate"}}
+            Date : {{ date_dernier_maj | date : "dd MMMM yy"}}
         </h3>
     </div>
     <p-tabView class="col-12 " style="max-width: 100%;" *ngIf="dataHisto">

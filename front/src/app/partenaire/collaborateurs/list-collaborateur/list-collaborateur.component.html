@@ -14,7 +14,7 @@
             <h2 class="col-12">Informations commercial</h2>
             <div class="field col-12 md:col-6">
                 <label>Date d'ajout</label>
-                <p> {{ gestionCommercial?.user_id?.date_creation | date:'mediumDate' }}</p>
+                <p> {{ gestionCommercial?.user_id?.date_creation | date:'dd MMMM yy' }}</p>
             </div>
             <div class="field col-12 md:col-6">
                 <label>Contribution</label>
@@ -323,10 +323,10 @@
                         </td>
 
                         <td style="min-width: 14rem;" *ngIf="users[commercial.user_id]?.date_creation">
-                            {{ users[commercial.user_id]?.date_creation| date:'mediumDate' }}
+                            {{ users[commercial.user_id]?.date_creation| date:'dd MMMM yy' }}
                         </td>
                         <td style="min-width: 14rem;" *ngIf="!users[commercial.user_id]?.date_creation">
-                            {{ commercial.date_ajout | date:'mediumDate' }}
+                            {{ commercial.date_ajout | date:'dd MMMM yy' }}
                         </td>
                         <td style="min-width: 14rem;">
                             {{ commercial.contribution }}
