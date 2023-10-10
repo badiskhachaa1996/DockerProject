@@ -1,9 +1,10 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy, DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TableModule } from 'primeng/table';
 import { AppRoutingModule } from './app-routing.module';
 import { registerLocaleData } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
@@ -73,7 +74,6 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { SplitterModule } from 'primeng/splitter';
 import { StepsModule } from 'primeng/steps';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TagModule } from 'primeng/tag';
 import { TerminalModule } from 'primeng/terminal';
@@ -391,9 +391,13 @@ import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
-
+import { EtudiantComponent } from './gerer-remboursement/etudiant/etudiant.component';
+import { NgModule } from '@angular/core';
+import { NationalityDropdownComponent } from './gerer-remboursement/nationality-dropdown/nationality-dropdown.component';
+import { CountryListComponent } from './gerer-remboursement/country-list/country-list.component';
 @NgModule({
   imports: [
+    TableModule,
     SignaturePadModule,
     BrowserModule,
     FormsModule,
@@ -793,6 +797,9 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
     NewListTicketsComponent,
     ReadMoreComponent,
     NewCvthequeInterneComponent,
+    EtudiantComponent,
+    NationalityDropdownComponent,
+    CountryListComponent,
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -802,6 +809,8 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
     useClass: MsalInterceptor,
     multi: true,
   },
+  [CountryService]
+
   ],
   bootstrap: [AppComponent, MsalRedirectComponent]
 })

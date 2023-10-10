@@ -283,6 +283,7 @@ import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
+import { EtudiantComponent } from './gerer-remboursement/etudiant/etudiant.component';
 const routes: Routes = [
     {
         path: '',
@@ -1367,6 +1368,8 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+    
+    {path: 'remboursemet-form' , component: EtudiantComponent}
 ]
 
 
