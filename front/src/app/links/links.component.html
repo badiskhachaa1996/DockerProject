@@ -20,7 +20,7 @@
         </p-dialog>
         <div class="grid col-12">
             <div class="col-4">
-                <p-orderList [value]="links1" [listStyle]="{ 'max-height': '30rem' }" header="My Links 1"
+                <p-orderList [value]="links1" [listStyle]="{ 'max-height': '5rem' }" header="My Links 1"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -45,7 +45,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" (onClick)="showdialog1()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" (onClick)="showdialog1()"> </p-button>
                     <p-dialog header="My Links 1" [(visible)]="showd1" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links2" [listStyle]="{ 'max-height': '30rem' }" header="My Links 2"
+                <p-orderList [value]="links2" [listStyle]="{ 'max-height': '5rem' }" header="My Links 2"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -95,7 +95,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" (onClick)="showdialog2()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" (onClick)="showdialog2()"></p-button>
                     <p-dialog header="My Links2" [(visible)]="showd2" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links3" [listStyle]="{ 'max-height': '30rem' }" header="My Links 3"
+                <p-orderList [value]="links3" [listStyle]="{ 'max-height': '5rem' }" header="My Links 3"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -145,7 +145,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" (onClick)="showdialog3()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" (onClick)="showdialog3()"></p-button>
                     <p-dialog header="My Links 3" [(visible)]="showd3" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -170,7 +170,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links4" [listStyle]="{ 'max-height': '30rem' }" header="My Links 4"
+                <p-orderList [value]="links4" [listStyle]="{ 'max-height': '5rem' }" header="My Links 4"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -195,7 +195,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus"(onClick)="showdialog4()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus"(onClick)="showdialog4()"></p-button>
                     <p-dialog header="My Links 4" [(visible)]="showd4" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -220,7 +220,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links5" [listStyle]="{ 'max-height': '30rem' }" header="My Links 5"
+                <p-orderList [value]="links5" [listStyle]="{ 'max-height': '5rem' }" header="My Links 5"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -270,7 +270,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links6" [listStyle]="{ 'max-height': '30rem' }" header="My Links 6"
+                <p-orderList [value]="links6" [listStyle]="{ 'max-height': '5rem' }" header="My Links 6"
                     [dragdrop]="true">
                     <ng-template let-links pTemplate="item">
 
@@ -295,7 +295,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" (onClick)="showdialog6()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" (onClick)="showdialog6()"> </p-button>
                     <p-dialog header="My Links 6" [(visible)]="showd6" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -346,7 +346,7 @@
 
         <div class="grid col-12">
             <div class="col-4">
-                <p-orderList [value]="classe1" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="Global">
+                <p-orderList [value]="classe1" [listStyle]="{ 'max-height': '5rem' }" header="Global">
                     <ng-template let-links pTemplate="item">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
@@ -368,7 +368,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogA()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogA()"> </p-button>
                     <p-dialog header="My Links" [(visible)]="showdA" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -393,7 +393,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe2" [listStyle]="{ 'max-height': '30rem' ,'width': '300px'}" header="Board">
+                <p-orderList [value]="classe2" [listStyle]="{ 'max-height': '5rem' }" header="Board">
                     <ng-template let-product pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
@@ -417,7 +417,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogB()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogB()"> </p-button>
                     <p-dialog header="My Links" [(visible)]="showdB" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('Board')">
@@ -441,7 +441,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe3" [listStyle]="{ 'max-height': '30rem','width': '300px' }"
+                <p-orderList [value]="classe3" [listStyle]="{ 'max-height': '5rem' }"
                     header="Process">
                     <ng-template let-product pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
@@ -466,7 +466,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogC()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogC()"> </p-button>
                     <p-dialog header="My Links" [(visible)]="showdC" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -491,7 +491,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe4" [listStyle]="{ 'max-height': '30rem','width': '300px' }"
+                <p-orderList [value]="classe4" [listStyle]="{ 'max-height': '5rem'}"
                     header="IGM events">
                     <ng-template let-product pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
@@ -516,7 +516,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogD()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogD()"></p-button>
                     <p-dialog header="My Links" [(visible)]="showdD" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -541,7 +541,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '30rem','width': '300px' }"
+                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '5rem' }"
                     header="IGM links">
                     <ng-template let-product pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
@@ -566,7 +566,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogE()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogE()"></p-button>
                     <p-dialog header="My Links" [(visible)]="showdE" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks"
@@ -591,7 +591,7 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="Other">
+                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '5rem' }" header="Other">
                     <ng-template let-product pTemplate="item">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
@@ -615,7 +615,7 @@
                 </p-orderList>
                 <br>
                 <div>
-                    <p-button icon="pi pi-plus"*ngIf="role" (onClick)="showdialogE()">Ajouter </p-button>
+                    <p-button icon="pi pi-plus"*ngIf="role" (onClick)="showdialogE()"> </p-button>
                     <p-dialog header="My Links" [(visible)]="showdE" [style]="{width: '50vw'}">
 
                         <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('Other')">

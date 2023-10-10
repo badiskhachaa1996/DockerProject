@@ -16,7 +16,7 @@ export class LinksComponent implements OnInit {
   userConnected: User;
   targetProducts!: [];
   sourceProducts!: any[];
-  role: boolean=true;
+  role: boolean=false;
   links1:any[]=[];links2:any[]=[];links3:any[]=[];links4:any[]=[];links5:any[]=[];links6:any[]=[];
   classe1: any[] = [];classe2: any[]=[];classe3: any[]=[];classe4: any[]=[];classe5: any[]=[];classse6: any[] = [];
   linkToUpdate:Links;
