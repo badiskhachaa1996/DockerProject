@@ -36,4 +36,10 @@ app.put("/put-links", (req, res, next) => {
     .then((links) => { res.status(201).json({ links: links, success: 'Links mis à jour'}); })
     .catch((error) => { console.error(error); res.status(400).json({ error: 'Impossible de mettre à jour le links, si le problème persite veuillez créer un ticket au service IMS' }); });
 });
+
+app.delete("/delete/:id", (req, res, next) => {
+  Links.deleteOne({ _id: req.params.id })
+  .then((response) => { res.status(200).json({ success: 'liks supprimé' }) })
+  .catch((error) => {console.error(error); res.status(400).json({ error: 'Impossible de supprimer ce lien' });})
+});
 module.exports = app;
