@@ -158,7 +158,7 @@ export class BulletinComponent implements OnInit {
     } else {
       this.generateBulletin()
     }
-    if (this.route.snapshot.paramMap.get('semestre') == "Annuel")
+    if (this.formAGSPV.value.pv == "Annuel")
       this.SemestreList.forEach((semestre, index) => {
         this.NoteS.getPVAnnuel(semestre, this.GROUPE._id).subscribe(data => {
           //this.cols[semestre] = data.cols
