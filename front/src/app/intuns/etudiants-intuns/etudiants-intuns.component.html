@@ -111,7 +111,7 @@
                         </td>
 
                         <td>
-                            {{ etudiant.user_id.date_creation | date:'mediumDate' }}
+                            {{ etudiant.user_id.date_creation | date:'dd MMMM yy' }}
                         </td>
                         <td *ngIf="etudiant.user_id">
                             {{ etudiant.user_id?.phone }}

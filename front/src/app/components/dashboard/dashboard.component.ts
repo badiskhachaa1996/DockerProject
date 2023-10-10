@@ -1493,11 +1493,6 @@ export class DashboardComponent implements OnInit {
     event.preventDefault();
     contextMenu.show(event);
   }
-  onConvertText(description: string) {
-    if (description.length > 500)
-      description = description.substring(0, 500) + "..."
-    return description
-  }
   seeDescriptionActu = false
   seeActu: ActualiteRH
   seeMore(act: ActualiteRH) {

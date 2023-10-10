@@ -1089,7 +1089,7 @@
                                     {{ticket.customid}}
                                 </td>
                                 <td>
-                                    {{ticket.date_ajout | date:'mediumDate'}}
+                                    {{ticket.date_ajout | date:'dd MMMM yy'}}
                                 </td>
                                 <td>
                                     {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname |
@@ -1140,7 +1140,7 @@
                         <ng-template pTemplate="body">
                             <tr>
                                 <td>{{ticket.description}}</td>
-                                <td>{{ticket.date_fin_traitement| date:'mediumDate'}}</td>
+                                <td>{{ticket.date_fin_traitement| date:'dd MMMM yy'}}</td>
                                 <td>{{ticket.note}}</td>
                             </tr>
                         </ng-template>
@@ -1223,7 +1223,7 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData>
                             <tr>
-                                <td>{{rowData?.date | date:'mediumDate'}}</td>
+                                <td>{{rowData?.date | date:'dd MMMM yy'}}</td>
                                 <td>{{rowData?.filename}}</td>
                                 <td>
                                     <a style="cursor: pointer;" (click)="downloadRHFile(rowData)">Télécharger</a>
@@ -2138,26 +2138,23 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Campus</th>
-                                <th>Titre de l'actualité</th>
-                                <th>Contenu de l'actualité</th>
+                                <th>Titre</th>
+                                <th>Description</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-actualite>
                             <tr>
                                 <td>
-                                    {{actualite?.date_creation | date :'mediumDate' }}
+                                    {{actualite?.date_creation | date :'dd MMMM yy' }}
                                 </td>
                                 <td>
                                     {{actualite.campus}}
                                 </td>
                                 <td>
-                                    {{actualite?.titre}}
+                                    <app-read-more [string]="actualite?.titre" [size_max]=30></app-read-more>
                                 </td>
                                 <td>
-                                    {{onConvertText(actualite?.description)}}
-                                    <i pTooltip="Voir plus de détails" tooltipPosition="bottom" class="pi pi-eye"
-                                        style="color: blue;cursor: pointer;" *ngIf="actualite?.description.length>500"
-                                        (click)="seeMore(actualite);" aria-hidden="true"></i>
+                                    <app-read-more [string]="actualite.description" [size_max]=40></app-read-more>
                                 </td>
                             </tr>
                         </ng-template>
@@ -2277,7 +2274,7 @@
                                     {{ticket.customid}}
                                 </td>
                                 <td>
-                                    {{ticket.date_ajout | date:'mediumDate'}}
+                                    {{ticket.date_ajout | date:'dd MMMM yy'}}
                                 </td>
                                 <td>
                                     {{ticket?.createur_id?.firstname | titlecase}} {{ticket?.createur_id?.lastname |
@@ -2328,7 +2325,7 @@
                         <ng-template pTemplate="body">
                             <tr>
                                 <td>{{ticket.description}}</td>
-                                <td>{{ticket.date_fin_traitement| date:'mediumDate'}}</td>
+                                <td>{{ticket.date_fin_traitement| date:'dd MMMM yy'}}</td>
                                 <td>{{ticket.note}}</td>
                             </tr>
                         </ng-template>
@@ -2410,7 +2407,7 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData>
                             <tr>
-                                <td>{{rowData?.date | date:'mediumDate'}}</td>
+                                <td>{{rowData?.date | date:'dd MMMM yy'}}</td>
                                 <td>{{rowData?.filename}}</td>
                                 <td>
                                     <a style="cursor: pointer;" (click)="downloadRHFile(rowData)">Télécharger</a>

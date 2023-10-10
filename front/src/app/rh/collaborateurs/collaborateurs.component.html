@@ -486,7 +486,7 @@
 								<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 									<tr>
 										<td>
-											{{rowData.date | date:'mediumDate'}}
+											{{rowData.date | date:'dd MMMM yy'}}
 										</td>
 										<td
 											*ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
@@ -588,7 +588,7 @@
 								<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 									<tr>
 										<td>
-											{{rowData.date | date:'mediumDate'}}
+											{{rowData.date | date:'dd MMMM yy'}}
 										</td>
 										<td
 											*ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
@@ -666,7 +666,7 @@
 										[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
 								</td>
 								<td>
-									{{email.date_creation|date:'mediumDate'}}
+									{{email.date_creation|date:'dd MMMM yy'}}
 								</td>
 								<td>
 									{{email.objet}}
@@ -721,7 +721,7 @@
 			<ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
 				<tr>
 					<td>
-						{{rowData.date | date:'mediumDate'}}
+						{{rowData.date | date:'dd MMMM yy'}}
 					</td>
 					<td pEditableColumn>
 						<p-cellEditor>
@@ -1021,7 +1021,7 @@
 	<p *ngIf="dataCollab && dataCollab.user_id">
 		Civilité : {{dataCollab?.user_id?.civilite}} <br>
 		Nom et prénom : {{dataCollab.user_id?.lastname | uppercase}} {{dataCollab.user_id?.firstname}}<br>
-		Date de naissance : {{dataCollab?.date_naissance | date: 'mediumDate'}}<br>
+		Date de naissance : {{dataCollab?.date_naissance | date: 'dd MMMM yy'}}<br>
 		Email travail : {{dataCollab.user_id?.email}}<br>
 		Email personnelle : {{dataCollab.user_id?.email_perso}}<br>
 		Téléphone personnelle : {{dataCollab.user_id?.indicatif}} {{dataCollab.user_id?.phone}}<br>
@@ -1037,7 +1037,7 @@
 		Nom du poste : {{dataCollab?.intitule_poste}} <br>
 		Service : {{dataCollab?.user_id?.service_id?.label}}<br>
 		Mention : {{dataCollab.user_id.mention}}<br>
-		Date de démarrage : {{dataCollab?.date_demarrage | date: 'mediumDate'}}<br>
+		Date de démarrage : {{dataCollab?.date_demarrage | date: 'dd MMMM yy'}}<br>
 		Ancienneté : {{afficherAnciennete(dataCollab)}} jours<br>
 		Type de contrat : {{dataCollab?.contrat_type}}<br>
 		Taux horaire : {{dataCollab?.h_cra}}<br>

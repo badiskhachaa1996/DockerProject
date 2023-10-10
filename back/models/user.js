@@ -137,6 +137,9 @@ const user_schema = new mongoose.Schema({
     },
     savedAnnonces: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "annonce" }], default: []
+    },
+    savedMatching: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "matching" }], default: []
     }
 
 

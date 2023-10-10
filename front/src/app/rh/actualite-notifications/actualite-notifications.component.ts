@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { ActualiteInt } from 'src/app/models/ActualiteInt';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { PartenaireService } from 'src/app/services/partenaire.service';
@@ -23,6 +22,7 @@ export class ActualiteNotificationsComponent implements OnInit {
   EditActivite: ActualiteRH
   AddActivite = false
   emailList = []
+
   showEmail: ActualiteRH
   formEdit = new FormGroup({
     _id: new FormControl('', Validators.required),
@@ -53,7 +53,7 @@ export class ActualiteNotificationsComponent implements OnInit {
     { label: 'Tunis', value: 'Tunis' },
     { label: 'Intuns', value: 'Intuns ' }
   ]
-
+  campusFilter = [{ label: 'Tous les campus', value: null }].concat(this.campusDropdown)
   onInitUpdate(act: ActualiteRH) {
     this.EditActivite = act
     this.formEdit.patchValue({ ...act })
@@ -74,7 +74,7 @@ export class ActualiteNotificationsComponent implements OnInit {
       this.ToastService.add({ severity: 'success', summary: 'Création d\'une activité avec succès' })
     })
   }
-  onDelete(act: ActualiteInt) {
+  onDelete(act: ActualiteRH) {
     this.activiteService.delete(act._id).subscribe(data => {
       this.activites.splice(this.activites.indexOf(act), 1)
       this.formEdit.reset()

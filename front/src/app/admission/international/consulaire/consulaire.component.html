@@ -69,7 +69,7 @@
                         </div>-->
                         <div class="field md:col-6 col-12">
                             <label For="postal_adresse">Date d'inscription</label>
-                            <p>{{showDetails?.date_creation|date:'mediumDate'}}</p>
+                            <p>{{showDetails?.date_creation|date:'dd MMMM yy'}}</p>
                         </div>
                     </div>
                 </form>
@@ -245,7 +245,7 @@
                                                 [(value)]="paiement.date">
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{paiement.date | date:mediumDate}}
+                                            {{paiement.date | date:'dd MMMM yy'}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -344,7 +344,7 @@
                                         {{rowData.type}}
                                     </td>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td>
                                         {{rowData.nom}}
@@ -424,7 +424,7 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
@@ -517,7 +517,7 @@
                             <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                                 <tr>
                                     <td>
-                                        {{rowData.date | date:'mediumDate'}}
+                                        {{rowData.date | date:'dd MMMM yy'}}
                                     </td>
                                     <td *ngIf="rowData.nom && rowData.nom!='Téléverser le fichier s\'il vous plaît'">
                                         {{rowData.nom}}
@@ -588,7 +588,7 @@
                                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                             </td>
                             <td>
-                                {{email.date_creation|date:'mediumDate'}}
+                                {{email.date_creation|date:'dd MMMM yy'}}
                             </td>
                             <td>
                                 {{email.objet}}
@@ -783,7 +783,7 @@
                                 {{rowData.type}}
                             </td>
                             <td>
-                                {{rowData.date | date:'mediumDate'}}
+                                {{rowData.date | date:'dd MMMM yy'}}
                             </td>
                             <td>
                                 {{rowData.nom}}
@@ -1024,7 +1024,7 @@
                         </td>
 
                         <td>
-                            {{prospect.date_creation | date :'mediumDate' }}
+                            {{prospect.date_creation | date :'dd MMMM yy' }}
                         </td>
                         <td>
                             {{ prospect.customid }}
@@ -1108,7 +1108,7 @@
             <p>Nom & Prénom: {{ selectedProspect?.user_id?.firstname | titlecase }} {{
                 selectedProspect?.user_id?.lastname |
                 uppercase }}</p>
-            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'mediumDate' }}</p>
+            <p>Date de naissance: {{ selectedProspect?.date_naissance | date:'dd MMMM yy' }}</p>
             <p>Nationalité: {{ selectedProspect?.user_id?.nationnalite }}</p>
             <p>Pays de résidence: {{ selectedProspect?.user_id?.pays_adresse }}</p>
             <p>Adresse électronique: {{ selectedProspect?.user_id?.email_perso }}</p>
@@ -1143,8 +1143,8 @@
             <p>Adresse électronique commerciale: {{infoCommercial?.user_id?.email_perso}}</p>
 
             <h5>Démarches </h5>
-            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'mediumDate'}}</p>
-            <p>Date de contact: {{ selectedProspect?.contact_date| date :'mediumDate' }}</p>
+            <p>Date d’inscription: {{ selectedProspect?.date_creation | date :'dd MMMM yy'}}</p>
+            <p>Date de contact: {{ selectedProspect?.contact_date| date :'dd MMMM yy' }}</p>
             <p>Phase de la candidature: {{ selectedProspect?.phase_candidature }}</p>
             <p>Montant payé: {{ selectedProspect?.statut_payement }}</p>
             <p>Visa : {{ selectedProspect?.avancement_visa }}</p>
