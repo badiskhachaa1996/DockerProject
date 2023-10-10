@@ -19,6 +19,7 @@ export class FormationAdmissionComponent implements OnInit {
   seeAction = true
   formations: FormationAdmission[] = []
   rentres:RentreeAdmission[] = [];
+  rentresList:[] = [];
   formationtoShow:FormationAdmission;
   selectedFormation: FormationAdmission;
   rentreeAdmissionList :any;
@@ -43,15 +44,15 @@ export class FormationAdmissionComponent implements OnInit {
     ]
   bacList =
     [
-      { label: "Bac +2", value: "Bac +2" },
-      { label: "Bac +3", value: "Bac +3" },
-      { label: "Bac +4", value: "Bac +4" },
-      { label: "Bac +5", value: "Bac +5" }
+      { label: "BAC +2", value: "BAC +2" },
+      { label: "BAC +3", value: "BAC +3" },
+      { label: "BAC +4", value: "BAC +4" },
+      { label: "BAC +5", value: "BAC +5" }
     ]
 
   bacFilter =
     [
-      { label: "Tous les bac", value: null },
+      { label: "Tous les BAC", value: null },
       ...this.bacList
     ]
 
@@ -59,9 +60,7 @@ export class FormationAdmissionComponent implements OnInit {
     [
       { label: "Année 1", value: "Année 1" },
       { label: "Année 2", value: "Année 2" },
-      { label: "Année 3", value: "Année 3" },
-      { label: "Année 4", value: "Année 4" },
-      { label: "Année 5", value: "Année 5" },
+
     ]
 
   anneeFilter =
@@ -171,8 +170,6 @@ export class FormationAdmissionComponent implements OnInit {
   }
 
   onDeleteRentreeScolaire(id: number): void {
-    console.log("i am here")
-    console.log(id)
     this.formationtoShow.rentree.splice(id, 1);
     this.FAService.FAupdate(this.formationtoShow)
       .subscribe((response) => {

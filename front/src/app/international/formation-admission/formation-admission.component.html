@@ -412,12 +412,12 @@
                             dt1.filterGlobal($event.target.value, 'contains')
                         " placeholder="Rechercher par formation, code ou certificateur" style="width: 350px;" />
                     <p-dropdown filter="true" [options]="bacFilter"
-                        (onChange)="dt1.filter($event.value, 'bac','contains')" emptyFilterMessage="Pas de bac trouvé"
+                        (onChange)="dt1.filter($event.value, 'bac','contains')" emptyFilterMessage="Pas de BAC trouvé"
                         filterPlaceholder="Bac" [style]="{'margin':'5px'}"></p-dropdown>
-                    <p-dropdown filter="true" [options]="anneeFilter"
+                    <!--<p-dropdown filter="true" [options]="anneeFilter"
                         (onChange)="dt1.filter($event.value, 'annee','contains')"
                         emptyFilterMessage="Pas d'année trouvé" filterPlaceholder="Année"
-                        [style]="{'margin':'5px'}"></p-dropdown>
+                        [style]="{'margin':'5px'}"></p-dropdown>-->
                         <p-dropdown filter="true" [options]="Filtercompuse"
                         (onChange)="dt1.filter($event.value, 'campus','contains')" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Campus" [style]="{'margin':'5px'}"></p-dropdown>
@@ -429,19 +429,21 @@
                         <th pSortableColumn="nom">
                             Formation<p-sortIcon field="nom"> </p-sortIcon>
                         </th>
-
-                        <th pSortableColumn="niveau">
-                            Niveau<p-sortIcon field="niveau"> </p-sortIcon>
-                        </th>
-                        <th pSortableColumn="bac">
-                            BAC <p-sortIcon field="bac"> </p-sortIcon>
-                        </th>
                         <th pSortableColumn="code">
                             Code<p-sortIcon field="code"> </p-sortIcon>
                         </th>
-                        <th pSortableColumn="annee">
-                            Année<p-sortIcon field="annee"> </p-sortIcon>
+                        <th pSortableColumn="filiere">
+                            Filiere<p-sortIcon field="filiere"> </p-sortIcon>
                         </th>
+                        <th pSortableColumn="niveau">
+                            Niveau<p-sortIcon field="niveau"> </p-sortIcon>
+                        </th>
+                        
+                        <th pSortableColumn="bac">
+                            BAC <p-sortIcon field="bac"> </p-sortIcon>
+                        </th>
+                        
+                        
                         <th pSortableColumn="duree">
                             Durée<p-sortIcon field="duree"> </p-sortIcon>
                         </th>
@@ -487,17 +489,19 @@
                             {{ formation.nom }}
                         </td>
                         <td>
+                            {{ formation.code }}
+                        </td>
+                        <td>
+                            {{ formation.filiere }}
+                        </td>
+                        <td>
                             {{ formation.niveau }}
                         </td>
                         <td>
                             {{ formation.bac }}
                         </td>
-                        <td>
-                            {{ formation.code }}
-                        </td>
-                        <td>
-                            {{ formation.annee }}
-                        </td>
+                       
+                       
                         <td>
                             {{ formation.duree }}
                         </td>
@@ -535,6 +539,7 @@
                                 <ng-template pTemplate="header">
                     <tr>
                         <th>RNCP</th>
+                        <th >Année </th>
                         <th>Code France Compétences</th>
                         <th>Validité</th>
                         <th>Organisme référent</th>
@@ -545,6 +550,9 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ formation.rncp }}</td>
+                        <td>
+                            {{ formation.annee }}
+                        </td>
                         <td>
                             {{
                             formation.code_france_competence
