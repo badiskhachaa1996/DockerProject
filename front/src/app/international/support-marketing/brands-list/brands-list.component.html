@@ -176,7 +176,7 @@
                             <a *ngIf="!sm.haveFile" (click)="onAddFile(sm)">Uploader le document</a>
                         </td>
                         <td>
-                            {{sm.date_creation | date:'mediumDate'}}
+                            {{sm.date_creation | date:'dd MMMM yy'}}
                         </td>
                         <td *ngIf="isAdminPartenaire">
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-cog mr-2" 

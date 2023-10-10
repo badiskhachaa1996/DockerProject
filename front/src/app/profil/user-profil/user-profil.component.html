@@ -141,13 +141,13 @@
 
                         <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
                             <strong>Date de naissance:</strong>
-                            {{ InfoUser.date_naissance | date : "mediumDate" }}
+                            {{ InfoUser.date_naissance | date : "dd MMMM yy" }}
                         </div>
 
                     <!--<div class="col-12 md:col-6" *ngIf="dataCollab && dataCollab.date_naissance">
                             <strong>Date de naissance: </strong>
                             <a *ngIf="!updateDNC" (click)="updateDNC= true">{{ dataCollab.date_naissance | date :
-                                "mediumDate" }}</a>
+                                "dd MMMM yy" }}</a>
                             <p-calendar *ngIf="updateDNC" dateFormat="d/mm/yy" [(ngModel)]="dataCollab.date_naissance"
                                 (onSelect)="onUpdateDNC()"></p-calendar>
                         </div> -->

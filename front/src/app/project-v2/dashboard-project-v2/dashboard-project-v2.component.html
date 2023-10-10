@@ -143,7 +143,7 @@
         </div>
     </div>
     <div class="grid col-9" >
-        <div class="col-3"><strong>Date de création:<span style="color:#878787" > {{taskSelected?.ticketId?.date_ajout | date:'mediumDate'}}</span></strong> </div>
+        <div class="col-3"><strong>Date de création:<span style="color:#878787" > {{taskSelected?.ticketId?.date_ajout | date:'dd MMMM yy'}}</span></strong> </div>
         <div class="col-3"><strong>Etat:<span style="color:#878787" > {{taskSelected?.etat}}</span></strong> </div>
         <div class="col-3"><strong>Avancement:<span style="color:#878787" > {{taskSelected?.avancement}} %</span></strong> </div>
         <p-table [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"[paginator]="true" rowExpandMode="single"
@@ -162,7 +162,7 @@
             <tr>
                 <td style="border-right: 1px solid gray;">{{ticket?.customid}}</td>
                 <td style="border-right: 1px solid gray;">{{ticket?.agent_id?.firstname}} {{ticket?.agent_id?.lastname}}</td>
-                <td style="border-right: 1px solid gray;">{{ticket?.date_ajout | date:'mediumDate'}}</td>
+                <td style="border-right: 1px solid gray;">{{ticket?.date_ajout | date:'dd MMMM yy'}}</td>
                 <td style="border-right:  1px solid gray;">{{taskSelected?.etat}}</td>
                 <td style="border-right: 1px solid gray;">
                       {{getDelaiTraitrement(rir)}}

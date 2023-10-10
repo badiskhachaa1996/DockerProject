@@ -45,7 +45,7 @@
             </p>
             <p class="col-12"><strong>Formation choisie</strong> : {{PROSPECT.formation}}</p>
             <p class="col-12"><strong>Ecole</strong> : {{PROSPECT.type_form |uppercase}}</p>
-            <p class="col-12"><strong>Date de naissance</strong> : {{PROSPECT.date_naissance |date:'mediumDate'}}</p>
+            <p class="col-12"><strong>Date de naissance</strong> : {{PROSPECT.date_naissance |date:'dd MMMM yy'}}</p>
         </div>
         <div class="col-4" style="text-align: right;">
             <img [src]="imageToShow" alt="Profil" style="border-radius: 50px;max-width: 160px;max-height: 160px;" />
@@ -84,7 +84,7 @@
                         {{ doc.type }}
                     </td>
                     <td>
-                        {{ doc.date | date:'mediumDate' }}
+                        {{ doc.date | date:'dd MMMM yy' }}
                     </td>
                     <td>
                         <a (click)="downloadAdminFile(doc.path)">Télécharger le document</a>

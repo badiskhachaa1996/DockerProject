@@ -88,7 +88,7 @@
             <ng-template pTemplate="body" let-actualite>
                 <tr>
                     <td>
-                        {{actualite?.date_creation | date :'mediumDate' }}
+                        {{actualite?.date_creation | date :'dd MMMM yy' }}
                     </td>
                     <td>
                         {{actualite?.titre}}

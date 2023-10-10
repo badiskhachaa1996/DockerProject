@@ -234,7 +234,7 @@
                     {{ extern.created_by?.firstname | titlecase}} {{ extern.created_by?.lastname|uppercase}}
                 </td>
                 <td>
-                    {{extern.created_at | date:"mediumDate"}}
+                    {{extern.created_at | date:"dd MMMM yy"}}
                 </td>
                 <td>
                     <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"

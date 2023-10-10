@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ReadMoreComponent implements OnInit {
   @Input() string?: String;
   seeAllString = false
+  @Input() size_max?:number = 20
   constructor() { }
   onClick() {
     this.seeAllString = !this.seeAllString

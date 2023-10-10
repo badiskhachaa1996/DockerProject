@@ -125,410 +125,358 @@
             </div>
         </form>
     </div>
-    <div class="grid col-12 card" *ngIf="matchingToSee.length!=0">
-        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" title="Fermer"
-            (click)="matchingToSee = []" aria-hidden="true"> </i>
-        <h4 style="width: 100%;text-align: center;">Tableau Matching de {{userMatchingData.firstname | titlecase}} {{userMatchingData.lastname | uppercase}}
-        </h4>
-        <p-table #dt3 [value]="matchingToSee" dataKey="_id" [rows]="8" [rowHover]="true"
-            styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true" rowExpandMode="single"
-            [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
-            responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th style="width: 3rem" scope="col">Offre</th>
-                    <th style="width: 3rem" scope="col">Type Matching</th>
-                    <th style="width: 3rem" scope="col">Matcher</th>
-                    <th style="width: 3rem" scope="col">Statut Matching</th>
-                    <th style="width: 3rem" scope="col">Taux Matching</th>
-                    <th style="width: 3rem" scope="col">Entretien</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-match>
-                <tr>
-                    <td>
-                        {{match.offre_id.custom_id}}
-                    </td>
-                    <td>
-                        {{match.type_matching}}
-                    </td>
-                    <td>
-                        {{match.matcher_id.firstname | titlecase}} {{match.matcher_id.lastname | uppercase}}
-                    </td>
-                    <td>
-                        {{match.statut}}
-                    </td>
-                    <td>
-                        {{match.taux}}
-                    </td>
-                    <td *ngIf="rdvDic[match.offre_id._id]">
-                        <i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
-                            style="color: green;cursor: pointer;" pTooltip="Voir l'entretien"
-                            (click)="seeRDV(rdvDic[match.offre_id._id])"></i>
-                    </td>
-                    <td *ngIf="!rdvDic[match.offre_id._id]">
-                        <i class="pi false-icon pi-times-circle" tooltipPosition="bottom" style="color: red;"
-                            pTooltip="Pas d'entretien"></i>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
-    <p-dataView #dv [value]="['']" layout="grid">
-        <ng-template pTemplate="listItem">
-            <p-table #dt1 [value]="cvs" dataKey="_id" [rows]="8" [rowHover]="true" styleClass="p-datatable-gridlines"
-                style="width: 100%;" [paginator]="true" rowExpandMode="single"
-                [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
-                responsiveLayout="scroll">
-                <ng-template pTemplate="caption">
-
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
+    <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
+        <p-tabPanel header="CV">
+            <p-dataView #dv [value]="['']" layout="grid">
+                <ng-template pTemplate="header">
+                    <!--<span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                        <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
-                            [(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
-                        </p-multiSelect>
-                        <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true"
-                            placeholder="Choisissez un lieu" [(ngModel)]="filter_value.locations"
-                            (onChange)="updateFilter()"></p-multiSelect>
-
-                        <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()"
-                            [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range"
-                            autoWidth="false" [style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
-
-                        <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList"
-                            [(ngModel)]="filter_value.competences" (onChange)="updateFilter()">
-                        </p-multiSelect>
-                        <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes"
-                            [(ngModel)]="filter_value.niveau" (onChange)="updateFilter()">
-                        </p-multiSelect>
-                        <div class="flex justify-content-between flex-column sm:flex-row">
-                            <button class="mr-3" style="height: 37px;" pButton label="Ajouter"
-                                (click)="cvToAdd=true"></button>
-                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>-->
+                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
+                        <div *ngIf="filter_value.profil.length!=0">
+                            <label style="text-align: center;" class="mr-2">Profil</label>
+                            <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" autoWidth="false"
+                                [style]="{'width':'27em'}" [(ngModel)]="filter_value.profil"
+                                (onChange)="updateFilter()">
+                            </p-multiSelect>
+                        </div>
+                        <div *ngIf="filter_value.locations.length!=0">
+                            <label style="text-align: center;" class="mr-2">Lieu</label>
+                            <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+                                autoWidth="false" [style]="{'width':'27em'}" filter="true"
+                                placeholder="Choisissez un lieu" [(ngModel)]="filter_value.locations"
+                                (onChange)="updateFilter()"></p-multiSelect>
+                        </div>
+                        <div *ngIf="filter_value.disponibilite">
+                            <label style="text-align: center;" class="mr-2">Disponibilité</label>
+                            <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" autoWidth="false"
+                                [style]="{'width':'27em'}" (onSelect)="updateFilter()"
+                                [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range"
+                                autoWidth="false" [style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+                        </div>
+                        <div *ngIf="filter_value.competences.length!=0">
+                            <label style="text-align: center;" class="mr-2">Compétences</label>
+                            <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList"
+                                autoWidth="false" [style]="{'width':'27em'}" [(ngModel)]="filter_value.competences"
+                                (onChange)="updateFilter()">
+                            </p-multiSelect>
+                        </div>
+                        <div *ngIf="filter_value.niveau.length!=0">
+                            <label style="text-align: center;" class="mr-2">Niveau d'étude</label>
+                            <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes"
+                                autoWidth="false" [style]="{'width':'27em'}" [(ngModel)]="filter_value.niveau"
+                                (onChange)="updateFilter()">
+                            </p-multiSelect>
                         </div>
                     </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem" scope="col"></th>
-
-                        <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
-                                field="user_id.civilite"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.firstname" style="text-align: center;">Prénom <p-sortIcon
-                                field="user_id.firstname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.lastname" style="text-align: center;">Nom <p-sortIcon
-                                field="user_id.lastname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
-                                field="type"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="profil_id.libelle" style="text-align: center;">Profil <p-sortIcon
-                                field="profil_id.libelle"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="winner_id.firstname" style="text-align: center;">Winner <p-sortIcon
-                                field="winne.firstnamer"></p-sortIcon>
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-cv let-expanded="expanded">
-                    <tr>
-                        <td>
-                            <button type="button" pButton pRipple [pRowToggler]="cv"
-                                class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.civilite}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.firstname | titlecase}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.lastname | uppercase}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.user_id?.type}}
-                        </td>
-
-                        <td style="min-width: 12rem;">
-                            {{cv.competences[0]?.profile_id?.libelle}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
-                        </td>
-                        <td class="text-center" style="min-width: 8rem;">
-                            <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
-                                (click)="onInitUpdate(cv)" tooltipPosition="bottom"></i>
-                            <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer" (click)="deleteCV(cv)"
-                                tooltipPosition="bottom"></i>
-                            <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV" (click)="goToCV(cv)"
-                                tooltipPosition="bottom"></i>
-                            <ng-container *ngIf="dicMatching[cv?._id]; then badge1 else no_badge1">
-
-                            </ng-container>
-                            <ng-template #badge1>
-                                <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
-                                    [value]="dicMatching[cv?._id]" tooltipPosition="bottom"
-                                    (click)="onLoadMatching(cv?.user_id)"></i>
-                            </ng-template>
-                            <ng-template #no_badge1>
-                                <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
-                                    value="0" tooltipPosition="bottom" (click)="onLoadMatching(cv?.user_id?._id)"></i>
-                            </ng-template>
-
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="5">Aucun cv trouvé.</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="rowexpansion" let-cv>
-                    <tr>
-                        <td colspan="9">
-                            <h5>Détails</h5>
-                            <br>
-                            <p-table responsiveLayout="scroll" [value]="['']">
-                                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Email école
-                        </th>
-                        <th>
-                            Email personnel
-                        </th>
-                        <th>
-                            Téléphone
-                        </th>
-                        <th>
-                            Adresse
-                        </th>
-                        <th>
-                            CV Externe
-                        </th>
-                        <th>
-                            Nationalité
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body">
-                    <tr>
-                        <td>
-                            {{cv?.user_id?.email}}
-                        </td>
-                        <td>
-                            {{cv?.user_id?.email_perso}}
-                        </td>
-                        <td>
-                            {{cv?.user_id?.phone}}
-                        </td>
-                        <td>
-                            {{cv?.user_id?.numero_adresse}} {{cv?.user_id?.rue_adresse}} {{cv?.user_id?.postal_adresse}}
-                            {{cv?.user_id?.ville_adresse}} {{cv?.user_id?.pays_adresse}}
-                        </td>
-                        <td>
-                            <a (click)="downloadOldCV(cv)">Téléchargé l'ancien CV</a>
-                        </td>
-                        <td>
-                            {{cv?.user_id?.nationnalite}}
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            <br>
-            <p-table responsiveLayout="scroll" [value]="['']">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Source
-                        </th>
-                        <th>
-                            Crée par
-                        </th>
-                        <th>
-                            Crée le
-                        </th>
-                        <th>
-                            Modifié le
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body">
-                    <tr>
-                        <td style="min-width: 12rem;">
-                            {{cv.source}}
-                        </td>
-                        <td>
-                            {{cv?.createur_id?.firstname | titlecase}} {{cv?.createur_id?.lastname | uppercase}}
-                        </td>
-                        <td>
-                            {{cv?.date_creation | date:'mediumDate'}}
-                        </td>
-                        <td>
-                            {{cv?.last_modified_at | date:'mediumDate'}}
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            </td>
-            </tr>
-        </ng-template>
-        </p-table>
-        </ng-template>
-        <ng-template pTemplate="gridItem">
-            <div class="p-datatable-header ng-star-inserted" style="width: 100%;">
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <span class="p-input-icon-left mb-2">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" #filter
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                            class="w-full" />
-                    </span>
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <button class="mr-3" style="height: 37px;" pButton label="Ajouter"
-                            (click)="cvToAdd=true"></button>
+                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
                         <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+                            (click)="showForm = true"></button>
                     </div>
+                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+                        <button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
+                            (click)="displayFilter=true"></button>
+                        <button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
+                            (click)="clearFilter()"></button>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="listItem">
 
-                </div>
-            </div>
-            <div class="col-12 md:col-4" *ngFor="let cv of cvs">
-                <div class="cv-card">
-                    <div class="cv-card-main">
-                        <div class="cv-card-information">
+                    <p-table #dt1 [value]="cvs" dataKey="_id" [rows]="8" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem" scope="col"></th>
 
-                            <div *ngIf="dicPicture && dicPicture[cv?._id]?.url;then cv_image else default_image">
+                                <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
+                                        field="user_id.civilite"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="user_id.firstname" style="text-align: center;">Prénom <p-sortIcon
+                                        field="user_id.firstname"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="user_id.lastname" style="text-align: center;">Nom <p-sortIcon
+                                        field="user_id.lastname"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
+                                        field="type"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="profil_id.libelle" style="text-align: center;">Profil <p-sortIcon
+                                        field="profil_id.libelle"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="winner_id.firstname" style="text-align: center;">Winner <p-sortIcon
+                                        field="winne.firstnamer"></p-sortIcon>
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-cv let-expanded="expanded">
+                            <tr>
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="cv"
+                                        class="p-button-text p-button-rounded p-button-plain"
+                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+
+                                <td style="min-width: 12rem;">
+                                    {{cv.user_id?.civilite}}
+                                </td>
+
+                                <td style="min-width: 12rem;">
+                                    {{cv.user_id?.firstname | titlecase}}
+                                </td>
+
+                                <td style="min-width: 12rem;">
+                                    {{cv.user_id?.lastname | uppercase}}
+                                </td>
+
+                                <td style="min-width: 12rem;">
+                                    {{cv.user_id?.type}}
+                                </td>
+
+                                <td style="min-width: 12rem;">
+                                    {{cv.competences[0]?.profile_id?.libelle}}
+                                </td>
+                                <td style="min-width: 12rem;">
+                                    {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
+                                </td>
+                                <td class="text-center" style="min-width: 8rem;">
+                                    <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
+                                        (click)="onInitUpdate(cv)" tooltipPosition="bottom"></i>
+                                    <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
+                                        (click)="deleteCV(cv)" tooltipPosition="bottom"></i>
+                                    <i class="pi pi-file mr-2" style="color: #a16126;" pTooltip="CV"
+                                        (click)="goToCV(cv)" tooltipPosition="bottom"></i>
+                                    <ng-container *ngIf="dicMatching[cv?._id]; then badge1 else no_badge1">
+
+                                    </ng-container>
+                                    <ng-template #badge1>
+                                        <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
+                                            [value]="dicMatching[cv?._id]" tooltipPosition="bottom"
+                                            (click)="onLoadMatching(cv?.user_id)"></i>
+                                    </ng-template>
+                                    <ng-template #no_badge1>
+                                        <i class="pi pi-users mr-2" pTooltip="Matching" pBadge style="font-size: 1.5rem"
+                                            value="0" tooltipPosition="bottom"
+                                            (click)="onLoadMatching(cv?.user_id)"></i>
+                                    </ng-template>
+
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="8">Aucun cv trouvé.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-cv>
+                            <tr>
+                                <td colspan="9">
+                                    <h5>Détails</h5>
+                                    <br>
+                                    <p-table responsiveLayout="scroll" [value]="['']">
+                                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>
+                                    Email école
+                                </th>
+                                <th>
+                                    Email personnel
+                                </th>
+                                <th>
+                                    Téléphone
+                                </th>
+                                <th>
+                                    Adresse
+                                </th>
+                                <th>
+                                    CV Externe
+                                </th>
+                                <th>
+                                    Nationalité
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                                <td>
+                                    {{cv?.user_id?.email}}
+                                </td>
+                                <td>
+                                    {{cv?.user_id?.email_perso}}
+                                </td>
+                                <td>
+                                    {{cv?.user_id?.phone}}
+                                </td>
+                                <td>
+                                    {{cv?.user_id?.numero_adresse}} {{cv?.user_id?.rue_adresse}}
+                                    {{cv?.user_id?.postal_adresse}}
+                                    {{cv?.user_id?.ville_adresse}} {{cv?.user_id?.pays_adresse}}
+                                </td>
+                                <td>
+                                    <a (click)="downloadOldCV(cv)">Téléchargé l'ancien CV</a>
+                                </td>
+                                <td>
+                                    {{cv?.user_id?.nationnalite}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <br>
+                    <p-table responsiveLayout="scroll" [value]="['']">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>
+                                    Source
+                                </th>
+                                <th>
+                                    Crée par
+                                </th>
+                                <th>
+                                    Crée le
+                                </th>
+                                <th>
+                                    Modifié le
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                                <td style="min-width: 12rem;">
+                                    {{cv.source}}
+                                </td>
+                                <td>
+                                    {{cv?.createur_id?.firstname | titlecase}} {{cv?.createur_id?.lastname | uppercase}}
+                                </td>
+                                <td>
+                                    {{cv?.date_creation | date:'dd MMMM yy'}}
+                                </td>
+                                <td>
+                                    {{cv?.last_modified_at | date:'dd MMMM yy'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    </td>
+                    </tr>
+                </ng-template>
+                </p-table>
+                </ng-template>
+                <ng-template pTemplate="gridItem">
+                    <div class="col-12 md:col-4" *ngFor="let cv of cvs">
+                        <div class="cv-card">
+                            <div class="cv-card-main">
+                                <div class="cv-card-information">
+
+                                    <div
+                                        *ngIf="dicPicture && dicPicture[cv?._id]?.url;then cv_image else default_image">
+                                    </div>
+                                    <ng-template #cv_image>
+                                        <div class="img-card"
+                                            style="background-image: url('{{dicPicture[cv._id].url}}');">
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #default_image>
+                                        <div *ngIf="cv?.user_id?.civilite == 'Madame'; then is_madame else other"></div>
+                                        <ng-template #is_madame>
+                                            <div class="img-card"
+                                                style="background-image: url('../../../assets/images/imatch/female.png');">
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #other>
+                                            <div class="img-card"
+                                                style="background-image: url('../../../assets/images/imatch/male.png');">
+                                            </div>
+                                        </ng-template>
+                                    </ng-template>
+                                    <div class="cv-card-details">
+                                        <div class="card-main-info">
+                                            <div class="cv-card-title">
+                                                <h4 style="font-weight: bold; width: 100%">
+                                                    {{cv?.competences[0]?.profile_id?.libelle || "Profil"}}
+                                                </h4>
+                                                <h5 style="width: 100%">{{cv?.user_id?.firstname | titlecase}}
+                                                    {{cv?.user_id?.lastname | uppercase}}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="card-main-data">
+                                            <p *ngIf='cv.mobilite_lieu'>📍 {{cv?.mobilite_lieu}}</p>
+                                            <p *ngIf='!cv.mobilite_lieu'>📍 France</p>
+                                            <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo">
+                                            </p>
+                                            <ng-template #not_dispo>
+                                                <p>⏱ {{cv?.disponibilite | date : 'MMMM YYYY'}}</p>
+                                            </ng-template>
+                                            <ng-template #dispo_immediat>
+                                                <p>⏱ Disponible Immédiatement</p>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <ng-template #cv_image>
-                                <div class="img-card" style="background-image: url('{{dicPicture[cv._id].url}}');">
-                                </div>
-                            </ng-template>
-                            <ng-template #default_image>
-                                <div *ngIf="cv?.user_id?.civilite == 'Madame'; then is_madame else other"></div>
-                                <ng-template #is_madame>
-                                    <div class="img-card"
-                                        style="background-image: url('../../../assets/images/imatch/female.png');">
-                                    </div>
+                            <div class="cv-card-footer">
+                                <a class="cv" (click)="goToCV(cv)">CV</a>
+                                <ng-container *ngIf="dicMatching[cv?._id]; then badge else no_badge">
+
+                                </ng-container>
+                                <ng-template #badge>
+                                    <a class="meeting" pBadge [value]="dicMatching[cv?._id]"
+                                        (click)="onLoadMatching(cv?.user_id)">Matching</a>
                                 </ng-template>
-                                <ng-template #other>
-                                    <div class="img-card"
-                                        style="background-image: url('../../../assets/images/imatch/male.png');">
-                                    </div>
+                                <ng-template #no_badge>
+                                    <a class="meeting" pBadge value="0"
+                                        (click)="onLoadMatching(cv?.user_id)">Matching</a>
                                 </ng-template>
-                            </ng-template>
-                            <div class="cv-card-details">
-                                <div class="card-main-info">
-                                    <div class="cv-card-title">
-                                        <h4 style="font-weight: bold; width: 100%">
-                                            {{cv?.competences[0]?.profile_id?.libelle || "Profil"}}
-                                        </h4>
-                                        <h5 style="width: 100%">{{cv?.user_id?.firstname | titlecase}}
-                                            {{cv?.user_id?.lastname | uppercase}}</h5>
-                                    </div>
-                                </div>
-                                <div class="card-main-data">
-                                    <p *ngIf='cv.mobilite_lieu'>📍 {{cv?.mobilite_lieu}}</p>
-                                    <p *ngIf='!cv.mobilite_lieu'>📍 France</p>
-                                    <p *ngIf="disponible(cv.disponibilite); then dispo_immediat else not_dispo"></p>
-                                    <ng-template #not_dispo>
-                                        <p>⏱ {{cv?.disponibilite | date : 'MMMM YYYY'}}</p>
-                                    </ng-template>
-                                    <ng-template #dispo_immediat>
-                                        <p>⏱ Disponible Immédiatement</p>
-                                    </ng-template>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="cv-card-footer">
-                        <a class="cv" (click)="goToCV(cv)">CV</a>
-                        <ng-container *ngIf="dicMatching[cv?._id]; then badge else no_badge">
 
-                        </ng-container>
-                        <ng-template #badge>
-                            <a class="meeting" pBadge [value]="dicMatching[cv?._id]"
-                                (click)="onLoadMatching(cv?.user_id?._id)">Matching</a>
-                        </ng-template>
-                        <ng-template #no_badge>
-                            <a class="meeting" pBadge value="0" (click)="onLoadMatching(cv?.user_id?._id)">Matching</a>
-                        </ng-template>
                     </div>
-                </div>
+                </ng-template>
+            </p-dataView>
+        </p-tabPanel>
+        <p-tabPanel style="width: 100%;" header="{{match.lastname}} {{match.firstname}}"
+            *ngFor="let match of matchingList" [closable]="true">
+            <app-matching-viewer [USER_ID]="match._id"></app-matching-viewer>
+        </p-tabPanel>
+    </p-tabView>
 
-            </div>
-        </ng-template>
-    </p-dataView>
 </div>
 
-<p-dialog header="Informations du Rendez-Vous" [(visible)]="displayRDV" modal="modal" showEffect="fade"
-    [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
-    <p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
-        styleClass="p-datatable-gridlines">
-        <ng-template pTemplate="header">
-            <tr>
-                <th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
-                    Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
-                </th>
-                <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                    Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
-                </th>
-                <th pSortableColumn="company_email" scope="col" style="text-align: center;">
-                    Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
-                </th>
-                <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
-                    Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
-                </th>
-                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                    Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
-                </th>
-                <th pSortableColumn="description" scope="col" style="text-align: center;">
-                    Description <p-sortIcon field="description"></p-sortIcon>
-                </th>
-                <th pSortableColumn="statut" scope="col" style="text-align: center;">
-                    Statut <p-sortIcon field="statut"></p-sortIcon>
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rdv>
-            <tr>
-                <td>
-                    {{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
-                </td>
-                <td>
-                    {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
-                </td>
-                <td>
-                    {{rdv?.company_email}}
-                </td>
-                <td>
-                    {{rdv?.meeting_start_date | date:'mediumDate'}} {{rdv?.meeting_start_date | date:'shortTime'}}
-                </td>
-                <td>
-                    {{rdv?.date_creation | date:'mediumDate'}}
-                </td>
-                <td>
-                    {{rdv?.description}}
-                </td>
-                <td>
-                    {{rdv?.statut}}
-                </td>
-            </tr>
+<p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
+    <h3>Filtres</h3>
+    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
+        <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" [(ngModel)]="filter_value.profil"
+            appendTo="body" class="mb-2" autoWidth="false" [style]="{'width':'27em'}" (onChange)="updateFilter()">
+        </p-multiSelect>
+        <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}" filter="true" class="mb-2"
+            appendTo="body" autoWidth="false" [style]="{'width':'27em'}" placeholder="Choisissez un lieu"
+            [(ngModel)]="filter_value.locations" (onChange)="updateFilter()"></p-multiSelect>
 
-        </ng-template>
-    </p-table>
-</p-dialog>
+        <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()" appendTo="body"
+            [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
+            class="mb-2" [style]="{'width':'27em'}" placeholder="Date de début"></p-calendar>
+
+        <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList" autoWidth="false"
+            appendTo="body" class="mb-2" [style]="{'width':'27em'}" [(ngModel)]="filter_value.competences"
+            (onChange)="updateFilter()">
+        </p-multiSelect>
+        <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes" [(ngModel)]="filter_value.niveau"
+            appendTo="body" class="mb-2" autoWidth="false" [style]="{'width':'27em'}" (onChange)="updateFilter()">
+        </p-multiSelect>
+        <input pInputText type="text" #filter (input)="updateFilter()" style="width: 27em;" class="mb-2"
+            [(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
+        <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
+			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
+        <button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
+            (click)="displayFilter = false"></button>
+        <button pButton label="Vider le filtre" class="p-button" icon="pi pi-filter-slash"
+            (click)="clearFilter()"></button>
+    </div>
+</p-sidebar>

@@ -10,6 +10,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { Matching } from 'src/app/models/Matching';
+import jwt_decode from "jwt-decode";
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
@@ -29,11 +30,15 @@ export class NewCvthequeInterneComponent implements OnInit {
   defaultcvs = this.cvs
   dicPicture = {}
   dicMatching = {}
+
+  matchingList = []
+  token;
   constructor(private AuthService: AuthService, private CVService: CvService, private MatchingService: MatchingService, private router: Router,
     private ToastService: MessageService, private RDVService: MeetingTeamsService, private skillsService: SkillsService) { }
 
   ngOnInit(): void {
     this.updateAllCVs()
+    this.token = jwt_decode(localStorage.getItem("token"));
     //Récupération de la liste des profiles
     this.skillsService.getProfiles()
       .then((response: Profile[]) => {
@@ -178,33 +183,30 @@ export class NewCvthequeInterneComponent implements OnInit {
     })
 
   }
-  userMatchingData: User
+
+  activeIndex1 = 0
+  handleClose(e) {
+    this.matchingList.splice(e.index - 1)
+    this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
+
+    })
+  }
   onLoadMatching(user_id: User) {
-    /*this.MatchingService.getAllByCVUSERID(user_id).subscribe(matchings => {
-      this.matchingToSee = matchings
-    })*/
-    this.userMatchingData = user_id
-    this.MatchingService.generateMatchingV1USERID(user_id._id).subscribe(r => {
-      this.matchingToSee = r
+    let ids = []
+    this.matchingList.forEach(u => {
+      ids.push(u._id)
     })
-    this.RDVService.getAllByUserID(user_id._id).subscribe(rdvs => {
-      console.log(rdvs)
-      rdvs.forEach(rd => {
-        if (rd.offre_id)
-          this.rdvDic[rd.offre_id._id] = rd
+    if (!ids.includes(user_id)) {
+      this.activeIndex1 = this.matchingList.length
+      this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
+        this.activeIndex1 = this.matchingList.length
       })
-    })
+    } else {
+      this.activeIndex1 = ids.indexOf(user_id) + 1
+    }
 
   }
-  rdvDic = {}
-  matchingToSee: Matching[] = []
-  displayRDV = false
-  dataRDV = null
-  seeRDV(rdv: MeetingTeams) {
-    console.log(rdv)
-    this.displayRDV = true
-    this.dataRDV = rdv
-  }
+
 
 
 
@@ -299,11 +301,15 @@ export class NewCvthequeInterneComponent implements OnInit {
     this.defaultcvs.forEach((val: CV) => {
       let r = true
       let competences_ids = []
+      let idsP = []
       val.competences.forEach(c => {
         competences_ids.push(c._id)
+        idsP.push(c.profile_id?._id)
       })
-      if (this.filter_value.profil.length != 0 && (val.competences.length != 0 || this.filter_value.profil != val.competences[0].profile_id?._id))
-        r = false
+      if (this.filter_value.profil)
+        console.log(typeof this.filter_value.profil[0], typeof idsP[0], idsP[0] == this.filter_value.profil[0], this.filter_value.profil.includes(idsP[0]))
+      if (this.filter_value.profil.length != 0 && (val.competences.length != 0 || !this.filter_value.profil.includes(idsP[0])))
+        r = false;
       else if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || !this.filter_value.locations.includes(val.mobilite_lieu)))
         r = false
       else if (this.filter_value.disponibilite && new Date(this.filter_value.disponibilite).getTime() > new Date(val.disponibilite).getTime())
@@ -313,16 +319,28 @@ export class NewCvthequeInterneComponent implements OnInit {
           r = false
       }
       else if (this.filter_value.search) {
-        if (!val.a_propos.includes(this.filter_value.search) &&
-          !val.centre_interets.includes(this.filter_value.search) &&
-          !val.user_id?.lastname.includes(this.filter_value.search) &&
-          !val.user_id?.firstname.includes(this.filter_value.search) &&
-          !val.mobilite_lieu.includes(this.filter_value.search))
+        if (!val?.a_propos?.includes(this.filter_value.search) &&
+          !val?.centre_interets?.includes(this.filter_value.search) &&
+          !val?.user_id?.lastname?.includes(this.filter_value.search) &&
+          !val?.user_id?.firstname?.includes(this.filter_value.search) &&
+          !val?.mobilite_lieu?.includes(this.filter_value.search))
           r = false
       }
       if (r)
         this.cvs.push(val)
     })
   }
-
+  displayFilter = false
+  clearFilter() {
+    this.filter_value = {
+      profil: [],
+      locations: [],
+      disponibilite: '',
+      competences: [],
+      niveau: [],
+      winner: '',
+      search: ''
+    }
+    this.cvs = this.defaultcvs
+  }
 }

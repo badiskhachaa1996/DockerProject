@@ -205,7 +205,7 @@
                             {{ticket.customid}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
-                            {{ticket.date_ajout | date:'mediumDate'}}
+                            {{ticket.date_ajout | date:'dd MMMM yy'}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{ticket?.sujet_id?.service_id?.label}}
@@ -270,7 +270,7 @@
                         <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
                         <td>{{ticket.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
                         <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
-                        <td>{{ticket.date_limite |date:"mediumDate"}}</td>
+                        <td>{{ticket.date_limite |date:"dd MMMM yy"}}</td>
                         <td>
                             <app-read-more [string]="ticket.note_assignation"></app-read-more>
                         </td>
@@ -293,7 +293,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-message>
                 <tr>
-                    <td>{{message.date_ajout | date:"mediumDate"}}</td>
+                    <td>{{message.date_ajout | date:"dd MMMM yy"}}</td>
                     <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                     <td>{{message.description}}</td>
                 </tr>
@@ -418,7 +418,7 @@
                             {{ticket.customid}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
-                            {{ticket.date_ajout | date:'mediumDate'}}
+                            {{ticket.date_ajout | date:'dd MMMM yy'}}
                         </td>
                         <td [ngClass]="{'urgent-middle':ticket.priorite}">
                             {{ticket?.sujet_id?.service_id?.label}}
@@ -472,7 +472,7 @@
                         <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
                         <td>{{ticket.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
                         <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
-                        <td>{{ticket.date_limite |date:"mediumDate"}}</td>
+                        <td>{{ticket.date_limite |date:"dd MMMM yy"}}</td>
                         <td> <app-read-more [string]="ticket.note_assignation"></app-read-more>
                         </td>
                     </tr>
@@ -519,7 +519,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-message>
                     <tr>
-                        <td>{{message.date_ajout | date:"mediumDate"}}</td>
+                        <td>{{message.date_ajout | date:"dd MMMM yy"}}</td>
                         <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                         <td>{{message.description}}</td>
                     </tr>

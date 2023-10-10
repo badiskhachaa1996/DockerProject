@@ -509,7 +509,7 @@
         <ng-template pTemplate="emptymessage">
             <tr>
                 <td>{{tache.description_task}}</td>
-                <td>{{tache.date_limite| date:'mediumDate'}}</td>
+                <td>{{tache.date_limite| date:'dd MMMM yy'}}</td>
                 <td>{{tache.number_of_hour}}</td>
 
             </tr>
@@ -685,7 +685,7 @@
                 {{project.titre}}
             </td>
             <td>
-                {{project.created_date | date:'mediumDate'}}
+                {{project.created_date | date:'dd MMMM yy'}}
             </td>
 
             <td>
@@ -742,8 +742,8 @@
     <ng-template pTemplate="emptymessage">
         <tr>
             <td>{{ticket.description}}</td>
-            <td>{{ticket.debut| date:'mediumDate'}}</td>
-            <td>{{ticket.fin| date:'mediumDate'}}</td>
+            <td>{{ticket.debut| date:'dd MMMM yy'}}</td>
+            <td>{{ticket.fin| date:'dd MMMM yy'}}</td>
 
         </tr>
 

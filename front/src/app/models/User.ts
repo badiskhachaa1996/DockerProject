@@ -1,4 +1,5 @@
 import { Annonce } from "./Annonce";
+import { Matching } from "./Matching";
 import { Service } from "./Service";
 import { Ticket } from "./Ticket";
 
@@ -53,7 +54,8 @@ export class User {
             note?: string
         }[],
         public savedTicket?: Ticket[],
-        public savedAnnonces?: Annonce[]
+        public savedAnnonces?: Annonce[],
+        public savedMatching?: Matching[],
     ) { }
 
 

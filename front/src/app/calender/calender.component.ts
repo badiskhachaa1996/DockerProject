@@ -1502,12 +1502,6 @@ console.log(formValue);
     this.displayPointeuse = true
     console.log(this.displayPointeuse)
   }
-
-  onConvertText(description: string) {
-    if (description.length > 500)
-      description = description.substring(0, 500) + "..."
-    return description
-  }
   seeDescriptionActu = false
   seeActu: ActualiteRH
   seeMore(act: ActualiteRH) {
