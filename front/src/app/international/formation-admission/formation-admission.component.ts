@@ -62,11 +62,26 @@ export class FormationAdmissionComponent implements OnInit {
       { label: "Année 2", value: "Année 2" },
 
     ]
-
+    filiereList = [
+      { value: "Informatique", label: "Informatique" },
+      { value: "Commerce", label: "Commerce" },
+      { value: "Communication", label: "Communication" },
+      { value: "Comptabilité", label: "Comptabilité" },
+      { value: "Ressources Humaines", label: "Ressources Humaines" },
+      { value: "Bâtiment BIM", label: "Bâtiment BIM" },
+      { value: "Programme anglais", label: "Programme anglais" },
+      { value: "Logistique", label: "Logistique" },
+      { value: "Hôtellerie", label: "Hôtellerie" },
+      { value: "Médical", label: "Médical" },
+      { value: "Service aux particuliers", label: "Service aux particuliers" },
+      { value: "Petite enfance", label: "Petite enfance" },
+      
+    ]
+  
   anneeFilter =
     [
-      { label: "Toutes les années", value: null },
-      ...this.anneesList
+      { label: "Toutes les filieres", value: null },
+      ...this.filiereList
     ]
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
     private MessageService: MessageService, private CampusService: CampusService, private route: ActivatedRoute) { }
@@ -127,20 +142,7 @@ export class FormationAdmissionComponent implements OnInit {
     note: new FormControl(''),
   })
 
-  filiereList = [
-    { value: "Informatique", label: "Informatique" },
-    { value: "Commerce et Marketing", label: "Commerce et Marketing" },
-    { value: "Comptabilité Gestion et Finance", label: "Comptabilité Gestion et Finance" },
-    { value: "Ressources Humaines", label: "Ressources Humaines" },
-    { value: "BIM", label: "BIM" },
-    { value: "Programme anglais", label: "Programme anglais" },
-    { value: "Logistique", label: "Logistique" },
-    { value: "Hôtellerie", label: "Hôtellerie" },
-    { value: "Médical", label: "Médical" },
-    { value: "Service à la personne", label: "Service à la personne" },
-    { value: "Petite enfance", label: "Petite enfance" },
-  ]
-
+ 
   anneeList =
     [
       { label: "Année 1", value: "Anneé 1" },

@@ -88,13 +88,14 @@ console.log(this.sourceProducts);
     this.showd = true;
 
   }
-  addLinks() {
+  addLinks(classe:string) {
     if (this.formAddLinks.valid) {
 
       const newLink: Links = {
         user_id: this.userConnected._id,
         nom: this.formAddLinks.get('nom').value,
         lien: this.formAddLinks.get('lien').value,
+        classe:classe
       };
 
 

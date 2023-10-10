@@ -20,6 +20,29 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links1')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
             <div class="col-4">
                 <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links 2"
@@ -39,6 +62,29 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links2')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
             <div class="col-4">
                 <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links 3"
@@ -58,6 +104,29 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links3')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
             <div class="col-4">
                 <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links 4"
@@ -77,6 +146,29 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links4')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
             <div class="col-4">
                 <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links 5"
@@ -96,6 +188,29 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links5')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
             <div class="col-4">
                 <p-orderList [value]="sourceProducts" [listStyle]="{ 'max-height': '30rem' }" header="My Links 6"
@@ -115,32 +230,34 @@
                     </ng-template>
 
                 </p-orderList>
+                <div>
+                    <p-button (onClick)="showdialog()">ajouter </p-button>
+                    <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+        
+                        <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+        
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="nom">nom :</label>
+                                <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                    cols="40"></textarea>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label htmlFor="lien">lien :</label>
+                                <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                    rows="2" cols="40"></textarea>
+                            </div>
+                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                                [disabled]="formAddLinks.invalid"></button>
+                        </form>
+        
+                    </p-dialog>
+        
+                </div>
             </div>
+            
         </div>
 
-        <div>
-            <p-button (onClick)="showdialog()">ajouter </p-button>
-            <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
-
-                <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks()">
-
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="nom">nom :</label>
-                        <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
-                            cols="40"></textarea>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="lien">lien :</label>
-                        <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
-                            rows="2" cols="40"></textarea>
-                    </div>
-                    <button pButton pRipple type="submit" class="my-2" label="Envoyer"
-                        [disabled]="formAddLinks.invalid"></button>
-                </form>
-
-            </p-dialog>
-
-        </div>
+       
 
     </p-tabPanel>
     <p-tabPanel header="Global Links">
@@ -184,6 +301,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
             <div class="col-4">
             <p-orderList [value]="classe2" [listStyle]="{ 'max-height': '30rem' ,'width': '300px'}" header="Board">
@@ -208,6 +348,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
             <div class="col-4">
             <p-orderList [value]="classe3" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="Process">
@@ -232,6 +395,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
             <div class="col-4">
             <p-orderList [value]="classe4" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="IGM events">
@@ -256,6 +442,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
             <div class="col-4">
             <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="IGM links">
@@ -280,6 +489,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
         <div class="col-4">
             <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '30rem','width': '300px' }" header="IGM links">
@@ -304,6 +536,29 @@
                     </div>
                 </ng-template>
             </p-orderList>
+            <div>
+                <p-button (onClick)="showdialog()">ajouter </p-button>
+                <p-dialog header="My Links" [(visible)]="showd" [style]="{width: '50vw'}">
+    
+                    <form class="p-formgrid grid p-fluid" [formGroup]="formAddLinks" (ngSubmit)="addLinks('links')">
+    
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="nom">nom :</label>
+                            <textarea formControlName="nom" pInputTextarea placeholder="Donnez une nom " autoResize rows="2"
+                                cols="40"></textarea>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="lien">lien :</label>
+                            <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize
+                                rows="2" cols="40"></textarea>
+                        </div>
+                        <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            [disabled]="formAddLinks.invalid"></button>
+                    </form>
+    
+                </p-dialog>
+    
+            </div>
         </div>
         </div>
     </p-tabPanel>
