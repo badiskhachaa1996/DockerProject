@@ -134,7 +134,11 @@ const user_schema = new mongoose.Schema({
     },
     savedTicket: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "ticket" }], default: []
+    },
+    savedAnnonces: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: "annonce" }], default: []
     }
+
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

@@ -280,7 +280,7 @@
 
 	<!-- Affichage des offres -->
 
-	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1">
+	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
 		<p-tabPanel header="Offres">
 			<div class="col-12">
 				<div class="card">
@@ -290,14 +290,20 @@
 						layout="grid">
 						<ng-template pTemplate="header">
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-								<p-dropdown placeholder="Statut" [options]="statutFilter" *ngIf="filter_value.statut"
-									[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
-								</p-dropdown>
+								<div *ngIf="filter_value.statut">
+									<label style="text-align: center;" class="mr-2">Statut</label>
+									<p-dropdown placeholder="Statut" [options]="statutFilter"
+										[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
+									</p-dropdown>
+								</div>
+								<div>
+									<label style="text-align: center;" class="mr-2">Type de mission</label>
+									<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
+										*ngIf="filter_value.typeMission" [(ngModel)]="filter_value.typeMission"
+										(onChange)="updateFilter()">
+									</p-dropdown>
+								</div>
 
-								<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
-									*ngIf="filter_value.typeMission" [(ngModel)]="filter_value.typeMission"
-									(onChange)="updateFilter()">
-								</p-dropdown>
 
 								<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
 									*ngIf="filter_value.profil.length!=0" [(ngModel)]="filter_value.profil"
@@ -309,16 +315,6 @@
 									(onChange)="updateFilter()">
 								</p-dropdown>
 
-								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-									(click)="showForm = true"></button>
-							</div>
-							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-								<input pInputText type="text" #filter
-									(input)="dv.filter($event.target.value, 'contains')" *ngIf="filter_value.search"
-									[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
-									placeholder="Recherche" />
-
 								<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
 									filter="true" placeholder="Choisissez une ville"
 									*ngIf="filter_value.locations.length!=0" [(ngModel)]="filter_value.locations"
@@ -329,10 +325,15 @@
 									*ngIf="filter_value.date" (onBlur)="updateFilter()" inputId="range"
 									autoWidth="false" [style]="{'width':'100%'}"
 									placeholder="Date de début"></p-calendar>
+							</div>
+							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
 
-								<!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'100%'}"
-									filter="true" [(ngModel)]="filter_value.user" *ngIf="filter_value.user"
-									(onChange)="updateFilter()"></p-dropdown>-->
+
+								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+									(click)="showForm = true"></button>
+							</div>
+							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 								<button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
 									(click)="displayFilter=true"></button>
 								<button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
@@ -436,7 +437,7 @@
 									<tr>
 										<td colspan="9">
 											<div class="competences-block">
-												<h2>Compétences</h2>
+												<h4 class="mb-2">Compétences</h4>
 												<div class="grid gx-5 competence">
 													<div class="col-12 md:col-4">
 														<p>{{annonce.competences[0]?.libelle | titlecase}}</p>
@@ -449,7 +450,7 @@
 													</div>
 												</div>
 											</div>
-											<h2>Description</h2>
+											<h4>Description</h4>
 											<p>
 												{{annonce.missionDesc}}
 											</p>
@@ -466,7 +467,7 @@
 								</ng-template>
 								<ng-template pTemplate="body">
 									<tr>
-										<td>{{annonce.entreprise_id?.r_sociale}}</td>
+										<td>{{annonce.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
 										<td>{{annonce.workplaceType}}</td>
 										<td>{{annonce.date_creation | date:'mediumDate'}}</td>
 										<td>{{annonce.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
@@ -531,10 +532,15 @@
 										<!--<a class="offres-btns postuler" [badge]="dicOffreNB[annonce._id]"
 									(click)="showPostuler = true; annonceSelected = annonce"><i
 										class="pi pi-arrow-right"></i>Postuler</a>-->
-										<p-button label="Matching" icon="pi pi-users" badgeClass="p-badge-danger"
+										<p-button *ngIf="dicOffreNB[annonce._id]" label="Matching" icon="pi pi-users"
+											badgeClass="p-badge-danger"
 											(click)="annonceSelected = annonce; InitMatching(annonce)"
 											[style]="{'width':'100%'}" autoWidth="false"
 											[badge]="dicOffreNB[annonce._id]"></p-button>
+										<p-button *ngIf="!dicOffreNB[annonce._id]" label="Matching" icon="pi pi-users"
+											badgeClass="p-badge-danger"
+											(click)="annonceSelected = annonce; InitMatching(annonce)"
+											[style]="{'width':'100%'}" autoWidth="false" badge="0"></p-button>
 									</div>
 								</div>
 							</div>
@@ -635,7 +641,8 @@
 				</div>
 			</div>
 		</p-tabPanel>
-		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList">
+		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList"
+			[closable]="true">
 			<app-matching [ID]="annonce._id"></app-matching>
 		</p-tabPanel>
 	</p-tabView>

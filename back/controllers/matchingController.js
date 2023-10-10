@@ -35,6 +35,13 @@ app.get('/getByID/:id', (req, res) => {
     })
 })
 
+
+app.delete('/delete/:id', (req, res) => {
+    Matching.findByIdAndDelete(req.params.id).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(doc => {
+        res.send(doc)
+    })
+})
+
 app.get('/getAll', (req, res) => {
     Matching.find().populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(docs => {
         res.send(docs)
@@ -86,10 +93,14 @@ app.get('/generateMatchingV1/:offre_id', (req, res) => {
                             result = 0
                         r.push({ cv_id: cv, taux: result })
                     })
-                    Matching.find({ offre_id: req.params.offre_id, accepted: false }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(match => {
-                        let re = r.concat(match)
-                        res.send(re)
+                    Matching.find({ offre_id: req.params.offre_id, favoris: true }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(matchF => {
+                        let re = matchF.concat(r)
+                        Matching.find({ offre_id: req.params.offre_id, accepted: false, favoris: false }).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(match => {
+                            let re2 = re.concat(match)
+                            res.send(re2)
+                        })
                     })
+
 
                 })
             })
