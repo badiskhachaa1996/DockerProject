@@ -1,0 +1,117 @@
+<div class=" col-12 grid">
+    <div class="col-12 grid">
+        <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement" (submit)="onSubmitRemboussementForm()">
+            <h3 class="col-12" style="text-align: start;">1 - Etudiant</h3>
+            <div class="field col-12 md:col-6">
+                <label for="civilite">Civilité:</label>
+                <p-dropdown id="civilite" name="civilite" [(ngModel)]="civilitySelect" [options]="civilitySelect"
+                            placeholder="Select Civilité" required></p-dropdown>
+
+
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Nom</label>
+                <input pInputText type="text" formControlName="nom" placeholder="Ex: Smith"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Prénom</label>
+                <input pInputText type="text" formControlName="prenom" placeholder="Ex: John"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Date de naissance</label>
+                <input pInputText type="date" formControlName="date_naissance"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Nationalité</label>
+                <p-dropdown [options]="pays_residence" formControlName="pays_residence"
+                            placeholder="Choisissez un service"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label>Pays de naissance <span style="color: red"> * </span></label>
+                <p-dropdown [options]="pays_residence" formControlName="pays_naissance"
+                            placeholder="Choisissez un service"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-2">
+                <label>Indicatif</label>
+                <input pInputText type="text" formControlName="indicatif_phone" placeholder="Ex: +33"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Téléphone</label>
+                <input pInputText type="text" formControlName="phone" placeholder="Ex: +33 612341518"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Email</label>
+                <input pInputText type="text" formControlName="email" placeholder="Ex: example.email@mail.com"/>
+            </div>
+
+            <h3 class="col-12" style="text-align: start;">2 - Formation</h3>
+            <div class="field col-12 md:col-4">
+                <label>Année scolaire</label>
+                <input pInputText type="text" formControlName="annee_scolaire" placeholder="Ex: 2020-2021"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                    <label>Ecole</label>
+                    <p-dropdown [options]="ecoles" formControlName="ecole"
+                                placeholder="Choisissez un service"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Formation</label>
+                <p-dropdown [options]="formations" formControlName="formations"
+                            placeholder="Choisissez une formation"></p-dropdown>
+            </div>
+
+
+            <h3 class="col-12" style="text-align: start;">3 - Demande</h3>
+            <div class="field col-12 md:col-4">
+                <label>Motif de demande</label>
+                <input pInputText type="text" formControlName="motif_refus" placeholder=""/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Montant</label>
+                <input pInputText type="text" formControlName="montant" placeholder="Ex: 1000€"/>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label>Modalité de paiement</label>
+                <p-dropdown [options]="modePaiement" formControlName="modalite_paiement"
+                            placeholder="Choisissez une modalité de paiement"></p-dropdown>
+            </div>
+
+            <div class="col-12 p-fluid p-formgrid grid ">
+                <h3 class="col-12" style="text-align: start;">4 - Documents</h3>
+                <p-table [value]="documents" class="col-12">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="col-5">Documents</th>
+                            <th class="col-5">Statut</th>
+                            <th class="col-2">Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-document>
+                        <tr>
+                            <td class="col-5">{{ document.label }}</td>
+                            <td class="col-5 d-flex flex-column">
+                                <p *ngIf="formRembourssement.get(document.value).value !=='' ">
+                                    Document Chargé avec sucess !</p>
+                                <input  type="file" id="{{document.value}}" style="display: none"
+                                       (change)="onFileSelected($event)" accept=".pdf">
+                            </td>
+                            <td class="col-2">
+                                <button pButton type="button" icon="pi pi-upload"
+                                        class="p-button-rounded p-button-success p-mr-2 p-3 m-3"
+                                        (click)="onClickToAddFile($event, document.value)"></button>
+                                <button pButton type="button" icon="pi pi-trash"
+                                        class="p-button-rounded p-button-danger p-3 m-3"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="col-12  flex align-items-center justify-content-center ">
+                <br>
+                <button [style]="{ width:'15%' }" autoWidth="false" pButton label="Envoyer" type="submit"
+                        class="ml-auto"></button>
+            </div>
+        </form>
+    </div>
+</div>
