@@ -30,13 +30,7 @@
 						<input pInputText id="title" type="text" formControlName="entreprise_name"
 							placeholder="Nom de l'entreprise" />
 					</div>
-					<div class="field col-12 md:col-6"
-						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
-						<label htmlFor="ville">Ville</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville"
-							placeholder="Ville de l'entreprise" />
-					</div>
-					<div class="field col-12 md:col-6"
+					<div class="field col-12"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="email">Email</label>
 						<input pInputText id="email" type="email" formControlName="entreprise_mail"
@@ -85,36 +79,20 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<!--<div class="field col-12">
-						<label htmlFor="outils">Outils</label>
-						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils"
-							defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
-							formControlName="outils">
-							<ng-template let-value pTemplate="selectedItems">
-								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
-									*ngFor="let option of selectedMultiOutils">
-									<div>{{option.label}}</div>
-								</div>
-								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0"
-									class="country-placeholder">
-									Selectionner un ou plusieurs outils
-								</div>
-							</ng-template>
-							<ng-template let-outil pTemplate="item">
-								<div class="flex align-items-center country-item">
-									<div>{{outil.label}}</div>
-								</div>
-							</ng-template>
-						</p-multiSelect>
-					</div>-->
 					<div class="field col-12">
-						<p-selectButton [options]="locationOptions" optionLabel="label"
-							formControlName="workplaceType"></p-selectButton>
+						<p-dropdown [options]="locationOptions" formControlName="workplaceType" optionLabel="label"
+							[style]="{'width':'100%'}" autoWidth="false"
+							placeholder="Choisissez un statut"></p-dropdown>
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Description</label>
 						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
 							formControlName="missionDesc"></textarea>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="ville">Lieu</label>
+						<input pInputText id="title" type="text" formControlName="entreprise_ville"
+							placeholder="Lieu de l'offre" />
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
@@ -167,13 +145,7 @@
 						<input pInputText id="title" type="text" formControlName="entreprise_name"
 							placeholder="Nom de l'entreprise" />
 					</div>
-					<div class="field col-12 md:col-6"
-						*ngIf="!annonceSelected?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
-						<label htmlFor="ville">Ville</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville"
-							placeholder="Ville de l'entreprise" />
-					</div>
-					<div class="field col-12 md:col-6"
+					<div class="field col-12"
 						*ngIf="!annonceSelected?.is_interne  && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="email">Email</label>
 						<input pInputText id="email" type="email" formControlName="entreprise_mail"
@@ -245,13 +217,20 @@
 						</p-multiSelect>
 					</div>-->
 					<div class="field col-12">
-						<p-selectButton [options]="locationOptions" optionLabel="label"
-							formControlName="workplaceType"></p-selectButton>
+						<p-dropdown [options]="locationOptions" formControlName="workplaceType" optionLabel="label"
+							[style]="{'width':'100%'}" autoWidth="false"
+							placeholder="Choisissez un statut"></p-dropdown>
 					</div>
 					<div class="field col-12">
 						<label htmlFor="title">Description</label>
 						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
 							formControlName="missionDesc"></textarea>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="ville">Lieu</label>
+						<input pInputText id="title" type="text" formControlName="entreprise_ville"
+							placeholder="Lieu de l'offre" />
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
@@ -319,9 +298,8 @@
 
 								<div *ngIf="filter_value.locations.length!=0">
 									<label style="text-align: center;" class="mr-2">Lieu</label>
-									<p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
-										filter="true" placeholder="Choisissez une ville"
-										[(ngModel)]="filter_value.locations"
+									<p-multiSelect [options]="locations" filter="true"
+										placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
 										(onChange)="updateFilter()"></p-multiSelect>
 								</div>
 
@@ -329,19 +307,23 @@
 									<label style="text-align: center;" class="mr-2">Disponibilité</label>
 									<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
 										(onSelect)="updateFilter()" [(ngModel)]="filter_value.date"
-										(onBlur)="updateFilter()" inputId="range" autoWidth="false"
-										[style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+										(onBlur)="updateFilter()" inputId="range"
+										placeholder="Date de début"></p-calendar>
 								</div>
 
 							</div>
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
 								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+
 								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
 									(click)="showForm = true"></button>
 							</div>
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 								<button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
 									(click)="displayFilter=true"></button>
+								<input pInputText type="text" style="width: 27em;" class="mb-2"
+									[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
+									placeholder="Recherche" />
 								<button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
 									(click)="clearFilter()"></button>
 							</div>
