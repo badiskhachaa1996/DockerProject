@@ -118,7 +118,7 @@
         <div class="card col-12">
             <h2>Profil</h2>
             <div style="display: flex;">
-                <div style="text-align: center" class=" card col-4">
+                <div style="text-align: center" class=" card col-6">
                     <div class="p-fluid p-formgrid grid">
                         <figure>
 
@@ -128,6 +128,7 @@
 
                             <figcaption>
                                 {{userco.firstname}} {{userco.lastname}}<br>
+                               <!-- <span>{{ userco.mention }}</span><br>
                                 {{userco?.statut}}
                                 {{ userco?.service_id?.label }}
                                 <br />
@@ -135,29 +136,29 @@
                                     <strong style="color: red">{{
                                         userco.role
                                         }}</strong> </span><br />
-                                <span>{{ userco.mention }}</span>
+                                -->
                             </figcaption>
                         </figure>
                     </div>
                 </div>
 
-                <div class="card col-8">
+                <div class="card col-6">
                     <div class="p-fluid p-formgrid grid">
                         <div class="col-12 md:col-6">
-                            <strong>Email entreprise:</strong>
+                            <strong>Email entreprise:</strong><br>
                             {{ userco?.email ? userco.email : userco?.email }}
                         </div>
                         <div class="col-12 md:col-6">
-                            <strong>Email personnelle:</strong>
+                            <strong>Email personnelle:</strong><br>
                             {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
                         </div>
                         <div class="col-12 md:col-6" *ngIf="userco.phone">
-                            <strong>Téléphone:</strong> {{ userco?.indicatif }}
+                            <strong>Téléphone:</strong><br> {{ userco?.indicatif }}
                             {{ userco?.phone }}
                         </div>
 
                         <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">
-                            <strong>Adresse:</strong> {{ userco.numero_adresse }}
+                            <strong>Adresse:</strong><br> {{ userco.numero_adresse }}
                             {{ userco.rue_adresse }} {{ userco.postal_adresse }},
                             {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
                         </div>
@@ -286,20 +287,18 @@
                             {{ PreinscriptionData?.date_traitement | date }}
                         </div>
                     </div>
-                    <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
-                        <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
-                            (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Editer</p-button>
-                        
-                        <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
-                            (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
-                            aria-hidden="true"></i>
-                    </div>
+                    
                 </div>
 
-
-
             </div>
-
+            <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
+                <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
+                    (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Editer</p-button>
+                
+                <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
+                    (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
+                    aria-hidden="true"></i>
+            </div>
             <!-- Info user -->
 
 

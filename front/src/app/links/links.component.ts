@@ -152,6 +152,7 @@ console.log(this.sourceProducts);
       this.linkToUpdate.lien= this.formUpdateLinks.get('lien').value,
    
     this.linksService.putLinks(this.linkToUpdate);
+    this.showm=false
     this.formUpdateLinks.reset();
   }
   onDeleteLinks(id:string) {
