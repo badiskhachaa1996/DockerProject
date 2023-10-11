@@ -30,7 +30,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -80,7 +80,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -130,7 +130,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -180,7 +180,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -230,7 +230,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -280,7 +280,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -354,7 +354,7 @@
                                 <span class="font-bold">{{ links?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ links?.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button *ngIf="role" pButton pRipple icon="pi pi-pencil"
@@ -401,7 +401,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien}}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -450,7 +450,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -500,7 +500,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -550,7 +550,7 @@
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -599,7 +599,7 @@
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
