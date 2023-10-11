@@ -30,6 +30,12 @@ export class EcoleAdmissionComponent implements OnInit {
     { label: 'Marne', value: 'Marne' },
     { label: 'En ligne', value: 'En ligne' }
   ]
+  dropdownCampus= [
+    { label: 'Paris', value: 'Paris' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Marne', value: 'Marne' },
+    { label: 'En ligne', value: 'En ligne' }
+  ]
   campusFilter = [
     { label: 'Tous les campus', value: null },
     ...this.campusList
@@ -64,6 +70,12 @@ export class EcoleAdmissionComponent implements OnInit {
     this.selectedEcole = rowData
     this.updateForm.patchValue({ ...rowData })
   }
+  onAddRentreeScolaire() {
+  
+    
+    this.selectedEcole.campusinfo.push({ campus: "", adresse: "", UAI: "" })
+
+  }
 
   onUpdate() {
     this.FAService.EAupdate({ ...this.updateForm.value }).subscribe(data => {
@@ -88,8 +100,31 @@ export class EcoleAdmissionComponent implements OnInit {
 
   addForm = false
 
+  
+  
   initCreate() {
     this.addForm = true
+  }
+  createFormRA: FormGroup = new FormGroup({
+    campus: new FormControl(''),
+    annee: new FormControl(''),
+    UAI: new FormControl(''),
+  })
+  onCreateRA() {
+    
+    this.selectedEcole.campusinfo.push(this.createFormRA.value)
+    if(this.createFormRA.value.campus.length > 3){
+    this.selectedEcole.campus.push(this.createFormRA.value.campus)}
+  this.FAService.EAupdate(this.selectedEcole).subscribe(data => {
+    console.log(data)
+  })
+    
+  }
+  onDeleteRentreeScolaire(id: number): void {
+    console.log("*********************");
+    this.selectedEcole.campusinfo.splice(id, 1);
+    this.FAService.EAupdate(this.selectedEcole);
+      
   }
 
   onCreate() {

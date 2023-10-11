@@ -14,7 +14,7 @@
                     <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize rows="2"
                         cols="40"></textarea>
                 </div>
-                <button *ngIf="role" pButton pRipple type="submit" class="my-2" label="Modifier"
+                <button *ngIf="role" [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Modifier"
                     [disabled]="formUpdateLinks.invalid"></button>
             </form>
         </p-dialog>
@@ -30,7 +30,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -61,8 +61,10 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            
+                            <button [style]="{ width:'15%' }"pButton pRipple type="submit" class="my-2 btn btn-sm mx-auto" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
+                            
                         </form>
 
                     </p-dialog>
@@ -80,7 +82,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -111,7 +113,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -130,7 +132,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -161,7 +163,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -180,7 +182,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -211,7 +213,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -230,7 +232,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -261,7 +263,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -280,7 +282,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien }}</a>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -311,7 +313,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -339,7 +341,7 @@
                     <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien " autoResize rows="2"
                         cols="40"></textarea>
                 </div>
-                <button *ngIf="role" pButton pRipple type="submit" class="my-2" label="Modifier"
+                <button *ngIf="role" [style]="{ width:'15%' }"pButton pRipple type="submit" class="my-2" label="Modifier"
                     [disabled]="formUpdateLinks.invalid"></button>
             </form>
         </p-dialog>
@@ -354,7 +356,7 @@
                                 <span class="font-bold">{{ links?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ links?.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button *ngIf="role" pButton pRipple icon="pi pi-pencil"
@@ -384,7 +386,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -401,7 +403,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien}}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -432,7 +434,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -450,7 +452,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -482,7 +484,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -500,7 +502,7 @@
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -532,7 +534,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -550,7 +552,7 @@
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -582,7 +584,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
@@ -599,7 +601,7 @@
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <span>{{ product.lien }}</span>
+                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -630,7 +632,7 @@
                                 <textarea formControlName="lien" pInputTextarea placeholder="Donnez une lien "
                                     autoResize rows="2" cols="40"></textarea>
                             </div>
-                            <button pButton pRipple type="submit" class="my-2" label="Envoyer"
+                            <button [style]="{ width:'15%' }" pButton pRipple type="submit" class="my-2" label="Ajouter"
                                 [disabled]="formAddLinks.invalid"></button>
                         </form>
 
