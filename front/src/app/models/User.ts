@@ -56,6 +56,7 @@ export class User {
         public savedTicket?: Ticket[],
         public savedAnnonces?: Annonce[],
         public savedMatching?: Matching[],
+        public last_connection?: Date
     ) { }
 
 

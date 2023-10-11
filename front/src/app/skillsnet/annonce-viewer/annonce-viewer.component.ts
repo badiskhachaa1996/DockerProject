@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Annonce } from 'src/app/models/Annonce';
 import { User } from 'src/app/models/User';
@@ -13,17 +13,19 @@ import { TuteurService } from 'src/app/services/tuteur.service';
 import { Profile } from 'src/app/models/Profile';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
 import { Competence } from 'src/app/models/Competence';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { Matching } from 'src/app/models/Matching';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
+
 @Component({
-  selector: 'app-annonces',
-  templateUrl: './annonces.component.html',
-  styleUrls: ['./annonces.component.scss']
+  selector: 'app-annonce-viewer',
+  templateUrl: './annonce-viewer.component.html',
+  styleUrls: ['./annonce-viewer.component.scss']
 })
-export class AnnoncesComponent implements OnInit {
+export class AnnonceViewerComponent implements OnInit {
+  @Input() ENTREPRISE_ID
   activeIndex1 = 1
   annonces: Annonce[] = [];
   annoncesFiltered: Annonce[] = [];
@@ -106,20 +108,20 @@ export class AnnoncesComponent implements OnInit {
     private entrepriseService: EntrepriseService, private messageService: MessageService,
     private formBuilder: FormBuilder, private userService: AuthService,
     private annonceService: AnnonceService, private router: Router, private CvService: CvService,
-    private MatchingService: MatchingService) { }
+    private MatchingService: MatchingService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     //Decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
     this.canAddOrEdit = this.token.role == "Admin"
-
+    if (!this.ENTREPRISE_ID)
+      this.ENTREPRISE_ID = this.route.snapshot.paramMap.get('entreprise_id');
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      console.log(user.savedAnnonces)
       if (user.savedAnnonces)
         this.matchingList = user.savedAnnonces
       if (!this.canAddOrEdit)
         this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
-      this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
+      this.isEntreprise = true
     })
 
 
@@ -180,7 +182,7 @@ export class AnnoncesComponent implements OnInit {
     );
 
     //Recuperation de la liste des annonces
-    this.annonceService.getAnnonces()
+    this.annonceService.getAnnoncesByEntrepriseID(this.ENTREPRISE_ID)
       .then((response: Annonce[]) => {
         this.annonces = response;
         this.annoncesFiltered = response

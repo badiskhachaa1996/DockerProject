@@ -32,7 +32,19 @@ export class AnnonceService {
   getAnnonces() {
     const url = `${this.apiUrl}get-annonces`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise<Annonce[]>((resolve, reject) => {
+      this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { console.error(error); reject(error); }
+      );
+    });
+  }
+
+  //Methode de recuperation de la liste des annonces
+  getAnnoncesByEntrepriseID(entreprise_id) {
+    const url = `${this.apiUrl}get-annonces-by-entreprise-id/` + entreprise_id;
+
+    return new Promise<Annonce[]>((resolve, reject) => {
       this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => { resolve(response); },
         (error) => { console.error(error); reject(error); }

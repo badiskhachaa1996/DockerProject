@@ -35,23 +35,11 @@ app.post("/create", (req, res, next) => {
 
     let userData = req.body.newUser;
     let user = new User({
-        civilite: userData.civilite,
-        firstname: userData.firstname,
-        lastname: userData.lastname,
-        indicatif: userData.indicatif,
-        phone: userData.phone,
+        ...userData,
         email: userData.email_perso,
-        email_perso: userData.email_perso,
         /*password: bcrypt.hashSync(data.password, 8),*/
-        role: userData.role,
+        role: 'user',
         type: "Tuteur",
-        entreprise: userData.entreprise,
-        pays_adresse: userData.pays_adresse,
-        ville_adresse: userData.ville_adresse,
-        rue_adresse: userData.rue_adresse,
-        numero_adresse: userData.numero_adresse,
-        postal_adresse: userData.postal_adresse,
-        nationalite: userData.nationalite,
         date_creation: new Date()
     });
 
@@ -60,7 +48,7 @@ app.post("/create", (req, res, next) => {
             tuteur.user_id = userCreated._id;
             tuteur.save()
                 .then((tuteurSaved) => {
-                    res.status(201).json({ success: "Tuteur ajouté dans la BD!" })
+                    res.status(201).json({ tuteur: tuteurSaved, user: userCreated })
                 })
                 .catch((error) => {
                     res.status(400).json({ msg: "Impossible d'ajouter ce tuteur ", error })

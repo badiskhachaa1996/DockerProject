@@ -32,7 +32,8 @@ export class Entreprise {
         public commercial_id?: string,
         public rcs?: string,
         public site_web?: string,
-        public email?: string
+        public email?: string,
+        public secteur_activite?: string
     ) { }
 
 } 
