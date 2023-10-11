@@ -377,43 +377,43 @@
 						layout="grid">
 						<ng-template pTemplate="header">
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-								<div *ngIf="filter_value.statut" style="width: 25em;">
+								<div *ngIf="filter_value.statut">
 									<label style="text-align: center;" class="mr-2">Statut</label>
-									<p-dropdown placeholder="Statut" [options]="statutFilter" style="width: 25em;" autoWidth="false"
+									<p-dropdown placeholder="Statut" [options]="statutFilter"
 										[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
 									</p-dropdown>
 								</div>
-								<div *ngIf="filter_value.typeMission" style="width: 25em;">
+								<div *ngIf="filter_value.typeMission">
 									<label style="text-align: center;" class="mr-2">Type de mission</label>
-									<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter" style="width: 25em;" autoWidth="false"
-										[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()"> 
+									<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
+										[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 									</p-dropdown>
 								</div>
 
-								<div *ngIf="filter_value.profil.length!=0" style="width: 25em;">
+								<div *ngIf="filter_value.profil.length!=0">
 									<label style="text-align: center;" class="mr-2">Profil</label>
-									<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" style="width: 25em;" autoWidth="false"
-										[(ngModel)]="filter_value.profil" (onChange)="updateFilter()"> 
+									<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
+										[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
 									</p-multiSelect>
 								</div>
 
-								<div *ngIf="filter_value.entreprise" style="width: 25em;">
+								<div *ngIf="filter_value.entreprise">
 									<label style="text-align: center;" class="mr-2">Auteur</label>
-									<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" style="width: 25em;" autoWidth="false"
-										[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()"> 
+									<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
+										[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
 									</p-dropdown>
 								</div>
 
-								<div *ngIf="filter_value.locations.length!=0" style="width: 25em;">
+								<div *ngIf="filter_value.locations.length!=0">
 									<label style="text-align: center;" class="mr-2">Lieu</label>
-									<p-multiSelect [options]="locations" filter="true" style="width: 25em;" autoWidth="false"
+									<p-multiSelect [options]="locations" filter="true"
 										placeholder="Choisissez une ville" [(ngModel)]="filter_value.locations"
 										(onChange)="updateFilter()"></p-multiSelect>
 								</div>
 
-								<div *ngIf="filter_value.date" style="width: 25em;">
+								<div *ngIf="filter_value.date">
 									<label style="text-align: center;" class="mr-2">Disponibilité</label>
-									<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" style="width: 25em;" autoWidth="false"
+									<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
 										(onSelect)="updateFilter()" [(ngModel)]="filter_value.date"
 										(onBlur)="updateFilter()" inputId="range"
 										placeholder="Date de début"></p-calendar>
@@ -423,16 +423,16 @@
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
 								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 
-								<!--<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-									(click)="showForm = true"></button>-->
+								<button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+									(click)="showForm = true"></button>
 							</div>
 							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-								<button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+								<button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
 									(click)="displayFilter=true"></button>
 								<input pInputText type="text" style="width: 27em;" class="mb-2"
 									[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
 									placeholder="Recherche" />
-								<button pButton label="Vider" class="p-button" icon="pi pi-filter-slash"
+								<button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
 									(click)="clearFilter()"></button>
 							</div>
 						</ng-template>

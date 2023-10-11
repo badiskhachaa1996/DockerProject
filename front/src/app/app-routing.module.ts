@@ -283,6 +283,8 @@ import { ImatchEntrepriseComponent } from './skillsnet/i-match/imatch-entreprise
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
+import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
+import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 const routes: Routes = [
     {
         path: '',
@@ -1287,7 +1289,8 @@ const routes: Routes = [
             { path: 'mes-disponibilites', component: CalendrierEtudiantComponent, canActivate: [AuthGuardService], },
             { path: 'suivi-candidat', component: SuiviCandidatComponent, canActivate: [AuthGuardService], },
             { path: 'entreprise-dashboard', component: EntrepriseDashboardComponent, canActivate: [AuthGuardService], },
-
+            { path: 'imatch/entreprise', component: NewEntreprisesComponent, canActivate: [AuthGuardService], },
+            { path: 'imatch/annonce/entreprise/:entreprise_id', component: AnnonceViewerComponent, canActivate: [AuthGuardService], },
             // Generateur de Doc 
             { path: 'genschools', component: GenschoolComponent, canActivate: [AuthGuardService] },
             { path: 'genCampus', component: GencampusComponent, canActivate: [AuthGuardService] },

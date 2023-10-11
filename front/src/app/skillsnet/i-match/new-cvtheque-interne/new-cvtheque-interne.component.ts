@@ -188,7 +188,7 @@ export class NewCvthequeInterneComponent implements OnInit {
 
   }
 
-  activeIndex1 = 0
+  activeIndex1 = 1
   handleClose(e) {
     this.matchingList.splice(e.index - 1)
     this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
@@ -203,10 +203,10 @@ export class NewCvthequeInterneComponent implements OnInit {
     if (!ids.includes(cv._id)) {
       this.matchingList.push(cv)
       this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
-        this.activeIndex1 = this.matchingList.length
+        this.activeIndex1 = this.matchingList.length + 1
       })
     } else {
-      this.activeIndex1 = ids.indexOf(cv._id) + 1
+      this.activeIndex1 = ids.indexOf(cv._id) + 2
     }
 
   }

@@ -45,18 +45,21 @@
                                 <input pInputText id="raison_sociale" type="text" formControlName="r_sociale"
                                     placeholder="Nom de l'entreprise " />
                             </div>
-                            <!-- <div class="field col-12 md:col-6">
-                                        <label For="forme_juridique">Forme juridique </label>
-                                        <input pInputText id="forme_juridique" type="text" formControlName="fm_juridique" placeholder="Forme juridique" />
-                                    </div> -->
-
-                            <div class="field col-12">
+                            <div class="field col-12 md:col-6">
+                                <label For="commercial">Secteur d'activité</label>
+                                <p-dropdown [options]="secteurs" filter="true"
+                                    placeholder="Choisissez le secteur d'activité" [showClear]="true"
+                                    formControlName="secteur_activite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
                                 <label For="activite">Activité de l'entreprise <span style="color: red;"> *
                                     </span></label>
                                 <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"
                                     formControlName="activite"
                                     placeholder="Description des activités de l'entreprise"></textarea>
                             </div>
+
+
 
                             <!-- <div class="field col-12 md:col-4">
                                         <label For="type_entreprise">Type d'entreprise </label>
@@ -67,27 +70,24 @@
                                 <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
                                     formControlName="categorie"></p-multiSelect>
                             </div>
-                            <div class="field col-12 md:col-6">
-                                <label For="isInterne">Entreprise Interne ? <span style="color: red;"> * </span></label>
-                                <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
-                            </div>
 
-                            <div class="field col-12 md:col-8">
+
+                            <div class="field col-12 md:col-6">
                                 <label For="crc">Caisse de retraite complémentaire</label>
                                 <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
                             </div>
 
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-6">
                                 <label For="nb_salarie">Nombre de salariés</label>
                                 <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
                             </div>
 
-                            <div class="field col-12 md:col-8">
+                            <div class="field col-12 md:col-6">
                                 <label For="convention">Convention collective</label>
                                 <input pInputText id="convention" type="text" formControlName="convention"
                                     placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
                             </div>
-                            <div class="field col-12 md:col-4">
+                            <div class="field col-12 md:col-6">
                                 <label For="idcc">Code IDCC</label>
                                 <input pInputText type="number" formControlName="idcc" placeholder="0000" />
                             </div>

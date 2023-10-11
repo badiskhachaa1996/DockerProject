@@ -851,6 +851,19 @@ app.get("/getById/:id", (req, res, next) => {
     });
 });
 
+app.delete("/delete/:id", (req, res, next) => {
+  Entreprise.findByIdAndRemove(req.params.id)
+    .then((entrepriseFormDb) => {
+      //Tuteur.remove({ entreprise_id: entrepriseFormDb._id })
+      res.status(200).send(entrepriseFormDb);
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .json({ error: "Impossible de recuperer cette entreprise" });
+    });
+});
+
 //Recuperation d'une entreprise selon un id en populate
 app.get("/getByIdPopulate/:id", (req, res, next) => {
   Entreprise.findOne({ _id: req.params.id })
@@ -994,16 +1007,16 @@ app.get("/nettoyageCA", (req, res) => {
             ca.entreprise_id.toString() == catocheck.entreprise_id.toString() &&
             ca.fin_contrat.toString() == catocheck.fin_contrat.toString()
           )
-          //console.log(ca.debut_contrat == catocheck.debut_contrat, ca.fin_contrat == catocheck.fin_contrat, ca.alternant_id == catocheck.alternant_id, ca.entreprise_id == catocheck.entreprise_id)
-          if (
-            ca.debut_contrat.toString() == catocheck.debut_contrat.toString() &&
-            ca.fin_contrat.toString() == catocheck.fin_contrat.toString() &&
-            ca.alternant_id.toString() == catocheck.alternant_id.toString() &&
-            ca.entreprise_id.toString() == catocheck.entreprise_id.toString() &&
-            ca.ecole.toString() == catocheck.ecole.toString() &&
-            catocheck._id.toString() != ca._id.toString()
-          )
-            toDelete.push(catocheck._id.toString());
+            //console.log(ca.debut_contrat == catocheck.debut_contrat, ca.fin_contrat == catocheck.fin_contrat, ca.alternant_id == catocheck.alternant_id, ca.entreprise_id == catocheck.entreprise_id)
+            if (
+              ca.debut_contrat.toString() == catocheck.debut_contrat.toString() &&
+              ca.fin_contrat.toString() == catocheck.fin_contrat.toString() &&
+              ca.alternant_id.toString() == catocheck.alternant_id.toString() &&
+              ca.entreprise_id.toString() == catocheck.entreprise_id.toString() &&
+              ca.ecole.toString() == catocheck.ecole.toString() &&
+              catocheck._id.toString() != ca._id.toString()
+            )
+              toDelete.push(catocheck._id.toString());
         });
       }
     });
@@ -1411,7 +1424,7 @@ app.get("/getLogo/:id", (req, res) => {
       res.status(404).send({ error: "Image non défini" });
     }
   });
-  
+
 
 });
 
@@ -1419,15 +1432,15 @@ app.get('/getAllLogo', (req, res) => {
   let ids = fs.readdirSync("storage/entreprise/logo")
   let fileDic = {}
   ids.forEach(id => {
-      let filenames = fs.readdirSync("storage/entreprise/logo/" + id)
-      if (filenames)
-          fileDic[id] = {
-              file: fs.readFileSync("storage/entreprise/logo/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
-                  if (err) return console.error(err);
-              }),
-              extension: mime.contentType(path.extname("storage/entreprise/logo/" + id + "/" + filenames[0])),
-              url: ""
-          }
+    let filenames = fs.readdirSync("storage/entreprise/logo/" + id)
+    if (filenames)
+      fileDic[id] = {
+        file: fs.readFileSync("storage/entreprise/logo/" + id + "/" + filenames[0], { encoding: 'base64' }, (err) => {
+          if (err) return console.error(err);
+        }),
+        extension: mime.contentType(path.extname("storage/entreprise/logo/" + id + "/" + filenames[0])),
+        url: ""
+      }
   })
   res.status(200).send({ files: fileDic, ids })
 })

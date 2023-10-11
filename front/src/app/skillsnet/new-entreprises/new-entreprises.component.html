@@ -1,0 +1,418 @@
+<p-toast></p-toast>
+<div class="grid">
+    <!-- Formulaire de modification d'une entreprise -->
+    <div class="col-12" *ngIf="showFormUpdateEntreprise!=null">
+        <div class="card">
+            <h4 style="text-align: center;">Modifier une entreprise </h4>
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormUpdateEntreprise = null;" aria-hidden="true">
+            </i>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <br>
+            <div>
+                <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
+            </div>
+            <br>
+            <form [formGroup]="formUpdateEntreprise" (ngSubmit)="onUpdateEntreprise()">
+                <div *ngIf="ActiveIndex==0">
+                    <div style="color: black; font-weight: normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label for="raison_sociale"> Raison sociale <span style="color: red;"> * </span></label>
+                                <input pInputText id="raison_sociale" type="text" formControlName="r_sociale"
+                                    placeholder="Nom de l'entreprise " />
+                            </div>
+                            <!-- <div class="field col-12 md:col-6">
+                                <label For="forme_juridique">Forme juridique </label>
+                                <input pInputText id="forme_juridique" type="text" formControlName="fm_juridique" placeholder="Forme juridique" />
+                            </div> -->
+                            <div class="field col-12 md:col-6">
+                                <label For="commercial">Secteur d'activité</label>
+                                <p-dropdown [options]="secteurs" filter="true"
+                                    placeholder="Choisissez le secteur d'activité" [showClear]="true"
+                                    formControlName="secteur_activite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="activite">Activité de l'entreprise</label>
+                                <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"
+                                    formControlName="activite"
+                                    placeholder="Description des activités de l'entreprise"></textarea>
+                            </div>
+
+                            <!-- <div class="field col-12 md:col-4">
+                                <label For="type_entreprise">Type d'entreprise </label>
+                                <input pInputText id="type_entreprise" type="text" formControlName="type_ent" placeholder="Type d'entreprise" />
+                            </div> -->
+                            <div class="field col-12 md:col-6">
+                                <label For="categorie">Catégorie </label>
+                                <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
+                                    formControlName="categorie"></p-multiSelect>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="crc">Caisse de retraite complémentaire :</label>
+                                <input pInputText id="crc" type="text" formControlName="crc" placeholder="KLESIA" />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="nb_salarie">Nombre de salariés:</label>
+                                <input pInputText type="number" formControlName="nb_salarie" placeholder="100" />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="convention">Convention collective :</label>
+                                <input pInputText id="convention" type="text" formControlName="convention"
+                                    placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="idcc">Code IDCC:</label>
+                                <input pInputText type="number" formControlName="idcc" placeholder="0000" />
+                            </div>
+                            <div class="field col-4 md:col-4">
+                                <label For="indicatif_ent">Indicatif</label>
+                                <input pInputText type="number" formControlName="indicatif_ent" placeholder="+33" />
+                            </div>
+                            <div class="field col-8 md:col-8">
+                                <label For="phone_ent">Téléphone <small>(entreprise)</small></label>
+                                <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800" />
+                            </div>
+
+                            <!--Adresse du siège social-->
+                            <h3 class="field col-12">Adresse du siège social</h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ss">Adresse</label>
+                                <input pInputText id="adresse_ss" type="text" formControlName="adresse_ent"
+                                    placeholder="Numero et Nom de la rue" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ss">Code postal</label>
+                                <input pInputText id="postal_ss" type="text" formControlName="code_postale_ent"
+                                    placeholder="75001" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ss">Ville</label>
+                                <input pInputText id="ville_ss" type="text" formControlName="ville_ent"
+                                    placeholder="Paris" />
+                            </div>
+
+                            <!--Adresse d’exécution du contrat -->
+                            <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ec">Adresse</label>
+                                <input pInputText id="adresse_ec" type="text" formControlName="adresse_ec"
+                                    placeholder="15 Rue du Louvre" formControlName="adresse_ec" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ec">Code postal</label>
+                                <input pInputText id="postal_ec" type="text" formControlName="postal_ec"
+                                    placeholder="75001" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ec">Ville</label>
+                                <input pInputText id="ville_ec" type="text" formControlName="ville_ec"
+                                    placeholder="Paris" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="siret">SIRET</label>
+                                <input pInputText id="siret" maxlength=15 minlength=15 type="number"
+                                    formControlName="siret" placeholder="XXXX-XXXX-XXXX-XXX" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="ape_naf">Code NAF</label>
+                                <input pInputText id="ape_naf" type="text" formControlName="code_ape_naf"
+                                    placeholder="CODE NAF" />
+                            </div>
+
+                            <!-- <div class="field col-12 md:col-4">
+                                <label For="tva">Numéro TVA </label>
+                                <input pInputText id="tva" type="text" formControlName="num_tva" placeholder="Numéro TVA" />
+                            </div>   -->
+
+                            <!-- <div class="field col-12 md:col-6">
+                                <label For="lastname">Télécopie</label>
+                                <input pInputText id="telecopie" type="text" formControlName="telecopie" placeholder="Télécopie" />
+                            </div> -->
+
+                            <div class="field col-12 md:col-6">
+                                <label For="OPCO">OPCO</label>
+                                <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
+                            </div>
+                            <!-- <div class="field col-12 ">
+                                <label For="organisme_prevoyance">Organisme de prevoyance</label>
+                                <input pInputText id="organisme_prevoyance" type="text" formControlName="organisme_prevoyance" placeholder="Organisme de prevoyance"/>
+                            </div> -->
+                            <div class="field col-12 md:col-6">
+                                <label For="commercial">Commercial référent</label>
+                                <p-dropdown [options]="commercials" filter="true"
+                                    placeholder="Commercial auprès de l'entreprise" [showClear]="true"
+                                    formControlName="commercial"></p-dropdown>
+                            </div>
+
+                            <div class="field col-6">
+                                <button pButton type="button" label="Suivant" (click)="nextPage();"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="ActiveIndex==1">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label For="civilite">Civilité</label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite_rep"
+                                    optionDisabled="actif"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="lastname">Nom </label>
+                                <input pInputText id="lastname" type="text" formControlName="nom_rep"
+                                    placeholder="Nom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="firstname">Prénom </label>
+                                <input pInputText id="firstname" type="text" formControlName="prenom_rep"
+                                    placeholder="Prenom du dirigeant" />
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="email">Email du représentant </label>
+                                <input pInputText id="email" type="email" formControlName="email_rep"
+                                    placeholder="Email du dirigeant" />
+                            </div>
+                            <div class="field col-3 md:col-4">
+                                <label For="indicatif">Indicatif </label>
+                                <input pInputText id="indicatif" type="number" formControlName="indicatif_rep"
+                                    placeholder="+01" />
+                            </div>
+                            <div class="field col-9 md:col-8">
+                                <label For="phone">Téléphone </label>
+                                <input pInputText id="phone" type="tel" formControlName="phone_rep"
+                                    placeholder="0188880050" />
+                            </div>
+                            <div class="field col-6">
+                                <button pButton type="button" label="Précedent" style="float: left;"
+                                    (click)="previousPage()"></button>
+                            </div>
+                            <div class="field col-6">
+                                <button pButton type="submit" label="Terminer" style="float: right;"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12 card">
+
+        <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
+            <p-tabPanel header="Ajouter">
+                <app-add-entreprise></app-add-entreprise>
+            </p-tabPanel>
+            <p-tabPanel header="Entreprises">
+                <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret',]" [pageLinks]="5"
+                    [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
+                    responsiveLayout="scroll" [rows]="8" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text"
+                                    (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                    class="w-full" />
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem;"></th>
+                            <th pSortableColumn="r_sociale"> Raison sociale <p-sortIcon field="r_sociale">
+                                </p-sortIcon>
+                            </th>
+                            <th pSortableColumn="activite"> Secteur d'activité <p-sortIcon
+                                    field="activite"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="categorie"> Catégorie <p-sortIcon field="categorie"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="ville_ent">
+                                Ville <p-sortIcon field="ville_ent"></p-sortIcon>
+                            </th>
+                            <th>
+                                Denière connexion
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-entreprise let-expanded="expanded">
+                        <tr>
+                            <td>
+                                <button type="button" pButton pRipple [pRowToggler]="entreprise"
+                                    class="p-button-text p-button-rounded p-button-plain"
+                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            </td>
+                            <td style="min-width: 8rem;">{{ entreprise.r_sociale }}</td>
+                            <td style="min-width: 8rem;">{{ entreprise.secteur_activite }}</td>
+                            <td style="min-width: 8rem;">{{ entreprise.categorie }}</td>
+                            <td style="min-width: 8rem;">{{entreprise.ville_ent}}</td>
+                            <td style="min-width: 8rem;">{{dicEntLastConnection[entreprise._id]}}</td>
+                            <td>
+                                <i style="cursor: pointer" class="pi pi-pencil mr-2" pTooltip="Modifier l'entreprise"
+                                    tooltipPosition="bottom"
+                                    (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);"
+                                    aria-hidden="true"></i>
+                                <ng-container *ngIf="dicEntOffer[entreprise?._id]; then badge1 else no_badge1">
+
+                                </ng-container>
+                                <ng-template #badge1>
+                                    <i style="cursor: pointer" class="pi pi-briefcase mr-2" pTooltip="Offres" pBadge
+                                        style="font-size: 1.2rem" [value]="dicEntOffer[entreprise?._id].length"
+                                        tooltipPosition="bottom" (click)="InitMatching(entreprise)"></i>
+                                </ng-template>
+                                <ng-template #no_badge1>
+                                    <i style="cursor: pointer" class="pi pi-briefcase mr-2" pTooltip="Offres" pBadge
+                                        style="font-size: 1.2rem" value="0" tooltipPosition="bottom"
+                                        (click)="InitMatching(entreprise)"></i>
+                                </ng-template>
+                                <i style="cursor: pointer" style="margin-left: 2%; cursor: pointer" class="pi pi-trash"
+                                    pTooltip="Supprimer l'entreprise" tooltipPosition="bottom"
+                                    (click)="deleteEntreprise(entreprise)" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-entreprise>
+                        <tr>
+                            <td colspan="7">
+                                <h5>Détail de création</h5>
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem;">Crée le </th>
+                            <th style="width: 3rem;">Crée par </th>
+                            <th style="width: 3rem;">Commercial réferent </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td style="width: 3rem;">{{entreprise?.date_creation | date:'dd MMMM yy'}}</td>
+                            <td style="width: 3rem;">WIP </td>
+                            <td style="width: 3rem;">{{entreprise?.commercial_id?.firstname | titlecase}}
+                                {{entreprise?.commercial_id?.lastname | titlecase}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <h5>Adresse et contact</h5>
+                <p-table [value]="">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem;">Adresse du siége social</th>
+                            <th style="width: 3rem;">Numéro de téléphone </th>
+                            <th style="width: 3rem;">Mail </th>
+                            <th style="width: 3rem;">Site Web </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td style="width: 3rem;">{{entreprise?.code_postale_ent}} {{entreprise?.adresse_ent}},
+                                {{entreprise?.ville_ent}}</td>
+                            <td style="width: 3rem;">{{entreprise?.indicatif_ent}} {{entreprise?.phone_ent}}</td>
+                            <td style="width: 3rem;">{{entreprise?.email}}</td>
+                            <td style="width: 3rem;">{{entreprise?.site_web}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <h5>Représentants</h5>
+                <form class="p-fluid p-formgrid grid" *ngIf="addRep" [formGroup]="formAddRep" (ngSubmit)="onAddRep()">
+                    <div class="field col-12">
+                        <label For="Civilite">Civilité</label>
+                        <p-dropdown placeholder="Choisissez une civilité" [options]="civiliteList" formControlName="civilite"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="lastname">Nom</label>
+                        <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="firstname">Prénom</label>
+                        <input pInputText id="firstname" formControlName="firstname" type="text" placeholder="Prénom" />
+                    </div>
+                    <div class="field col-12">
+                        <label For="firstname">Rôle</label>
+                        <p-dropdown placeholder="Choisissez un role" [options]="roleListRepresentant" formControlName="role"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="email">Email</label>
+                        <input pInputText id="email" type="email" formControlName="email_perso" placeholder="Email" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="phone">Téléphone </label>
+                        <input pInputText id="phone" type="tel" formControlName="phone" placeholder="0188880050" />
+                    </div>
+                    <div class="field col-12">
+                        <button pButton type="submit" [disabled]="formAddRep.invalid" label="Ajouter" style="float: right;"></button>
+                    </div>
+                </form>
+                <p-table [value]="dicEntRepresentant[entreprise._id]">
+                    <ng-template pTemplate="caption">
+                        <button pButton type="button" label="Ajouter" icon="pi pi-plus"
+                            (click)="addRepresentant(entreprise);"></button>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem;">Civilité</th>
+                            <th style="width: 3rem;">Prénom</th>
+                            <th style="width: 3rem;">Nom</th>
+                            <th style="width: 3rem;">Role</th>
+                            <th style="width: 3rem;">Email</th>
+                            <th style="width: 3rem;">Téléphone</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-representant>
+                        <tr>
+                            <td style="width: 3rem;">{{representant?.user_id?.civilite}}</td>
+                            <td style="width: 3rem;">{{representant?.user_id?.firstname | titlecase}}</td>
+                            <td style="width: 3rem;">{{representant?.user_id?.lastname | uppercase}}</td>
+                            <td style="width: 3rem;">{{representant?.role}}</td>
+                            <td style="width: 3rem;">{{representant?.user_id?.email_perso}}</td>
+                            <td style="width: 3rem;">{{representant?.user_id?.phone}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <h5>Informations contrat</h5>
+                <p-table [value]="">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem;">Activité</th>
+                            <th style="width: 3rem;">Adresse d'exécution </th>
+                            <th style="width: 3rem;">Caisse de retraite complémentaire </th>
+                            <th style="width: 3rem;">Nombre de salariés </th>
+                            <th style="width: 3rem;">Convention collective </th>
+                            <th style="width: 3rem;">Code IDCC </th>
+                            <th style="width: 3rem;">OPCO </th>
+                            <th style="width: 3rem;">Organisme de prevoyance </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td style="width: 3rem;">{{ entreprise.activite }}</td>
+                            <td style="width: 3rem;">{{entreprise?.code_postale_ec}} {{entreprise?.adresse_ec}},
+                                {{entreprise?.ville_ec}}</td>
+                            <td style="width: 3rem;">{{entreprise?.nb_salarie}}</td>
+                            <td style="width: 3rem;">{{entreprise?.convention}}</td>
+                            <td style="width: 3rem;">{{entreprise?.idcc}}</td>
+                            <td style="width: 3rem;">{{entreprise?.OPCO}}</td>
+                            <td style="width: 3rem;">{{entreprise?.organisme_prevoyance}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                </td>
+                </tr>
+                </ng-template>
+                </p-table>
+            </p-tabPanel>
+            <!--<p-tabPanel [header]="entreprise.r.sociale" *ngFor="let entreprise of entrepriseOfferList"
+                [closable]="true">
+
+            </p-tabPanel>-->
+        </p-tabView>
+    </div>
+</div>
