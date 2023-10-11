@@ -11,7 +11,11 @@ const schema = new mongoose.Schema({
     campus: { type: [String], default: [] },
     langue: { type: String, default: 'Français' },
     NDA:{ type: String},
-    UAI:{ type: String}
+    campusinfo:[{
+        campus: String,
+        adresse: String,
+        UAI: String,
+    }],
 });
 
 //Creation de la table ecole et export du model Ecole

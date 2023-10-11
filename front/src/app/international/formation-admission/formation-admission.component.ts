@@ -80,7 +80,7 @@ export class FormationAdmissionComponent implements OnInit {
   
   anneeFilter =
     [
-      { label: "Toutes les filieres", value: null },
+      { label: "Toutes les filières", value: null },
       ...this.filiereList
     ]
   constructor(private FAService: FormulaireAdmissionService, private RAService: FormulaireAdmissionService,
