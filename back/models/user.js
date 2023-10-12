@@ -140,7 +140,9 @@ const user_schema = new mongoose.Schema({
     },
     savedMatching: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
-    }
+    },
+    linksnames:[{ type: String }]
+
 
 
 });

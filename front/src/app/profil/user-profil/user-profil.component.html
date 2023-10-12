@@ -118,50 +118,75 @@
         <div class="card col-12">
             <h2>Profil</h2>
             <div style="display: flex;">
-                <div style="text-align: center" class=" card col-6">
+                <div class=" card col-6 ">
                     <div class="p-fluid p-formgrid grid">
-                        <figure>
+                        
+                            <div class="col-6 md-1">
+                                <img [src]="imageToShow" (click)="clickFile()" alt="Profil" width="100" height="100" style="border-radius: 100px" />
+                                <br><br>
+                                <strong>Responsable</strong>
+                                <br>
+                                <p>nom</p>
+                                <a href="#">Afficher l'organisation -></a>
+                            </div>
+                            <div class="col-6 md-5">
+                                <figcaption>
+                                    {{userco?.firstname}} {{userco?.lastname.toUpperCase()}}<br>
+                                    <span>{{ userco?.mention }}</span><br>
+                                    <br><br><br><br>
+                                    <span [ngStyle]="{
+                                        'font-weight': userco?.statut === 'Disponible' ? 'bold' : 'normal',
+                                        'color': userco?.statut === 'Disponible' ? 'green' : 'red',
+                                        'font-size': '18px'
+                                      }">
+                                      <i class="pi" [ngClass]="{
+                                        'pi-check-circle': userco?.statut === 'Disponible',
+                                        'pi-times-circle': userco?.statut === 'Absent',
+                                        'pi-stop-circle': userco?.statut === 'En pause',
+                                        'pi-minus-circle': userco?.statut === 'Occupé',
+                                        'pi-arrow-circle-right': userco?.statut === 'En congé',
+                                        'pi-circle-fill': userco?.statut === 'En réunion'
 
-                            <img [src]="imageToShow" (click)="clickFile()" alt="Profil" width="100" height="100"
-                                style="border-radius: 100px" />
-
-
-                            <figcaption>
-                                {{userco.firstname}} {{userco.lastname}}<br>
-                               <!-- <span>{{ userco.mention }}</span><br>
-                                {{userco?.statut}}
-                                {{ userco?.service_id?.label }}
-                                <br />
-                                <span *ngIf="userco.role !== 'user'">
-                                    <strong style="color: red">{{
-                                        userco.role
-                                        }}</strong> </span><br />
-                                -->
-                            </figcaption>
-                        </figure>
+                                        
+                                      }"></i>
+                                        {{ userco?.statut }}
+                                      </span>
+                                      
+                                      
+                                      
+                                    {{ userco?.service_id?.label }}
+                                    <br />
+                                    <!--<span *ngIf="userco.role !== 'user'">
+                                        <strong style="color: red">{{ userco.role }}</strong>
+                                    </span>-->
+                                </figcaption>
+                                
+                            </div>
+                        
                     </div>
                 </div>
 
                 <div class="card col-6">
                     <div class="p-fluid p-formgrid grid">
-                        <div class="col-12 md:col-6">
-                            <strong>Email entreprise:</strong><br>
+                        <div class="col-6 md-3">
+                            <i class="pi pi-envelope"></i>
+                            <strong>&nbsp;&nbsp;Email entreprise</strong><br>
                             {{ userco?.email ? userco.email : userco?.email }}
                         </div>
-                        <div class="col-12 md:col-6">
-                            <strong>Email personnelle:</strong><br>
+                        <div class="col-6 md-3">
+                            <i class="pi pi-id-card"></i>
+                            <strong>&nbsp;&nbsp;Email personnelle</strong><br>
                             {{ userco?.email_perso ? userco.email_perso : userco?.email_perso }}
                         </div>
-                        <div class="col-12 md:col-6" *ngIf="userco.phone">
-                            <strong>Téléphone:</strong><br> {{ userco?.indicatif }}
-                            {{ userco?.phone }}
+                        <div class="col-6 md-3" *ngIf="userco.phone">
+                            <i class="pi pi-phone"></i>
+                            <strong>Téléphone</strong><br> {{ userco?.indicatif }} {{ userco?.phone }}
                         </div>
-
-                        <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">
-                            <strong>Adresse:</strong><br> {{ userco.numero_adresse }}
-                            {{ userco.rue_adresse }} {{ userco.postal_adresse }},
-                            {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
+                        <div class="col-6 md-3" *ngIf="userco.rue_adresse">
+                            <i class="pi pi-map-marker"></i>
+                            <strong>Adresse</strong><br> {{ userco.numero_adresse }} {{ userco.rue_adresse }} {{ userco.postal_adresse }}, {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
                         </div>
+                        
 
                         <!--<div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
                             <strong>Date de naissance:</strong>
@@ -176,7 +201,7 @@
                                 (onSelect)="onUpdateDNC()"></p-calendar>
                         </div> -->
 
-                        <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.nationalite">
+                        <div class="col-6 md:col-3" *ngIf="InfoUser && InfoUser.nationalite">
                             <strong>Nationnalité:</strong>
                             {{ InfoUser.nationalite }}
                         </div>
@@ -185,7 +210,7 @@
                             <strong>Statut:</strong> {{ userco.type }}
                         </div>-->
 
-                        <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-6 md:col-3" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id]
@@ -194,7 +219,7 @@
                             {{ formationDic[InfoUser.classe_id].abbrv }}
                         </div>
 
-                        <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-6 md:col-3" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id] &&
@@ -210,7 +235,7 @@
                             }}
                         </div>
 
-                        <div class="col-12 md:col-4" *ngIf="
+                        <div class="col-6 md:col-3" *ngIf="
                             InfoUser &&
                             InfoUser.classe_id &&
                             formationDic[InfoUser.classe_id] &&
@@ -266,6 +291,16 @@
                             <strong>Conseiller:</strong> Votre demande est en
                             attente de validation
                         </div>
+                        
+                            <div class="md:col-10"></div>
+                            <div class="col-12 md:col-2">
+                            <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
+                                (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Editer</p-button>
+                
+                            <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
+                                (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
+                                aria-hidden="true"></i></div>
+                        
                     </div>
                     <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
                         <div class="col-12"></div>
@@ -291,14 +326,7 @@
                 </div>
 
             </div>
-            <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
-                <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
-                    (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Editer</p-button>
-                
-                <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
-                    (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
-                    aria-hidden="true"></i>
-            </div>
+            
             <!-- Info user -->
 
 
