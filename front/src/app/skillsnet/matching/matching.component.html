@@ -1,28 +1,18 @@
 <div *ngIf="showUpdateStatut" class="col-12 card">
-	<h3 style="text-align: center;">Mis à jour du matching</h3>
 	<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
-		<div class="field col-12 ">
-			<small>Tout les champs marqués d'un astérisque <span style="color:red">*</span> sont
-				obligatoires</small>
-		</div>
-
-		<div class="field col-12">
+		<div class="field col-12 md:col-6">
 			<label>Remarque<span style="color:red">*</span>:</label><br>
-			<textarea type="text" formControlName="remarque" class="form-control col-12"
-				placeholder=""
-				pInputTextarea>
+			<textarea type="text" formControlName="remarque" class="form-control col-12" placeholder="" pInputTextarea>
                     </textarea>
-
 		</div>
-
-		<div class="field col-12">
+		<div class="field col-12 md:col-6">
 			<label>Statut du Matching<span style="color:red">*</span>:</label><br>
 			<p-dropdown [options]="statutList" formControlName="statut" optionLabel="value" optionValue="value"
 				placeholder="Choisissez un statut">
 			</p-dropdown>
 		</div>
 		<div>
-			<button pButton type="submit" label="Mis à jour du matching" [disabled]="formUpdateStatut.invalid"></button>
+			<button pButton type="submit" label="Valider" [disabled]="formUpdateStatut.invalid"></button>
 		</div>
 	</form>
 </div>
@@ -80,7 +70,7 @@
 				<td>
 					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
 				</td>
-				<td>
+				<td [pTooltip]="match.remarque" tooltipPosition="bottom">
 					{{match.statut}}
 				</td>
 				<td>
@@ -99,14 +89,14 @@
 						pTooltip="Pas d'entretien"></i>
 				</td>
 				<td>
-					<i pTooltip="Prendre rendez-vous" style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar" (click)="takeRDV(match)"
-						aria-hidden="true"></i>
-					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id)"
-						aria-hidden="true"></i>
-					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil" (click)="InitUpdateStatut(match)"
-						aria-hidden="true"></i>
-					<i pTooltip="Annuler" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban"
-						aria-hidden="true" (click)="cancelMatching(match)"></i>
+					<i pTooltip="Prendre rendez-vous" style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar"
+						(click)="takeRDV(match)" aria-hidden="true"></i>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
+					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+						(click)="InitUpdateStatut(match)" aria-hidden="true"></i>
+					<i pTooltip="Annuler" style="margin-left: 2%; cursor: pointer;" class="pi pi-ban" aria-hidden="true"
+						(click)="cancelMatching(match)"></i>
 				</td>
 			</tr>
 		</ng-template>
@@ -152,7 +142,7 @@
 				<label class="mr-2">Favoris</label>
 				<p-columnFilter type="boolean" field="favoris"></p-columnFilter>
 			</div>
-			
+
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
@@ -173,16 +163,18 @@
 					{{ match.taux |number:'1.0-0' }}%
 				</td>
 				<td>
-					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id)"
-						aria-hidden="true"></i>
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
+						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
 
 					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
 						(click)="AcceptMatching(match.cv_id, match.taux)" aria-hidden="true"></i>
 
-					<i *ngIf="match.favoris" pTooltip="Enlever des favoris" style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)"
-						(click)="myFavorite(match,ri)" class="pi pi-star-fill" aria-hidden="true"></i>
-					<i *ngIf="!match.favoris" pTooltip="Ajouter au favoris" style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)"
-						(click)="myFavorite(match,ri)" class="pi pi-star" aria-hidden="true"></i>
+					<i *ngIf="match.favoris" pTooltip="Enlever des favoris"
+						style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)" (click)="myFavorite(match,ri)"
+						class="pi pi-star-fill" aria-hidden="true"></i>
+					<i *ngIf="!match.favoris" pTooltip="Ajouter au favoris"
+						style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)" (click)="myFavorite(match,ri)"
+						class="pi pi-star" aria-hidden="true"></i>
 
 					<i *ngIf="!match.hide" pTooltip="Cacher" style="margin-left: 2%; cursor: pointer;"
 						(click)="hideAndSeek(match,ri)" class="pi pi-eye-slash" aria-hidden="true"></i>
