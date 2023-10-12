@@ -211,7 +211,7 @@ export class AnnoncesComponent implements OnInit {
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
-          //this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
+          this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
@@ -504,6 +504,9 @@ export class AnnoncesComponent implements OnInit {
     { label: "Choisissez l'auteur", value: null },
     { label: "Entreprise", value: "Entreprise" },
   ]
+  entrepriseFilter2 = [
+    { label: 'Choisissez une entreprise', value: null }
+  ]
   locations = [
     //{ label: "Choisissez une ville", value: null },
     { label: "100% Télétravail", value: "100% Télétravail" },
@@ -578,7 +581,8 @@ export class AnnoncesComponent implements OnInit {
     locations: [],
     user: null,
     date: '',
-    search: ''
+    search: '',
+    entreprise_id: null
   }
 
   updateFilter() {
@@ -600,6 +604,8 @@ export class AnnoncesComponent implements OnInit {
             r = false
         }
 
+      } else if (this.filter_value.entreprise_id && this.filter_value.entreprise_id != val.entreprise_id._id) {
+        r = false
       }
       else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
         r = false
@@ -631,7 +637,8 @@ export class AnnoncesComponent implements OnInit {
       locations: [],
       user: null,
       date: '',
-      search: ''
+      search: '',
+      entreprise_id: null
     }
     this.annoncesFiltered = this.annonces
   }
@@ -651,12 +658,21 @@ export class AnnoncesComponent implements OnInit {
 
       })
   }
+  
   rdvList: { label: string, ID: string, offer_id: string }[] = []
-  cvList: { label: string, ID: string }[] = []
+
   takeRDV(element) {
     this.rdvList.push(element)
+    setTimeout(() => {
+      this.activeIndex1 = 2 + this.matchingList.length
+    }, 1)
   }
-  seeCV(element){
+  cvList: { label: string, ID: string }[] = []
+  seeCV(element) {
     this.cvList.push(element)
+    setTimeout(() => {
+      this.activeIndex1 = 2 + this.matchingList.length + this.rdvList.length
+    }, 1)
+
   }
 }

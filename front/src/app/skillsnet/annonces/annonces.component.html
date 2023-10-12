@@ -376,67 +376,73 @@
 						filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 						layout="grid">
 						<ng-template pTemplate="header">
-
-							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-								<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-								<div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-									<div *ngIf="filter_value.statut" style="width: 25em;">
+							<div class="grid" style="width: 100%;">
+								<div class="col-3">
+									<button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"
+										(click)="displayFilter=true"></button>
+									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+								</div>
+								<div class="col-6">
+									<div *ngIf="filter_value.statut" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Statut</label>
-										<p-dropdown placeholder="Statut" [options]="statutFilter" style="width: 25em;"
-											autoWidth="false" [(ngModel)]="filter_value.statut"
-											(onChange)="updateFilter()">
+										<p-dropdown placeholder="Statut" [options]="statutFilter"
+											autoWidth="false"
+											[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.typeMission" style="width: 25em;">
+									<div *ngIf="filter_value.typeMission" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Type de mission</label>
 										<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
-											style="width: 25em;" autoWidth="false"
+											[style]="{'width':'15em'}" autoWidth="false"
 											[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
 
-									<div *ngIf="filter_value.profil.length!=0" style="width: 25em;">
+									<div *ngIf="filter_value.profil.length!=0" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Profil</label>
 										<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
-											style="width: 25em;" autoWidth="false" [(ngModel)]="filter_value.profil"
-											(onChange)="updateFilter()">
+											[style]="{'width':'25em'}" autoWidth="false"
+											[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
 										</p-multiSelect>
 									</div>
 
-									<div *ngIf="filter_value.entreprise" style="width: 25em;">
+									<div *ngIf="filter_value.entreprise" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Auteur</label>
 										<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
-											style="width: 25em;" autoWidth="false" [(ngModel)]="filter_value.entreprise"
-											(onChange)="updateFilter()">
+											[style]="{'width':'25em'}" autoWidth="false"
+											[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-
-									<div *ngIf="filter_value.locations.length!=0" style="width: 25em;">
+									<div *ngIf="filter_value.entreprise_id" class="mb-1">
+										<label style="text-align: center;" class="mr-2">Entreprise</label>
+										<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2"
+											[(ngModel)]="filter_value.entreprise_id" class="mb-2" appendTo="body"
+											[style]="{'width':'25em'}" autoWidth="false" (onChange)="updateFilter()">
+										</p-dropdown>
+									</div>
+									<div *ngIf="filter_value.locations.length!=0" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Lieu</label>
-										<p-multiSelect [options]="locations" filter="true" style="width: 25em;"
+										<p-multiSelect [options]="locations" filter="true" [style]="{'width':'25em'}"
 											autoWidth="false" placeholder="Choisissez une ville"
 											[(ngModel)]="filter_value.locations"
 											(onChange)="updateFilter()"></p-multiSelect>
 									</div>
-
-									<div *ngIf="filter_value.date" style="width: 25em;">
+									<div *ngIf="filter_value.date" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Disponibilité</label>
 										<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
-											style="width: 25em;" autoWidth="false" (onSelect)="updateFilter()"
+											autoWidth="false" (onSelect)="updateFilter()"
 											[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range"
 											placeholder="Date de début"></p-calendar>
 									</div>
 
+									<input pInputText type="text" style="width: 27em;" class="mb-2"
+										[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
+										placeholder="Recherche" />
 								</div>
-							</div>
-							<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-								<button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
-									(click)="displayFilter=true"></button>
-								<input pInputText type="text" style="width: 27em;" class="mb-2"
-									[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
-									placeholder="Recherche" />
-								<button pButton label="Vider" class="p-button" icon="pi pi-filter-slash"
-									(click)="clearFilter()"></button>
+								<div class="col-3" style="text-align: right;">
+									<button pButton label="Vider" class="p-button" icon="pi pi-filter-slash"
+										(click)="clearFilter()"></button>
+								</div>
 							</div>
 						</ng-template>
 
@@ -769,6 +775,9 @@
 
 		<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" [(ngModel)]="filter_value.entreprise" class="mb-2"
 			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+		</p-dropdown>
+		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id"
+			class="mb-2" appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
 		<input pInputText type="text" style="width: 27em;" class="mb-2" [(ngModel)]="filter_value.search"
 			(onBlur)="updateFilter()" placeholder="Recherche" />

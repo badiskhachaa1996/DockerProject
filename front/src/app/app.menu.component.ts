@@ -6295,11 +6295,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-briefcase',
                                         routerLink: ['/imatch'],
                                     },
-                                    {
+                                    /*{
                                         label: 'Rendez-vous',
                                         icon: 'pi pi-calendar',
                                         routerLink: ['/imatch/rendez-vous']
-                                    }
+                                    }*/
                                 ],
                             },
                         )
@@ -6576,6 +6576,35 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
+                                {
+                                    label: 'iMatch',
+                                    icon: 'pi pi-briefcase',
+                                    items: [{
+                                        label: 'Mes offres',
+                                        icon: 'pi pi-user',
+                                        routerLink: ['/mes-offres'],
+                                    }, {
+                                        label: 'Gestion des compétences',
+                                        icon: 'pi pi-book',
+                                        routerLink: ['/skills-management'],
+                                    },
+                                    {
+                                        label: 'Gestions des externes',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/imatch/externe'],
+                                    },
+                                    {
+                                        label: 'Gestions des événements',
+                                        icon: 'pi pi-flag',
+                                        routerLink: ['/evenements'],
+                                    }
+                                        , {
+                                        label: 'Rendez-vous',
+                                        icon: 'pi pi-calendar',
+                                        routerLink: ['/imatch/rendez-vous']
+                                    }
+                                    ]
+                                }
                             ]
                         },
                     )

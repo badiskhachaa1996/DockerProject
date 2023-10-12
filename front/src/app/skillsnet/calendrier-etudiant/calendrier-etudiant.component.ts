@@ -94,8 +94,6 @@ export class CalendrierEtudiantComponent implements OnInit {
     },
     locale: 'fr',
     events: [],
-    minTime: '08:00:00',
-    maxTime: '19:00:00',
     defaultView: 'timeGridWeek',
     /*views: {
       timeGridFourDay: {
