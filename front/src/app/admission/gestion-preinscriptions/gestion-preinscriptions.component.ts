@@ -37,6 +37,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   infoFiltered = ""
   users: User[] = [];
   prospects: any[] = [];
+  defaultProspects: any[] = [];
   alternants: Prospect[] = [];
   inscriptionSelected: Prospect;
   showUploadFile: Prospect;
@@ -618,10 +619,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
       let t = {}
       t['NOM'] = p?.user_id?.lastname
       t['Prenom'] = p?.user_id?.firstname
-      t['Date de la demande'] = p?.date_creation
-      t['Date de naissance'] = p.date_naissance
-      t['Pays de residence'] = p['pays_de_residence']
-      t['Nationalite'] = p?.user_id?.nationnalite
+      //t['Date de la demande'] = p?.date_creation
+      //t['Date de naissance'] = p.date_naissance
+     // t['Pays de residence'] = p?.user_id?.pays_adresse
+      //t['Nationalite'] = p?.user_id?.nationnalite
+      t['Formation'] = p.formation
+      t['Etablissement'] = p?.type_form
+      t['Campus'] = p.campus_choix_1
       let email = ""
       if (p?.user_id?.email)
         email = p?.user_id?.email
@@ -629,33 +633,33 @@ export class GestionPreinscriptionsComponent implements OnInit {
         email = p?.user_id?.email_perso
       t['Email'] = email
       t['Telephone'] = p?.user_id?.indicatif + p?.user_id?.phone
-      t['Ecole demande'] = p?.type_form
-      t['1er choix'] = p.campus_choix_1
-      t['2eme choix'] = p.campus_choix_2
-      t['3eme choix'] = p.campus_choix_3
-      t['Programme'] = p.programme
-      t['formation'] = p.formation
-      t['Rythme de Formation'] = p.rythme_formation
-      t['Dernier niveau academique'] = p.validated_academic_level
-      t['Num WhatsApp'] = p.indicatif_whatsapp + " " + p.numero_whatsapp
-      t['Statut pro actuel'] = p.statut_actuel
-      t['Langues'] = p.languages
-      t['Experiences pro'] = p.professional_experience
-      t['Nom du garant'] = p?.nomGarant?.toUpperCase()
-      t['Prenom du garant'] = p?.prenomGarant
-      t['Nom de l\'agence'] = p?.nomAgence
-      t['Code du commercial'] = p?.code_commercial
-      t['Autre'] = p.other
-      t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
-      t['Decision Admission'] = p.decision_admission
-      t['Phase complémentaire'] = p.phase_complementaire
-      t['Statut Paiement'] = p.statut_payement
-      t['ID Etudiant'] = p.customid
-      t['Att Traité par'] = p.traited_by
-      t['Rentrée Scolaire'] = p.rentree_scolaire
-      t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
+      t['Pays de résidence'] = p?.user_id?.pays_adresse
+      t['Date Inscr.'] = new Date(p?.date_creation).toLocaleString()
+      //t['2eme choix'] = p.campus_choix_2
+      //t['3eme choix'] = p.campus_choix_3
+      //t['Programme'] = p.programme
+      
+      //t['Rythme de Formation'] = p.rythme_formation
+      //t['Dernier niveau academique'] = p.validated_academic_level
+      //t['Num WhatsApp'] = p.indicatif_whatsapp + " " + p.numero_whatsapp
+      //t['Statut pro actuel'] = p.statut_actuel
+      //t['Langues'] = p.languages
+      //t['Experiences pro'] = p.professional_experience
+      //t['Nom du garant'] = p?.nomGarant?.toUpperCase()
+      //t['Prenom du garant'] = p?.prenomGarant
+      //t['Nom de l\'agence'] = p?.nomAgence
+      //t['Code du commercial'] = p?.code_commercial
+      //t['Autre'] = p.other
+      //t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
+      //t['Decision Admission'] = p.decision_admission
+      //t['Phase complémentaire'] = p.phase_complementaire
+      //t['Statut Paiement'] = p.statut_payement
+      //t['ID Etudiant'] = p.customid
+      //t['Att Traité par'] = p.traited_by
+      //t['Rentrée Scolaire'] = p.rentree_scolaire
+      //t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
       if (p.agent_id && this.users[p.agent_id] && this.users[p.agent_id].lastname) {
-        t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
+        //t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }
       dataExcel.push(t)
     })
@@ -684,6 +688,16 @@ export class GestionPreinscriptionsComponent implements OnInit {
     if (!bol) {
       return "green";
     }
+  }
 
+  filterProspects(date) {
+    if (this.defaultProspects.length == 0)
+      this.defaultProspects = this.prospects
+    this.prospects = []
+    console.log(date)
+    this.defaultProspects.forEach(p => {
+      if (new Date(p.date_creation).getTime() > new Date(date).getTime())
+        this.prospects.push(p)
+    })
   }
 }

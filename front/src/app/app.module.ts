@@ -392,7 +392,9 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/matching-viewer.component';
-
+import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
+import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
+import { RdvCalendarInterneComponent } from './skillsnet/i-match/rdv-calendar-interne/rdv-calendar-interne.component';
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -795,6 +797,9 @@ import { MatchingViewerComponent } from './skillsnet/i-match/matching-viewer/mat
     ReadMoreComponent,
     NewCvthequeInterneComponent,
     MatchingViewerComponent,
+    NewEntreprisesComponent,
+    AnnonceViewerComponent,
+    RdvCalendarInterneComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

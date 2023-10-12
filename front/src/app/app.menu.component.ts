@@ -1053,11 +1053,6 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/imatch'],
                                 },
                                 {
-                                    label: 'Générateur de CV',
-                                    icon: 'pi pi-cog',
-                                    routerLink: ['/generateur-cv'],
-                                },
-                                {
                                     label: 'Rendez-vous',
                                     icon: 'pi pi-calendar',
                                     routerLink: ['/imatch/rendez-vous']
@@ -1699,11 +1694,6 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Cvthèque Externe',
                                             icon: 'pi pi-briefcase',
                                             routerLink: ['/imatch'],
-                                        },
-                                        {
-                                            label: 'Générateur de CV',
-                                            icon: 'pi pi-cog',
-                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -2403,11 +2393,6 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Cvthèque Externe',
                                             icon: 'pi pi-briefcase',
                                             routerLink: ['/imatch'],
-                                        },
-                                        {
-                                            label: 'Générateur de CV',
-                                            icon: 'pi pi-cog',
-                                            routerLink: ['/generateur-cv'],
                                         },
                                         {
                                             label: 'Rendez-vous',
@@ -3785,11 +3770,6 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/imatch'],
                                         },
                                         {
-                                            label: 'Générateur de CV',
-                                            icon: 'pi pi-cog',
-                                            routerLink: ['/generateur-cv'],
-                                        },
-                                        {
                                             label: 'Rendez-vous',
                                             icon: 'pi pi-calendar',
                                             routerLink: ['/imatch/rendez-vous']
@@ -4282,11 +4262,6 @@ export class AppMenuComponent implements OnInit {
                                         this.token.id,
                                     ],
                                 },
-                                {
-                                    label: 'Générateur de CV',
-                                    icon: 'pi pi-cog',
-                                    routerLink: ['/generateur-cv'],
-                                },
                             ],
                         }
                     ]
@@ -4364,12 +4339,7 @@ export class AppMenuComponent implements OnInit {
                                                 '/matching-externe/' +
                                                 this.token.id,
                                             ],
-                                        },
-                                        {
-                                            label: 'Générateur de CV',
-                                            icon: 'pi pi-cog',
-                                            routerLink: ['/generateur-cv'],
-                                        },
+                                        }
                                     ],
                                 },
                                 {
@@ -6297,10 +6267,15 @@ export class AppMenuComponent implements OnInit {
                                     },*/
                                     {
                                         label: 'Cvthèque',
-                                        icon: 'pi pi-briefcase',
+                                        icon: 'pi pi-list',
                                         routerLink: ['/cvtheque-interne']
                                     },
                                     {
+                                        label: 'Entreprise',
+                                        icon: 'pi pi-building',
+                                        routerLink: ['/imatch/entreprise']
+                                    },
+                                    /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',
                                         routerLink: ['/skills-management'],
@@ -6314,16 +6289,11 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Gestions des événements',
                                         icon: 'pi pi-flag',
                                         routerLink: ['/evenements'],
-                                    },
+                                    },*/
                                     {
                                         label: 'Cvthèque Externe',
                                         icon: 'pi pi-briefcase',
                                         routerLink: ['/imatch'],
-                                    },
-                                    {
-                                        label: 'Générateur de CV',
-                                        icon: 'pi pi-cog',
-                                        routerLink: ['/generateur-cv'],
                                     },
                                     {
                                         label: 'Rendez-vous',
