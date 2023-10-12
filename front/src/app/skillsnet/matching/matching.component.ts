@@ -32,7 +32,7 @@ export class MatchingComponent implements OnInit {
 
   matching: Matching[] = [];
 
-  statutList = [{ value: "En Cours" }, { value: "Validé par l'étudiant" }, { value: "Validé par l'étudiant et l'entreprise" }]
+  statutList = [{ value: "En cours" }, { value: "Entretien" }, { value: "Accepté" }, { value: "Refusé" }]
 
   isNotWinner = false
 
@@ -106,13 +106,11 @@ export class MatchingComponent implements OnInit {
   }
 
   AcceptMatching(cv: CV, taux = 0) {
-    let type_matching = "Automatique"
-    if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise")
+    let type_matching = "Candidat"
+    if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise" || this.matcher.type == "Tuteur")
       type_matching = "Entreprise"
     else if (this.matcher.type == "Commercial")
-      type_matching = "Winner"
-    else if (this.matcher.type == "Alternant")
-      type_matching = "Alternant"
+      type_matching = "Commercial"
     let matching = {
       offre_id: this.offre._id,
       matcher_id: this.token.id,

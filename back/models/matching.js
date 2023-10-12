@@ -5,7 +5,7 @@ const matiereSchema = mongoose.Schema({
     offre_id: { type: mongoose.Schema.Types.ObjectId, ref: "annonce", required: true },
     matcher_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     cv_id: { type: mongoose.Schema.Types.ObjectId, ref: "cv_type", required: true },
-    statut: { type: String, default: "En Cours" },
+    statut: { type: String, default: "En cours" },
     type_matching: { type: String, default: "MU" },
     date_creation: { type: Date },
     remarque: { type: String, default: "" },
