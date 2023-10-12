@@ -441,10 +441,13 @@ export class AnnoncesComponent implements OnInit {
   }
 
   handleClose(e) {
-    this.matchingList.splice(e.index - 1, 1)
-    this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+    if (e.index > this.matchingList.length - 1) {
+      this.matchingList.splice(e.index - 1, 1)
+      this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
 
-    })
+      })
+    }
+
     //this.deleteOnglet(this.matchingList[e.index - 1])
   }
 
@@ -648,5 +651,12 @@ export class AnnoncesComponent implements OnInit {
 
       })
   }
-
+  rdvList: { label: string, ID: string, offer_id: string }[] = []
+  cvList: { label: string, ID: string }[] = []
+  takeRDV(element) {
+    this.rdvList.push(element)
+  }
+  seeCV(element){
+    this.cvList.push(element)
+  }
 }

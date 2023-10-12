@@ -1,0 +1,32 @@
+<form class="form-container" [formGroup]="form" (submit)="onSubmit()">
+    <div class="row">
+        <div class="col-12">
+            <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+            <!--<p-calendar id="date" formControlName="date" autoWidth="false" [style]="{'width':'100%'}"
+                [showTime]="true"></p-calendar>-->
+        </div>
+    </div>
+    <button pButton type="submit" [disabled]="form.invalid" label="Valider" autoWidth="false"
+        class="button-submit"></button>
+</form>
+
+
+<p-dialog header="Rendez-vous" [(visible)]="displayModal" [modal]="true" [style]="{width: '75vw'}" [draggable]="false"
+    [resizable]="false">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field md:col-6 col-12">
+            <label For="postal_adresse">De:</label>
+            <p-calendar [(ngModel)]="date_start" placeholder="Ex: 20/01/2000" showTime="true" (onSelect)="chooseDate()"
+                (onBlur)="chooseDate()" appendTo="body"></p-calendar>
+        </div>
+        <div class="field md:col-6 col-12">
+            <label For="postal_adresse">À:</label>
+            <p-calendar [(ngModel)]="date_fin" placeholder="Ex: 20/01/2000" disabled="true" showTime="true"
+                appendTo="body"></p-calendar>
+        </div>
+        <div>
+            <button pButton label="Prendrez rendez-vous" type="submit" [disabled]="!checkValider"
+                (click)="onSelectRDV()"></button>
+        </div>
+    </div>
+</p-dialog>
