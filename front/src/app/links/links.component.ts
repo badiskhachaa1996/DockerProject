@@ -18,7 +18,7 @@ export class LinksComponent implements OnInit {
   sourceProducts!: any[];
   role: boolean=false;
   links1:any[]=[];links2:any[]=[];links3:any[]=[];links4:any[]=[];links5:any[]=[];links6:any[]=[];
-  classe1: any[] = [];classe2: any[]=[];classe3: any[]=[];classe4: any[]=[];classe5: any[]=[];classse6: any[] = [];
+  classe1: any[] = [];classe2: any[]=[];classe3: any[]=[];classe4: any[]=[];classe5: any[]=[];classe6: any[] = [];
   linkToUpdate:Links;
   showd1: boolean = false;
   showd2: boolean = false;
@@ -33,6 +33,7 @@ export class LinksComponent implements OnInit {
   showdE: boolean = false;
   showdF: boolean = false;
   showm: boolean = false;
+  editer: boolean = false;
   formAddLinks: FormGroup;
   formUpdateLinks: FormGroup;
   constructor(
@@ -47,6 +48,11 @@ export class LinksComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe({
       next: (response) => {
         this.userConnected = response;
+        if (!this.userConnected.linksnames[0]){
+          this.userConnected.linksnames.push("My Links 1")
+        console.log(this.userConnected);
+          this.userService.update(this.userConnected);
+        }
     this.userConnected.roles_list.forEach(element => {
           if ( element.module=="Links" && element.role=="Super-Admin"){
             this.role=true 
@@ -69,7 +75,7 @@ export class LinksComponent implements OnInit {
 
             }
             else if (link?.classe === "Other") {
-              this.classe5.push(link);
+              this.classe6.push(link);
               
             }else if (link.user_id == this.userConnected._id && link?.classe === "links1") {
               this.links1.push(link);
@@ -87,7 +93,7 @@ export class LinksComponent implements OnInit {
           })
           this.classe1= Object.assign([], this.classe1);this.classe2= Object.assign([], this.classe2)
           this.classe3= Object.assign([], this.classe3);this.classe4= Object.assign([], this.classe4)
-          this.classe5= Object.assign([], this.classe5);this.links1= Object.assign([], this.links1);
+          this.classe5= Object.assign([], this.classe5);this.classe6= Object.assign([], this.classe6);this.links1= Object.assign([], this.links1);
           this.links2= Object.assign([], this.links2);this.links3= Object.assign([], this.links3);
           this.links4= Object.assign([], this.links4);this.links5= Object.assign([], this.links5);
           this.links6= Object.assign([], this.links6);this.sourceProducts= Object.assign([], this.sourceProducts);
@@ -157,5 +163,8 @@ console.log(this.sourceProducts);
   }
   onDeleteLinks(id:string) {
     this.linksService.delete(id);
+}
+onClickLink(link){
+  console.log(link)
 }
 }

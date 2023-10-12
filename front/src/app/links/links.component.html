@@ -20,20 +20,21 @@
         </p-dialog>
         <div class="grid col-12">
             <div class="col-4">
-                <p-orderList [value]="links1" [listStyle]="{ 'max-height': '5rem' }" header="My Links 1"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="My Links 1" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links1"  header="My Links 1">
+                    <ng-template let-links pTemplate="listItem">
 
-                        <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
+                        <div class="flex flex-wrap p-2 align-items-center gap-3 w-500" [href]="links?.lien">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
-                            <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
+                            <span class="font-bold text-50"><button pButton pRipple icon="pi pi-pencil"
                                     pTooltip="Mettre à jour le lien" (click)="SetUpdateLinks(links)"
                                     class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
                                 <button pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
@@ -42,7 +43,8 @@
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView></div>
+            </p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" (onClick)="showdialog1()"> </p-button>
@@ -72,29 +74,31 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links2" [listStyle]="{ 'max-height': '5rem' }" header="My Links 2"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
-
-                        <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
-
+                <p-panel header="My Links 2" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links2"  header="My Links 2"
+                    >
+                    <ng-template let-links pTemplate="listItem">
+                        <div class="flex flex-wrap p-2 align-items-center gap-3" (click)="onClickLink(link)">
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
-                            <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
+                            <span class="font-bold text-900">
+                                <button pButton pRipple icon="pi pi-pencil" appendTo="body"
                                     pTooltip="Mettre à jour le lien" (click)="SetUpdateLinks(links)"
                                     class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
                                 <button pButton pRipple pTooltip="Supprimer le lien" icon="pi pi-trash"
-                                    (click)="onDeleteLinks(links._id)"
+                                    (click)="onDeleteLinks(links._id)" appendTo="body"
                                     class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button></span>
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView>
+                </div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" (onClick)="showdialog2()"></p-button>
@@ -122,9 +126,11 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links3" [listStyle]="{ 'max-height': '5rem' }" header="My Links 3"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="My Links 3" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links3"  header="My Links 3"
+                    >
+                    <ng-template let-links pTemplate="listItem">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
 
@@ -132,7 +138,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -144,7 +150,7 @@
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" (onClick)="showdialog3()"></p-button>
@@ -172,9 +178,11 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links4" [listStyle]="{ 'max-height': '5rem' }" header="My Links 4"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="My Links 4" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links4"  header="My Links 4"
+                    >
+                    <ng-template let-links pTemplate="listItem">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
 
@@ -182,7 +190,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -194,7 +202,7 @@
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus"(onClick)="showdialog4()"></p-button>
@@ -222,9 +230,11 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links5" [listStyle]="{ 'max-height': '5rem' }" header="My Links 5"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="My Links 5" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links5"  header="My Links 5"
+                    >
+                    <ng-template let-links pTemplate="listItem">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
 
@@ -232,7 +242,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -244,7 +254,7 @@
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus"(onClick)="showdialog5()"> </p-button>
@@ -272,9 +282,11 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="links6" [listStyle]="{ 'max-height': '5rem' }" header="My Links 6"
-                    [dragdrop]="true">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="My Links 6" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="links6"  header="My Links 6"
+                    >
+                    <ng-template let-links pTemplate="listItem">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3" [href]="links?.lien">
 
@@ -282,7 +294,7 @@
                                 <span class="font-bold">{{links?.nom}}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button pButton pRipple icon="pi pi-pencil"
@@ -294,7 +306,7 @@
                         </div>
                     </ng-template>
 
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" (onClick)="showdialog6()"> </p-button>
@@ -348,15 +360,17 @@
 
         <div class="grid col-12">
             <div class="col-4">
-                <p-orderList [value]="classe1" [listStyle]="{ 'max-height': '5rem' }" header="Global">
-                    <ng-template let-links pTemplate="item">
+                <p-panel header="Global" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe1" header="Global">
+                    <ng-template let-links pTemplate="listItem">
 
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ links?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900"><button *ngIf="role" pButton pRipple icon="pi pi-pencil"
@@ -367,7 +381,7 @@
                                     class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button></span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogA()"> </p-button>
@@ -395,15 +409,17 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe2" [listStyle]="{ 'max-height': '5rem' }" header="Board">
-                    <ng-template let-product pTemplate="item">
+                <p-panel header="Board" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe2"  header="Board">
+                    <ng-template let-product pTemplate="listItem">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -416,7 +432,7 @@
                             </span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogB()"> </p-button>
@@ -443,16 +459,18 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe3" [listStyle]="{ 'max-height': '5rem' }"
+                <p-panel header="Process" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe3" 
                     header="Process">
-                    <ng-template let-product pTemplate="item">
+                    <ng-template let-product pTemplate="listItem">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -465,7 +483,7 @@
                             </span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogC()"> </p-button>
@@ -493,16 +511,18 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe4" [listStyle]="{ 'max-height': '5rem'}"
+                <p-panel header="IGM events" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe4" 
                     header="IGM events">
-                    <ng-template let-product pTemplate="item">
+                    <ng-template let-product pTemplate="listItem">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ product.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -515,7 +535,7 @@
                             </span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogD()"></p-button>
@@ -543,16 +563,18 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '5rem' }"
+                <p-panel header="IGM links" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe5" 
                     header="IGM links">
-                    <ng-template let-product pTemplate="item">
+                    <ng-template let-product pTemplate="listItem">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -565,7 +587,7 @@
                             </span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus" *ngIf="role" (onClick)="showdialogE()"></p-button>
@@ -593,15 +615,17 @@
                 </div>
             </div>
             <div class="col-4">
-                <p-orderList [value]="classe5" [listStyle]="{ 'max-height': '5rem' }" header="Other">
-                    <ng-template let-product pTemplate="item">
+                <p-panel header="Other" [style]="{ 'border': '1px solid #ccc', 'border-radius': '1px', 'padding': '0px' }">
+                    <div style="height: 150px; overflow-x: auto;">
+                <p-dataView [value]="classe5"  header="Other">
+                    <ng-template let-product pTemplate="listItem">
                         <div class="flex flex-wrap p-2 align-items-center gap-3">
 
                             <div class="flex-1 flex flex-column gap-2">
                                 <span class="font-bold">{{ product?.nom }}</span>
                                 <div class="flex align-items-center gap-2">
                                     <i class="pi pi-link text-sm"></i>
-                                    <a [href]="links?.lien" target="_blank">{{ links?.lien.substring(0, 20) }}...</a>
+                                    <a [href]="links?.lien" target="_blank">Cliquez ici...</a>
                                 </div>
                             </div>
                             <span class="font-bold text-900">
@@ -614,7 +638,7 @@
                             </span>
                         </div>
                     </ng-template>
-                </p-orderList>
+                </p-dataView></div></p-panel>
                 <br>
                 <div>
                     <p-button icon="pi pi-plus"*ngIf="role" (onClick)="showdialogE()"> </p-button>
