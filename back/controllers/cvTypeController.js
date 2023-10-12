@@ -51,7 +51,7 @@ app.get("/download-cv/:id", uploadCV.single('file'), (req, res, next) => {
 
         res.status(200).json({ file: file, extension: fileExtention });
     } catch (e) {
-        res.status(200).json({ error: e })
+        res.status(400).json({ error: e })
     }
 });
 

@@ -4,7 +4,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EcoleService } from 'src/app/services/ecole.service';
 import * as html2pdf from 'html2pdf.js';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,6 +31,7 @@ import { sub } from 'date-fns';
   styleUrls: ['./ajout-cv.component.scss', '../../../../../assets/css/bootstrap.min.css']
 })
 export class AjoutCvComponent implements OnInit {
+  @Input() CV_USER_ID
   cv: CV
   ID = this.route.snapshot.paramMap.get('id');
   // partie dedié aux CV
@@ -187,7 +188,9 @@ export class AjoutCvComponent implements OnInit {
   ngOnInit(): void {
     // decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
-
+    if (this.CV_USER_ID)
+      this.ID = this.CV_USER_ID
+    console.log(this.CV_USER_ID)
     // initialisation de la methode de recuperation des données
     this.onGetAllClasses();
 
@@ -342,11 +345,11 @@ export class AjoutCvComponent implements OnInit {
 
   onLoadFile(cv_id) {
     this.cvService.downloadCV(cv_id).then(r => {
-
       const reader = new FileReader();
-      reader.onload = () => {
-        this.pdfSrc = reader.result as string;
-      }
+      if (r && !r.error)
+        reader.onload = () => {
+          this.pdfSrc = reader.result as string;
+        }
       //console.log(r, new Blob([r.file], { type: r.extension }), new File(new Blob([r.file], { type: r.extension }), "test.pdf"))
       reader.readAsDataURL(new Blob([r.file], { type: r.extension }))
     })

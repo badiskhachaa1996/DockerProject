@@ -26,14 +26,16 @@
     margin-right: -200px;
     height: 29.7cm;
     transform: scale(0.7);
-    transform-origin: top left;
+    transform-origin: top;
   }
   
   .new-cv {
+    //min-width: 21cm;
+    //min-height: 29.7cm;
     min-width: 21cm;
-    height: 29.7cm;
-    transform: scale(0.7);
-    transform-origin: top left;
+    min-height: 29.7cm;
+    //transform: scale(0.7);
+    transform-origin: top;
   }
   
   .input-form-cv {
