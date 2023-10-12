@@ -60,8 +60,7 @@ const prospect_schema = new mongoose.Schema({
         required: false,
     },
     date_creation: {
-        type: Date,
-        default: Date.now
+        type: Date
     },
     type_form: { type: String, required: false },
     code_commercial: { type: String, required: false },

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -23,6 +23,8 @@ import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 })
 export class MatchingComponent implements OnInit {
   @Input() ID = '';
+  @Output() rdv = new EventEmitter<{ label: string, ID: string, offer_id: string }>();
+  @Output() cv = new EventEmitter<{ label: string, ID: string }>();
   token;
   offre: Annonce;
   matcher: User;
@@ -218,11 +220,15 @@ export class MatchingComponent implements OnInit {
         this.matchingsPotentiel.push(r)
       })
   }
-  seeCV(cv_id: string) {
-    this.router.navigate(['cv', cv_id])
+  seeCV(cv: CV) {
+    console.log(cv)
+    this.cv.emit({ ID: cv._id, label: `CV - ${cv?.user_id?.firstname} ${cv?.user_id.lastname}` })
+    //this.router.navigate(['cv', cv_id])
   }
   takeRDV(match: Matching) {
-    this.router.navigate(['rendez-vous/', match?.cv_id?.user_id?._id])
+    //OFFER LA
+    this.rdv.emit({ ID: match?.cv_id?.user_id?._id, offer_id: this.route.snapshot.paramMap.get('offre_id'), label: `${this.offre.custom_id} - ${match?.cv_id?.user_id.firstname} ${match?.cv_id?.user_id.lastname}` })
+    //this.router.navigate(['rendez-vous/', match?.cv_id?.user_id?._id])
   }
 
 }

@@ -58,6 +58,7 @@ app.post("/create", (req, res, next) => {
   delete req.body._id;
   let entreprise = new Entreprise({
     ...req.body,
+    date_creation: new Date()
   });
 
   //Création d'une nouvelle entreprise

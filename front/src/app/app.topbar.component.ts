@@ -36,6 +36,8 @@ export class AppTopBarComponent implements OnInit {
   isCEO = false
   isEtudiant = false
   isExterne = false
+  isAgent = false
+  isAdmin = false
   isReinscrit = false
   userConnected: User;
   token: any;
@@ -187,6 +189,8 @@ export class AppTopBarComponent implements OnInit {
     })
     this.AuthService.getById(temp.id).subscribe((data) => {
       let userconnected: User = jwt_decode(data.userToken)["userFromDb"];
+      this.isAgent = userconnected.role == 'Agent' || userconnected.role == 'Responsable'
+      this.isAdmin = userconnected.role == 'Admin'
       this.isCEO = userconnected.type == "CEO Entreprise";
       this.isEtudiant = (userconnected.type == "Intial" || userconnected.type == "Alternant");
       this.EtuService.getPopulateByUserid(this.token.id).subscribe(dataEtu => {

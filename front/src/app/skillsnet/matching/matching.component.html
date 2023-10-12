@@ -101,7 +101,7 @@
 				<td>
 					<i pTooltip="Prendre rendez-vous" style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar" (click)="takeRDV(match)"
 						aria-hidden="true"></i>
-					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id._id)"
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id)"
 						aria-hidden="true"></i>
 					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil" (click)="InitUpdateStatut(match)"
 						aria-hidden="true"></i>
@@ -149,7 +149,7 @@
 		</ng-template>
 		<ng-template pTemplate="caption">
 			<div class="flex justify-content-center align-items-center">
-				<label class="mr-2">Voir les favoris seulement</label>
+				<label class="mr-2">Favoris</label>
 				<p-columnFilter type="boolean" field="favoris"></p-columnFilter>
 			</div>
 			
@@ -173,7 +173,7 @@
 					{{ match.taux |number:'1.0-0' }}%
 				</td>
 				<td>
-					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id._id)"
+					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase" (click)="seeCV(match.cv_id)"
 						aria-hidden="true"></i>
 
 					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"

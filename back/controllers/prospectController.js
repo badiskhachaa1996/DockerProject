@@ -138,6 +138,7 @@ app.post("/create", (req, res, next) => {
                             res.status(201).json({ error: 'Ce lead existe déjà !', prospect: prospectFromDb });
                         } else {
                             prospect.user_id = userFromDb._id;
+                            prospect.date_creation = new Date()
                             prospect.save()
                                 .then((prospectSaved) => {
                                     let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
@@ -154,6 +155,7 @@ app.post("/create", (req, res, next) => {
                     .then((userCreated) => {
 
                         prospect.user_id = userCreated._id;
+                        prospect.date_creation = new Date()
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
@@ -1012,7 +1014,8 @@ app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
     let p = Prospect({
         user_id: req.params.user_id,
         archived: true,
-        etat_traitement: "Fini"
+        etat_traitement: "Fini",
+        date_creation: new Date()
     })
     p.save().then(data => {
         res.status(201).send(data)

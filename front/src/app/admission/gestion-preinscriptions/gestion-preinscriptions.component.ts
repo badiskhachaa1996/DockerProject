@@ -620,7 +620,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Prenom'] = p?.user_id?.firstname
       t['Date de la demande'] = p?.date_creation
       t['Date de naissance'] = p.date_naissance
-      t['Pays de residence'] = p['pays_de_residence']
+      t['Pays de residence'] = p?.user_id?.pays_adresse
       t['Nationalite'] = p?.user_id?.nationnalite
       let email = ""
       if (p?.user_id?.email)

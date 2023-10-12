@@ -20,9 +20,11 @@ export class VoirCvComponent implements OnInit {
   constructor(private route: ActivatedRoute, private CVService: CvService) { }
 
   ngOnInit(): void {
+    console.log('SHUTSDQSDS')
     if (this.CV_ID)
       this.ID = this.CV_ID
     this.CVService.getByID(this.ID).subscribe(cv => {
+      console.log(this.ID,cv)
       this.CV = cv.dataCv
       this.user = this.CV.user_id
     })
