@@ -198,8 +198,8 @@
                     style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
                 </button>
             </div>-->
-            <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button" [disabled]="prospects.length==0"
-                style="margin-left: 2px;">
+            <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                [disabled]="prospects.length==0" style="margin-left: 2px;">
             </button>
             <h5>Liste des leads {{infoFiltered}}</h5>
 
@@ -263,8 +263,8 @@
                         (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
                         emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
                     </p-dropdown>
-                    <div class="flex table-header">
-                    </div>
+                    <p-calendar *ngIf="!dataCommercial" placeholder="Date Inscr."
+                        (onSelect)="filterProspects($event)"></p-calendar>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
