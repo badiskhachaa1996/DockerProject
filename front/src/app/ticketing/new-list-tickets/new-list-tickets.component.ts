@@ -52,7 +52,26 @@ export class NewListTicketsComponent implements OnInit {
     en_cours: 0
   }
   token: any;
-  filterService = [{ label: 'Tous les services', value: null }]
+  filterService = [{ label: 'Tous les services', value: null }];
+  filtreSujet = [{ label: 'Tous les sujets', value: null },
+  { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
+  { label: 'Module Pédagogie', value: "Module Pédagogie" },
+  { label: 'Module Administration', value: "Module Administration" },
+  { label: 'Module Admission', value: "Module Admission" },
+  { label: 'Module Commerciale', value: "Module Commerciale" },
+  { label: 'Module Partenaires', value: "Module Partenaires" },
+  { label: 'Module iMatch', value: "Module iMatch" },
+  { label: 'Module Booking', value: "Module Booking" },
+  { label: 'Module Questionnaire', value: "Module Questionnaire" },
+  { label: 'Module International', value: "Module International" },
+  { label: 'Module CRM', value: "Module CRM" },
+  { label: 'Module Intuns', value: "Module Intuns" },
+  { label: 'Module Gestions des emails', value: "Module Gestions des emails" },
+  { label: 'Module Admin IMS', value: "Module Admin IMS" },
+  { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
+  { label: 'Module Ticketing', value: "Module Ticketing" },
+  { label: 'Espace Personnel', value: "Espace Personnel" },        
+];
   filterStatut = [
     { label: 'Tous les statuts', value: null },
     { label: 'En attente', value: "En attente de traitement" },
@@ -429,6 +448,9 @@ export class NewListTicketsComponent implements OnInit {
           r = false
       if (!this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
         r = false
+      if (this.filterType.includes("Non Assignes") && this.filterType.includes("Crees"))
+        if (!t.origin || t.agent_id != null)
+          r = false
 
       if (r)
         this.tickets.push(t)
