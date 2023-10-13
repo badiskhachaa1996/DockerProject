@@ -30,8 +30,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   defaultcvs = this.cvs
   dicPicture = {}
   dicMatching = {}
-
-  matchingList = []
+  isEtudiant = true
   token;
   constructor(private AuthService: AuthService, private CVService: CvService, private MatchingService: MatchingService, private router: Router,
     private ToastService: MessageService, private RDVService: MeetingTeamsService, private skillsService: SkillsService) { }
@@ -55,6 +54,9 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
       .catch((error) => { console.error(error); })
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      this.isEtudiant = true
+      if (this.isEtudiant)
+        this.activeIndex1 = 0
       if (user.savedMatching)
         this.matchingList = user.savedMatching
     })
@@ -106,10 +108,7 @@ export class NewCvthequeInterneComponent implements OnInit {
     }
   }
 
-  goToCV(cv: CV) {
-    localStorage.setItem('seeEditBTNCV', 'true')
-    this.router.navigate(['imatch/cv', cv._id])
-  }
+
   downloadOldCV(cv: CV) {
     this.CVService.downloadCV(cv.user_id._id).then(data => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -190,26 +189,12 @@ export class NewCvthequeInterneComponent implements OnInit {
 
   activeIndex1 = 1
   handleClose(e) {
-    this.matchingList.splice(e.index - 1)
+    this.matchingList.splice(e.index - 2)
     this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
 
     })
   }
-  onLoadMatching(cv: CV) {
-    let ids = []
-    this.matchingList.forEach(u => {
-      ids.push(u._id)
-    })
-    if (!ids.includes(cv._id)) {
-      this.matchingList.push(cv)
-      this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
-        this.activeIndex1 = this.matchingList.length + 1
-      })
-    } else {
-      this.activeIndex1 = ids.indexOf(cv._id) + 2
-    }
 
-  }
 
 
 
@@ -347,4 +332,54 @@ export class NewCvthequeInterneComponent implements OnInit {
     }
     this.cvs = this.defaultcvs
   }
+
+  matchingList = []
+
+  onLoadMatching(cv: CV) {
+    let ids = []
+    this.matchingList.forEach(u => {
+      ids.push(u._id)
+    })
+    if (!ids.includes(cv._id)) {
+      this.matchingList.push(cv)
+      this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
+        this.activeIndex1 = 1 + this.matchingList.length
+      })
+    } else {
+      this.activeIndex1 = ids.indexOf(cv._id) + 2
+    }
+
+  }
+
+  cvList = []
+  goToCV(cv: CV) {
+    //localStorage.setItem('seeEditBTNCV', 'true')
+    //this.router.navigate(['imatch/cv', cv._id])
+    this.cvList.push({ label: "CV - " + cv?.user_id?.lastname + " " + cv?.user_id?.firstname, CV_ID: cv._id })
+    console.log(this.activeIndex1)
+    setTimeout(() => {
+      this.activeIndex1 = 1 + this.cvList.length + this.matchingList.length
+      console.log(this.activeIndex1)
+    }, 5)
+
+  }
+  updateCVList = []
+
+  updateCV(element) {
+    this.updateCVList.push(element)
+    setTimeout(() => {
+      this.activeIndex1 = 1 + this.cvList.length + this.updateCVList.length + this.matchingList.length
+    }, 1)
+  }
+
+  rdvList: { label: string, ID: string, offer_id: string }[] = []
+
+  takeRDV(element) {
+    this.rdvList.push(element)
+    setTimeout(() => {
+      this.activeIndex1 = 1 + this.cvList.length + this.updateCVList.length + this.matchingList.length + this.rdvList.length
+    }, 1)
+  }
+
+
 }

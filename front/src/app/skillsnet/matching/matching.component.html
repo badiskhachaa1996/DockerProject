@@ -1,4 +1,7 @@
 <div *ngIf="showUpdateStatut" class="col-12 card">
+	<!--Formulaire Modification Matching-->
+	<i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+		pTooltip="Fermer" (click)="showUpdateStatut = null" aria-hidden="true"> </i>
 	<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateStatut" (ngSubmit)="onUpdateStatut();">
 		<div class="field col-12 md:col-6">
 			<label>Remarque<span style="color:red">*</span>:</label><br>

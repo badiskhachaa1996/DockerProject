@@ -56,7 +56,7 @@
                             <p>{{match.offre_id.competences[0]?.libelle | titlecase}}</p>
                         </div>
                         <div class="col-12 md:col-4">
-                            <p>{{matchoffre_id.competences[1]?.libelle | titlecase}}</p>
+                            <p>{{match.offre_id.competences[1]?.libelle | titlecase}}</p>
                         </div>
                         <div class="col-12 md:col-4">
                             <p>{{match.offre_id.competences[2]?.libelle | titlecase}}</p>
@@ -79,13 +79,13 @@
     </ng-template>
     <ng-template pTemplate="body">
         <tr>
-            <td>{{match.offre_id.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
-            <td>{{match.offre_id.workplaceType}}</td>
-            <td>{{match.offre_id.date_creation | date:'dd MMMM yy'}}</td>
-            <td>{{match.offre_id.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
+            <td>{{match.offre_id?.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
+            <td>{{match.offre_id?.workplaceType}}</td>
+            <td>{{match.offre_id?.date_creation | date:'dd MMMM yy'}}</td>
+            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
                 titlecase}}</td>
             <td>
-                {{match.offre_id.modified_at| date:'dd MMMM yy'}}
+                {{match?.offre_id?.modified_at| date:'dd MMMM yy'}}
             </td>
         </tr>
     </ng-template>

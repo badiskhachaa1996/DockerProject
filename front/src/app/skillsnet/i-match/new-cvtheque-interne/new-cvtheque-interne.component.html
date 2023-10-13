@@ -442,13 +442,23 @@
                 </ng-template>
             </p-dataView>
         </p-tabPanel>
-        <p-tabPanel style="width: 100%;" header="{{match.user_id.lastname}} {{match.user_id.firstname}}"
+        <p-tabPanel style="width: 100%;" header="MATCH - {{match.user_id.lastname}} {{match.user_id.firstname}}"
             *ngFor="let match of matchingList" [closable]="true">
             <div class="grid" style="width: 100%;">
-                <app-voir-cv class="col-12 xl:col-5" [CV_ID]="match._id"></app-voir-cv>
-                <app-matching-viewer class="col-12 xl:col-7" [USER_ID]="match.user_id._id"></app-matching-viewer>
+                <app-voir-cv class="col-12" [CV_ID]="match._id"></app-voir-cv>
+                <app-matching-viewer class="col-12" [USER_ID]="match.user_id._id"></app-matching-viewer>
             </div>
 
+        </p-tabPanel>
+        <p-tabPanel [header]="cv.label" *ngFor="let cv of cvList" [closable]="true">
+            <app-see-cv-externe [CV_ID]="cv.CV_ID" (RDV)="takeRDV($event)"
+                (UPDATE)="updateCV($event)"></app-see-cv-externe>
+        </p-tabPanel>
+        <p-tabPanel [header]="cv.label" *ngFor="let cv of updateCVList" [closable]="true">
+            <app-ajout-cv [CV_USER_ID]="cv.CV_USER_ID"></app-ajout-cv>
+        </p-tabPanel>
+        <p-tabPanel [header]="rdv.label" *ngFor="let rdv of rdvList" [closable]="true">
+            <app-rdv-calendar-interne [ID]="rdv.ID"></app-rdv-calendar-interne>
         </p-tabPanel>
     </p-tabView>
 

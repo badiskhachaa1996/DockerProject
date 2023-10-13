@@ -34,6 +34,8 @@ export class AnnoncesComponent implements OnInit {
 
   tuteurs: Tuteur[] = [];
 
+  isEtudiant = true
+
   form: FormGroup;
   showForm: boolean = false;
   formUpdate: FormGroup;
@@ -101,6 +103,7 @@ export class AnnoncesComponent implements OnInit {
   isEntreprise = false
 
   token: any;
+  matchDic = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService,
     private entrepriseService: EntrepriseService, private messageService: MessageService,
@@ -114,11 +117,18 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      console.log(user.savedAnnonces)
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress')
+      if (this.isEtudiant) {
+        this.activeIndex1 = 0
+        this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {
+          matchings.forEach(m => {
+            this.matchDic[m.offre_id._id] = m
+          })
+        })
+      }
+
       if (user.savedAnnonces)
         this.matchingList = user.savedAnnonces
-      if (!this.canAddOrEdit)
-        this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
       this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
     })
 
@@ -211,7 +221,7 @@ export class AnnoncesComponent implements OnInit {
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
-          //this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
+          this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
@@ -458,7 +468,7 @@ export class AnnoncesComponent implements OnInit {
           offre_id: annonce._id,
           matcher_id: this.token.id,
           cv_id: cv._id,
-          type_matching: "MA",
+          type_matching: "Candidat",
           date_creation: new Date()
         }
         this.MatchingService.create(matching).subscribe(match => {
@@ -503,6 +513,9 @@ export class AnnoncesComponent implements OnInit {
   entrepriseFilter = [
     { label: "Choisissez l'auteur", value: null },
     { label: "Entreprise", value: "Entreprise" },
+  ]
+  entrepriseFilter2 = [
+    { label: 'Choisissez une entreprise', value: null }
   ]
   locations = [
     //{ label: "Choisissez une ville", value: null },
@@ -578,7 +591,8 @@ export class AnnoncesComponent implements OnInit {
     locations: [],
     user: null,
     date: '',
-    search: ''
+    search: '',
+    entreprise_id: null
   }
 
   updateFilter() {
@@ -600,6 +614,8 @@ export class AnnoncesComponent implements OnInit {
             r = false
         }
 
+      } else if (this.filter_value.entreprise_id && this.filter_value.entreprise_id != val.entreprise_id._id) {
+        r = false
       }
       else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
         r = false
@@ -631,7 +647,8 @@ export class AnnoncesComponent implements OnInit {
       locations: [],
       user: null,
       date: '',
-      search: ''
+      search: '',
+      entreprise_id: null
     }
     this.annoncesFiltered = this.annonces
   }
@@ -651,12 +668,52 @@ export class AnnoncesComponent implements OnInit {
 
       })
   }
+
   rdvList: { label: string, ID: string, offer_id: string }[] = []
-  cvList: { label: string, ID: string }[] = []
+
   takeRDV(element) {
-    this.rdvList.push(element)
+    let ids = []
+    this.rdvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.rdvList.push(element)
+      setTimeout(() => {
+        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + ids.indexOf(element.ID)
   }
-  seeCV(element){
-    this.cvList.push(element)
+  cvList: { label: string, ID: string }[] = []
+  seeCV(element) {
+    let ids = []
+    this.cvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.cvList.push(element)
+      setTimeout(() => {
+        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + ids.indexOf(element.ID)
+
+
+
+  }
+  offreList = []
+  seeDetails(annonce: Annonce) {
+    let ids = []
+    this.offreList.forEach(o => {
+      ids.push(o._id)
+    })
+    if (!ids.includes(annonce._id)) {
+      this.offreList.push(annonce)
+      setTimeout(() => {
+        this.activeIndex1 = 0 + this.matchingList.length + this.rdvList.length + this.cvList.length + this.offreList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length + ids.indexOf(annonce._id)
+
   }
 }

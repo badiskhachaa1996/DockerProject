@@ -4283,22 +4283,6 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-fw pi-home',
                                     routerLink: ['/'],
                                 },
-                                /*{
-                                    label: 'Signaler un problème technique',
-                                    icon: 'pi pi-fw pi-exclamation-triangle',
-                                    routerLink: ['/ticketing-igs'],
-                                },
-                                {
-                                    label: 'Ticketing - Ancienne Version',
-                                    icon: 'pi pi-fw pi-ticket',
-                                    items: [
-                                        {
-                                            label: 'Suivi des tickets',
-                                            icon: 'pi pi-fw pi-check-circle',
-                                            routerLink: ['/suivi-ticket'],
-                                        },
-                                    ],
-                                },*/
                                 {
                                     label: 'Pédagogie',
                                     icon: 'pi pi-fw pi-folder',
@@ -4312,17 +4296,6 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                /*{
-                                    label: 'Booking',
-                                    icon: 'pi pi-building',
-                                    items: [
-                                        {
-                                            label: 'Logements',
-                                            icon: 'pi pi-home',
-                                            routerLink: ['/logements'],
-                                        },
-                                    ],
-                                },*/
                                 {
                                     label: 'iMatch',
                                     icon: 'pi pi-star',
@@ -4333,13 +4306,18 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/offres'],
                                         },
                                         {
+                                            label: 'CV',
+                                            icon: 'pi pi-volume-up',
+                                            routerLink: ['/imatch/cv-etudiant'],
+                                        },
+                                        /*{
                                             label: 'Mes Matching',
                                             icon: 'pi pi-link',
                                             routerLink: [
                                                 '/matching-externe/' +
                                                 this.token.id,
                                             ],
-                                        }
+                                        }*/
                                     ],
                                 },
                                 {
@@ -6295,11 +6273,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-briefcase',
                                         routerLink: ['/imatch'],
                                     },
-                                    {
+                                    /*{
                                         label: 'Rendez-vous',
                                         icon: 'pi pi-calendar',
                                         routerLink: ['/imatch/rendez-vous']
-                                    }
+                                    }*/
                                 ],
                             },
                         )
@@ -6576,6 +6554,35 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
+                                {
+                                    label: 'iMatch',
+                                    icon: 'pi pi-briefcase',
+                                    items: [{
+                                        label: 'Mes offres',
+                                        icon: 'pi pi-user',
+                                        routerLink: ['/mes-offres'],
+                                    }, {
+                                        label: 'Gestion des compétences',
+                                        icon: 'pi pi-book',
+                                        routerLink: ['/skills-management'],
+                                    },
+                                    {
+                                        label: 'Gestions des externes',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/imatch/externe'],
+                                    },
+                                    {
+                                        label: 'Gestions des événements',
+                                        icon: 'pi pi-flag',
+                                        routerLink: ['/evenements'],
+                                    }
+                                        , {
+                                        label: 'Rendez-vous',
+                                        icon: 'pi pi-calendar',
+                                        routerLink: ['/imatch/rendez-vous']
+                                    }
+                                    ]
+                                }
                             ]
                         },
                     )

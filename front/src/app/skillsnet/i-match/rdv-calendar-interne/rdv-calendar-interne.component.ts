@@ -32,8 +32,6 @@ export class RdvCalendarInterneComponent implements OnInit {
   rdvTaker: User
 
   form = new FormGroup({
-    email: new FormControl('', Validators.required),
-    phone: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
     offre_id: new FormControl(null)
 
@@ -50,6 +48,8 @@ export class RdvCalendarInterneComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
+    if (this.offre_id)
+      this.form.patchValue({ offre_id: this.offre_id })
     this.UserService.nstuget(this.ID).subscribe(u => {
       this.USER = u
 
@@ -172,8 +172,7 @@ export class RdvCalendarInterneComponent implements OnInit {
     },
     locale: 'fr',
     events: [],
-    minTime: '08:00:00',
-    maxTime: '19:00:00',
+
     defaultView: 'timeGridWeek',
     /*views: {
       timeGridFourDay: {

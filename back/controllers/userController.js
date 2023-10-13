@@ -238,7 +238,7 @@ app.get("/nstuget/:id", (req, res, next) => {
 
         let my_cv = w[0]
         let fileOne
-        let cv_id = my_cv._id
+        let cv_id = my_cv?._id
         if (cv_id !== undefined) {
           try {
             let filenames = fs.readdirSync("storage/cvPicture/" + cv_id)
