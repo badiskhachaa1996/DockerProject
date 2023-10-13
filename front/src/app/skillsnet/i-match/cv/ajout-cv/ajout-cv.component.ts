@@ -219,7 +219,7 @@ export class AjoutCvComponent implements OnInit {
         this.experiences_associatif = c.experiences_associatif
         this.informatique = c.informatique
         setTimeout(() => {
-          if (c.user_id.type.startsWith('Externe'))
+          if (c?.user_id?.type?.startsWith('Externe'))
             this.formAddCV.patchValue({ user_create_type: 'Externe' })
           else
             this.formAddCV.patchValue({ user_create_type: 'Interne' })

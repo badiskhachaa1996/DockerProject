@@ -120,26 +120,26 @@
             <div style="display: flex;">
                 <div class=" card col-6 ">
                     <div class="p-fluid p-formgrid grid">
-                        
-                            <div class="col-6 md-1">
-                                <img [src]="imageToShow" (click)="clickFile()" alt="Profil" width="100" height="100" style="border-radius: 100px" />
-                                <br><br>
-                                <strong>Responsable</strong>
-                                <br>
-                                <p>nom</p>
-                                <a href="#">Afficher l'organisation -></a>
-                            </div>
-                            <div class="col-6 md-5">
-                                <figcaption>
-                                    {{userco?.firstname}} {{userco?.lastname.toUpperCase()}}<br>
-                                    <span>{{ userco?.mention }}</span><br>
-                                    <br><br><br><br>
-                                    <span [ngStyle]="{
+
+                        <div class="col-6 md-1">
+                            <img [src]="imageToShow" (click)="clickFile()" alt="Profil" width="100" height="100"
+                                style="border-radius: 100px" />
+                            <br><br>
+                            <strong>{{dataMC?.jobTitle}}</strong>
+                            <br>
+                            <a (click)="seeOrga()">Afficher l'organisation -></a>
+                        </div>
+                        <div class="col-6 md-5">
+                            <figcaption>
+                                {{userco?.firstname | titlecase}} {{userco?.lastname | uppercase}}<br>
+                                <span>{{ userco?.mention }}</span><br>
+                                <br><br><br><br>
+                                <span [ngStyle]="{
                                         'font-weight': userco?.statut === 'Disponible' ? 'bold' : 'normal',
                                         'color': userco?.statut === 'Disponible' ? 'green' : 'red',
                                         'font-size': '18px'
                                       }">
-                                      <i class="pi" [ngClass]="{
+                                    <i class="pi" [ngClass]="{
                                         'pi-check-circle': userco?.statut === 'Disponible',
                                         'pi-times-circle': userco?.statut === 'Absent',
                                         'pi-stop-circle': userco?.statut === 'En pause',
@@ -149,20 +149,20 @@
 
                                         
                                       }"></i>
-                                        {{ userco?.statut }}
-                                      </span>
-                                      
-                                      
-                                      
-                                    {{ userco?.service_id?.label }}
-                                    <br />
-                                    <!--<span *ngIf="userco.role !== 'user'">
+                                    {{ userco?.statut }}
+                                </span>
+
+
+
+                                {{ userco?.service_id?.label }}
+                                <br />
+                                <!--<span *ngIf="userco.role !== 'user'">
                                         <strong style="color: red">{{ userco.role }}</strong>
                                     </span>-->
-                                </figcaption>
-                                
-                            </div>
-                        
+                            </figcaption>
+
+                        </div>
+
                     </div>
                 </div>
 
@@ -184,9 +184,10 @@
                         </div>
                         <div class="col-6 md-3" *ngIf="userco.rue_adresse">
                             <i class="pi pi-map-marker"></i>
-                            <strong>Adresse</strong><br> {{ userco.numero_adresse }} {{ userco.rue_adresse }} {{ userco.postal_adresse }}, {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
+                            <strong>Adresse</strong><br> {{ userco.numero_adresse }} {{ userco.rue_adresse }} {{
+                            userco.postal_adresse }}, {{ userco.ville_adresse }}/ {{ userco.pays_adresse }}
                         </div>
-                        
+
 
                         <!--<div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
                             <strong>Date de naissance:</strong>
@@ -291,16 +292,18 @@
                             <strong>Conseiller:</strong> Votre demande est en
                             attente de validation
                         </div>
-                        
-                            <div class="md:col-10"></div>
-                            <div class="col-12 md:col-2">
-                            <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations" tooltipPosition="bottom" 
-                                (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px" aria-hidden="true">Editer</p-button>
-                
+
+                        <div class="md:col-10"></div>
+                        <div class="col-12 md:col-2">
+                            <p-button styleClass="p-button-raised p-button-warning" pTooltip="Modifier vos informations"
+                                tooltipPosition="bottom" (click)="ToggleUpdate();scrollToTop()" style="font-size: 15px"
+                                aria-hidden="true">Editer</p-button>
+
                             <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
                                 (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px"
-                                aria-hidden="true"></i></div>
-                        
+                                aria-hidden="true"></i>
+                        </div>
+
                     </div>
                     <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
                         <div class="col-12"></div>
@@ -322,11 +325,11 @@
                             {{ PreinscriptionData?.date_traitement | date }}
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
-            
+
             <!-- Info user -->
 
 
@@ -352,6 +355,6 @@
             </div>-->
         </div>
     </div>
-
+    <p-organizationChart class="col-12" *ngIf="seeOrgaBool" [value]="dataOrga"></p-organizationChart>
 
 </div>

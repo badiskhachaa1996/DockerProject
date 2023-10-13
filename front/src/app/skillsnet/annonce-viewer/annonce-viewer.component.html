@@ -563,7 +563,7 @@
 								</ng-template>
 								<ng-template pTemplate="body">
 									<tr>
-										<td>{{annonce.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
+										<td>{{annonce.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
 										<td>{{annonce.workplaceType}}</td>
 										<td>{{annonce.date_creation | date:'dd MMMM yy'}}</td>
 										<td>{{annonce.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |

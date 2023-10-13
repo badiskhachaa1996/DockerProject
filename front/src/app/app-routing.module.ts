@@ -285,6 +285,7 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
+import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
 const routes: Routes = [
     {
         path: '',
@@ -710,6 +711,7 @@ const routes: Routes = [
             { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
+            { path: 'imatch/cv-etudiant', component: CvEtudiantComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
             { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },

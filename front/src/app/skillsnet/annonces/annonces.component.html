@@ -260,7 +260,7 @@
 	<!-- Affichage des offres -->
 
 	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
-		<p-tabPanel header="Ajouter">
+		<p-tabPanel header="Ajouter" *ngIf="!isEtudiant">
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">
 				<div class="p-formgrid grid">
 					<div class="field col-12" *ngIf="token.role == 'Admin' || token.role == 'Commercial'">
@@ -385,8 +385,7 @@
 								<div class="col-6">
 									<div *ngIf="filter_value.statut" class="mb-1">
 										<label style="text-align: center;" class="mr-2">Statut</label>
-										<p-dropdown placeholder="Statut" [options]="statutFilter"
-											autoWidth="false"
+										<p-dropdown placeholder="Statut" [options]="statutFilter" autoWidth="false"
 											[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
@@ -572,7 +571,7 @@
 								</ng-template>
 								<ng-template pTemplate="body">
 									<tr>
-										<td>{{annonce.entreprise_id?.r_sociale || annonce.entreprise_name}}</td>
+										<td>{{annonce.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
 										<td>{{annonce.workplaceType}}</td>
 										<td>{{annonce.date_creation | date:'dd MMMM yy'}}</td>
 										<td>{{annonce.user_id?.firstname | titlecase}} {{annonce.user_id?.lastname |
@@ -607,8 +606,11 @@
 												style="background-image: url('../../../assets/images/imatch/entreprise.png');">
 											</div>
 										</ng-template>
-										<a class="offres-btns details"
+										<a class="offres-btns details" *ngIf="!isEtudiant"
 											(click)="visibleSidebar = true; annonceSelected = annonce"><i
+												class="pi pi-list"></i>Détails</a>
+										<a class="offres-btns details" *ngIf="isEtudiant"
+											(click)="visibleSidebar = false; seeDetails(annonce)"><i
 												class="pi pi-list"></i>Détails</a>
 									</div>
 									<div class="col-7 card-right">
@@ -634,18 +636,22 @@
 											</ng-container>
 											<p class="offre-card-lieu">📍 {{annonce?.entreprise_ville }}</p>
 										</div>
-										<!--<a class="offres-btns postuler" [badge]="dicOffreNB[annonce._id]"
-									(click)="showPostuler = true; annonceSelected = annonce"><i
-										class="pi pi-arrow-right"></i>Postuler</a>-->
-										<p-button *ngIf="dicOffreNB[annonce._id]" label="Matching" icon="pi pi-users"
-											badgeClass="p-badge-danger"
+										<p-button *ngIf="dicOffreNB[annonce._id] && !isEtudiant" label="Matching"
+											icon="pi pi-users" badgeClass="p-badge-danger"
 											(click)="annonceSelected = annonce; InitMatching(annonce)"
 											[style]="{'width':'100%'}" autoWidth="false"
 											[badge]="dicOffreNB[annonce._id]"></p-button>
-										<p-button *ngIf="!dicOffreNB[annonce._id]" label="Matching" icon="pi pi-users"
-											badgeClass="p-badge-danger"
+										<p-button *ngIf="!dicOffreNB[annonce._id] && !isEtudiant" label="Matching"
+											icon="pi pi-users" badgeClass="p-badge-danger"
 											(click)="annonceSelected = annonce; InitMatching(annonce)"
 											[style]="{'width':'100%'}" autoWidth="false" badge="0"></p-button>
+										<p-button *ngIf="isEtudiant && !matchDic[annonce._id]" label="Postuler"
+											icon="pi pi-briefcase" [style]="{'width':'100%'}" autoWidth="false"
+											(click)="visibleSidebar = false; InitPostulate(annonce)"></p-button>
+										<p-button *ngIf="isEtudiant && matchDic[annonce._id]"
+											label="Vous avez déjà postuler" [disabled]="true" icon="pi pi-briefcase"
+											[style]="{'width':'100%'}" autoWidth="false"
+											(click)="visibleSidebar = false; InitPostulate(annonce)"></p-button>
 									</div>
 								</div>
 							</div>
@@ -685,12 +691,18 @@
 						</ul>-->
 
 								<hr />
-								<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+								<button *ngIf="!isEtudiant" pButton type="button" label="Modifier" icon="pi pi-pencil"
 									(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
-								<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+								<button *ngIf="!isEtudiant" class="ml-1" pButton type="button" label="Matching V1"
 									icon="pi pi-link"
 									(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
-								<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+								<button *ngIf="isEtudiant" pButton type="button" label="Détails" icon="pi pi-eye"
+									(click)="visibleSidebar = false; seeDetails(annonceSelected)"></button>
+								<button *ngIf="isEtudiant && !matchDic[annonceSelected?._id]" class="ml-1" pButton
+									type="button" label="Postuler pour cette offre" icon="pi pi-briefcase"
+									(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
+								<button *ngIf="isEtudiant && matchDic[annonceSelected?._id]" class="ml-1" pButton
+									type="button" label="Vous avez déjà postuler" [disabled]="true"
 									icon="pi pi-briefcase"
 									(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 							</p-sidebar>
@@ -731,12 +743,18 @@
 						</ul>-->
 
 								<hr />
-								<button *ngIf="canAddOrEdit" pButton type="button" label="Modifier" icon="pi pi-pencil"
+								<button *ngIf="!isEtudiant" pButton type="button" label="Modifier" icon="pi pi-pencil"
 									(click)="visibleSidebar = false; onFillForm(); showFormUpdate = true;"></button>
-								<button *ngIf="isEntreprise" class="ml-1" pButton type="button" label="Matching V1"
+								<button *ngIf="!isEtudiant" class="ml-1" pButton type="button" label="Matching V1"
 									icon="pi pi-link"
 									(click)="visibleSidebar = false; InitMatching(annonceSelected)"></button>
-								<button class="ml-1" pButton type="button" label="Postuler pour cette offre"
+								<button *ngIf="isEtudiant" pButton type="button" label="Détails" icon="pi pi-eye"
+									(click)="visibleSidebar = false; seeDetails(annonceSelected)"></button>
+								<button *ngIf="isEtudiant && !matchDic[annonceSelected?._id]" class="ml-1" pButton
+									type="button" label="Postuler pour cette offre" icon="pi pi-briefcase"
+									(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
+								<button *ngIf="isEtudiant && matchDic[annonceSelected?._id]" class="ml-1" pButton
+									type="button" label="Vous avez déjà postuler" [disabled]="true"
 									icon="pi pi-briefcase"
 									(click)="visibleSidebar = false; InitPostulate(annonceSelected)"></button>
 							</p-sidebar>
@@ -756,6 +774,10 @@
 		<p-tabPanel style="width: 100%;" [header]="cv.label" *ngFor="let cv of cvList" [closable]="true">
 			<app-voir-cv [CV_ID]="cv.ID"></app-voir-cv>
 		</p-tabPanel>
+		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of offreList"
+			[closable]="true">
+			<app-voir-details-offre [ANNONCE_ID]="annonce._id"></app-voir-details-offre>
+		</p-tabPanel>
 	</p-tabView>
 </div>
 <p-sidebar [(visible)]="displayFilter" position="right" [style]="{width:'30em'}">
@@ -773,11 +795,13 @@
 			appendTo="body" class="mb-2" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-multiSelect>
 
-		<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" [(ngModel)]="filter_value.entreprise" class="mb-2"
-			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+		<p-dropdown *ngIf="!isEtudiant" placeholder="Auteur" [options]="entrepriseFilter"
+			[(ngModel)]="filter_value.entreprise" class="mb-2" appendTo="body" [style]="{'width':'27em'}"
+			autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
-		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id"
-			class="mb-2" appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
+		<p-dropdown *ngIf="!isEtudiant" placeholder="Entreprise" [options]="entrepriseFilter2"
+			[(ngModel)]="filter_value.entreprise_id" class="mb-2" appendTo="body" [style]="{'width':'27em'}"
+			autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
 		<input pInputText type="text" style="width: 27em;" class="mb-2" [(ngModel)]="filter_value.search"
 			(onBlur)="updateFilter()" placeholder="Recherche" />

@@ -1,0 +1,19 @@
+<div class="container" *ngIf="ANNONCE">
+    <div class="modal-content">
+        <div>
+            <img class="img-modal" src="../../../assets/images/imatch/entreprise.png">
+        </div>
+        <h4 *ngIf="profil_str">Profil :</h4>
+        <p *ngIf="profil_str">{{profil_str}}</p>
+        <h4>Compétences :</h4>
+        <p><span *ngFor="let compet of ANNONCE?.competences">{{compet.libelle}}, </span></p>
+        <h4>Lieu :</h4>
+        <p>{{ANNONCE?.entreprise_ville}}</p>
+        <h4>Description :</h4>
+        <p>{{ANNONCE?.missionDesc}}</p>
+        <div class="btns-postuler">
+            <div class="btn btn-postuler" (click)="InitPostulate()"><i
+                    class="pi pi-arrow-right"></i>Postuler</div>
+        </div>
+    </div>
+</div>
