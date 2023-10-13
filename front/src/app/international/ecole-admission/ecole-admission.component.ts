@@ -112,8 +112,9 @@ export class EcoleAdmissionComponent implements OnInit {
   })
   onCreateRA() {
     
-    this.selectedEcole.campusinfo.push(this.createFormRA.value)
+   
     if(this.createFormRA.value.campus.length > 3){
+      this.selectedEcole.campus=this.createFormRA.value.campus;
     this.selectedEcole.campus.push(this.createFormRA.value.campus)}
   this.FAService.EAupdate(this.selectedEcole).subscribe(data => {
     console.log(data)

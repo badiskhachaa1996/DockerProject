@@ -117,6 +117,9 @@
             style="margin-top: 6rem;"></button>
     </div>-->
     <p-tabView (onChange)="loadCommentaires($event)" style="width: 100%;" [(activeIndex)]="activeIndex1">
+        <p-tabPanel header="Créer un ticket">
+            <app-ajout-ticket></app-ajout-ticket>
+        </p-tabPanel>
         <p-tabPanel header="Liste">
             <div class="grid">
                 <div class="col-6 md:col-2 field-checkbox">
@@ -125,6 +128,11 @@
                     <label for="city1">Assignés</label>
                 </div>
                 <div class="col-6 md:col-2 field-checkbox">
+                    <p-checkbox name="filterType" value="Non Assignes" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
+                        inputId="type4"></p-checkbox>
+                    <label for="city1">Non Assignés</label>
+                </div>
+                <div class="col-6 md:col-1 field-checkbox">
                     <p-checkbox name="filterType" value="Crees" [(ngModel)]="filterType" (onChange)="onFilterTicket()"
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
@@ -139,9 +147,9 @@
                         (onChange)="onFilterTicket()" inputId="statut3"></p-checkbox>
                     <label for="city1">Urgent</label>
                 </div>
-                <div class="col-6 md:col-4 grid">
-                    <p class="col-12" style="text-align: center; border:1px lightgray solid;"> <span
-                            style="font-weight: bold;">Tickets selectionnés &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <div class="col-6 md:col-3 grid">
+                    <p class="col-9" style=" border:1px lightgray solid;"> <span
+                            style="font-weight: bold;">Tickets selectionnés </span>
                         {{tickets.length}}</p>
                 </div>
             </div>
@@ -156,6 +164,9 @@
                             (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');"
                             placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
+                            <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true"
+                            (onChange)="dt1.filter($event.value, 'sujet', 'equals');" placeholder="Choisissez un sujet"
+                            emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Choisissez un sujet"></p-dropdown>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Choisissez un etat"
                             emptyFilterMessage="Pas d'état trouvé" filterPlaceholder="Choisissez un état"></p-dropdown>
@@ -260,6 +271,7 @@
                     <tr>
                         <th> Crée par </th>
                         <th> Assigné par </th>
+                        <th>assigner a</th>
                         <th> Priorité </th>
                         <th> Deadline </th>
                         <th> Note assignation </th>
@@ -267,10 +279,11 @@
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{ticket.createur_id.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
-                        <td>{{ticket.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
-                        <td>{{(ticket.priorite)?'Urgent':'Pas Urgent'}}</td>
-                        <td>{{ticket.date_limite |date:"dd MMMM yy"}}</td>
+                        <td>{{ticket?.createur_id?.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
+                        <td>{{ticket?.agent_id?.firstname|titlecas}}{{ticket.agent_id?.lastname|uppercase}}</td>
+                        <td>{{ticket?.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
+                        <td>{{(ticket?.priorite)?'Urgent':'Pas Urgent'}}</td>
+                        <td>{{ticket?.date_limite |date:"dd MMMM yy"}}</td>
                         <td>
                             <app-read-more [string]="ticket.note_assignation"></app-read-more>
                         </td>
@@ -598,9 +611,7 @@
                 </ng-template>
             </p-table>-->
         </p-tabPanel>
-        <p-tabPanel header="Créer un ticket">
-            <app-ajout-ticket></app-ajout-ticket>
-        </p-tabPanel>
+        
     </p-tabView>
 
 </div>

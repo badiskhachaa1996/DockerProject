@@ -33,7 +33,7 @@
                 <div class="field col-6">
                     <label>Filière<span style="color: red"> * </span> </label>
                     <p-dropdown formControlName="filiere" [options]="filiereList" autoWidth="false"
-                        [style]="{ width: '100%' }" placeholder="Choisissez une filière">
+                        [style]="{ width: '100%' }" placeholder="Choisissez une filière ">
                     </p-dropdown>
                 </div>
                 <div class="field col-6">
@@ -309,10 +309,10 @@
                                 <td [pEditableColumn]="true" pEditableColumnField="annee">
                                     <p-cellEditor>
                                         <ng-template pTemplate="input">
-                                            <input pInputText type="text" [(ngModel)]="formation.annee" />
+                                            <input pInputText type="text" [(ngModel)]="formation.annee_scolaire" />
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{formation?.annee}}
+                                            {{formation?.annee_scolaire}}
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -416,7 +416,7 @@
                         filterPlaceholder="Bac" [style]="{'margin':'5px'}"></p-dropdown>
                     <p-dropdown filter="true" [options]="anneeFilter"
                         (onChange)="dt1.filter($event.value, 'filiere','contains')"
-                        emptyFilterMessage="Pas de filiere trouvé" filterPlaceholder="Année"
+                        emptyFilterMessage="Pas de filière  trouvé" filterPlaceholder="Année"
                         [style]="{'margin':'5px'}"></p-dropdown>
                         <p-dropdown filter="true" [options]="Filtercompuse"
                         (onChange)="dt1.filter($event.value, 'campus','contains')" emptyFilterMessage="Pas de campus trouvé"
@@ -433,7 +433,10 @@
                             Code<p-sortIcon field="code"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="filiere">
-                            Filiere<p-sortIcon field="filiere"> </p-sortIcon>
+                            Filière <p-sortIcon field="filiere"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="annee">
+                            Année <p-sortIcon field="annee"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="niveau">
                             Niveau<p-sortIcon field="niveau"> </p-sortIcon>
@@ -493,6 +496,9 @@
                         </td>
                         <td>
                             {{ formation.filiere }}
+                        </td>
+                        <td>
+                            {{ formation.annee }}
                         </td>
                         <td>
                             {{ formation.niveau }}
@@ -592,7 +598,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr *ngFor="let rentree of formation.rentree">
                         <td>{{ rentree.campus }}</td>
-                        <td>{{ rentree.annee }}</td>
+                        <td>{{ rentree.annee_scolaire }}</td>
                         <td>{{ rentree.date_debut | date : "dd/MM/yyyy" }}</td>
                         <td>{{ rentree.date_fin | date : "dd/MM/yyyy" }}</td>
                         <td>{{ rentree.nb_heures }}</td>
