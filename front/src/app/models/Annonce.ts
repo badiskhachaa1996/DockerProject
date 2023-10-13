@@ -14,7 +14,7 @@ export class Annonce {
         public entreprise_phone_indicatif?: string,
         public entreprise_phone?: string,
         public profil?: any,
-        public competences?: string[],
+        public competences?: any[],
         public outils?: string[],
         public workplaceType?: string,
         public publicationDate?: Date,

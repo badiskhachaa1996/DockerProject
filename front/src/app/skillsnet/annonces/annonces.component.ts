@@ -34,6 +34,8 @@ export class AnnoncesComponent implements OnInit {
 
   tuteurs: Tuteur[] = [];
 
+  isEtudiant = true
+
   form: FormGroup;
   showForm: boolean = false;
   formUpdate: FormGroup;
@@ -101,6 +103,7 @@ export class AnnoncesComponent implements OnInit {
   isEntreprise = false
 
   token: any;
+  matchDic = {}
 
   constructor(private skillsService: SkillsService, private tuteurService: TuteurService,
     private entrepriseService: EntrepriseService, private messageService: MessageService,
@@ -114,11 +117,18 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      console.log(user.savedAnnonces)
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant')
+      if (this.isEtudiant) {
+        this.activeIndex1 = 0
+        this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {
+          matchings.forEach(m => {
+            this.matchDic[m.offre_id._id] = m
+          })
+        })
+      }
+
       if (user.savedAnnonces)
         this.matchingList = user.savedAnnonces
-      if (!this.canAddOrEdit)
-        this.canAddOrEdit = (user.role == "Commercial" || user.type == "Commercial")
       this.isEntreprise = (this.canAddOrEdit || user.type == "CEO Entreprise")
     })
 
@@ -458,7 +468,7 @@ export class AnnoncesComponent implements OnInit {
           offre_id: annonce._id,
           matcher_id: this.token.id,
           cv_id: cv._id,
-          type_matching: "MA",
+          type_matching: "Candidat",
           date_creation: new Date()
         }
         this.MatchingService.create(matching).subscribe(match => {
@@ -658,21 +668,52 @@ export class AnnoncesComponent implements OnInit {
 
       })
   }
-  
+
   rdvList: { label: string, ID: string, offer_id: string }[] = []
 
   takeRDV(element) {
-    this.rdvList.push(element)
-    setTimeout(() => {
-      this.activeIndex1 = 2 + this.matchingList.length
-    }, 1)
+    let ids = []
+    this.rdvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.rdvList.push(element)
+      setTimeout(() => {
+        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + ids.indexOf(element.ID)
   }
   cvList: { label: string, ID: string }[] = []
   seeCV(element) {
-    this.cvList.push(element)
-    setTimeout(() => {
-      this.activeIndex1 = 2 + this.matchingList.length + this.rdvList.length
-    }, 1)
+    let ids = []
+    this.cvList.forEach(o => {
+      ids.push(o.ID)
+    })
+    if (!ids.includes(element.ID)) {
+      this.cvList.push(element)
+      setTimeout(() => {
+        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + ids.indexOf(element.ID)
+
+
+
+  }
+  offreList = []
+  seeDetails(annonce: Annonce) {
+    let ids = []
+    this.offreList.forEach(o => {
+      ids.push(o._id)
+    })
+    if (!ids.includes(annonce._id)) {
+      this.offreList.push(annonce)
+      setTimeout(() => {
+        this.activeIndex1 = 0 + this.matchingList.length + this.rdvList.length + this.cvList.length + this.offreList.length
+      }, 1)
+    } else
+      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length + ids.indexOf(annonce._id)
 
   }
 }

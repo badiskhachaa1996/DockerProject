@@ -30,8 +30,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   defaultcvs = this.cvs
   dicPicture = {}
   dicMatching = {}
-
-
+  isEtudiant = true
   token;
   constructor(private AuthService: AuthService, private CVService: CvService, private MatchingService: MatchingService, private router: Router,
     private ToastService: MessageService, private RDVService: MeetingTeamsService, private skillsService: SkillsService) { }
@@ -55,6 +54,9 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
       .catch((error) => { console.error(error); })
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      this.isEtudiant = true
+      if (this.isEtudiant)
+        this.activeIndex1 = 0
       if (user.savedMatching)
         this.matchingList = user.savedMatching
     })
