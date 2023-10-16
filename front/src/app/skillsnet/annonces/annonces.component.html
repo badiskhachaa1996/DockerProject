@@ -372,7 +372,7 @@
 			<div class="col-12">
 				<div class="card">
 
-					<p-dataView #dv [value]="['']" [paginator]="true" [rows]="9"
+					<p-dataView #dv [value]="['']"
 						filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 						layout="grid">
 						<ng-template pTemplate="header">
@@ -435,7 +435,7 @@
 									</div>
 
 									<input pInputText type="text" style="width: 27em;" class="mb-2"
-										[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
+										[(ngModel)]="filter_value.search" (input)="updateFilter()"
 										placeholder="Recherche" />
 								</div>
 								<div class="col-3" style="text-align: right;">
@@ -494,7 +494,7 @@
 										</td>
 
 										<td style="min-width: 12rem;">
-											{{annonce.statut}}
+											{{getStatut(annonce)}}
 										</td>
 
 										<td style="min-width: 12rem;">
@@ -600,16 +600,18 @@
 											<div class="img-card"
 												style="background-image: url('{{dicPicture[annonce.entreprise_id?._id].url}}');">
 											</div>
+											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">{{annonce.custom_id}}</p>
 										</ng-template>
 										<ng-template #default_image>
 											<div class="img-card"
 												style="background-image: url('../../../assets/images/imatch/entreprise.png');">
 											</div>
+											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">{{annonce.custom_id}}</p>
 										</ng-template>
-										<a class="offres-btns details" *ngIf="!isEtudiant"
+										<!--<a class="offres-btns details" *ngIf="!isEtudiant"
 											(click)="visibleSidebar = true; annonceSelected = annonce"><i
-												class="pi pi-list"></i>Détails</a>
-										<a class="offres-btns details" *ngIf="isEtudiant"
+												class="pi pi-list"></i>Détails</a>-->
+										<a class="offres-btns details"
 											(click)="visibleSidebar = false; seeDetails(annonce)"><i
 												class="pi pi-list"></i>Détails</a>
 									</div>
@@ -766,10 +768,10 @@
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList"
 			[closable]="true">
-			<app-matching [ID]="annonce._id" (rdv)="takeRDV($event)" (cv)="seeCV($event)"></app-matching>
+			<app-matching *ngIf="refresh" [ID]="annonce._id" (rdv)="takeRDV($event)" (cv)="seeCV($event)"></app-matching>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="rdv.label" *ngFor="let rdv of rdvList" [closable]="true">
-			<app-rdv-calendar-interne [ID]="rdv.ID" [offre_id]="rdv.offer_id"></app-rdv-calendar-interne>
+			<app-rdv-calendar-interne [ID]="rdv.ID" [offre_id]="rdv.offer_id" (formExit)="formExit($event)"></app-rdv-calendar-interne>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="cv.label" *ngFor="let cv of cvList" [closable]="true">
 			<app-voir-cv [CV_ID]="cv.ID"></app-voir-cv>
