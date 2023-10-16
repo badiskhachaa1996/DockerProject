@@ -330,10 +330,10 @@ export class UserProfilComponent implements OnInit {
       this.CollaborateurService.getCollaborateurByUserId(this.token.id).then(c => {
         this.dataCollab = c
       })
-      this.MCService.getInfo().then(u => {
+      /*this.MCService.getInfo().then(u => {
         console.log(u)
         this.dataMC = u
-      })
+      })*/
       this.userco = jwt_decode(data['userToken'])['userFromDb']
       //TODO C'est quoi cette merde
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {

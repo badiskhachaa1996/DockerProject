@@ -233,18 +233,23 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/formulaireICBS/") ||
       req.originalUrl === '/soc/admission-dubai/post-dubai-admission' ||
       req.originalUrl === '/soc/cv/get-cvs-public' ||
+      req.originalUrl === '/soc/cv/upload-cv' ||
+      req.originalUrl === '/soc/cv/post-cv' ||
       req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
       req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
+      req.originalUrl === '/soc/extSkillsnet/create' ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl.startsWith("/soc/cv/get-picture-by-user/") ||
+      req.originalUrl.startsWith("/soc/cv/download-cv/") ||
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
       req.originalUrl.startsWith("/soc/fIM") ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID') ||
       req.originalUrl.startsWith('/soc/docGenInt/download') ||
       req.originalUrl === '/soc/meetingTeams/create' ||
-      req.originalUrl.startsWith('/soc/genDoc/get-doc')
+      req.originalUrl.startsWith('/soc/genDoc/get-doc') ||
+      req.originalUrl.startsWith('/soc/annonce/get-annonces')
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici

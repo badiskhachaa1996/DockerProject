@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
 import { MessageService as ToastService } from 'primeng/api';
@@ -70,10 +70,9 @@ export class NewListTicketsComponent implements OnInit {
   { label: 'Module Admin IMS', value: "Module Admin IMS" },
   { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
   { label: 'Module Ticketing', value: "Module Ticketing" },
-  { label: 'Espace Personnel', value: "Espace Personnel" },        
-];
+  { label: 'Espace Personnel', value: "Espace Personnel" },
+  ];
   filterStatut = [
-    { label: 'Tous les statuts', value: null },
     { label: 'En attente', value: "En attente de traitement" },
     { label: 'En cours', value: "En cours de traitement" },
     { label: 'Traité', value: "Traité" },
@@ -84,51 +83,99 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'En cours', value: "En cours de traitement" },
     { label: 'Traité', value: "Traité" },
   ]
+  filterAgent = [
+    { label: 'Tous les users', value: null }
+  ]
   sujetDic = {}
   serviceDic = {}
   updateTicketList() {
     this.TicketService.getAllMine(this.token.id).subscribe((dataM: Ticket[]) => {
       this.tickets = dataM
       dataM.forEach(e => {
-        e.origin = true
+        e.origin = 'Mine'
         e.documents_service.forEach(ds => { ds.by = "Agent" })
         e.documents = e.documents.concat(e.documents_service)
       })
       this.TicketService.getAllAssigne(this.token.id).subscribe(data => {
         data.forEach(e => {
-          e.origin = false
+          e.origin = 'Assigne'
           e.documents_service.forEach(ds => { ds.by = "Agent" })
           e.documents = e.documents.concat(e.documents_service)
         })
-
         this.tickets = this.tickets.concat(data)
-        this.tickets.sort((a, b) => {
-          if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-            return -1
-          else
-            return 1
+        let service_dic = {};
+        this.USER.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
         })
-        this.defaultTicket.sort((a, b) => {
-          if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-            return -1
-          else
-            return 1
-        })
-        this.defaultTicket = this.tickets
-        this.onFilterTicket()
-        let tempDate = new Date()
-        tempDate.setDate(tempDate.getDate() - 2)
-        this.stats = {
-          en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-          en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
-        }
+        //IF this.user ticketing !='Super-Admin'
+        let role = service_dic['Ticketing']
+        if (role && role != 'Super-Admin')
+          this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
+            nonassigne.forEach(e => {
+              e.origin = 'Non Assigne'
+              e.documents_service.forEach(ds => { ds.by = "Agent" })
+              e.documents = e.documents.concat(e.documents_service)
+            })
+            this.tickets = this.tickets.concat(nonassigne)
+            this.tickets.sort((a, b) => {
+              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                return -1
+              else
+                return 1
+            })
+
+            this.defaultTicket = this.tickets
+            console.log(this.defaultTicket)
+            this.onFilterTicket()
+            let tempDate = new Date()
+            tempDate.setDate(tempDate.getDate() - 2)
+            this.stats = {
+              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+            }
+          })
+        else
+          this.TicketService.getAllNonAssigne().subscribe(nonassigne => {
+            nonassigne.forEach(e => {
+              e.origin = 'Non Assigne'
+              e.documents_service.forEach(ds => { ds.by = "Agent" })
+              e.documents = e.documents.concat(e.documents_service)
+            })
+            this.tickets = this.tickets.concat(nonassigne)
+            this.tickets.sort((a, b) => {
+              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                return -1
+              else
+                return 1
+            })
+
+            this.defaultTicket = this.tickets
+            console.log(this.defaultTicket)
+            this.onFilterTicket()
+            let tempDate = new Date()
+            tempDate.setDate(tempDate.getDate() - 2)
+            this.stats = {
+              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+            }
+          })
+
       })
     })
 
   }
+  filterBase = ['En attente de traitement', 'En cours de traitement']
+  @ViewChild('dt1', { static: true }) dt1: any;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
-    this.updateTicketList()
+    this.AuthService.getPopulate(this.token.id).subscribe(r => {
+      this.USER = r
+      this.ticketsOnglets = r.savedTicket
+      this.updateTicketList()
+    })
+
+    this.dt1.filter(this.filterBase, 'statut', 'in')
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
         this.serviceDropdown.push({ label: val.label, value: val._id })
@@ -141,9 +188,11 @@ export class NewListTicketsComponent implements OnInit {
         this.sujetDic[element._id] = element.label
       });
     })
-    this.AuthService.getPopulate(this.token.id).subscribe(r => {
-      this.USER = r
-      this.ticketsOnglets = r.savedTicket
+
+    this.AuthService.getAllAgent().subscribe(users => {
+      users.forEach(u => {
+        this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+      })
     })
   }
 
@@ -320,13 +369,12 @@ export class NewListTicketsComponent implements OnInit {
     })
     if (!ids.includes(ticket._id)) {
       this.ticketsOnglets.push(ticket)
-
       this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
-        this.activeIndex1 = this.ticketsOnglets.length
+        this.activeIndex1 = this.ticketsOnglets.length + 1
       })
       this.ToastService.add({ severity: 'success', summary: "Le ticket a été épinglé à vos onglets" })
     } else {
-      this.activeIndex1 = ids.indexOf(ticket._id) + 1
+      this.activeIndex1 = ids.indexOf(ticket._id) + 2
       this.ToastService.add({ severity: 'info', summary: "Ce ticket se trouve déjà dans vos onglets" })
     }
 
@@ -424,7 +472,11 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.update({ _id: this.token.id, savedTicket: this.ticketsOnglets }).subscribe(r => {
     })
   }
-  filterType = ['Crees']
+
+  handleClose(e) {
+    this.deleteTicket(this.ticketsOnglets[e.index - 2])
+  }
+  filterType = ['Mine']
   filterStatutTicket = []
   defaultTicket = []
   onFilterTicket() {
@@ -440,18 +492,8 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType.includes("Assignes") && !this.filterType.includes("Crees"))
-        if (t.origin)
-          r = false
-      if (this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
-        if (!t.origin)
-          r = false
-      if (!this.filterType.includes("Crees") && !this.filterType.includes("Assignes"))
+      if (this.filterType.includes(t.origin) == false)
         r = false
-      if (this.filterType.includes("Non Assignes") && this.filterType.includes("Crees"))
-        if (!t.origin || t.agent_id != null)
-          r = false
-
       if (r)
         this.tickets.push(t)
     })
@@ -526,6 +568,6 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
   }
-  activeIndex1 = 0
+  activeIndex1 = 1
 }
 

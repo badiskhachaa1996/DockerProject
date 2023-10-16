@@ -49,6 +49,22 @@ export class AppMenuComponent implements OnInit {
             icon: 'pi pi-fw pi-home',
             routerLink: ['/'],
         },
+        {
+            label: 'iMatch',
+            icon: 'pi pi-star',
+            items: [
+                {
+                    label: 'Offres',
+                    icon: 'pi pi-volume-up',
+                    routerLink: ['/offres'],
+                },
+                {
+                    label: 'CV',
+                    icon: 'pi pi-volume-up',
+                    routerLink: ['/imatch/cv-etudiant'],
+                }
+            ],
+        },
         /*{
             label: 'Signaler un problème technique',
             icon: 'pi pi-fw pi-exclamation-triangle',
@@ -4348,6 +4364,29 @@ export class AppMenuComponent implements OnInit {
                         },
                         error: (error: any) => {
                             console.error(error);
+                            this.items = [
+                                {
+                                    label: 'Espace Personnel',
+                                    icon: 'pi pi-fw pi-home',
+                                    routerLink: ['/'],
+                                },
+                                {
+                                    label: 'iMatch',
+                                    icon: 'pi pi-star',
+                                    items: [
+                                        {
+                                            label: 'Offres',
+                                            icon: 'pi pi-volume-up',
+                                            routerLink: ['/offres'],
+                                        },
+                                        {
+                                            label: 'CV',
+                                            icon: 'pi pi-volume-up',
+                                            routerLink: ['/imatch/cv-etudiant'],
+                                        }
+                                    ],
+                                },
+                            ];
                         },
                         complete: () => {
                             console.log(

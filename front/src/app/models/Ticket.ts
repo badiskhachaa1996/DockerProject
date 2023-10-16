@@ -40,7 +40,7 @@ export class Ticket {
         public module?: string,
         public resum?: string,
         public type?: string,
-        public origin?: boolean,
+        public origin?: string,
         public assigne_by?: User
     ) { }
 
