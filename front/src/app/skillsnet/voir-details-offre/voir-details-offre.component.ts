@@ -5,6 +5,7 @@ import { CvService } from 'src/app/services/skillsnet/cv.service';
 import jwt_decode from "jwt-decode";
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 import { MessageService } from 'primeng/api';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-voir-details-offre',
   templateUrl: './voir-details-offre.component.html',
@@ -13,12 +14,12 @@ import { MessageService } from 'primeng/api';
 export class VoirDetailsOffreComponent implements OnInit {
   @Input() ANNONCE_ID
   constructor(private AnnonceService: AnnonceService, private CvService: CvService, private MatchingService: MatchingService,
-    private ToastService: MessageService) { }
+    private ToastService: MessageService, private userService: AuthService) { }
   ANNONCE: Annonce
   profil_str = ""
   token;
+  isEtudiant = true
   ngOnInit(): void {
-
     this.AnnonceService.getAnnonce(this.ANNONCE_ID).then(annonce => {
       this.ANNONCE = annonce
       this.profil_str = annonce.profil?.libelle
@@ -26,6 +27,10 @@ export class VoirDetailsOffreComponent implements OnInit {
         this.profil_str = annonce.competences[0]?.profile_id?.libelle
     })
     this.token = jwt_decode(localStorage.getItem("token"));
+    this.userService.getPopulate(this.token.id).subscribe(user => {
+      console.log(user)
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || user.type == null)
+    })
   }
 
   InitPostulate() {
@@ -45,6 +50,14 @@ export class VoirDetailsOffreComponent implements OnInit {
         this.ToastService.add({ summary: "Non eligible au matching", severity: "error", detail: "Merci de créer votre cv pour pouvoir être eligible au matching" })
       }
     })
+  }
+
+  Edit(){
+
+  }
+
+  MAtching(){
+
   }
 
 }

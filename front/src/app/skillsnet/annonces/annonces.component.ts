@@ -34,7 +34,7 @@ export class AnnoncesComponent implements OnInit {
 
   tuteurs: Tuteur[] = [];
 
-  isEtudiant = true
+  isEtudiant = false
 
   form: FormGroup;
   showForm: boolean = false;
@@ -125,7 +125,8 @@ export class AnnoncesComponent implements OnInit {
             this.matchDic[m.offre_id._id] = m
           })
         })
-      }
+      } else
+        this.activeIndex1 = 1
 
       if (user.savedAnnonces)
         this.matchingList = user.savedAnnonces
@@ -388,7 +389,7 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.source = this.formUpdate.get('source')?.value;
     annonce.isClosed = false;
-
+    annonce.modified_at = new Date()
     //Envoi de l'annonce en BD
     this.annonceService.putAnnonce(annonce)
       .then((response) => {
@@ -452,10 +453,12 @@ export class AnnoncesComponent implements OnInit {
 
   handleClose(e) {
     if (e.index > this.matchingList.length - 1) {
-      this.matchingList.splice(e.index - 1, 1)
+      this.matchingList.splice(e.index - 2, 1)
       this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
 
       })
+      if (!this.isEtudiant)
+        this.activeIndex1 = 1
     }
 
     //this.deleteOnglet(this.matchingList[e.index - 1])
@@ -624,11 +627,12 @@ export class AnnoncesComponent implements OnInit {
       else if (this.filter_value.date && new Date(this.filter_value.date).getTime() >= new Date(val.debut).getTime())
         r = false, console.log("date")
       else if (this.filter_value.search) {
-        if (!val.custom_id.includes(this.filter_value.search) &&
-          !val.entreprise_name.includes(this.filter_value.search) &&
-          !val.missionDesc.includes(this.filter_value.search) &&
-          !val.missionName.includes(this.filter_value.search) &&
-          !val.entreprise_mail.includes(this.filter_value.search))
+        this.filter_value.search = this.filter_value.search.toLocaleLowerCase()
+        if (!val.custom_id.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_name.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionDesc.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionName.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
           r = false
       }
 
@@ -673,6 +677,7 @@ export class AnnoncesComponent implements OnInit {
 
   takeRDV(element) {
     let ids = []
+    console.log(element)
     this.rdvList.forEach(o => {
       ids.push(o.ID)
     })
@@ -704,16 +709,36 @@ export class AnnoncesComponent implements OnInit {
   offreList = []
   seeDetails(annonce: Annonce) {
     let ids = []
+    let base = 0
+    if(!this.isEtudiant)
+      base = 1
     this.offreList.forEach(o => {
       ids.push(o._id)
     })
     if (!ids.includes(annonce._id)) {
       this.offreList.push(annonce)
       setTimeout(() => {
-        this.activeIndex1 = 0 + this.matchingList.length + this.rdvList.length + this.cvList.length + this.offreList.length
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + this.cvList.length + this.offreList.length
       }, 1)
     } else
       this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length + ids.indexOf(annonce._id)
 
+  }
+  refresh = true
+  formExit(e: { ID: string, offre_id: string }) {
+    console.log('HI', e, this.rdvList, this.offreList)
+    this.refresh = false
+    this.rdvList.forEach((rdv, idx) => {
+      if (rdv.offer_id == e.offre_id && rdv.ID == e.ID)
+        this.rdvList.splice(idx, 1)
+    })
+    this.matchingList.forEach((offre, idx2) => {
+      if (offre._id == e.offre_id){
+        this.refresh = true
+        this.activeIndex1 = 2 + idx2
+      }
+        
+    })
+    
   }
 }

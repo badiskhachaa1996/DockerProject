@@ -1,8 +1,13 @@
 <div class="container" *ngIf="ANNONCE">
     <div class="modal-content">
-        <div>
-            <img class="img-modal" src="../../../assets/images/imatch/entreprise.png">
+        <div class="row">
+            <img style="max-width: 50%;" class="img-modal" src="../../../assets/images/imatch/entreprise.png">
+            <div style="max-width: 50%;" *ngIf="!isEtudiant">
+                <h4>{{ANNONCE.entreprise_id?.r_sociale || ANNONCE.entreprise_name}}</h4>
+                <h5>{{ANNONCE.missionName}}</h5>
+            </div>
         </div>
+
         <h4 *ngIf="profil_str">Profil :</h4>
         <p *ngIf="profil_str">{{profil_str}}</p>
         <h4>Compétences :</h4>
@@ -12,8 +17,13 @@
         <h4>Description :</h4>
         <p>{{ANNONCE?.missionDesc}}</p>
         <div class="btns-postuler">
-            <div class="btn btn-postuler" (click)="InitPostulate()"><i
-                    class="pi pi-arrow-right"></i>Postuler</div>
+            <div *ngIf="isEtudiant" class="btn btn-postuler" (click)="InitPostulate()">
+                <i class="pi pi-arrow-right"></i>Postuler
+            </div>
+            <div *ngIf="!isEtudiant" class="btn btn-retour" (click)="Edit()"><i
+                class="pi pi-cog"></i>Modifier</div>
+            <div *ngIf="!isEtudiant" class="btn btn-postuler" (click)="Matching()"><i
+                    class="pi pi-users"></i>Matching</div>
         </div>
     </div>
 </div>

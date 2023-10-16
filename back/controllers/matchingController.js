@@ -11,7 +11,8 @@ app.post('/create', (req, res) => {
             res.status(400).send(match)
         } else {
             let event = new Matching({
-                ...req.body
+                ...req.body,
+                date_creation: new Date()
             })
             event.save().then(doc => {
                 Matching.findById(doc._id).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(newDoc => {
