@@ -103,30 +103,63 @@ export class NewListTicketsComponent implements OnInit {
           e.documents = e.documents.concat(e.documents_service)
         })
         this.tickets = this.tickets.concat(data)
-        this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
-          nonassigne.forEach(e => {
-            e.origin = 'Non Assigne'
-            e.documents_service.forEach(ds => { ds.by = "Agent" })
-            e.documents = e.documents.concat(e.documents_service)
-          })
-          this.tickets = this.tickets.concat(nonassigne)
-          this.tickets.sort((a, b) => {
-            if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-              return -1
-            else
-              return 1
-          })
-          
-          this.defaultTicket = this.tickets
-          console.log(this.defaultTicket  )
-          this.onFilterTicket()
-          let tempDate = new Date()
-          tempDate.setDate(tempDate.getDate() - 2)
-          this.stats = {
-            en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-            en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
-          }
+        let service_dic = {};
+        this.USER.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
         })
+        //IF this.user ticketing !='Super-Admin'
+        let role = service_dic['Ticketing']
+        if (role && role != 'Super-Admin')
+          this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
+            nonassigne.forEach(e => {
+              e.origin = 'Non Assigne'
+              e.documents_service.forEach(ds => { ds.by = "Agent" })
+              e.documents = e.documents.concat(e.documents_service)
+            })
+            this.tickets = this.tickets.concat(nonassigne)
+            this.tickets.sort((a, b) => {
+              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                return -1
+              else
+                return 1
+            })
+
+            this.defaultTicket = this.tickets
+            console.log(this.defaultTicket)
+            this.onFilterTicket()
+            let tempDate = new Date()
+            tempDate.setDate(tempDate.getDate() - 2)
+            this.stats = {
+              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+            }
+          })
+        else
+          this.TicketService.getAllNonAssigne().subscribe(nonassigne => {
+            nonassigne.forEach(e => {
+              e.origin = 'Non Assigne'
+              e.documents_service.forEach(ds => { ds.by = "Agent" })
+              e.documents = e.documents.concat(e.documents_service)
+            })
+            this.tickets = this.tickets.concat(nonassigne)
+            this.tickets.sort((a, b) => {
+              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                return -1
+              else
+                return 1
+            })
+
+            this.defaultTicket = this.tickets
+            console.log(this.defaultTicket)
+            this.onFilterTicket()
+            let tempDate = new Date()
+            tempDate.setDate(tempDate.getDate() - 2)
+            this.stats = {
+              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+            }
+          })
 
       })
     })
@@ -136,7 +169,12 @@ export class NewListTicketsComponent implements OnInit {
   @ViewChild('dt1', { static: true }) dt1: any;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'))
-    this.updateTicketList()
+    this.AuthService.getPopulate(this.token.id).subscribe(r => {
+      this.USER = r
+      this.ticketsOnglets = r.savedTicket
+      this.updateTicketList()
+    })
+
     this.dt1.filter(this.filterBase, 'statut', 'in')
     this.ServService.getAll().subscribe(data => {
       data.forEach(val => {
@@ -150,10 +188,7 @@ export class NewListTicketsComponent implements OnInit {
         this.sujetDic[element._id] = element.label
       });
     })
-    this.AuthService.getPopulate(this.token.id).subscribe(r => {
-      this.USER = r
-      this.ticketsOnglets = r.savedTicket
-    })
+
     this.AuthService.getAllAgent().subscribe(users => {
       users.forEach(u => {
         this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
@@ -533,6 +568,6 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
   }
-  activeIndex1 = 0
+  activeIndex1 = 1
 }
 
