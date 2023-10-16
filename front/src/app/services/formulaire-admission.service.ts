@@ -47,7 +47,7 @@ export class FormulaireAdmissionService {
 
   RAgetAll() {
     let registerUrl = this.apiUrl + 'RA/getAll';
-    return this.http.get<any[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<RentreeAdmission[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   RAdelete(id: string): Promise<any> 

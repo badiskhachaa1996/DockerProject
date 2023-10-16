@@ -68,7 +68,7 @@
                                     style="width: 150px; height: 80px;"><i class="pi pi-pause"></i></button>
                                 <br></span>
                             <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
-                                    label="Fin pause" style="width: 150px; height: 80px;" class="p-button-warning mb-2"
+                                    label="Fin pause" style="width: 150px; height: 80px;background-color: #e4aef3;" class=" mb-2"
                                     [disabled]="dailyCheck == null || dailyCheck.check_out != null"><i
                                         class="pi pi-play"></i></button>
                                 <br></span>
@@ -246,7 +246,7 @@
                                     <ng-template pTemplate="rowexpansion" let-cra>
 
                                         <tr>
-                                            <td colspan="9">
+                                            <td colspan="3">
                                                 <p-table class="col-12" styleClass="p-datatable-gridlines">
                                                     <ng-template pTemplate="header">
                                         <tr>
@@ -1153,7 +1153,7 @@
         </ng-template>
         </p-table>
         </p-tabPanel>
-        <p-tabPanel header="Assiduité">
+       <!-- <p-tabPanel header="Assiduité">
             <div class="grid">
                 <div class="col-6">
                     <div>
@@ -1177,7 +1177,7 @@
 
             </div>
 
-        </p-tabPanel>
+        </p-tabPanel>-->
 
 
         <!--<p-tabPanel header="Mes favoris">

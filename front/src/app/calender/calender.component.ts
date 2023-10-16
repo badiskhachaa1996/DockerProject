@@ -474,6 +474,7 @@ export class CalenderComponent implements OnInit {
       .then((response) => {
         this.historiqueCra = response;
         this.lastCras=response[response.length-1];
+        
         console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
@@ -907,6 +908,7 @@ export class CalenderComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
+    
     this.dailyCheck.pause.push({ in: new Date() });
     this.dailyCheck.isInPause = true;
 
@@ -919,7 +921,7 @@ export class CalenderComponent implements OnInit {
         this.onUpdateStatus('En pause')
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
-  }
+      }
 
   // méthode de fin de la pause
   onStopPause(): void {
@@ -938,7 +940,16 @@ export class CalenderComponent implements OnInit {
         this.onUpdateStatus('Disponible')
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
-  }
+      this.dailyCheckService.getUserChecks(this.token.id)
+      .then((response) => {
+        this.historiqueCra = response.reverse();;
+        this.lastCras=response[response.length-1];
+        
+        console.log(this.lastCras);
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
+
+    }
 
   // methôde de checkout
   onCheckOut(): void {
@@ -955,7 +966,7 @@ export class CalenderComponent implements OnInit {
         // recuperation de l'historique du cra
         this.dailyCheckService.getUserChecks(this.token.id)
           .then((response) => {
-            this.historiqueCra = response;
+            this.historiqueCra = response.reverse();
             this.lastCras=response[response.length-1];
             console.log(this.lastCras);
           })

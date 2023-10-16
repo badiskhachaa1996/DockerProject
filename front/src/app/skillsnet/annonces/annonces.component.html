@@ -263,48 +263,50 @@
 		<p-tabPanel header="Ajouter" *ngIf="!isEtudiant">
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">
 				<div class="p-formgrid grid">
-					<div class="field col-12" *ngIf="token.role == 'Admin' || token.role == 'Commercial'">
+					<div class="field col-6" *ngIf="token.role == 'Admin' || token.role == 'Commercial'">
 						<label>Offre interne ?</label>
 						<p-selectButton [options]="entrepriseType" formControlName="is_interne"></p-selectButton>
 					</div>
 
-					<div class="field col-12"
+					<div class="field col-6"
 						*ngIf="form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
+						<label for="espace">Entreprise</label>
 						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label"
 							formControlName="entreprise_id" emptyFilterMessage="Pas d'entreprise trouvé"
 							filterPlaceholder="Recherche" filter="true">
 						</p-dropdown>
 					</div>
 
-					<div class="field col-12"
+					<div class="field col-6"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="entreprise">Entreprise</label>
 						<input pInputText id="title" type="text" formControlName="entreprise_name"
 							placeholder="Nom de l'entreprise" />
 					</div>
-					<div class="field col-12"
+					<div class="field col-6"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="email">Email</label>
 						<input pInputText id="email" type="email" formControlName="entreprise_mail"
 							placeholder="Email de contact de l'entreprise" />
 					</div>
-					<div class="field col-4"
+					<div class="field col-6">
+						<label htmlFor="title">Titre de la mission</label>
+						<input pInputText id="title" type="text" formControlName="missionName"
+							placeholder="Développeur Full-Stack" />
+					</div>
+					<div class="field col-6"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="indicatif">Indicatif</label>
 						<input pInputText id="indicatif" type="tel" formControlName="entreprise_phone_indicatif"
 							placeholder="00223" />
 					</div>
-					<div class="field col-8"
+					<div class="field col-6"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="phone">Téléphone</label>
 						<input pInputText id="phone" type="tel" formControlName="entreprise_phone"
 							placeholder="Numéro de téléphone de l'entreprise" />
 					</div>
-					<div class="field col-12">
-						<label htmlFor="title">Titre de la mission</label>
-						<input pInputText id="title" type="text" formControlName="missionName"
-							placeholder="Développeur Full-Stack" />
-					</div>
+					
 					<div class="field col-12 md:col-6">
 						<label htmlFor="profil">Profil</label>
 						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"
@@ -331,17 +333,18 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-					<div class="field col-12">
+					<div class="field col-6">
+						<label for="esace">Déroulement</label>
 						<p-dropdown [options]="locationOptions" formControlName="workplaceType" optionLabel="label"
 							[style]="{'width':'100%'}" autoWidth="false"
 							placeholder="Choisissez un statut"></p-dropdown>
 					</div>
-					<div class="field col-12">
-						<label htmlFor="title">Description</label>
-						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
-							formControlName="missionDesc"></textarea>
+					
+					<div class="field col-12 md:col-6">
+						<label htmlFor="debut">Date de début</label>
+						<input pInputText id="debut" type="date" formControlName="debut" />
 					</div>
-					<div class="field col-12">
+					<div class="field col-6">
 						<label htmlFor="ville">Lieu</label>
 						<input pInputText id="title" type="text" formControlName="entreprise_ville"
 							placeholder="Lieu de l'offre" />
@@ -351,98 +354,107 @@
 						<p-dropdown id="type" [options]="missionTypes" optionLabel="label"
 							formControlName="missionType"></p-dropdown>
 					</div>
-					<div class="field col-12 md:col-6">
-						<label htmlFor="debut">Date de début</label>
-						<input pInputText id="debut" type="date" formControlName="debut" />
+					<div class="field col-6">
+						<label htmlFor="title">Description</label>
+						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30"
+							formControlName="missionDesc"></textarea>
 					</div>
-					<div class="field col-12"
+					<div class="field col-6"
 						*ngIf="!form.value?.is_interne && (token.role == 'Admin' || token.role == 'Commercial')">
 						<label htmlFor="source">Source</label>
 						<input pInputText id="source" type="text" formControlName="source" />
 					</div>
 
 					<div>
-						<button pButton type="submit" label="Ajouter l'offre" icon="pi pi-plus"
+						<button pButton type="submit" label="Ajouter" icon="pi pi-plus"
 							[disabled]="form.invalid"></button>
 					</div>
 				</div>
 			</form>
 		</p-tabPanel>
 		<p-tabPanel header="Offres">
-			<div class="col-12">
+			<div class="col-12 ">
 				<div class="card">
 
 					<p-dataView #dv [value]="['']"
 						filterBy="missionName,custom_id,source,statut,missionType,profil._id,entreprise_id.r_sociale,entreprise_ville,user_id._id"
 						layout="grid">
 						<ng-template pTemplate="header">
-							<div class="grid" style="width: 100%;">
-								<div class="col-3">
+							<div class="grid ">
+								<div class=" field col-3">
 									<button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"
-										(click)="displayFilter=true"></button>
-									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+										(click)="displayFilter=true"></button><br>
+									<button pButton label="Vider&nbsp; " class="p-button" icon="pi pi-filter-slash"
+										(click)="clearFilter()"></button><br> <br>
+									
 								</div>
-								<div class="col-6">
-									<div *ngIf="filter_value.statut" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Statut</label>
+								
+								<div class="field col-7 grid ">
+									
+									<div *ngIf="filter_value.statut" class="field col-6">
+										<label  >Statut &nbsp;&nbsp;</label>
+										
 										<p-dropdown placeholder="Statut" [options]="statutFilter" autoWidth="false"
+										[style]="{'width':'10em'}"
 											[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.typeMission" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Type de mission</label>
+									<div *ngIf="filter_value.typeMission" class="field col-6">
+										<label  >Type de mission&nbsp; </label>
 										<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
-											[style]="{'width':'15em'}" autoWidth="false"
+											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-
-									<div *ngIf="filter_value.profil.length!=0" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Profil</label>
+									<br>
+									<div *ngIf="filter_value.profil.length!=0" class="field col-6">
+										<label  class="mr-2">Profil&nbsp; </label>
 										<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
-											[style]="{'width':'25em'}" autoWidth="false"
+											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
 										</p-multiSelect>
 									</div>
 
-									<div *ngIf="filter_value.entreprise" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Auteur</label>
+									<div *ngIf="filter_value.entreprise" class="field col-6">
+										<label  class="mr-2">Auteur&nbsp; </label>
 										<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
-											[style]="{'width':'25em'}" autoWidth="false"
+											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.entreprise_id" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Entreprise</label>
+									<br>
+									<div *ngIf="filter_value.entreprise_id" class="field col-6">
+										<label  >Entreprise&nbsp; </label>
 										<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2"
-											[(ngModel)]="filter_value.entreprise_id" class="mb-2" appendTo="body"
-											[style]="{'width':'25em'}" autoWidth="false" (onChange)="updateFilter()">
+											[(ngModel)]="filter_value.entreprise_id"  appendTo="body"
+											[style]="{'width':'10em'}" autoWidth="false" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.locations.length!=0" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Lieu</label>
-										<p-multiSelect [options]="locations" filter="true" [style]="{'width':'25em'}"
+									<div *ngIf="filter_value.locations.length!=0" class="field col-6">
+										<label >Lieu &nbsp;&nbsp;&nbsp;</label>
+										<p-multiSelect [options]="locations" filter="true" [style]="{'width':'10em'}"
 											autoWidth="false" placeholder="Choisissez une ville"
 											[(ngModel)]="filter_value.locations"
 											(onChange)="updateFilter()"></p-multiSelect>
 									</div>
-									<div *ngIf="filter_value.date" class="mb-1">
-										<label style="text-align: center;" class="mr-2">Disponibilité</label>
+									<br>
+									<div *ngIf="filter_value.date" class="field col-6">
+										<label style="text-align: center;" class="mr-2">Disponibilité&nbsp;</label>
 										<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
-											autoWidth="false" (onSelect)="updateFilter()"
+										[style]="{'width':'10em'}"autoWidth="false" (onSelect)="updateFilter()"
 											[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range"
 											placeholder="Date de début"></p-calendar>
 									</div>
 
-									<input pInputText type="text" style="width: 27em;" class="mb-2"
+									<input pInputText type="text" style="width: 27em;"
 										[(ngModel)]="filter_value.search" (input)="updateFilter()"
 										placeholder="Recherche" />
 								</div>
-								<div class="col-3" style="text-align: right;">
-									<button pButton label="Vider" class="p-button" icon="pi pi-filter-slash"
-										(click)="clearFilter()"></button>
+								<div class="col-2" style="text-align: right;">
+									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 								</div>
 							</div>
+							
 						</ng-template>
 
 						<ng-template pTemplate="listItem">
