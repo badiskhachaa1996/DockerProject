@@ -90,6 +90,11 @@ export class FormationAdmissionComponent implements OnInit {
     this.FAService.FAgetAll().subscribe(data => {
       
       this.formations = data
+      this.formations.sort((a, b) => {
+      if (a.filiere < b.filiere) return -1;
+      if (a.filiere > b.filiere) return 1;
+      return 0;
+    });
     })
     this.FAService.RAgetAll().subscribe(data1 =>{
       
@@ -147,9 +152,7 @@ export class FormationAdmissionComponent implements OnInit {
     [
       { label: "Année 1", value: "Anneé 1" },
       { label: "Année 2", value: "Anneé 2" },
-      { label: "Année 3", value: "Anneé 3" },
-      { label: "Année 4", value: "Anneé 4" },
-      { label: "Année 5", value: "Anneé 5" },
+
     ];
 
   initUpdate(rowData: FormationAdmission) {
@@ -189,12 +192,10 @@ export class FormationAdmissionComponent implements OnInit {
   }
 
   onCreateRA() {
-    this.formationtoShow.rentree.push(this.createFormRA.value)
+  
   this.FAService.FAupdate(this.formationtoShow).subscribe(data => {
     console.log(data)
   })
-
-    
     this.FAService.RAcreate({ ...this.createFormRA.value }).subscribe(data => {
       console.log(data)
     })
