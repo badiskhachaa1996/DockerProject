@@ -569,5 +569,13 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
   activeIndex1 = 1
+  onSelectFilterService(service_id: string) {
+    this.AuthService.getAllByServiceFromList(service_id).subscribe(users => {
+      this.filterAgent = []
+      users.forEach(u => {
+        this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+      })
+    })
+  }
 }
 

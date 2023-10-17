@@ -362,7 +362,10 @@
                 <label>Année :</label><br>
                 <input pInputText type="text" [(ngModel)]="exInfoDiplome">
             </div>
-
+            <div ngIf="semestreForGenerateBulletin=='Annuel'">
+                <label>Type Bulletin :</label><br>
+                <input pInputText type="text" [(ngModel)]="typeBulletin">
+            </div>
             <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin()" type="button"
                 style="float:right;" label="Exporter en pdf">
             </button>
@@ -395,8 +398,7 @@
                     </p>
                     <p #bulletin_annuel *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
-
-                        Bulletin {{ semestreForGenerateBulletin }} <br>
+                        {{ typeBulletin }} <br>
                         <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>
@@ -541,6 +543,10 @@
                     <label>Année :</label><br>
                     <input pInputText type="text" [(ngModel)]="exInfoDiplome">
                 </div>
+                <div>
+                    <label>Type :</label><br>
+                    <input pInputText type="text" [(ngModel)]="typeBulletin">
+                </div>
             </div>
             <br>
             <h3>Prévisualisation du bulletin Annuel</h3>
@@ -557,7 +563,7 @@
                         {{ activeCampus.pays }}</p>
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
-                        Bulletin Annuel <br>
+                        {{typeBulletin}} <br>
                         <strong>{{ classeForBGenerateBulletin.titre_long }} {{exInfoDiplome}}</strong>
                         <br>
                     </p>

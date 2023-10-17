@@ -162,7 +162,7 @@
                         <input pInputText type="text" #filter
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterService" filter="true"
-                            (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');"
+                            (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');onSelectFilterService($event.value)"
                             placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true"
