@@ -52,7 +52,7 @@ export class NewListTicketsComponent implements OnInit {
     en_cours: 0
   }
   token: any;
-  filterService = [{ label: 'Tous les services', value: null }];
+  filterService = [];
   filtreSujet = [{ label: 'Tous les sujets', value: null },
   { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
   { label: 'Module Pédagogie', value: "Module Pédagogie" },
