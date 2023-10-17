@@ -18,6 +18,7 @@ export class BulletinComponent implements OnInit {
   constructor(private GroupeService: ClasseService, private NoteS: NoteService, private EtuService: EtudiantService,
     private CFAService: EcoleService, private messageService: MessageService, private sanitizer: DomSanitizer, private route: ActivatedRoute) { }
   //:semestre/:classe_id/:etudiant_id/:pv_id
+  typeBulletin = 'Bulletin Annuel'
   ngOnInit(): void {
     this.GroupeService.getAll().subscribe(classes => {
       classes.forEach(c => {

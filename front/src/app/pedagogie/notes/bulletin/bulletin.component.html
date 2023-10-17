@@ -107,6 +107,10 @@
             <label>Année :</label><br>
             <input pInputText type="text" [(ngModel)]="exInfoDiplome">
         </div>
+        <div>
+            <label>Type :</label><br>
+            <input pInputText type="text" [(ngModel)]="typeBulletin">
+        </div>
     </div>
     <div class="col-12 grid card">
         <h3>Prévisualisation du bulletin</h3>
@@ -124,7 +128,7 @@
 
             <div class="col-3" style="margin-bottom:20% ;">
                 <h4 *ngIf='SEMESTRE!="Annuel"'><strong>Bulletin du {{ SEMESTRE }} </strong></h4>
-                <h4 *ngIf='SEMESTRE=="Annuel"'><strong>Bulletin {{ SEMESTRE }} </strong></h4>
+                <h4 *ngIf='SEMESTRE=="Annuel"'><strong>{{ typeBulletin }}</strong></h4>
                 <p style="font-size: 2vh;">
                     <strong><!--{{ETUDIANT.user_id?.civilite | i18nSelect :genderMap}}--> {{
                         ETUDIANT.user_id?.lastname | uppercase }} {{

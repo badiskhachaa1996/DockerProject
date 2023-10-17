@@ -710,7 +710,7 @@ export class AnnoncesComponent implements OnInit {
   seeDetails(annonce: Annonce) {
     let ids = []
     let base = 0
-    if(!this.isEtudiant)
+    if (!this.isEtudiant)
       base = 1
     this.offreList.forEach(o => {
       ids.push(o._id)
@@ -733,12 +733,35 @@ export class AnnoncesComponent implements OnInit {
         this.rdvList.splice(idx, 1)
     })
     this.matchingList.forEach((offre, idx2) => {
-      if (offre._id == e.offre_id){
+      if (offre._id == e.offre_id) {
         this.refresh = true
         this.activeIndex1 = 2 + idx2
       }
-        
+
     })
-    
+
+  }
+  onMatchingAnnonce(e: string) {
+    this.annonceService.getAnnonce(e).then(annonce => {
+      let ids = []
+      this.matchingList.forEach(m => {
+        ids.push(m._id)
+      })
+      if (!ids.includes(annonce._id)) {
+        this.matchingList.push(annonce)
+        this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
+          this.activeIndex1 = this.matchingList.length + 1
+        })
+      } else {
+        this.activeIndex1 = ids.indexOf(annonce._id) + 2
+      }
+    })
+
+  }
+
+  InitFormUpdate(e: string) {
+    this.annonceService.getAnnonce(e).then(annonce => {
+      this.onFillForm(annonce)
+    })
   }
 }

@@ -306,7 +306,7 @@
 						<input pInputText id="phone" type="tel" formControlName="entreprise_phone"
 							placeholder="Numéro de téléphone de l'entreprise" />
 					</div>
-					
+
 					<div class="field col-12 md:col-6">
 						<label htmlFor="profil">Profil</label>
 						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"
@@ -339,7 +339,7 @@
 							[style]="{'width':'100%'}" autoWidth="false"
 							placeholder="Choisissez un statut"></p-dropdown>
 					</div>
-					
+
 					<div class="field col-12 md:col-6">
 						<label htmlFor="debut">Date de début</label>
 						<input pInputText id="debut" type="date" formControlName="debut" />
@@ -386,21 +386,21 @@
 										(click)="displayFilter=true"></button><br>
 									<button pButton label="Vider&nbsp; " class="p-button" icon="pi pi-filter-slash"
 										(click)="clearFilter()"></button><br> <br>
-									
+
 								</div>
-								
+
 								<div class="field col-7 grid ">
-									
+
 									<div *ngIf="filter_value.statut" class="field col-6">
-										<label  >Statut &nbsp;&nbsp;</label>
-										
+										<label>Statut &nbsp;&nbsp;</label>
+
 										<p-dropdown placeholder="Statut" [options]="statutFilter" autoWidth="false"
-										[style]="{'width':'10em'}"
-											[(ngModel)]="filter_value.statut" (onChange)="updateFilter()">
+											[style]="{'width':'10em'}" [(ngModel)]="filter_value.statut"
+											(onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
 									<div *ngIf="filter_value.typeMission" class="field col-6">
-										<label  >Type de mission&nbsp; </label>
+										<label>Type de mission&nbsp; </label>
 										<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
@@ -408,7 +408,7 @@
 									</div>
 									<br>
 									<div *ngIf="filter_value.profil.length!=0" class="field col-6">
-										<label  class="mr-2">Profil&nbsp; </label>
+										<label class="mr-2">Profil&nbsp; </label>
 										<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
@@ -416,7 +416,7 @@
 									</div>
 
 									<div *ngIf="filter_value.entreprise" class="field col-6">
-										<label  class="mr-2">Auteur&nbsp; </label>
+										<label class="mr-2">Auteur&nbsp; </label>
 										<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
@@ -424,14 +424,14 @@
 									</div>
 									<br>
 									<div *ngIf="filter_value.entreprise_id" class="field col-6">
-										<label  >Entreprise&nbsp; </label>
+										<label>Entreprise&nbsp; </label>
 										<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2"
-											[(ngModel)]="filter_value.entreprise_id"  appendTo="body"
+											[(ngModel)]="filter_value.entreprise_id" appendTo="body"
 											[style]="{'width':'10em'}" autoWidth="false" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
 									<div *ngIf="filter_value.locations.length!=0" class="field col-6">
-										<label >Lieu &nbsp;&nbsp;&nbsp;</label>
+										<label>Lieu &nbsp;&nbsp;&nbsp;</label>
 										<p-multiSelect [options]="locations" filter="true" [style]="{'width':'10em'}"
 											autoWidth="false" placeholder="Choisissez une ville"
 											[(ngModel)]="filter_value.locations"
@@ -441,20 +441,19 @@
 									<div *ngIf="filter_value.date" class="field col-6">
 										<label style="text-align: center;" class="mr-2">Disponibilité&nbsp;</label>
 										<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
-										[style]="{'width':'10em'}"autoWidth="false" (onSelect)="updateFilter()"
+											[style]="{'width':'10em'}" autoWidth="false" (onSelect)="updateFilter()"
 											[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range"
 											placeholder="Date de début"></p-calendar>
 									</div>
 
-									<input pInputText type="text" style="width: 27em;"
-										[(ngModel)]="filter_value.search" (input)="updateFilter()"
-										placeholder="Recherche" />
+									<input pInputText type="text" style="width: 27em;" [(ngModel)]="filter_value.search"
+										(input)="updateFilter()" placeholder="Recherche" />
 								</div>
 								<div class="col-2" style="text-align: right;">
 									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 								</div>
 							</div>
-							
+
 						</ng-template>
 
 						<ng-template pTemplate="listItem">
@@ -612,13 +611,15 @@
 											<div class="img-card"
 												style="background-image: url('{{dicPicture[annonce.entreprise_id?._id].url}}');">
 											</div>
-											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">{{annonce.custom_id}}</p>
+											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">
+												{{annonce.custom_id}}</p>
 										</ng-template>
 										<ng-template #default_image>
 											<div class="img-card"
 												style="background-image: url('../../../assets/images/imatch/entreprise.png');">
 											</div>
-											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">{{annonce.custom_id}}</p>
+											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">
+												{{annonce.custom_id}}</p>
 										</ng-template>
 										<!--<a class="offres-btns details" *ngIf="!isEtudiant"
 											(click)="visibleSidebar = true; annonceSelected = annonce"><i
@@ -780,17 +781,20 @@
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of matchingList"
 			[closable]="true">
-			<app-matching *ngIf="refresh" [ID]="annonce._id" (rdv)="takeRDV($event)" (cv)="seeCV($event)"></app-matching>
+			<app-matching *ngIf="refresh" [ID]="annonce._id" (rdv)="takeRDV($event)"
+				(cv)="seeCV($event)"></app-matching>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="rdv.label" *ngFor="let rdv of rdvList" [closable]="true">
-			<app-rdv-calendar-interne [ID]="rdv.ID" [offre_id]="rdv.offer_id" (formExit)="formExit($event)"></app-rdv-calendar-interne>
+			<app-rdv-calendar-interne [ID]="rdv.ID" [offre_id]="rdv.offer_id"
+				(formExit)="formExit($event)"></app-rdv-calendar-interne>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="cv.label" *ngFor="let cv of cvList" [closable]="true">
 			<app-voir-cv [CV_ID]="cv.ID"></app-voir-cv>
 		</p-tabPanel>
 		<p-tabPanel style="width: 100%;" [header]="annonce.custom_id" *ngFor="let annonce of offreList"
 			[closable]="true">
-			<app-voir-details-offre [ANNONCE_ID]="annonce._id"></app-voir-details-offre>
+			<app-voir-details-offre (UPDATE)="InitFormUpdate($event)" (MATCHING)="onMatchingAnnonce($event)"
+				[ANNONCE_ID]="annonce._id"></app-voir-details-offre>
 		</p-tabPanel>
 	</p-tabView>
 </div>

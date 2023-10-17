@@ -217,7 +217,7 @@ export class EntrepriseFormComponent implements OnInit {
 
     this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
       ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Entreprise', detail: response.success });
+        this.messageService.add({ severity: 'success', summary: 'Entreprise', detail: "Création de l'entreprise et du représentant avec succès" });
         this.formAddEntreprise.reset();
         this.ActiveIndex = 0;
         this.showFormAddEntreprise = false;

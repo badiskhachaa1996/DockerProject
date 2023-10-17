@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Annonce } from 'src/app/models/Annonce';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
@@ -13,6 +13,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class VoirDetailsOffreComponent implements OnInit {
   @Input() ANNONCE_ID
+  @Output() UPDATE = new EventEmitter<{ ANNONCE_ID: string }>();
+  @Output() MATCHING = new EventEmitter<{ ANNONCE_ID: string }>();
+
   constructor(private AnnonceService: AnnonceService, private CvService: CvService, private MatchingService: MatchingService,
     private ToastService: MessageService, private userService: AuthService) { }
   ANNONCE: Annonce
@@ -52,12 +55,12 @@ export class VoirDetailsOffreComponent implements OnInit {
     })
   }
 
-  Edit(){
-
+  Edit() {
+    this.UPDATE.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 
-  MAtching(){
-
+  MAtching() {
+    this.MATCHING.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 
 }
