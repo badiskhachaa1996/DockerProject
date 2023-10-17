@@ -200,7 +200,7 @@
                             {{ prospect?.niveau}}
                         </td>
                         <td>
-                            {{ prospect.payement}}
+                            {{ prospect?.payement}}
                         </td>
 
 
@@ -210,7 +210,7 @@
                         <td>
                             {{ prospect?.date_creation}}
                         </td>
-                        <td *ngIf="seeAction">
+                        <td >
                             <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
                                 pTooltip="Rentrée scolaire" (click)="rScolaire(formation)" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
@@ -249,7 +249,7 @@
 
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="emptymessage">
+                <!--<ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ formation.rncp }}</td>
                         <td>
@@ -267,7 +267,7 @@
                         <td>{{ formation.tarif }}</td>
                         <td>{{ formation.deroulement }}</td>
                     </tr>
-                </ng-template>
+                </ng-template>-->
                 </ng-template>
 
             </p-table>
