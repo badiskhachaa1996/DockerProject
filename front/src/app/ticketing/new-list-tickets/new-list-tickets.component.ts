@@ -118,22 +118,31 @@ export class NewListTicketsComponent implements OnInit {
               e.documents = e.documents.concat(e.documents_service)
             })
             this.tickets = this.tickets.concat(nonassigne)
-            this.tickets.sort((a, b) => {
-              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-                return -1
-              else
-                return 1
-            })
+            this.TicketService.getAllAssigneV2(this.USER?.service_list || []).subscribe(allAssigne => {
+              allAssigne.forEach(e => {
+                e.origin = 'Assigne Service'
+                e.documents_service.forEach(ds => { ds.by = "Agent" })
+                e.documents = e.documents.concat(e.documents_service)
+              })
+              this.tickets = this.tickets.concat(allAssigne)
 
-            this.defaultTicket = this.tickets
-            console.log(this.defaultTicket)
-            this.onFilterTicket()
-            let tempDate = new Date()
-            tempDate.setDate(tempDate.getDate() - 2)
-            this.stats = {
-              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
-            }
+
+              this.tickets.sort((a, b) => {
+                if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                  return -1
+                else
+                  return 1
+              })
+
+              this.defaultTicket = this.tickets
+              this.onFilterTicket()
+              let tempDate = new Date()
+              tempDate.setDate(tempDate.getDate() - 2)
+              this.stats = {
+                en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+                en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+              }
+            })
           })
         else
           this.TicketService.getAllNonAssigne().subscribe(nonassigne => {
@@ -143,22 +152,30 @@ export class NewListTicketsComponent implements OnInit {
               e.documents = e.documents.concat(e.documents_service)
             })
             this.tickets = this.tickets.concat(nonassigne)
-            this.tickets.sort((a, b) => {
-              if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
-                return -1
-              else
-                return 1
-            })
+            this.TicketService.getAllAssigneAdmin().subscribe(allAssigne => {
+              allAssigne.forEach(e => {
+                e.origin = 'Assigne Service'
+                e.documents_service.forEach(ds => { ds.by = "Agent" })
+                e.documents = e.documents.concat(e.documents_service)
+              })
+              this.tickets = this.tickets.concat(allAssigne)
 
-            this.defaultTicket = this.tickets
-            console.log(this.defaultTicket)
-            this.onFilterTicket()
-            let tempDate = new Date()
-            tempDate.setDate(tempDate.getDate() - 2)
-            this.stats = {
-              en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
-              en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
-            }
+              this.tickets.sort((a, b) => {
+                if (new Date(a.date_ajout).getTime() > new Date(b.date_ajout).getTime())
+                  return -1
+                else
+                  return 1
+              })
+
+              this.defaultTicket = this.tickets
+              this.onFilterTicket()
+              let tempDate = new Date()
+              tempDate.setDate(tempDate.getDate() - 2)
+              this.stats = {
+                en_attente: Math.trunc(this.tickets.reduce((total, next) => total + (new Date(next?.date_ajout).getTime() < tempDate.getTime() ? 1 : 0), 0)),
+                en_cours: Math.trunc(this.tickets.reduce((total, next) => total + (next?.statut == "En cours" ? 1 : 0), 0)),
+              }
+            })
           })
 
       })
@@ -189,7 +206,7 @@ export class NewListTicketsComponent implements OnInit {
       });
     })
 
-    this.AuthService.getAllAgent().subscribe(users => {
+    this.AuthService.getAllAgentPopulate().subscribe(users => {
       users.forEach(u => {
         this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
       })
@@ -423,11 +440,22 @@ export class NewListTicketsComponent implements OnInit {
     this.router.navigate(['ticketing/gestion/ajout'])
   }
   onCreateSujetLabel(ticket: Ticket) {
-    let r = ticket?.sujet_id?.label
-    if (ticket.module)
-      r = r + " - " + ticket.module
-    if (ticket.type)
-      r = r + " - " + ticket.type
+    let r = ''
+    if (ticket?.sujet_id?.label)
+      r = ticket?.sujet_id?.label
+    if (ticket.module) {
+      if (r != '')
+        r = r + " - " + ticket.module
+      else
+        r = ticket.module
+    }
+    if (ticket.type) {
+      if (r != '')
+        r = r + " - " + ticket.type
+      else
+        r = ticket.module
+    }
+
     return r
   }
   messageList = []
@@ -576,6 +604,10 @@ export class NewListTicketsComponent implements OnInit {
         this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
       })
     })
+  }
+
+  onAddTicket(e) {
+    this.updateTicketList()
   }
 }
 

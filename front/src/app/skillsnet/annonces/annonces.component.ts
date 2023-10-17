@@ -117,7 +117,7 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress')
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
       if (this.isEtudiant) {
         this.activeIndex1 = 0
         this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {

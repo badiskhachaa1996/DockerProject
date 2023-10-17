@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ExterneSNService } from 'src/app/services/skillsnet/externe-sn.service';
@@ -13,7 +14,7 @@ export class ImatchEntrepriseComponent implements OnInit {
 
   portail = "etudiant";
 
-  constructor(private ExterneService: ExterneSNService, private cvService: CvService, private ToastService: MessageService) { }
+  constructor(private ExterneService: ExterneSNService, private cvService: CvService, private ToastService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -22,12 +23,12 @@ export class ImatchEntrepriseComponent implements OnInit {
   }
   showPostuler = false
   form = new FormGroup({
-    civilite : new FormControl('',Validators.required),
-    lastname : new FormControl('',Validators.required),
-    firstname : new FormControl('',Validators.required),
-    email_perso : new FormControl('',Validators.required),
-    phone : new FormControl('',Validators.required),
-    consent : new FormControl('',Validators.required),
+    civilite: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    firstname: new FormControl('', Validators.required),
+    email_perso: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    consent: new FormControl('', Validators.required),
   })
   DepositCV() {
     this.showPostuler = true
@@ -61,7 +62,7 @@ export class ImatchEntrepriseComponent implements OnInit {
         this.ToastService.add({ severity: 'success', summary: "Compte crée", detail: 'Un compte a été crée, vos identifiants ont été envoyés sur votre adresse email' })
         this.form.reset();
         this.showPostuler = false;
-
+        this.router.navigate(['/login'])
       })
 
     })

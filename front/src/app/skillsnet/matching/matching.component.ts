@@ -16,6 +16,7 @@ import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Matching } from 'src/app/models/Matching';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 import { Table } from 'primeng/table';
+import { MeetingTeams } from 'src/app/models/MeetingTeams';
 
 @Component({
   selector: 'app-matching',
@@ -256,5 +257,12 @@ export class MatchingComponent implements OnInit {
       this.dtmatching.filter('', 'favoris', 'contains')
     else
       this.dtmatching.filter(true, 'favoris', 'equals')
+  }
+
+  displayRDV = false
+  dataRDV;
+  seeRDV(rdv: MeetingTeams) {
+    this.displayRDV = true
+    this.dataRDV = rdv
   }
 }

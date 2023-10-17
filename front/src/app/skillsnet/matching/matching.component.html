@@ -130,8 +130,8 @@
 </div>
 <div class="card" *ngIf="offre">
 	<h5>Potentiel</h5>
-	<p-table #dtmatching id="dtmatching" rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="8"
-		[rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
+	<p-table #dtmatching id="dtmatching" rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id"
+		[rows]="8" [rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
 		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
 		<ng-template pTemplate="caption">
@@ -141,16 +141,12 @@
 					<input pInputText type="text" (input)="dtmatching.filterGlobal($event.target.value, 'contains');"
 						placeholder="Recherche" />
 				</span>
-			</div>
-		</ng-template>
-		<ng-template pTemplate="caption">
-			<div class="flex justify-content-center align-items-center">
-				<label class="mr-2">Favoris</label>
-				<p-checkbox value="val2" (onChange)="filterCustomFav($event.checked);"
-					[binary]="true"></p-checkbox>
-				
-			</div>
+				<div>
+					<label class="mr-2">Favoris</label>
+					<p-checkbox value="val2" (onChange)="filterCustomFav($event.checked);" [binary]="true"></p-checkbox>
+				</div>
 
+			</div>
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
@@ -193,3 +189,62 @@
 		</ng-template>
 	</p-table>
 </div>
+
+<p-dialog header="Informations du Rendez-Vous" [(visible)]="displayRDV" modal="modal" showEffect="fade"
+	[style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
+	<p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
+		styleClass="p-datatable-gridlines">
+
+		<ng-template pTemplate="header">
+			<tr>
+				<th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
+					Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
+				</th>
+				<th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+					Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
+				</th>
+				<th pSortableColumn="company_email" scope="col" style="text-align: center;">
+					Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
+				</th>
+				<th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+					Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+				</th>
+				<th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+					Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
+				</th>
+				<th pSortableColumn="description" scope="col" style="text-align: center;">
+					Description <p-sortIcon field="description"></p-sortIcon>
+				</th>
+				<th pSortableColumn="statut" scope="col" style="text-align: center;">
+					Statut <p-sortIcon field="statut"></p-sortIcon>
+				</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-rdv>
+			<tr>
+				<td>
+					{{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
+				</td>
+				<td>
+					{{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+				</td>
+				<td>
+					{{rdv?.company_email}}
+				</td>
+				<td>
+					{{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+				</td>
+				<td>
+					{{rdv?.date_creation | date:'dd MMMM yy'}}
+				</td>
+				<td>
+					{{rdv?.description}}
+				</td>
+				<td>
+					{{rdv?.statut}}
+				</td>
+			</tr>
+
+		</ng-template>
+	</p-table>
+</p-dialog>
