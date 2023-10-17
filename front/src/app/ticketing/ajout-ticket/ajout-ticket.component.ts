@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
@@ -14,7 +14,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { Task} from 'src/app/models/project/Task';
+import { Task } from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
 @Component({
   selector: 'app-ajout-ticket',
@@ -22,10 +22,10 @@ import { ProjectService } from 'src/app/services/projectv2.service';
   styleUrls: ['./ajout-ticket.component.scss']
 })
 export class AjoutTicketComponent implements OnInit {
-
+  @Output() ADD = new EventEmitter()
   receivedTask: Task;
-  itsTask:boolean = false;
-  taskID:string;
+  itsTask: boolean = false;
+  taskID: string;
 
   service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
@@ -33,9 +33,9 @@ export class AjoutTicketComponent implements OnInit {
     service_id: new FormControl('', Validators.required),
     description: new FormControl('',),
     resum: new FormControl('', Validators.required),
-    priorite: new FormControl("false" ),
-    module : new FormControl('', ),
-    type : new FormControl('',),
+    priorite: new FormControl("false"),
+    module: new FormControl('',),
+    type: new FormControl('',),
   })
   token;
   sujetDropdown: any[] = [
@@ -73,14 +73,14 @@ export class AjoutTicketComponent implements OnInit {
     { label: 'Correction', value: "Correction" },
   ]
   showModuleDropdown: boolean = false;
-  showTypeDropdown:boolean = false;
+  showTypeDropdown: boolean = false;
   onAdd() {
     let documents = []
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
     console.log(this.TicketForm.value.priorite)
-    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id,priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
+    this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id, priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 
       let d = new Date()
@@ -97,15 +97,16 @@ export class AjoutTicketComponent implements OnInit {
           this.ToastService.add({ severity: 'success', summary: 'Envoi de la pièce jointe avec succès', detail: element.name })
         })
       });
-    if(this.itsTask){
-      
-      this.projectService.getTask(this.taskID).then((datat) => {
-        datat.ticketId=data.doc._id;
-        this.projectService.putTask(datat)  ; 
-        
-        }) 
+      this.ADD.emit(data)
+      if (this.itsTask) {
+
+        this.projectService.getTask(this.taskID).then((datat) => {
+          datat.ticketId = data.doc._id;
+          this.projectService.putTask(datat);
+
+        })
         this.router.navigate(['/gestion-project'])
-    }
+      }
     })
   }
   onSelectService() {
@@ -122,7 +123,7 @@ export class AjoutTicketComponent implements OnInit {
     fileUpload.clear()
   }
   constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute,
-    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService,private projectService: ProjectService) { }
+    private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService, private projectService: ProjectService) { }
   serviceDic = {}
   sujetDic = {}
   USER: User
@@ -158,49 +159,49 @@ export class AjoutTicketComponent implements OnInit {
         })
       })
     } else {
-        this.ServService.getAll().subscribe(data => {
+      this.ServService.getAll().subscribe(data => {
         data.forEach(val => {
-            this.serviceDropdown.push({ label: val.label, value: val._id })
-            this.serviceDic[val._id] = val.label
+          this.serviceDropdown.push({ label: val.label, value: val._id })
+          this.serviceDic[val._id] = val.label
         })
       })
     }
     this.route.queryParams.subscribe(params => {
       if (params && params.data) {
         this.receivedTask = JSON.parse(params.data);
-        this.itsTask=true;
-        this.taskID = this.receivedTask._id; 
+        this.itsTask = true;
+        this.taskID = this.receivedTask._id;
         this.TicketForm.patchValue({
-          description: this.receivedTask.libelle + ' :'+ this.receivedTask.description_task,
+          description: this.receivedTask.libelle + ' :' + this.receivedTask.description_task,
           priorite: this.receivedTask.priorite,
-          
+
         })
-         
+
       }
     });
 
   }
 
   onSubjectChange() {
-    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
-    
-    if (this.serviceDic[this.TicketForm.get('service_id').value]==="Support informatique"){
-      this.showTypeDropdown=true;
-    }else {
-      this.showTypeDropdown=false;
+    const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value];
+
+    if (this.serviceDic[this.TicketForm.get('service_id').value] === "Support informatique") {
+      this.showTypeDropdown = true;
+    } else {
+      this.showTypeDropdown = false;
     }
-    if(selectedSubject === "IMS") {
-        this.showModuleDropdown = true;
-        this.showTypeDropdown=true;
-        this.TicketForm.get('module').setValidators([Validators.required]);
-        this.TicketForm.get('module').updateValueAndValidity();
+    if (selectedSubject === "IMS") {
+      this.showModuleDropdown = true;
+      this.showTypeDropdown = true;
+      this.TicketForm.get('module').setValidators([Validators.required]);
+      this.TicketForm.get('module').updateValueAndValidity();
     }
     else {
-        
-        this.TicketForm.get('module').clearValidators();
-        this.TicketForm.get('module').updateValueAndValidity();
-        this.TicketForm.get('module').reset();
-        this.showModuleDropdown = false;
+
+      this.TicketForm.get('module').clearValidators();
+      this.TicketForm.get('module').updateValueAndValidity();
+      this.TicketForm.get('module').reset();
+      this.showModuleDropdown = false;
     }
   };
 

@@ -249,6 +249,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith('/soc/docGenInt/download') ||
       req.originalUrl === '/soc/meetingTeams/create' ||
       req.originalUrl.startsWith('/soc/genDoc/get-doc') ||
+      req.originalUrl === '/soc/annonce/post-annonce' ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces')
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,

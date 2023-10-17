@@ -446,13 +446,8 @@
 											placeholder="Date de début"></p-calendar>
 									</div>
 
-									<div class="field col-4">
-										<input pInputText type="text" style="width: 10em;"
-											[(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
-											placeholder="Recherche" />
-									</div>
-
-
+									<input pInputText type="text" style="width: 27em;height: 30px;" [(ngModel)]="filter_value.search"
+										(input)="updateFilter()" placeholder="Recherche" />
 								</div>
 								<div class="col-2" style="text-align: right;">
 									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>

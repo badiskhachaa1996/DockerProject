@@ -27,17 +27,12 @@
             <form class="form-container" [formGroup]="form">
                 <div class="row">
                     <div class="col-12">
-                        <label>Nom de l'entreprise</label>
-                        <input pInputText type="text" formControlName="r_sociale" autoWidth="false"
-                            [style]="{'width':'100%'}">
-                    </div>
-                    <div class="col-12">
-                        <label>Nom du représentant</label>
+                        <label>Nom</label>
                         <input pInputText type="text" formControlName="lastname" autoWidth="false"
                             [style]="{'width':'100%'}">
                     </div>
                     <div class="col-12">
-                        <label>Prénom</label>
+                        <label>Prénom </label>
                         <input pInputText type="text" formControlName="firstname" autoWidth="false"
                             [style]="{'width':'100%'}">
                     </div>
@@ -50,6 +45,11 @@
                         <label for="email">Numéro de téléphone (avec indicatif)</label><br>
                         <input pInputText placeholder="Ex: +33 623568978" type="phone" formControlName="company_phone"
                             autoWidth="false" [style]="{'width':'100%'}">
+                    </div>
+                    <div class="col-12">
+                        <label>Entreprise</label>
+                        <input pInputText type="text" formControlName="r_sociale" autoWidth="false"
+                            [style]="{'width':'100%'}">
                     </div>
                 </div>
                 <hr>
