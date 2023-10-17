@@ -286,6 +286,7 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
 import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entreprises.component';
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
+import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 const routes: Routes = [
     {
         path: '',
@@ -1372,6 +1373,7 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
+    { path: 'administration/preinscription',component: PreinscriptionComponent}
 ]
 
 
