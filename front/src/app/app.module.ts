@@ -398,6 +398,9 @@ import { RdvCalendarInterneComponent } from './skillsnet/i-match/rdv-calendar-in
 import { SeeCvExterneComponent } from './skillsnet/i-match/see-cv-externe/see-cv-externe.component';
 import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-details-offre.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
+import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+
+
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -805,7 +808,10 @@ import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant
     RdvCalendarInterneComponent,
     SeeCvExterneComponent,
     VoirDetailsOffreComponent,
-    CvEtudiantComponent
+    CvEtudiantComponent,
+    PreinscriptionComponent,
+    
+    
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },
