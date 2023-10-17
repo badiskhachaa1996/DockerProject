@@ -181,6 +181,12 @@
                                     (onChange)="updateFilter()">
                                 </p-multiSelect>
                             </div>
+                            <div class="field col-4">
+                                <label >&nbsp;</label><br>
+                                <input pInputText type="text" style="width: 20em;"
+                                    [(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
+                                    placeholder="Recherche" />
+                            </div>
                         </div>
                         <div class="col-2">
                             <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
