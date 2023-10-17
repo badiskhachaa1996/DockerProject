@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
@@ -15,6 +15,7 @@ import { Annonce } from 'src/app/models/Annonce';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { Matching } from 'src/app/models/Matching';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-matching',
@@ -105,12 +106,12 @@ export class MatchingComponent implements OnInit {
     //this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
   }
 
-  AcceptMatching(cv: CV, taux = 0) {
-    let type_matching = "Candidat"
-    if (this.matcher.type == "CEO Entreprise" || this.matcher.type == "Entreprise" || this.matcher.type == "Tuteur")
+  AcceptMatching(cv: CV, taux = 0, match: Matching = null) {
+    let type_matching = "Commercial"
+    if (this.token.type == "CEO Entreprise" || this.token.type == "Entreprise" || this.token.type == "Tuteur")
       type_matching = "Entreprise"
-    else if (this.matcher.type == "Commercial")
-      type_matching = "Commercial"
+    else if (this.token.type == "Initial" || this.token.type == "Alternant" || this.token.type == null)
+      type_matching = "Candidat"
     let matching = {
       offre_id: this.offre._id,
       matcher_id: this.token.id,
@@ -118,18 +119,34 @@ export class MatchingComponent implements OnInit {
       type_matching,
       date_creation: new Date(),
       taux,
-      accepted: true
+      accepted: true,
+      favoris: null,
+      hide: null
     }
-    this.MatchingService.create(matching).subscribe(match => {
-      this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
-      this.matching.push(match)
-      this.matchingsPotentiel.forEach((m, idx) => {
-        let b1: any = m.cv_id.user_id
-        let b2: any = m.cv_id.user_id
-        if (b1._id == b2._id)
-          this.matchingsPotentiel.splice(idx, 1)
+    if (!match._id)
+      this.MatchingService.create(matching).subscribe(match => {
+        this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
+        this.matching.push(match)
+        this.matchingsPotentiel.forEach((m, idx) => {
+          let b1: any = m.cv_id.user_id
+          let b2: any = m.cv_id.user_id
+          if (b1._id == b2._id)
+            this.matchingsPotentiel.splice(idx, 1)
+        })
       })
-    })
+    else {
+      this.MatchingService.update(match._id, matching).subscribe(match => {
+        this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
+        this.matching.push(match)
+        this.matchingsPotentiel.forEach((m, idx) => {
+          let b1: any = m.cv_id.user_id
+          let b2: any = m.cv_id.user_id
+          if (b1._id == b2._id)
+            this.matchingsPotentiel.splice(idx, 1)
+        })
+      })
+    }
+
   }
 
   onUpdateStatut() {
@@ -161,6 +178,7 @@ export class MatchingComponent implements OnInit {
       this.messageService.add({ summary: 'Mis à jour du statut de matching avec succès', severity: 'success' })
     })
   }
+
   hideAndSeek(match, idx) {
     console.log(idx)
     let favoris = false
@@ -225,8 +243,18 @@ export class MatchingComponent implements OnInit {
   }
   takeRDV(match: Matching) {
     //OFFER LA
-    this.rdv.emit({ ID: match?.cv_id?.user_id?._id, offer_id: this.route.snapshot.paramMap.get('offre_id'), label: `${this.offre.custom_id} - ${match?.cv_id?.user_id.firstname} ${match?.cv_id?.user_id.lastname}` })
+    let ID = this.ID
+    if(!this.ID)
+      ID = this.route.snapshot.paramMap.get('offre_id')
+    this.rdv.emit({ ID: match?.cv_id?.user_id?._id, offer_id: ID, label: `${this.offre.custom_id} - ${match?.cv_id?.user_id.firstname} ${match?.cv_id?.user_id.lastname}` })
     //this.router.navigate(['rendez-vous/', match?.cv_id?.user_id?._id])
   }
-
+  @ViewChild('dtmatching') dtmatching: Table;
+  filterCustomFav(e) {
+    console.log(e)
+    if (e == false)
+      this.dtmatching.filter('', 'favoris', 'contains')
+    else
+      this.dtmatching.filter(true, 'favoris', 'equals')
+  }
 }

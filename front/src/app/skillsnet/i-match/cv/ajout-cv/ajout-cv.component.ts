@@ -625,11 +625,11 @@ export class AjoutCvComponent implements OnInit {
   })
 
   onAssignOffer() {
-    let type_matching = "Candidat"
+    let type_matching = "Commercial"
     if (this.token.type == "CEO Entreprise" || this.token.type == "Entreprise" || this.token.type == "Tuteur")
       type_matching = "Entreprise"
-    else if (this.token.type == "Commercial")
-      type_matching = "Commercial"
+    else if (this.token.type == "Initial" || this.token.type == "Alternant" || this.token.type == null)
+      type_matching = "Candidat"
     this.selectedCVs.forEach((cv: any) => {
       this.MatchingService.create(new Matching(null, this.AssignForm.value.offer, this.token.id, cv._id, "En cours", type_matching, new Date())).subscribe(match => {
         this.messageService.add({ severity: 'success', summary: "Création du Matching avec " + cv.user_id?.lastname + " " + cv.user_id?.firstname })

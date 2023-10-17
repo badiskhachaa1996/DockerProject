@@ -70,8 +70,11 @@
 				<td>
 					{{match.type_matching}}
 				</td>
-				<td>
+				<td *ngIf="match.type_matching!='Candidat'">
 					{{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+				</td>
+				<td *ngIf="match.type_matching=='Candidat'">
+					Non
 				</td>
 				<td [pTooltip]="match.remarque" tooltipPosition="bottom">
 					{{match.statut}}
@@ -127,7 +130,7 @@
 </div>
 <div class="card" *ngIf="offre">
 	<h5>Potentiel</h5>
-	<p-table #dt1 rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="8"
+	<p-table #dtmatching id="dtmatching" rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id" [rows]="8"
 		[rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
 		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
@@ -135,7 +138,7 @@
 			<div class="flex justify-content-between flex-column sm:flex-row">
 				<span class="p-input-icon-left mb-3">
 					<i class="pi pi-search"></i>
-					<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+					<input pInputText type="text" (input)="dtmatching.filterGlobal($event.target.value, 'contains');"
 						placeholder="Recherche" />
 				</span>
 			</div>
@@ -143,7 +146,9 @@
 		<ng-template pTemplate="caption">
 			<div class="flex justify-content-center align-items-center">
 				<label class="mr-2">Favoris</label>
-				<p-columnFilter type="boolean" field="favoris"></p-columnFilter>
+				<p-checkbox value="val2" (onChange)="filterCustomFav($event.checked);"
+					[binary]="true"></p-checkbox>
+				
 			</div>
 
 		</ng-template>
@@ -170,7 +175,7 @@
 						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
 
 					<i pTooltip="Accepter le matching" style="margin-left: 2%; cursor: pointer;" class="pi pi-check"
-						(click)="AcceptMatching(match.cv_id, match.taux)" aria-hidden="true"></i>
+						(click)="AcceptMatching(match.cv_id, match.taux,match)" aria-hidden="true"></i>
 
 					<i *ngIf="match.favoris" pTooltip="Enlever des favoris"
 						style="margin-left: 2%; cursor: pointer;color:rgb(255, 153, 0)" (click)="myFavorite(match,ri)"

@@ -52,7 +52,7 @@ export class NewListTicketsComponent implements OnInit {
     en_cours: 0
   }
   token: any;
-  filterService = [{ label: 'Tous les services', value: null }];
+  filterService = [];
   filtreSujet = [{ label: 'Tous les sujets', value: null },
   { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
   { label: 'Module Pédagogie', value: "Module Pédagogie" },
@@ -569,5 +569,13 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
   activeIndex1 = 1
+  onSelectFilterService(service_id: string) {
+    this.AuthService.getAllByServiceFromList(service_id).subscribe(users => {
+      this.filterAgent = []
+      users.forEach(u => {
+        this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+      })
+    })
+  }
 }
 

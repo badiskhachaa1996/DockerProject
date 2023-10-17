@@ -134,7 +134,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                     }
                   );
 
-                  res.status(201).send(entrepriseSaved);
+                  res.status(201).send({ entreprise: entrepriseSaved, representant: userFromDb });
                 })
                 .catch((error) => {
                   console.error(error);
@@ -201,7 +201,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                         );
 
                         // envoi de la reponse du serveur
-                        res.status(201).send(entrepriseSaved);
+                        res.status(201).send({ entreprise: entrepriseSaved, representant: representant });
                       })
                       .catch((error) => {
                         console.error(error);
@@ -222,7 +222,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                   .save()
                   .then((entrepriseSaved) => {
                     // envoi de la reponse du serveur
-                    res.status(201).send(entrepriseSaved);
+                    res.status(201).send({ entreprise: entrepriseSaved, representant: null });
                   })
                   .catch((error) => {
                     console.error(error);

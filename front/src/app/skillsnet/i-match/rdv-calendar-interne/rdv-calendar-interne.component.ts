@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -29,6 +29,7 @@ export class RdvCalendarInterneComponent implements OnInit {
 
   @Input() offre_id
   @Input() ID //ID de l'étudiant avec qui prendre le rdv
+  @Output() formExit = new EventEmitter<{ ID: string, offre_id: string }>();
   rdvTaker: User
 
   form = new FormGroup({
@@ -148,12 +149,15 @@ export class RdvCalendarInterneComponent implements OnInit {
       this.DispoEtuService.create(new DisponibiliteEtudiant(null, 'Entretien avec ' + company_email, 'Other', this.ID, meeting_start_date, new Date(meeting_start_date.getTime() + + 3600000))).subscribe(dispoR => {
         this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été planifié sur IMS pour l\'étudiant' })
       })
+      this.formExit.emit({ ID: this.ID, offre_id: this.offre_id })
       this.McService.createTeamsMeeting(event).then(r => {
         if (r) {
           this.ToastService.add({ severity: 'success', summary: 'Le rendez-vous a été planifié sur TEAMS' })
           this.router.navigate(['/imatch'])
         }
+
       })
+      
     }, error => {
       console.error(error)
       this.ToastService.add({ severity: 'error', summary: 'Le rendez-vous a eu un problème', detail: error?.error })

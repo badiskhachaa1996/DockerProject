@@ -63,14 +63,16 @@
                                 [showTime]="true"></p-calendar>-->
                         </div>
                         <div class="col-12" *ngIf="annonces.length!=0">
-                            <label for="date">Offre</label>
                             <p-dropdown id="type" [options]="annonces" formControlName="offre_id" optionValue="_id"
                                 optionLabel="missionName" [style]="{'width':'100%'}" autoWidth="false"
                                 placeholder="Choisissez une offre"></p-dropdown>
                         </div>
                     </div>
-                    <button pButton type="submit" [disabled]="form.invalid" label="Prendre rendez-vous"
+                    <div style="text-align: center;">
+                        <button pButton type="submit" style="width: 25%;" [disabled]="form.invalid" label="Prendre rendez-vous"
                         autoWidth="false" class="button-submit"></button>
+                    </div>
+
                 </form>
             </div>
         </div>

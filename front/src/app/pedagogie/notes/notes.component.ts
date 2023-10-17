@@ -68,7 +68,7 @@ export class NotesComponent implements OnInit {
     { libelle: '2ème', value: 'Semestre 2', actif: false },
     { libelle: 'Annuel', value: 'Annuel', actif: false }
   ];
-
+  typeBulletin = "Bulletin Annuel"
   //Données liées à la saisie de notes
   notesByClasseBySemestre: any[] = [];
 
