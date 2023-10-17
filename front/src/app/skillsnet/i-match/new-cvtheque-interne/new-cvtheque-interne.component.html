@@ -137,54 +137,67 @@
                             <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                                 placeholder="Recherche" class="w-full" />
                         </span>-->
-                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-                        <div *ngIf="filter_value.profil.length!=0">
-                            <label style="text-align: center;" class="mr-2">Profil</label>
-                            <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter" autoWidth="false"
-                                [style]="{'width':'27em'}" [(ngModel)]="filter_value.profil"
-                                (onChange)="updateFilter()">
-                            </p-multiSelect>
+                    <div class="grid ">
+                        <div class="field col-3">
+                            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                                (click)="displayFilter=true"></button><br><br> <br>
+                            <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                                (click)="clearFilter()"></button><br> <br>
                         </div>
-                        <div *ngIf="filter_value.locations.length!=0">
-                            <label style="text-align: center;" class="mr-2">Lieu</label>
-                            <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
-                                autoWidth="false" [style]="{'width':'27em'}" filter="true"
-                                placeholder="Choisissez un lieu" [(ngModel)]="filter_value.locations"
-                                (onChange)="updateFilter()"></p-multiSelect>
+                        <div class="field col-7 grid ">
+                            <div *ngIf="filter_value.profil.length!=0" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Profil</label><br>
+                                <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
+                                    autoWidth="false" [style]="{'width':'10em'}" [(ngModel)]="filter_value.profil"
+                                    (onChange)="updateFilter()">
+                                </p-multiSelect>
+                            </div>
+                            <div *ngIf="filter_value.locations.length!=0" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Lieu</label><br>
+                                <p-multiSelect [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+                                    autoWidth="false" [style]="{'width':'10em'}" filter="true"
+                                    placeholder="Choisissez un lieu" [(ngModel)]="filter_value.locations"
+                                    (onChange)="updateFilter()"></p-multiSelect>
+                            </div>
+                            <div *ngIf="filter_value.disponibilite" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Disponibilité</label><br>
+                                <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" autoWidth="false"
+                                    [style]="{'width':'10em'}" (onSelect)="updateFilter()"
+                                    [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range"
+                                    autoWidth="false" [style]="{'width':'10em'}"
+                                    placeholder="Date de début"></p-calendar>
+                            </div>
+                            <div *ngIf="filter_value.competences.length!=0" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Compétences</label><br>
+                                <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList"
+                                    autoWidth="false" [style]="{'width':'10em'}" [(ngModel)]="filter_value.competences"
+                                    (onChange)="updateFilter()">
+                                </p-multiSelect>
+                            </div>
+                            <div *ngIf="filter_value.niveau.length!=0" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Niveau d'étude</label><br>
+                                <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes"
+                                    autoWidth="false" [style]="{'width':'10em'}" [(ngModel)]="filter_value.niveau"
+                                    (onChange)="updateFilter()">
+                                </p-multiSelect>
+                            </div>
+                            <div class="field col-4">
+                                <label >&nbsp;</label><br>
+                                <input pInputText type="text" style="width: 20em;"
+                                    [(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
+                                    placeholder="Recherche" />
+                            </div>
                         </div>
-                        <div *ngIf="filter_value.disponibilite">
-                            <label style="text-align: center;" class="mr-2">Disponibilité</label>
-                            <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" autoWidth="false"
-                                [style]="{'width':'27em'}" (onSelect)="updateFilter()"
-                                [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range"
-                                autoWidth="false" [style]="{'width':'100%'}" placeholder="Date de début"></p-calendar>
+                        <div class="col-2">
+                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                            <br><br> <br>
+                            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+                                (click)="showForm = true"></button>
                         </div>
-                        <div *ngIf="filter_value.competences.length!=0">
-                            <label style="text-align: center;" class="mr-2">Compétences</label>
-                            <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList"
-                                autoWidth="false" [style]="{'width':'27em'}" [(ngModel)]="filter_value.competences"
-                                (onChange)="updateFilter()">
-                            </p-multiSelect>
-                        </div>
-                        <div *ngIf="filter_value.niveau.length!=0">
-                            <label style="text-align: center;" class="mr-2">Niveau d'étude</label>
-                            <p-multiSelect placeholder="Choisissez un niveau d'étude" [options]="etudes"
-                                autoWidth="false" [style]="{'width':'27em'}" [(ngModel)]="filter_value.niveau"
-                                (onChange)="updateFilter()">
-                            </p-multiSelect>
-                        </div>
+
                     </div>
-                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between mb-2">
-                        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-                            (click)="showForm = true"></button>
-                    </div>
-                    <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-                        <button pButton label="Voir filtres" class="p-button" icon="pi pi-filter"
-                            (click)="displayFilter=true"></button>
-                        <button pButton label="Vider filtres" class="p-button" icon="pi pi-filter-slash"
-                            (click)="clearFilter()"></button>
-                    </div>
+                    
+
                 </ng-template>
                 <ng-template pTemplate="listItem">
 

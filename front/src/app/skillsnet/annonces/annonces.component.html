@@ -391,55 +391,55 @@
 
 								<div class="field col-7 grid ">
 
-									<div *ngIf="filter_value.statut" class="field col-6">
-										<label>Statut &nbsp;&nbsp;</label>
+									<div *ngIf="filter_value.statut" class="field col-4">
+										<label>Statut &nbsp;&nbsp;</label><br>
 
 										<p-dropdown placeholder="Statut" [options]="statutFilter" autoWidth="false"
 											[style]="{'width':'10em'}" [(ngModel)]="filter_value.statut"
 											(onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.typeMission" class="field col-6">
-										<label>Type de mission&nbsp; </label>
+									<div *ngIf="filter_value.typeMission" class="field col-4">
+										<label>Type de mission&nbsp; </label><br>
 										<p-dropdown placeholder="Type de mission" [options]="typeMissionFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.typeMission" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
 									<br>
-									<div *ngIf="filter_value.profil.length!=0" class="field col-6">
-										<label class="mr-2">Profil&nbsp; </label>
+									<div *ngIf="filter_value.profil.length!=0" class="field col-4">
+										<label class="mr-2">Profil&nbsp; </label><br>
 										<p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.profil" (onChange)="updateFilter()">
 										</p-multiSelect>
 									</div>
 
-									<div *ngIf="filter_value.entreprise" class="field col-6">
-										<label class="mr-2">Auteur&nbsp; </label>
+									<div *ngIf="filter_value.entreprise" class="field col-4">
+										<label class="mr-2">Auteur&nbsp; </label><br>
 										<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
 											[style]="{'width':'10em'}" autoWidth="false"
 											[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
 									<br>
-									<div *ngIf="filter_value.entreprise_id" class="field col-6">
-										<label>Entreprise&nbsp; </label>
+									<div *ngIf="filter_value.entreprise_id" class="field col-4">
+										<label>Entreprise&nbsp; </label><br>
 										<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2"
 											[(ngModel)]="filter_value.entreprise_id" appendTo="body"
 											[style]="{'width':'10em'}" autoWidth="false" (onChange)="updateFilter()">
 										</p-dropdown>
 									</div>
-									<div *ngIf="filter_value.locations.length!=0" class="field col-6">
-										<label>Lieu &nbsp;&nbsp;&nbsp;</label>
+									<div *ngIf="filter_value.locations.length!=0" class="field col-4">
+										<label>Lieu &nbsp;&nbsp;&nbsp;</label><br>
 										<p-multiSelect [options]="locations" filter="true" [style]="{'width':'10em'}"
 											autoWidth="false" placeholder="Choisissez une ville"
 											[(ngModel)]="filter_value.locations"
 											(onChange)="updateFilter()"></p-multiSelect>
 									</div>
 									<br>
-									<div *ngIf="filter_value.date" class="field col-6">
-										<label style="text-align: center;" class="mr-2">Disponibilité&nbsp;</label>
+									<div *ngIf="filter_value.date" class="field col-4">
+										<label style="text-align: center;" class="mr-2">Disponibilité&nbsp;</label><br>
 										<p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy"
 											[style]="{'width':'10em'}" autoWidth="false" (onSelect)="updateFilter()"
 											[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range"
