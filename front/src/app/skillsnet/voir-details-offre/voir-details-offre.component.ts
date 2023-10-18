@@ -59,7 +59,7 @@ export class VoirDetailsOffreComponent implements OnInit {
     this.UPDATE.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 
-  MAtching() {
+  Matching() {
     this.MATCHING.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 

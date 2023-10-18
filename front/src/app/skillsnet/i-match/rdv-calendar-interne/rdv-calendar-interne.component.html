@@ -8,8 +8,7 @@
     </div>
     <div class="col-12" *ngIf="!offre_id">
         <label for="date">Offre</label>
-        <p-dropdown id="type" [options]="annonces" formControlName="offre_id" optionValue="_id"
-            optionLabel="missionName" [style]="{'width':'100%'}" autoWidth="false"
+        <p-dropdown id="type" [options]="annonces" formControlName="offre_id" [style]="{'width':'100%'}" autoWidth="false"
             placeholder="Choisissez une offre"></p-dropdown>
     </div>
     <button pButton type="submit" [disabled]="form.invalid" label="Valider" autoWidth="false"

@@ -1,10 +1,10 @@
 <div class="container" *ngIf="ANNONCE">
     <div class="modal-content">
-        <div class="row">
-            <img style="max-width: 50%;" class="img-modal" src="../../../assets/images/imatch/entreprise.png">
-            <div style="max-width: 50%;" *ngIf="!isEtudiant">
-                <h4>{{ANNONCE.entreprise_id?.r_sociale || ANNONCE.entreprise_name}}</h4>
-                <h5>{{ANNONCE.missionName}}</h5>
+        <div class="grid">
+            <img class="col-6" class="img-modal" src="../../../assets/images/imatch/entreprise.png">
+            <div class="col-6" *ngIf="!isEtudiant">
+                <h4 style="color: #1E526C;">{{ANNONCE.entreprise_id?.r_sociale || ANNONCE.entreprise_name}}</h4>
+                <h4>{{ANNONCE.missionName}}</h4>
             </div>
         </div>
 

@@ -741,8 +741,8 @@ export class AnnoncesComponent implements OnInit {
     })
 
   }
-  onMatchingAnnonce(e: string) {
-    this.annonceService.getAnnonce(e).then(annonce => {
+  onMatchingAnnonce(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
       let ids = []
       this.matchingList.forEach(m => {
         ids.push(m._id)
@@ -759,9 +759,10 @@ export class AnnoncesComponent implements OnInit {
 
   }
 
-  InitFormUpdate(e: string) {
-    this.annonceService.getAnnonce(e).then(annonce => {
+  InitFormUpdate(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
       this.onFillForm(annonce)
+      this.showFormUpdate = true
     })
   }
 }

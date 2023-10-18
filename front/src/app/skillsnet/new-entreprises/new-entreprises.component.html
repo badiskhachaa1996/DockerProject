@@ -210,7 +210,7 @@
                 <app-add-entreprise></app-add-entreprise>
             </p-tabPanel>
             <p-tabPanel header="Entreprises">
-                <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret',]" [pageLinks]="5"
+                <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret','ville_ent']" [pageLinks]="5"
                     [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
                     responsiveLayout="scroll" [rows]="8" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="caption">
@@ -221,6 +221,11 @@
                                     (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                     class="w-full" />
                             </span>
+                            <p-multiSelect [options]="secteurs" filter="true"
+                                placeholder="Choisissez un secteur d'activité" [showClear]="true"
+                                (onChange)="dt1.filter($event.value,'secteur_activite','in')"></p-multiSelect>
+                            <p-dropdown [options]="categorieFilter" filter="true" placeholder="Choisissez une catégorie"
+                                (onChange)="dt1.filter($event.value,'categorie','contains')"></p-dropdown>
                         </div>
                     </ng-template>
 
@@ -230,8 +235,8 @@
                             <th pSortableColumn="r_sociale"> Raison sociale <p-sortIcon field="r_sociale">
                                 </p-sortIcon>
                             </th>
-                            <th pSortableColumn="activite"> Secteur d'activité <p-sortIcon
-                                    field="activite"></p-sortIcon>
+                            <th pSortableColumn="secteur_activite"> Secteur d'activité <p-sortIcon
+                                    field="secteur_activite"></p-sortIcon>
                             </th>
                             <th pSortableColumn="categorie"> Catégorie <p-sortIcon field="categorie"></p-sortIcon>
                             </th>
@@ -239,7 +244,7 @@
                                 Ville <p-sortIcon field="ville_ent"></p-sortIcon>
                             </th>
                             <th>
-                                Denière connexion
+                                Denière connexion <p-sortIcon (click)="sortByLastConnexion()"></p-sortIcon>
                             </th>
                             <th>Action</th>
                         </tr>
@@ -255,7 +260,13 @@
                             <td style="min-width: 8rem;">{{ entreprise.secteur_activite }}</td>
                             <td style="min-width: 8rem;">{{ entreprise.categorie }}</td>
                             <td style="min-width: 8rem;">{{entreprise.ville_ent}}</td>
-                            <td style="min-width: 8rem;">{{dicEntLastConnection[entreprise._id]}}</td>
+                            <td style="min-width: 8rem;"
+                                *ngIf="dicEntLastConnection[entreprise._id]"> 
+                                {{dicEntLastConnection[entreprise._id] | date:'mediumDate'}}
+                            </td>
+                            <td style="min-width: 8rem;"
+                                *ngIf="!dicEntLastConnection[entreprise._id]">
+                                Jamais connecté</td>
                             <td>
                                 <i style="cursor: pointer" class="pi pi-pencil mr-2" pTooltip="Modifier l'entreprise"
                                     tooltipPosition="bottom"
@@ -295,9 +306,10 @@
                     <ng-template pTemplate="emptymessage">
                         <tr>
                             <td style="width: 3rem;">{{entreprise?.date_creation | date:'dd MMMM yy'}}</td>
-                            <td style="width: 3rem;">WIP </td>
+                            <td style="width: 3rem;">{{entreprise?.created_by?.firstname | titlecase}}
+                                {{entreprise?.created_by?.lastname | uppercase}} </td>
                             <td style="width: 3rem;">{{entreprise?.commercial_id?.firstname | titlecase}}
-                                {{entreprise?.commercial_id?.lastname | titlecase}}</td>
+                                {{entreprise?.commercial_id?.lastname | uppercase}}</td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -325,7 +337,8 @@
                 <form class="p-fluid p-formgrid grid" *ngIf="addRep" [formGroup]="formAddRep" (ngSubmit)="onAddRep()">
                     <div class="field col-12">
                         <label For="Civilite">Civilité</label>
-                        <p-dropdown placeholder="Choisissez une civilité" [options]="civiliteList" formControlName="civilite"></p-dropdown>
+                        <p-dropdown placeholder="Choisissez une civilité" [options]="civiliteList"
+                            formControlName="civilite"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="lastname">Nom</label>
@@ -337,7 +350,8 @@
                     </div>
                     <div class="field col-12">
                         <label For="firstname">Rôle</label>
-                        <p-dropdown placeholder="Choisissez un role" [options]="roleListRepresentant" formControlName="role"></p-dropdown>
+                        <p-dropdown placeholder="Choisissez un role" [options]="roleListRepresentant"
+                            formControlName="role"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="email">Email</label>
@@ -348,7 +362,8 @@
                         <input pInputText id="phone" type="tel" formControlName="phone" placeholder="0188880050" />
                     </div>
                     <div class="field col-12">
-                        <button pButton type="submit" [disabled]="formAddRep.invalid" label="Ajouter" style="float: right;"></button>
+                        <button pButton type="submit" [disabled]="formAddRep.invalid" label="Ajouter"
+                            style="float: right;"></button>
                     </div>
                 </form>
                 <p-table [value]="dicEntRepresentant[entreprise._id]">
@@ -396,6 +411,7 @@
                             <td style="width: 3rem;">{{ entreprise.activite }}</td>
                             <td style="width: 3rem;">{{entreprise?.code_postale_ec}} {{entreprise?.adresse_ec}},
                                 {{entreprise?.ville_ec}}</td>
+                            <td style="width: 3rem;">{{entreprise?.crc}}</td>
                             <td style="width: 3rem;">{{entreprise?.nb_salarie}}</td>
                             <td style="width: 3rem;">{{entreprise?.convention}}</td>
                             <td style="width: 3rem;">{{entreprise?.idcc}}</td>

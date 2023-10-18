@@ -89,7 +89,9 @@ export class AnnonceViewerComponent implements OnInit {
 
   selectedMulti: string[] = [];
   selectedMultiOutils: string[] = [];
-
+  entrepriseFilter2 = [
+    { label: 'Choisissez une entreprise', value: null }
+  ]
   missionTypes: any = [
     { label: 'Stage' },
     { label: 'Alternance' },
@@ -182,7 +184,7 @@ export class AnnonceViewerComponent implements OnInit {
     );
 
     //Recuperation de la liste des annonces
-    this.annonceService.getAnnoncesByEntrepriseID(this.ENTREPRISE_ID)
+    this.annonceService.getAnnonces()
       .then((response: Annonce[]) => {
         this.annonces = response;
         this.annoncesFiltered = response
@@ -213,10 +215,11 @@ export class AnnonceViewerComponent implements OnInit {
       ((response) => {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
-          //this.entrepriseFilter.push({ label: entreprise.r_sociale, value: entreprise._id });
+          this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
+        this.filter_value.entreprise_id = this.ENTREPRISE_ID
       }),
       ((error) => console.error(error))
     );
@@ -577,7 +580,8 @@ export class AnnonceViewerComponent implements OnInit {
     locations: [],
     user: null,
     date: '',
-    search: ''
+    search: '',
+    entreprise_id: null
   }
 
   updateFilter() {
@@ -599,6 +603,8 @@ export class AnnonceViewerComponent implements OnInit {
             r = false
         }
 
+      } else if (this.filter_value.entreprise_id && this.filter_value.entreprise_id != val.entreprise_id._id) {
+        r = false
       }
       else if (this.filter_value.locations.length != 0 && (!val.entreprise_ville || !this.filter_value.locations.includes(val.entreprise_ville)))
         r = false
@@ -607,11 +613,12 @@ export class AnnonceViewerComponent implements OnInit {
       else if (this.filter_value.date && new Date(this.filter_value.date).getTime() >= new Date(val.debut).getTime())
         r = false, console.log("date")
       else if (this.filter_value.search) {
-        if (!val.custom_id.includes(this.filter_value.search) &&
-          !val.entreprise_name.includes(this.filter_value.search) &&
-          !val.missionDesc.includes(this.filter_value.search) &&
-          !val.missionName.includes(this.filter_value.search) &&
-          !val.entreprise_mail.includes(this.filter_value.search))
+        this.filter_value.search = this.filter_value.search.toLocaleLowerCase()
+        if (!val.custom_id.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_name.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionDesc.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.missionName.toLocaleLowerCase().includes(this.filter_value.search) &&
+          !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
           r = false
       }
 
@@ -630,7 +637,8 @@ export class AnnonceViewerComponent implements OnInit {
       locations: [],
       user: null,
       date: '',
-      search: ''
+      search: '',
+      entreprise_id: null
     }
     this.annoncesFiltered = this.annonces
   }

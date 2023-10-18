@@ -98,7 +98,7 @@ const user_schema = new mongoose.Schema({
     },
     date_creation: { type: Date, required: false, default: Date.now },
     departement: { type: String },
-    last_connection: { type: Date },
+    last_connection: { type: Date, default: new Date() },
     mention: { //not used
         type: String,
         required: false,
@@ -129,7 +129,7 @@ const user_schema = new mongoose.Schema({
             date: { type: Date },
             filename: { type: String },
             path: { type: String },
-            note: { type: String }
+            note: { type: String },
         }], default: []
     },
     savedTicket: {
@@ -141,7 +141,7 @@ const user_schema = new mongoose.Schema({
     savedMatching: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
     },
-    linksnames:[{ type: String }]
+    linksnames: [{ type: String }]
 
 
 

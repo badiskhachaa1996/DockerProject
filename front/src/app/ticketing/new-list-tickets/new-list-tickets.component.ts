@@ -218,7 +218,6 @@ export class NewListTicketsComponent implements OnInit {
         if (service_dic['Ticketing'] && service_dic['Ticketing'] == 'Super-Admin')
           itemsSuperAdmin.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
         if (u.roles_ticketing_list && u.roles_ticketing_list.length != 0) {
-          console.log(u)
           u.roles_ticketing_list.forEach(r => {
             if (r.module) {
               if (!itemsService[r.module._id]) {
@@ -227,6 +226,25 @@ export class NewListTicketsComponent implements OnInit {
               }
               else
                 itemsService[r.module._id].push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+            }
+          })
+        }
+        if (u.service_list && u.service_list.length != 0) {
+          u.service_list.forEach((r: Service) => {
+            if (r) {
+              if (!itemsService[r._id]) {
+                itemsService[r._id] = [{ label: `${u.firstname} ${u.lastname}`, value: u._id }]
+                serviceList.push(r)
+              }
+              else {
+                let ids = []
+                itemsService[r._id].forEach(element => {
+                  ids.push(element.value)
+                });
+                if (ids.indexOf(u._id) == -1)
+                  itemsService[r._id].push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+              }
+
             }
           })
         }
@@ -631,14 +649,6 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
   activeIndex1 = 1
-  onSelectFilterService(service_id: string[]) {
-    this.AuthService.getAllByServiceFromList(service_id[0]).subscribe(users => {
-      this.filterAgent = []
-      users.forEach(u => {
-        this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
-      })
-    })
-  }
 
   onAddTicket(e) {
     this.updateTicketList()

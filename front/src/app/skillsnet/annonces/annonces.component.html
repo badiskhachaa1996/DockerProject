@@ -91,8 +91,9 @@
 					</div>
 					<div class="field col-12">
 						<label htmlFor="ville">Lieu</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville"
-							placeholder="Lieu de l'offre" />
+						<p-dropdown [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+							autoWidth="false" filter="true" placeholder="Choisissez un lieu"
+							formControlName="entreprise_ville"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
@@ -229,8 +230,9 @@
 
 					<div class="field col-12">
 						<label htmlFor="ville">Lieu</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville"
-							placeholder="Lieu de l'offre" />
+						<p-dropdown [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+							autoWidth="false" filter="true" placeholder="Choisissez un lieu"
+							formControlName="entreprise_ville"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
@@ -346,8 +348,9 @@
 					</div>
 					<div class="field col-6">
 						<label htmlFor="ville">Lieu</label>
-						<input pInputText id="title" type="text" formControlName="entreprise_ville"
-							placeholder="Lieu de l'offre" />
+						<p-dropdown [options]="locations" autoWidth="false" [style]="{'width':'100%'}"
+							autoWidth="false" filter="true" placeholder="Choisissez un lieu"
+							formControlName="entreprise_ville"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
@@ -446,8 +449,9 @@
 											placeholder="Date de début"></p-calendar>
 									</div>
 
-									<input pInputText type="text" style="width: 27em;height: 30px;" [(ngModel)]="filter_value.search"
-										(input)="updateFilter()" placeholder="Recherche" />
+									<input pInputText type="text" style="width: 27em;height: 30px;"
+										[(ngModel)]="filter_value.search" (input)="updateFilter()"
+										placeholder="Recherche" />
 								</div>
 								<div class="col-2" style="text-align: right;">
 									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
@@ -554,14 +558,8 @@
 											<div class="competences-block">
 												<h4 class="mb-2">Compétences</h4>
 												<div class="grid gx-5 competence">
-													<div class="col-12 md:col-4">
-														<p>{{annonce.competences[0]?.libelle | titlecase}}</p>
-													</div>
-													<div class="col-12 md:col-4">
-														<p>{{annonce.competences[1]?.libelle | titlecase}}</p>
-													</div>
-													<div class="col-12 md:col-4">
-														<p>{{annonce.competences[2]?.libelle | titlecase}}</p>
+													<div class="col-12 md:col-4" *ngFor="let c of annonce.competences">
+														<p>{{c?.libelle | titlecase}}</p>
 													</div>
 												</div>
 											</div>

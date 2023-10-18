@@ -638,7 +638,7 @@ app.get("/getAllAgent/", (req, res) => {
 });
 
 app.get("/getAllAgentPopulate", (req, res) => {
-  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id').populate('roles_ticketing_list.module')
+  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
 
     .then((result) => {
       res.send(result.length > 0 ? result : []);

@@ -41,7 +41,7 @@ let transporterINTED = nodemailer.createTransport({
 app.get("/getAll", (req, res, next) => {
   Entreprise.find()
     .sort({ r_sociale: 1 })
-    .populate("commercial_id")
+    .populate("commercial_id").populate('created_by')
     .then((entreprisesFromDb) => {
       res.status(200).send(entreprisesFromDb);
     })
