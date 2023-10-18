@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 import { MessageService } from 'src/app/services/message.service';
 import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
+import { Sujet } from 'src/app/models/Sujet';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
@@ -53,24 +55,7 @@ export class NewListTicketsComponent implements OnInit {
   }
   token: any;
   filterService = [];
-  filtreSujet = [{ label: 'Tous les sujets', value: null },
-  { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
-  { label: 'Module Pédagogie', value: "Module Pédagogie" },
-  { label: 'Module Administration', value: "Module Administration" },
-  { label: 'Module Admission', value: "Module Admission" },
-  { label: 'Module Commerciale', value: "Module Commerciale" },
-  { label: 'Module Partenaires', value: "Module Partenaires" },
-  { label: 'Module iMatch', value: "Module iMatch" },
-  { label: 'Module Booking', value: "Module Booking" },
-  { label: 'Module Questionnaire', value: "Module Questionnaire" },
-  { label: 'Module International', value: "Module International" },
-  { label: 'Module CRM', value: "Module CRM" },
-  { label: 'Module Intuns', value: "Module Intuns" },
-  { label: 'Module Gestions des emails', value: "Module Gestions des emails" },
-  { label: 'Module Admin IMS', value: "Module Admin IMS" },
-  { label: 'Module Générateur Docs', value: "Module Générateur Docs" },
-  { label: 'Module Ticketing', value: "Module Ticketing" },
-  { label: 'Espace Personnel', value: "Espace Personnel" },
+  filtreSujet = [
   ];
   filterStatut = [
     { label: 'En attente', value: "En attente de traitement" },
@@ -84,7 +69,6 @@ export class NewListTicketsComponent implements OnInit {
     { label: 'Traité', value: "Traité" },
   ]
   filterAgent = [
-    { label: 'Tous les users', value: null }
   ]
   sujetDic = {}
   serviceDic = {}
@@ -199,17 +183,67 @@ export class NewListTicketsComponent implements OnInit {
         this.filterService.push({ label: val.label, value: val._id })
         this.serviceDic[val._id] = val.label
       })
-    })
-    this.SujetService.getAll().subscribe(data => {
-      data.forEach(element => {
-        this.sujetDic[element._id] = element.label
-      });
+      this.SujetService.getAll().subscribe(dataSujet => {
+        let serviceSujetDic = {}
+        dataSujet.forEach(element => {
+          this.sujetDic[element._id] = element.label
+          if (serviceSujetDic[element.service_id])
+            serviceSujetDic[element.service_id].push(element)
+          else
+            serviceSujetDic[element.service_id] = [element]
+        });
+        data.forEach((service: Service) => {
+          if (serviceSujetDic[service._id]) {
+            let items = []
+            serviceSujetDic[service._id].forEach((suj: Sujet) => {
+              items.push({ label: suj.label, value: suj._id })
+            })
+            this.filtreSujet.push({ label: service.label, value: service._id, items })
+          }
+        })
+      })
     })
 
+
     this.AuthService.getAllAgentPopulate().subscribe(users => {
+      let itemsSuperAdmin = []
+      let itemsService = {}
+      let serviceList: Service[] = []
       users.forEach(u => {
-        this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+        let service_dic = {};
+        u.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
+        })
+        if (service_dic['Ticketing'] && service_dic['Ticketing'] == 'Super-Admin')
+          itemsSuperAdmin.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+        if (u.roles_ticketing_list && u.roles_ticketing_list.length != 0) {
+          console.log(u)
+          u.roles_ticketing_list.forEach(r => {
+            if (r.module) {
+              if (!itemsService[r.module._id]) {
+                itemsService[r.module._id] = [{ label: `${u.firstname} ${u.lastname}`, value: u._id }]
+                serviceList.push(r.module)
+              }
+              else
+                itemsService[r.module._id].push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
+            }
+          })
+        }
       })
+      this.filterAgent.push({
+        label: "Tous les services",
+        value: null,
+        items: itemsSuperAdmin
+      })
+      serviceList.forEach(s => {
+        this.filterAgent.push({
+          label: s.label,
+          value: s._id,
+          items: itemsService[s._id]
+        })
+      })
+      console.log(this.filterAgent)
     })
   }
 
@@ -597,8 +631,8 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
   activeIndex1 = 1
-  onSelectFilterService(service_id: string) {
-    this.AuthService.getAllByServiceFromList(service_id).subscribe(users => {
+  onSelectFilterService(service_id: string[]) {
+    this.AuthService.getAllByServiceFromList(service_id[0]).subscribe(users => {
       this.filterAgent = []
       users.forEach(u => {
         this.filterAgent.push({ label: `${u.firstname} ${u.lastname}`, value: u._id })
