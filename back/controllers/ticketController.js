@@ -440,7 +440,7 @@ app.post("/AccAff/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             agent_id: req.body.agent_id,
-            statut: "En cours de traitement",
+            statut: "En attente de traitement",
             date_affec_accep: Date.now(),
             isAffected: req.body?.isAffected || false
         },

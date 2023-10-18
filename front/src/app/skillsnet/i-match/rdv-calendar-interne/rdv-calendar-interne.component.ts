@@ -74,13 +74,25 @@ export class RdvCalendarInterneComponent implements OnInit {
       let token: any = jwt_decode(localStorage.getItem("token"));
       this.UserService.getPopulate(token.id).subscribe(userConnected => {
         this.form.patchValue({ email: userConnected.email_perso, phone: userConnected.phone })
-      })
-      this.annonceService.getAnnoncesByUserId(token.id)
-        .then((response: Annonce[]) => {
-          this.annonces = response;
+        if (userConnected.type == 'CEO Entreprise' || userConnected.type == 'Tuteur' || userConnected.type == 'Représentant')
+          this.annonceService.getAnnoncesByUserId(userConnected._id)
+            .then((response: Annonce[]) => {
+              response.forEach(ann => {
+                this.annonces.push({ label: `${ann.missionName} - ${ann.custom_id}`, value: ann._id })
+              })
 
-        })
-        .catch((error) => console.error(error));
+            })
+            .catch((error) => console.error(error));
+        else
+          this.annonceService.getAnnonces()
+            .then((response: Annonce[]) => {
+              response.forEach(ann => {
+                this.annonces.push({ label: `${ann?.missionName} - ${ann?.custom_id}`, value: ann._id })
+              })
+            })
+            .catch((error) => console.error(error));
+      })
+
     }
     this.loadEvents()
   }
@@ -157,7 +169,7 @@ export class RdvCalendarInterneComponent implements OnInit {
         }
 
       })
-      
+
     }, error => {
       console.error(error)
       this.ToastService.add({ severity: 'error', summary: 'Le rendez-vous a eu un problème', detail: error?.error })

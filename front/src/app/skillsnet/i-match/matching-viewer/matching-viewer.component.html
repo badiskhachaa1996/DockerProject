@@ -7,10 +7,10 @@
         <tr>
             <th style="width: 3rem" scope="col"></th>
             <th style="width: 3rem" scope="col">Offre</th>
-            <th style="width: 3rem" scope="col">Type Matching</th>
-            <th style="width: 3rem" scope="col">Matcher</th>
-            <th style="width: 3rem" scope="col">Statut Matching</th>
-            <th style="width: 3rem" scope="col">Taux Matching</th>
+            <th style="width: 3rem" scope="col">Type</th>
+            <th style="width: 3rem" scope="col">Commercial</th>
+            <th style="width: 3rem" scope="col">Statut</th>
+            <th style="width: 3rem" scope="col">Taux</th>
             <th style="width: 3rem" scope="col">Entretien</th>
         </tr>
     </ng-template>
@@ -27,8 +27,11 @@
             <td>
                 {{match.type_matching}}
             </td>
-            <td>
-                {{match.matcher_id.firstname | titlecase}} {{match.matcher_id.lastname | uppercase}}
+            <td *ngIf="match.type_matching!='Candidat'">
+                {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+            </td>
+            <td *ngIf="match.type_matching=='Candidat'">
+                Non
             </td>
             <td>
                 {{match.statut}}
@@ -49,17 +52,11 @@
     <ng-template pTemplate="rowexpansion" let-match>
         <tr>
             <td colspan="9">
-                <div class="competences-block">
+                <div class="competences-block" *ngIf="match.offre_id.competences.length!=0">
                     <h4 class="mb-2">Compétences</h4>
                     <div class="grid gx-5 competence">
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[0]?.libelle | titlecase}}</p>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[1]?.libelle | titlecase}}</p>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[2]?.libelle | titlecase}}</p>
+                        <div class="col-12 md:col-4" *ngFor="let c of match.offre_id.competences">
+                            <p>{{c?.libelle | titlecase}}</p>
                         </div>
                     </div>
                 </div>
@@ -79,10 +76,10 @@
     </ng-template>
     <ng-template pTemplate="body">
         <tr>
-            <td>{{match.offre_id?.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
+            <td>{{match.offre_id?.entreprise_id?.r_sociale || match.offre_id?.entreprise_name}}</td>
             <td>{{match.offre_id?.workplaceType}}</td>
             <td>{{match.offre_id?.date_creation | date:'dd MMMM yy'}}</td>
-            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
+            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{match.offre_id?.user_id?.lastname |
                 titlecase}}</td>
             <td>
                 {{match?.offre_id?.modified_at| date:'dd MMMM yy'}}

@@ -54,7 +54,7 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
       .catch((error) => { console.error(error); })
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
-      this.isEtudiant = true
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
       if (this.isEtudiant)
         this.activeIndex1 = 0
       if (user.savedMatching)
