@@ -155,7 +155,8 @@
                     <label for="city1">Urgent</label>
                 </div>
                 <div class="col-6 md:col-2 grid">
-                    <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets selectionnés </span>{{tickets.length}}</p>
+                    <p style="padding: 2px; border:1px lightgray solid;"> <span style="font-weight: bold;">Tickets
+                            selectionnés </span>{{tickets.length}}</p>
                 </div>
             </div>
             <p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true" [value]="tickets"
@@ -169,12 +170,11 @@
                             (onChange)="dt1.filter($event.value, 'sujet_id.service_id._id', 'in');onSelectFilterService($event.value)"
                             placeholder="Choisissez un service" emptyFilterMessage="Pas de service trouvé"
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true" [group]="true"
                             (onChange)="dt1.filter($event.value, 'sujet', 'equals');" placeholder="Choisissez un sujet"
                             emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
-                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true"
-                            [virtualScroll]="true" itemSize="30"
+                        <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
                             (onChange)="dt1.filter($event.value, 'agent_id', 'equals');"
                             placeholder="Choisissez un user" emptyFilterMessage="Pas de user trouvé"
                             filterPlaceholder="Choisissez un user"></p-dropdown>
