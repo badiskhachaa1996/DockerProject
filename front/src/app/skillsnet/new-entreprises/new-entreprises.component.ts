@@ -129,9 +129,11 @@ export class NewEntreprisesComponent implements OnInit {
           this.TuteurService.getAllByEntrepriseId(ent._id).subscribe(tuteurs => {
             let d = new Date(tuteurs[0]?.user_id?.last_connection).getTime()
             tuteurs.forEach(t => {
-              ids.push(t.user_id._id)
-              if (new Date(t?.user_id?.last_connection).getTime() > d)
-                d = new Date(t?.user_id?.last_connection).getTime()
+              if (t.user_id) {
+                ids.push(t?.user_id?._id)
+                if (new Date(t?.user_id?.last_connection).getTime() > d)
+                  d = new Date(t?.user_id?.last_connection).getTime()
+              }
             })
             if (!isNaN(d))
               this.dicEntLastConnection[ent._id] = new Date(d);

@@ -220,6 +220,7 @@ export class AnnonceViewerComponent implements OnInit {
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
         this.filter_value.entreprise_id = this.ENTREPRISE_ID
+        this.updateFilter()
       }),
       ((error) => console.error(error))
     );
