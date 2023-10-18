@@ -126,6 +126,9 @@
         </form>
     </div>
     <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
+        <p-tabPanel header="Rendez-vous">
+            <app-rendez-vous-resultats></app-rendez-vous-resultats>
+        </p-tabPanel>
         <p-tabPanel header="Générateur de CV">
             <app-ajout-cv></app-ajout-cv>
         </p-tabPanel>

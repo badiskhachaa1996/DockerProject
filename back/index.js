@@ -244,6 +244,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/cv/download-cv/") ||
       req.originalUrl === '/soc/skills/get-competences' ||
       req.originalUrl === '/soc/skills/get-profiles' ||
+      req.originalUrl === '/soc/disponbiliteEtudiant/getAllByUSERID' ||
       req.originalUrl.startsWith("/soc/fIM") ||
       req.originalUrl.startsWith('/soc/RA/getByEcoleID') ||
       req.originalUrl.startsWith('/soc/docGenInt/download') ||

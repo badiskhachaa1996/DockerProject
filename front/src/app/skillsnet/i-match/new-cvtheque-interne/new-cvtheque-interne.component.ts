@@ -187,7 +187,7 @@ export class NewCvthequeInterneComponent implements OnInit {
 
   }
 
-  activeIndex1 = 1
+  activeIndex1 = 2
   handleClose(e) {
     this.matchingList.splice(e.index - 2)
     this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {

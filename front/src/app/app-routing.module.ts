@@ -1368,7 +1368,6 @@ const routes: Routes = [
     { path: 'imatch', component: IMatchComponent },
     { path: 'imatch/cvtheque', component: ImatchCandidatComponent },
     { path: 'imatch/offres', component: ImatchEntrepriseComponent },
-    { path: 'rendez-vous', component: RendezVousComponent },
     { path: 'rendez-vous/:user_id', component: RendezVousComponent },
     { path: 'imatch/cv/:id', component: CvComponent },
 

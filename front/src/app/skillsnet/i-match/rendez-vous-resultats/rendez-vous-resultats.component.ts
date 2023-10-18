@@ -15,22 +15,21 @@ export class RendezVousResultatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.MeetingTeamsService.getAll().subscribe(mts => {
-      console.log(mts)
       this.meetings = mts
     })
   }
 
   form = new FormGroup({
-    statut: new FormControl('', Validators.required)
+    statut: new FormControl('', Validators.required),
+    note: new FormControl('')
   })
 
   rdvToUpdate: MeetingTeams
 
   statutDropdown = [
     { label: "Planifié", value: "Planifié" },
-    { label: "Validé par le candidat", value: "Validé par le candidat" },
+    { label: "Validé", value: "Validé" },
     { label: "Annulé", value: "Annulé" },
-    { label: "Fait", value: "Fait" },
   ]
 
 

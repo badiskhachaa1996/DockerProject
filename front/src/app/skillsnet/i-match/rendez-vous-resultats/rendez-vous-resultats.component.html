@@ -12,6 +12,10 @@
                 <p-dropdown [options]="statutDropdown" placeholder="Choissisez un statut" autoWidth="false"
                     [filter]="true" [style]="{'width':'100%'}" formControlName="statut"></p-dropdown>
             </div>
+            <div class="field col-12" *ngIf="form.value.statut=='Annulé'">
+                <label>Note: </label>
+                <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+            </div>
             <button pButton [disabled]="form.invalid" label="Mettre à jour le rendez-vous"></button>
         </form>
     </div>
@@ -30,23 +34,14 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
-                        Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
+                    <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                        ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                        Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="company_email" scope="col" style="text-align: center;">
-                        Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
+                        Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
                     </th>
                     <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
                         Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                        Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="description" scope="col" style="text-align: center;">
-                        Description <p-sortIcon field="description"></p-sortIcon>
                     </th>
                     <th pSortableColumn="statut" scope="col" style="text-align: center;">
                         Statut <p-sortIcon field="statut"></p-sortIcon>
@@ -58,28 +53,19 @@
             </ng-template>
             <ng-template pTemplate="body" let-rdv>
                 <tr>
-                    <td>
-                        {{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
+                    <td [ngClass]="{'valid-begin':(rdv?.statut=='Validé'),'annuler-begin':(rdv?.statut=='Annulé')}">
+                        {{rdv?.offre_id?.custom_id }}
                     </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
                     </td>
-                    <td>
-                        {{rdv?.company_email}}
-                    </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
                     </td>
-                    <td>
-                        {{rdv?.date_creation | date:'dd MMMM yy'}}
-                    </td>
-                    <td>
-                        {{rdv?.description}}
-                    </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.statut}}
                     </td>
-                    <td>
+                    <td [ngClass]="{'valid-end':(rdv?.statut=='Validé'),'annuler-end':(rdv?.statut=='Annulé')}">
                         <i pTooltip="Mettre à jour le statut du rendez-vous" tooltipPosition="bottom"
                             class="pi pi-pencil mr-2" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
                     </td>
