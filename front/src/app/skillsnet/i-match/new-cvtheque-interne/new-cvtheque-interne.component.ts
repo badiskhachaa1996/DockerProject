@@ -189,7 +189,7 @@ export class NewCvthequeInterneComponent implements OnInit {
 
   activeIndex1 = 2
   handleClose(e) {
-    this.matchingList.splice(e.index - 2)
+    this.matchingList.splice(e.index - 3)
     this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
 
     })
@@ -201,6 +201,9 @@ export class NewCvthequeInterneComponent implements OnInit {
 
   profilFilter = [
     //{ label: "Choisissez un profil", value: null },
+  ]
+  typeFilter = [
+    { label: 'Choisissez un Type', value: null },
   ]
 
   locations = [
@@ -283,7 +286,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     competences: [],
     niveau: [],
     winner: '',
-    search: ''
+    search: '',
+    type: null
   }
   updateFilter() {
     this.cvs = []
@@ -299,22 +303,24 @@ export class NewCvthequeInterneComponent implements OnInit {
         console.log(typeof this.filter_value.profil[0], typeof idsP[0], idsP[0] == this.filter_value.profil[0], this.filter_value.profil.includes(idsP[0]))
       if (this.filter_value.profil.length != 0 && (val.competences.length != 0 || !this.filter_value.profil.includes(idsP[0])))
         r = false;
-      else if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || !this.filter_value.locations.includes(val.mobilite_lieu)))
+      if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || !this.filter_value.locations.includes(val.mobilite_lieu)))
         r = false
-      else if (this.filter_value.disponibilite && new Date(this.filter_value.disponibilite).getTime() > new Date(val.disponibilite).getTime())
+      if (this.filter_value.disponibilite && new Date(this.filter_value.disponibilite).getTime() > new Date(val.disponibilite).getTime())
         r = false
-      else if (this.filter_value.competences.length != 0) {
+      if (this.filter_value.competences.length != 0) {
         if (competences_ids.length == 0)
           r = false
       }
-      else if (this.filter_value.search) {
+      if (this.filter_value.search) {
         if (!val?.a_propos?.includes(this.filter_value.search) &&
           !val?.centre_interets?.includes(this.filter_value.search) &&
           !val?.user_id?.lastname?.includes(this.filter_value.search) &&
           !val?.user_id?.firstname?.includes(this.filter_value.search) &&
-          !val?.mobilite_lieu?.includes(this.filter_value.search))
+          !val?.mobilite_lieu?.includes(this.filter_value.search) &&
+          !val?.profil?.libelle.includes(this.filter_value.search))
           r = false
       }
+      //if(this.filter_value.type && !this.filter_value.type.includes(val))
       if (r)
         this.cvs.push(val)
     })
@@ -328,7 +334,8 @@ export class NewCvthequeInterneComponent implements OnInit {
       competences: [],
       niveau: [],
       winner: '',
-      search: ''
+      search: '',
+      type: null
     }
     this.cvs = this.defaultcvs
   }
@@ -343,7 +350,7 @@ export class NewCvthequeInterneComponent implements OnInit {
     if (!ids.includes(cv._id)) {
       this.matchingList.push(cv)
       this.AuthService.update({ _id: this.token.id, savedMatching: this.matchingList }).subscribe(r => {
-        this.activeIndex1 = 1 + this.matchingList.length
+        this.activeIndex1 = 2 + this.matchingList.length
       })
     } else {
       this.activeIndex1 = ids.indexOf(cv._id) + 2
@@ -358,7 +365,7 @@ export class NewCvthequeInterneComponent implements OnInit {
     this.cvList.push({ label: "CV - " + cv?.user_id?.lastname + " " + cv?.user_id?.firstname, CV_ID: cv._id })
     console.log(this.activeIndex1)
     setTimeout(() => {
-      this.activeIndex1 = 1 + this.cvList.length + this.matchingList.length
+      this.activeIndex1 = 2 + this.cvList.length + this.matchingList.length
       console.log(this.activeIndex1)
     }, 5)
 
@@ -368,7 +375,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   updateCV(element) {
     this.updateCVList.push(element)
     setTimeout(() => {
-      this.activeIndex1 = 1 + this.cvList.length + this.updateCVList.length + this.matchingList.length
+      this.activeIndex1 = 2 + this.cvList.length + this.updateCVList.length + this.matchingList.length
     }, 1)
   }
 
@@ -377,7 +384,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   takeRDV(element) {
     this.rdvList.push(element)
     setTimeout(() => {
-      this.activeIndex1 = 1 + this.cvList.length + this.updateCVList.length + this.matchingList.length + this.rdvList.length
+      this.activeIndex1 = 2 + this.cvList.length + this.updateCVList.length + this.matchingList.length + this.rdvList.length
     }, 1)
   }
 
