@@ -32,7 +32,7 @@ export class EntrepriseService {
   // Création d'une entreprise et d'un représentant 
   createEntrepriseRepresentant(tbObj: any) {
     let registreUrl = this.apiUrl + "createEntrepriseRepresentant";
-    return this.httpClient.post<{ entreprise: Entreprise, representant: User }>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<{ entreprise: Entreprise, representant: User }>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   // recuperation de la liste des entreprises d'un CEO
