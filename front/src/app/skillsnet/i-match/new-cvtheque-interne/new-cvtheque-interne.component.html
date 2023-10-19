@@ -466,8 +466,9 @@
         <p-tabPanel style="width: 100%;" header="MATCH - {{match.user_id.lastname}} {{match.user_id.firstname}}"
             *ngFor="let match of matchingList" [closable]="true">
             <div class="grid" style="width: 100%;">
+
+                <app-matching-viewer class="col-12" [USER_ID]="match.user_id._id"></app-matching-viewer>
                 <app-voir-cv class="col-6" [CV_ID]="match._id"></app-voir-cv>
-                <app-matching-viewer class="col-6" [USER_ID]="match.user_id._id"></app-matching-viewer>
             </div>
 
         </p-tabPanel>
