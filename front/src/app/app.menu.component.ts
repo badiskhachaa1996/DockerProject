@@ -6274,6 +6274,11 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
+                                        label: 'Entreprise',
+                                        icon: 'pi pi-building',
+                                        routerLink: ['/imatch/entreprise']
+                                    },
+                                    {
                                         label: "Offres",
                                         icon: 'pi pi-volume-up',
                                         routerLink: ['/offres'],
@@ -6288,11 +6293,7 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-list',
                                         routerLink: ['/cvtheque-interne']
                                     },
-                                    {
-                                        label: 'Entreprise',
-                                        icon: 'pi pi-building',
-                                        routerLink: ['/imatch/entreprise']
-                                    },
+
                                     /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',
