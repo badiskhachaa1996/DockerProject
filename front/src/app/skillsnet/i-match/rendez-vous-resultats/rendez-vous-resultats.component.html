@@ -26,11 +26,24 @@
             [globalFilterFields]="['statut', 'winner_id.firstname','winner_id.lastname','user_id.firstname','user_id.lastname','company_email','description']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <span class="p-input-icon-left mb-2">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" class="w-full" />
-                </span>
+
+                <div class="flex justify-content-center align-items-center">
+                    <!--<div>
+                        <p>Date</p>
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>-->
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
+                        (onChange)="dt1.filter($event.value, 'statut', 'equals');"
+                        emptyFilterMessage="Pas de source trouvé"
+                        filterPlaceholder="Choisissez une source"></p-dropdown>
+                    <p-calendar [style]="{'margin':'5px'}" (onSelect)="onFilterDate($event)"></p-calendar>
+                </div>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
