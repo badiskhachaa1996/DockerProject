@@ -95,8 +95,12 @@
 						pTooltip="Pas d'entretien"></i>
 				</td>
 				<td>
-					<i pTooltip="Prendre rendez-vous" style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar"
-						(click)="takeRDV(match)" aria-hidden="true"></i>
+					<i *ngIf="!rdvDic[match.cv_id.user_id._id]" pTooltip="Prendre rendez-vous"
+						style="margin-left: 2%; cursor: pointer;" class="pi pi-calendar" (click)="takeRDV(match)"
+						aria-hidden="true"></i>
+					<i *ngIf="rdvDic[match.cv_id.user_id._id]" pTooltip="Vous avez déjà pris un rendez-vous"
+						style="margin-left: 2%; cursor: pointer;color: gray;" class="pi pi-calendar"
+						aria-hidden="true"></i>
 					<i pTooltip="Voir le CV" style="margin-left: 2%; cursor: pointer;" class="pi pi-briefcase"
 						(click)="seeCV(match.cv_id)" aria-hidden="true"></i>
 					<i pTooltip="Décision" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
