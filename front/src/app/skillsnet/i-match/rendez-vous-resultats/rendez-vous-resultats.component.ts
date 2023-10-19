@@ -12,10 +12,11 @@ import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 export class RendezVousResultatsComponent implements OnInit {
   meetings: MeetingTeams[] = []
   constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService) { }
-
+  defaultmeetings: MeetingTeams[] = []
   ngOnInit(): void {
     this.MeetingTeamsService.getAll().subscribe(mts => {
       this.meetings = mts
+      this.defaultmeetings = this.meetings
     })
   }
 
@@ -31,7 +32,12 @@ export class RendezVousResultatsComponent implements OnInit {
     { label: "Validé", value: "Validé" },
     { label: "Annulé", value: "Annulé" },
   ]
-
+  filterStatut = [
+    { label: "Tous les statuts", value: null },
+    { label: "Planifié", value: "Planifié" },
+    { label: "Validé", value: "Validé" },
+    { label: "Annulé", value: "Annulé" },
+  ]
 
   onInitUpdate(rdv: MeetingTeams) {
     this.form.patchValue({ statut: rdv.statut })
@@ -60,5 +66,12 @@ export class RendezVousResultatsComponent implements OnInit {
       }
     }, 15);
   }
-
+  onFilterDate(date) {
+    this.meetings = []
+    this.defaultmeetings.forEach(m => {
+      //console.log(new Date(date).getTime() < new Date(m.meeting_start_date).getTime(), new Date(date).getTime(), new Date(m.meeting_start_date).getTime())
+      if (m.meeting_start_date && new Date(date).getTime() < new Date(m.meeting_start_date).getTime())
+        this.meetings.push(m)
+    })
+  }
 }
