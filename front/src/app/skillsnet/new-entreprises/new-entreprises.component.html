@@ -260,12 +260,10 @@
                             <td style="min-width: 8rem;">{{ entreprise.secteur_activite }}</td>
                             <td style="min-width: 8rem;">{{ entreprise.categorie }}</td>
                             <td style="min-width: 8rem;">{{entreprise.ville_ent}}</td>
-                            <td style="min-width: 8rem;"
-                                *ngIf="dicEntLastConnection[entreprise._id]"> 
+                            <td style="min-width: 8rem;" *ngIf="dicEntLastConnection[entreprise._id]">
                                 {{dicEntLastConnection[entreprise._id] | date:'mediumDate'}}
                             </td>
-                            <td style="min-width: 8rem;"
-                                *ngIf="!dicEntLastConnection[entreprise._id]">
+                            <td style="min-width: 8rem;" *ngIf="!dicEntLastConnection[entreprise._id]">
                                 Jamais connecté</td>
                             <td>
                                 <i style="cursor: pointer" class="pi pi-pencil mr-2" pTooltip="Modifier l'entreprise"
@@ -335,6 +333,8 @@
                 </p-table>
                 <h5>Représentants</h5>
                 <form class="p-fluid p-formgrid grid" *ngIf="addRep" [formGroup]="formAddRep" (ngSubmit)="onAddRep()">
+                    <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                        (click)="addRep = false;" aria-hidden="true"></i>
                     <div class="field col-12">
                         <label For="Civilite">Civilité</label>
                         <p-dropdown placeholder="Choisissez une civilité" [options]="civiliteList"
