@@ -31,6 +31,7 @@ export class NewListTicketsComponent implements OnInit {
   serviceDropdown: any[] = [
   ];
   USER: User
+  isAgent = false
   constructor(private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
     private NotifService: NotificationService, private Socket: SocketService, private router: Router, private MessageService: MessageService) { }
@@ -172,6 +173,7 @@ export class NewListTicketsComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'))
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
+      this.isAgent = (r.role != 'user')
       this.ticketsOnglets = r.savedTicket
       this.updateTicketList()
     })

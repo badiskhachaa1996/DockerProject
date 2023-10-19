@@ -4589,7 +4589,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'Formateur' && !response?.type?.includes('Externe'))
+                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'CEO Entreprise' && response.type != 'Formateur'&& !response?.type?.includes('Externe'))
                     this.items = [
                         {
                             label: 'Espace Personnel',

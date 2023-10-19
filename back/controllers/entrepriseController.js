@@ -84,10 +84,12 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
 
   let entreprise = new Entreprise({
     ...entrepriseData,
+    date_creation: new Date()
   });
 
   let representant = new User({
     ...representantData,
+    date_creation: new Date()
   });
 
   // verification de la raison sociale de l'entreprise
@@ -168,12 +170,8 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                           "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
                           Ceo_Pwd +
                           "</strong></p>" +
-                          '<p ><span style="color: rgb(36, 36, 36);font-weight: bolder;"> Activer votre compte et valider votre email en cliquant sur' +
-                          ' <a href="' +
-                          origin[0] +
-                          "/#/validation-email/" +
-                          userCreated.email_perso +
-                          "\">J'active mon compte IMS</a></span></p> " +
+                          '<p ><span style="color: rgb(36, 36, 36);font-weight: bolder;"> Vous pouvez vous connecter en cliquant sur ce lien:' +
+                          '<a href=\"www.ims.intedgroup.com/#/login\">IMS</a></span></p>' +
                           '<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l\'adresse mail <a href="mailto:contact@intedgroup.com">contact@intedgroup.com</a></p>' +
                           "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
                           " <p>Cordialement.</p>";
