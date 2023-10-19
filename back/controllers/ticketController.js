@@ -111,11 +111,11 @@ app.post("/create", (req, res) => {
                         };
 
 
-                        transporter.sendMail(mailOptions, function (error, info) {
+                        /*transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.error(error);
                             }
-                        });
+                        });*/
                     })
                     Sujet.findById(req.body.sujet_id).populate('service_id').then(sujet => {
                         let htmlemail = `
