@@ -79,7 +79,7 @@
                         <i pTooltip="Replanifier" style="margin-left: 2%; cursor: pointer;color: green;"
                             *ngIf="!isEtudiant" class="pi pi-pencil" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
                         <i pTooltip="Valider" style="margin-left: 2%; cursor: pointer;color: green;"
-                            *ngIf="(rdv.statut=='Entretien' || rdv.statut=='Accepté') && !isEntreprise" class="pi pi-check"
+                            *ngIf="(rdv.statut=='Planifié') && !isEntreprise" class="pi pi-check"
                             (click)="changeStatut('Validé',rdv)" aria-hidden="true"></i>
                         <i pTooltip="Annulé" style="margin-left: 2%; cursor: pointer;color: red;"
                             *ngIf="rdv.statut=='Planifié'" class="pi pi-times" (click)="changeStatut('Annulé',rdv)"

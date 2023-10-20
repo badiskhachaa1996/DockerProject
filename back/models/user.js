@@ -57,7 +57,8 @@ const user_schema = new mongoose.Schema({
     },
     type: {
         type: String,
-        required: false
+        required: false,
+        default:'Externe-InProgress'
     },
     entreprise: {
         type: String,
