@@ -16,15 +16,29 @@ export class RendezVousResultatsComponent implements OnInit {
   defaultmeetings: MeetingTeams[] = []
   isEntreprise = false
   isEtudiant = false
+  token
   ngOnInit(): void {
-    this.MeetingTeamsService.getAll().subscribe(mts => {
-      this.meetings = mts
-      this.defaultmeetings = this.meetings
-    })
+
     let token: any = jwt_decode(localStorage.getItem("token"));
     this.UserService.getPopulate(token.id).subscribe(userConnected => {
       this.isEtudiant = (userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'Prospect' || userConnected.type == 'Externe' || userConnected.type == 'Externe-InProgress' || (userConnected.type == null && userConnected.role == "user"))
       this.isEntreprise = (userConnected.type == 'Tuteur' || userConnected.type == 'CEO Entreprise')
+      if (!this.isEtudiant && !this.isEntreprise) {
+        this.MeetingTeamsService.getAll().subscribe(mts => {
+          this.meetings = mts
+          this.defaultmeetings = this.meetings
+        })
+      } else if (this.isEtudiant) {
+        this.MeetingTeamsService.getAllByUserID(token.id).subscribe(mts => {
+          this.meetings = mts
+          this.defaultmeetings = this.meetings
+        })
+      }else if (this.isEntreprise){
+        this.MeetingTeamsService.getAllByEmail(userConnected.email_perso).subscribe(mts => {
+          this.meetings = mts
+          this.defaultmeetings = this.meetings
+        })
+      }
     })
   }
 

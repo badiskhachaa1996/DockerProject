@@ -18,7 +18,7 @@
                 </div>
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddCV">
 
-                    <div class="field col-12">
+                    <div class="field col-12" *ngIf="!isEtudiant">
                         <label for="user">A qui appartient ce CV ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="user_create_type"
                             optionValue="value" optionLabel="label"
@@ -175,7 +175,7 @@
                             [style]="{'width':'100%'}"></p-calendar>
                     </div>
 
-                    <div class="field col-12">
+                    <div class="field col-12" *ngIf="!isEtudiant">
                         <label>Winner lié à ce CV:</label>
                         <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             [options]="commercials" placeholder="Selectionner un winner" [showClear]="true"
@@ -243,7 +243,7 @@
                                             <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{exp.details}}
+                                            <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -321,7 +321,7 @@
                                             <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{exp.details}}
+                                            <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -410,7 +410,7 @@
                                             <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{exp.details}}
+                                            <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>
@@ -499,7 +499,7 @@
                                             <textarea pInputTextarea [(ngModel)]="exp.details"></textarea>
                                         </ng-template>
                                         <ng-template pTemplate="output">
-                                            {{exp.details}}
+                                            <app-read-more [string]="exp.details" [size_max]=60></app-read-more>
                                         </ng-template>
                                     </p-cellEditor>
                                 </td>

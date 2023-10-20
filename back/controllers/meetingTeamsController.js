@@ -5,7 +5,7 @@ app.disable("x-powered-by");
 
 app.post("/create", (req, res) => {
     delete req.body._id
-    let f = new MeetingTeams({ ...req.body })
+    let f = new MeetingTeams({ ...req.body, statut: 'Planifié' })
     f.save()
         .then((FFSaved) => { res.status(201).send(FFSaved) })
         .catch((error) => { console.error(error); res.status(500).send(error); });
