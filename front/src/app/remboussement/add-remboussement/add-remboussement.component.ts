@@ -9,6 +9,7 @@ import jwt_decode from 'jwt-decode';
 import { Demande } from 'src/app/models/Demande';
 import { Router } from '@angular/router';
 import { error } from 'console';
+import { FormulaireAdmissionService } from 'src/app/services/formulaire-admission.service';
 
 @Component({
   selector: 'app-add-remboussement',
@@ -23,6 +24,7 @@ export class AddRemboussementComponent implements OnInit {
     private messageService: MessageService,
     private demandeRemboursementService: DemandeRemboursementService,
     private router: Router,
+    private formationService : FormulaireAdmissionService
   ) {}
  
   civilitySelect = [
@@ -31,12 +33,12 @@ export class AddRemboussementComponent implements OnInit {
     { label: "Non Précisé", value: "Non précisé" },
 ]
 
-ecoles = environment.entreprises
-
-formations = environment.formations 
+ecoles = []
  
 
+formations = []
 
+annescolaires=[]
 
 
 //TODO à rajouter au fichier env
@@ -51,7 +53,7 @@ motifs = [
 ]
 
 token: any;
-
+motif = environment.motif
 
 modePaiement = environment.paymentType
 
@@ -86,6 +88,33 @@ user: User;
  
 
   ngOnInit(): void {
+
+
+    this.formationService.FAgetAll().subscribe(data => {
+  
+      
+      data.forEach(d => {
+        this.formations.push({ label: d.nom, value: d.nom })
+      })
+
+    })
+    this.formationService.RAgetAll().subscribe(data =>{
+      data.forEach(d => {
+        this.annescolaires.push({ label: d.nom, value: d._id })
+      })
+      
+    })
+
+    this.formationService.EAgetAll().subscribe(data => {
+      
+      data.forEach(d => {
+        this.ecoles.push({ label: d.titre, value: d.url_form })
+      })
+    })
+
+    
+
+
 
     this.formRembourssement =  this.formBuilder.group({
       civilite: [''],
@@ -216,7 +245,6 @@ user: User;
     console.log(this.formRembourssement.value)
     demande.created_by = this.token.id
     demande.motif = this.formRembourssement.value.motif_refus
-
     demande.student = {
      civility: this.formRembourssement.value.civilite,
      last_name:this.formRembourssement.value.nom,

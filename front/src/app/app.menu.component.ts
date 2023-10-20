@@ -85,7 +85,7 @@ export class AppMenuComponent implements OnInit {
                         },
                         {
                             label: 'Remboussement',
-                            icon: 'fas fa-redo-alt',
+                            icon: 'pi pi-dollar',
                             items: [
                                 {
                                     label: 'Ajouter un remboussement',

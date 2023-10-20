@@ -56,11 +56,21 @@ export const environment = {
     "emptyMessage": 'Aucun résultat',
     "emptyFilterMessage": 'Aucun résultat'
   },
+  motif :[
+    {label: 'Refus de visa', value: 'Refus de visa'},
+    {label: 'Alternance',value: 'Alternance'},
+    {label: 'Dossier rejeté par capmus France',value: 'Dossier rejeté par capmus France'},
+    {label: 'Paiement en double',value: 'Paiement en double'},
+    {label: 'Autre',value: 'Autre'},
+
+  ],
   paymentType : [
-    { label: 'Espèce', value: 'Espèce' },
+    { label: '', value: 'Espèce' },
     { label: 'Virement', value: 'Virement' },
     { label: 'Chèque', value: 'Chèque' },
     { label: 'Compensation', value: 'Compensation' },
+    { label:'Autre', value: 'Autre'},
+
   ], 
 
   availableStatus : [
