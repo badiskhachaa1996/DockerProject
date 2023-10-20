@@ -19,6 +19,34 @@ export class EntrepriseDashboardComponent implements OnInit {
   ENTREPRISE: Entreprise
   token;
   reader: FileReader = new FileReader();
+  secteurs = [
+    { label: 'Industrie manufacturière', value: 'Industrie manufacturière' },
+    { label: "Technologie de l'information et de la communication", value: "Technologie de l'information et de la communication" },
+    { label: "Finance et services bancaires", value: "Finance et services bancaires" },
+    { label: "Commerce de détail", value: "Commerce de détail" },
+    { label: "Énergie", value: "Énergie" },
+    { label: "Santé et pharmaceutique", value: "Santé et pharmaceutique" },
+    { label: "Transport et logistique", value: "Transport et logistique" },
+    { label: "Tourisme et hôtellerie", value: "Tourisme et hôtellerie" },
+    { label: "Construction et immobilier", value: "Construction et immobilier" },
+    { label: "Éducation", value: "Éducation" },
+    { label: "Industrie automobile", value: "Industrie automobile" },
+    { label: "Aérospatiale et défense", value: "Aérospatiale et défense" },
+    { label: "Médias et divertissement", value: "Médias et divertissement" },
+    { label: "Environnement et développement durable", value: "Environnement et développement durable" },
+    { label: "Chimie", value: "Chimie" },
+    { label: "Artisanat et design", value: "Artisanat et design" },
+    { label: "Télécommunications", value: "Télécommunications" },
+    { label: "Services professionnels", value: "Services professionnels" },
+    { label: "Services publics", value: "Services publics" }
+
+  ]
+  categorieList = [
+    'Sous-traitant',
+    "Alternant",
+    "Prestataire",
+    "Autre"
+  ]
   constructor(private UserService: AuthService, private entrepriseService: EntrepriseService, private ToastService: MessageService) { }
 
   ngOnInit(): void {

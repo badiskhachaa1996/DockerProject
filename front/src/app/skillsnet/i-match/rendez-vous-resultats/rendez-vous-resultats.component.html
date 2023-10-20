@@ -8,13 +8,9 @@
         </h3>
         <form class="p-fluid p-formgrid grid col-12" [formGroup]="form" (ngSubmit)="onUpdate()">
             <div class="field col-12">
-                <label>Statut: </label>
-                <p-dropdown [options]="statutDropdown" placeholder="Choissisez un statut" autoWidth="false"
-                    [filter]="true" [style]="{'width':'100%'}" formControlName="statut"></p-dropdown>
-            </div>
-            <div class="field col-12" *ngIf="form.value.statut=='Annulé'">
-                <label>Note: </label>
-                <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+                <label>Date: </label>
+                <p-calendar formControlName="meeting_start_date" placeholder="Ex: 20/01/2000"
+                    showTime="true"></p-calendar>
             </div>
             <button pButton [disabled]="form.invalid" label="Mettre à jour le rendez-vous"></button>
         </form>
@@ -42,7 +38,8 @@
                         (onChange)="dt1.filter($event.value, 'statut', 'equals');"
                         emptyFilterMessage="Pas de source trouvé"
                         filterPlaceholder="Choisissez une source"></p-dropdown>
-                    <p-calendar [style]="{'margin':'5px'}" (onSelect)="onFilterDate($event)"></p-calendar>
+                    <p-calendar [style]="{'margin':'5px'}" (onSelect)="onFilterDate($event)"
+                        placeholder="Date à partir de"></p-calendar>
                 </div>
             </ng-template>
             <ng-template pTemplate="header">
@@ -79,8 +76,14 @@
                         {{rdv?.statut}}
                     </td>
                     <td [ngClass]="{'valid-end':(rdv?.statut=='Validé'),'annuler-end':(rdv?.statut=='Annulé')}">
-                        <i pTooltip="Mettre à jour le statut du rendez-vous" tooltipPosition="bottom"
-                            class="pi pi-pencil mr-2" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Replanifier" style="margin-left: 2%; cursor: pointer;color: green;"
+                            *ngIf="!isEtudiant" class="pi pi-pencil" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Valider" style="margin-left: 2%; cursor: pointer;color: green;"
+                            *ngIf="(rdv.statut=='Entretien' || rdv.statut=='Accepté') && !isEntreprise" class="pi pi-check"
+                            (click)="changeStatut('Validé',rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Annulé" style="margin-left: 2%; cursor: pointer;color: red;"
+                            *ngIf="rdv.statut=='Planifié'" class="pi pi-times" (click)="changeStatut('Annulé',rdv)"
+                            aria-hidden="true"></i>
                     </td>
                 </tr>
 

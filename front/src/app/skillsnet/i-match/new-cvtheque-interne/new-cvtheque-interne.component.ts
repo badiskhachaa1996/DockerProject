@@ -305,13 +305,16 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
       if (this.filter_value.profil.length != 0 && (val.competences.length == 0 || !this.atleastOne(idsP, this.filter_value.profil)))
         r = false;
-      if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || (!this.filter_value.locations.includes(val.mobilite_lieu) && !this.atleastOne(this.filter_value.locations,val.mobilite_lieu))))
+      if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || (!this.filter_value.locations.includes(val.mobilite_lieu) && !this.atleastOne(this.filter_value.locations, val.mobilite_lieu))))
         r = false
       if (this.filter_value.disponibilite && new Date(this.filter_value.disponibilite).getTime() > new Date(val.disponibilite).getTime())
         r = false
       if (this.filter_value.competences.length != 0) {
-        if (competences_ids.length == 0)
+        if (competences_ids.length == 0 || !this.atleastOne(competences_ids, this.filter_value.competences))
           r = false
+      }
+      if (this.filter_value.niveau.length != 0 && (!this.filter_value.niveau.includes(val.niveau_etude))) {
+        r = false
       }
       if (this.filter_value.search) {
         if (!val?.a_propos?.includes(this.filter_value.search) &&

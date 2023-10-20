@@ -65,77 +65,107 @@
                 autoWidth="false"></button>
         </div>
     </div>
-    <div class="grid col-12" *ngIf="modeEdit">
-        <h3 class="col-12" style="text-align: center;">
+    <div class="p-fluid p-formgrid grid" *ngIf="modeEdit">
+        <h3 class="field col-12" style="text-align: center;">
             {{ENTREPRISE.r_sociale}}
         </h3>
+        <div class="field col-12 md:col-6">
+            <label For="commercial">Secteur d'activité</label>
+            <p-dropdown [options]="secteurs" filter="true"
+                placeholder="Choisissez le secteur d'activité" [showClear]="true"
+                [(ngModel)]="ENTREPRISE.secteur_activite"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="activite">Activité de l'entreprise</label>
+            <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"
+                f[(ngModel)]="ENTREPRISE.activite"
+                placeholder="Description des activités de l'entreprise"></textarea>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="categorie">Catégorie </label>
+            <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
+            [(ngModel)]="ENTREPRISE.categorie"></p-multiSelect>
+        </div>
 
-        <p class="col-6" style="text-align: center;">
-            Téléphone de l'entreprise:<br>
-            <input class="mb-2" pInputText type="tel" [(ngModel)]="ENTREPRISE.indicatif_ent" placeholder="Ex: +33"
-                autoWidth="false" [style]="{'width':'100%'}">
-            <input pInputText type="tel" [(ngModel)]="ENTREPRISE.phone_ent" autoWidth="false"
-                placeholder="Ex: 0213456789" [style]="{'width':'100%'}">
-        </p>
-        <p class="col-6" style="text-align: center;">
-            Email de l'entreprise:<br>
-            <input pInputText type="text" [(ngModel)]="ENTREPRISE.email" autoWidth="false" [style]="{'width':'100%'}"
-                placeholder="Ex: email@gmail.com">
-        </p>
+        <div class="field col-12 md:col-6">
+            <label For="crc">Caisse de retraite complémentaire :</label>
+            <input pInputText id="crc" type="text" [(ngModel)]="ENTREPRISE.crc" placeholder="KLESIA" />
+        </div>
 
-        <p class="col-6" style="text-align: center;">
-            Adresse de l'entreprise: <br>
-            <input class="mb-2" pInputText type="text" [(ngModel)]="ENTREPRISE.code_postale_ent" autoWidth="false"
-                placeholder="Ex: 96420" [style]="{'width':'100%'}">
-            <input class="mb-2" pInputText type="text" [(ngModel)]="ENTREPRISE.adresse_ent" autoWidth="false"
-                placeholder="Ex: 20 Place de l'église" [style]="{'width':'100%'}">
-            <input pInputText type="text" [(ngModel)]="ENTREPRISE.ville_ent" autoWidth="false" placeholder="Ex: Paris"
-                [style]="{'width':'100%'}">
-        </p>
-        <p class="col-6" style="text-align: center;">
-            Site web:<br>
-            <input pInputText type="text" [(ngModel)]="ENTREPRISE.site_web" autoWidth="false"
-                placeholder="Ex: intedgroup.com" [style]="{'width':'100%'}">
-        </p>
+        <div class="field col-12 md:col-6">
+            <label For="nb_salarie">Nombre de salariés:</label>
+            <input pInputText type="number" [(ngModel)]="ENTREPRISE.nb_salarie" placeholder="100" />
+        </div>
 
-        <p class="col-6" style="text-align: center;">
-            Secteur d'activité:<br>
-            <textarea pInputTextarea autoResize="autoResize" id="activite" type="text" [(ngModel)]="ENTREPRISE.activite"
-                [style]="{'width':'100%'}" placeholder="Description des activités de l'entreprise"></textarea>
-        </p>
-        <p class="col-6" style="text-align: center;">
-            Taille de l'entreprise:<br>
-            <input pInputText type="number" [(ngModel)]="ENTREPRISE.nb_salarie" autoWidth="false" placeholder="Ex: 200"
-                [style]="{'width':'100%'}">
-        </p>
+        <div class="field col-12 md:col-6">
+            <label For="convention">Convention collective :</label>
+            <input pInputText id="convention" type="text" [(ngModel)]="ENTREPRISE.convention"
+                placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="idcc">Code IDCC:</label>
+            <input pInputText type="number" [(ngModel)]="ENTREPRISE.idcc" placeholder="0000" />
+        </div>
+        <div class="field col-4 md:col-4">
+            <label For="indicatif_ent">Indicatif</label>
+            <input pInputText type="number" [(ngModel)]="ENTREPRISE.indicatif_ent" placeholder="+33" />
+        </div>
+        <div class="field col-8 md:col-8">
+            <label For="phone_ent">Téléphone <small>(entreprise)</small></label>
+            <input pInputText type="tel" [(ngModel)]="ENTREPRISE.phone_ent" placeholder="0188008800" />
+        </div>
 
-        <h5 class="col-12" style="text-align: center;font-weight: bold;">
-            Informations de contact
-        </h5>
-        <p class="col-6" style="text-align: center;">
-            Prénom & NOM de la personne de contact:<br>
-            <input class="mb-2" pInputText type="text" [(ngModel)]="USER.firstname" autoWidth="false"
-                [style]="{'width':'100%'}" placeholder="Ex: Smith">
-            <input pInputText type="text" [(ngModel)]="USER.lastname" autoWidth="false" [style]="{'width':'100%'}"
-                placeholder="Ex: John">
-        </p>
-        <p class="col-6" style="text-align: center;">
-            Adresse mail contact:<br>
-            <input pInputText type="text" [(ngModel)]="USER.email_perso" autoWidth="false" [style]="{'width':'100%'}"
-                placeholder="Ex: email@gmail.com">
-        </p>
+        <!--Adresse du siège social-->
+        <h3 class="field col-12">Adresse du siège social</h3>
+        <div class="field col-12 md:col-6">
+            <label For="adresse_ss">Adresse</label>
+            <input pInputText id="adresse_ss" type="text" [(ngModel)]="ENTREPRISE.adresse_ent"
+                placeholder="Numero et Nom de la rue" />
+        </div>
+        <div class="field col-12 md:col-3">
+            <label For="postal_ss">Code postal</label>
+            <input pInputText id="postal_ss" type="text" [(ngModel)]="ENTREPRISE.code_postale_ent"
+                placeholder="75001" />
+        </div>
+        <div class="field col-12 md:col-3">
+            <label For="ville_ss">Ville</label>
+            <input pInputText id="ville_ss" type="text" [(ngModel)]="ENTREPRISE.ville_ent"
+                placeholder="Paris" />
+        </div>
 
-        <h5 class="col-12" style="text-align: center;font-weight: bold;">
-            Mentions légales
-        </h5>
-        <p class="col-6" style="text-align: center;">
-            SIRET:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.siret" autoWidth="false"
-                placeholder="Ex: 362 521 879 00034" [style]="{'width':'100%'}">
-        </p>
-        <p class="col-6" style="text-align: center;">
-            RCS:<br> <input pInputText type="text" [(ngModel)]="ENTREPRISE.rcs" autoWidth="false"
-                placeholder="RCS PARIS B 362 521 879" [style]="{'width':'100%'}">
-        </p>
+        <!--Adresse d’exécution du contrat -->
+        <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
+        <div class="field col-12 md:col-6">
+            <label For="adresse_ec">Adresse</label>
+            <input pInputText id="adresse_ec" type="text" [(ngModel)]="ENTREPRISE.adresse_ec"
+                placeholder="15 Rue du Louvre" [(ngModel)]="ENTREPRISE.adresse_ec" />
+        </div>
+        <div class="field col-12 md:col-3">
+            <label For="postal_ec">Code postal</label>
+            <input pInputText id="postal_ec" type="text" [(ngModel)]="ENTREPRISE.postal_ec"
+                placeholder="75001" />
+        </div>
+        <div class="field col-12 md:col-3">
+            <label For="ville_ec">Ville</label>
+            <input pInputText id="ville_ec" type="text" [(ngModel)]="ENTREPRISE.ville_ec"
+                placeholder="Paris" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="siret">SIRET</label>
+            <input pInputText id="siret" maxlength=15 minlength=15 type="number"
+                [(ngModel)]="ENTREPRISE.siret" placeholder="XXXX-XXXX-XXXX-XXX" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label For="ape_naf">Code NAF</label>
+            <input pInputText id="ape_naf" type="text" [(ngModel)]="ENTREPRISE.code_ape_naf"
+                placeholder="CODE NAF" />
+        </div>
+
+
+        <div class="field col-12 md:col-6">
+            <label For="OPCO">OPCO</label>
+            <input pInputText id="OPCO" type="text" [(ngModel)]="ENTREPRISE.OPCO" placeholder="OPCO" />
+        </div>
         <div class="col-2 col-offset-10">
             <button pButton type="button" label="Valider les modifications" (click)="onSave()"
                 [style]="{'width':'100%'}" autoWidth="false"></button>

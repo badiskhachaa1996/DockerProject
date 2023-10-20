@@ -198,57 +198,38 @@
 	[style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
 	<p-table dataKey="_id" [value]="[dataRDV]" class="col-12" responsiveLayout="scroll"
 		styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                    ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                    Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
+                    Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
+                </th>
+                <th pSortableColumn="statut" scope="col" style="text-align: center;">
+                    Statut <p-sortIcon field="statut"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rdv>
+            <tr>
+                <td>
+                    {{rdv?.offre_id?.custom_id }}
+                </td>
+                <td>
+                    {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
+                </td>
+                <td>
+                    {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
+                </td>
+                <td>
+                    {{rdv?.statut}}
+                </td>
+            </tr>
 
-		<ng-template pTemplate="header">
-			<tr>
-				<th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
-					Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-					Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
-				</th>
-				<th pSortableColumn="company_email" scope="col" style="text-align: center;">
-					Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
-				</th>
-				<th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
-					Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
-				</th>
-				<th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-					Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
-				</th>
-				<th pSortableColumn="description" scope="col" style="text-align: center;">
-					Description <p-sortIcon field="description"></p-sortIcon>
-				</th>
-				<th pSortableColumn="statut" scope="col" style="text-align: center;">
-					Statut <p-sortIcon field="statut"></p-sortIcon>
-				</th>
-			</tr>
-		</ng-template>
-		<ng-template pTemplate="body" let-rdv>
-			<tr>
-				<td>
-					{{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
-				</td>
-				<td>
-					{{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
-				</td>
-				<td>
-					{{rdv?.company_email}}
-				</td>
-				<td>
-					{{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
-				</td>
-				<td>
-					{{rdv?.date_creation | date:'dd MMMM yy'}}
-				</td>
-				<td>
-					{{rdv?.description}}
-				</td>
-				<td>
-					{{rdv?.statut}}
-				</td>
-			</tr>
-
-		</ng-template>
+        </ng-template>
 	</p-table>
 </p-dialog>
