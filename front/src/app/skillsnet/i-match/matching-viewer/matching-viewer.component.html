@@ -7,10 +7,10 @@
         <tr>
             <th style="width: 3rem" scope="col"></th>
             <th style="width: 3rem" scope="col">Offre</th>
-            <th style="width: 3rem" scope="col">Type Matching</th>
-            <th style="width: 3rem" scope="col">Matcher</th>
-            <th style="width: 3rem" scope="col">Statut Matching</th>
-            <th style="width: 3rem" scope="col">Taux Matching</th>
+            <th style="width: 3rem" scope="col">Type</th>
+            <th style="width: 3rem" scope="col">Commercial</th>
+            <th style="width: 3rem" scope="col">Statut</th>
+            <th style="width: 3rem" scope="col">Taux</th>
             <th style="width: 3rem" scope="col">Entretien</th>
         </tr>
     </ng-template>
@@ -27,14 +27,17 @@
             <td>
                 {{match.type_matching}}
             </td>
-            <td>
-                {{match.matcher_id.firstname | titlecase}} {{match.matcher_id.lastname | uppercase}}
+            <td *ngIf="match.type_matching!='Candidat'">
+                {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
+            </td>
+            <td *ngIf="match.type_matching=='Candidat'">
+                Non
             </td>
             <td>
                 {{match.statut}}
             </td>
             <td>
-                {{match.taux}}
+                {{match.taux |number:'1.0-0'}}%
             </td>
             <td *ngIf="rdvDic[match.offre_id._id]">
                 <i class="pi true-icon pi-check-circle" tooltipPosition="bottom" style="color: green;cursor: pointer;"
@@ -49,17 +52,11 @@
     <ng-template pTemplate="rowexpansion" let-match>
         <tr>
             <td colspan="9">
-                <div class="competences-block">
+                <div class="competences-block" *ngIf="match.offre_id.competences.length!=0">
                     <h4 class="mb-2">Compétences</h4>
                     <div class="grid gx-5 competence">
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[0]?.libelle | titlecase}}</p>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[1]?.libelle | titlecase}}</p>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <p>{{match.offre_id.competences[2]?.libelle | titlecase}}</p>
+                        <div class="col-12 md:col-4" *ngFor="let c of match.offre_id.competences">
+                            <p>{{c?.libelle | titlecase}}</p>
                         </div>
                     </div>
                 </div>
@@ -79,10 +76,10 @@
     </ng-template>
     <ng-template pTemplate="body">
         <tr>
-            <td>{{match.offre_id?.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
+            <td>{{match.offre_id?.entreprise_id?.r_sociale || match.offre_id?.entreprise_name}}</td>
             <td>{{match.offre_id?.workplaceType}}</td>
             <td>{{match.offre_id?.date_creation | date:'dd MMMM yy'}}</td>
-            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
+            <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{match.offre_id?.user_id?.lastname |
                 titlecase}}</td>
             <td>
                 {{match?.offre_id?.modified_at| date:'dd MMMM yy'}}
@@ -102,23 +99,14 @@
         styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
-                    Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
+                <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                    ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
                 </th>
                 <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                    Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
-                </th>
-                <th pSortableColumn="company_email" scope="col" style="text-align: center;">
-                    Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
+                    Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
                 </th>
                 <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
                     Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
-                </th>
-                <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                    Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
-                </th>
-                <th pSortableColumn="description" scope="col" style="text-align: center;">
-                    Description <p-sortIcon field="description"></p-sortIcon>
                 </th>
                 <th pSortableColumn="statut" scope="col" style="text-align: center;">
                     Statut <p-sortIcon field="statut"></p-sortIcon>
@@ -128,22 +116,13 @@
         <ng-template pTemplate="body" let-rdv>
             <tr>
                 <td>
-                    {{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
+                    {{rdv?.offre_id?.custom_id }}
                 </td>
                 <td>
                     {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
                 </td>
                 <td>
-                    {{rdv?.company_email}}
-                </td>
-                <td>
                     {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
-                </td>
-                <td>
-                    {{rdv?.date_creation | date:'dd MMMM yy'}}
-                </td>
-                <td>
-                    {{rdv?.description}}
                 </td>
                 <td>
                     {{rdv?.statut}}

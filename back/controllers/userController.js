@@ -638,7 +638,7 @@ app.get("/getAllAgent/", (req, res) => {
 });
 
 app.get("/getAllAgentPopulate", (req, res) => {
-  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id')
+  User.find({ role: ["Responsable", "Agent", "Admin"] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
 
     .then((result) => {
       res.send(result.length > 0 ? result : []);
@@ -648,6 +648,7 @@ app.get("/getAllAgentPopulate", (req, res) => {
       console.error(err);
     });
 });
+
 
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id", (req, res) => {

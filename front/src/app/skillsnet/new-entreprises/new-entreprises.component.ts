@@ -30,6 +30,14 @@ export class NewEntreprisesComponent implements OnInit {
     "Prestataire",
     "Autre"
   ]
+
+  categorieFilter = [
+    { label: 'Toutes les catégories', value: null },
+    { label: 'Sous-traitant', value: 'Sous-traitant' },
+    { label: "Alternant", value: 'Alternant' },
+    { label: "Prestataire", value: 'Prestataire' },
+    { label: "Autre", value: 'Autre' }
+  ]
   civiliteList = environment.civilite;
   secteurs = [
     { label: 'Industrie manufacturière', value: 'Industrie manufacturière' },
@@ -53,6 +61,7 @@ export class NewEntreprisesComponent implements OnInit {
     { label: "Services publics", value: "Services publics" }
 
   ]
+
   choiceList = [
     { label: 'Oui', value: true },
     { label: 'Non', value: false },
@@ -116,19 +125,33 @@ export class NewEntreprisesComponent implements OnInit {
           this.entreprises = this.entreprises.slice(0, 5);
         }
         response.forEach(ent => {
+          let ids = []
           this.TuteurService.getAllByEntrepriseId(ent._id).subscribe(tuteurs => {
-            let d = new Date(1970, 1, 1).getTime()
+            let d = new Date(tuteurs[0]?.user_id?.last_connection).getTime()
             tuteurs.forEach(t => {
-              if (new Date(t.user_id.last_connection).getTime() > d)
-                d = new Date(t.user_id.last_connection).getTime()
+              if (t.user_id) {
+                ids.push(t?.user_id?._id)
+                if (new Date(t?.user_id?.last_connection).getTime() > d)
+                  d = new Date(t?.user_id?.last_connection).getTime()
+              }
             })
-            if (d != new Date(1970, 1, 1).getTime())
-              this.dicEntLastConnection[ent._id] = new Date(d)
-            else
-              this.dicEntLastConnection[ent._id] = "Jamais connecté"
+            if (!isNaN(d))
+              this.dicEntLastConnection[ent._id] = new Date(d);
             this.dicEntRepresentant[ent._id] = tuteurs
           })
 
+
+          if (ent.directeur_id && !ids.includes(ent.directeur_id))
+            this.userService.getPopulate(ent.directeur_id).subscribe(directeur => {
+              if (directeur) {
+                directeur.role = "Admin"
+                if (this.dicEntRepresentant[ent._id])
+                  this.dicEntRepresentant[ent._id].push({ user_id: directeur })
+                else
+                  this.dicEntRepresentant[ent._id] = [{ user_id: directeur }]
+              }
+
+            })
         })
         this.AnnonceService.getAnnonces().then(annonces => {
           annonces.forEach((ann: Annonce) => {
@@ -378,6 +401,23 @@ export class NewEntreprisesComponent implements OnInit {
       this.formAddRep.reset()
 
     })
+  }
+  sorted = 1
+  sortByLastConnexion() {
+
+    this.entreprises.sort((a, b) => {
+      let val1 = 0
+      let val2 = 0
+      if (this.dicEntLastConnection[a._id])
+        val1 = new Date(this.dicEntLastConnection[a._id])?.getTime()
+      if (this.dicEntLastConnection[b._id])
+        val2 = new Date(this.dicEntLastConnection[b._id])?.getTime()
+      if (val1 > val2)
+        return this.sorted
+      else
+        return this.sorted * -1
+    })
+    this.sorted = this.sorted * -1
   }
 
 

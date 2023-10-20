@@ -431,7 +431,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        
+
                     ];
                 }
                 // menu service administration
@@ -4269,18 +4269,15 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Offres',
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/imatch/offres'],
+                                    routerLink: ['/offres'],
                                 },
                                 {
-                                    label: 'Mes Matching',
-                                    icon: 'pi pi-link',
-                                    routerLink: [
-                                        '/matching-externe/' +
-                                        this.token.id,
-                                    ],
-                                },
+                                    label: 'CV',
+                                    icon: 'pi pi-volume-up',
+                                    routerLink: ['/imatch/cv-etudiant'],
+                                }
                             ],
-                        }
+                        },
                     ]
                 }
                 /* end menus role */
@@ -4489,94 +4486,29 @@ export class AppMenuComponent implements OnInit {
                 /* menus externes */
                 // menu ceo entreprise
                 if (
-                    response.type === 'CEO Entreprise' &&
+                    (response.type === 'CEO Entreprise') &&
                     response.role === 'user'
                 ) {
                     this.items = [
                         {
-                            label: 'Tuteurs',
-                            icon: 'pi pi-users',
-                            routerLink: ['/tuteur-ceo'],
-                        },
-                        {
-                            label: 'Alternance',
-                            icon: 'pi pi-briefcase',
-                            items: [
-                                {
-                                    label: 'Alternants par entreprises',
-                                    icon: 'pi pi-file',
-                                    routerLink: ['/liste-entreprises-ceo'],
-                                },
-                                {
-                                    label: 'Alternants sous ma tutelle',
-                                    icon: 'pi pi-file-excel',
-                                    routerLink: ['/liste-contrats-ceo/'],
-                                },
-                            ],
-                        },
-                        {
-                            label: 'Stage',
-                            icon: 'pi pi-briefcase',
-                            items: [
-                                {
-                                    label: 'Stage par entreprises',
-                                    icon: 'pi pi-file',
-                                    routerLink: [`/stages/${this.token.id}`],
-                                },
-                            ],
-                        },
-                        /*{
-                            label: 'Suivi',
-                            icon: 'pi pi-reply',
-                            items: [
-                                {
-                                    label: 'Mes Rendez-vous',
-                                    icon: 'pi pi-calendar',
-                                    routerLink: ['/mes-rendez-vous']
-                                },
-                                {
-                                    label: 'Suivi des candidats',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/suivi-candidat']
-                                }
-                            ],
-                        },*/
-                        {
-                            label: 'Offres',
+                            label: 'Espace Personnel',
+                            icon: 'pi pi-fw pi-home',
+                            routerLink: ['/'],
+                        }, {
+                            label: 'iMatch',
                             icon: 'pi pi-star',
-                            routerLink: ['/mes-offres']
-                        },
-                        {
-                            label: 'Cvthèque',
-                            icon: 'pi pi-briefcase',
-                            routerLink: ['/imatch'],
-                        },
-                        {
-                            label: "Matching",
-                            icon: 'pi pi-users',
-                            routerLink: ['/suivi-candidat']
-
-                        },
-                        {
-                            label: 'Ticketing',
-                            icon: 'pi pi-fw pi-ticket',
                             items: [
                                 {
-                                    label: 'Ajouter un ticket',
-                                    icon: 'pi pi-plus',
-                                    routerLink: ['/ticketing/gestion/ajout']
+                                    label: "Offres",
+                                    icon: 'pi pi-volume-up',
+                                    routerLink: ['/offres'],
                                 },
                                 {
-                                    label: 'Mes tickets envoyé',
-                                    icon: 'pi pi-inbox',
-                                    routerLink: ['/ticketing/gestion/mes-tickets']
-                                }
-                            ]
-                        },
-                        {
-                            label: 'Repporting',
-                            icon: 'pi pi-chart-line',
-                            routerLink: ['/dashboard-alternance'],
+                                    label: 'Cvthèque',
+                                    icon: 'pi pi-list',
+                                    routerLink: ['/cvtheque-interne']
+                                },
+                            ],
                         },
                     ];
                 }
@@ -4589,7 +4521,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'Formateur' && !response?.type?.includes('Externe'))
+                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && !response.type && response.type != 'CEO Entreprise' && response.type != 'Formateur' && !response?.type?.startsWith('Externe'))
                     this.items = [
                         {
                             label: 'Espace Personnel',
@@ -6274,6 +6206,11 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-star',
                                 items: [
                                     {
+                                        label: 'Entreprise',
+                                        icon: 'pi pi-building',
+                                        routerLink: ['/imatch/entreprise']
+                                    },
+                                    {
                                         label: "Offres",
                                         icon: 'pi pi-volume-up',
                                         routerLink: ['/offres'],
@@ -6288,11 +6225,7 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-list',
                                         routerLink: ['/cvtheque-interne']
                                     },
-                                    {
-                                        label: 'Entreprise',
-                                        icon: 'pi pi-building',
-                                        routerLink: ['/imatch/entreprise']
-                                    },
+
                                     /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',

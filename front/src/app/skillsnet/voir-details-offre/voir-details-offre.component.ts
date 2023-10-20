@@ -32,7 +32,7 @@ export class VoirDetailsOffreComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"));
     this.userService.getPopulate(this.token.id).subscribe(user => {
       console.log(user)
-      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || user.type == null)
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == 'user'))
     })
   }
 
@@ -59,7 +59,7 @@ export class VoirDetailsOffreComponent implements OnInit {
     this.UPDATE.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 
-  MAtching() {
+  Matching() {
     this.MATCHING.emit({ ANNONCE_ID: this.ANNONCE_ID })
   }
 

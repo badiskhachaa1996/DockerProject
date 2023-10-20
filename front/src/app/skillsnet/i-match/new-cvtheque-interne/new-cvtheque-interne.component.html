@@ -126,7 +126,10 @@
         </form>
     </div>
     <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
-        <p-tabPanel header="Générateur de CV">
+        <p-tabPanel header="Rendez-vous">
+            <app-rendez-vous-resultats></app-rendez-vous-resultats>
+        </p-tabPanel>
+        <p-tabPanel header="Générateur de CV" *ngIf="!isEntreprise">
             <app-ajout-cv></app-ajout-cv>
         </p-tabPanel>
         <p-tabPanel header="CV">
@@ -142,7 +145,7 @@
                             <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                                 (click)="displayFilter=true"></button><br><br> <br>
                             <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
-                                (click)="clearFilter()"></button><br> <br>
+                                (click)="clearFilter()"></button>
                         </div>
                         <div class="field col-7 grid ">
                             <div *ngIf="filter_value.profil.length!=0" class="field col-6">
@@ -151,6 +154,12 @@
                                     autoWidth="false" [style]="{'width':'10em'}" [(ngModel)]="filter_value.profil"
                                     (onChange)="updateFilter()">
                                 </p-multiSelect>
+                            </div>
+                            <div *ngIf="filter_value.type" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Type</label><br>
+                                <p-dropdown placeholder="Choisissez un type" [options]="typeFilter" autoWidth="false"
+                                    [style]="{'width':'10em'}" [(ngModel)]="filter_value.type" (onChange)="updateFilter()">
+                                </p-dropdown>
                             </div>
                             <div *ngIf="filter_value.locations.length!=0" class="field col-6">
                                 <label style="text-align: center;" class="mr-2">Lieu</label><br>
@@ -181,22 +190,21 @@
                                     (onChange)="updateFilter()">
                                 </p-multiSelect>
                             </div>
-                            <div class="field col-4">
-                                <label >&nbsp;</label><br>
-                                <input pInputText type="text" style="width: 20em;"
-                                    [(ngModel)]="filter_value.search" (onBlur)="updateFilter()"
-                                    placeholder="Recherche" />
-                            </div>
                         </div>
-                        <div class="col-2">
+                        <div class="field col-2">
                             <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-                            <br><br> <br>
+                            <br><br>
                             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-                                (click)="showForm = true"></button>
+                                (click)="cvToAdd = true"></button>
                         </div>
-
+                        <div class="field col-12">
+                            <label>&nbsp;</label><br>
+                            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filter_value.search"
+                                (input)="updateFilter()" placeholder="Recherche" />
+                        </div>
                     </div>
-                    
+
+
 
                 </ng-template>
                 <ng-template pTemplate="listItem">
@@ -213,10 +221,10 @@
                                 <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
                                         field="user_id.civilite"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.firstname" style="text-align: center;">Prénom <p-sortIcon
+                                <th pSortableColumn="user_id.firstname" style="text-align: center;" *ngIf="!isEntreprise">Prénom <p-sortIcon
                                         field="user_id.firstname"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.lastname" style="text-align: center;">Nom <p-sortIcon
+                                <th pSortableColumn="user_id.lastname" style="text-align: center;" *ngIf="!isEntreprise">Nom <p-sortIcon
                                         field="user_id.lastname"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
@@ -245,11 +253,11 @@
                                     {{cv.user_id?.civilite}}
                                 </td>
 
-                                <td style="min-width: 12rem;">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.firstname | titlecase}}
                                 </td>
 
-                                <td style="min-width: 12rem;">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.lastname | uppercase}}
                                 </td>
 
@@ -458,8 +466,9 @@
         <p-tabPanel style="width: 100%;" header="MATCH - {{match.user_id.lastname}} {{match.user_id.firstname}}"
             *ngFor="let match of matchingList" [closable]="true">
             <div class="grid" style="width: 100%;">
-                <app-voir-cv class="col-12" [CV_ID]="match._id"></app-voir-cv>
+
                 <app-matching-viewer class="col-12" [USER_ID]="match.user_id._id"></app-matching-viewer>
+                <app-voir-cv class="col-10" [CV_ID]="match._id"></app-voir-cv>
             </div>
 
         </p-tabPanel>
@@ -490,7 +499,9 @@
         <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()" appendTo="body"
             [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
             class="mb-2" [style]="{'width':'27em'}" placeholder="Date de début"></p-calendar>
-
+        <!--<p-dropdown placeholder="Choisissez un type" [options]="typeFilter" autoWidth="false" [style]="{'width':'27em'}"
+            appendTo="body" [(ngModel)]="filter_value.type" (onChange)="updateFilter()">
+        </p-dropdown>-->
         <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList" autoWidth="false"
             appendTo="body" class="mb-2" [style]="{'width':'27em'}" [(ngModel)]="filter_value.competences"
             (onChange)="updateFilter()">

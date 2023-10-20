@@ -117,7 +117,7 @@ export class AnnoncesComponent implements OnInit {
     this.canAddOrEdit = this.token.role == "Admin"
 
     this.userService.getPopulate(this.token.id).subscribe(user => {
-      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress')
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
       if (this.isEtudiant) {
         this.activeIndex1 = 0
         this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {
@@ -186,36 +186,64 @@ export class AnnoncesComponent implements OnInit {
     this.userService.getInfoById(this.token.id).subscribe(
       ((response) => {
         this.userConnected = response;
+
+        //Recuperation de la liste des annonces
+        if (response.type != 'CEO Entreprise') {
+          this.annonceService.getAnnonces()
+            .then((response: Annonce[]) => {
+              this.annonces = response;
+              this.annoncesFiltered = response
+              let agent_id = []
+              response.forEach(annonce => {
+                this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+                  let t = []
+                  matchs.forEach(m => { t.push(m) })
+                  this.dicOffreNB[annonce._id] = t.length
+                })
+                if (annonce && annonce.user_id) {
+                  let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
+                  if (!agent_id.includes(annonce.user_id._id)) {
+                    //this.userFilter.push(temp)
+                    this.entrepriseFilter.push(temp)
+                    agent_id.push(annonce.user_id._id)
+                  }
+
+                }
+
+              })
+
+            })
+            .catch((error) => console.error(error));
+        } else {
+          this.annonceService.getAnnoncesByUserId(this.userConnected._id).then((response: Annonce[]) => {
+            this.annonces = response;
+            this.annoncesFiltered = response
+            let agent_id = []
+            response.forEach(annonce => {
+              this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
+                let t = []
+                matchs.forEach(m => { t.push(m) })
+                this.dicOffreNB[annonce._id] = t.length
+              })
+              if (annonce && annonce.user_id) {
+                let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
+                if (!agent_id.includes(annonce.user_id._id)) {
+                  //this.userFilter.push(temp)
+                  this.entrepriseFilter.push(temp)
+                  agent_id.push(annonce.user_id._id)
+                }
+
+              }
+
+            })
+          })
+        }
+
       }),
       ((error) => { console.error(error); })
     );
 
-    //Recuperation de la liste des annonces
-    this.annonceService.getAnnonces()
-      .then((response: Annonce[]) => {
-        this.annonces = response;
-        this.annoncesFiltered = response
-        let agent_id = []
-        response.forEach(annonce => {
-          this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
-            let t = []
-            matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
-            this.dicOffreNB[annonce._id] = t.length
-          })
-          if (annonce && annonce.user_id) {
-            let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
-            if (!agent_id.includes(annonce.user_id._id)) {
-              //this.userFilter.push(temp)
-              this.entrepriseFilter.push(temp)
-              agent_id.push(annonce.user_id._id)
-            }
 
-          }
-
-        })
-
-      })
-      .catch((error) => console.error(error));
 
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
@@ -337,7 +365,22 @@ export class AnnoncesComponent implements OnInit {
     this.annonceService.postAnnonce(annonce)
       .then((response) => {
         this.messageService.add({ severity: "success", summary: "L'annonce a été ajouté" })
-        this.form.reset();
+        if (!annonce.is_interne) {
+          let t: Entreprise = {
+            r_sociale: this.form.value.entreprise_name,
+            ville_ent: this.form.value.entreprise_ville,
+            email: this.form.value.entreprise_mail,
+            indicatif_ent: this.form.value.entreprise_phone_indicatif,
+            phone_ent: this.form.value.entreprise_phone,
+            date_creation: new Date(),
+            created_by: this.token.id
+          }
+          this.entrepriseService.create(t).subscribe(ent => {
+            this.form.reset();
+          })
+        }
+        else
+          this.form.reset();
         this.showForm = false;
 
         //Recuperation de la liste des classes
@@ -741,8 +784,8 @@ export class AnnoncesComponent implements OnInit {
     })
 
   }
-  onMatchingAnnonce(e: string) {
-    this.annonceService.getAnnonce(e).then(annonce => {
+  onMatchingAnnonce(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
       let ids = []
       this.matchingList.forEach(m => {
         ids.push(m._id)
@@ -759,9 +802,10 @@ export class AnnoncesComponent implements OnInit {
 
   }
 
-  InitFormUpdate(e: string) {
-    this.annonceService.getAnnonce(e).then(annonce => {
+  InitFormUpdate(e: { ANNONCE_ID: string }) {
+    this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
       this.onFillForm(annonce)
+      this.showFormUpdate = true
     })
   }
 }

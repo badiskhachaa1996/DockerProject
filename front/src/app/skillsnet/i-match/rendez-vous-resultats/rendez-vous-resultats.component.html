@@ -8,9 +8,9 @@
         </h3>
         <form class="p-fluid p-formgrid grid col-12" [formGroup]="form" (ngSubmit)="onUpdate()">
             <div class="field col-12">
-                <label>Statut: </label>
-                <p-dropdown [options]="statutDropdown" placeholder="Choissisez un statut" autoWidth="false"
-                    [filter]="true" [style]="{'width':'100%'}" formControlName="statut"></p-dropdown>
+                <label>Date: </label>
+                <p-calendar formControlName="meeting_start_date" placeholder="Ex: 20/01/2000"
+                    showTime="true"></p-calendar>
             </div>
             <button pButton [disabled]="form.invalid" label="Mettre à jour le rendez-vous"></button>
         </form>
@@ -22,31 +22,36 @@
             [globalFilterFields]="['statut', 'winner_id.firstname','winner_id.lastname','user_id.firstname','user_id.lastname','company_email','description']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
-                <span class="p-input-icon-left mb-2">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" class="w-full" />
-                </span>
+
+                <div class="flex justify-content-center align-items-center">
+                    <!--<div>
+                        <p>Date</p>
+                        <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+                    </div>-->
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
+                        (onChange)="dt1.filter($event.value, 'statut', 'equals');"
+                        emptyFilterMessage="Pas de source trouvé"
+                        filterPlaceholder="Choisissez une source"></p-dropdown>
+                    <p-calendar [style]="{'margin':'5px'}" (onSelect)="onFilterDate($event)"
+                        placeholder="Date à partir de"></p-calendar>
+                </div>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="winner_id.firstname" scope="col" style="text-align: center;">
-                        Winner <p-sortIcon field="winner_id.firstname"></p-sortIcon>
+                    <th pSortableColumn="offre_id.custom_id" scope="col" style="text-align: center;">
+                        ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
-                        Etudiant <p-sortIcon field="user_id.firstname"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="company_email" scope="col" style="text-align: center;">
-                        Email de la companie <p-sortIcon field="company_email"></p-sortIcon>
+                        Prénom & Nom <p-sortIcon field="user_id.firstname"></p-sortIcon>
                     </th>
                     <th pSortableColumn="meeting_start_date" scope="col" style="text-align: center;">
                         Date <p-sortIcon field="meeting_start_date"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
-                        Date d'ajout <p-sortIcon field="date_creation"></p-sortIcon>
-                    </th>
-                    <th pSortableColumn="description" scope="col" style="text-align: center;">
-                        Description <p-sortIcon field="description"></p-sortIcon>
                     </th>
                     <th pSortableColumn="statut" scope="col" style="text-align: center;">
                         Statut <p-sortIcon field="statut"></p-sortIcon>
@@ -58,30 +63,27 @@
             </ng-template>
             <ng-template pTemplate="body" let-rdv>
                 <tr>
-                    <td>
-                        {{rdv?.winner_id?.firstname|titlecase }} {{rdv?.winner_id?.lastname |uppercase }}
+                    <td [ngClass]="{'valid-begin':(rdv?.statut=='Validé'),'annuler-begin':(rdv?.statut=='Annulé')}">
+                        {{rdv?.offre_id?.custom_id }}
                     </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.user_id?.firstname|titlecase }} {{rdv?.user_id?.lastname |uppercase }}
                     </td>
-                    <td>
-                        {{rdv?.company_email}}
-                    </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.meeting_start_date | date:'dd MMMM yy'}} {{rdv?.meeting_start_date | date:'shortTime'}}
                     </td>
-                    <td>
-                        {{rdv?.date_creation | date:'dd MMMM yy'}}
-                    </td>
-                    <td>
-                        {{rdv?.description}}
-                    </td>
-                    <td>
+                    <td [ngClass]="{'valid-middle':(rdv?.statut=='Validé'),'annuler-middle':(rdv?.statut=='Annulé')}">
                         {{rdv?.statut}}
                     </td>
-                    <td>
-                        <i pTooltip="Mettre à jour le statut du rendez-vous" tooltipPosition="bottom"
-                            class="pi pi-pencil mr-2" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
+                    <td [ngClass]="{'valid-end':(rdv?.statut=='Validé'),'annuler-end':(rdv?.statut=='Annulé')}">
+                        <i pTooltip="Replanifier" style="margin-left: 2%; cursor: pointer;color: green;"
+                            *ngIf="!isEtudiant" class="pi pi-pencil" (click)="onInitUpdate(rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Valider" style="margin-left: 2%; cursor: pointer;color: green;"
+                            *ngIf="(rdv.statut=='Planifié') && !isEntreprise" class="pi pi-check"
+                            (click)="changeStatut('Validé',rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Annulé" style="margin-left: 2%; cursor: pointer;color: red;"
+                            *ngIf="rdv.statut=='Planifié'" class="pi pi-times" (click)="changeStatut('Annulé',rdv)"
+                            aria-hidden="true"></i>
                     </td>
                 </tr>
 

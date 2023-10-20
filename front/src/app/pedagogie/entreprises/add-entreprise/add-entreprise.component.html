@@ -40,7 +40,7 @@
                 <div *ngIf="ActiveIndex==0">
                     <div style="color: black; font-weight: normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12">
+                            <div class="field col-12 md:col-6">
                                 <label for="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
                                 <input pInputText id="raison_sociale" type="text" formControlName="r_sociale"
                                     placeholder="Nom de l'entreprise " />
@@ -90,6 +90,16 @@
                             <div class="field col-12 md:col-6">
                                 <label For="idcc">Code IDCC</label>
                                 <input pInputText type="number" formControlName="idcc" placeholder="0000" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="convention">Site web</label>
+                                <input pInputText type="text" formControlName="site_web"
+                                    placeholder="Ex: www.google.fr" />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="idcc">Email</label>
+                                <input pInputText type="email" formControlName="email"
+                                    placeholder="Ex: email@intedgroup.com" />
                             </div>
                             <div class="field col-4 md:col-4">
                                 <label For="indicatif_ent">Indicatif <span style="color: red;"> * </span></label>
@@ -228,9 +238,6 @@
                     </div>
                 </div>
             </form>
-
-            <a routerLink="/entreprises" style="float: right;"><i class="pi pi-caret-right"></i> Voir les
-                entreprises</a>
         </div>
     </div>
 </div>

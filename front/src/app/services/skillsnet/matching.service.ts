@@ -22,10 +22,10 @@ export class MatchingService {
 
   }
 
-  delete(id:string){
+  delete(id: string) {
     let url = this.apiUrl + 'delete/' + id;
     return this.httpClient.delete<Matching>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
-      
+
   }
 
   getByID(id: string) {
@@ -45,12 +45,17 @@ export class MatchingService {
     let url = this.apiUrl + 'generateMatchingV1USERID/' + user_id;
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  getAllByOffreID(offre_id:string) {
+  getAllByOffreID(offre_id: string) {
     let url = this.apiUrl + 'getAllByOffreID/' + offre_id;
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  getAllByCVUSERID(user_id:string) {
+  getAllByCVUSERID(user_id: string) {
     let url = this.apiUrl + 'getAllByCVUSERID/' + user_id;
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  getMatchingByUserAndEntreprise(user_id: string, entreprise_id) {
+    let url = this.apiUrl + 'getMatchingByUserAndEntreprise/' + user_id + "/" + entreprise_id;
+    return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
   }
 }

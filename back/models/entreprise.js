@@ -35,7 +35,8 @@ const entrepriseSchema = mongoose.Schema({
     email: { type: String, required: false },
     logoFile: { type: String },
     secteur_activite: { type: String },
-    date_creation: { type: Date }
+    date_creation: { type: Date },
+    created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 });
 
 //Création de la table entreprise via le schema de la table

@@ -551,7 +551,7 @@ export class AdmissionIntComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     let bypass: any = prospect.user_id
     this.detailsForm.patchValue({ ...bypass, ...prospect })
     this.payementList = prospect?.payement
@@ -922,7 +922,7 @@ export class AdmissionIntComponent implements OnInit {
         this.partenaireOwned = commercial.partenaire_id
       })
     this.lengthPaiement = prospect?.payement?.length
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
   }
   savePaiement() {
     let statut_payement = "Oui" //TODO Vérifier length de prospect.payement par rapport à payementList

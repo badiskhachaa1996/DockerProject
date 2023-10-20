@@ -124,6 +124,8 @@ export class AddEntrepriseComponent implements OnInit {
       OPCO: [''],
       // organisme_prevoyance: [''],
       commercial: [this.commercials[0].value],
+      site_web: "",
+      email: ['', Validators.email],
 
       civilite_rep: [this.civiliteList[0]],
       nom_rep: [''],
@@ -201,6 +203,11 @@ export class AddEntrepriseComponent implements OnInit {
     entreprise.code_ape_naf = code_ape_naf;
     entreprise.OPCO = opco;
     entreprise.commercial_id = commercial_id;
+    entreprise.secteur_activite = this.formAddEntreprise.value.secteur_activite;
+    entreprise.email = this.formAddEntreprise.value.email;
+    entreprise.site_web = this.formAddEntreprise.value.site_web;
+    entreprise.date_creation = new Date()
+    entreprise.created_by = this.token.id
 
 
     let representant = new User(

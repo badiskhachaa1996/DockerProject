@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { Annonce } from 'src/app/models/Annonce';
 import { Competence } from 'src/app/models/Competence';
 import { Profile } from 'src/app/models/Profile';
 import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { SkillsService } from 'src/app/services/skillsnet/skills.service';
-
+import jwt_decode from "jwt-decode";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-imatch-candidat',
   templateUrl: './imatch-candidat.component.html',
@@ -88,7 +91,9 @@ export class ImatchCandidatComponent implements OnInit {
   selectedSkills = []
 
 
-  constructor(private formBuilder: FormBuilder, private SkillService: SkillsService, private EntrepriseService: EntrepriseService, private AnnonceService: AnnonceService) { }
+  constructor(private formBuilder: FormBuilder, private SkillService: SkillsService,
+    private EntrepriseService: EntrepriseService, private AnnonceService: AnnonceService,
+    private ToastService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     //Initialisation du formulaire d'ajout de CV
@@ -144,6 +149,7 @@ export class ImatchCandidatComponent implements OnInit {
         'CEO Entreprise',
       )
     }).subscribe((data) => {
+      this.ToastService.add({ severity: 'success', summary: 'Votre entreprise a été rajouté ainsi que votre compte' })
       this.AnnonceService.postAnnonce(
         new Annonce(
           false, null, data.representant._id, null,
@@ -158,7 +164,8 @@ export class ImatchCandidatComponent implements OnInit {
           new Date(),
           "iMatch", false, this.onGenerateID('EXT', "Alternance"), new Date()
         )).then(r => {
-          
+          this.ToastService.add({ severity: 'success', summary: 'Votre offre a été rajouté' })
+          this.router.navigate(['/login'])
         })
     })
   }
