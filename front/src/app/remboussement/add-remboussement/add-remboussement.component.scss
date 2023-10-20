@@ -11,3 +11,45 @@
     padding-left: 50px;
     padding-right: 50px;
 }
+
+
+
+
+
+.upload-doc {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  .upload-doc i {
+    margin-right: 10px;
+  }
+
+  .file-name {
+    font-weight: 700;
+    padding: 6px;
+    margin-left: 10px;
+  }
+
+input[type="file"] {
+    display: none;
+}
+
+.cancel-icon {
+    padding: 6px;
+    cursor: pointer;
+    color: red;
+}
+
+.doc-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-right: 20px;
+}
+
+.doc-block {
+    display: block;
+    margin-bottom: 20px;
+}

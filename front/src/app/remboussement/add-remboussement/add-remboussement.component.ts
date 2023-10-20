@@ -9,6 +9,7 @@ import jwt_decode from 'jwt-decode';
 import { Demande } from 'src/app/models/Demande';
 import { Router } from '@angular/router';
 import { error } from 'console';
+import { empty } from 'rxjs';
 
 @Component({
   selector: 'app-add-remboussement',
@@ -351,6 +352,63 @@ demande.docs={
               );
   }
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+  rib: any;
+  attestation_payement: any;
+  document_inscription: any;
+  preuve_payement: any;
+  autres_doc: any;
+
+  onUpload(event: any, doc:string ) {
+    if (event.target.files.length > 0) {
+      switch (doc) {
+        case 'rib': {
+          this.rib = event.target.files[0];
+          break; 
+        }
+        case "attestation_payement": {
+          this.attestation_payement = event.target.files[0];
+          break; 
+        }
+        case "document_inscription": {
+          this.document_inscription = event.target.files[0];
+          break; 
+        }
+        case 'preuve_payement': {
+          this.preuve_payement = event.target.files[0];
+          break; 
+        }
+        case 'autres_doc': {
+          this.autres_doc = event.target.files[0];
+          break; 
+        }
+        default: { 
+          break; 
+       } 
+      }
+      console.log(this.autres_doc)
+    }
+  }
+
+
+  reset(doc) {
+    doc.value = ""
+  }
+
+
+
 
 
 }

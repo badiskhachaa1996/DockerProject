@@ -86,38 +86,54 @@
             </div>
 
             <div class="col-12 p-fluid p-formgrid grid ">
-                <h3 class="col-12" style="text-align: start;"> Documents</h3>
-                <p-table [value]="documents" class="col-12">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th class="col-5">Documents</th>
-                            <th class="col-5">Statut</th>
-                            <th class="col-2">Actions</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-document>
-                        <tr>
-                            <td class="col-5">{{ document.label }}</td>
-                            <td class="col-5 d-flex flex-column">
-                                <p *ngIf="formRembourssement.get(document.value).value !=='' ">
-                                    Document Chargé avec sucess !</p>
-                                <input  type="file" id="{{document.value}}" style="display: none"
-                                       (change)="onFileSelected($event)" accept=".pdf">
-                            </td>
-                            <td class="col-2">
-                                <button pButton type="button" icon="pi pi-upload"
-                                        class="p-button-rounded p-button-success p-mr-2 p-3 m-3"
-                                        (click)="onClickToAddFile($event, document.value)"></button>
-
-                                        <button pButton type="button" icon="pi pi-trash"
-                                        class="p-button-rounded p-button-success p-mr-2 p-3 m-3" style="background-color: red;" (click)="deleteDocument( document.document_id)"
-                                        ></button>
-                                       
-                                       
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
+                <div>
+                <div class="doc-block">
+                    <span class="doc-title">RIB</span>
+                    <label for="rib-upload" class="upload-doc" (click)="rib.click()">
+                        <i class="pi pi-cloud-upload"></i>Joindre
+                    </label><span class="file-name" >{{rib?.files?.item(0)?.name}}</span>
+                    <input #rib multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event, 'rib')" chooseLabel="Browse" inputId="rib-upload"/>
+                    <i class="pi pi-times cancel-icon" *ngIf="rib?.files?.item(0)" (click)="reset(rib)"></i>
+                </div>
+                <div class="doc-block">
+                    <span class="doc-title">Attestation</span>
+                    <label for="rib-upload" class="upload-doc" (click)="attestation_payement.click()">
+                        <i class="pi pi-cloud-upload"></i>Joindre
+                    </label><span class="file-name" >{{attestation_payement?.files?.item(0)?.name}}</span>
+                    <input #attestation_payement multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event, 'attestation_payement')" chooseLabel="Browse" inputId="rib-upload"/>
+                    <i class="pi pi-times cancel-icon" *ngIf="attestation_payement?.files?.item(0)" (click)="reset(attestation_payement)"></i>
+                </div>
+                <div class="doc-block">
+                    <span class="doc-title">Test 2</span>
+                    <label for="rib-upload" class="upload-doc" (click)="document_inscription.click()">
+                        <i class="pi pi-cloud-upload"></i>Joindre
+                    </label><span class="file-name" >{{document_inscription?.files?.item(0)?.name}}</span>
+                    <input #document_inscription multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event, 'document_inscription')" chooseLabel="Browse" inputId="rib-upload"/>
+                    <i class="pi pi-times cancel-icon" *ngIf="document_inscription?.files?.item(0)" (click)="reset(document_inscription)"></i>
+                </div>
+                <div class="doc-block">
+                    <span class="doc-title">Test 3</span>
+                    <label for="rib-upload" class="upload-doc" (click)="preuve_payement.click()">
+                        <i class="pi pi-cloud-upload"></i>Joindre
+                    </label><span class="file-name" >{{preuve_payement?.files?.item(0)?.name}}</span>
+                    <input #preuve_payement multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event, 'preuve_payement')" chooseLabel="Browse" inputId="rib-upload"/>
+                    <i class="pi pi-times cancel-icon" *ngIf="preuve_payement?.files?.item(0)" (click)="reset(preuve_payement)"></i>
+                </div>
+                <div class="doc-block">
+                    <span class="doc-title">Test 3</span>
+                    <label for="rib-upload" class="upload-doc" (click)="autres_doc.click()">
+                        <i class="pi pi-cloud-upload"></i>Joindre
+                    </label><span class="file-name" >{{autres_doc?.files?.item(0)?.name}}</span>
+                    <input #autres_doc multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event, 'autres_doc')" chooseLabel="Browse" inputId="rib-upload"/>
+                    <i class="pi pi-times cancel-icon" *ngIf="autres_doc?.files?.item(0)" (click)="reset(autres_doc)"></i>
+                </div>
+            </div>
             </div>
             <div class="col-12  flex align-items-center justify-content-center ">
                 <br>
