@@ -10,32 +10,30 @@
     <div class="col-12 grid">
         <form class="col-12 p-fluid p-formgrid grid" [formGroup]="formRembourssement" (submit)="onSubmitRemboussementForm()">
             <h3 class="col-12" style="text-align: start;"> Etudiant</h3>
-            <div class="field col-12 md:col-6">
-                <label for="civilite">Civilité:</label>
+            <div class="field col-12 md:col-4">
+                <label for="civilite" >Civilité:</label>
                 <p-dropdown formControlName="civilite" [options]="civilitySelect"
                             placeholder="Select Civilité" required></p-dropdown>
-
-
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-4">
                 <label>Nom</label>
                 <input pInputText type="text" formControlName="nom" placeholder="Ex: Smith"/>
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-4">
                 <label>Prénom</label>
                 <input pInputText type="text" formControlName="prenom" placeholder="Ex: John"/>
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-4">
                 <label>Date de naissance</label>
                 <input pInputText type="date" formControlName="date_naissance"/>
             </div>
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-4">
                 <label>Nationalité</label>
                 <p-dropdown [options]="pays_residence" formControlName="nationalite"
                             placeholder="Choisissez un service"></p-dropdown>
             </div>
 
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-4">
                 <label>Pays de résidence <span style="color: red">  </span></label>
                 <p-dropdown [options]="pays_residence" formControlName="pays_resid"
                             placeholder="Choisissez un service"></p-dropdown>
@@ -56,8 +54,8 @@
             <h3 class="col-12" style="text-align: start;"> Formation</h3>
             <div class="field col-12 md:col-4">
                 <label>Année scolaire</label>
-                <input pInputText type="text" formControlName="annee_scolaire" placeholder="Ex: 2020-2021"/>
-            </div>
+                <p-dropdown [options]="annescolaires" formControlName="ecole"
+                placeholder="Choisissez un service"></p-dropdown>            </div>
             <div class="field col-12 md:col-4">
                     <label>Ecole</label>
                     <p-dropdown [options]="ecoles" formControlName="ecole"
@@ -73,7 +71,8 @@
             <h3 class="col-12" style="text-align: start;"> Demande</h3>
             <div class="field col-12 md:col-4">
                 <label>Motif de demande</label>
-                <input pInputText type="text" formControlName="motif_refus" placeholder=""/>
+                <p-dropdown [options]="motif" optionLabel="value" formControlName="formation"
+                            placeholder="Choisissez une motif"></p-dropdown>
             </div>
             <div class="field col-12 md:col-4">
                 <label>Montant</label>
@@ -86,6 +85,7 @@
             </div>
 
             <div class="col-12 p-fluid p-formgrid grid ">
+<<<<<<< HEAD
                 <h3 class="col-12" style="text-align: start;">Joindre des Documents</h3>
                 <div>
                 <div class="doc-block">
@@ -134,6 +134,40 @@
                     <i class="pi pi-times cancel-icon" *ngIf="autres_doc?.files?.item(0)" (click)="reset(autres_doc)"></i>
                 </div>
             </div>
+=======
+                <h3 class="col-12" style="text-align: start;"> Documents</h3>
+                <p-table [value]="documents" class="col-12">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="col-5">Documents</th>
+                            <th class="col-5">Lien de telechargement</th>
+                            <th class="col-2">Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-document>
+                        <tr>
+                            <td class="col-5">{{ document.label }}</td>
+                            <td class="col-5 d-flex flex-column">
+                                <p *ngIf="formRembourssement.get(document.value).value !=='' ">
+                               </p>
+                                <input  type="file" id="{{document.value}}" style="display: none"
+                                       (change)="onFileSelected($event)" accept=".pdf">
+                            </td>
+                            <td class="col-2">
+                                <button pButton type="button" icon="pi pi-upload"
+                                        class="p-button-rounded p-button-success p-mr-2 p-3 m-3 " style="background-color: rgb(60, 54, 176);"
+                                        (click)="onClickToAddFile($event, document.value)"></button>
+
+                                        <button pButton type="button" icon="pi pi-trash"
+                                        class="p-button-rounded p-button-success p-mr-2 p-3 m-3" style="background-color: rgb(115, 115, 115);" (click)="deleteDocument( document.document_id)"
+                                        ></button>
+                                       
+                                       
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+>>>>>>> a0ece6d2cad155d412ccbe01a45acfd51b2527f6
             </div>
             <div class="col-12  flex align-items-center justify-content-center ">
                 <br>
