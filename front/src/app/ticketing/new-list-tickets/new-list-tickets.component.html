@@ -95,6 +95,11 @@
             <p-dropdown [options]="moduleDropdown" formControlName="module"
                 placeholder="Choisissez un module"></p-dropdown>
         </div>
+        <div class="field col-12 md:col-6" *ngIf="showDemandeDropdown">
+            <label For="module">Demande <span style="color: red"> * </span></label>
+            <p-dropdown [options]="demandeDropdown" formControlName="module"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
         <div class="field col-12 md:col-6" *ngIf="showTypeDropdown">
             <label For="type">Type <span style="color: red"> * </span></label>
             <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"

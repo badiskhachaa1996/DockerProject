@@ -16,6 +16,21 @@
             <p-dropdown [options]="moduleDropdown" formControlName="module"
                 placeholder="Choisissez un module"></p-dropdown>
         </div>
+        <div class="field col-12 md:col-6" *ngIf="showCampusDropdown">
+            <label For="campus">Campus <span style="color: red"> * </span></label>
+            <p-multiSelect [options]="campusDropdown" formControlName="campus"
+                placeholder="Choisissez le campus"></p-multiSelect>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="showDemandeDropdown">
+            <label For="demande">Demande <span style="color: red"> * </span></label>
+            <p-dropdown [options]="demandeDropdown" formControlName="demande"
+                placeholder="Choisissez un module"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6" *ngIf="showFiliereDropdown">
+            <label For="filiere">Filière <span style="color: red"> * </span></label>
+            <p-dropdown [options]="filiereDropdown" formControlName="filiere"
+                placeholder="Choisissez la filière "></p-dropdown>
+        </div>
         <div class="field col-12 md:col-6" *ngIf="showTypeDropdown">
             <label For="type">Type <span style="color: red"> * </span></label>
             <p-dropdown [options]="IMS_Type_Dropdown" formControlName="type"
