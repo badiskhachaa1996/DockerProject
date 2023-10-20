@@ -41,7 +41,10 @@ export class Ticket {
         public resum?: string,
         public type?: string,
         public origin?: string,
-        public assigne_by?: User
+        public assigne_by?: User,
+        public demande?:String,
+        public campus?:String,
+        public filiere?:String,
     ) { }
 
 

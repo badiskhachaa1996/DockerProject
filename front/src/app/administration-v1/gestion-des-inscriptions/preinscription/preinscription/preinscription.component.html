@@ -3,31 +3,201 @@
     <p-tabView [(activeIndex)]="selectedTabIndex">
 
         <p-tabPanel header="Local">
+            <div *ngIf="showDossier">
+            <p-tabView  [(activeIndex)]="selectedTabIndex1">
+                <p-tabPanel header="Etape 1 :Dossier">
+                    
+                    <h4 style="text-align: center;">Etat du dossier <p-dropdown [options]="etat_dossierDropdown" placeholder="Choisissez l'etat du dossier"
+                        (onChange)="onSelectEtat(PROSPECT)" ></p-dropdown> </h4>
+                    <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+                        [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
+                        rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 5em"></th>
+                                <th pSortableColumn="id">
+                                    ID Ticket<p-sortIcon field="id"> </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="nom">
+                                    Statut<p-sortIcon field="nom"> </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="choix">
+                                    Assigné à <p-sortIcon field="choix"> </p-sortIcon>
+                                </th>
+                                <th pSortableColumn="rythme">
+                                    Traité le <p-sortIcon field="rythme"> </p-sortIcon>
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-prospect>
+                            <tr>
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                        class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'
+                                "></button>
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                 
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                                " class="pi pi-send m-1" (click)="initUpdate(formation); scrollToTop()"
+                                        pTooltip="Affecter" aria-hidden="true"
+                                        tooltipPosition="bottom"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-user>
+                            <tr>
+                                <td colspan="6">
+
+
+                                    <p-table responsiveLayout="scroll">
+                                        <ng-template pTemplate="header">
+                            <tr>
+
+                                <th>Commentaire</th>
+                                <th>Commenté par </th>
+                                <th>Commenté le </th>
+
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td>{{ user.customid }}</td>
+                                <td>
+                                    {{ user.user_id.firstname | titlecase }}
+                                    {{ user.user_id.lastname | uppercase }}
+                                </td>
+                                <td>
+                                    {{
+                                    user.date_naissance
+                                    }}
+                                </td>
+
+                            </tr>
+
+
+                        </ng-template>
+
+                    </p-table>
+                    
+                    </ng-template>
+
+                    </p-table>
+                    <div class="col-12">
+                        <input type="file" (change)="uploadFile($event.target.files)" id="selectedFile" #selectedFile style="display: none;"
+                            accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                        <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther
+                            style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+                    </div>
+                    <a href="javascript:void(0)" (click)="showDocuments = true">Afficher le dossier -></a>
+                    <div class="card grid" *ngIf="PROSPECT && showDocuments">
+                        <h3 class="col-12">Documents</h3>
+                        <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
+                            styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Lien</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc>
+                                <tr>
+                                    <td>{{doc.nom}}</td>
+                                    <td>
+                                        <a *ngIf="doc.path" (click)="downloadFile(doc)">Télécharger le document</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                            (click)="initUpload(doc)" style="margin-left: 2%;" aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                            (click)="delete(doc)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <h3 class="col-8">Autre documents</h3>
+                        <div class="col-4">
+                            <p-button [style]="{'width':'100%'}" (click)="addDoc()" icon="pi pi-plus" autoWidth="false"
+                                label="Ajouter un autre document"></p-button>
+                        </div>
+                        <p-table [value]="PROSPECT.documents_autre" #dt1 dataKey="_id" [rows]="8" rowExpandMode="single" [rows]="8"
+                            [rowHover]="true" class="col-12" [paginator]="true" [pageLinks]="5"
+                            [globalFilterFields]="['libelle','email','site']" responsiveLayout="scroll" [filterDelay]="0"
+                            styleClass="p-datatable-gridlines">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>Lien</th>
+                                    <th>Action</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-doc let-ri="rowIndex">
+                                <tr [pEditableRow]="doc">
+                                    <td pEditableColumn>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input type="text" pInputText [(ngModel)]="doc.nom">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{doc.nom}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td>
+                                        <a *ngIf="doc.path" (click)="downloadOtherFile(doc)">Télécharger le document</a>
+                                    </td>
+                                    <td>
+                                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file" *ngIf="doc.nom!='Cliquer pour modifier le nom du document ici'"
+                                            (click)="initUpload(doc,'selectedFileOther')" style="margin-left: 2%;" aria-hidden="true"></i>
+                                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;" class="pi pi-trash"
+                                            (click)="deleteOther(doc)" aria-hidden="true"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Etape 2:">
+                </p-tabPanel>
+                <p-tabPanel header="Etape 3:">
+                </p-tabPanel>
+                <p-tabPanel header="Etape 4:">
+                </p-tabPanel>
+            </p-tabView></div>
             <div *ngIf="shownewLeadForm" class="col-12 card">
-                <h4 style="text-align: center;">Ajouter un nouveau lead avec le Quick Ajout</h4>
+                <h4 style="text-align: center;">Ajouter un nouveau lead </h4>
                 <div style="text-align: center;">
                     <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
                         obligatoires</small><br>
                 </div>
                 <br>
                 <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="newLeadForm">
+                    <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
                     <div class="field col-12 md:col-12">
-                        <label For="role">Ecole <span style="color:red"> *</span></label>
-                        <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
-                            (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
+                        <label For="type">Type <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
+                            (onChange)="onSelectEcole()" formControlName="type"></p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
-                        <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
-                        <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
-                            (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne"> <!--SI INTERNE-->
-                        <label For="role">Commercial</label>
-                        <p-dropdown [options]="commercialList" filter="true"
-                            placeholder="Choisissez le commercial qui a ajouté le lead"
-                            formControlName="commercial"></p-dropdown>
-                    </div>
-                    <h5 class="col-12" style="text-align: center;">Informations personnelle</h5> <br>
+
+
                     <div class="field col-12 md:col-2">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
                         <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
@@ -35,7 +205,8 @@
                     </div>
                     <div class="field col-12 md:col-5">
                         <label For="nom">Nom <span style="color: red;"> * </span></label>
-                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="lastname" />
+                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                            formControlName="lastname" />
                     </div>
                     <div class="field col-12 md:col-5">
                         <label For="prenom">Prénom <span style="color: red;"> * </span></label>
@@ -48,22 +219,18 @@
                         <input type="date" formControlName="date_naissance" pInputText />
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
-                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
-                            filter="true"></p-dropdown>
-                    </div>
-                    <div class="field col-12 md:col-6">
                         <label>Pays de résidence :<span style="color:red"> *</span></label><br>
                         <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
                             emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
                             optionDisabled="actif"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label>Adresse électronique :<span style="color:red"> *</span></label>
-                        <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
-                            pInputText>
+                        <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                            filter="true"></p-dropdown>
                     </div>
+                    <h5 class="col-12" style="text-align: center;">Contact</h5> <br>
                     <div class="field col-12 md:col-3">
                         <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
                         <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
@@ -74,23 +241,49 @@
                         <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
                             formControlName="phone" />
                     </div>
-        
-                    <h5 class="col-12" style="text-align: center;">Informations pédagogique</h5><br>
-        
+                    <div class="field col-12 md:col-6">
+
+                        <label>Email :<span style="color:red"> *</span></label>
+                        <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
+                            pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>Numéro rue:<span style="color:red"> *</span></label>
+                        <input formControlName="rue" placeholder="rue" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>ville:<span style="color:red"> *</span></label>
+                        <input formControlName="ville" placeholder="ville" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>code postale:<span style="color:red"> *</span></label>
+                        <input formControlName="codep" placeholder="code postale" pInputText>
+                    </div>
+
+
+                    <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
+                    <div class="field col-12 md:col-12">
+                        <label For="role">Ecole <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
+                            (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
+                    </div>
                     <div class="field col-12">
                         <label>Choix du campus <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
                             placeholder="Choisissez un campus">
                         </p-dropdown>
                     </div>
-        
+
                     <div class="field col-12 md:col-12">
                         <label>Choix de la rentrée <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
                             placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
                         </p-dropdown>
                     </div>
-        
+
                     <div class="field col-12 md:col-4">
                         <label>Choix du programme <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
@@ -100,14 +293,15 @@
                     <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
                         <label For="formation">Choix de la formation <span style="color: red;">
                                 *</span></label>
-                        <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program" autoWidth="false"
-                            [filter]="true" [group]="true" [style]="{'width':'100%'}" formControlName="formation"></p-dropdown>
+                        <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
+                            autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
+                            formControlName="formation"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
                         <label For="programme_fr">Choix de la formation <span style="color: red;"> *
                             </span></label>
                         <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
-                             [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                            [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
                             formControlName="formation"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-12">
@@ -117,6 +311,22 @@
                             placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
                             formControlName="rythme_formation"></p-dropdown>
                     </div>
+
+                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                        <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                        <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
+                            (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
+                    </div>
+                    <div *ngIf="!itslead" class="field col-12 md:col-6"> <!--SI INTERNE-->
+                        <label For="role">Commercial</label>
+                        <p-dropdown [options]="commercialList" filter="true"
+                            placeholder="Choisissez le commercial qui a ajouté le lead"
+                            formControlName="commercial"></p-dropdown>
+                    </div>
+                    <div *ngIf="itslead" class="field col-12 md:col-6">
+                        <label>Nom et prénom :<span style="color:red"> *</span></label>
+                        <input formControlName="nomlead" placeholder="nom et pénom" pInputText>
+                    </div> <br>
                     <div style="justify-content: right;">
                         <button pButton type="submit" label="Ajouter"
                             [disabled]="(newLeadForm.invalid && !isPartenaireExterne) || (!newLeadForm.value.ecole)"></button>
@@ -132,7 +342,7 @@
                     <input pInputText type="text" style="width: 20em;" placeholder="Recherche" />
                 </div>
                 <div class=" field col-3">
-                    <button pButton pRipple label="Ajouter" (click)="shownewLeadForm=true"   icon="pi pi-plus" class="mr-2 mb-2"></button>
+                    <button pButton pRipple (click)="shownewLeadForm=true" icon="pi pi-plus" class="mr-2 mb-2"></button>
                 </div>
             </div>
             <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
@@ -141,7 +351,7 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 5rem"></th>
+                        <th style="width: 5em"></th>
                         <th pSortableColumn="id">
                             ID<p-sortIcon field="id"> </p-sortIcon>
                         </th>
@@ -176,7 +386,7 @@
                 <ng-template pTemplate="body" let-prospect>
                     <tr>
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="formation"
+                            <button type="button" pButton pRipple [pRowToggler]="prospect"
                                 class="p-button-text p-button-rounded p-button-plain" [icon]="
                                     expanded
                                         ? 'pi pi-chevron-down'
@@ -210,7 +420,402 @@
                         <td>
                             {{ prospect?.date_creation}}
                         </td>
-                        <td >
+                        <td>
+                            <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
+                                pTooltip="Admission" (click)="onshowDossier(prospect)" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%;color: rgb(72, 72, 255);
+                                " class="pi pi-pencil m-1" (click)="initUpdate(formation); scrollToTop()"
+                                pTooltip="Modifier la formation" aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="padding-left: 3%; color: rgb(255, 0, 0)" class="pi pi-trash m-1"
+                                (click)="delete(formation)" pTooltip="Supprimer la formation" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-user>
+                    <tr>
+                        <td colspan="10">
+
+
+                            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                                Détails
+                            </h5>
+                            <p-table responsiveLayout="scroll">
+                                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Prénom et Nom </th>
+                        <th>Date de naissance</th>
+                        <th>Pays de résidence</th>
+                        <th>Nationalité</th>
+                        <th>Action</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ user.customid }}</td>
+                        <td>
+                            {{ user.user_id.firstname | titlecase }}
+                            {{ user.user_id.lastname | uppercase }}
+                        </td>
+                        <td>
+                            {{
+                            user.date_naissance
+                            }}
+                        </td>
+                        <td>{{ user.user_id.pays_adresse}}</td>
+                        <td>
+                            {{user.user_id.nationnalite}}
+                        </td>
+
+                        <td></td>
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Contact
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Adresse mail</th>
+                        <th>Adresse mail école </th>
+                        <th>numéro de téléphone</th>
+                        <th>Adresse</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.user_id.email}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Choix académique
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Session</th>
+                        <th>Ecole </th>
+                        <th>Campus</th>
+                        <th>Formation</th>
+                        <th>Groupe</th>
+                        <th>Rythme</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.formation}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Source
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Source</th>
+                        <th>Commercial </th>
+                        <th>Adresse mail</th>
+                        <th>Téléphone</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.source}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            </td>
+            </tr>
+            </ng-template>
+
+            </p-table>
+        </p-tabPanel>
+        <p-tabPanel header="Internationale">
+            <div *ngIf="shownewLeadFormI" class="col-12 card">
+                <h4 style="text-align: center;">Ajouter un nouveau lead </h4>
+                <div style="text-align: center;">
+                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                        obligatoires</small><br>
+                </div>
+                <br>
+                <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="newLeadForm">
+                    <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
+                    <div class="field col-12 md:col-12">
+                        <label For="type">Type <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="typeList" placeholder="Choisissez le type du lead"
+                            (onChange)="onSelectEcole()" formControlName="type"></p-dropdown>
+                    </div>
+
+
+                    <div class="field col-12 md:col-2">
+                        <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                            placeholder="Choisissez une civilité" formControlName="civilite"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label For="nom">Nom <span style="color: red;"> * </span></label>
+                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                            formControlName="lastname" />
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                        <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                            formControlName="firstname" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                            </span></label>
+                        <input type="date" formControlName="date_naissance" pInputText />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                        <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
+                            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
+                            optionDisabled="actif"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                            filter="true"></p-dropdown>
+                    </div>
+                    <h5 class="col-12" style="text-align: center;">Contact</h5> <br>
+                    <div class="field col-12 md:col-3">
+                        <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                        <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
+                    </div>
+                    <div class="field col-12 md:col-9">
+                        <label For="telephone">Numéro de téléphone <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
+                            formControlName="phone" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>Adresse électronique :<span style="color:red"> *</span></label>
+                        <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
+                            pInputText>
+                    </div>
+
+
+                    <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
+                    <div class="field col-12 md:col-12">
+                        <label For="role">Ecole <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
+                            (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label>Choix du campus <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
+                            placeholder="Choisissez un campus">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label>Choix de la rentrée <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                            placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label>Choix du programme <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
+                            placeholder="Choisissez un programme">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
+                        <label For="formation">Choix de la formation <span style="color: red;">
+                                *</span></label>
+                        <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
+                            autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
+                            formControlName="formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
+                        <label For="programme_fr">Choix de la formation <span style="color: red;"> *
+                            </span></label>
+                        <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
+                            [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                            formControlName="formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label For="rythme">Rythme de la formation <span style="color: red;"> *
+                            </span></label>
+                        <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
+                            placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
+                            formControlName="rythme_formation"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                        <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                        <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
+                            (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne"> <!--SI INTERNE-->
+                        <label For="role">Commercial</label>
+                        <p-dropdown [options]="commercialList" filter="true"
+                            placeholder="Choisissez le commercial qui a ajouté le lead"
+                            formControlName="commercial"></p-dropdown>
+                    </div>
+                    <div style="justify-content: right;">
+                        <button pButton type="submit" label="Ajouter" (click)="shownewLeadFormI=true"
+                            [disabled]="(newLeadForm.invalid && !isPartenaireExterne) || (!newLeadForm.value.ecole)"></button>
+                    </div>
+                </form>
+            </div>
+            <div class="grid ">
+                <div class=" field col-3">
+                    <button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"></button><br>
+                    <button pButton label="Vider&nbsp; " class="p-button" icon="pi pi-filter-slash"></button><br> <br>
+                </div>
+                <div class=" field col-6">
+                    <input pInputText type="text" style="width: 20em;" placeholder="Recherche" />
+                </div>
+                <div class=" field col-3">
+                    <button pButton pRipple (click)="shownewLeadFormI=true" icon="pi pi-plus"
+                        class="mr-2 mb-2"></button>
+                </div>
+            </div>
+            <p-table #dt1 [value]="prospectI" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
+                rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 5em"></th>
+                        <th pSortableColumn="id">
+                            ID<p-sortIcon field="id"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom">
+                            Prénom et Nom<p-sortIcon field="nom"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="choix">
+                            Choix académique <p-sortIcon field="choix"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rythme">
+                            Rythme <p-sortIcon field="rythme"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="decision">
+                            Décision admission<p-sortIcon field="decision"> </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="paiement">
+                            Paiement<p-sortIcon field="paiement"> </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="etape">
+                            Etape<p-sortIcon field="etape"> </p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="date">
+                            Date d'inscription<p-sortIcon field="date">
+                            </p-sortIcon>
+
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                class="p-button-text p-button-rounded p-button-plain" [icon]="
+                                    expanded
+                                        ? 'pi pi-chevron-down'
+                                        : 'pi pi-chevron-right'
+                                "></button>
+                        </td>
+                        <td>
+                            {{ prospect.customid}}
+                        </td>
+                        <td>
+                            {{ prospect.user_id.firstname | titlecase }}
+                            {{ prospect.user_id.lastname | uppercase }}
+                        </td>
+                        <td>
+                            {{ prospect.formation}},{{prospect.campus_choix_1}},{{prospect.rentree_scolaire}}
+                        </td>
+                        <td>
+                            {{prospect.rythme_formation}}
+                        </td>
+                        <td>
+                            {{ prospect?.niveau}}
+                        </td>
+                        <td>
+                            {{ prospect?.payement}}
+                        </td>
+
+
+                        <td>
+                            {{ prospect?.etat_dossier}}
+                        </td>
+                        <td>
+                            {{ prospect?.date_creation}}
+                        </td>
+                        <td>
                             <i style="padding-left: 3%;color: rgb(255, 223, 44);" class="pi pi-building m-1"
                                 pTooltip="Rentrée scolaire" (click)="rScolaire(formation)" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
@@ -223,70 +828,319 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="rowexpansion" let-formation>
+                <ng-template pTemplate="rowexpansion" let-user>
                     <tr>
-                        < colspan="10">
-                            <h5 style="
-                                    color: rgb(48, 121, 230);
-                                    font-weight: bold;
-                                ">
+                        <td colspan="10">
+
+
+                            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
                                 Détails
                             </h5>
-                            < responsiveLayout="scroll" style="
-                                    display: flex;
-                                    justify-content: center;
-                                    text-align: center;
-                                    justify-content: left;
-                                ">
+                            <p-table responsiveLayout="scroll">
                                 <ng-template pTemplate="header">
                     <tr>
+
                         <th>ID</th>
                         <th>Prénom et Nom </th>
                         <th>Date de naissance</th>
                         <th>Pays de résidence</th>
-                        <th>Nationalité
-                        <th>
+                        <th>Nationalité</th>
+                        <th>Action</th>
 
                     </tr>
                 </ng-template>
-                <!--<ng-template pTemplate="emptymessage">
+                <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{ formation.rncp }}</td>
+                        <td>{{ user.customid }}</td>
                         <td>
-                            {{ formation.annee }}
+                            {{ user.user_id.firstname | titlecase }}
+                            {{ user.user_id.lastname | uppercase }}
                         </td>
                         <td>
                             {{
-                            formation.code_france_competence
+                            user.date_naissance
                             }}
                         </td>
-                        <td>{{ formation.validite }}</td>
+                        <td>{{ user.user_id.pays_adresse}}</td>
                         <td>
-                            {{ formation.organisme_referent }}
+                            {{user.user_id.nationnalite}}
                         </td>
-                        <td>{{ formation.tarif }}</td>
-                        <td>{{ formation.deroulement }}</td>
+
+                        <td></td>
                     </tr>
-                </ng-template>-->
+
+
                 </ng-template>
 
             </p-table>
-        </p-tabPanel>
-        <p-tabPanel header="Internationale">
-            <div class="grid ">
-                <div class=" field col-3">
-                    <button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"></button><br>
-                    <button pButton label="Vider&nbsp; " class="p-button" icon="pi pi-filter-slash"></button><br> <br>
-                </div>
-                <div class=" field col-6">
-                    <input pInputText type="text" style="width: 20em;" placeholder="Recherche" />
-                </div>
-                <div class=" field col-3">
-                    <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"></button>
-                </div>
-            </div>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Contact
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Adresse mail</th>
+                        <th>Adresse mail école </th>
+                        <th>numéro de téléphone</th>
+                        <th>Adresse</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.user_id.email}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Choix académique
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Session</th>
+                        <th>Ecole </th>
+                        <th>Campus</th>
+                        <th>Formation</th>
+                        <th>Groupe</th>
+                        <th>Rythme</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.formation}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            <h5 style="color: rgb(48, 121, 230);font-weight: bold;">
+                Source
+            </h5>
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Source</th>
+                        <th>Commercial </th>
+                        <th>Adresse mail</th>
+                        <th>Téléphone</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{user.source}}</td>
+                        <td>
+                            {{ user.user_id.email_perso}}
+                        </td>
+                        <td>
+                            {{
+                            user.user_id.phone
+                            }}
+                        </td>
+                        <td>{{ user.user_id.rue_adresse}}{{user.user_id.ville_adresse}}{{ user.user_id.pays_adresse}}
+                        </td>
+
+
+                        <td></td>
+
+                    </tr>
+
+
+                </ng-template>
+
+            </p-table>
+            </td>
+            </tr>
+            </ng-template>
+
+            </p-table>
         </p-tabPanel>
         <p-tabPanel header="réinscription">
+            <div *ngIf="shownewRIForm" class="col-12 card">
+                <h4 style="text-align: center;"> Réinscription </h4>
+                <div style="text-align: center;">
+                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                        obligatoires</small><br>
+                </div>
+                <br>
+                <form class="p-fluid p-formgrid grid" (ngSubmit)="addNewProspect()" [formGroup]="RIForm">
+                    <h5 class="col-12" style="text-align: center;">Etudiant</h5> <br>
+                    <div class="field col-12 md:col-12">
+                        <label For="etudiant">Etudiant <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="typeList" placeholder="Choisissez l'étudiant"
+                            (onChange)="onSelectEtudiat()" formControlName="etudiant"></p-dropdown>
+                    </div>
+
+
+                    <div class="field col-12 md:col-2">
+                        <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                            placeholder="Choisissez une civilité" formControlName="civilite"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label For="nom">Nom <span style="color: red;"> * </span></label>
+                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                            formControlName="lastname" />
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                        <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                            formControlName="firstname" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                            </span></label>
+                        <input type="date" formControlName="date_naissance" pInputText />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                        <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays" optionLabel="value"
+                            emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true"
+                            optionDisabled="actif"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="label"
+                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                            filter="true"></p-dropdown>
+                    </div>
+                    <h5 class="col-12" style="text-align: center;">Contact</h5> <br>
+                    <div class="field col-12 md:col-3">
+                        <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                        <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
+                    </div>
+                    <div class="field col-12 md:col-9">
+                        <label For="telephone">Numéro de téléphone <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone"
+                            formControlName="phone" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>Email :<span style="color:red"> *</span></label>
+                        <input type="email" formControlName="email_perso" placeholder="Email" (blur)="verifEmailInBD()"
+                            pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>Numéro rue:<span style="color:red"> *</span></label>
+                        <input formControlName="rue" placeholder="rue" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>ville:<span style="color:red"> *</span></label>
+                        <input formControlName="ville" placeholder="ville" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-6">
+
+                        <label>code postale:<span style="color:red"> *</span></label>
+                        <input formControlName="codep" placeholder="code postale" pInputText>
+                    </div>
+
+
+                    <h5 class="col-12" style="text-align: center;">Choix académique</h5><br>
+                    <div class="field col-12 md:col-12">
+                        <label For="role">Ecole <span style="color:red"> *</span></label>
+                        <p-dropdown [options]="EcoleListRework" placeholder="Choisissez l'école du lead"
+                            (onChange)="onSelectEcole()" formControlName="ecole"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label>Choix du campus <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="campusDropdown" optionLabel="value" formControlName="campus"
+                            placeholder="Choisissez un campus">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label>Choix de la rentrée <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                            placeholder="Choisissez une rentrée" placeholder="Choisissez la rentrée scolaire">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label>Choix du programme <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"
+                            placeholder="Choisissez un programme">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Anglais'">
+                        <label For="formation">Choix de la formation <span style="color: red;">
+                                *</span></label>
+                        <p-dropdown [options]="programEnDropdown" placeholder="Choose a english program"
+                            autoWidth="false" [filter]="true" [group]="true" [style]="{'width':'100%'}"
+                            formControlName="formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-8" *ngIf="newLeadForm.value.programme.value=='Programme Français'">
+                        <label For="programme_fr">Choix de la formation <span style="color: red;"> *
+                            </span></label>
+                        <p-dropdown [options]="programeFrDropdown" placeholder="Choissiez un programme français"
+                            [filter]="true" [group]="true" [style]="{'width':'100%'}" autoWidth="false"
+                            formControlName="formation"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label For="rythme">Rythme de la formation <span style="color: red;"> *
+                            </span></label>
+                        <p-dropdown [options]="typeFormationDropdown" optionLabel="value" autoWidth="false"
+                            placeholder="Choisissez un rythme" [style]="{'width':'100%'}"
+                            formControlName="rythme_formation"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6" *ngIf="!isPartenaireExterne">
+                        <label For="role">Source <span style="color:red"> *</span></label> <!--SI INTERNE-->
+                        <p-dropdown [options]="sourceList" placeholder="Choisissez la provenance du lead"
+                            (onChange)="changeSource($event.value)" formControlName="source"></p-dropdown>
+                    </div>
+                    <div *ngIf="!itslead" class="field col-12 md:col-6"> <!--SI INTERNE-->
+                        <label For="role">Commercial</label>
+                        <p-dropdown [options]="commercialList" filter="true"
+                            placeholder="Choisissez le commercial qui a ajouté le lead"
+                            formControlName="commercial"></p-dropdown>
+                    </div>
+                    <div *ngIf="itslead" class="field col-12 md:col-6">
+                        <label>Nom et prénom :<span style="color:red"> *</span></label>
+                        <input formControlName="nomlead" placeholder="nom et pénom" pInputText>
+                    </div> <br>
+                    <div style="justify-content: right;">
+                        <button pButton type="submit" label="Ajouter"
+                            [disabled]="(newLeadForm.invalid && !isPartenaireExterne) || (!newLeadForm.value.ecole)"></button>
+                    </div>
+                </form>
+            </div>
             <div class="grid ">
                 <div class=" field col-3">
                     <button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"></button><br>
@@ -296,9 +1150,10 @@
                     <input pInputText type="text" style="width: 20em;" placeholder="Recherche" />
                 </div>
                 <div class=" field col-3">
-                    <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"></button>
+                    <button pButton pRipple icon="pi pi-plus" (click)="shownewRIForm=true" class="mr-2 mb-2"></button>
                 </div>
             </div>
+
         </p-tabPanel>
     </p-tabView>
 </div>

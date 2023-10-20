@@ -314,6 +314,19 @@ const prospect_schema = new mongoose.Schema({
     date_inscription_def: {
         type: Date,
     },
+    lead_type:{type: String},
+    ville_adresse: {
+        type: String,
+        required: false
+    },
+    rue_adresse: {
+        type: String,
+        required: false
+    },
+    numero_adresse: {
+        type: String,
+        required: false
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

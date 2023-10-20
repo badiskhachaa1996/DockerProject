@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Task} from 'src/app/models/project/Task';
 import { ProjectService } from 'src/app/services/projectv2.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 @Component({
   selector: 'app-ajout-ticket',
   templateUrl: './ajout-ticket.component.html',
@@ -26,7 +27,35 @@ export class AjoutTicketComponent implements OnInit {
   receivedTask: Task;
   itsTask:boolean = false;
   taskID:string;
-
+  demandeDropdown:any;
+  showDemandeDropdown:boolean =false;
+  showCampusDropdown:boolean =false;
+  showFiliereDropdown:boolean =false;
+  filiereDropdown:any[]=[];
+  campusDropdown :any[] = [
+    { value: 'Paris', label: "Paris" },
+    { value: "Marne", label: "Marne" },
+    { value: 'Montpelier', label: "Montpelier" },
+  ];
+  YpareoDropdown:any[]=[
+    { label: 'Accés', value: "Acces" },
+    { label: "Ajout d'un étudiant", value: "Ajout" },
+    { label: 'Autre', value: "Autre" },
+  ];
+  MicrosoftDropdown:any[]=[
+    { label: 'Réinitialisation du mot de passe', value: "Réinitialisation du mot de passe" },
+    { label: 'Création du compte Microsoft 365', value: "Création du compte Microsoft 365" },
+    { label: "Problème d'accès à Microsoft 365", value: "Problème d'accès à Microsoft 365" },
+    { label: "Problème TEAMS", value: "Problème TEAMS" },
+    { label: "Problème Outlook", value: "Problème Outlook" },
+    { label: "Problème OneDrive", value: "Problème OneDrive" },
+  ];
+  SiteinternetDropdown:any[]=[
+    { label: 'Contenu', value: "Contenu" },
+    { label: "Formulaire d'admission", value: "Formulaire d'admission" },
+    { label: 'Beug', value: "Beug" },
+    { label: 'Autre', value: "Autre" },
+  ];
   service_ID = this.route.snapshot.paramMap.get('service_id');
   TicketForm = new FormGroup({
     sujet_id: new FormControl('', Validators.required),
@@ -36,6 +65,9 @@ export class AjoutTicketComponent implements OnInit {
     priorite: new FormControl("false" ),
     module : new FormControl('', ),
     type : new FormControl('',),
+    demande : new FormControl('',),
+    campus: new FormControl('',),
+    filiere:new FormControl('',),
   })
   token;
   sujetDropdown: any[] = [
@@ -79,6 +111,7 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
+    console.log(this.TicketForm.value);
     console.log(this.TicketForm.value.priorite)
     this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id,priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
@@ -121,7 +154,7 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.push(event.files[0])
     fileUpload.clear()
   }
-  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute,
+  constructor(private TicketService: TicketService, private ToastService: MessageService, private ServService: ServService, private router: Router, private route: ActivatedRoute,private diplomeService: DiplomeService,
     private SujetService: SujetService, private Socket: SocketService, private AuthService: AuthService, private NotificationService: NotificationService,private projectService: ProjectService) { }
   serviceDic = {}
   sujetDic = {}
@@ -178,6 +211,11 @@ export class AjoutTicketComponent implements OnInit {
          
       }
     });
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.filiereDropdown.push({ value: d._id, label: d.titre })
+      })
+    })
 
   }
 
@@ -186,14 +224,51 @@ export class AjoutTicketComponent implements OnInit {
     
     if (this.serviceDic[this.TicketForm.get('service_id').value]==="Support informatique"){
       this.showTypeDropdown=true;
-    }else {
+      this.showCampusDropdown=false;
+      
+    }else if(this.serviceDic[this.TicketForm.get('service_id').value]==="Pédagogie"){
+      console.log("*****************************")
       this.showTypeDropdown=false;
+      this.showCampusDropdown=true;
+      this.showModuleDropdown=false;
+      this.showFiliereDropdown=true;
+    }else if(this.serviceDic[this.TicketForm.get('service_id').value]==="Administration"){
+      this.showTypeDropdown=false;
+      this.showCampusDropdown=true;
+      this.showModuleDropdown=false;
+      this.showFiliereDropdown=false;
+    }
+      else  {
+      this.showFiliereDropdown=false;
+      this.showTypeDropdown=false;
+      this.showCampusDropdown=false
+      this.showModuleDropdown=false;
     }
     if(selectedSubject === "IMS") {
+      this.showFiliereDropdown=false;
         this.showModuleDropdown = true;
+        this.showCampusDropdown=false;
         this.showTypeDropdown=true;
         this.TicketForm.get('module').setValidators([Validators.required]);
         this.TicketForm.get('module').updateValueAndValidity();
+    }else if (selectedSubject ==="Ypareo"){
+      this.showFiliereDropdown=false;
+      this.showDemandeDropdown=true;
+      this.showModuleDropdown=false;
+      this.showCampusDropdown=false;
+      this.demandeDropdown=this.YpareoDropdown;
+    }else if (selectedSubject ==="Microsoft"){
+      this.showFiliereDropdown=false;
+      this.showDemandeDropdown=true;
+      this.showModuleDropdown=false;
+      this.showCampusDropdown=false;
+      this.demandeDropdown=this.MicrosoftDropdown
+    }else if (selectedSubject ==="Site internet"){
+      this.showFiliereDropdown=false;
+      this.showDemandeDropdown=true;
+      this.showModuleDropdown=false;
+      this.showCampusDropdown=false;
+      this.demandeDropdown=this.SiteinternetDropdown;
     }
     else {
         

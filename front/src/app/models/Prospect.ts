@@ -93,6 +93,9 @@ export class Prospect {
         public date_cf?: Date,
         public date_visa?: Date,
         public date_inscription_def?: Date,
+        public lead_type? :String,
+        public rue_adresse? :String,
+        public numero_adresse? :String,
     ) { }
 
 }
