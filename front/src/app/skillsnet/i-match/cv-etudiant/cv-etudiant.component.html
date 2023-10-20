@@ -1,5 +1,8 @@
 <div class="col-12">
     <p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
+        <p-tabPanel header="Mes rendez-vous" >
+            <app-rendez-vous-resultats></app-rendez-vous-resultats>
+        </p-tabPanel>
         <p-tabPanel header="Générateur de CV" >
             <app-ajout-cv *ngIf="USER" [CV_USER_ID]="USER._id"></app-ajout-cv>
         </p-tabPanel>
@@ -21,24 +24,25 @@
                     <tr>
                         <th style="width: 3rem"></th>
                         <th>
-                            Offre <p-sortIcon field="offre_id.user_id.custom_id"></p-sortIcon>
+                            ID Offre <p-sortIcon field="offre_id.custom_id"></p-sortIcon>
                         </th>
                         <th style="text-align:center">
-                            Type Matching
+                            Type
                         </th>
-                        <th style="text-align:center">
-                            Profil
+                        <th pSortableColumn="taux" sstyle="text-align:center;width: 2px;">
+                            Commercial <p-sortIcon field="taux"></p-sortIcon>
                         </th>
+        
                         <th style="text-align:center">
-                            Mission
+                            Statut
                         </th>
-                        <th style="text-align:center">
-                            Statut du Matching
+                        <th pSortableColumn="date_creation" style="text-align:center">
+                            Date <p-sortIcon field="date_creation"></p-sortIcon>
                         </th>
-                        <th style="text-align:center">
-                            Taux
+                        <th pSortableColumn="taux" style="text-align:center;width: 2px;">
+                            Taux <p-sortIcon field="taux"></p-sortIcon>
                         </th>
-                        <th style="text-align:center">
+                        <th style="text-align:center;width: 2px;">
                             Entretien
                         </th>
                         <th>
@@ -58,17 +62,20 @@
                         <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
                             {{match.type_matching}}
                         </td>
-                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
-                            {{ match.offre_id?.profil?.libelle}}
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}" *ngIf="match.type_matching!='Candidat'">
+                            {{ match.matcher_id?.firstname | titlecase}} {{ match.matcher_id?.lastname | uppercase}}
                         </td>
-                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
-                            {{ match.offre_id?.missionName}}
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}" *ngIf="match.type_matching=='Candidat'">
+                            Non
                         </td>
                         <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
                             {{match.statut}}
                         </td>
                         <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
-                            WIP
+                            {{match.date_creation|date:medium}}
+                        </td>
+                        <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
+                            {{match.taux|number:'1.0-0'}}%
                         </td>
                         <td *ngIf="rdvDic[match.offre_id._id]" [ngClass]="{'valid-middle':match.statut=='Validé'}">
                             <i class="pi true-icon pi-check-circle" tooltipPosition="bottom"

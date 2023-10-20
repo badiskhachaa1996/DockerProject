@@ -177,7 +177,7 @@ export class AjoutCvComponent implements OnInit {
   ]
 
   @ViewChild('filter') filter: ElementRef;
-
+  isEtudiant = false
 
   constructor(private skillsService: SkillsService, private formBuilder: FormBuilder,
     private messageService: MessageService, private cvService: CvService,
@@ -186,11 +186,26 @@ export class AjoutCvComponent implements OnInit {
     private MatchingService: MatchingService, private AnnonceService: AnnonceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //Initialisation du formulaire d'ajout de CV
+    this.formAddCV = this.formBuilder.group({
+      user_id: ['', Validators.required],
+      competences: [],
+      //outils: [''],
+      langues: [],
+      //video_lien: [],
+      mobilite_lieu: [''],
+      centre_interets: [''],
+      a_propos: [''],
+      disponibilite: [''],
+      user_create_type: ['Externe'],
+      winner_id: [''],
+      isPublic: [true],
+      niveau_etude: ['']
+    });
     // decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
     if (this.CV_USER_ID)
       this.ID = this.CV_USER_ID
-    console.log(this.CV_USER_ID)
     // initialisation de la methode de recuperation des données
     this.onGetAllClasses();
 
@@ -199,7 +214,12 @@ export class AjoutCvComponent implements OnInit {
         this.commercials.push({ label: `${user.firstname} ${user.lastname}`, value: user._id })
       })
     })
-
+    this.userService.getPopulate(this.token.id).subscribe(user => {
+      this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
+      if (this.isEtudiant) {
+        this.formAddCV.patchValue({ user_id: this.token.id })
+      }
+    })
     if (this.ID) {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
@@ -228,22 +248,7 @@ export class AjoutCvComponent implements OnInit {
       })
     }
 
-    //Initialisation du formulaire d'ajout de CV
-    this.formAddCV = this.formBuilder.group({
-      user_id: ['', Validators.required],
-      competences: [],
-      //outils: [''],
-      langues: [],
-      //video_lien: [],
-      mobilite_lieu: [''],
-      centre_interets: [''],
-      a_propos: [''],
-      disponibilite: [''],
-      user_create_type: ['Externe'],
-      winner_id: [''],
-      isPublic: [true],
-      niveau_etude: ['']
-    });
+
 
     this.EcoleService.getAll().subscribe(ecoles => {
       ecoles.forEach(ecole => {
