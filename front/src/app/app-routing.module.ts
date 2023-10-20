@@ -285,7 +285,7 @@ import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-t
 // <<<<<<< HEAD
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
 import { AddRemboussementComponent } from './remboussement/add-remboussement/add-remboussement.component';
-import { RemboursementListComponent } from './remboursement-list/remboursement-list.component';
+import { RemboursementListComponent } from './remboussement/remboursement-list/remboursement-list.component';
 // =======
 // import {AddRemboussementComponent} from "./remboussement/add-remboussement/add-remboussement.component";
 // >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8

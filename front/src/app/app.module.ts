@@ -395,7 +395,7 @@ import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-in
 import { NgModule } from '@angular/core';
 // =======
 import { AddRemboussementComponent } from './remboussement/add-remboussement/add-remboussement.component';
-import { RemboursementListComponent } from './remboursement-list/remboursement-list.component';
+import { RemboursementListComponent } from './remboussement/remboursement-list/remboursement-list.component';
 
 // >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 @NgModule({

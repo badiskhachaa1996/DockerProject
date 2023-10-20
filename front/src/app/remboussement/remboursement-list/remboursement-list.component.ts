@@ -1,8 +1,8 @@
 import { Component, OnInit,} from '@angular/core';
 import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
-import { DemandeRemboursementService } from '../services/demande-remboursement.service';
-import { Demande } from '../models/Demande';
+import { DemandeRemboursementService } from '../../services/demande-remboursement.service';
+import { Demande } from '../../models/Demande';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
