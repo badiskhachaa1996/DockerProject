@@ -128,6 +128,30 @@ app.get('/generateMatchingV1USERID/:user_id', (req, res) => {
     })
 
 })
+
+app.get('/generateMatchingV1USERID/:user_id/:entreprise_id', (req, res) => {
+    CvType.findOne({ user_id: req.params?.user_id }).then(cv => {
+        Matching.find({ cv_id: cv._id }).populate('cv_id').populate({ path: 'offre_id', populate: 'entreprise_id' }).populate({ path: 'offre_id', populate: 'competences' }).populate({ path: 'offre_id', populate: 'user_id' }).then(match => {
+            let r = []
+            match.forEach(m => {
+                if (m?.offre_id?.entreprise_id?._id && m?.offre_id?.entreprise_id?._id == req.params.entreprise_id) {
+                    let score = 0
+                    let max_score = 0
+                    m.offre_id.competences.forEach(skill => {
+                        if (customIncludes(cv.competences, skill))
+                            score += 1
+                    })
+                    max_score += m.offre_id.competences.length
+                    m.taux = score * 100 / max_score
+                    r.push(m)
+                }
+            })
+            res.send(r)
+        })
+    })
+
+})
+
 function customIncludes(listObj, Obj) {
     let r = false
     listObj.forEach(buffer => {

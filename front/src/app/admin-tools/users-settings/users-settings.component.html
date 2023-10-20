@@ -184,7 +184,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th>#</th>
+                        <th pSortableColumn="_id">_ID <p-sortIcon field="_id"></p-sortIcon></th>
                         <th>Rôle</th>
                         <th pSortableColumn="type">Type <p-sortIcon field="type">
                             </p-sortIcon></th>
@@ -192,7 +192,7 @@
                             </p-sortIcon></th>
                         <th>Email</th>
                         <th>Email perso</th>
-                        <th pSortableColumn="date_creation">Date d'insertion <p-sortIcon field="date_creation">
+                        <th pSortableColumn="_id">Date d'insertion <p-sortIcon field="_id">
                             </p-sortIcon></th>
                         <th>Action</th>
                     </tr>
@@ -218,8 +218,8 @@
                             <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
                                 (click)="userToUpdate = user; onPatchData(); showFormUpdate = true;"
                                 aria-hidden="true"></i>
-                            <!--<i pTooltip="Supprimer entièrement" style="margin-left: 2%; cursor: pointer;"
-                                class="pi pi-trash" (click)="deletePerso(user)" aria-hidden="true"></i>-->
+                            <i pTooltip="Supprimer entièrement" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-trash" (click)="deletePerso(user)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

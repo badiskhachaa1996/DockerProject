@@ -815,7 +815,7 @@
 			[(ngModel)]="filter_value.entreprise" class="mb-2" appendTo="body" [style]="{'width':'27em'}"
 			autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
-		<p-dropdown *ngIf="!isEtudiant" placeholder="Entreprise" [options]="entrepriseFilter2"
+		<p-dropdown *ngIf="!isEtudiant && token?.role!='user'" placeholder="Entreprise" [options]="entrepriseFilter2" 
 			[(ngModel)]="filter_value.entreprise_id" class="mb-2" appendTo="body" [style]="{'width':'27em'}"
 			autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>

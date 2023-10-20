@@ -37,7 +37,7 @@
                 {{match.statut}}
             </td>
             <td>
-                {{match.taux}}
+                {{match.taux |number:'1.0-0'}}%
             </td>
             <td *ngIf="rdvDic[match.offre_id._id]">
                 <i class="pi true-icon pi-check-circle" tooltipPosition="bottom" style="color: green;cursor: pointer;"

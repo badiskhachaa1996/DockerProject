@@ -290,7 +290,10 @@ export class NewListTicketsComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    this.TicketService.update({ ...this.TicketForm.value, documents }).subscribe(data => {
+    let statut = "En attente de traitement"
+    if (this.ticketAssign)
+      statut = "En cours de traitement"
+    this.TicketService.update({ ...this.TicketForm.value, documents, statut }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
