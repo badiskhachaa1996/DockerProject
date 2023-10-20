@@ -431,7 +431,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        
+
                     ];
                 }
                 // menu service administration
@@ -4269,18 +4269,15 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Offres',
                                     icon: 'pi pi-volume-up',
-                                    routerLink: ['/imatch/offres'],
+                                    routerLink: ['/offres'],
                                 },
                                 {
-                                    label: 'Mes Matching',
-                                    icon: 'pi pi-link',
-                                    routerLink: [
-                                        '/matching-externe/' +
-                                        this.token.id,
-                                    ],
-                                },
+                                    label: 'CV',
+                                    icon: 'pi pi-volume-up',
+                                    routerLink: ['/imatch/cv-etudiant'],
+                                }
                             ],
-                        }
+                        },
                     ]
                 }
                 /* end menus role */
@@ -4489,7 +4486,7 @@ export class AppMenuComponent implements OnInit {
                 /* menus externes */
                 // menu ceo entreprise
                 if (
-                    response.type === 'CEO Entreprise' &&
+                    (response.type === 'CEO Entreprise') &&
                     response.role === 'user'
                 ) {
                     this.items = [
@@ -4497,7 +4494,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Espace Personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
-                        },                            {
+                        }, {
                             label: 'iMatch',
                             icon: 'pi pi-star',
                             items: [
@@ -4524,7 +4521,7 @@ export class AppMenuComponent implements OnInit {
                         service_dic[val.module] = val.role
                 })
                 services_list = Object.keys(service_dic)
-                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && response.type != 'CEO Entreprise' && response.type != 'Formateur'&& !response?.type?.includes('Externe'))
+                if ((services_list.length != 0 || new Date(response.date_creation) > new Date(2023, 7, 5)) && response.role != 'Admin' && service_id?.label != 'Event' && response.type != "Prospect" && !response.type && response.type != 'CEO Entreprise' && response.type != 'Formateur' && !response?.type?.includes('Externe'))
                     this.items = [
                         {
                             label: 'Espace Personnel',
