@@ -626,7 +626,7 @@ export class ConsulaireComponent implements OnInit {
     this.payementList = prospect?.payement
     if (!this.payementList) { this.payementList = [] }
     this.scrollToTop()
-    this.initalPayement = [...prospect?.payement]
+    this.initalPayement = prospect?.payement
     if (prospect.code_commercial)
       this.CommercialService.getByCode(prospect.code_commercial).subscribe(commercial => {
         this.partenaireOwned = commercial.partenaire_id
