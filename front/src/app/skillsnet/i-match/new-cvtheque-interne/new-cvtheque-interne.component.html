@@ -129,7 +129,7 @@
         <p-tabPanel header="Rendez-vous">
             <app-rendez-vous-resultats></app-rendez-vous-resultats>
         </p-tabPanel>
-        <p-tabPanel header="Générateur de CV">
+        <p-tabPanel header="Générateur de CV" *ngIf="!isEntreprise">
             <app-ajout-cv></app-ajout-cv>
         </p-tabPanel>
         <p-tabPanel header="CV">
@@ -221,10 +221,10 @@
                                 <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
                                         field="user_id.civilite"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.firstname" style="text-align: center;">Prénom <p-sortIcon
+                                <th pSortableColumn="user_id.firstname" style="text-align: center;" *ngIf="!isEntreprise">Prénom <p-sortIcon
                                         field="user_id.firstname"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.lastname" style="text-align: center;">Nom <p-sortIcon
+                                <th pSortableColumn="user_id.lastname" style="text-align: center;" *ngIf="!isEntreprise">Nom <p-sortIcon
                                         field="user_id.lastname"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
@@ -253,11 +253,11 @@
                                     {{cv.user_id?.civilite}}
                                 </td>
 
-                                <td style="min-width: 12rem;">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.firstname | titlecase}}
                                 </td>
 
-                                <td style="min-width: 12rem;">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.lastname | uppercase}}
                                 </td>
 
@@ -468,7 +468,7 @@
             <div class="grid" style="width: 100%;">
 
                 <app-matching-viewer class="col-12" [USER_ID]="match.user_id._id"></app-matching-viewer>
-                <app-voir-cv class="col-10 col-offset-2" [CV_ID]="match._id"></app-voir-cv>
+                <app-voir-cv class="col-10" [CV_ID]="match._id"></app-voir-cv>
             </div>
 
         </p-tabPanel>
@@ -499,9 +499,9 @@
         <p-calendar [readonlyInput]="true" view="month" dateFormat="mm/yy" (onSelect)="updateFilter()" appendTo="body"
             [(ngModel)]="filter_value.disponibilite" (onBlur)="updateFilter()" inputId="range" autoWidth="false"
             class="mb-2" [style]="{'width':'27em'}" placeholder="Date de début"></p-calendar>
-        <p-dropdown placeholder="Choisissez un type" [options]="typeFilter" autoWidth="false" [style]="{'width':'27em'}"
+        <!--<p-dropdown placeholder="Choisissez un type" [options]="typeFilter" autoWidth="false" [style]="{'width':'27em'}"
             appendTo="body" [(ngModel)]="filter_value.type" (onChange)="updateFilter()">
-        </p-dropdown>
+        </p-dropdown>-->
         <p-multiSelect placeholder="Choisissez une compétence" [options]="competencesList" autoWidth="false"
             appendTo="body" class="mb-2" [style]="{'width':'27em'}" [(ngModel)]="filter_value.competences"
             (onChange)="updateFilter()">

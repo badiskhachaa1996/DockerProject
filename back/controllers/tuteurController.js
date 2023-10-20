@@ -125,5 +125,13 @@ app.get('/getByUserId/:id', (req, res, next) => {
 });
 
 
-
+//recupération d'un tuteur via l'user id
+app.get('/getPopulatebyUserID/:id', (req, res, next) => {
+    Tuteur.findOne({ user_id: req.params.id }).populate('user_id').populate('entreprise_id')
+        .then((data) => res.status(200).send(data))
+        .catch(error => {
+            console.error(error)
+            res.status(400).send(error)
+        });
+});
 module.exports = app;

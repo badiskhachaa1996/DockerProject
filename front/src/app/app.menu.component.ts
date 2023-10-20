@@ -4511,12 +4511,6 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-list',
                                     routerLink: ['/cvtheque-interne']
                                 },
-
-                                {
-                                    label: 'Cvthèque Externe',
-                                    icon: 'pi pi-briefcase',
-                                    routerLink: ['/imatch'],
-                                },
                             ],
                         },
                     ];

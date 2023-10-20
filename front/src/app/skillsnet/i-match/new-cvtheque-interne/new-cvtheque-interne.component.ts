@@ -31,6 +31,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   dicPicture = {}
   dicMatching = {}
   isEtudiant = true
+  isEntreprise = false
   token;
   constructor(private AuthService: AuthService, private CVService: CvService, private MatchingService: MatchingService, private router: Router,
     private ToastService: MessageService, private RDVService: MeetingTeamsService, private skillsService: SkillsService) { }
@@ -55,8 +56,9 @@ export class NewCvthequeInterneComponent implements OnInit {
       .catch((error) => { console.error(error); })
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
       this.isEtudiant = (user.type == 'Initial' || user.type == 'Alternant' || user.type == 'Prospect' || user.type == 'Externe' || user.type == 'Externe-InProgress' || (user.type == null && user.role == "user"))
-      if (this.isEtudiant)
-        this.activeIndex1 = 0
+      this.isEntreprise = (user.type == 'CEO Entreprise' || user.type == 'Tuteur')
+      if (this.isEntreprise)
+        this.activeIndex1 = 1
       if (user.savedMatching)
         this.matchingList = user.savedMatching
     })
@@ -295,15 +297,15 @@ export class NewCvthequeInterneComponent implements OnInit {
       let r = true
       let competences_ids = []
       let idsP = []
+      let strprofile = ""
       val.competences.forEach(c => {
         competences_ids.push(c._id)
         idsP.push(c.profile_id?._id)
+        strprofile = strprofile + c.profile_id?.libelle
       })
-      if (this.filter_value.profil)
-        console.log(typeof this.filter_value.profil[0], typeof idsP[0], idsP[0] == this.filter_value.profil[0], this.filter_value.profil.includes(idsP[0]))
-      if (this.filter_value.profil.length != 0 && (val.competences.length != 0 || !this.filter_value.profil.includes(idsP[0])))
+      if (this.filter_value.profil.length != 0 && (val.competences.length == 0 || !this.atleastOne(idsP, this.filter_value.profil)))
         r = false;
-      if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || !this.filter_value.locations.includes(val.mobilite_lieu)))
+      if (this.filter_value.locations.length != 0 && (!val.mobilite_lieu || (!this.filter_value.locations.includes(val.mobilite_lieu) && !this.atleastOne(this.filter_value.locations,val.mobilite_lieu))))
         r = false
       if (this.filter_value.disponibilite && new Date(this.filter_value.disponibilite).getTime() > new Date(val.disponibilite).getTime())
         r = false
@@ -317,7 +319,8 @@ export class NewCvthequeInterneComponent implements OnInit {
           !val?.user_id?.lastname?.includes(this.filter_value.search) &&
           !val?.user_id?.firstname?.includes(this.filter_value.search) &&
           !val?.mobilite_lieu?.includes(this.filter_value.search) &&
-          !val?.profil?.libelle.includes(this.filter_value.search))
+          !val?.profil?.libelle.includes(this.filter_value.search) &&
+          !strprofile.includes(this.filter_value.search))
           r = false
       }
       //if(this.filter_value.type && !this.filter_value.type.includes(val))
@@ -386,6 +389,16 @@ export class NewCvthequeInterneComponent implements OnInit {
     setTimeout(() => {
       this.activeIndex1 = 2 + this.cvList.length + this.updateCVList.length + this.matchingList.length + this.rdvList.length
     }, 1)
+  }
+
+  atleastOne(arr1, arr2) {
+    console.log(arr1, arr2)
+    let r = false
+    arr1.forEach(val => {
+      if (arr2.includes(val))
+        r = true
+    })
+    return r
   }
 
 

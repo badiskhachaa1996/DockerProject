@@ -777,7 +777,7 @@
 		<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" [(ngModel)]="filter_value.entreprise" class="mb-2"
 			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
-		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id"
+		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id" *ngIf="token?.role!='user'"
 			class="mb-2" appendTo="body" [style]="{'width':'27em'}" autoWidth="false"
 			(onChange)="updateFilter()"></p-dropdown>
 		<input pInputText type="text" style="width: 27em;" class="mb-2" [(ngModel)]="filter_value.search"

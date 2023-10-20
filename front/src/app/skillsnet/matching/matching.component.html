@@ -83,7 +83,7 @@
 					{{match.date_creation|date:medium}}
 				</td>
 				<td>
-					{{match.taux}}%
+					{{match.taux|number:'1.0-0'}}%
 				</td>
 				<td *ngIf="rdvDic[match.cv_id.user_id._id]">
 					<i class="pi true-icon pi-check-circle" tooltipPosition="bottom"
@@ -135,7 +135,7 @@
 <div class="card" *ngIf="offre">
 	<h5>Potentiel</h5>
 	<p-table #dtmatching id="dtmatching" rowExpandMode="single" [value]="matchingsPotentiel" dataKey="cv.user_id._id"
-		[rows]="8" [rowHover]="true" [globalFilterFields]="['cv.user_id.lastname','cv.user_id.firstname']"
+		[rows]="8" [rowHover]="true" [globalFilterFields]="['cv_id.user_id.lastname','cv_id.user_id.firstname']"
 		styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
 		<ng-template pTemplate="caption">
@@ -154,8 +154,8 @@
 		</ng-template>
 		<ng-template pTemplate="header">
 			<tr>
-				<th pSortableColumn="cv.user_id.lastname" style="text-align:center">
-					Nom & Prénom<p-sortIcon field="cv.user_id.lastname"></p-sortIcon>
+				<th pSortableColumn="cv_id.user_id.lastname" style="text-align:center">
+					Nom & Prénom<p-sortIcon field="cv_id.user_id.lastname"></p-sortIcon>
 				</th>
 				<th pSortableColumn="taux" style="text-align:center">
 					Taux <p-sortIcon field="taux"></p-sortIcon>
