@@ -197,7 +197,7 @@ export class AnnoncesComponent implements OnInit {
               response.forEach(annonce => {
                 this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
                   let t = []
-                  matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
+                  matchs.forEach(m => { t.push(m) })
                   this.dicOffreNB[annonce._id] = t.length
                 })
                 if (annonce && annonce.user_id) {
@@ -215,14 +215,14 @@ export class AnnoncesComponent implements OnInit {
             })
             .catch((error) => console.error(error));
         } else {
-          this.annonceService.getAnnoncesByUserId(this.userConnected._id).then((response:Annonce[]) => {
+          this.annonceService.getAnnoncesByUserId(this.userConnected._id).then((response: Annonce[]) => {
             this.annonces = response;
             this.annoncesFiltered = response
             let agent_id = []
             response.forEach(annonce => {
               this.MatchingService.getAllByOffreID(annonce._id).subscribe(matchs => {
                 let t = []
-                matchs.forEach(m => { if (m.type_matching != 'Entreprise') t.push(m) })
+                matchs.forEach(m => { t.push(m) })
                 this.dicOffreNB[annonce._id] = t.length
               })
               if (annonce && annonce.user_id) {
@@ -365,7 +365,22 @@ export class AnnoncesComponent implements OnInit {
     this.annonceService.postAnnonce(annonce)
       .then((response) => {
         this.messageService.add({ severity: "success", summary: "L'annonce a été ajouté" })
-        this.form.reset();
+        if (!annonce.is_interne) {
+          let t: Entreprise = {
+            r_sociale: this.form.value.entreprise_name,
+            ville_ent: this.form.value.entreprise_ville,
+            email: this.form.value.entreprise_mail,
+            indicatif_ent: this.form.value.entreprise_phone_indicatif,
+            phone_ent: this.form.value.entreprise_phone,
+            date_creation: new Date(),
+            created_by: this.token.id
+          }
+          this.entrepriseService.create(t).subscribe(ent => {
+            this.form.reset();
+          })
+        }
+        else
+          this.form.reset();
         this.showForm = false;
 
         //Recuperation de la liste des classes

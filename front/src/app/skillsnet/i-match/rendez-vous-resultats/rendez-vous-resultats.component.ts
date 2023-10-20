@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
+import { AuthService } from 'src/app/services/auth.service';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
-
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-rendez-vous-resultats',
   templateUrl: './rendez-vous-resultats.component.html',
@@ -11,18 +12,25 @@ import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 })
 export class RendezVousResultatsComponent implements OnInit {
   meetings: MeetingTeams[] = []
-  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService) { }
+  constructor(private MeetingTeamsService: MeetingTeamsService, private ToastService: MessageService, private UserService: AuthService) { }
   defaultmeetings: MeetingTeams[] = []
+  isEntreprise = false
+  isEtudiant = false
   ngOnInit(): void {
     this.MeetingTeamsService.getAll().subscribe(mts => {
       this.meetings = mts
       this.defaultmeetings = this.meetings
     })
+    let token: any = jwt_decode(localStorage.getItem("token"));
+    this.UserService.getPopulate(token.id).subscribe(userConnected => {
+      this.isEtudiant = (userConnected.type == 'Initial' || userConnected.type == 'Alternant' || userConnected.type == 'Prospect' || userConnected.type == 'Externe' || userConnected.type == 'Externe-InProgress' || (userConnected.type == null && userConnected.role == "user"))
+      this.isEntreprise = (userConnected.type == 'Tuteur' || userConnected.type == 'CEO Entreprise')
+    })
   }
 
   form = new FormGroup({
-    statut: new FormControl('', Validators.required),
-    note: new FormControl('')
+    statut: new FormControl('Planifié'),
+    meeting_start_date: new FormControl('')
   })
 
   rdvToUpdate: MeetingTeams
@@ -40,14 +48,14 @@ export class RendezVousResultatsComponent implements OnInit {
   ]
 
   onInitUpdate(rdv: MeetingTeams) {
-    this.form.patchValue({ statut: rdv.statut })
+    this.form.patchValue({ ...rdv })
     this.rdvToUpdate = rdv
     this.scrollToTop()
   }
 
   onUpdate() {
-    this.MeetingTeamsService.update({ _id: this.rdvToUpdate._id, ...this.form.value }).subscribe(r => {
-      this.meetings[this.meetings.indexOf(this.rdvToUpdate)].statut = this.form.value.statut
+    this.MeetingTeamsService.update({ _id: this.rdvToUpdate._id, statut: 'Planifié', ...this.form.value }).subscribe(r => {
+      this.meetings[this.meetings.indexOf(this.rdvToUpdate)].statut = 'Planifié'
       this.form.reset()
       this.rdvToUpdate = null
       this.ToastService.add({ severity: 'success', summary: 'Mis à jour du rendez-vous avec succès' })
@@ -66,12 +74,20 @@ export class RendezVousResultatsComponent implements OnInit {
       }
     }, 15);
   }
-  onFilterDate(date) {
+  onFilterDate(date: Date) {
     this.meetings = []
+    date = new Date(date)
+    date.setHours(0, 0, 0, 0)
     this.defaultmeetings.forEach(m => {
       //console.log(new Date(date).getTime() < new Date(m.meeting_start_date).getTime(), new Date(date).getTime(), new Date(m.meeting_start_date).getTime())
-      if (m.meeting_start_date && new Date(date).getTime() < new Date(m.meeting_start_date).getTime())
+      if (m.meeting_start_date && date.getTime() < date.getTime())
         this.meetings.push(m)
+    })
+  }
+  changeStatut(statut: string, rdv: MeetingTeams) {
+    rdv.statut = statut
+    this.MeetingTeamsService.update({ ...rdv }).subscribe(r => {
+      this.ToastService.add({ severity: 'success', summary: 'Statut du rendez-vous mis à jour' })
     })
   }
 }
