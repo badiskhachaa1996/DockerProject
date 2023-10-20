@@ -226,7 +226,7 @@ export class AjoutTicketComponent implements OnInit {
     const selectedSubject = this.sujetDic[this.TicketForm.get('sujet_id').value]; 
     
     if (this.serviceDic[this.TicketForm.get('service_id').value]==="Support informatique"){
-      this.showTypeDropdown=true;
+      this.showTypeDropdown=false;
       this.showCampusDropdown=false;
       
     }else if(this.serviceDic[this.TicketForm.get('service_id').value]==="Pédagogie"){
@@ -248,9 +248,11 @@ export class AjoutTicketComponent implements OnInit {
       this.showModuleDropdown=false;
     }
     if(selectedSubject === "IMS") {
+      this.showTypeDropdown=true;
       this.showFiliereDropdown=false;
         this.showModuleDropdown = true;
         this.showCampusDropdown=false;
+        this.showDemandeDropdown=false;
         this.showTypeDropdown=true;
         this.TicketForm.get('module').setValidators([Validators.required]);
         this.TicketForm.get('module').updateValueAndValidity();
