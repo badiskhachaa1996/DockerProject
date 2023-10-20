@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const { Prospect } = require("../models/prospect");
+const { Prospect } = require("../../models/prospect");
 const fs = require("fs");
 
 mongoose
-    .connect(`mongodb://localhost:27017/learningNode`, {
+    .connect(`mongodb://127.0.0.1:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -14,16 +14,18 @@ mongoose
         Prospect.find().then(data => {
             data.forEach(p => {
                 let nb = false
+                let files = p.documents_dossier
                 try {
-                    let fileList = fs.readdirSync('../storage/prospect/' + p._id + "/")
+                    let fileList = fs.readdirSync('../../storage/prospect/' + p._id + "/")
                     fileList.forEach(file => {
                         console.log(file)
-                        if (!fs.lstatSync('../storage/prospect/' + p._id + "/" + file).isDirectory()) {
+                        if (!fs.lstatSync('../../storage/prospect/' + p._id + "/" + file).isDirectory()) {
                             nb = true
                         }
                         else {
-                            let files = fs.readdirSync('../storage/prospect/' + p._id + "/" + file)
+                            let files = fs.readdirSync('../../storage/prospect/' + p._id + "/" + file)
                             files.forEach(f => {
+                                console.log(f)
                                 nb = true
                             });
                         }
@@ -37,6 +39,8 @@ mongoose
                     if (err) {
                         console.log(err)
                     }
+                    if(p==data[data.length-1])
+                        console.log('Done')
                 }))
 
             })
