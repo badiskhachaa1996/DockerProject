@@ -390,11 +390,14 @@ import { EntrepriseListComponent } from './skillsnet/i-match/imatch-entreprise/e
 import { CalenderComponent } from './calender/calender.component';
 import { NewListTicketsComponent } from './ticketing/new-list-tickets/new-list-tickets.component';
 import { ReadMoreComponent } from './other/component/read-more/read-more.component';
+// <<<<<<< HEAD
 import { NewCvthequeInterneComponent } from './skillsnet/i-match/new-cvtheque-interne/new-cvtheque-interne.component';
-import { EtudiantComponent } from './gerer-remboursement/etudiant/etudiant.component';
 import { NgModule } from '@angular/core';
-import { NationalityDropdownComponent } from './gerer-remboursement/nationality-dropdown/nationality-dropdown.component';
-import { CountryListComponent } from './gerer-remboursement/country-list/country-list.component';
+// =======
+import { AddRemboussementComponent } from './remboussement/add-remboussement/add-remboussement.component';
+import { RemboursementListComponent } from './remboursement-list/remboursement-list.component';
+
+// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
 @NgModule({
   imports: [
     TableModule,
@@ -796,10 +799,12 @@ import { CountryListComponent } from './gerer-remboursement/country-list/country
     CalenderComponent,
     NewListTicketsComponent,
     ReadMoreComponent,
+// <<<<<<< HEAD
     NewCvthequeInterneComponent,
-    EtudiantComponent,
-    NationalityDropdownComponent,
-    CountryListComponent,
+// =======
+    AddRemboussementComponent,
+RemboursementListComponent,
+// >>>>>>> de65bc579e9136f39326ed2bfdfd50dcc37e01e8
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }, MessageService, ConfirmationService, DatePipe,
   { provide: LocationStrategy, useClass: HashLocationStrategy },

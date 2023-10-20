@@ -3,6 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+
+
   origin: "http://localhost:3000/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
   User: null,
@@ -54,6 +56,33 @@ export const environment = {
     "emptyMessage": 'Aucun résultat',
     "emptyFilterMessage": 'Aucun résultat'
   },
+  paymentType : [
+    { label: 'Espèce', value: 'Espèce' },
+    { label: 'Virement', value: 'Virement' },
+    { label: 'Chèque', value: 'Chèque' },
+    { label: 'Compensation', value: 'Compensation' },
+  ], 
+
+  availableStatus : [
+    {
+      label: "Nouvelle",
+      value: 'new'
+    },
+    {
+      label: "En cours de traiement",
+      value: 'in-progress'
+    },
+    {
+      label: "Refusée",
+      value: 'declined'
+    },
+    {
+      label: "Acceptée",
+      value: 'accepted'
+    },
+  
+  ],
+
   fr: {
     firstDayOfWeek: 0,
     dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
@@ -1783,6 +1812,7 @@ export const environment = {
     { value: "Zimbabweenne", label: 'Zimbabweenne' },
 
   ],
+
   entreprises: [
     { value: "ESTYA Education", label: 'ESTYA Education' },
     { value: "ESTYA Training", label: 'ESTYA Training' },

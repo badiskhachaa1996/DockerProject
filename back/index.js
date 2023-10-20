@@ -6,7 +6,6 @@ const app = express();
 const jwt = require("jsonwebtoken");
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
-
 app.use(bodyParser.json({ limit: "20mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }));
 let dblog = "mongodb://127.0.0.1:27017/learningNode"; //Production:5c74a988f3a038777f875347ea98d165@
@@ -44,6 +43,10 @@ const options = {
   },
   allowEIO3: true,
 };
+//finding the demande by the docs id
+// function findDemandeByDocId (documentId){
+//   return Remboursement.findById(documentId).exec();
+// }
 const io = require("socket.io")(httpServer, options);
 console.log('URL Connection MONGODB:' + dblog)
 mongoose
@@ -151,7 +154,8 @@ const meetingTeamsController = require('./controllers/meetingTeamsController');
 // const rembouresementController = require ('./controllers/rembouresementController')
 const { User } = require("./models/user");
 const rembouresementController = require('./controllers/rembouresementController'); // Require the controller module
-
+// const documentsController = require('./controllers/documentsController');
+const { Remboursement } = require("./models/Remboursement");
 
 app.use("/", function (req, res, next) {
   let token = jwt.decode(req.header("token"));
@@ -410,6 +414,8 @@ app.use('/soc/fIM', require('./controllers/formulaireMIController'))
 app.use('/soc/meetingTeams', meetingTeamsController)
 // app.use('/soc/demanderemboursement',rembouresementController)
 app.use('/soc/demanderemboursement',require('./controllers/rembouresementController'));
+// app.use('/soc/docremb',require('./controllers/documentsController'));
+
 //app.use('/soc/demanderemboursement', rembouresementController )
 app.use('/soc/template/formulaire', require('./controllers/template/formulaireController'))
 app.use('/soc/suivi-candidat', require('./controllers/suiviCandidatController'))

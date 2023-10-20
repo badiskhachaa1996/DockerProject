@@ -1,0 +1,469 @@
+<div *ngIf="showUpdateForm">
+  <app-add-remboussement *ngIf="showUpdateForm" [currentDemande]="currentDemande" (cancelFormOutPut)="closeForm($event)" (doneUpdating)="returnToList($event)" ></app-add-remboussement>
+</div>
+
+
+
+<p-table *ngIf="!showUpdateForm" #demande [value]="refundRequests" dataKey="_id" [rows]="8" [loading]="loading" [rowHover]="true"
+  rowExpandMode="single" selectionMode="single" styleClass="p-datatable-gridlines" [paginator]="true" [(selection)]="selectedDemande"
+  responsiveLayout="scroll">
+
+  <ng-template pTemplate="caption">
+    <div class="p-grid p-nogutter">
+      <div class="p-col-12 p-md-6 p-lg-4">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input [(ngModel)]="searchQuery" (input)="search()" class="p-inputtext" placeholder="rechercher">
+        </span>
+      </div>
+      <div class="p-col-12 p-md-6 p-lg-2">
+        <button pButton label="Search" (click)="search()" icon="pi pi-search" class="p-button-raised"></button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr >
+      <th style="width: 5rem"></th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          ID
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Nom
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Prénom
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Année Scolaire
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Ecole
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Montant
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Modalité de paiement
+        </div>
+      </th>
+      <th>
+        <div class="flex justify-content-between align-items-center">
+          Statut
+        </div>
+      </th>
+      <th style="width: 8rem">
+        <div class="flex justify-content-between align-items-center">
+          Action
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-demande let-expanded="expanded">
+    <tr >
+      <td>
+          <button type="button" pButton pRipple [pRowToggler]="demande" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+      </td>
+      <td style="min-width: 12rem;">{{demande._id}}</td>
+      <td style="min-width: 12rem;">{{demande?.student?.last_name}}</td>
+      <td style="min-width: 12rem;">{{demande?.student?.first_name}}</td>
+      <td style="min-width: 12rem;">{{ demande.training?.scholar_year}}</td>
+      <td style="min-width: 12rem;">{{demande.training?.school}}</td>
+      <td style="min-width: 12rem;">{{demande.refund?.montant}}</td>
+      <td style="min-width: 12rem;">{{demande.refund?.method}}</td>
+      <td style="min-width: 12rem;">{{demande.status}}</td>
+      <td class="text-right" style="min-width: 8rem">
+        <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="showFUpdateForm(demande)"></i>
+        <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+      </td>
+    </tr>
+  </ng-template>
+
+
+  <ng-template pTemplate="rowexpansion" let-demande>
+    <tr>
+      <td colspan="6">
+          <div class="p-3">
+            <h5>Détails Candidat</h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Civilité
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Date de naissance
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Pays de residence
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Nationalité
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Anneé scolaire
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Formation
+                    </div>
+                  </th>
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.student.civility}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student.country_residence}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student.nationality}}</td>
+                  <td  style="min-width: 12rem;">{{demande.training.scholar_year}}</td>
+                  <td  style="min-width: 12rem;">{{ demande.training.name}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div class="p-3">
+            <h5>Contact</h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Téléphone
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Email
+                    </div>
+                  </th>
+                
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.student?.phone}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.email}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div class="p-3">
+            <h5>Dates clé</h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Motif
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Date de refus
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Date de demande
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Date prévue de remboursement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Date de remboursement  
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Action
+                    </div>
+                  </th>
+                
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">
+                    <input  [(ngModel)]="demande.motif" [disabled]="editKeyDates"> 
+                  </td>
+                  <td  style="min-width: 12rem;">{{(demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.created_on | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.refund?.date_estimated | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.refund?.date | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
+                  <td class="text-right" style="min-width: 8rem">
+                    <i *ngIf="editKeyDates" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editKeyDates = false"></i>
+                    <i *ngIf="!editKeyDates" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updateKeyDates(demande)" ></i>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+          <div class="p-3">
+            <h5>Dossier remboursement </h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Nom document
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Ajouté le 
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                    Lien de telechargement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Action
+                    </div>
+                  
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.docs?.rib.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.rib.added_on| date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.rib.link}}</td>                
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.attestation_payement.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement.link}}</td>                
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.preuve_payement.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.preuve_payement.added_on}}</td>                
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.document_inscription.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.document_inscription.added_on}}</td>                
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc.nom}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.docs?.autres_doc.added_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.autres_doc.added_on}}</td>                
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-arrow-down mr-2 clickable-element" title="charger" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+          <div class="p-3">
+            
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Note
+                     <textarea></textarea>
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Commenté par
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Commenté le
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Action
+                    </div>
+                  
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">
+                    <input  [(ngModel)]="demande.motif" [disabled]="editKeyDates"> 
+                  </td>
+                  <td  style="min-width: 12rem;">{{demande.comments?.created_by }}</td>
+                  <td  style="min-width: 12rem;">{{(demande.comments?.created_on | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td>
+                  <td class="text-right" style="min-width: 8rem">
+                    <i *ngIf="editKeyDates" class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editKeyDates = false"></i>
+                    <i *ngIf="!editKeyDates" class="pi pi-check mr-2 clickable-element" title="ckeck" (click)="updateKeyDates(demande)" ></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+          <div class="p-3">
+            <h5>information Paiement</h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Date de paiement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Montant
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Modalité de paiement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Autre détail 
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Action
+                    </div>
+                 
+                    <!-- (demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée" -->
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.student?.payment_date}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.montant}}</td>
+                  <td  style="min-width: 12rem;">{{(demande.student?.payment_method | date: 'dd/MM/yyyy') || "Non spécifiée"}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.note}}</td>
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editDatesDemande(demande)"></i>
+                    <i class="pi pi-trash mr-2 clickable-element" title="supprimer" (click)="deleteDemande(demande._id)"></i>
+
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+          <div class="p-3">
+            <h5>information Remboursement</h5>
+            <p-table>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Date de paiement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                    Modalité de paiement
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                      Montant 
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                    Ordre de virement (ou équivalent)
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                    Note
+                    </div>
+                  </th>
+                  <th>
+                    <div class="flex justify-content-between align-items-center">
+                     Action
+                    </div>
+                 
+                  
+                </tr>
+                <tr>
+                  <td  style="min-width: 12rem;">{{demande.student?.payment_date}}</td>
+                  <!-- <td  style="min-width: 12rem;">{{(demande.date_refus  | date: 'dd/MM/yyyy')  || "Non spécifiée"}}</td> -->
+                  <td  style="min-width: 12rem;">{{demande.student?.payment_method}}</td>
+                  <td  style="min-width: 12rem;">{{demande.student?.montant }}</td>
+                  <td  style="min-width: 12rem;">{{demande.docs?.attestation_payement}}</td>
+                  <td  style="min-width: 12rem;">{{demande.comments?.note}}</td>
+
+                  <td class="text-right" style="min-width: 8rem">
+                    <i class="pi pi-pencil mr-2 clickable-element" title="Modifier" (click)="editDatesDemande(demande)"></i>
+                    <i class="pi pi-check mr-2 clickable-element" title="ckeck" ></i>
+
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+        </td>
+    </tr>
+              
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="8">Aucune demande trouvée.</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="loadingbody">
+    <tr>
+      <td colspan="8">Chargement...</td>
+    </tr>
+  </ng-template>
+  
+
+</p-table>

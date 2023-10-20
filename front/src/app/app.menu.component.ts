@@ -29,7 +29,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
             </a>
         </div>
         <p-panelMenu [model]="items" *ngIf="showMenu"></p-panelMenu>
-        <!-- <div class="layout-menu-container">  
+        <!-- <div class="layout-menu-container">
             ul class="layout-menu" role="menu" (keydown)="onKeydown($event)">
                 <li app-menu class="layout-menuitem-category" *ngFor="let item of model; let i = index;" [item]="item" [index]="i" [root]="true" role="none">
                     <div class="layout-menuitem-root-text" [attr.aria-label]="item.label">{{item.label}}</div>
@@ -49,12 +49,16 @@ export class AppMenuComponent implements OnInit {
             icon: 'pi pi-fw pi-home',
             routerLink: ['/'],
         },
+
+    ];
+
+
         /*{
             label: 'Signaler un problème technique',
             icon: 'pi pi-fw pi-exclamation-triangle',
             routerLink: ['/ticketing-igs'],
         },*/
-    ];
+
     showMenu = false
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService,
         private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService,
@@ -78,6 +82,22 @@ export class AppMenuComponent implements OnInit {
                             label: 'Espace Personnel',
                             icon: 'pi pi-fw pi-home',
                             routerLink: ['/'],
+                        },
+                        {
+                            label: 'Remboussement',
+                            icon: 'fas fa-redo-alt',
+                            items: [
+                                {
+                                    label: 'Ajouter un remboussement',
+                                    icon: 'pi pi-plus-circle',
+                                    routerLink: ['/ajout-remboussement'],
+                                },
+                                {
+                                    label: 'Liste des remboussements',
+                                    icon: 'pi pi-fw pi-tags',
+                                    routerLink: ['/list-remboussement'],
+                                },
+                            ]
                         },
                     ];
                 }
@@ -968,7 +988,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         } /*
-                        
+
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -4109,7 +4129,7 @@ export class AppMenuComponent implements OnInit {
                             routerLink: ['/ticketing-igs'],
                         },*/
                         /*
-                        
+
                         {
                             label: 'Partenaires',
                             icon: 'pi pi-share-alt',
@@ -4476,10 +4496,10 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: '/formateur/etudiants',
                                         },
-                                        /*{ 
-                                            label: 'Gestions des devoirs', 
-                                            icon: 'pi pi-book', 
-                                            routerLink: 'devoirs' 
+                                        /*{
+                                            label: 'Gestions des devoirs',
+                                            icon: 'pi pi-book',
+                                            routerLink: 'devoirs'
                                         }*/
                                     ],
                                 },

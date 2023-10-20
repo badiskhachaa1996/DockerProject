@@ -18,7 +18,7 @@ app.post('/newremb', async (req, res) => {
 
 
 app.get('/getAll',  (req, res) => {
- Remboursement.find().then(r=>{
+ Remboursement.find().sort({ _id: -1 }).then(r=>{
     res.send(r)
  })
 });
@@ -35,7 +35,7 @@ app.get('/:id', async (req, res) => {
     }
 });
 
-app.put('/:id', async (req, res) => {
+app.put('/:id', async (req, res) => { 
     try {
         const updatedRemboussement = await Remboursement.findByIdAndUpdate(req.params.id, req.body, {
             new: true, 
@@ -61,5 +61,22 @@ app.delete('/:id', async (req, res) => {
         res.status(500).json({ message: 'Erreur lors de la suppression du remboursement.' });
     }
 });
+// app.get('/findDemandeByDocNumber/:docNumber', async (req, res) => {
+//     const docNumber = req.params.docNumber;
+  
+//     try {
+//       const demande = await findDemandeByDocNumber(docNumber);
+  
+//       if (!demande) {
+//         return res.status(404).json({ message: 'Demande not found' });
+//       }
+  
+//       res.status(200).json(demande);
+//     } catch (error) {
+//       res.status(500).json({ message: 'Error while retrieving demande' });
+//     }
+//   });
+  
 
 module.exports = app;
+
