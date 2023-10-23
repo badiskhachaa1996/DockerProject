@@ -114,7 +114,7 @@
             <p-calendar dateFormat="dd/mm/yy" formControlName="date_limite"></p-calendar>
         </div>
         <div class="field col-12">
-            <label For="description">Note de l'affectation</label>
+            <label For="description">Note</label>
             <textarea pInputTextarea placeholder="Bon courage" formControlName="note_assignation" autoResize rows="3"
                 cols="30"></textarea>
         </div>
@@ -326,7 +326,7 @@
                     <tr>
                         <td>{{ticket?.createur_id?.firstname|titlecase}} {{ticket.createur_id.lastname|uppercase}}</td>
                         <td>{{ticket?.assigne_by?.firstname|titlecase}} {{ticket.assigne_by?.lastname|uppercase}}</td>
-                        <td>{{ticket?.agent_id?.firstname|titlecase}}{{ticket.agent_id?.lastname|uppercase}}</td>
+                        <td>{{ticket?.agent_id?.firstname|titlecase}} {{ticket.agent_id?.lastname|uppercase}}</td>
                         <td>{{(ticket?.priorite)?'Urgent':'Pas Urgent'}}</td>
                         <td>{{ticket?.date_limite |date:"dd MMMM yy"}}</td>
                         <td>

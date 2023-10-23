@@ -377,15 +377,7 @@
 						layout="grid">
 						<ng-template pTemplate="header">
 							<div class="grid ">
-								<div class=" field col-3">
-									<button pButton label="Filtrer" class="p-button mb-2" icon="pi pi-filter"
-										(click)="displayFilter=true"></button><br>
-									<button pButton label="Vider&nbsp; " class="p-button" icon="pi pi-filter-slash"
-										(click)="clearFilter()"></button><br> <br>
-
-								</div>
-
-								<div class="field col-7 grid ">
+								<div class="field col-12 grid">
 
 									<div *ngIf="filter_value.statut" class="field col-4">
 										<label>Statut &nbsp;&nbsp;</label><br>
@@ -441,13 +433,25 @@
 											[(ngModel)]="filter_value.date" (onBlur)="updateFilter()" inputId="range"
 											placeholder="Date de début"></p-calendar>
 									</div>
-
-									<input pInputText type="text" style="width: 27em;height: 30px;"
-										[(ngModel)]="filter_value.search" (input)="updateFilter()"
-										placeholder="Recherche" />
 								</div>
-								<div class="col-2" style="text-align: right;">
-									<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+								<div class="col-12 grid" style="text-align: right;">
+									<div class="md:col-1 col-6" style="text-align: center;">
+										<button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+											(click)="displayFilter=true"></button>
+									</div>
+									<div class="md:col-1 col-6" style="text-align: center;">
+										<button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+											(click)="clearFilter()"></button>
+									</div>
+									<div class="md:col-9 col-9" style="text-align: center;">
+										<input pInputText type="text" style="width: 100%;"
+											[(ngModel)]="filter_value.search" (input)="updateFilter()"
+											placeholder="Recherche" />
+									</div>
+									<div class="md:col-1 col-3" style="text-align: center;">
+										<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+									</div>
+
 								</div>
 							</div>
 
@@ -777,8 +781,8 @@
 		<p-dropdown placeholder="Auteur" [options]="entrepriseFilter" [(ngModel)]="filter_value.entreprise" class="mb-2"
 			appendTo="body" [style]="{'width':'27em'}" autoWidth="false" (onChange)="updateFilter()">
 		</p-dropdown>
-		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id" *ngIf="token?.role!='user'"
-			class="mb-2" appendTo="body" [style]="{'width':'27em'}" autoWidth="false"
+		<p-dropdown placeholder="Entreprise" [options]="entrepriseFilter2" [(ngModel)]="filter_value.entreprise_id"
+			*ngIf="token?.role!='user'" class="mb-2" appendTo="body" [style]="{'width':'27em'}" autoWidth="false"
 			(onChange)="updateFilter()"></p-dropdown>
 		<input pInputText type="text" style="width: 27em;" class="mb-2" [(ngModel)]="filter_value.search"
 			(onBlur)="updateFilter()" placeholder="Recherche" />
