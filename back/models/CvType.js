@@ -88,7 +88,8 @@ const cvTypeSchema = mongoose.Schema({
     isPublic: { type: Boolean, default: true },
     niveau_etude: { type: String },
     last_modified_at: { type: Date },
-    source: { type: String, default: 'Interne' }
+    source: { type: String, default: 'Interne' },
+    taux: { type: Number, default: 0 }
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

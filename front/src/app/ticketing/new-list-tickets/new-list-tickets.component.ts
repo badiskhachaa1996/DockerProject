@@ -49,17 +49,17 @@ export class NewListTicketsComponent implements OnInit {
     documents: new FormControl([]),
     agent_id: new FormControl('',),
     _id: new FormControl('', Validators.required),
-    demande : new FormControl('',),
+    demande: new FormControl('',),
     campus: new FormControl('',),
-    filiere:new FormControl('',),
+    filiere: new FormControl('',),
   })
   stats = {
     en_attente: 0,
     en_cours: 0
   }
   token: any;
-  demandeDropdown:any;
-  showDemandeDropdown:boolean =false;
+  demandeDropdown: any;
+  showDemandeDropdown: boolean = false;
   filterService = [];
   filtreSujet = [
   ];
@@ -505,19 +505,16 @@ export class NewListTicketsComponent implements OnInit {
     let r = ''
     if (ticket?.sujet_id?.label)
       r = ticket?.sujet_id?.label
-    if (ticket.module) {
-      if (r != '')
-        r = r + " - " + ticket.module
-      else
-        r = ticket.module
-    }
-    if (ticket.type) {
-      if (r != '')
-        r = r + " - " + ticket.type
-      else
-        r = ticket.module
-    }
-
+    if (ticket.module)
+      r = r + " - " + ticket.module
+    if (ticket.type)
+      r = r + " - " + ticket.type
+    if (ticket.campus)
+      r = r + " - " + ticket.campus
+    if (ticket.filiere)
+      r = r + " - " + ticket.filiere
+    if (ticket.demande)
+      r = r + " - " + ticket.demande
     return r
   }
   messageList = []
@@ -588,25 +585,25 @@ export class NewListTicketsComponent implements OnInit {
         this.tickets.push(t)
     })
   }
-YpareoDropdown:any[]=[
-  { label: 'Accés', value: "Acces" },
-  { label: "Ajout d'un étudiant", value: "Ajout" },
-  { label: 'Autre', value: "Autre" },
-];
-MicrosoftDropdown:any[]=[
-  { label: 'Réinitialisation du mot de passe', value: "Réinitialisation du mot de passe" },
-  { label: 'Création du compte Microsoft 365', value: "Création du compte Microsoft 365" },
-  { label: "Problème d'accès à Microsoft 365", value: "Problème d'accès à Microsoft 365" },
-  { label: "Problème TEAMS", value: "Problème TEAMS" },
-  { label: "Problème Outlook", value: "Problème Outlook" },
-  { label: "Problème OneDrive", value: "Problème OneDrive" },
-];
-SiteinternetDropdown:any[]=[
-  { label: 'Contenu', value: "Contenu" },
-  { label: "Formulaire d'admission", value: "Formulaire d'admission" },
-  { label: 'Beug', value: "Beug" },
-  { label: 'Autre', value: "Autre" },
-];
+  YpareoDropdown: any[] = [
+    { label: 'Accés', value: "Acces" },
+    { label: "Ajout d'un étudiant", value: "Ajout" },
+    { label: 'Autre', value: "Autre" },
+  ];
+  MicrosoftDropdown: any[] = [
+    { label: 'Réinitialisation du mot de passe', value: "Réinitialisation du mot de passe" },
+    { label: 'Création du compte Microsoft 365', value: "Création du compte Microsoft 365" },
+    { label: "Problème d'accès à Microsoft 365", value: "Problème d'accès à Microsoft 365" },
+    { label: "Problème TEAMS", value: "Problème TEAMS" },
+    { label: "Problème Outlook", value: "Problème Outlook" },
+    { label: "Problème OneDrive", value: "Problème OneDrive" },
+  ];
+  SiteinternetDropdown: any[] = [
+    { label: 'Contenu', value: "Contenu" },
+    { label: "Formulaire d'admission", value: "Formulaire d'admission" },
+    { label: 'Beug', value: "Beug" },
+    { label: 'Autre', value: "Autre" },
+  ];
   moduleDropdown: any[] = [
     { label: 'Module Ressources humaines', value: "Module Ressources humaines" },
     { label: 'Module Pédagogie', value: "Module Pédagogie" },
@@ -648,18 +645,18 @@ SiteinternetDropdown:any[]=[
       this.showTypeDropdown = true;
       this.TicketForm.get('module').setValidators([Validators.required]);
       this.TicketForm.get('module').updateValueAndValidity();
-    }else if (selectedSubject ==="Ypareo"){
+    } else if (selectedSubject === "Ypareo") {
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      this.showDemandeDropdown=true;
-      this.demandeDropdown=this.YpareoDropdown;
-    }else if (selectedSubject ==="Microsoft"){
+      this.showDemandeDropdown = true;
+      this.demandeDropdown = this.YpareoDropdown;
+    } else if (selectedSubject === "Microsoft") {
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      this.showDemandeDropdown=true;
-      this.demandeDropdown=this.MicrosoftDropdown
-    }else if (selectedSubject ==="Site internet"){
+      this.showDemandeDropdown = true;
+      this.demandeDropdown = this.MicrosoftDropdown
+    } else if (selectedSubject === "Site internet") {
       console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-      this.showDemandeDropdown=true;
-      this.demandeDropdown=this.SiteinternetDropdown;
+      this.showDemandeDropdown = true;
+      this.demandeDropdown = this.SiteinternetDropdown;
     }
     else {
 

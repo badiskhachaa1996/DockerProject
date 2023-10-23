@@ -1,8 +1,8 @@
-
 .cv-card-title h4 {
     font-size: 1.3rem;
     margin-bottom: 0;
 }
+
 .cv-card-title h5 {
     margin-top: 1rem;
 }
@@ -13,22 +13,23 @@
     padding-top: 30px;
     padding-bottom: 30px;
 }
+
 @media screen and (max-width: 1500px) {
     .cv-list {
-        grid-template-columns: 50% 50% ;
+        grid-template-columns: 50% 50%;
     }
-  }
+}
 
-  @media screen and (max-width: 1100px) {
+@media screen and (max-width: 1100px) {
     .cv-list {
-        grid-template-columns: auto ;
+        grid-template-columns: auto;
     }
 
     .steps-imatch {
         width: 100%;
     }
-    
-  }
+
+}
 
 .lightgray-bg {
     background-color: #F2F2F2;
@@ -136,7 +137,9 @@
 }
 
 
-.cv-clear-button:hover,.cv-clear-button:focus, .cv-clear-button:active {
+.cv-clear-button:hover,
+.cv-clear-button:focus,
+.cv-clear-button:active {
     background: none;
     color: #D95525;
     border: none !important;
@@ -174,6 +177,72 @@
     width: 100%;
 }
 
-    
 
 
+.red-begin {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-left: 2px solid red !important;
+}
+
+.red-middle {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+}
+
+.red-end {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-right: 2px solid red !important;
+}
+
+.orange-begin {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+    border-left: 2px solid orange !important;
+}
+
+.orange-middle {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+}
+
+.orange-end {
+    border-top: 2px solid orange !important;
+    border-bottom: 2px solid orange !important;
+    border-right: 2px solid orange !important;
+}
+
+.red-begin {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-left: 2px solid red !important;
+}
+
+.red-middle {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+}
+
+.red-end {
+    border-top: 2px solid red !important;
+    border-bottom: 2px solid red !important;
+    border-right: 2px solid red !important;
+}
+
+.green-begin {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+    border-left: 2px solid green !important;
+}
+
+.green-middle {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+}
+
+.green-end {
+    border-top: 2px solid green !important;
+    border-bottom: 2px solid green !important;
+    border-right: 2px solid green !important;
+}

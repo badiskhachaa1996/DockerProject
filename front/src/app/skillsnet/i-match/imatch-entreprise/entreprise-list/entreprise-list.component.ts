@@ -278,6 +278,7 @@ export class EntrepriseListComponent implements OnInit {
           this.form.reset();
           this.showPostuler = false;
         }, error => {
+          console.error(error)
           this.ToastService.add({ severity: 'error', summary: "Matching déjà crée", detail: 'Un matching existe déjà entre vous et cette offre.' })
           this.form.reset();
           this.showPostuler = false;
