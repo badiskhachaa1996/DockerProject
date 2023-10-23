@@ -272,7 +272,8 @@ export class EntrepriseListComponent implements OnInit {
           matcher_id: externe.user_id._id,
           cv_id: newCv._id,
           type_matching: "Candidat",
-          date_creation: new Date()
+          date_creation: new Date(),
+          accepted: true
         }).subscribe(m => {
           this.ToastService.add({ severity: 'success', summary: "Matching crée", detail: 'Un compte a été crée, vos identifiants ont été envoyés sur votre adresse email' })
           this.form.reset();

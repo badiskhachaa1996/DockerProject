@@ -198,7 +198,7 @@ export class AjoutCvComponent implements OnInit {
       a_propos: [''],
       disponibilite: [''],
       user_create_type: ['Externe'],
-      winner_id: [''],
+      winner_id: [null],
       isPublic: [true],
       niveau_etude: ['']
     });

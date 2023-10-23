@@ -30,6 +30,19 @@ export class NewListTicketsComponent implements OnInit {
   ];
   serviceDropdown: any[] = [
   ];
+  modeOptions = [{ label: 'Personnel' },
+  { label: 'Service' }
+  ]
+  TicketMode = "Personnel"
+  onChangeMode(e) {
+    console.log(e)
+    if (e.value == 'Personnel') {
+      this.filterType = ['Mine']
+    } else {
+      this.filterType = ['Non Assigne']
+    }
+    this.onFilterTicket()
+  }
   USER: User
   isAgent = false
   constructor(private TicketService: TicketService, private ToastService: ToastService,
@@ -52,6 +65,8 @@ export class NewListTicketsComponent implements OnInit {
     demande: new FormControl('',),
     campus: new FormControl('',),
     filiere: new FormControl('',),
+    date_limite: new FormControl('',),
+    note_assignation: new FormControl('',),
   })
   stats = {
     en_attente: 0,
@@ -125,6 +140,7 @@ export class NewListTicketsComponent implements OnInit {
               })
 
               this.defaultTicket = this.tickets
+              this.filteredValues = this.tickets
               this.onFilterTicket()
               let tempDate = new Date()
               tempDate.setDate(tempDate.getDate() - 2)
@@ -298,7 +314,7 @@ export class NewListTicketsComponent implements OnInit {
     let statut = "En attente de traitement"
     if (this.ticketAssign)
       statut = "En cours de traitement"
-    this.TicketService.update({ ...this.TicketForm.value, documents, statut }).subscribe(data => {
+    this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by: this.token.id }).subscribe(data => {
       this.updateTicketList()
       this.uploadedFiles.forEach((element, idx) => {
         let formData = new FormData()
@@ -519,7 +535,7 @@ export class NewListTicketsComponent implements OnInit {
   }
   messageList = []
   loadCommentaires(event: any) {
-    console.log(event)
+    this.messageList = []
     if (event._id) {
       this.MessageService.getAllByTicketID(event._id).subscribe(messages => {
         this.messageList = messages
@@ -686,9 +702,12 @@ export class NewListTicketsComponent implements OnInit {
     })
   }
   activeIndex1 = 1
-
+  filteredValues = []
   onAddTicket(e) {
     this.updateTicketList()
+  }
+  onFilter(event, dt) {
+    this.filteredValues = event.filteredValue;
   }
 }
 
