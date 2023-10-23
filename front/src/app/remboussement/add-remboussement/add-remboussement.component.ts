@@ -480,55 +480,47 @@ user: User;
      method:this.formRembourssement.value.paymentType
    }
 
- 
+
 
 demande.docs={
-       rib: this.formRembourssement.value.rib ?
+       rib: this.rib ?
        {
-         added_on: this.formRembourssement.value.rib.lastModifiedDate,
-         nom: this.formRembourssement.value.rib.lastModifiedDate,
+         added_on: new Date(),
+         nom: this.rib.name,
          added_by : this.token.id,
-         link: 'Link Here',
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
        } : null ,
        attestation_payement: this.formRembourssement.value.attestion_paiement ?
        {
-         added_on : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
-         nom : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
+        added_on: new Date(),
+         nom : this.attestation_payement.name,
          added_by : this.token.id,
-         link : 'Link Here',
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
        } : null,
        document_inscription: this.formRembourssement.value.document_inscription ?
           {
-            added_on : this.formRembourssement.value.document_inscription.lastModifiedDate,
-            nom : this.formRembourssement.value.document_inscription.lastModifiedDate,
+            added_on: new Date(),
+            nom : this.document_inscription.name,
             added_by : this.token.id,
-            link : 'Link Here',
             doc_number :this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
           } : null ,
        preuve_payement: this.formRembourssement.value.preuve_paiement ?
 
        {
-         added_on : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
-         nom : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
+        added_on: new Date(),
+         nom : this.preuve_payement.name,
          added_by : this.token.id,
-         link : 'Link Here',
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
        } : null,
        autres_doc: this.formRembourssement.value.notification_ou_autre_justificatif ?
        {
-         added_on : this.formRembourssement.value.notification_ou_autre_justificatif.lastModifiedDate,
-         nom : this.formRembourssement.value.rnotification_ou_autre_justificatifib.lastModifiedDate,
+        added_on: new Date(),
+         nom : this.autres_doc.name,
          added_by : this.token.id,
-         link : 'Link Here'  ,
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
        } : null
      }
 
- 
-
- 
 
      if (update) {
       this.updateDemande(demande)
@@ -601,7 +593,6 @@ demande.docs={
   autres_doc: any;
 
   onUpload(event: any, doc:string ) {
-
     if (event.target.files.length > 0) {
       switch (doc) {
         case 'rib': {

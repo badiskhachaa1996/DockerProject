@@ -52,35 +52,30 @@ export class Demande {
             
             rib: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             attestation_payement: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             preuve_payement: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             document_inscription: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
             },
             autres_doc: {
                 nom?: string;
-                link?: string;
                 added_on?: Date;
                 added_by?: string;
                 doc_number?: string;
