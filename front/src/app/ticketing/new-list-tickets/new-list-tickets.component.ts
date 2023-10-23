@@ -35,11 +35,10 @@ export class NewListTicketsComponent implements OnInit {
   ]
   TicketMode = "Personnel"
   onChangeMode(e) {
-    console.log(e)
     if (e.value == 'Personnel') {
       this.filterType = ['Mine']
     } else {
-      this.filterType = ['Non Assigne']
+      this.filterType = ['Assigne Service']
     }
     this.onFilterTicket()
   }
@@ -584,6 +583,10 @@ export class NewListTicketsComponent implements OnInit {
   defaultTicket = []
   onFilterTicket() {
     this.tickets = []
+    if (!this.filterType.includes('Non Assigne') && this.TicketMode != 'Personnel')
+      this.filterType.push('Assigne Service')
+    else if (this.filterType.indexOf('Assigne Service') != -1)
+      this.filterType.splice(this.filterType.indexOf('Assigne Service'), 1)
     this.defaultTicket.forEach((t: Ticket) => {
       let r = true
       if (this.filterStatutTicket.includes("Urgent")) {
@@ -595,8 +598,10 @@ export class NewListTicketsComponent implements OnInit {
         if (!(new Date(t.date_ajout).getTime() < tempDate.getTime()))
           r = false
       }
-      if (this.filterType.includes(t.origin) == false)
+      if (this.filterType.includes(t.origin) == false) {
         r = false
+      }
+
       if (r)
         this.tickets.push(t)
     })
