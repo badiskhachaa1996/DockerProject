@@ -158,7 +158,8 @@
                             <div *ngIf="filter_value.type" class="field col-6">
                                 <label style="text-align: center;" class="mr-2">Type</label><br>
                                 <p-dropdown placeholder="Choisissez un type" [options]="typeFilter" autoWidth="false"
-                                    [style]="{'width':'10em'}" [(ngModel)]="filter_value.type" (onChange)="updateFilter()">
+                                    [style]="{'width':'10em'}" [(ngModel)]="filter_value.type"
+                                    (onChange)="updateFilter()">
                                 </p-dropdown>
                             </div>
                             <div *ngIf="filter_value.locations.length!=0" class="field col-6">
@@ -189,6 +190,13 @@
                                     autoWidth="false" [style]="{'width':'10em'}" [(ngModel)]="filter_value.niveau"
                                     (onChange)="updateFilter()">
                                 </p-multiSelect>
+                            </div>
+                            <div *ngIf="filter_value.taux" class="field col-6">
+                                <label style="text-align: center;" class="mr-2">Couleur</label><br>
+                                <p-dropdown [options]="colorFilter" placeholder="Choisissez une couleur"
+                                    autoWidth="false" [style]="{'width':'10em'}" filter="true" class="mb-2"
+                                    appendTo="body" [(ngModel)]="filter_value.taux"
+                                    (onChange)="updateFilter()"></p-dropdown>
                             </div>
                         </div>
                         <div class="field col-2">
@@ -221,11 +229,11 @@
                                 <th pSortableColumn="user_id.civilite" style="text-align: center;">Civilité <p-sortIcon
                                         field="user_id.civilite"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.firstname" style="text-align: center;" *ngIf="!isEntreprise">Prénom <p-sortIcon
-                                        field="user_id.firstname"></p-sortIcon>
+                                <th pSortableColumn="user_id.firstname" style="text-align: center;"
+                                    *ngIf="!isEntreprise">Prénom <p-sortIcon field="user_id.firstname"></p-sortIcon>
                                 </th>
-                                <th pSortableColumn="user_id.lastname" style="text-align: center;" *ngIf="!isEntreprise">Nom <p-sortIcon
-                                        field="user_id.lastname"></p-sortIcon>
+                                <th pSortableColumn="user_id.lastname" style="text-align: center;"
+                                    *ngIf="!isEntreprise">Nom <p-sortIcon field="user_id.lastname"></p-sortIcon>
                                 </th>
                                 <th pSortableColumn="type" style="text-align: center;">Type <p-sortIcon
                                         field="type"></p-sortIcon>
@@ -243,35 +251,36 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-cv let-expanded="expanded">
                             <tr>
-                                <td [ngClass]="{'green-begin':cv.taux>=60,'red-begin':cv.taux<=10,'orange-begin':(cv.taux>10 && cv.taux<60)}">
+                                <td
+                                    [ngClass]="{'bg-green':cv.taux>=60,'bg-red':cv.taux<=10,'bg-orange':(cv.taux>10 && cv.taux<60)}">
                                     <button type="button" pButton pRipple [pRowToggler]="cv"
                                         class="p-button-text p-button-rounded p-button-plain"
                                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
 
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;">
+                                <td style="min-width: 12rem;">
                                     {{cv.user_id?.civilite}}
                                 </td>
 
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;" *ngIf="!isEntreprise">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.firstname | titlecase}}
                                 </td>
 
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;" *ngIf="!isEntreprise">
+                                <td style="min-width: 12rem;" *ngIf="!isEntreprise">
                                     {{cv.user_id?.lastname | uppercase}}
                                 </td>
 
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;">
+                                <td style="min-width: 12rem;">
                                     {{cv.user_id?.type}}
                                 </td>
 
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;">
+                                <td style="min-width: 12rem;">
                                     {{cv.competences[0]?.profile_id?.libelle}}
                                 </td>
-                                <td [ngClass]="{'green-middle':cv.taux>=60,'red-middle':cv.taux<=10,'orange-middle':(cv.taux>10 && cv.taux<60)}" style="min-width: 12rem;">
+                                <td style="min-width: 12rem;">
                                     {{cv?.winner_id?.firstname | titlecase}} {{cv?.winner_id?.lastname | uppercase}}
                                 </td>
-                                <td [ngClass]="{'green-end':cv.taux>=60,'red-end':cv.taux<=10,'orange-end':(cv.taux>10 && cv.taux<60)}" class="text-center" style="min-width: 8rem;">
+                                <td class="text-center" style="min-width: 8rem;">
                                     <i class="pi pi-pencil mr-2" style="color: blue;" pTooltip="Modifier"
                                         (click)="onInitUpdate(cv)" tooltipPosition="bottom"></i>
                                     <i class="pi pi-trash mr-2" style="color: red;" pTooltip="Supprimer"
@@ -511,6 +520,9 @@
         </p-multiSelect>
         <input pInputText type="text" #filter (input)="updateFilter()" style="width: 27em;" class="mb-2"
             [(ngModel)]="filter_value.search" (onBlur)="updateFilter()" placeholder="Recherche" />
+        <p-dropdown [options]="colorFilter" placeholder="Choisissez une couleur" autoWidth="false"
+            [style]="{'width':'27em'}" filter="true" class="mb-2" appendTo="body" [(ngModel)]="filter_value.taux"
+            (onChange)="updateFilter()"></p-dropdown>
         <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
 			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
         <button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"

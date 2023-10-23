@@ -208,6 +208,12 @@ export class NewCvthequeInterneComponent implements OnInit {
     { label: 'Choisissez un Type', value: null },
   ]
 
+  colorFilter = [
+    { label: 'Rouge', value: 'red' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Vert',value:'green' }
+  ]
+
   locations = [
     //{ label: "Choisissez une ville", value: null },
     { label: "100% Télétravail", value: "100% Télétravail" },
@@ -289,7 +295,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     niveau: [],
     winner: '',
     search: '',
-    type: null
+    type: null,
+    taux: ''
   }
   updateFilter() {
     this.cvs = []
@@ -326,6 +333,14 @@ export class NewCvthequeInterneComponent implements OnInit {
           !strprofile.includes(this.filter_value.search))
           r = false
       }
+      if (this.filter_value.taux) {
+        if (this.filter_value.taux == 'red' && (val.taux > 10))
+          r = false
+        else if (this.filter_value.taux == 'orange' && (val.taux <= 10 || val.taux > 60))
+          r = false
+        else if (this.filter_value.taux == 'green' && (val.taux <= 60))
+          r = false
+      }
       //if(this.filter_value.type && !this.filter_value.type.includes(val))
       if (r)
         this.cvs.push(val)
@@ -341,7 +356,8 @@ export class NewCvthequeInterneComponent implements OnInit {
       niveau: [],
       winner: '',
       search: '',
-      type: null
+      type: null,
+      taux: ''
     }
     this.cvs = this.defaultcvs
   }

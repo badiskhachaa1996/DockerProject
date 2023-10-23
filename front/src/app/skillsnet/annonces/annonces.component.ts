@@ -515,7 +515,8 @@ export class AnnoncesComponent implements OnInit {
           matcher_id: this.token.id,
           cv_id: cv._id,
           type_matching: "Candidat",
-          date_creation: new Date()
+          date_creation: new Date(),
+          accepted: true
         }
         this.MatchingService.create(matching).subscribe(match => {
           this.messageService.add({ summary: "Matching enregistré", severity: "success" })

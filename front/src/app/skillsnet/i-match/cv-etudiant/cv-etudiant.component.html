@@ -57,7 +57,7 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
-                            <!--<a (click)="seeOffre(match.offre_id)"></a>--> {{ match.offre_id.custom_id | titlecase}}
+                            <!--<a (click)="seeOffre(match.offre_id)"></a>--> {{ match.offre_id.custom_id | uppercase}}
                         </td>
                         <td [ngClass]="{'valid-middle':match.statut=='Validé'}">
                             {{match.type_matching}}
@@ -122,23 +122,23 @@
                             <p-table responsiveLayout="scroll" [value]="['sq']" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                     <tr>
-                        <th scope="col">Entreprise</th>
+                        <!--<th scope="col">Entreprise</th>-->
                         <th scope="col">Déroulement</th>
                         <th scope="col">Crée le</th>
-                        <th scope="col">Auteur</th>
-                        <th scope="col">Modifié le</th>
+                        <!--<th scope="col">Auteur</th>
+                        <th scope="col">Modifié le</th>-->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body">
                     <tr>
-                        <td>{{match.offre_id.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>
+                        <!--<td>{{match.offre_id.entreprise_id?.r_sociale || annonce?.entreprise_name}}</td>-->
                         <td>{{match.offre_id.workplaceType}}</td>
                         <td>{{match.offre_id.date_creation | date:'dd MMMM yy'}}</td>
-                        <td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
+                        <!--<td>{{match.offre_id?.user_id?.firstname | titlecase}} {{annonce?.user_id?.lastname |
                             titlecase}}</td>
                         <td>
                             {{match.offre_id.modified_at| date:'dd MMMM yy'}}
-                        </td>
+                        </td>-->
                     </tr>
                 </ng-template>
             </p-table>
