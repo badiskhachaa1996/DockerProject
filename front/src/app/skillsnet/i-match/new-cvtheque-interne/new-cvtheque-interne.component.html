@@ -141,13 +141,7 @@
                                 placeholder="Recherche" class="w-full" />
                         </span>-->
                     <div class="grid ">
-                        <div class="field col-3">
-                            <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
-                                (click)="displayFilter=true"></button><br><br> <br>
-                            <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
-                                (click)="clearFilter()"></button>
-                        </div>
-                        <div class="field col-7 grid ">
+                        <div class="field col-12 grid ">
                             <div *ngIf="filter_value.profil.length!=0" class="field col-6">
                                 <label style="text-align: center;" class="mr-2">Profil</label><br>
                                 <p-multiSelect placeholder="Choisissez un profil" [options]="profilFilter"
@@ -199,16 +193,27 @@
                                     (onChange)="updateFilter()"></p-dropdown>
                             </div>
                         </div>
-                        <div class="field col-2">
-                            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-                            <br><br>
-                            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
-                                (click)="cvToAdd = true"></button>
-                        </div>
-                        <div class="field col-12">
-                            <label>&nbsp;</label><br>
-                            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filter_value.search"
-                                (input)="updateFilter()" placeholder="Recherche" />
+                        <div class="col-12 grid" style="text-align: right;">
+                            <div class="md:col-1 col-6" style="text-align: center;">
+                                <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
+                                    (click)="displayFilter=true"></button>
+                            </div>
+                            <div class="md:col-1 col-6" style="text-align: center;">
+                                <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
+                                    (click)="clearFilter()"></button>
+                            </div>
+                            <div class="md:col-8 col-6" style="text-align: center;">
+                                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filter_value.search"
+                                    (input)="updateFilter()" placeholder="Recherche" />
+                            </div>
+                            <div class="md:col-1 col-3" style="text-align: center;">
+                                <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+                            </div>
+                            <div class="md:col-1 col-3" style="text-align: center;">
+                                <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="mr-2 mb-2"
+                                    (click)="cvToAdd = true"></button>
+                            </div>
+
                         </div>
                     </div>
 
