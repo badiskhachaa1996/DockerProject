@@ -405,9 +405,7 @@ user: User;
    
 
     }  else {
-
       this.updateDemandeObject(this.currentDemande, true)
-
     }
 
  
@@ -417,9 +415,7 @@ user: User;
   cancelForm() {
 
     this.cancelFormOutPut.emit(true)
-
     this.showUpdateForm = false
-
     this.ngOnInit()
 
   }
@@ -433,191 +429,101 @@ user: User;
     var indicatifLength = this.formRembourssement.value.indicatif_phone.length + 2;
 
     this.formRembourssement =  this.formBuilder.group({
-
       civilite: [demande.student?.civility],
-
       nom: [demande.student?.last_name],
-
       prenom: [demande.student?.first_name],
-
       date_naissance: [demande.student?.date_naissance],
-
       nationalite: [demande.student?.nationality],
-
       pays_resid: [demande.student?.country_residence],
-
       paymentType: [demande.refund?.method],
-
      indicatif_phone:[demande.student?.phone.slice(0, indicatifLength + 4)],
-
      phone:[demande.student?.phone.slice(indicatifLength + 4  )],
-
       email: [demande.student?.email],
-
       annee_scolaire: [ demande.training?.scholar_year],
-
       ecole: [ demande.training?.school],
-
       formation: [ demande.training?.name],
-
       motif_refus: [demande.motif],
-
       montant: [demande.refund?.montant],
-
       rib: [demande.docs?.rib],
-
       attestion_paiement: [demande.docs?.attestation_payement],
-
       preuve_paiement: [demande.docs?.preuve_payement],
-
       document_inscription: [demande.docs?.document_inscription],
-
       notification_ou_autre_justificatif: [demande.docs?.autres_doc],
-
     })
-
   }
 
- 
-
- 
 
   updateDemandeObject(demande, update) {
-
- 
-
     console.log(this.formRembourssement.value)
-
     demande.created_by = this.token.id
-
     demande.motif = this.formRembourssement.value.motif_refus
-
     demande.student = {
-
      civility: this.formRembourssement.value.civilite,
-
      last_name:this.formRembourssement.value.nom,
-
      first_name:this.formRembourssement.value.prenom,
-
      date_naissance: this.formRembourssement.value.date_naissance,
-
      nationality:  this.formRembourssement.value.nationalite,
-
      country_residence: this.formRembourssement.value.pays_resid ,
-
      indicatif_phone: this.formRembourssement.value.indicatif_phone,
-
      phone: "(" + this.formRembourssement.value.indicatif_phone + ")" + this.formRembourssement.value.phone,
-
      email:  this.formRembourssement.value.email,
-
    },
 
    demande.training = {
-
      scholar_year :this.formRembourssement.value.annee_scolaire,
-
      school:this.formRembourssement.value.ecole,
-
      name:this.formRembourssement.value.formation?.value,
-
    }
 
    demande.refund ={
-
      montant:this.formRembourssement.value.montant,
-
      method:this.formRembourssement.value.paymentType
-
    }
 
  
 
 demande.docs={
-
        rib: this.formRembourssement.value.rib ?
-
        {
-
          added_on: this.formRembourssement.value.rib.lastModifiedDate,
-
          nom: this.formRembourssement.value.rib.lastModifiedDate,
-
          added_by : this.token.id,
-
          link: 'Link Here',
-
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-
        } : null ,
-
        attestation_payement: this.formRembourssement.value.attestion_paiement ?
-
        {
-
          added_on : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
-
          nom : this.formRembourssement.value.attestion_paiement.lastModifiedDate,
-
          added_by : this.token.id,
-
          link : 'Link Here',
-
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-
        } : null,
-
        document_inscription: this.formRembourssement.value.document_inscription ?
-
-       {
-
-         added_on : this.formRembourssement.value.document_inscription.lastModifiedDate,
-
-         nom : this.formRembourssement.value.document_inscription.lastModifiedDate,
-
-         added_by : this.token.id,
-
-         link : 'Link Here',
-
-         doc_number :this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-
-       } : null ,
-
+          {
+            added_on : this.formRembourssement.value.document_inscription.lastModifiedDate,
+            nom : this.formRembourssement.value.document_inscription.lastModifiedDate,
+            added_by : this.token.id,
+            link : 'Link Here',
+            doc_number :this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
+          } : null ,
        preuve_payement: this.formRembourssement.value.preuve_paiement ?
 
        {
-
          added_on : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
-
          nom : this.formRembourssement.value.preuve_paiement.lastModifiedDate,
-
          added_by : this.token.id,
-
          link : 'Link Here',
-
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-
- 
-
        } : null,
-
        autres_doc: this.formRembourssement.value.notification_ou_autre_justificatif ?
-
        {
-
          added_on : this.formRembourssement.value.notification_ou_autre_justificatif.lastModifiedDate,
-
          nom : this.formRembourssement.value.rnotification_ou_autre_justificatifib.lastModifiedDate,
-
          added_by : this.token.id,
-
          link : 'Link Here'  ,
-
          doc_number : this.formRembourssement.value.nom[0].toUpperCase() + this.formRembourssement.value.prenom[0].toUpperCase() + '-' + Math.floor(Math.random() * Date.now()).toString()
-
        } : null
-
      }
 
  
@@ -625,137 +531,65 @@ demande.docs={
  
 
      if (update) {
-
       this.updateDemande(demande)
-
      } else {
-
       this.newDemande(demande)
-
      }
-
   }
 
- 
-
- 
-
   updateDemande(demande) {
-
                // Use the service to make the POST request
-
                this.demandeRemboursementService.updateRemboursement(demande).subscribe(
-
                 (response) => {
-
                   this.doneUpdating.emit(true)
-
                   // Handle success (show a success message)
-
                   this.messageService.add({
-
                     severity: 'success',
-
                     summary: 'Success',
-
                     detail: 'Remboursement added successfully.'
-
                   });
-
- 
-
-                 
-
-         
-
-         
-
                   // this.router.navigate(['remboursement-list']);
-
                 },
-
                 (error) => {
-
                   // Handle error (show an error message)
-
                   console.error('Error adding remboursement:', error);
-
                   // Check if the error response contains a message
-
                   const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
-
                   this.messageService.add({
-
                     severity: 'error',
-
                     summary: 'Error',
-
                     detail: errorMessage
-
                   });
-
                 }
-
               );
-
   }
 
  
 
   newDemande(demande) {
-
-   
-
               // Use the service to make the POST request
-
               this.demandeRemboursementService.addRemboursement(demande).subscribe(
-
                 (response) => {
-
                   // Handle success (show a success message)
-
                   this.messageService.add({
-
                     severity: 'success',
-
                     summary: 'Success',
-
                     detail: 'Remboursement added successfully.'
-
                   });
-
-         
-
-         
-
                   // this.router.navigate(['remboursement-list']);
-
                 },
-
                 (error) => {
-
                   // Handle error (show an error message)
-
                   console.error('Error adding remboursement:', error);
-
                   // Check if the error response contains a message
-
                   const errorMessage = error.error ? error.error.message : 'Failed to add remboursement.';
-
                   this.messageService.add({
-
                     severity: 'error',
-
                     summary: 'Error',
-
                     detail: errorMessage
-
                   });
-
                 }
-
               );
-
   }
 
 
@@ -767,6 +601,7 @@ demande.docs={
   autres_doc: any;
 
   onUpload(event: any, doc:string ) {
+
     if (event.target.files.length > 0) {
       switch (doc) {
         case 'rib': {
@@ -795,18 +630,11 @@ demande.docs={
       }
       console.log(this.autres_doc)
     }
-
   }
-
- 
 
   reset(doc) {
     doc.value = ""
   }
-
- 
-
-
  
 }
  

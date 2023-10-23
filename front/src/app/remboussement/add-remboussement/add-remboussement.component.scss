@@ -46,10 +46,12 @@ input[type="file"] {
 .doc-title {
     font-size: 1.2em;
     font-weight: 700;
-    margin-right: 20px;
 }
 
 .doc-block {
-    display: block;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid rgb(207, 207, 207);
+    margin-bottom: 10px;
 }
