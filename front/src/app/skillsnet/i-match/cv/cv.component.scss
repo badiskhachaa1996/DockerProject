@@ -154,26 +154,41 @@ h2 {
             background-color: #37BAD4;
             text-align: center;
             border-radius: 50px;
-            padding: 7px 0;
+            padding: 0;
+            margin: 0;
             color: white;
         }
 
     }
 }
 
+.comp {
+    margin: 0;
+}
+
+.bouton-suite {
+    text-align: right;
+    cursor: pointer;
+    color: #37BAD4;
+}
+
+.bouton-suite:hover {
+    text-decoration: underline;
+}
+
+
 .other-block-1 {
+    border-right: 1px solid #9D9D9D;
+}
+
+.border-right {
     border-right: 1px solid #9D9D9D;
 }
 
 .other-cv-info {
     margin-top: 50px;
-    .first-block {
-        border-right: 1px solid #9D9D9D;
-        padding-right: 8%;
-    }
-
-    .second-block {
-        padding-left: 80px;
+    .block-other {
+        padding: 30px;
     }
 }
 

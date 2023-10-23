@@ -34,36 +34,40 @@
                     </div>
                 </div>
                 <div class="competences-block">
-                    <h2>Compétences</h2>
-                    <div class="row gx-5 competence">
-                        <div class="col-md col-12 marg-right">
-                            <p>{{cv.competences[0]?.libelle || "Compétences 1"}}</p>
-                        </div>
-                        <div class="col-md col-12 marg-both">
-                            <p>{{cv.competences[1]?.libelle || "Compétences 2"}}</p>
-                        </div>
-                        <div class="col-md col-12 marg-left">
-                            <p>{{cv.competences[2]?.libelle || "Compétences 3"}}</p>
-                        </div>
-                    </div>
+                    <h2>à propos</h2>
+                    <p>{{cv.a_propos || 'A propos non spécifié'}}</p>
                 </div>
-
                 <div class="row other-cv-info">
-                    <div class="col-md-4 first-block">
-                        <h2>à propos</h2>
-                        <p>{{cv.a_propos || 'A propos non spécifié'}}</p>
-                    </div>
-                    <div class="col-md-8 second-block">
-                        <div class="row gx-5">
-                            <div class="col inner-area-1">
-                                <h2>centres D'Intérêts</h2>
-                                <p>{{cv.centre_interets || "Centre d'intérets non spécifiés"}}</p>
+                    <div class="col-md-4 col-12 block-other border-right">
+                        <h2>Compétences</h2>
+                        <div class="row gx-5 competence">
+                            <div class="col-md col-12">
+                                <p class="comp">{{cv.competences[0]?.libelle}}</p>
                             </div>
-                            <div class="col inner-area-2">
-                                <h2>Langues</h2>
-                                <p>{{cv.langues || 'Langues non spécifiés'}}</p>
+                            <div class="col-md col-12">
+                                <p class="comp">{{cv.competences[1]?.libelle}}</p>
+                            </div>
+                            <div class="col-md col-12">
+                                <p class="comp">{{cv.competences[2]?.libelle}}</p>
                             </div>
                         </div>
+                        <div *ngIf="(cv.competences.length > 3)" >
+                            <div *ngIf="showingmore" class="row gx-5 competence">
+                                <div class="col-md-4 col-12" *ngFor="let competence of cv.competences | slice:3">
+                                    <p class="comp">{{competence.libelle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="(cv.competences.length > 3) && !showingmore" class="bouton-suite" (click)="showMore(cv.competences)">plus</div>
+                        <div *ngIf="showingmore" class="bouton-suite" (click)="showLess(cv.competences)">moins</div>
+                    </div>
+                    <div class="col-md-4 col-12 block-other border-right">
+                        <h2>centres D'Intérêts</h2>
+                        <p>{{cv.centre_interets || "Centre d'intérets non spécifiés"}}</p>
+                    </div>
+                    <div class="col-md-4 col-12 block-other">
+                        <h2>Langues</h2>
+                        <p>{{cv.langues || 'Langues non spécifiés'}}</p>
                     </div>
                 </div>
             </div>
@@ -74,13 +78,13 @@
                     <h2>Education</h2>
                     <div class="section-block" *ngFor="let exp of cv.education">
                         <div class="section-sub-info">
-                            <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                            <h4 class="sub-info">{{exp?.intitule_experience}}</h4>
                             <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
                                 date:'YYYY' || '20xx'}}</h4>
                         </div>
                         <h4 class="structure-name">{{exp?.structure}}</h4>
                         <div class="section-details">
-                            <p>{{exp?.type}} : {{exp?.details}}</p>
+                            <p>{{exp?.type}} <span *ngIf="exp?.details && exp?.type">:</span> {{exp?.details}}</p>
                         </div>
                     </div>
                 </div>
@@ -88,13 +92,13 @@
                     <h2>Expériences professionnelles</h2>
                     <div class="section-block" *ngFor="let exp of cv.experiences_pro">
                         <div class="section-sub-info">
-                            <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                            <h4 class="sub-info">{{exp?.intitule_experience}}</h4>
                             <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
                                 date:'YYYY' || '20xx'}}</h4>
                         </div>
                         <h4 class="structure-name">{{exp?.structure}}</h4>
                         <div class="section-details">
-                            <p>{{exp?.type}} : {{exp?.details}}</p>
+                            <p>{{exp?.type}} <span *ngIf="exp?.details && exp?.type">:</span> {{exp?.details}}</p>
                         </div>
                     </div>
                 </div>
@@ -102,13 +106,13 @@
                     <h2>Expériences Associatives</h2>
                     <div class="section-block" *ngFor="let exp of cv.experiences_associatif">
                         <div class="section-sub-info">
-                            <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                            <h4 class="sub-info">{{exp?.intitule_experience}}</h4>
                             <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
                                 date:'YYYY' || '20xx'}}</h4>
                         </div>
                         <h4 class="structure-name">{{exp?.structure}}</h4>
                         <div class="section-details">
-                            <p>{{exp?.type}} : {{exp?.details}}</p>
+                            <p>{{exp?.type}} <span *ngIf="exp?.details && exp?.type">:</span> {{exp?.details}}</p>
                         </div>
                     </div>
                 </div>
@@ -116,13 +120,13 @@
                     <h2>Informatique</h2>
                     <div class="section-block" *ngFor="let exp of cv.informatique">
                         <div class="section-sub-info">
-                            <h4 class="sub-info">{{exp?.intitule_experience || 'Poste'}}</h4>
+                            <h4 class="sub-info">{{exp?.intitule_experience}}</h4>
                             <h4 class="sub-date">{{exp?.date_debut | date:'YYYY' || '20xx'}}-{{exp?.date_fin |
                                 date:'YYYY' || '20xx'}}</h4>
                         </div>
                         <h4 class="structure-name">{{exp?.structure}}</h4>
                         <div class="section-details">
-                            <p>{{exp?.type}} : {{exp?.details}}</p>
+                            <p>{{exp?.type}} <span *ngIf="exp?.details && exp?.type">:</span> {{exp?.details}}</p>
                         </div>
                     </div>
                 </div>

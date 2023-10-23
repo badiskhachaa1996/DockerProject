@@ -14,6 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class CvComponent implements OnInit {
 
+  showingmore = false
+
   cv: CV;
   user: User;
   dicPicture
@@ -59,5 +61,13 @@ export class CvComponent implements OnInit {
 
   gotoEdit() {
     this.router.navigate(['generateur-cv/', this.user._id])
+  }
+
+  showMore() {
+    this.showingmore = true
+  }
+
+  showLess() {
+    this.showingmore = false
   }
 }
