@@ -768,43 +768,43 @@ app.get("/getAllAssigne/:id", (req, res) => {
 });
 
 app.get("/getAllNonAssigne", (req, res) => {
-    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: null }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.post("/getAllNonAssigneV2", (req, res) => {
-    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: null, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.post("/getAllAssigneV2", (req, res) => {
-    Ticket.find({ agent_id: { $ne: null }, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: { $ne: null }, service_id: { $in: req.body.service_list } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllAssigneAdmin", (req, res) => {
-    Ticket.find({ agent_id: { $ne: null } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } })
+    Ticket.find({ agent_id: { $ne: null } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllRefuse", (req, res) => {
-    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('user_revert')
+    Ticket.find({ isReverted: true }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by').populate('user_revert')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllTraite", (req, res) => {
-    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: 'Traité' }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
 
 app.get("/getAllAttenteDeTraitement", (req, res) => {
-    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id')
+    Ticket.find({ statut: { $ne: 'Traité' } }).populate('createur_id').populate({ path: 'sujet_id', populate: { path: 'service_id' } }).populate('agent_id').populate('assigne_by')
         .then((ticket) => { res.status(200).send(ticket); })
         .catch((error) => { res.status(400).send(error); })
 });
