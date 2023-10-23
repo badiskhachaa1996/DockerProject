@@ -10,7 +10,7 @@
         <div class="input-form-cv">
             <div *ngIf="formAddCV">
                 <h4 class="title-add-cv">Génération de CV</h4>
-                <div class="col-12">
+                <div class="col-12" *ngIf="!isEtudiant">
                     <label for="user">Choisir une école</label>
                     <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="ecolesImage"
                         [(ngModel)]="ecoleImage" placeholder="Selectionner une école" filter="true"
@@ -26,13 +26,13 @@
                         <!-- Rajouter filter Ecole et Spécialité -->
                     </div>
 
-                    <div class="field col-12" *ngIf="formAddCV.value.user_create_type=='Externe'">
+                    <div class="field col-12" *ngIf="formAddCV.value.user_create_type=='Externe' && !isEtudiant">
                         <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30"
                             [options]="dropdownUserExterne" placeholder="Selectionner un externe" [showClear]="true"
                             (onChange)="onSelectUser($event.value)" formControlName="user_id" filter="true"
                             emptyFilterMessage="Aucun utilisateur trouvé" filterPlaceholder="Recherche"></p-dropdown>
                     </div>
-                    <div class="field col-12 grid" *ngIf="formAddCV.value.user_create_type=='Interne'">
+                    <div class="field col-12 grid" *ngIf="formAddCV.value.user_create_type=='Interne' && !isEtudiant">
                         <p-dropdown autoWidth="false" class="col-6 mb-4" [style]="{'width':'100%'}" [options]="ecoles"
                             [virtualScroll]="true" itemSize="30" placeholder="Selectionner une école" [showClear]="true"
                             filter="true" emptyFilterMessage="Aucun école trouvé"
@@ -75,7 +75,7 @@
                             defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
                             formControlName="competences">
                             <ng-template let-value pTemplate="selectedItems">
-                                <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+                                <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary border-round mr-2"
                                     *ngFor="let option of selectedMultiCpt">
                                     <div>{{option.label}}</div>
                                 </div>
@@ -125,7 +125,7 @@
                             defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom"
                             formControlName="langues">
                             <ng-template let-value pTemplate="selectedItems">
-                                <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2"
+                                <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary border-round mr-2"
                                     *ngFor="let option of selectedMultilang">
                                     <div>{{option.label}}</div>
                                 </div>

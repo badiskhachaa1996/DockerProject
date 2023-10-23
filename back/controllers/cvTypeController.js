@@ -88,7 +88,39 @@ app.put("/put-cv", (req, res) => {
 // recuperation de la liste de cv
 app.get("/get-cvs", (_, res) => {
     CvType.find({ user_id: { $ne: null } })?.populate('user_id').populate({ path: 'competences', populate: { path: "profile_id" } }).populate('createur_id').populate('profil_id').populate('winner_id')
-        .then((response) => { res.status(200).send(response); })
+        .then((response) => {
+            let r = []
+            response.forEach(cv => {
+                if (cv.competences && cv.competences.length >= 3)
+                    cv.taux += 37.5
+                else if (cv.competences && cv.competences.length >= 1)
+                    cv.taux += 22.5
+                if (cv.experiences_pro && cv.experiences_pro.length != 0)
+                    cv.taux += 15
+                if (cv.education && cv.education.length != 0)
+                    cv.taux += 15
+                if (cv.langues && cv.langues.length != 0)
+                    cv.taux += 7.5
+                if (cv.centre_interets && cv.centre_interets.length != 0)
+                    cv.taux += 7.5
+                if (cv.experiences_associatif && cv.experiences_associatif.length != 0)
+                    cv.taux += 7.5
+                //RESTE = 10%
+                if (cv.mobilite_lieu && cv.mobilite_lieu.length != 0)
+                    cv.taux += 2
+                if (cv.a_propos && cv.a_propos != '')
+                    cv.taux += 2
+                if (cv.disponibilite && new Date(cv.disponibilite).getTime() != new Date().getTime())
+                    cv.taux += 2
+                if (cv.informatique && cv.informatique.length != 0)
+                    cv.taux += 2
+                if (cv.niveau_etude && cv.niveau_etude != '')
+                    cv.taux += 2
+                if (cv.user_id)
+                    r.push(cv)
+            })
+            res.status(200).send(r);
+        })
         .catch((error) => { res.status(500).send(error.message); });
 });
 

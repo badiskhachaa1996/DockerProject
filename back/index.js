@@ -238,7 +238,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl.startsWith("/soc/cv/get-object-cv/") ||
       req.originalUrl.startsWith("/soc/user/nstuget/") ||
       req.originalUrl === '/soc/extSkillsnet/getAll' ||
-      req.originalUrl === '/soc/extSkillsnet/create' ||
+      req.originalUrl.startsWith('/soc/extSkillsnet/create') ||
       req.originalUrl === '/soc/cv/getAllPicture' ||
       req.originalUrl.startsWith("/soc/cv/get-picture-by-user/") ||
       req.originalUrl.startsWith("/soc/cv/download-cv/") ||
@@ -251,6 +251,7 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/meetingTeams/create' ||
       req.originalUrl.startsWith('/soc/genDoc/get-doc') ||
       req.originalUrl === '/soc/annonce/post-annonce' ||
+      req.originalUrl === '/soc/matching/create' ||
       req.originalUrl === "/soc/entreprise/createEntrepriseRepresentant" ||
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
       req.originalUrl.startsWith('/soc/annonce/get-annonces')
@@ -382,14 +383,6 @@ app.use('/soc/stage', stageController)
 app.use('/soc/vente', venteController)
 app.use('/soc/factureCommission', factureCommissionController)
 
-app.use("/soc/progressionPeda", progressionPedaController);
-app.use("/soc/qs", QSController);
-app.use("/soc/project", projectController);
-app.use("/soc/links", linksController);
-app.use("/soc/projet", projetController);
-app.use("/soc/team", teamController);
-app.use("/soc/matching", MatchingController);
-app.use("/soc/stage", stageController);
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)

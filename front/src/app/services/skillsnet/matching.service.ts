@@ -14,7 +14,7 @@ export class MatchingService {
   constructor(private httpClient: HttpClient) { }
   create(tbObj: any) {
     let url = this.apiUrl + 'create';
-    return this.httpClient.post<Matching>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<Matching>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
   update(id: string, obj: any) {
     let url = this.apiUrl + 'update/' + id;

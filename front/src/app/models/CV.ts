@@ -82,6 +82,7 @@ export class CV {
         public niveau_etude?: string,
         public last_modified_at?: Date,
         public source?: string,
-        public profil?: Profile
+        public profil?: Profile,
+        public taux?: number
     ) { }
 }

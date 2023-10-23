@@ -421,7 +421,8 @@ export class AjoutCvComponent implements OnInit {
 
             })
             .catch((error) => {
-              this.formAddCV.reset();
+              if (!this.isEtudiant)
+                this.formAddCV.reset();
               this.showFormAddCV = false;
               this.onGetAllClasses();
             });
@@ -438,7 +439,8 @@ export class AjoutCvComponent implements OnInit {
       this.cvService.postCv(cv)
         .then((response: CV) => {
           this.messageService.add({ severity: "success", summary: `Le cv à été ajouté` })
-          this.formAddCV.reset();
+          if (!this.isEtudiant)
+            this.formAddCV.reset();
           this.showFormAddCV = false;
           this.onGetAllClasses();
         })
