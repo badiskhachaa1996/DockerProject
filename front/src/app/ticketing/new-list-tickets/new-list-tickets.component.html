@@ -146,7 +146,7 @@
                         inputId="type3"></p-checkbox>
                     <label for="city1">Crées</label>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
+                <div class="col-6 md:col-6 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
                     <p-checkbox name="filterType" value="Non Assigne" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type4"></p-checkbox>
                     <label for="city1">Non assignés</label>
@@ -156,11 +156,11 @@
                         inputId="type2"></p-checkbox>
                     <label for="city1">Assignés</label>
                 </div>
-                <div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
+                <!--<div class="col-6 md:col-3 field-checkbox" *ngIf="isAgent  && TicketMode!='Personnel'">
                     <p-checkbox name="filterType" value="Assigne Service" [(ngModel)]="filterType"
                         (onChange)="onFilterTicket()" inputId="type2"></p-checkbox>
                     <label for="city1">Assignés au service</label>
-                </div>
+                </div>-->
 
                 <div class="col-6 md:col-2 field-checkbox">
                     <p-checkbox name="filterStatutTicket" value="Tickets > 24 heures" (onChange)="onFilterTicket()"
