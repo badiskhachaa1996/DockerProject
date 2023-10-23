@@ -28,7 +28,7 @@ export class CvEtudiantComponent implements OnInit {
     this.AuthService.getPopulate(this.token.id).subscribe(user => {
       this.USER = user
     })
-    this.MatchingService.getAllByCVUSERID(this.token.id).subscribe(matchings => {
+    this.MatchingService.generateMatchingV1USERID(this.token.id).subscribe(matchings => {
       this.matchingList = matchings
     })
     this.RDVService.getAllByUserID(this.token.id).subscribe(rdvs => {
