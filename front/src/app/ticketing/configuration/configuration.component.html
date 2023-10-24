@@ -91,6 +91,9 @@
                     <th pSortableColumn="firstname" style="text-align:center">
                         Prénom & Nom <p-sortIcon field="firstname"> </p-sortIcon>
                     </th>
+                    <th>
+                        Role
+                    </th>
                     <th>Action</th>
                 </tr>
             </ng-template>
@@ -100,9 +103,28 @@
                         {{user.firstname|titlecase}} {{user.lastname|uppercase}}
                     </td>
                     <td>
+                        <ng-container *ngIf="customIncludes(responsableList,user)">
+                            Responsable
+                        </ng-container>
+                        <ng-container *ngIf="!customIncludes(responsableList,user)">
+                            Agent
+                        </ng-container>
+                    </td>
+                    <td>
+                        <!--
                         <i pTooltip="Voir les roles Ticketing" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-star" (click)="onSeeRole(user)" aria-hidden="true"></i>
+-->
+                        <i *ngIf="!customIncludes(responsableList,user)" aria-hidden="true"
+                            pTooltip="Nommer Responsable" style="margin-left: 2%; cursor: pointer;" class="pi pi-star"
+                            (click)="convertRole(user,addMemberOfService,'Responsable')">
 
+                        </i>
+                        <i *ngIf="customIncludes(responsableList,user)" aria-hidden="true" pTooltip="Convertir en Agent"
+                            style="margin-left: 2%; cursor: pointer;color:orange" class="pi pi-star-fill"
+                            (click)="convertRole(user,addMemberOfService)">
+
+                        </i>
                         <i pTooltip="Supprimer ce membre du service" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-trash" (click)="removeMember(user,ri)" aria-hidden="true"></i>
                     </td>
@@ -150,6 +172,9 @@
                     Sujets
                 </th>
                 <th>
+                    Responsable
+                </th>
+                <th>
                     Membres
                 </th>
                 <th style="text-align:center">Action</th>
@@ -161,7 +186,17 @@
                     {{service.label}}
                 </td>
                 <td>
-                    {{sujetDic[service._id]}}
+                    <app-read-more [string]="sujetDic[service._id]"></app-read-more>
+                </td>
+                <td>
+                    <ng-container *ngFor="let responsable of responsableDic[service._id]; let isLast = last">
+                        <ng-container *ngIf="!isLast">
+                            {{responsable.firstname | titlecase}} {{responsable.lastname |uppercase}},
+                        </ng-container>
+                        <ng-container *ngIf="isLast">
+                            {{responsable.firstname | titlecase}} {{responsable.lastname |uppercase}}
+                        </ng-container>
+                    </ng-container>
                 </td>
                 <td>
                     {{memberDic[service._id]}}
@@ -169,9 +204,6 @@
                 <td>
                     <i pTooltip="Gérer les membres" style="margin-right: 3%; cursor: pointer;" class="pi pi-users"
                         (click)="AddMember(service)" aria-hidden="true"></i>
-
-                    <i pTooltip="Gérer les responsables" style="margin-right: 3%; cursor: pointer;" class="pi pi-star"
-                        (click)="AddResponsable(service)" aria-hidden="true"></i>
 
                     <i pTooltip="Gérer les sujets" style="margin-right: 3%; cursor: pointer;" class="pi pi-comments"
                         (click)="AddSujet(service)" aria-hidden="true"></i>
@@ -185,12 +217,10 @@
 
 </div>
 
-<p-dialog header="Ajout des role Ticketing à {{seeRole?.firstname | titlecase}} {{seeRole?.lastname | uppercase}}"
+<p-dialog header="Ajout des roles Ticketing à {{seeRole?.firstname | titlecase}} {{seeRole?.lastname | uppercase}}"
     [(visible)]="displayRolesTicketing" [modal]="true" [style]="{width: '75vw', height:'75vw'}">
     <div class="grid" *ngIf="displayRolesTicketing">
         <div class="col-12">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="seeRole = null"
-                aria-hidden="true"> </i>
             <button pButton icon="pi pi-file" label="Ajouter un module" (click)="initAddModule()" type="button"
                 style="margin-left: 2px;">
             </button>

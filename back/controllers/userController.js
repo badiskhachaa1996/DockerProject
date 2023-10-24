@@ -370,9 +370,8 @@ app.post("/updateById/:id", (req, res) => {
   if (user.password_clear) {
     user["password"] = bcrypt.hashSync(user.password_clear, 8);
   }
-  User.findOneAndUpdate(
-    { _id: req.params.id },
-    user,
+  delete user._id
+  User.findByIdAndUpdate(    req.params.id,    user,
     { new: true },
     (err, user) => {
       if (err) {
