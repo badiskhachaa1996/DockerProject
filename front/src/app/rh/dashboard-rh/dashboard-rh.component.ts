@@ -6,27 +6,33 @@ import { PointageData } from 'src/app/models/PointageData';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
 import { PointageService } from 'src/app/services/pointage.service';
 import { RhService } from 'src/app/services/rh.service';
-
+import jwt_decode from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
+import mongoose from 'mongoose';
 @Component({
   selector: 'app-dashboard-rh',
   templateUrl: './dashboard-rh.component.html',
   styleUrls: ['./dashboard-rh.component.scss']
 })
 export class DashboardRhComponent implements OnInit {
-
+  displayCRA = false
   today: Date = new Date();
   dailyChecks: DailyCheck[] = [];
   userChecksHistorique: DailyCheck[] = [];
+  defaultUserChecksHistorique: DailyCheck[] = [];
   showUserChecksHistorique: boolean = false;
   collaborateurs: Collaborateur[] = [];
+  dicCollaborateurs = {}
   numberOfChecks: number = 0;
-  checkPercent: number = 0;
   numberOfConge: number = 0;
   numberOfAbsent: number = 0;
   numberOfPause: number = 0;
   numberOfDisponible: number = 0;
   numberOfReunion: number = 0;
   numberOfOccupe: number = 0;
+  collaborateurConnected: Collaborateur
+  token;
 
   loading: boolean = true;
   statutList: any[] = [
@@ -39,9 +45,9 @@ export class DashboardRhComponent implements OnInit {
   ];
 
   dataMachine;
-
+  USER: User
   constructor(private rhService: RhService, private dailyCheckService: DailyCheckService,
-    private messageService: MessageService, private PointageService: PointageService) { }
+    private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService) { }
 
   ngOnInit(): void {
     // recuperation de la liste des checks
@@ -49,6 +55,9 @@ export class DashboardRhComponent implements OnInit {
     this.PointageService.getAllWithUserID().subscribe(r => {
       this.dataMachine = r
     })
+
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
@@ -68,23 +77,29 @@ export class DashboardRhComponent implements OnInit {
         this.rhService.getCollaborateurs()
           .then((response) => {
             this.collaborateurs = response;
+            this.collaborateurs.forEach((c, idx) => {
+              if (!c.user_id) {
+                this.collaborateurs.splice(idx, 1)
+              }
+            })
             let listCIDS = []
             this.dailyChecks.forEach((dc: any) => {
               if (dc && dc.user_id)
                 listCIDS.push(dc.user_id._id)
             })
-            console.log(this.dailyChecks, listCIDS, this.collaborateurs)
-            this.collaborateurs.forEach(c => {
+            this.collaborateurs.forEach((c, idx) => {
               if (c.user_id && c.user_id.lastname && c.user_id.firstname && listCIDS.includes(c.user_id._id) == false) {
                 c.user_id.statut = "Absent"
-                console.log(c.user_id)
-                this.dailyChecks.push(new DailyCheck(null, c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
+                this.dailyChecks.push(new DailyCheck(new mongoose.Types.ObjectId().toString(), c.user_id, new Date().toLocaleDateString(), null, null, null, null, null, null, null, null))
               }
-
+              if (c.user_id) {
+                this.dicCollaborateurs[c.user_id._id] = c
+              }
+              if (c.user_id?._id == this.token.id)
+                this.collaborateurConnected = c
             })
+            this.defaultdailyChecks = this.dailyChecks
             this.loading = false;
-            // pourcentage de checks
-            this.checkPercent = Math.ceil((this.numberOfChecks / this.collaborateurs.length) * 100);
 
             // initialisation à zero
             this.numberOfDisponible = 0;
@@ -125,43 +140,141 @@ export class DashboardRhComponent implements OnInit {
     this.dailyCheckService.getUserChecks(user_id._id)
       .then((response) => {
         this.userChecksHistorique = response;
+        this.defaultUserChecksHistorique = response
         this.showUserChecksHistorique = true;
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: "Impossible de récupérer l'historique de check du collaborateur" }); });
   }
 
   getCheckIn(user_id) {
-    let UID = this.dataMachine.UserToUID[user_id]
-    if (this.dataMachine.DataDic[UID]) {
-      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
-      let date = new Date(listCheck[0].date)
-      listCheck.forEach(element => {
-        if (new Date(element.date) < date)
-          date = new Date(element.date)
-      });
-      return date
-    } else {
-      return null
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) < date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
     }
+
 
   }
 
   getCheckOut(user_id) {
-    let UID = this.dataMachine.UserToUID[user_id]
-    if (this.dataMachine.DataDic[UID]) {
-      let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
-      let date = new Date(listCheck[0].date)
-      listCheck.forEach(element => {
-        if (new Date(element.date) > date)
-          date = new Date(element.date)
-      });
-      return date
-    } else {
-      return null
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) > date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
     }
+
   }
 
+  localisationList: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
+  siteSelected = []
+  defaultdailyChecks = []
+  filterCollaborateur(e: string[]) {
+    this.dailyChecks = []
+    if (e.length != 0)
+      this.defaultdailyChecks.forEach(check => {
+        let localisations: string[] = this.dicCollaborateurs[check.user_id._id].localisation
+        let r = false
+        localisations.forEach(val => {
+          if (e.includes(val))
+            r = true
+        })
+        if (r) {
+          this.dailyChecks.push(check)
+        }
+      })
+    else
+      this.dailyChecks = this.defaultdailyChecks
+  }
 
+  onReinitPointage(check: DailyCheck) {
+    this.dailyCheckService.deleteCheck(check._id).then(d => {
+      if (this.defaultdailyChecks.indexOf(check) != -1)
+        this.defaultdailyChecks.splice(this.defaultdailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
+      if (this.dailyChecks.indexOf(check) != -1)
+        this.dailyChecks.splice(this.dailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
+    })
+  }
+  craStatutList = [
+    { label: 'Valider', value: true },
+    { label: 'Non Valider', value: false }
+  ]
+  dataCHECK: DailyCheck
+  onValidateCRA(check: DailyCheck) {
+    this.displayCRA = true
+    this.dataCHECK = check
+  }
+  displayNote = false
+  noteCheck: DailyCheck
+  takeNote(check: DailyCheck) {
+    this.displayNote = true
+    this.noteCheck = check
+  }
+  saveNote(check: DailyCheck) {
+    check.commented_by = this.USER
+    check.commented_date = new Date()
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+      this.displayNote = false
+    })
+  }
 
+  seePause(pause: any[]) {
+
+  }
+
+  onFilter(value: string) {
+    if (new Date(value).toString() != 'Invalid Date') {
+      let db = new Date(value)
+      db.setHours(0, 0, 0, 0)
+      let df = new Date(value)
+      df.setHours(23, 59, 59, 59)
+      console.log(value, db, df)
+      this.userChecksHistorique = []
+      this.defaultUserChecksHistorique.forEach(check => {
+        let day = check.today[0] + check.today[1]
+        let month = check.today[3] + check.today[4]
+        let year = check.today[6] + check.today[7] + check.today[8] + check.today[9]
+        let td = new Date(month + "/" + day + "/" + year)
+        if (td.getTime() >= db.getTime() && td.getTime() <= df.getTime())
+          this.userChecksHistorique.push(check)
+
+      })
+    }
+  }
+  saveCheck(check: DailyCheck) {
+    console.log(check.validated)
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+     
+    },error=>{console.error(error)})
+  }
 
 }

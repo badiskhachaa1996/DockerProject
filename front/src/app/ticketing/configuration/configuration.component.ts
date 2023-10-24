@@ -291,7 +291,6 @@ export class ConfigurationComponent implements OnInit {
         }
       })
     }
-    console.log(user.roles_ticketing_list)
     this.UserService.update({ _id: user._id, roles_ticketing_list: user.roles_ticketing_list }).subscribe(r => {
       this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
     })
