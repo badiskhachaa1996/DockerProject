@@ -6364,59 +6364,27 @@ export class AppMenuComponent implements OnInit {
                             icon: 'pi pi-users',
                             items: [
                                 {
-                                    label: 'Les collaborateurs',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/rh/collaborateurs'],
+                                    label: 'Dashboard',
+                                    icon: 'pi pi-home',
+                                    routerLink: ['/rh/dashboard'],
                                 },
                                 {
-                                    label: 'Gestion des congés, autorisations et absences',
+                                    label: 'Demandes',
                                     icon: 'pi pi-calendar',
                                     routerLink: ['/rh/conges-autorisations'],
                                 },
                                 {
-                                    label: 'Gestion des demandes et reclamation',
-                                    icon: 'pi pi-check-square',
-                                    items: [
-                                        {
-                                            label: 'Tickets non assignés',
-                                            icon: 'pi pi-clock',
-                                            routerLink: [
-                                                '/ticketing/suivi/non-assignes/Ressources Humaines',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Tickets assignés - En attente de traitement',
-                                            icon: 'pi pi-inbox',
-                                            routerLink: [
-                                                '/ticketing/suivi/attente-de-traitement/Ressources Humaines',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Tickets traités',
-                                            icon: 'pi pi-check-circle',
-                                            routerLink: [
-                                                '/ticketing/suivi/traite/Ressources Humaines',
-                                            ],
-                                        },
-                                        {
-                                            label: 'Tickets refusés',
-                                            icon: 'pi pi-check-circle',
-                                            routerLink: [
-                                                '/ticketing/suivi/refuse/Ressources Humaines',
-                                            ],
-                                        },
-                                    ]
+                                    label: 'Collaborateurs',
+                                    icon: 'pi pi-users',
+                                    routerLink: ['/rh/collaborateurs'],
                                 },
+
                                 {
                                     label: 'Calendrier',
                                     icon: 'pi pi-calendar',
                                     routerLink: ['/rh/calendrier'],
                                 },
-                                {
-                                    label: 'DashBoard',
-                                    icon: 'pi pi-home',
-                                    routerLink: ['/rh/dashboard'],
-                                },
+
                             ],
                         }
                     )

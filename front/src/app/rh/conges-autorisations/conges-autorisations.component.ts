@@ -23,7 +23,7 @@ export class CongesAutorisationsComponent implements OnInit {
   formUpdateConge: FormGroup;
   showFormUpdateConge: boolean = false;
   showOtherTextArea: boolean = false;
-  
+
   filterStatut: any[] = [
     { label: 'En attente', value: 'En attente' },
     { label: 'Refusé', value: 'Refusé' },
@@ -58,41 +58,44 @@ export class CongesAutorisationsComponent implements OnInit {
   ngOnInit(): void {
     // recuperation de la liste des collaborateurs
     this.rhService.getCollaborateurs()
-    .then((response) => {
-      response.forEach((collaborateur) => {
-        let {user_id} = collaborateur;
+      .then((response) => {
+        response.forEach((collaborateur) => {
+          let { user_id } = collaborateur;
 
-        let userName = `${user_id.firstname} ${user_id.lastname}`;
-        let userObj = {label: userName, value: user_id._id};
-        this.collaborateursFilter.push(userObj);
-      });
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des collaborateurs' }) });
+          let userName = `${user_id.firstname} ${user_id.lastname}`;
+          let userObj = { label: userName, value: user_id._id };
+          this.collaborateursFilter.push(userObj);
+        });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des collaborateurs' }) });
 
     // recuperation de la liste des congés
     this.onGetConges();
-    
+
     // initialisation du formulaire de modification d'une demande de congé
     this.formUpdateConge = this.formBuilder.group({
-      type:             ['', Validators.required],
-      other:            [''],
-      debut:            ['', Validators.required],
-      fin:              ['', Validators.required],
-      nb_jour:          ['', Validators.required],
-      motif:            ['', Validators.required],
-      note_decideur:    ['', Validators.required],
+      type: ['', Validators.required],
+      other: [''],
+      debut: ['', Validators.required],
+      fin: ['', Validators.required],
+      nb_jour: ['', Validators.required],
+      motif: ['', Validators.required],
+      note_decideur: ['', Validators.required],
     });
   }
 
 
   // méthode de recuperation de la liste des congés
-  onGetConges(): void
-  {
+  onGetConges(): void {
     this.congeService.getAll()
-    .then((response) => {
-      this.conges = response;
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des congés' }) });
+      .then((response) => {
+        this.conges = [];
+        response.forEach(c => {
+          if (c.user_id)
+            this.conges.push(c)
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des congés' }) });
   }
 
 
@@ -126,12 +129,12 @@ export class CongesAutorisationsComponent implements OnInit {
 
   onRowEditSave(conge: Conge) {
     this.congeService.patchStatut(conge.statut, conge._id)
-    .then((response) => {
-      this.onGetConges();
-      delete this.clonedConges[conge._id as string];
-      this.messageService.add({ severity: 'success', summary: 'Conge', detail: 'Statut de la demande mis à jour' });
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de mettre à jour le statut de la demande' }); });
+      .then((response) => {
+        this.onGetConges();
+        delete this.clonedConges[conge._id as string];
+        this.messageService.add({ severity: 'success', summary: 'Conge', detail: 'Statut de la demande mis à jour' });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de mettre à jour le statut de la demande' }); });
   }
 
   onRowEditCancel(conge: Conge, index: number) {
@@ -141,23 +144,21 @@ export class CongesAutorisationsComponent implements OnInit {
   //* fin
 
   // méthode de remplissage du formulaire de mise à jour d'une demande de congé
-  onFillFormUpdate(conge: Conge): void
-  {
+  onFillFormUpdate(conge: Conge): void {
     this.congeToUpdate = conge;
 
-    if(conge.type_conge === "Autre motif")
-    {
+    if (conge.type_conge === "Autre motif") {
       this.showOtherTextArea = true;
     }
 
     this.formUpdateConge.patchValue({
-      type:     conge.type_conge,
-      other:    conge.other_motif,
-      debut:    new Date(conge.date_debut),
-      fin:      new Date(conge.date_fin),
-      nb_jour:  conge.nombre_jours,
-      motif:    conge.motif,
-      node_decideur:    conge?.note_decideur,
+      type: conge.type_conge,
+      other: conge.other_motif,
+      debut: new Date(conge.date_debut),
+      fin: new Date(conge.date_fin),
+      nb_jour: conge.nombre_jours,
+      motif: conge.motif,
+      node_decideur: conge?.note_decideur,
     });
 
     this.showFormUpdateConge = true;
@@ -169,29 +170,28 @@ export class CongesAutorisationsComponent implements OnInit {
   }
 
   // méthode de mise à jour d'une demande de congé
-  onUpdateConge(): void
-  {
+  onUpdateConge(): void {
     // recuperation des valeurs du formulaire
     const formValue = this.formUpdateConge.value;
 
-    this.congeToUpdate.type_conge     = formValue.type;
-    this.congeToUpdate.other_motif    = formValue.other;
+    this.congeToUpdate.type_conge = formValue.type;
+    this.congeToUpdate.other_motif = formValue.other;
 
-    this.congeToUpdate.date_debut     = formValue.debut;
-    this.congeToUpdate.date_fin       = formValue.fin;
-    this.congeToUpdate.nombre_jours   = formValue.nb_jour;
-    this.congeToUpdate.motif          = formValue.motif;
-    this.congeToUpdate.note_decideur          = formValue.note_decideur;
+    this.congeToUpdate.date_debut = formValue.debut;
+    this.congeToUpdate.date_fin = formValue.fin;
+    this.congeToUpdate.nombre_jours = formValue.nb_jour;
+    this.congeToUpdate.motif = formValue.motif;
+    this.congeToUpdate.note_decideur = formValue.note_decideur;
 
     this.congeService.putConge(this.congeToUpdate)
-    .then(() => {
-      this.formUpdateConge.reset();
-      this.showFormUpdateConge = false;
-      this.showOtherTextArea = false;
-      this.messageService.add({ severity: 'success', summary: 'Congé', detail: "La demande à bien été modifié" });
-      this.onGetConges();
-    })
-    .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
+      .then(() => {
+        this.formUpdateConge.reset();
+        this.showFormUpdateConge = false;
+        this.showOtherTextArea = false;
+        this.messageService.add({ severity: 'success', summary: 'Congé', detail: "La demande à bien été modifié" });
+        this.onGetConges();
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
   }
 
 }

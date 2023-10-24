@@ -399,6 +399,7 @@ import { SeeCvExterneComponent } from './skillsnet/i-match/see-cv-externe/see-cv
 import { VoirDetailsOffreComponent } from './skillsnet/voir-details-offre/voir-details-offre.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
 
 
 @NgModule({
@@ -810,6 +811,7 @@ import { PreinscriptionComponent } from './administration-v1/gestion-des-inscrip
     VoirDetailsOffreComponent,
     CvEtudiantComponent,
     PreinscriptionComponent,
+    PauseReadMoreComponent,
     
     
   ],

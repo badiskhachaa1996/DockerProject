@@ -128,4 +128,16 @@ export class DailyCheckService {
     });
   }
 
+  deleteCheck(id: string): Promise<DailyCheck> {
+    const url = `${this.endPoint}/delete/${id}`;
+
+    return new Promise<DailyCheck>((resolve, reject) => {
+      this.httpClient.delete<DailyCheck>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => { resolve(response) },
+        error: (error) => { reject(error) },
+        complete: () => { console.log('requête de mise à jour du check in exécuté') }
+      });
+    });
+  }
+
 }

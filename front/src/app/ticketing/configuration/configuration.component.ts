@@ -20,6 +20,7 @@ export class ConfigurationComponent implements OnInit {
   services: Service[] = []
   sujetDic = {}
   memberDic = {}
+  responsableDic = {}
   ngOnInit(): void {
     this.ServServ.getAll().subscribe(data => {
       this.services = data
@@ -34,6 +35,15 @@ export class ConfigurationComponent implements OnInit {
     })
     this.UserService.getAllAgent().subscribe(data => {
       data.forEach(user => {
+        let dicRoles = {}
+        if (user.roles_ticketing_list && user.roles_ticketing_list.length != 0) {
+
+          user.roles_ticketing_list.forEach(roleTicket => {
+            let buffer: any = roleTicket.module
+            dicRoles[buffer] = roleTicket.role
+          })
+        }
+
         if (user.service_list) {
           user.service_list.forEach(service => {
             if (this.memberDic[service]) {
@@ -41,6 +51,12 @@ export class ConfigurationComponent implements OnInit {
             }
             else {
               this.memberDic[service] = user.firstname + " " + user.lastname.toUpperCase()
+            }
+            if (dicRoles[service] && dicRoles[service] == 'Responsable') {
+              if (this.responsableDic[service])
+                this.responsableDic[service].push(user)
+              else
+                this.responsableDic[service] = [user]
             }
           })
         }
@@ -132,9 +148,14 @@ export class ConfigurationComponent implements OnInit {
   addMemberOfService: Service = null
   memberList: User[] = []
   memberDropdown = []
+  responsableList: User[] = []
   AddMember(service: Service) {
     this.addMemberOfService = service
     this.memberDropdown = []
+    if (this.responsableDic[service._id])
+      this.responsableList = this.responsableDic[service._id]
+    else
+      this.responsableList = []
     this.UserService.getAllByServiceFromList(service._id).subscribe(data => {
       this.memberList = data
       this.UserService.getAllAgent().subscribe(dataAgent => {
@@ -146,13 +167,6 @@ export class ConfigurationComponent implements OnInit {
       })
     })
   }
-  responsableList = []
-  AddResponsable(service: Service) {
-    this.UserService.getAllAgentByTicketing(service._id).subscribe(users => {
-      this.responsableList = users
-    })
-  }
-
   customIncludes(listUser: User[], agent: User) {
     let r = false
     listUser.forEach(val => {
@@ -186,11 +200,24 @@ export class ConfigurationComponent implements OnInit {
       this.UserService.getAllAgent().subscribe(data => {
         this.memberDic = {}
         data.forEach(user => {
+          let dicRoles = {}
+          if (user.roles_ticketing_list) {
+            user.roles_ticketing_list.forEach(roleTicket => {
+              dicRoles[roleTicket.module._id] = roleTicket.role
+            })
+          }
           if (user.service_list)
             user.service_list.forEach(service => {
               if (this.memberDic[service]) this.memberDic[service] = this.memberDic[service] + ", " + user.firstname + " " + user.lastname.toUpperCase()
               else this.memberDic[service] = user.firstname + " " + user.lastname.toUpperCase()
+              if (dicRoles[service] && dicRoles[service] == 'Responsable') {
+                if (this.responsableDic[service])
+                  this.responsableDic[service].push(user)
+                else
+                  this.responsableDic[service] = [user]
+              }
             })
+
         })
       })
     })
@@ -244,5 +271,29 @@ export class ConfigurationComponent implements OnInit {
 
   initAddMember() {
     this.addMember = true
+  }
+  convertRole(user: User, service: Service, role: string = 'Agent') {
+    if (role != 'Responsable') {
+      this.responsableList.splice(this.customIndexOf(this.responsableList, user), 1)
+      this.responsableDic[service._id].splice(this.customIndexOf(this.responsableDic[service._id], user), 1)
+      user.roles_ticketing_list.forEach((roleTicket, idx) => {
+        if (roleTicket.module._id == service._id) {
+          user.roles_ticketing_list[idx].role = 'Agent'
+        }
+      })
+    }
+    else {
+      this.responsableList.push(user)
+      this.responsableDic[service._id].push(user)
+      user.roles_ticketing_list.forEach((roleTicket, idx) => {
+        if (roleTicket.module._id == service._id) {
+          user.roles_ticketing_list[idx].role = 'Responsable'
+        }
+      })
+    }
+    this.UserService.update({ _id: user._id, roles_ticketing_list: user.roles_ticketing_list }).subscribe(r => {
+      this.ToastService.add({ severity: 'success', summary: "Mis à jour des roles de Ticketing avec succès" })
+    })
+
   }
 }
