@@ -78,9 +78,9 @@ export class UsersSettingsComponent implements OnInit {
 
   ]
   paysList = environment.pays;
-
+  nbEstya = 0
   etudiants: Etudiant[] = [];
-  formateurs: Formateur[] = [];
+  //formateurs: Formateur[] = [];
   agents: User[] = [];
   services: Service[] = [];
   dropDownService: any = [{ label: 'Tous les services', value: null }];
@@ -130,6 +130,10 @@ export class UsersSettingsComponent implements OnInit {
       .then((response: User[]) => {
         this.messageService.add({ severity: 'info', summary: 'Gestion des utilisateurs', detail: `Chargement de la liste des users` });
         this.users = response;
+        response.forEach(u => {
+          if (u.email && u.email.includes('@estya.com'))
+            this.nbEstya += 1
+        })
       })
       .catch((error) => { console.error(error) });
 
@@ -140,10 +144,10 @@ export class UsersSettingsComponent implements OnInit {
     );
 
     //Recuperation de la liste des formateurs
-    this.formateurService.getAll().subscribe(
+    /*this.formateurService.getAll().subscribe(
       ((response) => { this.formateurs = response }),
       ((error) => { console.error(error) })
-    );
+    );*/
 
     //Recuperation de la liste des agents
     this.userService.getAllAgent().subscribe(
@@ -243,7 +247,7 @@ export class UsersSettingsComponent implements OnInit {
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
     console.log(this.formUpdate.value);
-    
+
     this.userService.patchById(user)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });
