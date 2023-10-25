@@ -186,7 +186,7 @@ export class RdvCalendarInterneComponent implements OnInit {
       center: 'title',
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay,timeGridFourDay'
     },
-    locale: 'fr',
+   locale: frLocale,
     events: [],
 
     defaultView: 'timeGridWeek',

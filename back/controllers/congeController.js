@@ -38,7 +38,7 @@ app.get("/get-conges", (req, res) => {
 app.put("/put-conge", (req, res) => {
     const conge = new Conge({ ...req.body });
 
-    Conge.updateOne({ _id: conge._id }, { ...req.body })
+    Conge.findByIdAndUpdate(conge._id, { ...req.body })
         .then((response) => { res.status(201).send(response) })
         .catch((error) => { res.status(400).send(error) })
 })

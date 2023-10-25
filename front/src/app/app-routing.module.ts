@@ -287,6 +287,7 @@ import { NewEntreprisesComponent } from './skillsnet/new-entreprises/new-entrepr
 import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewer.component';
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
+import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
 const routes: Routes = [
     {
         path: '',
@@ -824,7 +825,7 @@ const routes: Routes = [
                 component: DemandesReclamationsComponent,
             },
             { path: 'rh/dashboard', component: DashboardRhComponent },
-            { path: 'rh/calendrier', component: CalendrierRhComponent },
+            { path: 'rh/calendrier', component: NewCalendrierComponent },
             { path: 'rh/calendrier/:id', component: CalendrierRhComponent },
 
             /** end */
