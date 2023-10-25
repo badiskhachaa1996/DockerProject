@@ -1,4 +1,38 @@
 <div class="card grid">
+    <div class="col-12 grid">
+        <div class="col-4" *ngIf="indexTabView!=1">
+            <label>Absence</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Absence" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView==1">
+            <label>Absence Non Justifiée</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4">
+            <label>Autorisation</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Autorisation" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView!=1">
+            <label>Férié Tunis</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView!=1">
+            <label>Férié France</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView!=1">
+            <label>Autre événement</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Autre événement" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView==1">
+            <label>Présent</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Présent" (onChange)="onFilter()"></p-checkbox>
+        </div>
+        <div class="col-4" *ngIf="indexTabView==1">
+            <label>Cours</label><br>
+            <p-checkbox [(ngModel)]="filter_value" value="Cours" (onChange)="onFilter()"></p-checkbox>
+        </div>
+    </div>
     <p-tabView [(activeIndex)]="indexTabView">
         <p-tabPanel header="Global" leftIcon="pi pi-globe">
             <div style="width: 100%;text-align: center;">
@@ -13,11 +47,87 @@
         <p-tabPanel header="Users" leftIcon="pi pi-users">
             <div style="width: 100%;text-align: center;">
                 <label>Collaborateur&nbsp;</label>
-                <p-dropdown filter="true" [options]="collaborateurList" placeholder="Choisissez un collaborateur" [(ngModel)]="userSelected"
-                    (onChange)="changeUser($event.value)" autoWidth="false" [style]="{'width':'30em'}"></p-dropdown>
+                <p-dropdown filter="true" [options]="collaborateurList" placeholder="Choisissez un collaborateur"
+                    [(ngModel)]="userSelected" (onChange)="changeUser($event.value)" autoWidth="false"
+                    [style]="{'width':'30em'}"></p-dropdown>
             </div>
             <p-fullCalendar #calendar [events]="eventUsers" [options]="optionsUsers">
             </p-fullCalendar>
         </p-tabPanel>
     </p-tabView>
 </div>
+
+<p-dialog class="grid" header="Ajouter un événement" [(visible)]="displayPopUp" [modal]="true"
+    [style]="{width: '75vw'}">
+    <form class="p-fluid p-formgrid grid col-12" [formGroup]="formAdd" (ngSubmit)="onSave()">
+        <div class="field col-12 md:col-6">
+            <label>Type: </label>
+            <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true" appendTo="body"
+                placeholder="Choisissez un type d'événement" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Intitulé </label>
+            <input pInputText id="title" type="text" formControlName="name" placeholder="Intitulé" />
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Campus: </label>
+            <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false" [filter]="true"
+                appendTo="body" placeholder="Choisissez un campus" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label>Description </label>
+            <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+        </div>
+        <button pButton [disabled]="formAdd.invalid" label="Ajouter l'événement"></button>
+    </form>
+</p-dialog>
+
+<p-dialog *ngIf="dateAbsence" [(visible)]="displayAbsence" header="Absents du {{dateAbsence| date:'dd MMMM yy'}}">
+    <p>En cours de dévéloppement</p>
+</p-dialog>
+
+<p-dialog *ngIf="dateAutorisation" [(visible)]="displayAutorisation"
+    header="Autorisations du {{dateAutorisation| date:'dd MMMM yy'}}">
+    <p>En cours de dévéloppement</p>
+</p-dialog>
+
+<p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
+    [style]="{width: '75vw'}">
+    <div class="col-12 grid">
+        <div class="col-12">
+            <p>
+                {{dataEvent?.note}}
+            </p>
+        </div>
+        <form class="p-fluid p-formgrid grid col-12" [formGroup]="formUpdate" (ngSubmit)="onUpdate()" *ngIf="showEdit">
+            <div class="field col-12 md:col-6">
+                <label>Type: </label>
+                <p-dropdown [options]="typeList" formControlName="type" autoWidth="false" [filter]="true"
+                    appendTo="body" placeholder="Choisissez un type d'événement"
+                    [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Intitulé </label>
+                <input pInputText id="title" type="text" formControlName="name" placeholder="Intitulé" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Campus: </label>
+                <p-dropdown [options]="campusList" formControlName="campus" autoWidth="false" [filter]="true"
+                    appendTo="body" placeholder="Choisissez un campus" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Description </label>
+                <textarea pInputTextarea formControlName="note" autoResize rows="3" cols="30"></textarea>
+            </div>
+            <button pButton [disabled]="formUpdate.invalid" label="Modifier l'événement"></button>
+        </form>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-cog" [style]="{'width':'100%'}" label="Modifier l'événement"
+                (click)="onInitUpdate()"></p-button>
+        </div>
+        <div class="col-6" *ngIf="dataEvent?._id">
+            <p-button icon="pi pi-trash" [style]="{'width':'100%'}" label="Supprimer l'événement"
+                styleClass="p-button-danger" (click)="onDelete()"></p-button>
+        </div>
+    </div>
+</p-dialog>

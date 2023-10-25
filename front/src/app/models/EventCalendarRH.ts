@@ -7,5 +7,7 @@ export class EventCalendarRH {
         public type?: string,
         public note?: string,
         public created_by?: User,
+        public name?:string,
+        public campus?:string,
     ) { };
 }

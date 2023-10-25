@@ -17,6 +17,7 @@ import mongoose from 'mongoose';
 import { AuthService } from 'src/app/services/auth.service';
 import { CongeService } from 'src/app/services/conge.service';
 import { Router } from '@angular/router';
+import { ServService } from 'src/app/services/service.service';
 
 @Component({
   selector: 'app-collaborateurs',
@@ -24,7 +25,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./collaborateurs.component.scss']
 })
 export class CollaborateursComponent implements OnInit {
-
   collaborateurs: Collaborateur[] = [];
   agents: any[] = [];
   collaborateurToUpdate: Collaborateur;
@@ -63,6 +63,17 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Tunis M4', value: 'Tunis M4' },
     { label: 'Autre', value: 'Autre' },
   ];
+  siteFilter = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ]
 
   contratList: any[] = [
     { label: 'Stage', value: 'Stage' },
@@ -77,6 +88,15 @@ export class CollaborateursComponent implements OnInit {
     { label: 'Actif', value: 'Actif' },
     { label: 'Démission', value: 'Démission' },
     { label: 'Abandon poste', value: 'Abandon poste' },
+    { label: 'Période d\'essai', value: 'Période d\'essai' },
+    { label: 'Fin contrat', value: 'Fin contrat' },
+  ];
+  serviceFilter = []
+  statutFilter: any[] = [
+    { label: 'Actif', value: 'Actif' },
+    { label: 'Démission', value: 'Démission' },
+    { label: 'Abandon poste', value: 'Abandon poste' },
+    { label: 'Période d\'essai', value: 'Période d\'essai' },
     { label: 'Fin contrat', value: 'Fin contrat' },
   ];
 
@@ -114,15 +134,18 @@ export class CollaborateursComponent implements OnInit {
 
   constructor(private emailTypeService: EmailTypeService, private dailyCheckService: DailyCheckService,
     private messageService: MessageService, private rhService: RhService, private formBuilder: FormBuilder,
-    private UserService: AuthService, private congeService: CongeService, private router: Router) { }
+    private UserService: AuthService, private congeService: CongeService, private router: Router, private ServService: ServService) { }
 
   ngOnInit(): void {
     // décodage du token
     this.token = jwt_decode(localStorage.getItem('token'));
-
     // recuperation de la liste des collaborateurs
     this.onGetCollaborateurs();
-
+    this.ServService.getAll().subscribe(data => {
+      data.forEach(val => {
+        this.serviceFilter.push({ label: val.label, value: val._id })
+      })
+    })
     // recuperation de la liste des agents
     this.rhService.getAgents()
       .then((response) => {
@@ -651,7 +674,7 @@ export class CollaborateursComponent implements OnInit {
   }
 
   onUpdateConge() {
-    this.rhService.patchCollaborateurData({ _id: this.dataConge._id, conge_nb: this.dataConge.conge_nb }).then(c => { })
+    this.rhService.patchCollaborateurData({ _id: this.dataConge._id, conge_nb: this.dataConge.conge_nb, plafond: this.dataConge.plafond }).then(c => { })
   }
 
   calculDay(): number {
@@ -688,6 +711,12 @@ export class CollaborateursComponent implements OnInit {
   }
   onUpdateRow() {
     this.rhService.patchCollaborateurData({ ...this.dataCollab }).then(r => { })
+  }
+
+  testDate(date: string) {
+    let db = new Date(date)
+    db.setMonth(db.getMonth() + 5)
+    return db.getTime() < new Date().getTime()
   }
 
 }
