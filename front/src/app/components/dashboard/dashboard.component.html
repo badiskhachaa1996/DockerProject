@@ -1044,7 +1044,10 @@
                                     placeholder="Merci de décrire les raisons de votre demande de congé" autoResize
                                     rows="4" cols="30"></textarea>
                             </div>
-
+                            <div class="field col-12">
+                                <label>Urgent ?</label>
+                                <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
+                            </div>
                             <button pButton pRipple type="submit" class="my-2" label="Envoyer"
                                 [disabled]="formUpdateConge.invalid"></button>
                         </form>
@@ -1093,8 +1096,12 @@
                                     placeholder="Merci de décrire les raisons de votre demande de congé" autoResize
                                     rows="4" cols="30"></textarea>
                             </div>
-                            <div class="field col-12">
+                            <div class="field col-6">
                                 <input type="file" pInputText (change)="onSelectFile($event)" accept="application/pdf">
+                            </div>
+                            <div class="field col-6">
+                                <label>Urgent ?</label>
+                                <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
                             </div>
 
                             <button pButton pRipple type="submit" class="my-2" label="Envoyer"

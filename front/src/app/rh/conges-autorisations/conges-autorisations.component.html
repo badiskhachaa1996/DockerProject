@@ -42,9 +42,13 @@
                         cols="30"></textarea>
                 </div>
                 <div class="field col-12">
-                    <label htmlFor="note_decideur">Note décideur <span style="color: red">*</span></label>
+                    <label htmlFor="note_decideur">Commentaire <span style="color: red">*</span></label>
                     <textarea formControlName="note_decideur" id="note_decideur" pInputTextarea autoResize rows="4"
                         cols="30"></textarea>
+                </div>
+                <div class="field col-12">
+                    <label>Urgent ?</label>
+                    <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
                 </div>
 
                 <button pButton pRipple type="submit" class="my-2" label="Envoyer"
@@ -66,7 +70,9 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
-
+                        <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterUrgent"
+                            (onChange)="dt1.filter($event.value, 'urgent', 'equals');" placeholder="Urgent"
+                            [showClear]="true"></p-dropdown>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterStatut"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Statut"
                             [showClear]="true"></p-dropdown>
@@ -77,8 +83,8 @@
 
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}"
                             [options]="collaborateursFilter" filter="true"
-                            (onChange)="dt1.filter($event.value, 'user_id._id', 'equals');"
-                            placeholder="Nom du demandeur" [showClear]="true"></p-dropdown>
+                            (onChange)="dt1.filter($event.value, 'user_id._id', 'equals');" placeholder="Collaborateur"
+                            [showClear]="true"></p-dropdown>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -97,33 +103,40 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-conge let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="conge">
-                        <td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">
                             <button type="button" pButton pRipple [pRowToggler]="conge"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
 
-                        <td>{{conge._id.substring(conge._id.length-6, conge._id.length)|uppercase}}</td>
-                        <td>{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
-                        <td>{{conge.user_id.firstname | titlecase}} {{conge.user_id.lastname | uppercase}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge._id.substring(conge._id.length-6,
+                            conge._id.length)|uppercase}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge.date_demande | date: 'd/MM/YYYY'}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">{{conge.user_id.firstname | titlecase}}
+                            {{conge.user_id.lastname | uppercase}}</td>
 
-                        <td *ngIf="conge.type_conge == 'Autre motif'">{{ conge.other_motif}}</td>
-                        <td *ngIf="conge.type_conge != 'Autre motif'">{{ conge.type_conge}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.type_conge == 'Autre motif'">{{
+                            conge.other_motif}}</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.type_conge != 'Autre motif'">{{
+                            conge.type_conge}}</td>
 
-                        <td>du {{conge.date_debut | date: 'd/MM/YYYY'}} <br> au {{conge.date_fin | date: 'd/MM/YYYY'}}
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">du {{conge.date_debut | date: 'd/MM/YYYY'}} <br>
+                            au {{conge.date_fin | date: 'd/MM/YYYY'}}
                         </td>
 
-                        <td *ngIf="conge.nombre_jours > 1">{{conge.nombre_jours}} jours</td>
-                        <td *ngIf="conge.nombre_jours <= 1">{{conge.nombre_jours}} jour</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.nombre_jours > 1">
+                            {{conge.nombre_jours}} jours</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.nombre_jours <= 1">
+                            {{conge.nombre_jours}} jour</td>
 
-                        <td *ngIf="conge.justificatif == null">--</td>
-                        <td *ngIf="conge.justificatif != null">
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.justificatif == null">--</td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}" *ngIf="conge.justificatif != null">
                             <i class="pi pi-file" pTooltip="Télécharger le justificatif"
                                 (click)="onDonwloadJustificatif(conge._id)"
                                 style="cursor: pointer; font-size: 20px; color: rgba(0, 0, 0, 0.622)"></i>
                         </td>
 
-                        <td>
+                        <td [ngClass]="{'urgent-middle':conge.urgent}">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="filterStatut" appendTo="body" [(ngModel)]="conge.statut"
@@ -140,9 +153,11 @@
                             </p-cellEditor>
                         </td>
 
-                        <td>
-                            <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-check" pTooltip="Sauvegarder les modifications"
-                                pSaveEditableRow (click)="onRowEditSave(conge)" aria-hidden="true"></i>
+                        <td [ngClass]="{'urgent-end':conge.urgent}">
+                            
+                            <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-check"
+                                pTooltip="Sauvegarder les modifications" pSaveEditableRow (click)="onRowEditSave(conge)"
+                                aria-hidden="true"></i>
                             <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-times"
                                 pCancelEditableRow pTooltip="Annuler les modifications"
                                 (click)="onRowEditCancel(conge, ri)" aria-hidden="true"></i>
@@ -166,11 +181,16 @@
                                     <ng-template pTemplate="header">
                     <tr>
                         <th>Motif</th>
+                        <th>Validé le</th>
+                        <th>Validé par</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{conge.motif}}</td>
+                        <td>{{conge.valided_date|date:'dd MMMM yy'}}</td>
+                        <td>{{conge?.valided_by?.firstname | titlecase}} {{conge?.valided_by?.lastname | uppercase}}
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -180,12 +200,17 @@
             <p-table responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Note decideur</th>
+                        <th>Commentaire</th>
+                        <th>Commenté par</th>
+                        <th>Commenté le</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{conge.note_decideur}}</td>
+                        <td>{{conge?.commented_by?.firstname | titlecase}} {{conge?.commented_by?.lastname | uppercase}}
+                        </td>
+                        <td>{{conge.commented_date|date:'dd MMMM yy'}}</td>
                     </tr>
                 </ng-template>
             </p-table>

@@ -27,9 +27,8 @@ app.get("/get-conges-user-id/:user_id", (req, res) => {
 
 // recuperation de la liste des congés
 app.get("/get-conges", (req, res) => {
-    const { user_id } = req.params;
 
-    Conge.find()?.populate('user_id')
+    Conge.find()?.populate('user_id').populate('valided_by').populate('commented_by')
         .then((response) => { res.status(200).send(response) })
         .catch((error) => { res.status(400).send(error) })
 })
@@ -135,11 +134,11 @@ app.get("/download-justificatif/:id", (req, res) => {
 app.get("/getUserCongesByDate/:userId/:date", (req, res) => {
     const { userId } = req.params;
     if (req.params.date != 'null')
-        Conge.find({ user_id: userId, date_debut: { $lte: `${req.params.date}-31` }, date_fin: { $gte: `${req.params.date}-01` }, statut: "Validé" }).populate('user_id')
+        Conge.find({ user_id: userId, date_debut: { $lte: `${req.params.date}-31` }, date_fin: { $gte: `${req.params.date}-01` }, statut: "Validé" }).populate('user_id').populate('valided_by').populate('commented_by')
             .then((response) => { res.status(200).send(response); })
             .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des conges de l\'utilisateurs' }) });
     else
-        Conge.find({ user_id: userId, statut: "Validé" }).populate('user_id')
+        Conge.find({ user_id: userId, statut: "Validé" }).populate('user_id').populate('valided_by').populate('commented_by')
             .then((response) => { res.status(200).send(response); })
             .catch((error) => { res.status(400).json({ error: error, errorMsg: 'Impossible de récupérer la liste des conges de l\'utilisateurs' }) });
 });
