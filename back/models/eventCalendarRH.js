@@ -5,6 +5,8 @@ const schema = new mongoose.Schema({
     date: { type: Date },
     type: { type: String },
     note: { type: String },
+    campus: { type: String },
+    name: { type: String },
     created_by: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
 });
 

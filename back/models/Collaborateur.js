@@ -30,7 +30,8 @@ const collaborateurSchema = mongoose.Schema({
             title: { type: String, required: false },
             description: { type: String, required: false },
         }], default: []
-    }
+    },
+    plafond: { type: Number, required: false, default: 0 },
 });
 
 const Collaborateur = mongoose.model('collaborateur', collaborateurSchema);

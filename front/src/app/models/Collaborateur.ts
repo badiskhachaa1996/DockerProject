@@ -28,6 +28,7 @@ export class Collaborateur {
             _id?: string,
             title?: string,
             description?: string,
-        }[]
+        }[],
+        public plafond?: number
     ) { }
 }

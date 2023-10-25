@@ -153,9 +153,7 @@ export class CalendrierRhComponent implements OnInit {
     else {
       this.CalendrierRHService.getAll().subscribe(events => {
         events.forEach(ev => { this.addEvent(ev) })
-
       })
-      //this.loadEverything()
     }
 
   }
