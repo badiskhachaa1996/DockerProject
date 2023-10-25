@@ -1,38 +1,4 @@
 <div class="card grid">
-    <div class="col-12 grid">
-        <div class="col-4" *ngIf="indexTabView!=1">
-            <label>Absence</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Absence" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView==1">
-            <label>Absence Non Justifiée</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4">
-            <label>Autorisation</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Autorisation" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView!=1">
-            <label>Férié Tunis</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView!=1">
-            <label>Férié France</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView!=1">
-            <label>Autre événement</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Autre événement" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView==1">
-            <label>Présent</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Présent" (onChange)="onFilter()"></p-checkbox>
-        </div>
-        <div class="col-4" *ngIf="indexTabView==1">
-            <label>Cours</label><br>
-            <p-checkbox [(ngModel)]="filter_value" value="Cours" (onChange)="onFilter()"></p-checkbox>
-        </div>
-    </div>
     <p-tabView [(activeIndex)]="indexTabView">
         <p-tabPanel header="Global" leftIcon="pi pi-globe">
             <div style="width: 100%;text-align: center;">
@@ -40,7 +6,40 @@
                 <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." [(ngModel)]="siteSelected"
                     (onChange)="changeSite($event.value)" autoWidth="false" [style]="{'width':'30em'}"></p-multiSelect>
             </div>
-
+            <div class="col-12 grid">
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Absence</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Absence Non Justifiée</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4">
+                    <label>Autorisation</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Autorisation" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Férié Tunis</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Férié France</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Autre événement</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Autre événement" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Présent</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Présent" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Cours</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Cours" (onChange)="onFilter()"></p-checkbox>
+                </div>
+            </div>
             <p-fullCalendar #calendar [events]="eventGlobal" [options]="optionsGlobal">
             </p-fullCalendar>
         </p-tabPanel>
@@ -50,6 +49,40 @@
                 <p-dropdown filter="true" [options]="collaborateurList" placeholder="Choisissez un collaborateur"
                     [(ngModel)]="userSelected" (onChange)="changeUser($event.value)" autoWidth="false"
                     [style]="{'width':'30em'}"></p-dropdown>
+            </div>
+            <div class="col-12 grid">
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Absence</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Absence Non Justifiée</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4">
+                    <label>Autorisation</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Autorisation" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Férié Tunis</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Férié France</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView!=1">
+                    <label>Autre événement</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Autre événement" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Présent</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Présent" (onChange)="onFilter()"></p-checkbox>
+                </div>
+                <div class="col-4" *ngIf="indexTabView==1">
+                    <label>Cours</label><br>
+                    <p-checkbox [(ngModel)]="filter_value" value="Cours" (onChange)="onFilter()"></p-checkbox>
+                </div>
             </div>
             <p-fullCalendar #calendar [events]="eventUsers" [options]="optionsUsers">
             </p-fullCalendar>
