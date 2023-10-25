@@ -11,6 +11,8 @@ import { CongeService } from 'src/app/services/conge.service';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
 import { ActivatedRoute } from '@angular/router';
 import frLocale from '@fullcalendar/core/locales/fr';
+import { User } from 'src/app/models/User';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-new-calendrier',
@@ -22,6 +24,16 @@ export class NewCalendrierComponent implements OnInit {
   siteSelected = []
   eventGlobal = []
   eventUsers = []
+  userSelected: User
+  filter_value = {
+    absence: true,
+    autorisation: true,
+    tunis_ferie: true,
+    france_ferie: true,
+    autre: true,
+    present: true,
+    cours: true
+  }
   localisationList: any[] = [
     { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
     { label: 'Paris - Louvre', value: 'Paris - Louvre' },
@@ -33,6 +45,7 @@ export class NewCalendrierComponent implements OnInit {
     { label: 'Tunis M4', value: 'Tunis M4' },
     { label: 'Autre', value: 'Autre' },
   ];
+  collaborateurList = []
 
   optionsGlobal = {
     plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
@@ -75,21 +88,42 @@ export class NewCalendrierComponent implements OnInit {
     firstDay: 1,
     selectable: true,
   };
-  constructor() { }
+  constructor(private rhService: RhService, private ToastService: MessageService) { }
 
   ngOnInit(): void {
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id)
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.user_id._id })
+        })
+      })
+      .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
   }
 
   dateClickGlobal(col) {
   }
   eventClickGlobal(event) {
+    /*
+    Si Global :
+    Si Type == 'Absent' => Affiché les Collaborateurs qui sont Absents
+    Si Type == 'Autorisation' => Affiché les Collaborateurs qui sont en congé autorisé
+
+        Si User :
+RIEN
+    */
   }
 
   changeSite(e) {
 
   }
+  changeUser(e) {
+
+  }
+
   loadEvents() {
 
   }
+
 
 }

@@ -55,7 +55,6 @@ export class ConfigurationPointeuseComponent implements OnInit {
   onGetCollaborateurs(): void {
     this.rhService.getCollaborateurs()
       .then((response) => {
-        console.log(response)
         response.forEach(c => {
           if (c.user_id)
             this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c.user_id._id })
