@@ -489,6 +489,7 @@ export class DashboardComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     // initialisation du formulaire de modification de congé
@@ -499,6 +500,7 @@ export class DashboardComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     this.route.queryParams.subscribe(params => {
@@ -516,55 +518,55 @@ export class DashboardComponent implements OnInit {
     });
     this.menuCalenders = [
       {
-        label:"CRA",
+        label: "CRA",
         command: () => {
-          if (this.showCRA==false){
+          if (this.showCRA == false) {
             this.showCRA = true;
-          }else{
-            this.showCRA=false
+          } else {
+            this.showCRA = false
           };
         }
       },
       {
-        label:"Calendrier",
+        label: "Calendrier",
         command: () => {
-          if (this.showCalender==false){
+          if (this.showCalender == false) {
             this.showCalender = true;
-          }else{
-            this.showCalender=false
+          } else {
+            this.showCalender = false
           };
         }
       },
       {
-        label:"Historique",
+        label: "Historique",
         command: () => {
-          if (this.showHis==false){
+          if (this.showHis == false) {
             this.showHis = true;
-          }else{
-            this.showHis=false
+          } else {
+            this.showHis = false
           };
         }
       },
       {
-        label:"Congé",
+        label: "Congé",
         command: () => {
-          if (this.showCon==false){
+          if (this.showCon == false) {
             this.showCon = true;
-          }else{
-            this.showCon=false
+          } else {
+            this.showCon = false
           };
         }
       },
       {
-        label:"Assiduité",
+        label: "Assiduité",
         command: () => {
-          if (this.showAassiduite==false){
+          if (this.showAassiduite == false) {
             this.showAassiduite = true;
-          }else{
-            this.showAassiduite=false
+          } else {
+            this.showAassiduite = false
           };
-          }
-        
+        }
+
       },
     ];
   }

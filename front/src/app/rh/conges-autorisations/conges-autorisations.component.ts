@@ -9,7 +9,7 @@ import { EmailTypeService } from 'src/app/services/email-type.service';
 import { MailType } from 'src/app/models/MailType';
 import { FileUpload } from 'primeng/fileupload';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
-
+import jwt_decode from "jwt-decode";
 @Component({
   selector: 'app-conges-autorisations',
   templateUrl: './conges-autorisations.component.html',
@@ -28,6 +28,13 @@ export class CongesAutorisationsComponent implements OnInit {
     { label: 'En attente', value: 'En attente' },
     { label: 'Refusé', value: 'Refusé' },
     { label: 'Validé', value: 'Validé' },
+  ];
+
+  
+  filterUrgent: any[] = [
+    { label: 'Toutes les urgences', value: null },
+    { label: 'Urgent', value: true },
+    { label: 'Non Urgent', value: false },
   ];
 
   filterType: any[] = [
@@ -52,10 +59,11 @@ export class CongesAutorisationsComponent implements OnInit {
 
   collaborateursFilter: any[] = [];
   btnActions: MenuItem[] = [];
-
+  token;
   constructor(private formBuilder: FormBuilder, private congeService: CongeService, private rhService: RhService, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem('token'));
     // recuperation de la liste des collaborateurs
     this.rhService.getCollaborateurs()
       .then((response) => {
@@ -128,7 +136,11 @@ export class CongesAutorisationsComponent implements OnInit {
   }
 
   onRowEditSave(conge: Conge) {
-    this.congeService.patchStatut(conge.statut, conge._id)
+    if (conge.statut == 'Validé' && !conge.valided_by) {
+      conge.valided_by = this.token.id
+      conge.valided_date = new Date()
+    }
+    this.congeService.putConge(conge)
       .then((response) => {
         this.onGetConges();
         delete this.clonedConges[conge._id as string];
@@ -181,6 +193,10 @@ export class CongesAutorisationsComponent implements OnInit {
     this.congeToUpdate.date_fin = formValue.fin;
     this.congeToUpdate.nombre_jours = formValue.nb_jour;
     this.congeToUpdate.motif = formValue.motif;
+    if (this.congeToUpdate.note_decideur != formValue.note_decideur) {
+      this.congeToUpdate.commented_by = this.token.id
+      this.congeToUpdate.commented_date = new Date()
+    }
     this.congeToUpdate.note_decideur = formValue.note_decideur;
 
     this.congeService.putConge(this.congeToUpdate)

@@ -1,4 +1,6 @@
-export class Conge{
+import { User } from "./User";
+
+export class Conge {
     constructor(
         public _id?: string,
         public user_id?: string,
@@ -12,5 +14,11 @@ export class Conge{
         public justificatif?: string,
         public statut?: string,
         public note_decideur?: string,
-    ){}
+        public valided_by?: User,
+        public valided_date?: Date,
+        public commented_by?: User,
+        public commented_date?: Date,
+        public urgent?: boolean
+
+    ) { }
 }

@@ -5,7 +5,7 @@ const collaborateurSchema = mongoose.Schema({
     matricule: { type: String, required: false },
     date_demarrage: { type: Date, required: false },
     date_naissance: { type: Date, required: false },
-    localisation: { type: String, required: false },
+    localisation: { type: [String], required: false, default: [] },
     intitule_poste: { type: String, required: false },
     contrat_type: { type: String, required: false },
     statut: { type: String, required: false },
