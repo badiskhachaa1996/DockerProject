@@ -138,7 +138,7 @@ export class MesRendezVousComponent implements OnInit {
       center: 'title',
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay'
     },
-    locale: 'fr',
+   locale: frLocale,
     events: [],
     minTime: '08:00:00',
     firstDay: 1,

@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
-import { Product } from '../../dev-components/api-template/product';
-import { ProductService } from '../../dev-components/service-template/productservice';
-import { Subscription } from 'rxjs';
-import { ConfigService } from '../../dev-components/service-template/app.config.service';
-import { AppConfig } from '../../dev-components/api-template/appconfig';
+import frLocale from '@fullcalendar/core/locales/fr';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
@@ -138,7 +134,7 @@ export class DashboardComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -159,7 +155,7 @@ export class DashboardComponent implements OnInit {
       left: "title",
       right: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -1117,6 +1113,7 @@ export class DashboardComponent implements OnInit {
     conge.date_fin = formValue.fin;
     conge.nombre_jours = formValue.nb_jour;
     conge.motif = formValue.motif;
+    conge.urgent = formValue.urgent;
     conge.statut = 'En attente';
 
     // envoi des données en bd
@@ -1186,6 +1183,7 @@ export class DashboardComponent implements OnInit {
       fin: new Date(conge.date_fin),
       nb_jour: conge.nombre_jours,
       motif: conge.motif,
+      urgent: conge.urgent
     });
 
     this.showUpdateCongeForm = true;
@@ -1202,6 +1200,7 @@ export class DashboardComponent implements OnInit {
     this.congeToUpdate.date_fin = formValue.fin;
     this.congeToUpdate.nombre_jours = formValue.nb_jour;
     this.congeToUpdate.motif = formValue.motif;
+    this.congeToUpdate.urgent = formValue.urgent;
 
     this.congeService.putConge(this.congeToUpdate)
       .then(() => {
@@ -1378,7 +1377,7 @@ export class DashboardComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFCRH.bind(this),

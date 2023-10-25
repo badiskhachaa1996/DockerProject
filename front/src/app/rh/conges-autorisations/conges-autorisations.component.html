@@ -47,7 +47,7 @@
                         cols="30"></textarea>
                 </div>
                 <div class="field col-12">
-                    <label>Urgent ?</label>
+                    <label>Urgent ?</label><br>
                     <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
                 </div>
 
@@ -70,9 +70,10 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
-                        <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterUrgent"
-                            (onChange)="dt1.filter($event.value, 'urgent', 'equals');" placeholder="Urgent"
-                            [showClear]="true"></p-dropdown>
+                        <div>
+                            <label class="mb-1">Urgent ?&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);" [binary]="true"></p-checkbox></label>
+                            
+                        </div>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterStatut"
                             (onChange)="dt1.filter($event.value, 'statut', 'equals');" placeholder="Statut"
                             [showClear]="true"></p-dropdown>
@@ -103,7 +104,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-conge let-expanded="expanded" let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="conge">
-                        <td [ngClass]="{'urgent-middle':conge.urgent}">
+                        <td [ngClass]="{'urgent-begin':conge.urgent}">
                             <button type="button" pButton pRipple [pRowToggler]="conge"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -154,7 +155,7 @@
                         </td>
 
                         <td [ngClass]="{'urgent-end':conge.urgent}">
-                            
+
                             <i *ngIf="editing" style="margin-right: 2%;cursor: pointer;" class="pi pi-check"
                                 pTooltip="Sauvegarder les modifications" pSaveEditableRow (click)="onRowEditSave(conge)"
                                 aria-hidden="true"></i>

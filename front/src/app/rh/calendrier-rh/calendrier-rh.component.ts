@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { CongeService } from 'src/app/services/conge.service';
 import { DailyCheckService } from 'src/app/services/daily-check.service';
 import { ActivatedRoute } from '@angular/router';
+import frLocale from '@fullcalendar/core/locales/fr';
 @Component({
   selector: 'app-calendrier-rh',
   templateUrl: './calendrier-rh.component.html',
@@ -21,11 +22,10 @@ export class CalendrierRhComponent implements OnInit {
     defaultDate: new Date(),
     titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
     header: {
-      left: "title",
-      right: 'prev,next'
-      // left: 'prev,next'
+      right: 'prev,next',
+      left: 'today,dayGridMonth,timeGridWeek,timeGridDay'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -205,28 +205,4 @@ export class CalendrierRhComponent implements OnInit {
     })
 
   }
-
-  /*loadEverything() {
-    this.events = []
-    this.CalendrierRHService.getAll().subscribe(events => {
-      events.forEach(ev => { this.addEvent(ev) })
-      this.congeService.getAll().then(conges => {
-        let congesList = []
-        let congeDic = {}
-        conges.forEach(c => {
-          let dateC = new Date(c.date_debut)
-          dateC.setDate(dateC.getDate() - 1)
-          while (dateC < new Date(c.date_fin)) {
-            let idx = `${dateC.getDate()}-${dateC.getMonth()}-${dateC.getFullYear()}}`
-            if (congesList.find(o => (new Date(o.date).getDate()== dateC.))) {
-          congeDic[idx].push(dateC)
-        } else {
-          congesList.push({ idx, date: dateC })
-        }
-        dateC.setDate(dateC.getDate() + 1)
-      }
-        })
-  })
-})
-  }*/
 }

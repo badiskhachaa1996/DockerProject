@@ -15,6 +15,8 @@ import { FullCalendar } from 'primeng/fullcalendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import frLocale from '@fullcalendar/core/locales/fr';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
@@ -67,7 +69,7 @@ export class EmploiDuTempsComponent implements OnInit {
       // changement de couleur
       col.el.style.borderColor = 'white';
     },
-    locale: 'fr',
+   locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     defaultView: this.mobilecheck() ? "timeGridDay" : "timeGridWeek",

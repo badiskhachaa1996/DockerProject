@@ -10,6 +10,7 @@ import { MailType } from 'src/app/models/MailType';
 import { FileUpload } from 'primeng/fileupload';
 import { HistoriqueEmail } from 'src/app/models/HistoriqueEmail';
 import jwt_decode from "jwt-decode";
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-conges-autorisations',
   templateUrl: './conges-autorisations.component.html',
@@ -30,7 +31,7 @@ export class CongesAutorisationsComponent implements OnInit {
     { label: 'Validé', value: 'Validé' },
   ];
 
-  
+
   filterUrgent: any[] = [
     { label: 'Toutes les urgences', value: null },
     { label: 'Urgent', value: true },
@@ -89,6 +90,7 @@ export class CongesAutorisationsComponent implements OnInit {
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
       note_decideur: ['', Validators.required],
+      urgent: [false, Validators.required]
     });
   }
 
@@ -170,7 +172,8 @@ export class CongesAutorisationsComponent implements OnInit {
       fin: new Date(conge.date_fin),
       nb_jour: conge.nombre_jours,
       motif: conge.motif,
-      node_decideur: conge?.note_decideur,
+      note_decideur: conge?.note_decideur,
+      urgent: conge?.urgent
     });
 
     this.showFormUpdateConge = true;
@@ -198,7 +201,7 @@ export class CongesAutorisationsComponent implements OnInit {
       this.congeToUpdate.commented_date = new Date()
     }
     this.congeToUpdate.note_decideur = formValue.note_decideur;
-
+    this.congeToUpdate.urgent = formValue.urgent
     this.congeService.putConge(this.congeToUpdate)
       .then(() => {
         this.formUpdateConge.reset();
@@ -208,6 +211,14 @@ export class CongesAutorisationsComponent implements OnInit {
         this.onGetConges();
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Congé', detail: 'Impossible de prendre en compte vos modifications' }); });
+  }
+  @ViewChild('dt1') dt1: Table;
+  filterCustomUrgent(e) {
+    console.log(e)
+    if (e == false)
+      this.dt1.filter('', 'urgent', 'contains')
+    else
+      this.dt1.filter(true, 'urgent', 'equals')
   }
 
 }

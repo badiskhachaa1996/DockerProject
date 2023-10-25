@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-import { GalleriaModule } from 'primeng/galleria';
+import frLocale from '@fullcalendar/core/locales/fr';
 import { saveAs as importedSaveAs } from "file-saver";
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -141,7 +141,7 @@ export class CalenderComponent implements OnInit {
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -152,7 +152,7 @@ export class CalenderComponent implements OnInit {
   }
 
   dernotes: Note[] = [];
-  classbutonchekin:String="p-button-warning mb-2"
+  classbutonchekin: String = "p-button-warning mb-2"
   //Options du calendrier formateur
   optionsforma = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -162,7 +162,7 @@ export class CalenderComponent implements OnInit {
       left: "title",
       right: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
@@ -333,7 +333,7 @@ export class CalenderComponent implements OnInit {
   histoPointage: PointageData[];
   reader: FileReader = new FileReader();
   machineDic = {}
-  
+
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -464,17 +464,17 @@ export class CalenderComponent implements OnInit {
       cras: this.formBuilder.array([this.onCreateCraField()]),
     });
     //initialisation du formulaire d'ajout de cra ticket
-    this.formAddCraTicket=this.formBuilder.group({
-      ticket: ['' , Validators.required],
-      duration:['' , Validators.required],
+    this.formAddCraTicket = this.formBuilder.group({
+      ticket: ['', Validators.required],
+      duration: ['', Validators.required],
     })
 
     // recuperation de l'historique de pointage d'un collaborateur
     this.dailyCheckService.getUserChecks(this.token.id)
       .then((response) => {
         this.historiqueCra = response;
-        this.lastCras=response[response.length-1];
-        
+        this.lastCras = response[response.length - 1];
+
         console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
@@ -492,6 +492,7 @@ export class CalenderComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     // initialisation du formulaire de modification de congé
@@ -502,6 +503,7 @@ export class CalenderComponent implements OnInit {
       fin: ['', Validators.required],
       nb_jour: ['', Validators.required],
       motif: ['', Validators.required],
+      urgent: [false]
     });
 
     this.route.queryParams.subscribe(params => {
@@ -519,41 +521,43 @@ export class CalenderComponent implements OnInit {
     });
     this.items = [
       {
-          label: "Aujourd'hui",
-          command: () => {
-            this.showAssiduite()
-          }
+        label: "Aujourd'hui",
+        command: () => {
+          this.showAssiduite()
+        }
       },
       {
-          label: 'Historique',
-          command: () => {
-            this.showHistorique()
-          }
+        label: 'Historique',
+        command: () => {
+          this.showHistorique()
+        }
       }];
-      this.itemsCra = [
-        {
-            label: "ticket",
-            command: () => {
-              this.showFormAddCraTicket=true
-              
-            }
-        },
-        {
-            label: 'Autre',
-            command: () => {
-              this.showFormAddCra = true;
-            }
-        }];
+    this.itemsCra = [
+      {
+        label: "ticket",
+        command: () => {
+          this.showFormAddCraTicket = true
+
+        }
+      },
+      {
+        label: 'Autre',
+        command: () => {
+          this.showFormAddCra = true;
+        }
+      }];
   }
   showHistorique() {
-    if (this.visible==false){
-      this.visible = true}
-      else{this.visible = false}
+    if (this.visible == false) {
+      this.visible = true
+    }
+    else { this.visible = false }
   }
   showAssiduite() {
-    if (this.visibleA==false){
-    this.visibleA = true}
-    else{this.visibleA = false}
+    if (this.visibleA == false) {
+      this.visibleA = true
+    }
+    else { this.visibleA = false }
   }
   showConge() {
     this.visibleC = true
@@ -784,11 +788,12 @@ export class CalenderComponent implements OnInit {
       next: (response) => {
         this.userConnected = response;
         this.ticketService.getAccAff(this.userConnected._id)
-        .subscribe(datatache => {
-          this.ticketListe = datatache.map(ticket => ({
-            ...ticket, 
-            label: ` ${ticket.customid}  ${ticket.statut}`
-          }))});
+          .subscribe(datatache => {
+            this.ticketListe = datatache.map(ticket => ({
+              ...ticket,
+              label: ` ${ticket.customid}  ${ticket.statut}`
+            }))
+          });
         // recupere la liste des congés
         this.onGetConges(this.userConnected._id);
         // verification du check in journalier
@@ -895,7 +900,7 @@ export class CalenderComponent implements OnInit {
     check.user_id = this.user._id;
     check.check_in = new Date();
     check.isInPause = false;
-    this.classbutonchekin="p-button-secondary mb-2"
+    this.classbutonchekin = "p-button-secondary mb-2"
 
     this.dailyCheckService.postCheckIn(check)
       .then((response) => {
@@ -908,7 +913,7 @@ export class CalenderComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    
+
     this.dailyCheck.pause.push({ in: new Date() });
     this.dailyCheck.isInPause = true;
 
@@ -921,7 +926,7 @@ export class CalenderComponent implements OnInit {
         this.onUpdateStatus('En pause')
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
-      }
+  }
 
   // méthode de fin de la pause
   onStopPause(): void {
@@ -929,7 +934,7 @@ export class CalenderComponent implements OnInit {
     const pLength = this.dailyCheck.pause.length;
     this.dailyCheck.pause[pLength - 1].out = new Date();
     this.dailyCheck.isInPause = false;
-    this.dailyCheck.pause_timing = this.pauseTiming +this.dailyCheck.pause_timing;
+    this.dailyCheck.pause_timing = this.pauseTiming + this.dailyCheck.pause_timing;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
@@ -940,16 +945,16 @@ export class CalenderComponent implements OnInit {
         this.onUpdateStatus('Disponible')
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
-      this.dailyCheckService.getUserChecks(this.token.id)
+    this.dailyCheckService.getUserChecks(this.token.id)
       .then((response) => {
         this.historiqueCra = response.reverse();;
-        this.lastCras=response[response.length-1];
-        
+        this.lastCras = response[response.length - 1];
+
         console.log(this.lastCras);
       })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); });
 
-    }
+  }
 
   // methôde de checkout
   onCheckOut(): void {
@@ -967,7 +972,7 @@ export class CalenderComponent implements OnInit {
         this.dailyCheckService.getUserChecks(this.token.id)
           .then((response) => {
             this.historiqueCra = response.reverse();
-            this.lastCras=response[response.length-1];
+            this.lastCras = response[response.length - 1];
             console.log(this.lastCras);
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
@@ -1024,15 +1029,15 @@ export class CalenderComponent implements OnInit {
   onAddCraTicket(): void {
     const formValue = this.formAddCraTicket.value;
     // ajout des données formulaire au dailycheck
-console.log(formValue);
-    
-      this.dailyCheck.cra.push({ task:this.formAddCraTicket.get('ticket').value.label, number_minutes:this.formAddCraTicket.get('duration').value });
-    
+    console.log(formValue);
+
+    this.dailyCheck.cra.push({ task: this.formAddCraTicket.get('ticket').value.label, number_minutes: this.formAddCraTicket.get('duration').value });
+
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
       .then((response) => {
         this.messageService.add({ severity: 'success', summary: 'Cra', detail: 'Votre CRA à été mis à jour' });
-        
+
         this.formAddCraTicket.reset();
         this.showFormAddCraTicket = false;
         // recuperation du check journalier
@@ -1138,6 +1143,7 @@ console.log(formValue);
     conge.date_fin = formValue.fin;
     conge.nombre_jours = formValue.nb_jour;
     conge.motif = formValue.motif;
+    conge.urgent = formValue.urgent;
     conge.statut = 'En attente';
 
     // envoi des données en bd
@@ -1207,6 +1213,7 @@ console.log(formValue);
       fin: new Date(conge.date_fin),
       nb_jour: conge.nombre_jours,
       motif: conge.motif,
+      urgent: conge.urgent
     });
 
     this.showUpdateCongeForm = true;
@@ -1223,7 +1230,7 @@ console.log(formValue);
     this.congeToUpdate.date_fin = formValue.fin;
     this.congeToUpdate.nombre_jours = formValue.nb_jour;
     this.congeToUpdate.motif = formValue.motif;
-
+    this.congeToUpdate.urgent = formValue.urgent;
     this.congeService.putConge(this.congeToUpdate)
       .then(() => {
         this.formUpdateConge.reset();
@@ -1240,7 +1247,7 @@ console.log(formValue);
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
           this.historiqueCra = response;
-          this.lastCras=response[response.length-1];
+          this.lastCras = response[response.length - 1];
           console.log(this.lastCras);
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
@@ -1401,7 +1408,7 @@ console.log(formValue);
       right: 'prev,next'
       // left: 'prev,next'
     },
-    locale: 'fr',
+    locale: frLocale,
     timeZone: 'local',
     contentHeight: 500,
     eventClick: this.eventClickFCRH.bind(this),

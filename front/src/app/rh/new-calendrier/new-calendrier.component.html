@@ -1,0 +1,18 @@
+<div class="card grid">
+    <p-tabView [(activeIndex)]="indexTabView">
+        <p-tabPanel header="Global" leftIcon="pi pi-globe">
+            <div style="width: 100%;text-align: center;">
+                <label>Site:</label>
+                <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." [(ngModel)]="siteSelected"
+                    (onChange)="changeSite($event.value)" autoWidth="false" [style]="{'width':'30em'}"></p-multiSelect>
+            </div>
+
+            <p-fullCalendar #calendar [events]="eventGlobal" [options]="optionsGlobal">
+            </p-fullCalendar>
+        </p-tabPanel>
+        <p-tabPanel header="Users" leftIcon="pi pi-users">
+            <p-fullCalendar #calendar [events]="eventUsers" [options]="optionsUsers">
+            </p-fullCalendar>
+        </p-tabPanel>
+    </p-tabView>
+</div>
