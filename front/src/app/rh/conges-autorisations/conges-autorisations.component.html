@@ -47,7 +47,7 @@
                         cols="30"></textarea>
                 </div>
                 <div class="field col-12">
-                    <label>Urgent ?</label><br>
+                    <label>Urgent</label><br>
                     <p-checkbox formControlName="urgent" [binary]="true"></p-checkbox>
                 </div>
 
@@ -71,7 +71,7 @@
                                 class="w-full" />
                         </span>
                         <div>
-                            <label class="mb-1">Urgent ?&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);" [binary]="true"></p-checkbox></label>
+                            <label class="mb-1">Urgent&nbsp;<p-checkbox (onChange)="filterCustomUrgent($event.checked);" [binary]="true"></p-checkbox></label>
                             
                         </div>
                         <p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="filterStatut"
