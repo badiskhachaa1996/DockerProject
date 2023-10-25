@@ -145,6 +145,7 @@ Si User :
   PresentDic = {}
   getGlobalEvents() {
     this.eventGlobal = []
+    this.defaultEventsGlobal = []
     this.CalendrierRHService.getAll().subscribe(events => {
       events.forEach(ev => { this.addEventGlobal(ev) })
       this.dailyCheckService.getChecks().then(dcs => {
@@ -193,6 +194,7 @@ Si User :
   }
   getUsersEvents() {
     this.eventUsers = []
+    this.defaultEventUsers = []
     this.CalendrierRHService.getAll().subscribe(events => {
       //events.forEach(ev => { this.addEventUser(ev) })
       this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
