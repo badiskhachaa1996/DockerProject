@@ -720,6 +720,9 @@ export class AnnoncesComponent implements OnInit {
   rdvList: { label: string, ID: string, offer_id: string }[] = []
 
   takeRDV(element) {
+    let base = 0
+    if (!this.isEtudiant)
+      base = 1
     let ids = []
     console.log(element)
     this.rdvList.forEach(o => {
@@ -728,27 +731,28 @@ export class AnnoncesComponent implements OnInit {
     if (!ids.includes(element.ID)) {
       this.rdvList.push(element)
       setTimeout(() => {
-        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length
       }, 1)
     } else
-      this.activeIndex1 = 1 + this.matchingList.length + ids.indexOf(element.ID)
+      this.activeIndex1 = base + this.matchingList.length + ids.indexOf(element.ID)
   }
   cvList: { label: string, ID: string }[] = []
   seeCV(element) {
+    let base = 0
+    if (!this.isEtudiant)
+      base = 1
     let ids = []
     this.cvList.forEach(o => {
       ids.push(o.ID)
     })
     if (!ids.includes(element.ID)) {
       this.cvList.push(element)
+
       setTimeout(() => {
-        this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + this.cvList.length
+        this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + this.cvList.length
       }, 1)
     } else
-      this.activeIndex1 = 1 + this.matchingList.length + this.rdvList.length + ids.indexOf(element.ID)
-
-
-
+      this.activeIndex1 = base + this.matchingList.length + this.rdvList.length + ids.indexOf(element.ID)
   }
   offreList = []
   seeDetails(annonce: Annonce) {
@@ -787,6 +791,9 @@ export class AnnoncesComponent implements OnInit {
   }
   onMatchingAnnonce(e: { ANNONCE_ID: string }) {
     this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
+      let base = 0
+      if (!this.isEtudiant)
+        base = 1
       let ids = []
       this.matchingList.forEach(m => {
         ids.push(m._id)
@@ -794,19 +801,35 @@ export class AnnoncesComponent implements OnInit {
       if (!ids.includes(annonce._id)) {
         this.matchingList.push(annonce)
         this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
-          this.activeIndex1 = this.matchingList.length + 1
+          this.activeIndex1 = 0
+          setTimeout(() => {
+            this.activeIndex1 = base + this.matchingList.length 
+          }, 1)
+          
         })
       } else {
-        this.activeIndex1 = ids.indexOf(annonce._id) + 2
+        this.activeIndex1 =  ids.indexOf(annonce._id) + 2
       }
     })
 
   }
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
 
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
   InitFormUpdate(e: { ANNONCE_ID: string }) {
     this.annonceService.getAnnonce(e.ANNONCE_ID).then(annonce => {
       this.onFillForm(annonce)
       this.showFormUpdate = true
+      this.scrollToTop()
     })
   }
 }

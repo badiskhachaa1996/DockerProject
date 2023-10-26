@@ -1,29 +1,27 @@
-<div class="container" *ngIf="ANNONCE">
-    <div class="modal-content">
-        <div class="grid">
-            <img class="col-6" class="img-modal" src="../../../assets/images/imatch/entreprise.png">
-            <div class="col-6" *ngIf="!isEtudiant">
-                <h4 style="color: #1E526C;">{{ANNONCE.entreprise_id?.r_sociale || ANNONCE.entreprise_name}}</h4>
-                <h4>{{ANNONCE.missionName}}</h4>
-            </div>
+<div *ngIf="ANNONCE">
+    <div class="grid">
+        <img class="col-6" class="img-modal" src="../../../assets/images/imatch/entreprise.png">
+        <div class="col-6" *ngIf="!isEtudiant">
+            <h4 style="color: #1E526C;">{{ANNONCE.entreprise_id?.r_sociale || ANNONCE.entreprise_name}}</h4>
+            <h4>{{ANNONCE.missionName}}</h4>
         </div>
+    </div>
 
-        <h4 *ngIf="profil_str">Profil :</h4>
-        <p *ngIf="profil_str">{{profil_str}}</p>
-        <h4>Compétences :</h4>
-        <p><span *ngFor="let compet of ANNONCE?.competences">{{compet.libelle}}, </span></p>
-        <h4>Lieu :</h4>
-        <p>{{ANNONCE?.entreprise_ville}}</p>
-        <h4>Description :</h4>
-        <p>{{ANNONCE?.missionDesc}}</p>
-        <div class="btns-postuler">
-            <div *ngIf="isEtudiant" class="btn btn-postuler" (click)="InitPostulate()">
-                <i class="pi pi-arrow-right"></i>Postuler
-            </div>
-            <div *ngIf="!isEtudiant" class="btn btn-retour" (click)="Edit()"><i
-                class="pi pi-cog"></i>Modifier</div>
-            <div *ngIf="!isEtudiant" class="btn btn-postuler" (click)="Matching()"><i
-                    class="pi pi-users"></i>Matching</div>
+    <h4 *ngIf="profil_str">Profil :</h4>
+    <p *ngIf="profil_str">{{profil_str}}</p>
+    <h4>Compétences :</h4>
+    <p><span *ngFor="let compet of ANNONCE?.competences">{{compet.libelle}}, </span></p>
+    <h4>Lieu :</h4>
+    <p>{{ANNONCE?.entreprise_ville}}</p>
+    <h4>Description :</h4>
+    <p>{{ANNONCE?.missionDesc}}</p>
+    <div class="btns-postuler">
+        <div *ngIf="isEtudiant" class="btn btn-postuler" (click)="InitPostulate()">
+            <i class="pi pi-arrow-right"></i>Postuler
         </div>
+        <div *ngIf="!isEtudiant" class="btn btn-retour" (click)="Edit()" style="margin-right:5%"><i
+            class="pi pi-cog"></i>Modifier</div>
+        <div *ngIf="!isEtudiant" class="btn btn-postuler" (click)="Matching()"><i
+                class="pi pi-users"></i>Matching</div>
     </div>
 </div>
