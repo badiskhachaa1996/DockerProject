@@ -4,11 +4,7 @@
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showAdd = false;">
             </i>
-            <h4 style="text-align: center;">Configurer une pointeuse</h4>
-            <div style="text-align: center;">
-                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                    obligatoires</small><br>
-            </div>
+            <h4 style="text-align: center;">Configuration</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="addForm" (ngSubmit)="onAdd()">
                 <div class="field col-12 md:col-6">
                     <label>Numéro de série<span style="color: red;"> * </span></label>
@@ -18,13 +14,19 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Localisation<span style="color: red;"> * </span></label>
+                    <label>Site<span style="color: red;"> * </span></label>
                     <p-dropdown placeholder="Choisissez un site" filter="true" formControlName="localisation"
                         [options]="localisationDropdown" autoWidth="false" [style]="{'width':'100%'}">
                     </p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <label>Emplacement<span style="color: red;"> * </span></label>
+                    <p-dropdown placeholder="Choisissez un emplacement" filter="true" formControlName="emplacement"
+                        [options]="emplacementDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
                 <div class="field col-12 md:col-6">
-                    <label>Type de pointage<span style="color: red;"> * </span></label>
+                    <label>Type<span style="color: red;"> * </span></label>
                     <p-multiSelect placeholder="Choisissez un type de pointage" filter="true"
                         formControlName="pointageType" [options]="typePointageDropdown" autoWidth="false"
                         [style]="{'width':'100%'}">
@@ -46,11 +48,7 @@
             <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showUpdate = null;">
             </i>
-            <h4 style="text-align: center;">Reconfigurer une pointeuse</h4>
-            <div style="text-align: center;">
-                <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
-                    obligatoires</small><br>
-            </div>
+            <h4 style="text-align: center;">Reconfiguration</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="updateForm" (ngSubmit)="onUpdate()">
                 <div class="field col-12 md:col-6">
                     <label>Numéro de série<span style="color: red;"> * </span></label>
@@ -60,13 +58,19 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Localisation<span style="color: red;"> * </span></label>
+                    <label>Site<span style="color: red;"> * </span></label>
                     <p-dropdown placeholder="Choisissez un site" filter="true" formControlName="localisation"
                         [options]="localisationDropdown" autoWidth="false" [style]="{'width':'100%'}">
                     </p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <label>Emplacement<span style="color: red;"> * </span></label>
+                    <p-dropdown placeholder="Choisissez un emplacement" filter="true" formControlName="emplacement"
+                        [options]="emplacementDropdown" autoWidth="false" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
                 <div class="field col-12 md:col-6">
-                    <label>Type de pointage<span style="color: red;"> * </span></label>
+                    <label>Type<span style="color: red;"> * </span></label>
                     <p-multiSelect placeholder="Choisissez un type de pointage" filter="true"
                         formControlName="pointageType" [options]="typePointageDropdown" autoWidth="false"
                         [style]="{'width':'100%'}">
@@ -86,7 +90,7 @@
     </div>
     <div class="col-12">
         <div class="card">
-            <button pButton pRipple label="Configurer une nouvelle pointeuse" class="mr-2 mb-2" style="float: right;"
+            <button pButton pRipple label="Ajouter" class="mr-2 mb-2" style="float: right;"
                 (click)="showAdd = true;scrollToTop()"></button>
             <h5>Liste des pointeuses</h5>
 
@@ -106,19 +110,22 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="_id" scope="col" style="text-align: center;">
-                            ID Pointeuse <p-sortIcon field="_id"></p-sortIcon>
+                            ID <p-sortIcon field="_id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="serial_number" scope="col" style="text-align: center;">
-                            Numéro de série <p-sortIcon field="serial_number"></p-sortIcon>
+                            Num Série <p-sortIcon field="serial_number"></p-sortIcon>
                         </th>
                         <th pSortableColumn="localisation" scope="col" style="text-align: center;">
-                            Localisation <p-sortIcon field="localisation"></p-sortIcon>
+                            Site <p-sortIcon field="localisation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="emplacement" scope="col" style="text-align: center;">
+                            Emplacement <p-sortIcon field="emplacement"></p-sortIcon>
                         </th>
                         <th>
-                            Type de Pointage disponible
+                            Type
                         </th>
                         <th scope="col" style="text-align: center;">
-                            Nombre des utilisateurs enregistrées
+                            Nbr Users
                         </th>
                         <th>
                             Action
@@ -128,13 +135,16 @@
                 <ng-template pTemplate="body" let-machine>
                     <tr>
                         <td>
-                            {{machine._id | slice: 0:20 }}...
+                            <app-read-more [string]="machine._id" [size_max]=5></app-read-more>
                         </td>
                         <td>
                             {{machine.serial_number}}
                         </td>
                         <td>
                             {{machine.localisation}}
+                        </td>
+                        <td>
+                            {{machine?.emplacement}}
                         </td>
                         <td>
                             {{machine.pointageType}}
@@ -193,7 +203,7 @@
     <hr />
     <ul>
         <li *ngFor="let user of dataPopUp?.users;let i = index;">
-            {{user.UID}} : {{ user.name }} attribué à : <p-dropdown [options]="collaborateurList" autoWidth="false"
+            {{user.UID}} : {{ user.name }} attribué à : <p-dropdown [options]="collaborateurList" autoWidth="false" [filter]="true"
                 placeholder="Choisissez un collaborateur" [style]="{'width':'100%'}" [(ngModel)]="user.user_id"
                 (onChange)="updatePointeuse()"></p-dropdown><br><br>
         </li>

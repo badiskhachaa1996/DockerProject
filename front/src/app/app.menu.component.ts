@@ -6397,20 +6397,20 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 {
                                     label: "Pointeuse",
-                                    icon: 'pi pi-cog',
+                                    icon: 'pi pi-camera',
                                     items: [
                                         {
-                                            label: "Pointeuse",
+                                            label: "Configuration",
                                             icon: 'pi pi-cog',
                                             routerLink: ['/pointeuse/configuration']
                                         }, {
-                                            label: "Pointage",
-                                            icon: 'pi pi-cog',
+                                            label: "Activités",
+                                            icon: 'pi pi-desktop',
                                             routerLink: ['/pointage/configuration']
                                         },
                                         {
-                                            label: "Archivage des pointages",
-                                            icon: 'pi pi-cog',
+                                            label: "Historique",
+                                            icon: 'pi pi-book',
                                             routerLink: ['/pointage/archivage']
                                         },
                                     ]

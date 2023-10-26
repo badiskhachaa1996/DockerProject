@@ -25,7 +25,10 @@ export class ConfigurationPointeuseComponent implements OnInit {
     { label: 'Tunis M4', value: 'Tunis M4' },
     { label: 'Autre', value: 'Autre' },
   ]
-
+  emplacementDropdown = [
+    { label: 'Entrée', value: 'Entrée' },
+    { label: 'Sortie', value: 'Sortie' },
+  ]
   typePointageDropdown = [
     { label: 'Face', value: 'Face' },
     { label: 'Finger', value: 'Finger' },
@@ -68,7 +71,8 @@ export class ConfigurationPointeuseComponent implements OnInit {
     serial_number: new FormControl('', Validators.required),
     localisation: new FormControl('', Validators.required),
     pointageType: new FormControl([], Validators.required),
-    modele: new FormControl('', Validators.required)
+    modele: new FormControl('', Validators.required),
+    emplacement: new FormControl('Entrée')
   })
   onAdd() {
     this.PointeuseService.create({ ...this.addForm.value }).subscribe(p => {
@@ -85,7 +89,8 @@ export class ConfigurationPointeuseComponent implements OnInit {
     localisation: new FormControl('', Validators.required),
     pointageType: new FormControl([], Validators.required),
     modele: new FormControl('', Validators.required),
-    _id: new FormControl('', Validators.required)
+    _id: new FormControl('', Validators.required),
+    emplacement: new FormControl('Entrée')
   })
   initUpdate(machine: Pointeuse) {
     this.updateForm.patchValue({
