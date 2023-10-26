@@ -411,7 +411,6 @@ export class NewCvthequeInterneComponent implements OnInit {
   }
 
   atleastOne(arr1, arr2) {
-    console.log(arr1, arr2)
     let r = false
     arr1.forEach(val => {
       if (arr2.includes(val))
