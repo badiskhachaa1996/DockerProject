@@ -260,7 +260,6 @@
 	</div>
 
 	<!-- Affichage des offres -->
-
 	<p-tabView style="width: 100%;" [(activeIndex)]="activeIndex1" (onClose)="handleClose($event)">
 		<p-tabPanel header="Ajouter" *ngIf="!isEtudiant">
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">

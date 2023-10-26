@@ -64,6 +64,12 @@ export class NewCalendrierComponent implements OnInit {
     minTime: '08:00:00',
     firstDay: 1,
     selectable: true,
+    views: {
+      dayGridMonth: { // name of view
+        titleFormat: { year: 'numeric', month: 'long' }
+        // other view-specific options here
+      }
+    }
   };
 
   optionsUsers = {
@@ -85,6 +91,12 @@ export class NewCalendrierComponent implements OnInit {
     minTime: '08:00:00',
     firstDay: 1,
     selectable: true,
+    views: {
+      dayGridMonth: { // name of view
+        titleFormat: { year: 'numeric', month: 'long' }
+        // other view-specific options here
+      }
+    }
   };
   constructor(private rhService: RhService, private ToastService: MessageService,
     private CalendrierRHService: CalendrierRhService, private dailyCheckService: DailyCheckService,
