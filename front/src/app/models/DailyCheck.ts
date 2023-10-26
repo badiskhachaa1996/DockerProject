@@ -7,7 +7,7 @@ export class DailyCheck {
             public user_id?: any,
             public today?: string,
             public check_in?: Date,
-            public pause?: any[],
+            public pause?: { in?: Date, out?: Date, motif?: string }[],
             public isInPause?: boolean,
             public cra?: any[],
             public is_anticipated?: boolean,
