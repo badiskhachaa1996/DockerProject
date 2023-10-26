@@ -911,10 +911,18 @@ export class CalenderComponent implements OnInit {
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Check in', detail: "Impossible d’effectuer votre check in" }); });
   }
 
+  motifStr = ''
+  displayMotif = false
+
+  motifDropdown = [
+    { label: 'Déjeuner', value: 'Déjeuner' },
+    { label: 'Autre', value: 'Autre' }
+  ]
+
   // méthode de pause
   onPause(): void {
 
-    this.dailyCheck.pause.push({ in: new Date() });
+    this.dailyCheck.pause.push({ in: new Date(), motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)

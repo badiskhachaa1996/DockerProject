@@ -13,14 +13,19 @@
 
 				<div class="col-12 md:col-4 align-self-center grid"
 					style="border: 1px black solid;margin:0px;height: 100px;">
-					<p class="col-12"><p-tag value="Checkin IMS" icon="pi pi-check-circle"></p-tag><strong>&nbsp;{{numberOfChecks}}/{{collaborateurs.length}}</strong></p>
-					<p class="col-12"><p-tag value="Pointage" icon="pi pi-bookmark"></p-tag><strong>&nbsp;WIP</strong></p>
+					<p class="col-12"><p-tag value="Checkin IMS"
+							icon="pi pi-check-circle"></p-tag><strong>&nbsp;{{numberOfChecks}}/{{collaborateurs.length}}</strong>
+					</p>
+					<p class="col-12"><p-tag value="Pointage" icon="pi pi-bookmark"></p-tag><strong>&nbsp;WIP</strong>
+					</p>
 				</div>
 
 				<div class="col-12 md:col-4 align-self-center grid"
 					style="border: 1px black solid;margin:0px;height: 100px;">
-					<p class="col-12"><p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag><strong>&nbsp;{{numberOfAbsent}}</strong></p>
-					<p class="col-12"><p-tag value="Congé" icon="pi pi-home" severity="info"></p-tag><strong>&nbsp;{{numberOfConge}}</strong> </p>
+					<p class="col-12"><p-tag value="Absent" icon="pi pi-times"
+							severity="danger"></p-tag><strong>&nbsp;{{numberOfAbsent}}</strong></p>
+					<p class="col-12"><p-tag value="Congé" icon="pi pi-home"
+							severity="info"></p-tag><strong>&nbsp;{{numberOfConge}}</strong> </p>
 				</div>
 
 				<div class="col-12 md:col-4 align-self-center grid"
@@ -94,7 +99,8 @@
 							<strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
 						</td>
 						<td style="min-width: 10rem;padding: 0%;">
-							<app-pause-read-more [pausemin]="check?.pause_timing" [pauseList]="check?.pause"></app-pause-read-more>
+							<app-pause-read-more [pausemin]="check?.pause_timing"
+								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td style="min-width: 10rem;">
 							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
@@ -134,6 +140,8 @@
 						<td>
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
+							<i pTooltip="Pointage" style="cursor: pointer;" class="pi pi-camera"
+								tooltipPosition="bottom" (click)="seePointage(check)" aria-hidden="true"></i>
 							<i pTooltip="Réinitialiser Pointage" style="margin-left: 2%; cursor: pointer;"
 								class="pi pi-clock" tooltipPosition="bottom" (click)="onReinitPointage(check)"
 								aria-hidden="true"></i>
@@ -253,11 +261,71 @@
 	</div>
 </p-dialog>
 
+<p-dialog *ngIf="choosenCollaborateur" header="Activité de {{choosenCollaborateur.user_id.lastname}} {{choosenCollaborateur.user_id.firstname}}" [(visible)]="displayActivite" [modal]="true">
+	<div style="width: 100%;">
+		<p-table #dt1 dataKey="_id" [rows]="8" [rowHover]="true" [paginator]="true"
+			[value]="pointages" [paginator]="true" [pageLinks]="5" selectionMode="single"
+			[globalFilterFields]="['uid', 'machine']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+			<!--<ng-template pTemplate="caption">
+				<span class="p-input-icon-left mb-2">
+					<i class="pi pi-search"></i>
+					<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+						placeholder="Recherche" class="w-full" />
+				</span>
+			</ng-template>-->
+			<ng-template pTemplate="header">
+				<tr>
+					<th pSortableColumn="date" scope="col" style="text-align: center;">
+						Heure <p-sortIcon field="date"></p-sortIcon>
+					</th>
+					<th>
+						ID
+					</th>
+					<th pSortableColumn="uid" scope="col" style="text-align: center;">
+						UID <p-sortIcon field="uid"></p-sortIcon>
+					</th>
+					<th>
+						Site
+					</th>
+					<th>
+						Emplacement
+					</th>
+					<th pSortableColumn="type" scope="col" style="text-align: center;">
+						Type <p-sortIcon field="type"></p-sortIcon>
+					</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-point>
+				<tr>
+					<td>
+						{{point.date | date:'H:mm' }}
+					</td>
+					<td>
+						{{machineDic[point.machine]._id | slice:0:5}}
+					</td>
+					<td>
+						{{point.uid}}
+					</td>
+					<td>
+						{{machineDic[point.machine].localisation}}
+					</td>
+					<td>
+						{{machineDic[point.machine].emplacement}}
+					</td>
+					<td>
+						{{point.type}}
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</p-dialog>
+
 <p-dialog header="Valider CRA" [(visible)]="displayCRA" [modal]="true" showEffect="fade" [style]="{width: '50vw'}"
 	[breakpoints]="{'960px': '75vw'}">
 	<div [style]="{'width':'100%'}" *ngIf="dataCHECK">
 		<p-toggleButton autoWidth="false" [style]="{'width':'100%'}" onLabel="Validé" offLabel="Non validé"
-			 offIcon="pi pi-times" onIcon='pi pi-check' [(ngModel)]="dataCHECK.validated"
+			offIcon="pi pi-times" onIcon='pi pi-check' [(ngModel)]="dataCHECK.validated"
 			(onChange)="saveCheck(dataCHECK)"> <!-- ERREUR VSCode Qui n'en est pas une -->
 		</p-toggleButton>
 		<p>&nbsp;</p>

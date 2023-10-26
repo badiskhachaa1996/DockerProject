@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import mongoose from 'mongoose';
+import { PointeuseService } from 'src/app/services/pointeuse.service';
 @Component({
   selector: 'app-dashboard-rh',
   templateUrl: './dashboard-rh.component.html',
@@ -46,16 +47,39 @@ export class DashboardRhComponent implements OnInit {
 
   dataMachine;
   USER: User
-  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService,
+  constructor(private rhService: RhService, private dailyCheckService: DailyCheckService, private PoiService: PointeuseService,
     private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService) { }
-
+  machineList = []
+  machineDic = {}
+  uidDic = {}
   ngOnInit(): void {
     // recuperation de la liste des checks
     this.onGetUsersDailyChecksAndCollaborateur();
     this.PointageService.getAllWithUserID().subscribe(r => {
       this.dataMachine = r
     })
+    this.PoiService.getAll().subscribe(ps => {
+      this.machineList = ps
+      ps.forEach(m => {
+        this.machineDic[m.serial_number] = m
+      })
+    })
+    this.PoiService.getData().subscribe(pd => {
+      pd.forEach(p => {
+        p.users.forEach(u => {
+          if (u.user_id) {
+            if (this.uidDic[p.serial_number]) {
+              this.uidDic[p.serial_number][u.UID] = u.user_id
+            } else {
+              this.uidDic[p.serial_number] = {}
+              this.uidDic[p.serial_number][u.UID] = u.user_id
+            }
 
+          }
+        })
+      })
+      console.log(this.uidDic)
+    })
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
   }
@@ -270,11 +294,23 @@ export class DashboardRhComponent implements OnInit {
     }
   }
   saveCheck(check: DailyCheck) {
-    console.log(check.validated)
     this.dailyCheckService.patchCheckIn(check).then(r => {
       this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
-     
-    },error=>{console.error(error)})
-  }
 
+    }, error => { console.error(error) })
+  }
+  pointages = []
+  displayActivite = false
+  choosenCollaborateur: Collaborateur
+  seePointage(check: DailyCheck) {
+    this.choosenCollaborateur = this.dicCollaborateurs[check.user_id._id]
+    this.PointageService.getAllToday().subscribe(ps => {
+
+      ps.forEach(p => {
+        if (this.uidDic[p?.machine][p?.uid] && this.uidDic[p?.machine][p?.uid] == check.user_id._id)
+          this.pointages.push(p)
+      })
+      this.displayActivite = true
+    })
+  }
 }

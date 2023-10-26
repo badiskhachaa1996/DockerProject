@@ -143,7 +143,7 @@
 
                             </div>
                             <div class="col-6 md:col-3">
-                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
+                                <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="motifStr='Déjeuner';displayMotif=true"
                                         label="Pause" class="p-button-help mb-2"
                                         [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
                                     <br></span>
@@ -1388,7 +1388,7 @@
 
                                 </div>
                                 <div class="col-6 md:col-3">
-                                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="onPause()"
+                                    <span *ngIf="!dailyCheck?.isInPause"><button pButton pRipple (click)="motifStr='Déjeuner';displayMotif=true"
                                             label="Pause" class="p-button-help mb-2"
                                             [disabled]="dailyCheck == null || dailyCheck.check_out != null"></button>
                                         <br></span>
@@ -2195,3 +2195,16 @@
         </div>
     </div>
 </div>-->
+
+<p-dialog header="Motif de la pause" [(visible)]="displayMotif" [style]="{width: '50vw'}" [modal]="true">
+    <div style="width: 100%;" style="text-align: center;">
+        <p-dropdown autoWidth="false" [style]="{'width':'30%'}" *ngIf="motifStr=='Déjeuner'" [options]="motifDropdown"
+            appendTo="body" [(ngModel)]="motifStr"></p-dropdown>
+        <textarea *ngIf="motifStr!='Déjeuner'" [style]="{'width':'30%'}" pInputTextarea
+            [(ngModel)]="motifStr"></textarea>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayMotif=false;onPause()" label="Ok"
+            styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

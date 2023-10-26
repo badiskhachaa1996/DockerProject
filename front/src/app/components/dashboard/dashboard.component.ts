@@ -919,7 +919,7 @@ export class DashboardComponent implements OnInit {
 
   // méthode de pause
   onPause(): void {
-    this.dailyCheck.pause.push({ in: new Date() });
+    this.dailyCheck.pause.push({ in: new Date(),motif: this.motifStr });
     this.dailyCheck.isInPause = true;
 
     this.dailyCheckService.patchCheckIn(this.dailyCheck)
@@ -1500,4 +1500,11 @@ export class DashboardComponent implements OnInit {
     this.seeActu = act
     this.seeDescriptionActu = true
   }
+  motifStr = ''
+  displayMotif = false
+
+  motifDropdown = [
+    { label: 'Déjeuner', value: 'Déjeuner' },
+    { label: 'Autre', value: 'Autre' }
+  ]
 }
