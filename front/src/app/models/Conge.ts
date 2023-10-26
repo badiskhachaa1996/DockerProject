@@ -3,7 +3,7 @@ import { User } from "./User";
 export class Conge {
     constructor(
         public _id?: string,
-        public user_id?: string,
+        public user_id?: any,
         public date_demande?: Date,
         public type_conge?: string,
         public other_motif?: string,

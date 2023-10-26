@@ -13,7 +13,8 @@
                 </div>
                 <div class="col-4" *ngIf="indexTabView==1">
                     <label>Absence Non Justifiée</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4">
                     <label>Autorisation</label><br>
@@ -21,11 +22,13 @@
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Férié Tunis</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Férié France</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Autre événement</label><br>
@@ -57,7 +60,8 @@
                 </div>
                 <div class="col-4" *ngIf="indexTabView==1">
                     <label>Absence Non Justifiée</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4">
                     <label>Autorisation</label><br>
@@ -65,11 +69,13 @@
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Férié Tunis</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié Tunis"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Férié France</label><br>
-                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France" (onChange)="onFilter()"></p-checkbox>
+                    <p-checkbox [(ngModel)]="filter_value" value="Jour férié France"
+                        (onChange)="onFilter()"></p-checkbox>
                 </div>
                 <div class="col-4" *ngIf="indexTabView!=1">
                     <label>Autre événement</label><br>
@@ -115,13 +121,81 @@
     </form>
 </p-dialog>
 
-<p-dialog *ngIf="dateAbsence" [(visible)]="displayAbsence" header="Absents du {{dateAbsence| date:'dd MMMM yy'}}">
-    <p>En cours de dévéloppement</p>
+<p-dialog *ngIf="dateCRA" [(visible)]="displayCRA" header="CRA du {{dateCRA| date:'dd MMMM yy'}}"
+    [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="DataCRA.cra">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Durée</th>
+                <th>Tâche</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cra>
+            <tr>
+                <td>{{cra.number_minutes}} mn</td>
+                <td>{{cra.task}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun tache de cra trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+
+<p-dialog *ngIf="dateAbsence" [(visible)]="displayAbsence" header="Absents du {{dateAbsence| date:'dd MMMM yy'}}"
+    [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="dicAbsent[dateAbsence]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+                <th>
+                    Statut
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.user_id.firstname | titlecase}} {{rowData.user_id.lastname | uppercase}}</td>
+                <td>Absent</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </p-dialog>
 
 <p-dialog *ngIf="dateAutorisation" [(visible)]="displayAutorisation"
-    header="Autorisations du {{dateAutorisation| date:'dd MMMM yy'}}">
-    <p>En cours de dévéloppement</p>
+    header="Autorisations du {{dateAutorisation| date:'dd MMMM yy'}}" [style]="{width: '30vw'}" [modal]="true">
+    <p-table #dtCon dataKey="_id" styleClass="p-datatable-gridlines" [value]="CongeDic[dateAutorisation]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>
+                    Collaborateur
+                </th>
+                <th>
+                    Type de congé
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+                <td>{{rowData.user_id.firstname | titlecase}} {{rowData.user_id.lastname | uppercase}}</td>
+                <td>{{rowData.type_conge}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="2">Aucun collaborateur trouvé.</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </p-dialog>
 
 <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"

@@ -14,6 +14,7 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import { User } from 'src/app/models/User';
 import { RhService } from 'src/app/services/rh.service';
 import { Collaborateur } from 'src/app/models/Collaborateur';
+import { Conge } from 'src/app/models/Conge';
 
 @Component({
   selector: 'app-new-calendrier',
@@ -41,6 +42,7 @@ export class NewCalendrierComponent implements OnInit {
     { label: 'Autre', value: 'Autre' },
   ];
   collaborateurList = []
+  collaborateurDic = []
 
   optionsGlobal = {
     plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
@@ -77,6 +79,7 @@ export class NewCalendrierComponent implements OnInit {
     timeZone: 'local',
     contentHeight: 500,
     events: [],
+    eventClick: this.eventClickUser.bind(this),
     //eventDidMount: this.eventToolTip(this),
     defaultView: "dayGridMonth",
     minTime: '08:00:00',
@@ -93,8 +96,11 @@ export class NewCalendrierComponent implements OnInit {
     this.rhService.getCollaborateurs()
       .then((response) => {
         response.forEach(c => {
-          if (c.user_id)
+          if (c.user_id) {
             this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            this.collaborateurDic[c.user_id._id] = c
+          }
+
         })
       })
       .catch((error) => { this.ToastService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
@@ -103,21 +109,38 @@ export class NewCalendrierComponent implements OnInit {
   dateClickGlobal(col) {
     this.DataDay = col
     this.displayPopUp = true
-    /*
-Si Global :
-  Ouvrir le formulaire Event
-
-Si User :
-  RIEN
-*/
   }
+  DataCRA = []
+  displayCRA
+  dateCRA: string;
+  eventClickUser(event) {
+    console.log(event)
+    if (event.event.extendedProps.type == "Présent") {
+      this.dateCRA = new Date(event.event.start).toDateString()
+      this.DataCRA = this.PresentDicUser[this.dateCRA]
+      this.displayCRA = true
+    }
+  }
+  dicAbsent = {}
   eventClickGlobal(event) {
-    
+
     if (event.event.extendedProps.type == 'Absence') {
-      this.dateAbsence = new Date(event.event.extendedProps.date).toDateString()
+      this.dateAbsence = new Date(event.event.start).toDateString()
+      this.dicAbsent[this.dateAbsence] = []
+      let listPresent = []
+      if (this.PresentDic[this.dateAbsence])
+        this.PresentDic[this.dateAbsence].forEach(pd => {
+          listPresent.push(pd.user_id._id)
+        })
+      this.collaborateurList.forEach(c => {
+        if (listPresent.includes(c.value.user_id._id) == false && this.siteSelected.length == 0)
+          this.dicAbsent[this.dateAbsence].push(c.value)
+        else if (listPresent.includes(c.value.user_id._id) == false && this.atleastOne(c.value.localisation, this.siteSelected))
+          this.dicAbsent[this.dateAbsence].push(c.value)
+      })
       this.displayAbsence = true
     } else if (event.event.extendedProps.type == 'Autorisation') {
-      this.dateAutorisation = new Date(event.event.extendedProps.date).toDateString()
+      this.dateAutorisation = new Date(event.event.start).toDateString()
       this.displayAutorisation = true
     } else {
       this.displayData = true
@@ -143,6 +166,7 @@ Si User :
   AbsentDic = {}
   CongeDic = {}
   PresentDic = {}
+
   getGlobalEvents() {
     this.eventGlobal = []
     this.defaultEventsGlobal = []
@@ -181,7 +205,7 @@ Si User :
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
           while (dateEnd < dateDebut) {
             if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
-              this.addEventGlobal(new EventCalendarRH(null, dateDebut, "Absence", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null, "Absence"))
+              this.addEventGlobal(new EventCalendarRH(null, dateDebut, "Absence", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null, "Absence", null,))
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
@@ -192,6 +216,7 @@ Si User :
       })
     })
   }
+  PresentDicUser = {}
   getUsersEvents() {
     this.eventUsers = []
     this.defaultEventUsers = []
@@ -214,7 +239,15 @@ Si User :
           })
           dcs.forEach(dc => {
             presencesList.push(new Date(dc.check_in))
+            if (this.PresentDicUser[new Date(dc.check_in).toDateString()]) {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
+            } else {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Présent"))
+            }
+
           })
+          console.log(this.PresentDicUser)
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
@@ -314,8 +347,34 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
         this.eventGlobal.push(r)
       }
     })
-  }
+    if (this.siteSelected.length != 0) {
+      let keys = Object.keys(this.CongeDic)
+      keys.forEach(k => {
+        let r = []
+        this.CongeDic[k].forEach((value: Conge) => {
+          if (value.user_id) {
+            let c: Collaborateur = this.collaborateurDic[value.user_id._id]
+            if (this.atleastOne(c.localisation, this.siteSelected))
+              r.push(c)
+          }
+        })
+        this.CongeDic[k] = r
+      })
+    }
 
+  }
+  atleastOne(arr1: string[], arr2: string[]) {
+    if (typeof arr1 != typeof ['qsdqdqsd'])
+      arr1 = [arr1.toString()]
+    if (typeof arr2 != typeof ['qsdqdqsd'])
+      arr2 = [arr2.toString()]
+    let r = false
+    arr1.forEach(val => {
+      if (arr2.includes(val))
+        r = true
+    })
+    return r
+  }
   DataDay: {
     date: Date,
     dateStr: string,
