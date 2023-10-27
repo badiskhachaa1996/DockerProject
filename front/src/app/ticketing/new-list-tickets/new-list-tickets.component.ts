@@ -547,7 +547,11 @@ export class NewListTicketsComponent implements OnInit {
         this.messageList = messages
       })
   }
-
+  deleteCom(idx, m: Message) {
+    this.MessageService.delete(m._id).subscribe(delm => {
+      this.messageList.splice(idx, 1)
+    })
+  }
   onAjoutCommentaire(ticket: Ticket) {
     this.ticketTraiter = ticket
     this.TicketForm.patchValue({ ticket_id: this.ticketTraiter._id })

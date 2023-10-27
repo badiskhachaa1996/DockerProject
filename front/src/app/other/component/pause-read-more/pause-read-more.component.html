@@ -13,7 +13,7 @@
         </li>
     </ul>
 </ng-container>
-<p-dialog [(visible)]="seeAllString" [modal]="true">
+<p-dialog [(visible)]="seeAllString" [modal]="true" [style]="{width: '40vw',height:'75vw'}" header="Pauses">
     <p-table class="col-12" styleClass="p-datatable-gridlines">
         <ng-template pTemplate="header">
             <tr>
@@ -29,7 +29,7 @@
                             de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
                         </li>
                     </ul>
-                    <br> &nbsp;&nbsp;&nbsp; {{ cra?.pause_timing }}mn
+                    <br> &nbsp;&nbsp;&nbsp; {{ pause_timing | number:'1.0-0' }}mn
                 </td>
                 <td>
                     <ul>
@@ -37,6 +37,7 @@
                             -{{ pause?.motif }}
                         </li>
                     </ul>
+                    <br> &nbsp;&nbsp;&nbsp;
                 </td>
                 <td colspan="2" *ngIf="!pauseList">
                     0mn

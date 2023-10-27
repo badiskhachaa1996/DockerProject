@@ -161,7 +161,7 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.civilite,
       null,
       null,
-      'Agent',
+      'Salarié',
       null,
       this.RegisterForm.value.pays_adresse,
       this.RegisterForm.value.ville_adresse,
@@ -172,7 +172,7 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.mention,
 
     );
-
+      console.log(user)
     if (this.router.url == "/register") {
       user.role = "user"
     }

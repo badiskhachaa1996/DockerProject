@@ -375,7 +375,7 @@
                                 <td *ngIf="!cra.pause_timing">
                                     0mn
                                 </td>
-                                <td>{{ cra.taux_cra }}%</td>
+                                <td>{{ cra.taux_cra | number:'1.0-2' }}%</td>
                                 <td>
                                     <button pButton pRipple label="Afficher CRA"
                                         class="p-button-success p-button-outlined mb-2"
@@ -1622,7 +1622,7 @@
                                     <td *ngIf="!cra.pause_timing">
                                         0mn
                                     </td>
-                                    <td>{{ cra.taux_cra }}%</td>
+                                    <td>{{ cra.taux_cra | number:'1.0-2' }}%</td>
                                     <td>
                                         <button pButton pRipple label="Afficher CRA"
                                             class="p-button-success p-button-outlined mb-2"

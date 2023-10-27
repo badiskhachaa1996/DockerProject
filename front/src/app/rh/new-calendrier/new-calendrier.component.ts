@@ -15,6 +15,9 @@ import { User } from 'src/app/models/User';
 import { RhService } from 'src/app/services/rh.service';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { Conge } from 'src/app/models/Conge';
+import { PointageService } from 'src/app/services/pointage.service';
+import { PointageData } from 'src/app/models/PointageData';
+import { DailyCheck } from 'src/app/models/DailyCheck';
 
 @Component({
   selector: 'app-new-calendrier',
@@ -42,7 +45,7 @@ export class NewCalendrierComponent implements OnInit {
     { label: 'Autre', value: 'Autre' },
   ];
   collaborateurList = []
-  collaborateurDic = []
+  collaborateurDic = {}
 
   optionsGlobal = {
     plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
@@ -71,7 +74,7 @@ export class NewCalendrierComponent implements OnInit {
       }
     }
   };
-
+  dataMachine;
   optionsUsers = {
     plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
     defaultDate: new Date(),
@@ -98,13 +101,16 @@ export class NewCalendrierComponent implements OnInit {
       }
     }
   };
-  constructor(private rhService: RhService, private ToastService: MessageService,
+  constructor(private rhService: RhService, private ToastService: MessageService, private PointageService: PointageService,
     private CalendrierRHService: CalendrierRhService, private dailyCheckService: DailyCheckService,
     private congeService: CongeService) { }
   token;
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.getGlobalEvents()
+    this.PointageService.getAllWithUserID().subscribe(r => {
+      this.dataMachine = r
+    })
     this.rhService.getCollaborateurs()
       .then((response) => {
         response.forEach(c => {
@@ -467,4 +473,52 @@ Absence , Autorisation , Férié France , Férié Tunis , Autre évènement : ca
   dateAutorisation: string = ''
   displayAutorisation = false
   displayAbsence = false
+
+  getCheckIn(user_id) {
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) < date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
+    }
+  }
+
+  getCheckOut(user_id) {
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) > date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
+    }
+
+  }
+  displayCRACheck = false
+  dataCHECK: DailyCheck
+  onValidateCRA(check: DailyCheck) {
+    this.displayCRACheck = true
+    this.dataCHECK = check
+  }
+
+  saveCheck(check: DailyCheck) {
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.ToastService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+
+    }, error => { console.error(error) })
+  }
 }
