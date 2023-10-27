@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="field col-6">
-                    <label>Test Mobilité - Ville</label>
+                    <label>Mobilité - Ville</label>
                     <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
                         autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
                         formControlName="locations"></p-multiSelect>
@@ -644,8 +644,13 @@
                         formControlName="video_lien" />
                 </div>-->
 
+                <div class="field col-12">
+                    <label>joindre un fichier (pdf)</label>
+                    <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
+                        (change)="onUpload($event)" chooseLabel="Browse" />
+                </div>
                 <div class="field col-6">
-                    <label>Test Mobilité - Ville</label>
+                    <label>Mobilité - Ville</label>
                     <p-multiSelect [options]="locations" [(ngModel)]="selectedLocations" defaultLabel="Lieu"
                         autoWidth="false" [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
                         formControlName="locations"></p-multiSelect>

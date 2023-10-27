@@ -6241,11 +6241,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-flag',
                                         routerLink: ['/evenements'],
                                     },*/
-                                    {
+                                    /*{
                                         label: 'Cvthèque Externe',
                                         icon: 'pi pi-briefcase',
                                         routerLink: ['/imatch'],
-                                    },
+                                    },*/
                                     /*{
                                         label: 'Rendez-vous',
                                         icon: 'pi pi-calendar',
@@ -6521,7 +6521,11 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Rendez-vous',
                                         icon: 'pi pi-calendar',
                                         routerLink: ['/imatch/rendez-vous']
-                                    }
+                                    }, {
+                                        label: 'Cvthèque Externe',
+                                        icon: 'pi pi-briefcase',
+                                        routerLink: ['/imatch'],
+                                    },
                                     ]
                                 }
                             ]

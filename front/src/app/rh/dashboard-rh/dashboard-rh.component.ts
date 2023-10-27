@@ -74,11 +74,9 @@ export class DashboardRhComponent implements OnInit {
               this.uidDic[p.serial_number] = {}
               this.uidDic[p.serial_number][u.UID] = u.user_id
             }
-
           }
         })
       })
-      console.log(this.uidDic)
     })
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
@@ -224,14 +222,20 @@ export class DashboardRhComponent implements OnInit {
     this.dailyChecks = []
     if (e.length != 0)
       this.defaultdailyChecks.forEach(check => {
-        let localisations: string[] = this.dicCollaborateurs[check.user_id._id].localisation
-        let r = false
-        localisations.forEach(val => {
-          if (e.includes(val))
-            r = true
-        })
-        if (r) {
-          this.dailyChecks.push(check)
+        if (check.user_id) {
+          let localisations: string[] = []
+          if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof 'str')
+            localisations = [this.dicCollaborateurs[check.user_id._id].localisation]
+          else if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof ['str'])
+            localisations = this.dicCollaborateurs[check.user_id._id].localisation
+          let r = false
+          localisations.forEach(val => {
+            if (this.siteSelected.includes(val))//this.siteSelected
+              r = true
+          })
+          if (r) {
+            this.dailyChecks.push(check)
+          }
         }
       })
     else

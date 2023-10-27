@@ -223,7 +223,7 @@ export class AjoutCvComponent implements OnInit {
     if (this.ID) {
       this.onGetUserById(this.ID)
       this.cvService.getCvbyUserId(this.ID).subscribe(c => {
-        this.onLoadFile(c._id)
+        this.onLoadFile(this.ID)
         this.formAddCV.patchValue({ ...c, user_id: c.user_id._id, winner_id: c?.winner_id, disponibilite: new Date(c.disponibilite), user_create_type: 'Externe' })
 
         this.selectedMultiCpt = []
@@ -334,7 +334,7 @@ export class AjoutCvComponent implements OnInit {
 
 
   //Traitement des formArray
-  pdfSrc = ""
+  pdfSrc: any = ""
   // upload du cv brute
   onUpload(event: any) {
     if (event.target.files.length > 0) {
@@ -343,20 +343,37 @@ export class AjoutCvComponent implements OnInit {
       reader.onload = () => {
         this.pdfSrc = reader.result as string;
       }
-      console.log(event.target.files[0])
+      let formData = new FormData();
+      let id = this.ID
+      if (!id)
+        id = this.formAddCV.value.user_id
+      console.log(id, this.ID, this.formAddCV.value.user_id, this.CV_USER_ID, this.uploadedFiles)
+      formData.append('id', id);
+      formData.append('file', this.uploadedFiles);
+      this.cvService.postCVBrute(formData)
+        .then(() => {
+          this.messageService.add({ severity: 'Ajout du CV PDF avec succès' })
+        })
+        .catch((error) => {
+          console.error(error)
+        });
       reader.readAsDataURL(event.target.files[0])
     }
   }
 
   onLoadFile(cv_id) {
     this.cvService.downloadCV(cv_id).then(r => {
-      const reader = new FileReader();
-      if (r && !r.error)
-        reader.onload = () => {
-          this.pdfSrc = reader.result as string;
-        }
-      //console.log(r, new Blob([r.file], { type: r.extension }), new File(new Blob([r.file], { type: r.extension }), "test.pdf"))
-      reader.readAsDataURL(new Blob([r.file], { type: r.extension }))
+      console.log(r)
+      const byteArray = new Uint8Array(atob(r.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: r.extension });
+      /*var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);*/
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        this.pdfSrc = new Uint8Array(fileReader.result as ArrayBuffer);
+      };
+      fileReader.readAsArrayBuffer(blob);
+
     })
   }
 
@@ -666,7 +683,6 @@ export class AjoutCvComponent implements OnInit {
     this.onGetUserById(val)
     this.cvService.getCvbyUserId(val).subscribe(c => {
       this.cv = c
-      console.log(c)
     })
   }
 
