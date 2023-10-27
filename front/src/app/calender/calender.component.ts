@@ -333,7 +333,8 @@ export class CalenderComponent implements OnInit {
   histoPointage: PointageData[];
   reader: FileReader = new FileReader();
   machineDic = {}
-
+  collaborateurList = []
+  userSelected
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -362,6 +363,21 @@ export class CalenderComponent implements OnInit {
         }
       }
     })
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id) {
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            if (c.user_id._id == this.token.id) {
+              this.userSelected = c
+              this.getUsersEvents()
+            }
+
+          }
+
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
@@ -780,7 +796,22 @@ export class CalenderComponent implements OnInit {
     })
 
   }
-
+  onCreateSujetLabel(ticket: Ticket) {
+    let r = ''
+    if (ticket?.sujet_id?.label)
+      r = ticket?.sujet_id?.label
+    if (ticket.module)
+      r = r + " - " + ticket.module
+    if (ticket.type)
+      r = r + " - " + ticket.type
+    if (ticket.campus)
+      r = r + " - " + ticket.campus
+    if (ticket.filiere)
+      r = r + " - " + ticket.filiere
+    if (ticket.demande)
+      r = r + " - " + ticket.demande
+    return r
+  }
   //* Check methods
   // recuperation de l'utilisateur connecté
   onGetUserConnectedInformation(): void {
@@ -791,7 +822,7 @@ export class CalenderComponent implements OnInit {
           .subscribe(datatache => {
             this.ticketListe = datatache.map(ticket => ({
               ...ticket,
-              label: ` ${ticket.customid}  ${ticket.statut}`
+              label: ` ${ticket.customid} ${this.onCreateSujetLabel(ticket)} ${ticket.statut}`
             }))
           });
         // recupere la liste des congés
@@ -955,7 +986,7 @@ export class CalenderComponent implements OnInit {
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre retour de pause' }); });
     this.dailyCheckService.getUserChecks(this.token.id)
       .then((response) => {
-        this.historiqueCra = response.reverse();;
+        this.historiqueCra = response
         this.lastCras = response[response.length - 1];
 
         console.log(this.lastCras);
@@ -979,7 +1010,7 @@ export class CalenderComponent implements OnInit {
         // recuperation de l'historique du cra
         this.dailyCheckService.getUserChecks(this.token.id)
           .then((response) => {
-            this.historiqueCra = response.reverse();
+            this.historiqueCra = response
             this.lastCras = response[response.length - 1];
             console.log(this.lastCras);
           })
@@ -1254,7 +1285,7 @@ export class CalenderComponent implements OnInit {
     if (value)
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
-          this.historiqueCra = response;
+          this.historiqueCra = response.reverse();
           this.lastCras = response[response.length - 1];
           console.log(this.lastCras);
         })
@@ -1534,7 +1565,152 @@ export class CalenderComponent implements OnInit {
     this.seeActu = act
     this.seeDescriptionActu = true
   }
+  eventUsers = []
+  optionsUsers = {
+    plugins: [dayGridPlugin, dayGridMonth, interactionPlugin],
+    defaultDate: new Date(),
+    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    header: {
+      right: 'prev,next',
+      center: 'title',
+      left: 'today,dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    locale: frLocale,
+    timeZone: 'local',
+    contentHeight: 500,
+    events: [],
+    eventClick: this.eventClickUser.bind(this),
+    //eventDidMount: this.eventToolTip(this),
+    defaultView: "dayGridMonth",
+    minTime: '08:00:00',
+    firstDay: 1,
+    selectable: true,
+    views: {
+      dayGridMonth: { // name of view
+        titleFormat: { year: 'numeric', month: 'long' }
+        // other view-specific options here
+      }
+    }
+  };
+  defaultEventUsers = []
+  filter_value = ['Absence Non Justifié', 'Absence', 'Autorisation', 'Jour férié Tunis', 'Jour férié France', 'Autre événement', 'Présent', 'Cours']
+  //Calendrier RH
+  onFilter() {
+    this.eventUsers = []
+    this.defaultEventUsers.forEach(r => {
+      if (this.filter_value.includes(r.extendedProps.type)) {
+        this.eventUsers.push(r)
+      }
+    })
+    /*if (this.siteSelected.length != 0) {
+      let keys = Object.keys(this.CongeDic)
+      keys.forEach(k => {
+        let r = []
+        this.CongeDic[k].forEach((value: Conge) => {
+          if (value.user_id) {
+            let c: Collaborateur = this.collaborateurDic[value.user_id._id]
+            if (this.atleastOne(c.localisation, this.siteSelected))
+              r.push(c)
+          }
+        })
+        this.CongeDic[k] = r
+      })
+    }*/
 
+  }
+  PresentDicUser = {}
+  getUsersEvents() {
+    this.eventUsers = []
+    this.defaultEventUsers = []
+    this.CalendrierRHService.getAll().subscribe(events => {
+      //events.forEach(ev => { this.addEventUser(ev) })
+      this.dailyCheckService.getUserChecks(this.userSelected.user_id._id).then(dcs => {
+        this.congeService.getAllByUserId(this.userSelected.user_id._id).then(conges => {
+          //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
+          let congesList: Date[] = []
+          let absencesList: Date[] = []
+          let presencesList: Date[] = []
+          conges.forEach(c => {
+            let dateC = new Date(c.date_debut)
+            dateC.setDate(dateC.getDate() - 1)
+            while (dateC < new Date(c.date_fin)) {
+              congesList.push(new Date(dateC))
+              this.addEventUser(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null))
+              dateC.setDate(dateC.getDate() + 1)
+            }
+          })
+          dcs.forEach(dc => {
+            presencesList.push(new Date(dc.check_in))
+            if (this.PresentDicUser[new Date(dc.check_in).toDateString()]) {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()].push(dc)
+            } else {
+              this.PresentDicUser[new Date(dc.check_in).toDateString()] = [dc]
+              this.addEventUser(new EventCalendarRH(null, new Date(dc.check_in), "Présent", "", null, "Présent"))
+            }
+
+          })
+          console.log(this.PresentDicUser)
+          let dateDebut = new Date()
+          let dateEnd = new Date()
+          dateEnd.setFullYear(dateEnd.getFullYear() - 1)
+          while (dateEnd < dateDebut) {
+            if (dateDebut.getDay() != 0 && dateDebut.getDay() != 6) {
+              //Vérifier si il a été présent ou si il a été en congé 
+              if (presencesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                congesList.find(d => (d.getDate() == dateDebut.getDate() && d.getMonth() == dateDebut.getMonth())) == undefined &&
+                events.find(d => (new Date(d.date).getDate() == dateDebut.getDate() && new Date(d.date).getMonth() == dateDebut.getMonth())) == undefined) {
+                absencesList.push(dateDebut)
+                this.addEventUser(new EventCalendarRH(null, dateDebut, "Absence Non Justifié", "Contacté la RH pour régulariser votre Absence ou via l'onglet 'Demande de congé / autorisation' de votre dashboard", null))
+              } else {
+                //console.log(dateDebut,events)
+              }
+            }
+            dateDebut.setDate(dateDebut.getDate() - 1)
+          }
+          this.defaultEventUsers = this.eventUsers
+          this.onFilter()
+        })
+      })
+    })
+    this.onFilter()
+  }
+  addEventUser(event: EventCalendarRH) {
+    let backgroundColor = '#1F618D'
+    let borderColor = '#17202A'
+    if (event.type == 'Jour férié France') {
+      backgroundColor = '#D4AC0D'
+      borderColor = '#D35400'
+    } else if (event.type == 'Autre événement') {
+      backgroundColor = '#9B59B6'
+      borderColor = '#8E44AD'
+    } else if (event.type == "Autorisation") {
+      backgroundColor = '#1ABC9C'
+      borderColor = '#186A3B'
+    } else if (event.type == "Absence Non Justifié") {
+      backgroundColor = '#E74C3C'
+      borderColor = '#7B241C'
+    }
+    let title = event.type
+    if (event.name)
+      title = event.name
+    if (event.campus)
+      title = title + ", " + event.campus
+    this.eventUsers.push({ title, date: new Date(event.date), allDay: true, backgroundColor, borderColor, extendedProps: { ...event } })
+    this.optionsUsers.events = this.eventUsers
+    this.eventUsers = Object.assign([], this.eventUsers)
+
+  }
+  DataCRA = []
+  displayCRA
+  dateCRA: string;
+  eventClickUser(event) {
+    console.log(event)
+    if (event.event.extendedProps.type == "Présent") {
+      this.dateCRA = new Date(event.event.start).toDateString()
+      this.DataCRA = this.PresentDicUser[this.dateCRA]
+      this.displayCRA = true
+    }
+  }
 }
 
 

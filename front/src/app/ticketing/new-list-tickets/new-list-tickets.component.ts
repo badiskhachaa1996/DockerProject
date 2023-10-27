@@ -58,6 +58,7 @@ export class NewListTicketsComponent implements OnInit {
     priorite: new FormControl("false"),
     module: new FormControl('',),
     type: new FormControl('',),
+    statut: new FormControl('',),
     documents: new FormControl([]),
     agent_id: new FormControl('',),
     _id: new FormControl('', Validators.required),
@@ -310,7 +311,7 @@ export class NewListTicketsComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    let statut = "En attente de traitement"
+    let statut = this.TicketForm.value.statut
     if (this.ticketAssign)
       statut = "En cours de traitement"
     this.TicketService.update({ ...this.TicketForm.value, documents, statut, assigne_by: this.token.id }).subscribe(data => {
