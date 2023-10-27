@@ -8,7 +8,9 @@ app.post("/post-annonce", (req, res) => {
     const annonce = new Annonce({ ...req.body, date_creation: new Date() });
 
     annonce.save()
-        .then((annonceSaved) => { res.status(201).send(annonceSaved); })
+        .then((annonceSaved) => {
+            res.status(201).send(annonceSaved);
+        })
         .catch((error) => { res.status(400).send(error.message); });
 });
 

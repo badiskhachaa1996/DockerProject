@@ -3,10 +3,16 @@
     <div class="page-content">
         <div class="old-cv" *ngIf="pdfSrc">
             <pdf-viewer [src]="pdfSrc" class="pdf-viewer-here"></pdf-viewer>
-
+        </div>
+        <div class="old-cv" *ngIf="!pdfSrc">
+            <div class="field col-12">
+                <h1>Joindre un fichier (pdf)</h1>
+                <input multiple type="file" accept="application/pdf" maxFileSize="10000000" (change)="onUpload($event)"
+                    chooseLabel="Browse" />
+            </div>
         </div>
 
-        <div class="input-form-cv">
+        <div class="input-form-cv" style="height:17.82cm;overflow:scroll">
             <div *ngIf="formAddCV">
                 <h4 class="title-add-cv">Génération de CV</h4>
                 <div class="col-12" *ngIf="!isEtudiant">
