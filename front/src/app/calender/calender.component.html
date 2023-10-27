@@ -69,7 +69,7 @@
                                     style="width: 150px; height: 80px;"><i class="pi pi-pause"></i></button>
                                 <br></span>
                             <span *ngIf="dailyCheck?.isInPause"><button pButton pRipple (click)="onStopPause()"
-                                    label="Fin pause" style="width: 150px; height: 80px;background-color: #e4aef3;"
+                                    label="Fin pause" style="width: 150px; height: 80px;background-color: #df6bff;"
                                     class=" mb-2" [disabled]="dailyCheck == null || dailyCheck.check_out != null"><i
                                         class="pi pi-play"></i></button>
                                 <br></span>
@@ -120,11 +120,11 @@
                                         </td>
                                         <td>{{cra.check_in | date:'H:mm'}}</td>
                                         <td>WIP</td>
-                                        <td *ngIf="cra.pause_timing">
+                                        <td *ngIf="pauseTiming">
 
-                                            {{ cra.pause_timing }}mn
+                                            {{ pauseTiming }}mn
                                         </td>
-                                        <td *ngIf="!cra.pause_timing">
+                                        <td *ngIf="!pauseTiming">
                                             0mn
                                         </td>
                                         <td>{{cra.check_out | date:'H:mm'}}</td>
@@ -156,19 +156,19 @@
                                 </ng-template>
                                 <ng-template pTemplate="emptymessage">
                                     <tr>
-                                        <td *ngIf="cra.pause_timing">
+                                        <td *ngIf="cra.pause && cra.pause.length!=0">
                                             <ul>
                                                 <li *ngFor="let pause of cra.pause; let i = index">
                                                     de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
                                                 </li>
                                             </ul>
-                                            <br> &nbsp;&nbsp;&nbsp; {{ cra?.pause_timing }}mn
+                                            <br> &nbsp;&nbsp;&nbsp; {{ pauseTiming }}mn
                                         </td>
-                                        <td colspan="2" *ngIf="!cra?.pause_timing">
+                                        <td colspan="2" *ngIf="!cra.pause || cra.pause.length==0">
                                             0mn
                                         </td>
 
-                                        <td *ngIf="cra.pause_timing">
+                                        <td *ngIf="cra.pause && cra.pause.length!=0">
                                             <ul>
                                                 <li *ngFor="let pause of cra.pause; let i = index">
                                                     -{{ pause?.motif }}
@@ -321,7 +321,7 @@
                                 <div class="field col-12 md:col-5">
 
                                     <p-dropdown formControlName="ticket" [options]="ticketListe" filter="true"
-                                        placeholder="ticket" [showClear]="true"
+                                        placeholder="Choisissez un ticket" [showClear]="true"
                                         (onChange)="onShowOtherTextArea($event)"></p-dropdown>
                                 </div>
                                 <div class="field col-12 md:col-5">
@@ -512,17 +512,53 @@
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Calendrier">
-                    <p-fullCalendar #calendar [events]="eventsRH" [options]="optionsRH">
-                    </p-fullCalendar>
-                    <p-dialog class="grid" header="Détails de l'événement" [(visible)]="displayData" [modal]="true"
-                        [style]="{width: '75vw'}">
+                    <div class="col-12 grid">
                         <div class="col-12 grid">
-                            <div class="col-12">
-                                <p>
-                                    {{dataEvent?.note}}
-                                </p>
+                            <div class="col-6">
+                                <label>Absence Non Justifiée</label><br>
+                                <p-checkbox [(ngModel)]="filter_value" value="Absence Non Justifié"
+                                    (onChange)="onFilter()"></p-checkbox>
+                            </div>
+                            <div class="col-6">
+                                <label>Autorisation</label><br>
+                                <p-checkbox [(ngModel)]="filter_value" value="Autorisation"
+                                    (onChange)="onFilter()"></p-checkbox>
+                            </div>
+                            <div class="col-6">
+                                <label>Présent</label><br>
+                                <p-checkbox [(ngModel)]="filter_value" value="Présent"
+                                    (onChange)="onFilter()"></p-checkbox>
+                            </div>
+                            <div class="col-6">
+                                <label>Cours</label><br>
+                                <p-checkbox [(ngModel)]="filter_value" value="Cours"
+                                    (onChange)="onFilter()"></p-checkbox>
                             </div>
                         </div>
+                    </div>
+                    <p-fullCalendar #calendar [events]="eventUsers" [options]="optionsUsers">
+                    </p-fullCalendar>
+                    <p-dialog *ngIf="dateCRA" [(visible)]="displayCRA" header="CRA du {{dateCRA| date:'dd MMMM yy'}}"
+                        [style]="{width: '30vw'}" [modal]="true">
+                        <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="DataCRA.cra">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Durée</th>
+                                    <th>Tâche</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-cra>
+                                <tr>
+                                    <td>{{cra.number_minutes}} mn</td>
+                                    <td>{{cra.task}}</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="2">Aucun tache de cra trouvé.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
                     </p-dialog>
                 </p-tabPanel>
 

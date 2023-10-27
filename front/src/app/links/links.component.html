@@ -26,11 +26,7 @@
                         <p-dataView [value]="links1" header="My Links 1">
                             <ng-template let-links pTemplate="listItem">
                                 <div class="col-8 flex flex-column gap-2">
-                                    <span class="font-bold ">{{links?.nom}}</span>
-                                    <div class="flex align-items-center gap-2">
-                                        <i class="pi pi-link text-sm"></i>
-                                        <a [href]="links?.lien" target="_blank">Cliquez ici</a>
-                                    </div>
+                                    <a class="font-bold " tooltipPosition="bottom" [pTooltip]="links?.lien" [href]="links?.lien" target="_blank">{{links?.nom}}</a>
                                 </div>
                                 <div class="col-4 font-bold text-50"><button pButton pRipple icon="pi pi-pencil"
                                         pTooltip="Mettre à jour le lien" (click)="SetUpdateLinks(links)"
