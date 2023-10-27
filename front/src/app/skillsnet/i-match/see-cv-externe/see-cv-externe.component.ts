@@ -34,6 +34,8 @@ export class SeeCvExterneComponent implements OnInit {
       id = this.CV_ID
     this.cvservice.getByID(id).subscribe((data) => {
       this.cv = data.dataCv;
+      this.competencesList =  [...this.cv.competences];
+      this.competencesList.splice(3, 999)
       this.user = data.dataCv.user_id
       if (!data) {
         this.UserService.getPopulate(id).subscribe(u => {
@@ -57,6 +59,25 @@ export class SeeCvExterneComponent implements OnInit {
   gotoEdit() {
     this.UPDATE.emit({ label: `GENCV - ${this.user.lastname} ${this.user.firstname}`, CV_USER_ID: this.user._id })
     //this.router.navigate(['generateur-cv/', this.user._id])
+  }
+  competencesList = []
+  seeAllCompetences() {
+    let id = this.route.snapshot.paramMap.get('id')
+    if (this.CV_ID)
+      id = this.CV_ID
+    this.cvservice.getByID(id).subscribe((data) => {
+      this.competencesList = this.cv.competences
+    })
+  }
+
+  hideAllCompetences() {
+    let id = this.route.snapshot.paramMap.get('id')
+    if (this.CV_ID)
+      id = this.CV_ID
+    this.cvservice.getByID(id).subscribe((data) => {
+      this.competencesList =  [...this.cv.competences];
+      this.competencesList.splice(3, 999)
+    })
   }
 
 }
