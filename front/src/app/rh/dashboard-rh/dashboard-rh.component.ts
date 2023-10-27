@@ -10,6 +10,7 @@ import jwt_decode from 'jwt-decode';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import mongoose from 'mongoose';
+import * as moment from 'moment';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
 @Component({
   selector: 'app-dashboard-rh',
@@ -89,6 +90,16 @@ export class DashboardRhComponent implements OnInit {
       .then((dcs) => {
         this.dailyChecks = [];
         dcs.forEach(dc => {
+          /*let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
+          if (dc.check_out)
+            workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
+          let max = workingTiming
+          let worked = 0
+          dc?.cra.map((cra) => {
+            worked += cra.number_minutes;
+          });
+          dc.taux_cra = ((worked * 100) / max)
+          console.log(dc)*/
           if (dc && dc.user_id)
             this.dailyChecks.push(dc)
         })
@@ -183,8 +194,6 @@ export class DashboardRhComponent implements OnInit {
         return null
       }
     }
-
-
   }
 
   getCheckOut(user_id) {

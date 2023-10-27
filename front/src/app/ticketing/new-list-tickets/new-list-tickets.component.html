@@ -201,9 +201,9 @@
                             placeholder="Choisissez un user" emptyFilterMessage="Pas de user trouvé"
                             filterPlaceholder="Choisissez un user"></p-dropdown>
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
-                            [showClear]="true" (onClear)="dt1.filter('', 'statut', 'in');"
-                            [(ngModel)]="filterBase" (onChange)="dt1.filter($event.value, 'statut', 'in');"
-                            placeholder="Choisissez un statut" emptyFilterMessage="Pas de statut trouvé"
+                            [showClear]="true" (onClear)="dt1.filter('', 'statut', 'in');" [(ngModel)]="filterBase"
+                            (onChange)="dt1.filter($event.value, 'statut', 'in');" placeholder="Choisissez un statut"
+                            emptyFilterMessage="Pas de statut trouvé"
                             filterPlaceholder="Choisissez un statut"></p-multiSelect>
                     </div>
                 </ng-template>
@@ -291,7 +291,8 @@
                         <td *ngIf="ticket.origin=='Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Traiter" style="cursor: pointer;" class="pi pi-cog mr-2"
                                 tooltipPosition="bottom" (click)="onTraiter(ticket,ri)" aria-hidden="true"></i>
-
+                            <i pTooltip="Réassigner" style="margin-left: 2%; cursor: pointer;" class="pi pi-user"
+                                tooltipPosition="bottom" (click)="onAssign(ticket)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="ticket.origin=='Non Assigne'" [ngClass]="{'urgent-end':ticket.priorite}">
                             <i pTooltip="Modifier" style="margin-left: 2%;cursor: pointer;" class="pi pi-pencil"
@@ -574,13 +575,18 @@
                         <th>Date</th>
                         <th>Commenté par</th>
                         <th>Commentaire</th>
+                        <th>Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-message>
+                <ng-template pTemplate="body" let-message let-idx="index">
                     <tr>
                         <td>{{message.date_ajout | date:"dd MMMM yy"}}</td>
                         <td>{{message.user_id.firstname | titlecase}} {{message.user_id.lastname | uppercase}}</td>
                         <td>{{message.description}}</td>
+                        <td>
+                            <i *ngIf="message.user_id._id==token.id" pTooltip="Supprimer le commentaire" tooltipPosition="bottom" class="pi pi-trash mr-2"
+                                aria-hidden="true" (click)="deleteCom(idx,message)"> </i>
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>

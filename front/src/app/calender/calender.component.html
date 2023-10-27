@@ -81,7 +81,7 @@
                             <button pButton pRipple label="Checkout" (click)="onCheckOut()" class="p-button-danger"
                                 [disabled]="dailyCheck == null || dailyCheck.check_out != null"
                                 style="width: 150px; height: 80px;"><i class="pi pi-sign-out"></i></button>
-                            <h6>Remplissage CRA <strong>{{craPercent}}%</strong></h6>
+                            <h6>Remplissage CRA <strong>{{craPercent| number:'1.0-2'}}%</strong></h6>
                         </div>
 
                     </div>
@@ -174,6 +174,7 @@
                                                     -{{ pause?.motif }}
                                                 </li>
                                             </ul>
+                                            <br> &nbsp;&nbsp;&nbsp;
                                         </td>
 
 
@@ -226,7 +227,7 @@
                                                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                                                 </button>
                                             </td>
-                                            <td>{{cra?.today |date:'dd MMM yyyy'}}</td>
+                                            <td>{{cra?.today}}</td>
                                             <td>{{cra.check_in | date:'H:mm'}}</td>
                                             <td>WIP</td>
                                             <td *ngIf="cra.pause_timing>0">
@@ -456,9 +457,9 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-cra>
                                 <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
-                                    <td>{{cra?.today |date}}</td>
+                                    <td>{{cra?.today}}</td>
 
-                                    <td>{{ cra.taux_cra }}%</td>
+                                    <td>{{ cra.taux_cra | number:'1.0-2' }}%</td>
 
                                 </tr>
                             </ng-template>

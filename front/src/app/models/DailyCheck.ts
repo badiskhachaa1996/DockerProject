@@ -12,7 +12,7 @@ export class DailyCheck {
             public cra?: any[],
             public is_anticipated?: boolean,
             public check_out?: Date,
-            public taux_cra?: string,
+            public taux_cra?: any,
             public pause_timing?: number,
             public validated?: boolean,
             public commentaire?: string,

@@ -83,7 +83,7 @@ export class AddAgentComponent implements OnInit {
   })
 
   onAdd() {
-    this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list, role: "Agent" }).subscribe(data => {
+    this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list, role: "Agent", type: "Salarié" }).subscribe(data => {
       this.ToastService.add({ summary: 'Création de l\'agent avec succès', severity: 'success' })
       this.addForm.reset()
       this.roles_list = []
