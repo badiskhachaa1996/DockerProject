@@ -2,7 +2,7 @@
     <ng-container *ngIf="!seeAllString">
         <p (click)="onClick()" tooltipPosition="bottom" pTooltip="Voir le détails"
             style="margin-left:1rem">
-            Total: {{  pausemin }}mn
+            Total: {{  pausemin |  number:'1.0-0' }}mn
         </p>
     </ng-container>
 
