@@ -17,11 +17,15 @@ export class PauseReadMoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let t = 0
-    this.pauseList.forEach(p=>{
-      t = t + (new Date(p.out).getTime() - new Date(p.in).getTime())
-    })
-    this.pause_timing = t/60000
+
+    if (this.pauseList && this.pauseList.length != 0) {
+      let t = 0
+      this.pauseList.forEach(p => {
+        t = t + (new Date(p.out).getTime() - new Date(p.in).getTime())
+      })
+      this.pause_timing = t / 60000
+    }
+
   }
 
 }
