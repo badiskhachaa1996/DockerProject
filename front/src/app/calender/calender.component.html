@@ -124,11 +124,12 @@
 
                                             {{ cra.pause_timing }}mn
                                         </td>
-                                        <td>{{cra.check_out | date:'H:mm'}}</td>
-                                        <td>WIP</td>
                                         <td *ngIf="!cra.pause_timing">
                                             0mn
                                         </td>
+                                        <td>{{cra.check_out | date:'H:mm'}}</td>
+                                        <td>WIP</td>
+
 
                                     </tr>
                                 </ng-template>
@@ -163,15 +164,16 @@
                                             </ul>
                                             <br> &nbsp;&nbsp;&nbsp; {{ cra?.pause_timing }}mn
                                         </td>
-                                        <td>
+                                        <td colspan="2" *ngIf="!cra?.pause_timing">
+                                            0mn
+                                        </td>
+
+                                        <td *ngIf="cra.pause_timing">
                                             <ul>
                                                 <li *ngFor="let pause of cra.pause; let i = index">
                                                     -{{ pause?.motif }}
                                                 </li>
                                             </ul>
-                                        </td>
-                                        <td colspan="2" *ngIf="!cra?.pause_timing">
-                                            0mn
                                         </td>
 
 

@@ -23,7 +23,7 @@
 .old-cv {
   font-weight: bold;
   min-width: 21cm;
-  margin-right: -200px;
+  margin-right: -220px;
   height: 29.7cm;
   transform: scale(0.7);
   transform-origin: top left;
@@ -41,7 +41,8 @@
   border: 1px solid lightgray;
   padding: 20px;
   border-radius: 20px;
-  margin: 0 20px;
+  margin: 0;
+  margin-right: 10px;
   min-height: 100vh;
   flex-grow: 1;
   min-width: 500px;
@@ -250,6 +251,7 @@
     bottom: 30px;
     right: 25px;
   }
+
   .country-item div {
     color: white !important;
   }

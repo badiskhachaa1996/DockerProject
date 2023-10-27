@@ -12,7 +12,6 @@ app.disable("x-powered-by");
 // upload du cv brute
 const cvStorage = multer.diskStorage({
     destination: (req, file, callBack) => {
-        console.log(req.body, req.file)
         let id = req.body.id;
         let storage = `storage/cv/${id}`;
 
@@ -40,7 +39,6 @@ app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
 
 app.get("/download-cv/:id", uploadCV.single('file'), (req, res, next) => {
     let filePath = path.join('storage', 'cv', req.params.id.toString(), 'cv.pdf')
-    let fileExtention = 'pdf';
 
     try {
         let file = fs.readFileSync(filePath, { encoding: 'base64' }, (error) => {
@@ -49,7 +47,7 @@ app.get("/download-cv/:id", uploadCV.single('file'), (req, res, next) => {
             }
         });
 
-        res.status(200).json({ file: file, extension: fileExtention });
+        res.status(200).json({ file: file, extension: 'application/pdf' });
     } catch (e) {
         res.status(400).json({ error: e })
     }

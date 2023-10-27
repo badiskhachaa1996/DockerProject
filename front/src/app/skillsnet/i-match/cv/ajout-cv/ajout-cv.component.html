@@ -2,8 +2,7 @@
     <div class="page-header"></div>
     <div class="page-content">
         <div class="old-cv" *ngIf="pdfSrc">
-            <pdf-viewer [src]="pdfSrc" [render-text]="true" [original-size]="false"
-                class="pdf-viewer-here"></pdf-viewer>
+            <pdf-viewer [src]="pdfSrc" class="pdf-viewer-here"></pdf-viewer>
 
         </div>
 
@@ -150,12 +149,12 @@
                         </div>-->
 
                     <div class="field col-12">
-                        <label>joindre un fichier (pdf)</label>
+                        <label>Joindre un fichier (pdf)</label>
                         <input multiple type="file" accept="application/pdf" maxFileSize="10000000"
                             (change)="onUpload($event)" chooseLabel="Browse" />
                     </div>
                     <div class="field col-6">
-                        <label>Test Mobilité - Ville</label>
+                        <label>Mobilité - Ville</label>
                         <p-multiSelect [options]="locations" defaultLabel="Lieu" autoWidth="false"
                             [style]="{'width':'100%'}" [virtualScroll]="true" itemSize="30" class="w-100"
                             formControlName="mobilite_lieu"></p-multiSelect>
@@ -183,7 +182,7 @@
                             filterPlaceholder="Recherche"></p-dropdown>
                     </div>
                     <div class="field col-12">
-                        <label for="user">Publier votre CV sur iMATCH ?</label>
+                        <label for="user">Publier votre CV sur iMatch ?</label>
                         <p-selectButton autoWidth="false" [style]="{'width':'100%'}" formControlName="isPublic"
                             optionValue="value" optionLabel="label"
                             [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"></p-selectButton>
