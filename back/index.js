@@ -254,7 +254,8 @@ app.use("/", function (req, res, next) {
       req.originalUrl === '/soc/matching/create' ||
       req.originalUrl === "/soc/entreprise/createEntrepriseRepresentant" ||
       req.originalUrl.startsWith('/soc/annonce/postAnnonce') ||
-      req.originalUrl.startsWith('/soc/annonce/get-annonces')
+      req.originalUrl.startsWith('/soc/annonce/get-annonces') ||
+      req.originalUrl === '/soc/ticket/getAllPopulate'
       /*
           Dans des cas particulier certaines requêtes doivent être effectué alors que l'user n'ait pas connecté ou ne possède pas de compte,
           il faut dans ce cas rajouter le chemin de la route ici

@@ -39,6 +39,14 @@ export class AjoutCvComponent implements OnInit {
   showFormAddCV: boolean = true;
   formAddCV: FormGroup;
   showFormUpdateCV: boolean = false;
+  typeContratList = [
+    { label: 'Temps plein', value: 'Temps plein' },
+    { label: 'Temps partiel', value: 'Temps partiel' },
+    { label: 'Freelance', value: 'Freelance' },
+    { label: 'Saisonnière', value: 'Saisonnière' },
+    { label: 'Contrat', value: 'Contrat' },
+    { label: 'Alternance', value: 'Alternance' },
+  ]
   languesList: any[] = [
     { label: 'Français' },
     { label: 'Anglais' },
@@ -202,6 +210,9 @@ export class AjoutCvComponent implements OnInit {
       isPublic: [true],
       niveau_etude: ['']
     });
+    this.reader.addEventListener("load", () => {
+      this.imgPDP = this.reader.result;
+    }, false);
     // decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
     if (this.CV_USER_ID)
@@ -296,7 +307,20 @@ export class AjoutCvComponent implements OnInit {
   onGetUserById(id) {
     if (id) {
       this.userService.getPopulate(id).subscribe(user => {
-        return this.user = user
+        this.user = user
+      })
+      this.userService.getProfilePicture(id).subscribe((data) => {
+        console.log(data)
+        if (data.error) {
+          this.imgPDP = null
+        } else {
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([byteArray], { type: data.documentType })
+          if (blob) {
+            this.imgPDP = null
+            this.reader.readAsDataURL(blob);
+          }
+        }
       })
     }
   }
@@ -726,5 +750,26 @@ export class AjoutCvComponent implements OnInit {
       window.open(pdf.output('bloburl'), '_blank');
     });*/
     window.print()
+  }
+  imgPDP;
+  reader: FileReader = new FileReader();
+  FileUploadPDP(event) {
+    console.log(this.formAddCV.value.user_id, event)
+    if (event.target.files.length > 0 && this.formAddCV.value.user_id) {
+      const formData = new FormData();
+      formData.append('id', this.formAddCV.value.user_id)
+      formData.append('file', event.target.files[0])
+
+      this.userService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de votre photo de profil avec succès' });
+        this.imgPDP = null
+        this.reader.readAsDataURL(event.target.files[0]);
+        let avoidError: any = document.getElementById('selectedFile')
+        avoidError.value = ""
+        //this.UserService.reloadImage(this.token.id)
+      }, (error) => {
+        console.error(error)
+      })
+    }
   }
 }

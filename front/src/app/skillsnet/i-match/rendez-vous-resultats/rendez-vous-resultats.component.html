@@ -82,8 +82,11 @@
                             *ngIf="(rdv.statut=='Planifié' || !rdv.statut) && !isEntreprise" class="pi pi-check"
                             (click)="changeStatut('Validé',rdv)" aria-hidden="true"></i>
                         <i pTooltip="Annulé" style="margin-left: 2%; cursor: pointer;color: red;"
-                            *ngIf="(rdv.statut=='Planifié' || !rdv.statut)" class="pi pi-times" (click)="changeStatut('Annulé',rdv)"
-                            aria-hidden="true"></i>
+                            *ngIf="(rdv.statut=='Planifié' || !rdv.statut)" class="pi pi-times"
+                            (click)="changeStatut('Annulé',rdv)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer" style="margin-left: 2%; cursor: pointer;color: red;"
+                            *ngIf="token && token.role!='user'" class="pi pi-trash"
+                            (click)="deleteRDV(rdv)" aria-hidden="true"></i>
                     </td>
                 </tr>
 
