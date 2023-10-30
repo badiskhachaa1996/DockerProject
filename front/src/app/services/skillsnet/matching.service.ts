@@ -4,16 +4,59 @@ import { CV } from 'src/app/models/CV';
 import { Evenements } from 'src/app/models/Evenements';
 import { Matching } from 'src/app/models/Matching';
 import { environment } from 'src/environments/environment';
-
+import jwt_decode from 'jwt-decode';
+import { AuthService } from '../auth.service';
+import { TicketService } from '../ticket.service';
+import { SujetService } from '../sujet.service';
+import { Sujet } from 'src/app/models/Sujet';
+import { Ticket } from 'src/app/models/Ticket';
+import { AnnonceService } from './annonce.service';
 @Injectable({
   providedIn: 'root'
 })
 export class MatchingService {
 
   apiUrl = environment.origin + "matching/";
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private AuthService: AuthService, private TicketService: TicketService,
+    private SujetService: SujetService, private AnnonceService: AnnonceService) { }
   create(tbObj: any) {
+    let m: Matching = tbObj
+    /*if (m && localStorage.getItem('token')) {
+      let token: any = jwt_decode(localStorage.getItem('token'))
+      this.AuthService.getPopulate(token.id).subscribe(user => {
+        let sujet: Sujet;
+        this.SujetService.getAllPopulate().subscribe(sujets => {
+          sujets.forEach(s => { if (s.label == 'iMatch' && s.service_id.label == 'Commercial') sujet = s })
+          if (user.type == 'Collaborateur') {
+            this.TicketService.create(new Ticket(null, token.id, sujet._id, new Date(), null, 'En attente de traitement',
+              null, null, null, false, `${user.firstname} ${user.lastname} a publié une nouvelle offre,${annonce.custom_id}`, false, null, null, null,
+              null, null, null, null, null, null, null, null, null, null, null, 'Offre publié'
+            ))
+          } else if (user.type == 'CEO Entreprise' || user.type == 'Entreprise' || user.type == 'Tuteur')
+            this.TicketService.create(new Ticket(null, token.id, sujet._id, new Date(), null, 'En attente de traitement',
+              null, null, null, false, `L'entreprise ${annonce.entreprise_name} a publié une nouvelle offre,${annonce.custom_id}`, false, null, null, null,
+              null, null, null, null, null, null, null, null, null, null, null, 'Offre publié'
+            ))
+        })
+      })
+    } else if (m) {
+      if (m.offre_id) {
+        this.AnnonceService.getAnnonce(m.offre_id).then(annonce => {
+          this.SujetService.getAllPopulate().subscribe(sujets => {
+            let sujet: Sujet;
+            sujets.forEach(s => { if (s.label == 'iMatch' && s.service_id.label == 'Commercial') sujet = s })
+            this.TicketService.create(new Ticket(null, null, sujet._id, new Date(), null, 'En attente de traitement',
+              null, null, null, false, `L'entreprise ${annonce.entreprise_name} a publié une nouvelle offre,${annonce.custom_id}`, false, null, null, null,
+              null, null, null, null, null, null, null, null, null, null, null, 'Offre publié'
+            ))
+          })
+        })
+
+      }
+    }*/
+
     let url = this.apiUrl + 'create';
+
     return this.httpClient.post<Matching>(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
   update(id: string, obj: any) {

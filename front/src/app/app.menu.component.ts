@@ -1028,7 +1028,7 @@ export class AppMenuComponent implements OnInit {
                                 }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                             ]
                         },
-                        */,
+                        *//*,
 
                         {
                             label: 'iMatch',
@@ -1039,11 +1039,11 @@ export class AppMenuComponent implements OnInit {
                                     icon: 'pi pi-volume-up',
                                     routerLink: ['/offres'],
                                 },
-                                /*{
+                                {
                                     label: 'Mes offres',
                                     icon: 'pi pi-user',
                                     routerLink: ['/mes-offres'],
-                                },*/
+                                },
                                 {
                                     label: 'Cvthèque',
                                     icon: 'pi pi-briefcase',
@@ -1075,7 +1075,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/imatch/rendez-vous']
                                 }
                             ],
-                        },
+                        },*/
                     ];
                 }
                 // menu service RH
@@ -1673,7 +1673,7 @@ export class AppMenuComponent implements OnInit {
                                         }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },*/,
-                                {
+                                /*{
                                     label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
@@ -1682,11 +1682,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        /*{
+                                        {
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
                                             routerLink: ['/mes-offres'],
-                                        },*/
+                                        },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -1718,7 +1718,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/imatch/rendez-vous']
                                         }
                                     ],
-                                },
+                                },*/
                                 /*{
                                     label: 'Booking',
                                     icon: 'pi pi-building',
@@ -2372,7 +2372,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },
-                                {
+                                /*{
                                     label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
@@ -2381,11 +2381,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        /*{
+                                        {
                                             label: 'Mes offres',
                                             icon: 'pi pi-user',
                                             routerLink: ['/mes-offres'],
-                                        },*/
+                                        },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -2417,7 +2417,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/imatch/rendez-vous']
                                         }
                                     ],
-                                },
+                                },*/
                                 /*{
                                     label: 'Booking',
                                     icon: 'pi pi-building',
@@ -3747,7 +3747,7 @@ export class AppMenuComponent implements OnInit {
                                         }, { label: "Actualités", icon: 'pi pi-exclamation-circle', routerLink: ['/international/actualite'] },
                                     ]
                                 },*/,
-                                {
+                                /*{
                                     label: 'iMatch',
                                     icon: 'pi pi-star',
                                     items: [
@@ -3756,11 +3756,11 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-volume-up',
                                             routerLink: ['/offres'],
                                         },
-                                        /*{
+                                        {
                                       label: 'Mes offres',
                                       icon: 'pi pi-user',
                                       routerLink: ['/mes-offres'],
-                                  },*/
+                                  },
                                         {
                                             label: 'Cvthèque',
                                             icon: 'pi pi-briefcase',
@@ -3792,7 +3792,7 @@ export class AppMenuComponent implements OnInit {
                                             routerLink: ['/imatch/rendez-vous']
                                         }
                                     ],
-                                },
+                                },*/
                                 {
                                     label: 'Étudiant',
                                     icon: 'pi pi-chart-pie',
