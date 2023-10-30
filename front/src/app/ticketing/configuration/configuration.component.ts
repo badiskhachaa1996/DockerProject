@@ -283,7 +283,10 @@ export class ConfigurationComponent implements OnInit {
       })
     }
     else {
-      this.responsableList.push(user)
+      if (this.responsableList)
+        this.responsableList.push(user)
+      else
+        this.responsableList = [user]
       this.responsableDic[service._id].push(user)
       user.roles_ticketing_list.forEach((roleTicket, idx) => {
         if (roleTicket.module._id == service._id) {

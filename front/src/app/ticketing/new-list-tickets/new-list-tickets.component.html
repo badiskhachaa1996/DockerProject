@@ -192,12 +192,12 @@
                             filterPlaceholder="Choisissez un service"></p-multiSelect>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filtreSujet" filter="true" [group]="true"
                             [showClear]="true" (onClear)="dt1.filter('', 'sujet', 'equals');"
-                            (onChange)="dt1.filter($event.value, 'sujet', 'equals');" placeholder="Choisissez un sujet"
+                            (onChange)="dt1.filter($event.value, 'sujet_id._id', 'equals');" placeholder="Choisissez un sujet"
                             emptyFilterMessage="Pas de sujet trouvé"
                             filterPlaceholder="Choisissez un sujet"></p-dropdown>
                         <p-dropdown [style]="{'margin':'5px'}" [options]="filterAgent" filter="true" [group]="true"
-                            [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id', 'equals');"
-                            *ngIf="TicketMode!='Personnel'" (onClear)="dt1.filter('', 'agent_id', 'equals');"
+                            [showClear]="true" (onChange)="dt1.filter($event.value, 'agent_id._id', 'equals');"
+                            *ngIf="TicketMode!='Personnel'" (onClear)="dt1.filter('', 'agent_id._id', 'equals');"
                             placeholder="Choisissez un user" emptyFilterMessage="Pas de user trouvé"
                             filterPlaceholder="Choisissez un user"></p-dropdown>
                         <p-multiSelect [style]="{'margin':'5px'}" [options]="filterStatut" filter="true"
