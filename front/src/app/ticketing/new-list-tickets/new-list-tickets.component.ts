@@ -37,8 +37,12 @@ export class NewListTicketsComponent implements OnInit {
   onChangeMode(e) {
     if (e.value == 'Personnel') {
       this.filterType = ['Mine']
+      this.filterBase = ['En attente de traitement', 'En cours de traitement']
+      this.dt1.filter(['En attente de traitement', 'En cours de traitement'], 'statut', 'in')
     } else {
       this.filterType = ['Assigne Service']
+      this.filterBase = []
+      this.dt1.filter([], 'statut', 'in')
     }
     this.onFilterTicket()
   }
@@ -521,15 +525,15 @@ export class NewListTicketsComponent implements OnInit {
     let r = ''
     if (ticket?.sujet_id?.label)
       r = ticket?.sujet_id?.label
-    if (ticket.module)
+    if (ticket.module && ticket.module != "")
       r = r + " - " + ticket.module
-    if (ticket.type)
+    if (ticket.type && ticket.type != "")
       r = r + " - " + ticket.type
-    if (ticket.campus)
+    if (ticket.campus && ticket.campus != "")
       r = r + " - " + ticket.campus
-    if (ticket.filiere)
+    if (ticket.filiere && ticket.filiere != "")
       r = r + " - " + ticket.filiere
-    if (ticket.demande)
+    if (ticket.demande && ticket.demande != "")
       r = r + " - " + ticket.demande
     return r
   }
@@ -588,10 +592,12 @@ export class NewListTicketsComponent implements OnInit {
   defaultTicket = []
   onFilterTicket() {
     this.tickets = []
-    if (!this.filterType.includes('Non Assigne') && this.TicketMode != 'Personnel')
-      this.filterType.push('Assigne Service')
-    else if (this.filterType.indexOf('Assigne Service') != -1)
+    if (this.filterType.indexOf('Assigne Service') != -1)
       this.filterType.splice(this.filterType.indexOf('Assigne Service'), 1)
+    if (!this.filterType.includes('Non Assigne') && this.TicketMode != 'Personnel' && this.filterType.indexOf('Assigne Service') == -1)
+      this.filterType.push('Assigne Service')
+
+    console.log(this.filterType)
     this.defaultTicket.forEach((t: Ticket) => {
       let r = true
       if (this.filterStatutTicket.includes("Urgent")) {
