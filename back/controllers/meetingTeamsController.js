@@ -1,11 +1,16 @@
 const express = require("express");
 const { MeetingTeams } = require("../models/meetingTeams");
+const { Ticket } = require("../models/ticket");
+const { User } = require("../models/user");
+const { Service } = require("../models/service");
+const { Sujet } = require("../models/sujet");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 
 app.post("/create", (req, res) => {
     delete req.body._id
     let f = new MeetingTeams({ ...req.body, statut: 'Planifié' })
+
     f.save()
         .then((FFSaved) => { res.status(201).send(FFSaved) })
         .catch((error) => { console.error(error); res.status(500).send(error); });
