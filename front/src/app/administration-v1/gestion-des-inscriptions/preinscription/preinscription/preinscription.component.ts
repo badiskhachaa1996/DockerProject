@@ -26,13 +26,16 @@ export class PreinscriptionComponent implements OnInit {
   prospects:Prospect[]=[];
   prospectI:Prospect[]= [];
   PROSPECT:Prospect;
-  ticket:Ticket;
+  ticket:any[]=[];
+  tickets:Ticket[] = [];
   selectedTabIndex: number = 0;
   selectedTabIndex1: number = 0;
   shownewLeadForm: boolean = false;
   shownewLeadFormI: boolean = false;
   shownewRIForm:boolean = false;
   itslead: boolean = false;
+  visible: boolean = false;
+  showDocuments:boolean = false;
   showDossier: boolean = false;
   showDoccuments: boolean = false;
   nationList = environment.nationalites;
@@ -124,6 +127,12 @@ export class PreinscriptionComponent implements OnInit {
     rue:new FormControl(''),
     ville:new FormControl(''),
     codep:new FormControl(''),
+  })
+  formAffectation = new FormGroup({
+    _id: new FormControl('', Validators.required),
+    agent_id: new FormControl('', Validators.required),
+    date_limite: new FormControl(''),
+    note_assignation: new FormControl(''),
   })
   RIForm: FormGroup = new FormGroup({
     etudiant:new FormControl('',Validators.required),
@@ -229,6 +238,10 @@ export class PreinscriptionComponent implements OnInit {
         console.log(this.prospects);
 
       })}))
+      this.ticketService.getAll().subscribe(data => {
+        this.tickets=data;
+      });
+      
     }
 
   }
@@ -419,11 +432,30 @@ export class PreinscriptionComponent implements OnInit {
 
   }
   onshowDossier(student:Prospect){
+    this.ticket=[];
     this.showDossier=true;
     this.admissionService.getPopulate(student._id).subscribe(data => {
       this.PROSPECT = data
-
-  })}
+    
+  })
+  console.log(student.user_id);
+    this.ticketService.getByIdEtudiant(student.user_id._id).subscribe(tick=>{
+      console.log(student._id);
+      console.log(tick);
+      this.ticket.push(tick.dataTicket   )   ;
+      
+    })
+}
+onshowDocuments(){
+  if(this.showDocuments == true){
+    this.showDocuments=false
+  }else{
+    this.showDocuments=true
+  }
+}
+showDialog() {
+  this.visible = true;
+}
   downloadFile(doc: { date: Date, nom: String, path: String }) {
     this.admissionService.downloadFile(this.PROSPECT._id, `${doc.nom}/${doc.path}`).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));

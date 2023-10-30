@@ -3,6 +3,7 @@ const app = express();
 app.disabled("x-powered-by");
 const { Prospect } = require('../models/prospect');
 const { User } = require('./../models/user');
+const { Ticket } = require('../models/ticket');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
 const path = require('path');
@@ -138,9 +139,19 @@ app.post("/create", (req, res, next) => {
                             res.status(201).json({ error: 'Ce lead existe déjà !', prospect: prospectFromDb });
                         } else {
                             prospect.user_id = userFromDb._id;
+                            const etudiantId = userFromDb._id;
+                            const ticket = new Ticket({
+                                etudiant_id: etudiantId, // Utilisez l'ID de l'utilisateur du prospect ici
+                                // Autres champs du ticket
+                            });
+                            ticket.save()
+                            .then((suc) => {res.status(201).json({ 
+                                success: 'ticket ajouté dans la BD'})})
+                            .catch((er) => { res.status(400).json({ err:"impossible de cree le ticket" }) });
                             prospect.date_creation = new Date()
                             prospect.save()
                                 .then((prospectSaved) => {
+                                    
                                     let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                                     res.status(201).json({ success: 'Lead ajouté dans la BD', dataUser: userFromDb, token, prospect });
                                 })
@@ -155,6 +166,14 @@ app.post("/create", (req, res, next) => {
                     .then((userCreated) => {
 
                         prospect.user_id = userCreated._id;
+                        const etudiantId = userCreated._id;
+                            const ticket = new Ticket({
+                                etudiant_id: etudiantId,
+                               
+                                 // Utilisez l'ID de l'utilisateur du prospect ici
+                                // Autres champs du ticket
+                            });
+                            ticket.save()
                         prospect.date_creation = new Date()
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()

@@ -4,23 +4,44 @@
 
         <p-tabPanel header="Local">
             <div *ngIf="showDossier">
-            <p-tabView  [(activeIndex)]="selectedTabIndex1">
-                <p-tabPanel header="Etape 1 :Dossier">
-                    
+            <p-accordion  [(activeIndex)]="selectedTabIndex1">
+                <p-accordionTab header="Etape 1 :Dossier">
+                    <p-dialog header="Affecter un agent à ce ticket" [(visible)]="visible" [style]="{width: '50vw'}">
+                        
+    <form [formGroup]="formAffectation" class="p-fluid p-formgrid grid col-12">
+        <div class="field col-6">
+            <label>Agent: </label>
+            <p-dropdown autoWidth="false" [style]="{'width':'100%'}" [options]="dropdownMember"
+                formControlName="agent_id" filter="true" placeholder="Choisissez un membre"></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>DDL: </label>
+            <input pInputText type="date" formControlName="date_limite" />
+        </div>
+        <div class="field col-12">
+            <label For="description">Note de l'affectation <span style="color: red;"> * </span></label>
+            <textarea pInputTextarea placeholder="Bon courage" formControlName="note_assignation" autoResize rows="3"
+                cols="30"></textarea>
+        </div>
+        <div class="col-12">
+            <p-button [style]="{'width':'100%'}" autoWidth="false" (onClick)="onAffectation()"
+                label="Affecter cette agent" [disabled]="formAffectation.invalid"></p-button>
+        </div>
+    </form>
+                    </p-dialog>
                     <h4 style="text-align: center;">Etat du dossier <p-dropdown [options]="etat_dossierDropdown" placeholder="Choisissez l'etat du dossier"
                         (onChange)="onSelectEtat(PROSPECT)" ></p-dropdown> </h4>
-                    <p-table #dt1 [value]="prospects" dataKey="_id" responsiveLayout="scroll"
+                    <p-table #dt1 [value]="ticket" dataKey="_id" responsiveLayout="scroll"
                         [globalFilterFields]="['nom', 'choix', 'rythme']" [rows]="8" [pageLinks]="5" [paginator]="true"
                         rowExpandMode="single" [totalRecords]="" styleClass="p-datatable-gridlines">
-
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="width: 5em"></th>
                                 <th pSortableColumn="id">
-                                    ID Ticket<p-sortIcon field="id"> </p-sortIcon>
+                                    ID Ticket <p-sortIcon field="id"> </p-sortIcon>
                                 </th>
                                 <th pSortableColumn="nom">
-                                    Statut<p-sortIcon field="nom"> </p-sortIcon>
+                                    Statut <p-sortIcon field="nom"> </p-sortIcon>
                                 </th>
                                 <th pSortableColumn="choix">
                                     Assigné à <p-sortIcon field="choix"> </p-sortIcon>
@@ -31,10 +52,11 @@
                                 <th>Action</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-prospect>
+                        <ng-template pTemplate="body" let-ticket>
+                            
                             <tr>
                                 <td>
-                                    <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                    <button type="button" pButton pRipple [pRowToggler]="ticket"
                                         class="p-button-text p-button-rounded p-button-plain" [icon]="
                                     expanded
                                         ? 'pi pi-chevron-down'
@@ -42,10 +64,10 @@
                                 "></button>
                                 </td>
                                 <td>
-                                    
+                                    {{ ticket?.customid }}
                                 </td>
                                 <td>
-                                 
+                                    {{ ticket?.statut }}
                                 </td>
                                 <td>
                                     
@@ -55,7 +77,7 @@
                                 </td>
                                 <td>
                                     <i style="padding-left: 3%;color: rgb(72, 72, 255);
-                                " class="pi pi-send m-1" (click)="initUpdate(formation); scrollToTop()"
+                                " class="pi pi-send m-1" (click)="showDialog(); scrollToTop()"
                                         pTooltip="Affecter" aria-hidden="true"
                                         tooltipPosition="bottom"></i>
                                 </td>
@@ -79,7 +101,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td>{{ user.customid }}</td>
+                                <td></td>
                                 <td>
                                     {{ user.user_id.firstname | titlecase }}
                                     {{ user.user_id.lastname | uppercase }}
@@ -106,7 +128,7 @@
                         <input type="file" (change)="uploadOtherFile($event.target.files)" id="selectedFileOther" #selectedFileOther
                             style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
                     </div>
-                    <a href="javascript:void(0)" (click)="showDocuments = true">Afficher le dossier -></a>
+                    <a href="javascript:void(0)" (click)="onshowDocuments()">Afficher le dossier -></a>
                     <div class="card grid" *ngIf="PROSPECT && showDocuments">
                         <h3 class="col-12">Documents</h3>
                         <p-table [value]="PROSPECT.documents_dossier" #dt1 dataKey="_id" class="col-12" responsiveLayout="scroll"
@@ -174,14 +196,14 @@
                             </ng-template>
                         </p-table>
                     </div>
-                </p-tabPanel>
-                <p-tabPanel header="Etape 2:">
-                </p-tabPanel>
-                <p-tabPanel header="Etape 3:">
-                </p-tabPanel>
-                <p-tabPanel header="Etape 4:">
-                </p-tabPanel>
-            </p-tabView></div>
+                </p-accordionTab>
+                <p-accordionTab header="Etape 2:">
+                </p-accordionTab>
+                <p-accordionTab header="Etape 3:">
+                </p-accordionTab>
+                <p-accordionTab header="Etape 4:">
+                </p-accordionTab>
+            </p-accordion></div>
             <div *ngIf="shownewLeadForm" class="col-12 card">
                 <h4 style="text-align: center;">Ajouter un nouveau lead </h4>
                 <div style="text-align: center;">
