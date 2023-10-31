@@ -14,35 +14,36 @@ app.post('/create', (req, res) => {
         if (match) {
             res.status(400).send(match)
         } else {
-            Matching.findById(match._id).populate({ path: 'offre_id', populate: { path: 'entreprise_id' } }).populate({ path: 'cv_id', populate: { path: 'user_id' } }).then(newMatching => {
-                let ent_name = newMatching?.offre_id?.entreprise_name
-                if (!ent_name)
-                    ent_name = newMatching?.offre_id?.entreprise_id?.r_sociale
-                User.findById(req.body.created_by).then(auteur => {
-                    Service.findOne({ label: 'Commercial' }).then(s => {
-                        if (s) Sujet.findOne({ service_id: s._id, label: 'iMatch' }).then(sujet => {
-                            if (sujet && (!auteur || auteur.type == 'CEO Entreprise' || auteur.type == 'Entreprise' || auteur.type == 'Tuteur'))
-                                createTicket(req.body?.created_by,
-                                    `L'entreprise ${ent_name} a fait un match avec le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Entreprise')
-                            else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin'))
-                                createTicket(req.body?.created_by,
-                                    `${auteur?.firstname} ${auteur?.lastname} a fait un match entre le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} et l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Commercial', auteur._id)
-                            else if (sujet && auteur && (auteur.type == 'Initial' || auteur.type == 'Alternant' || auteur.type == 'Prospect' || auteur.type.startWith('Externe')))
-                                createTicket(req.body?.created_by,
-                                    `Le candidat ${auteur?.firstname} ${auteur?.lastname} a fait un match entre pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Candidat')
-                        })
-                    })
-                })
-            })
             let event = new Matching({
                 ...req.body,
                 date_creation: new Date()
             })
             event.save().then(doc => {
-                Matching.findById(doc._id).populate('offre_id').populate('matcher_id').populate({ path: 'cv_id', populate: { path: "user_id" } }).then(newDoc => {
-                    res.send(newDoc)
+                Matching.findById(doc._id).populate({ path: 'offre_id', populate: { path: 'entreprise_id' } }).populate({ path: 'cv_id', populate: { path: 'user_id' } }).then(newMatching => {
+                    let ent_name = newMatching?.offre_id?.entreprise_name
+                    if (!ent_name)
+                        ent_name = newMatching?.offre_id?.entreprise_id?.r_sociale
+                    if (event?.accepted)
+                        User.findById(req.body.created_by).then(auteur => {
+                            Service.findOne({ label: 'Commercial' }).then(s => {
+                                if (s) Sujet.findOne({ service_id: s._id, label: 'iMatch' }).then(sujet => {
+                                    if (sujet && (!auteur || auteur.type == 'CEO Entreprise' || auteur.type == 'Entreprise' || auteur.type == 'Tuteur'))
+                                        createTicket(req.body?.created_by,
+                                            `L'entreprise ${ent_name} a fait un match avec le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Entreprise')
+                                    else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin'))
+                                        createTicket(req.body?.created_by,
+                                            `${auteur?.firstname} ${auteur?.lastname} a fait un match entre le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} et l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Commercial', auteur._id)
+                                    else if (sujet && auteur && (auteur.type == 'Initial' || auteur.type == 'Alternant' || auteur.type == 'Prospect' || auteur.type.startWith('Externe')))
+                                        createTicket(req.body?.created_by,
+                                            `Le candidat ${auteur?.firstname} ${auteur?.lastname} a fait un match entre pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Candidat')
+                                })
+                            })
+                        })
+                    res.send(newMatching)
                 })
             })
+
+
         }
     })
 
