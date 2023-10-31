@@ -91,13 +91,16 @@ export class DashboardRhComponent implements OnInit {
         this.dailyChecks = [];
         dcs.forEach(dc => {
           let pauseTiming = 0;
-          dc?.pause.forEach((p) => {
-            if (p.out) {
-              pauseTiming = pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
-            } else {
-              pauseTiming = pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
-            }
-          })
+          if(dc && dc.pause && dc.pause.length!=0){
+            dc?.pause.forEach((p) => {
+              if (p.out) {
+                pauseTiming = pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+              } else {
+                pauseTiming = pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+              }
+            })
+          }
+
           let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
           if (dc.check_out)
             workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
