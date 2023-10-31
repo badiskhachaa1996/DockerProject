@@ -583,10 +583,8 @@ export class CalenderComponent implements OnInit {
       this.visibleA = true
     }
     else { this.visibleA = false }
-    if (craLast.today == new Date().toLocaleDateString()) {
-
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: craLast.today })
+    if (craLast?.today != new Date().toLocaleDateString('en-US')) {
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: `Affichage du CRA du ${craLast?.today}` })
     }
 
   }
@@ -1687,6 +1685,8 @@ export class CalenderComponent implements OnInit {
             }
 
           })
+          //Charger les Réunions Teams
+          
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
