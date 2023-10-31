@@ -81,7 +81,7 @@
                             <button pButton pRipple label="Checkout" (click)="onCheckOut()" class="p-button-danger"
                                 [disabled]="dailyCheck == null || dailyCheck.check_out != null"
                                 style="width: 150px; height: 80px;"><i class="pi pi-sign-out"></i></button>
-                            <h6>Remplissage CRA <strong>{{craPercent| number:'1.0-2'}}%</strong></h6>
+                            <h6>Remplissage CRA <strong *ngIf="!isNaN(craPercent) && !isInfinity(craPercent)">{{craPercent| number:'1.0-2'}}%</strong> <strong *ngIf="isNaN(craPercent) || isInfinity(craPercent)">0%</strong></h6>
                         </div>
 
                     </div>
@@ -204,7 +204,7 @@
                                     <label htmlFor="">Choisissez un mois et une année &nbsp;&nbsp;&nbsp;</label>
                                     <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
                                 </div>
-                                <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true"
+                                <p-table [value]="historiqueCraHisto" dataKey="_id" [rows]="4" [rowHover]="true"
                                     styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
                                         <tr>
@@ -215,32 +215,36 @@
                                             <th>Pauses</th>
                                             <th>Checkout IMS</th>
                                             <th>Checkout Pointeuse</th>
-
+                                            <th>Validé</th>
 
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-cra let-expanded="expanded" let-ri="rowIndex">
                                         <tr (click)="historiqueCraSelected = cra; showDailySelectedCra1 = true">
-                                            <td>
+                                            <td [ngClass]="{'valid-begin':cra.validated,'non-valid-begin':!cra.validated}">
                                                 <button type="button" pButton pRipple [pRowToggler]="cra"
                                                     class="p-button-text p-button-rounded p-button-plain"
                                                     [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                                                 </button>
                                             </td>
-                                            <td>{{cra?.today}}</td>
-                                            <td>{{cra.check_in | date:'H:mm'}}</td>
-                                            <td>WIP</td>
-                                            <td *ngIf="cra.pause_timing>0">
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}">{{cra?.today}}</td>
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}">{{cra.check_in | date:'H:mm'}}</td>
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}">WIP</td>
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}" *ngIf="cra.pause_timing>0">
 
                                                 &nbsp;&nbsp;&nbsp; {{ cra.pause_timing }}mn
                                             </td>
-                                            <td *ngIf="!cra.pause_timing>0  ">
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}" *ngIf="!cra.pause_timing>0  ">
                                                 0 mn
                                             </td>
-                                            <td>{{cra.check_out | date:'H:mm'}}</td>
-                                            <td>WIP</td>
-
-
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}">{{cra.check_out | date:'H:mm'}}</td>
+                                            <td [ngClass]="{'valid-middle':cra.validated,'non-valid-middle':!cra.validated}">WIP</td>
+                                            <td *ngIf="cra.validated" class="valid-end">
+                                                Validé
+                                            </td>
+                                            <td *ngIf="!cra.validated" class="non-valid-end">
+                                                Non Validé
+                                            </td>
 
                                         </tr>
                                     </ng-template>
@@ -261,24 +265,35 @@
                                                 <p-table class="col-12" styleClass="p-datatable-gridlines">
                                                     <ng-template pTemplate="header">
                                         <tr>
-                                            <th> Pause </th>
+                                            <th> Pauses </th>
+                                            <th>Motif</th>
 
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td *ngIf="cra.pause_timing">
+                                            <td *ngIf="cra.pause && cra.pause.length!=0">
                                                 <ul>
                                                     <li *ngFor="let pause of cra.pause; let i = index">
-                                                        de {{ pause.in | date:'H:mm' }} à {{ pause.out | date:'H:mm' }}
+                                                        de {{ pause?.in | date:'H:mm' }} à {{ pause?.out | date:'H:mm' }}
                                                     </li>
                                                 </ul>
-                                                <br> {{ cra.pause_timing }}mn
+                                                <br> &nbsp;&nbsp;&nbsp; {{ pauseTiming }}mn
                                             </td>
-                                            <td *ngIf="!cra.pause_timing">
+                                            <td colspan="2" *ngIf="!cra.pause || cra.pause.length==0">
                                                 0mn
                                             </td>
-
+    
+                                            <td *ngIf="cra.pause && cra.pause.length!=0">
+                                                <ul>
+                                                    <li *ngFor="let pause of cra.pause; let i = index">
+                                                        -{{ pause?.motif }}
+                                                    </li>
+                                                </ul>
+                                                <br> &nbsp;&nbsp;&nbsp;
+                                            </td>
+    
+    
                                         </tr>
 
                                     </ng-template>
@@ -383,9 +398,9 @@
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Durée</th>
-                                <th>Activité</th>
-                                <th>Action</th>
+                                <th [ngClass]="{'valid-begin':dailyCheck.validated,'non-valid-begin':!dailyCheck.validated}">Durée</th>
+                                <th [ngClass]="{'valid-middle':dailyCheck.validated,'non-valid-middle':!dailyCheck.validated}">Activité</th>
+                                <th [ngClass]="{'valid-end':dailyCheck.validated,'non-valid-end':!dailyCheck.validated}">Action</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
@@ -446,7 +461,7 @@
                             <label htmlFor="">Choisissez un mois et une année</label>
                             <input pInputText type="month" (input)="getHistoPointage($event.target.value)">
                         </div>
-                        <p-table [value]="historiqueCra" dataKey="_id" [rows]="4" [rowHover]="true"
+                        <p-table [value]="historiqueCraHisto" dataKey="_id" [rows]="4" [rowHover]="true"
                             styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                             <ng-template pTemplate="header">
                                 <tr>
@@ -459,7 +474,8 @@
                                 <tr (click)="historiqueCraSelected = cra; showDailySelectedCra = true">
                                     <td>{{cra?.today}}</td>
 
-                                    <td>{{ cra.taux_cra | number:'1.0-2' }}%</td>
+                                    <td *ngIf="cra.taux_cra && !isNaN(cra.taux_cra)">{{ cra.taux_cra | number:'1.0-2' }}%</td>
+                                    <td *ngIf="!cra.taux_cra || isNaN(cra.taux_cra)">0%</td>
 
                                 </tr>
                             </ng-template>
@@ -544,19 +560,71 @@
                         <p-table #dtAbs dataKey="_id" styleClass="p-datatable-gridlines" [value]="DataCRA.cra">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Durée</th>
-                                    <th>Tâche</th>
+                                    <th>Site</th>
+                                    <th>Checkin</th>
+                                    <th>Pause</th>
+                                    <th>Checkout</th>
+                                    <th style="width: 8rem">
+                                        Taux CRA
+                                    </th>
+                                    <th style="width: 8rem">
+                                        Statut
+                                    </th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-cra>
+                            <ng-template pTemplate="body" let-check>
                                 <tr>
-                                    <td>{{cra.number_minutes}} mn</td>
-                                    <td>{{cra.task}}</td>
+                                    <td>
+                                        {{collaborateurDic[check?.user_id._id]?.localisation}}
+                                    </td>
+                                    <td style="min-width: 14rem;">
+                                        <strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}}<br>
+                                        <strong>Pointage: </strong>{{getCheckIn(check?.user_id?._id) | date:'H:mm'}}
+                                    </td>
+                                    <td style="min-width: 10rem;padding: 0%;">
+                                        <app-pause-read-more [pausemin]="check?.pause_timing"
+                                            [pauseList]="check?.pause"></app-pause-read-more>
+                                    </td>
+                                    <td style="min-width: 10rem;">
+                                        <strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
+                                        <strong>Pointage: </strong>{{getCheckOut(check?.user_id?._id) | date:'H:mm'}}
+                                    </td>
+                    
+                                    <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
+                                        [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
+                                        {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
+                                            pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
+                                            tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
+                                    </td>
+                                    <td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
+                                        0% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
+                                            pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
+                                            tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
+                                    </td>
+                    
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Disponible'">
+                                        <p-tag value="Disponible" severity="success" icon="pi pi-check"></p-tag>
+                                    </td>
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En congé'">
+                                        <p-tag value="En congé" icon="pi pi-home" severity="info"></p-tag>
+                                    </td>
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En réunion'">
+                                        <p-tag value="En réunion" severity="warning" icon="pi pi-phone"></p-tag>
+                                    </td>
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Occupé'">
+                                        <p-tag value="Occupé" severity="danger" icon="pi pi-pencil"></p-tag>
+                                    </td>
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'Absent'">
+                                        <p-tag value="Absent" icon="pi pi-times" severity="danger"></p-tag>
+                                    </td>
+                                    <td style="min-width: 12rem;" *ngIf="check.user_id?.statut == 'En pause'">
+                                        <p-tag value="En pause" severity="warning" icon="pi pi-moon"></p-tag>
+                                    </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="emptymessage">
                                 <tr>
-                                    <td colspan="2">Aucun tache de cra trouvé.</td>
+                                    <td colspan="6">Aucun tache de cra trouvé.</td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -726,10 +794,10 @@
                                             value={{conge.statut}}></p-tag></span>
                                 </td>
                                 <td>
-                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande"
+                                    <button pButton pRipple icon="pi pi-pencil" pTooltip="Mettre à jour la demande" *ngIf="conge.statut != 'Validé'"
                                         (click)="onPachCongeData(conge)"
                                         class="p-button-primary p-button-rounded p-button-outlined mb-2"></button>
-                                    <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash"
+                                    <button pButton pRipple pTooltip="Supprimer la demande" icon="pi pi-trash" *ngIf="conge.statut != 'Validé'"
                                         (click)="onDeleteConge(conge._id)"
                                         class="p-button-danger p-button-rounded p-button-outlined ml-2 mb-2"></button>
                                 </td>
@@ -852,4 +920,46 @@
         <p-button icon="pi pi-check" (click)="displayMotif=false;onPause()" label="Ok"
             styleClass="p-button-text"></p-button>
     </ng-template>
+</p-dialog>
+
+<p-dialog header="Valider CRA" [(visible)]="displayCRACheck" [modal]="true" showEffect="fade" [style]="{width: '50vw'}"
+    [breakpoints]="{'960px': '75vw'}">
+    <div [style]="{'width':'100%'}" *ngIf="dataCHECK">
+        <p-toggleButton autoWidth="false" [style]="{'width':'100%'}" onLabel="Validé" offLabel="Non validé"
+            offIcon="pi pi-times" [(ngModel)]="dataCHECK.validated" (onChange)="saveCheck(dataCHECK)">
+            <!-- ERREUR VSCode Qui n'en est pas une -->
+        </p-toggleButton>
+        <p>&nbsp;</p>
+        <p-table [value]="dataCHECK?.cra" dataKey="_id" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Tâche</th>
+                    <th>Durée</th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="cra">
+                    <td>
+                        {{cra.task}}
+                    </td>
+                    <td>
+                        {{cra.number_minutes}} mn
+                    </td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="3">Aucun CRA pour le moment.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="3">Chargement des CRA, merci de patienter...</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
 </p-dialog>

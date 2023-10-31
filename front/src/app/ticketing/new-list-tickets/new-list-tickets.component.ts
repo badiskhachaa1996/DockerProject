@@ -19,13 +19,19 @@ import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
 import { Sujet } from 'src/app/models/Sujet';
 import { Service } from 'src/app/models/Service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 @Component({
   selector: 'app-new-list-tickets',
   templateUrl: './new-list-tickets.component.html',
   styleUrls: ['./new-list-tickets.component.scss']
 })
 export class NewListTicketsComponent implements OnInit {
-
+  campusDropdown: any[] = [
+    { value: 'Paris', label: "Paris" },
+    { value: "Marne", label: "Marne" },
+    { value: 'Montpelier', label: "Montpelier" },
+  ];
+  serviceFiltered: string[] = []
   sujetDropdown: any[] = [
   ];
   serviceDropdown: any[] = [
@@ -50,7 +56,8 @@ export class NewListTicketsComponent implements OnInit {
   isAgent = false
   constructor(private TicketService: TicketService, private ToastService: ToastService,
     private ServService: ServService, private SujetService: SujetService, private AuthService: AuthService,
-    private NotifService: NotificationService, private Socket: SocketService, private router: Router, private MessageService: MessageService) { }
+    private NotifService: NotificationService, private Socket: SocketService, private router: Router,
+    private MessageService: MessageService, private diplomeService: DiplomeService) { }
   tickets: Ticket[] = []
   ticketsOnglets = []
   ticketUpdate: Ticket;
@@ -231,7 +238,11 @@ export class NewListTicketsComponent implements OnInit {
       })
     })
 
-
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.filiereDropdown.push({ value: d._id, label: d.titre })
+      })
+    })
     this.AuthService.getAllAgentPopulate().subscribe(users => {
       let itemsSuperAdmin = []
       let itemsService = {}
@@ -724,6 +735,15 @@ export class NewListTicketsComponent implements OnInit {
   }
   onFilter(event, dt) {
     this.filteredValues = event.filteredValue;
+  }
+  filiereDropdown: any[] = [];
+  showPedagogieFilter() {
+    let r = false
+    this.serviceFiltered.forEach(s => {
+      if (this.serviceDic[s] == 'Pédagogie' || this.serviceDic[s] == 'Pedagogie' || this.serviceDic[s] == 'Administration')
+        r = true
+    })
+    return r
   }
 }
 
