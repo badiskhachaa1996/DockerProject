@@ -104,6 +104,37 @@ export class ConfigurationComponent implements OnInit {
     })
     this.SujetForm.patchValue({ service_id: service._id })
   }
+  addExtra: Service = null
+  AddExtra(service: Service) {
+    this.addExtra = service
+  }
+  textExtra1 = ""
+  textExtra2 = ""
+  saveExtra() {
+    this.ServServ.update({ ...this.addExtra, id: this.addExtra._id }).subscribe(r => {
+      this.addExtra = null
+    })
+  }
+  addExtra1() {
+    this.addExtra.extra1.push(this.textExtra1)
+    this.addExtra.extra1 = Object.assign([], this.addExtra.extra1);
+    this.textExtra1 = ""
+  }
+  addExtra2() {
+    this.addExtra.extra2.push(this.textExtra2)
+    this.addExtra.extra2 = Object.assign([], this.addExtra.extra2);
+    this.textExtra2 = ""
+  }
+
+  removeExtra1(idx: number) {
+    this.addExtra.extra1.splice(idx, 1)
+    this.addExtra.extra1 = Object.assign([], this.addExtra.extra1);
+  }
+  removeExtra2(idx: number) {
+    this.addExtra.extra2.splice(idx, 1)
+    this.addExtra.extra2 = Object.assign([], this.addExtra.extra2);
+  }
+
 
   removeSujet(sujet: Sujet, ri) {
     this.SujetServ.delete(sujet._id).subscribe(data => {
