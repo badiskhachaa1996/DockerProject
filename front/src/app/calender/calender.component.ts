@@ -585,7 +585,7 @@ export class CalenderComponent implements OnInit {
       }
       else { this.visibleA = false }
     } else {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn' })
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: craLast.today })
     }
 
   }
