@@ -579,13 +579,14 @@ export class CalenderComponent implements OnInit {
   }
   showAssiduite() {
     let craLast: DailyCheck = this.historiqueCra[this.historiqueCra.length - 1]
+    if (this.visibleA == false) {
+      this.visibleA = true
+    }
+    else { this.visibleA = false }
     if (craLast.today == new Date().toLocaleDateString()) {
-      if (this.visibleA == false) {
-        this.visibleA = true
-      }
-      else { this.visibleA = false }
+
     } else {
-      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn' })
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn', detail: craLast.today })
     }
 
   }

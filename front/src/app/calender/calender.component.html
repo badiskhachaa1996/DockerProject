@@ -398,9 +398,9 @@
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th [ngClass]="{'valid-begin':dailyCheck.validated,'non-valid-begin':!dailyCheck.validated}">Durée</th>
-                                <th [ngClass]="{'valid-middle':dailyCheck.validated,'non-valid-middle':!dailyCheck.validated}">Activité</th>
-                                <th [ngClass]="{'valid-end':dailyCheck.validated,'non-valid-end':!dailyCheck.validated}">Action</th>
+                                <th [ngClass]="{'valid-begin':dailyCheck?.validated,'non-valid-begin':!dailyCheck?.validated}">Durée</th>
+                                <th [ngClass]="{'valid-middle':dailyCheck?.validated,'non-valid-middle':!dailyCheck?.validated}">Activité</th>
+                                <th [ngClass]="{'valid-end':dailyCheck?.validated,'non-valid-end':!dailyCheck?.validated}">Action</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
@@ -592,13 +592,13 @@
                     
                                     <td *ngIf="check?.taux_cra" style="min-width: 12rem;"
                                         [ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
-                                        {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
-                                            pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
+                                        {{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check?.validated" class="pi pi-check" tooltipPosition="bottom"
+                                            pTooltip="CRA Validé"></i> <i *ngIf="!check?.validated" class="pi pi-times"
                                             tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
                                     </td>
                                     <td *ngIf="!check?.taux_cra" style="min-width: 12rem;" class="cra-none">
-                                        0% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
-                                            pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
+                                        0% <i *ngIf="check?.validated" class="pi pi-check" tooltipPosition="bottom"
+                                            pTooltip="CRA Validé"></i> <i *ngIf="!check?.validated" class="pi pi-times"
                                             tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
                                     </td>
                     
