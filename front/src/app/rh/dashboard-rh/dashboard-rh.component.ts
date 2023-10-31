@@ -90,10 +90,18 @@ export class DashboardRhComponent implements OnInit {
       .then((dcs) => {
         this.dailyChecks = [];
         dcs.forEach(dc => {
+          let pauseTiming = 0;
+          dc?.pause.forEach((p) => {
+            if (p.out) {
+              pauseTiming = pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
+            } else {
+              pauseTiming = pauseTiming + (moment(new Date()).diff(moment(new Date(p.in)), 'minutes'));
+            }
+          })
           let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
           if (dc.check_out)
             workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
-          let max = workingTiming
+          let max = workingTiming - pauseTiming
           let worked = 0
           dc?.cra.map((cra) => {
             worked += cra.number_minutes;
@@ -252,11 +260,8 @@ export class DashboardRhComponent implements OnInit {
   }
 
   onReinitPointage(check: DailyCheck) {
-    this.dailyCheckService.patchCheckIn({ _id: check._id, check_out: null, pause: null, isInPause: false, pause_timing: 0, validated: false, taux_cra: 0 }).then(d => {
-      if (this.defaultdailyChecks.indexOf(check) != -1)
-        this.defaultdailyChecks.splice(this.defaultdailyChecks.indexOf(check), 1, d)
-      if (this.dailyChecks.indexOf(check) != -1)
-        this.dailyChecks.splice(this.dailyChecks.indexOf(check), 1, d)
+    this.dailyCheckService.patchCheckIn({ _id: check._id, check_out: null, pause: [], isInPause: false, pause_timing: 0, validated: false, taux_cra: 0 }).then(d => {
+      this.onGetUsersDailyChecksAndCollaborateur();
     })
   }
   craStatutList = [
