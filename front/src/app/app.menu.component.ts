@@ -256,7 +256,7 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ],
                         },
-                        {
+                        /*{
                             label: 'Commerciale',
                             icon: 'pi pi-fw pi-briefcase',
                             items: [
@@ -313,7 +313,7 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ajout-lead'],
                                 },
                             ],
-                        },
+                        },*/
                         {
                             label: 'Questionnaire',
                             icon: 'pi pi-sort-alpha-down',

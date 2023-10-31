@@ -371,7 +371,7 @@ app.post("/updateById/:id", (req, res) => {
     user["password"] = bcrypt.hashSync(user.password_clear, 8);
   }
   delete user._id
-  User.findByIdAndUpdate(    req.params.id,    user,
+  User.findByIdAndUpdate(req.params.id, user,
     { new: true },
     (err, user) => {
       if (err) {
@@ -1430,11 +1430,17 @@ app.patch("/recovery-password", (req, res) => {
 
 app.post('/create', (req, res) => {
   let user = new User({ ...req.body })
-  user.save().then(data => {
-    res.send(data)
-  }, error => {
-    res.status(500).send(error)
+  User.findOne({ email: req.body.email }).then(u => {
+    if (!u)
+      user.save().then(data => {
+        res.send(data)
+      }, error => {
+        res.status(500).send(error)
+      })
+    else
+      res.status(500).send(error)
   })
+
 })
 
 app.get('/getAllByServiceFromList/:service_id', (req, res) => {

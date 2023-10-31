@@ -280,7 +280,7 @@
     [breakpoints]="{'960px': '75vw'}">
     <div [style]="{'width':'100%'}" *ngIf="dataCHECK">
         <p-toggleButton autoWidth="false" [style]="{'width':'100%'}" onLabel="Validé" offLabel="Non validé"
-            offIcon="pi pi-times" [(ngModel)]="dataCHECK.validated" (onChange)="saveCheck(dataCHECK)">
+            offIcon="pi pi-times" [(ngModel)]="dataCHECK?.validated" (onChange)="saveCheck(dataCHECK)">
             <!-- ERREUR VSCode Qui n'en est pas une -->
         </p-toggleButton>
         <p>&nbsp;</p>
@@ -295,10 +295,10 @@
             <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
                 <tr [pEditableRow]="cra">
                     <td>
-                        {{cra.task}}
+                        {{cra?.task}}
                     </td>
                     <td>
-                        {{cra.number_minutes}} mn
+                        {{cra?.number_minutes}} mn
                     </td>
 
                 </tr>
