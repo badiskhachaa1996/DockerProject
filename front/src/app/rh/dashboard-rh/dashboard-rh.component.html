@@ -109,7 +109,7 @@
 
 						<td *ngIf="check?.taux_cra" style="min-width: 12rem;"
 							[ngClass]="{'cra-none':check?.taux_cra<1,'cra-perfect':check?.taux_cra>99,'cra-middle':(check?.taux_cra>=1 && check?.taux_cra<=99)}">
-							{{check?.taux_cra}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
+							{{check?.taux_cra | number:'1.0-2'}}% <i *ngIf="check.validated" class="pi pi-check" tooltipPosition="bottom"
 								pTooltip="CRA Validé"></i> <i *ngIf="!check.validated" class="pi pi-times"
 								tooltipPosition="bottom" pTooltip="CRA Non validé"></i>
 						</td>
@@ -184,37 +184,44 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th> Date </th>
+						<th pSortableColumn="today"> Date <p-sortIcon field="today"></p-sortIcon></th>
 						<th>Checkin</th>
-						<th>Pause</th>
+						<th>Pause </th>
 						<th>Checkout</th>
 						<th style="width: 8rem"> Taux CRA </th>
+						<th>Validé </th>
 						<th>Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-check>
 					<tr>
-						<td style="min-width: 12rem;">
+						<td [ngClass]="{'valid-begin':check.validated,'non-valid-begin':!check.validated}" style="min-width: 12rem;">
 							{{check?.today}}
 						</td>
-						<td style="min-width: 14rem;">
+						<td [ngClass]="{'valid-middle':check.validated,'non-valid-middle':!check.validated}" style="min-width: 14rem;">
 							<strong>IMS: </strong>{{check?.check_in | date: 'H:mm'}}<br>
 							<strong>Pointage: </strong>WIP
 						</td>
-						<td style="min-width: 14rem;">
+						<td [ngClass]="{'valid-middle':check.validated,'non-valid-middle':!check.validated}" style="min-width: 14rem;">
 							WIP
 						</td>
-						<td style="min-width: 10rem;">
+						<td [ngClass]="{'valid-middle':check.validated,'non-valid-middle':!check.validated}" style="min-width: 10rem;">
 							<strong>IMS: </strong>{{check?.check_out | date: 'H:mm'}}<br>
 							<strong>Pointage: </strong>WIP
 						</td>
-						<td style="min-width: 12rem;" *ngIf="check.taux_cra">
-							{{check?.taux_cra}}%
+						<td [ngClass]="{'valid-middle':check.validated,'non-valid-middle':!check.validated}" style="min-width: 12rem;" *ngIf="check.taux_cra">
+							{{check?.taux_cra | number:'1.0-2'}}%
 						</td>
-						<td style="min-width: 12rem;" *ngIf="!check.taux_cra">
+						<td [ngClass]="{'valid-middle':check.validated,'non-valid-middle':!check.validated}" style="min-width: 12rem;" *ngIf="!check.taux_cra">
 							0%
 						</td>
-						<td>
+						<td *ngIf="cra.validated" class="valid-middle">
+							Validé
+						</td>
+						<td *ngIf="!cra.validated" class="non-valid-middle">
+							Non Validé
+						</td>
+						<td [ngClass]="{'valid-end':ccheckra.validated,'non-valid-end':!check.validated}">
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"
 								tooltipPosition="bottom" (click)="onValidateCRA(check)" aria-hidden="true"></i>
 							<i pTooltip="Note" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"

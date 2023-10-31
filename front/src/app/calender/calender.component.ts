@@ -335,6 +335,7 @@ export class CalenderComponent implements OnInit {
   machineDic = {}
   collaborateurList = []
   userSelected
+  collaborateurDic = {}
   ngOnInit(): void {
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
@@ -381,6 +382,17 @@ export class CalenderComponent implements OnInit {
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
     })
+    this.rhService.getCollaborateurs()
+      .then((response) => {
+        response.forEach(c => {
+          if (c.user_id) {
+            this.collaborateurList.push({ label: `${c.user_id.lastname} ${c.user_id.firstname}`, value: c })
+            this.collaborateurDic[c.user_id._id] = c
+          }
+
+        })
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Agents', detail: 'Impossible de récupérer la liste des collaborateurs' }); });
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
         this.user = dataUser;
@@ -566,10 +578,16 @@ export class CalenderComponent implements OnInit {
     else { this.visible = false }
   }
   showAssiduite() {
-    if (this.visibleA == false) {
-      this.visibleA = true
+    let craLast: DailyCheck = this.historiqueCra[this.historiqueCra.length - 1]
+    if (craLast.today == new Date().toLocaleDateString()) {
+      if (this.visibleA == false) {
+        this.visibleA = true
+      }
+      else { this.visibleA = false }
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Vous n\'avez pas encore fait votre CheckIn' })
     }
-    else { this.visibleA = false }
+
   }
   showConge() {
     this.visibleC = true
@@ -960,7 +978,7 @@ export class CalenderComponent implements OnInit {
       })
       .catch((error) => { console.error(error); this.messageService.add({ severity: 'error', summary: 'Pause', detail: 'Impossible de prendre en compte votre départ en pause' }); });
   }
-
+  historiqueCraHisto = []
   // méthode de fin de la pause
   onStopPause(): void {
     // taille du tableau de check
@@ -1306,9 +1324,7 @@ export class CalenderComponent implements OnInit {
     if (value)
       this.dailyCheckService.getUserChecksByDate(this.token.id, value)
         .then((response) => {
-          this.historiqueCra = response.reverse();
-          this.lastCras = response[response.length - 1];
-          console.log(this.lastCras);
+          this.historiqueCraHisto = response.reverse();
         })
         .catch((error) => { this.messageService.add({ severity: 'error', summary: 'CRA', detail: 'Impossible de récupérer votre historique de pointage' }); })
   }
@@ -1721,12 +1737,46 @@ export class CalenderComponent implements OnInit {
   DataCRA = []
   displayCRA
   dateCRA: string;
+  displayCRACheck = false
+  dataCHECK: DailyCheck
+  onValidateCRA(check: DailyCheck) {
+    this.displayCRACheck = true
+    this.dataCHECK = check
+  }
   eventClickUser(event) {
     if (event.event.extendedProps.type == "Présent") {
       this.dateCRA = new Date(event.event.start).toDateString()
       this.DataCRA = this.PresentDicUser[this.dateCRA]
       this.displayCRA = true
     }
+  }
+  isNaN(nb: number) { return isNaN(nb) }
+  isInfinity(nb: number) { return nb == Infinity }
+
+
+  getCheckOut(user_id) {
+    if (this.dataMachine) {
+      let UID = this.dataMachine.UserToUID[user_id]
+      if (this.dataMachine.DataDic[UID]) {
+        let listCheck: PointageData[] = this.dataMachine.DataDic[UID]
+        let date = new Date(listCheck[0].date)
+        listCheck.forEach(element => {
+          if (new Date(element.date) > date)
+            date = new Date(element.date)
+        });
+        return date
+      } else {
+        return null
+      }
+    }
+
+  }
+
+  saveCheck(check: DailyCheck) {
+    this.dailyCheckService.patchCheckIn(check).then(r => {
+      this.messageService.add({ severity: 'success', summary: "L'activité a été mis à jour" })
+
+    }, error => { console.error(error) })
   }
 }
 

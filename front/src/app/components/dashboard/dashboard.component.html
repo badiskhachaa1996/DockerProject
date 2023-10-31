@@ -218,9 +218,9 @@
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Durée</th>
-                                <th>Tâche</th>
-                                <th>Action</th>
+                                <th [ngClass]="{'valid-begin':dailyCheck.validated,'non-valid-begin':!dailyCheck.validated}">Durée</th>
+                                <th [ngClass]="{'valid-middle':dailyCheck.validated,'non-valid-middle':!dailyCheck.validated}">Activité</th>
+                                <th [ngClass]="{'valid-end':dailyCheck.validated,'non-valid-end':!dailyCheck.validated}">Action</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
@@ -316,7 +316,7 @@
                             </tr>
                             <tr>
                                 <th>Durée</th>
-                                <th>Tâche</th>
+                                <th>Activité</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-cra>
@@ -1464,9 +1464,9 @@
                             styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll">
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Durée</th>
-                                    <th>Tâche</th>
-                                    <th>Action</th>
+                                    <th [ngClass]="{'valid-begin':dailyCheck.validated,'non-valid-begin':!dailyCheck.validated}">Durée</th>
+                                    <th [ngClass]="{'valid-middle':dailyCheck.validated,'non-valid-middle':!dailyCheck.validated}">Activité</th>
+                                    <th [ngClass]="{'valid-end':dailyCheck.validated,'non-valid-end':!dailyCheck.validated}">Action</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-cra let-editing="editing" let-ri="rowIndex">
@@ -1563,7 +1563,7 @@
                                 </tr>
                                 <tr>
                                     <th>Durée</th>
-                                    <th>Tâche</th>
+                                    <th>Activité</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-cra>

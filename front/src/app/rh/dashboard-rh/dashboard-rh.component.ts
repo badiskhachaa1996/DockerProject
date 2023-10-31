@@ -90,7 +90,7 @@ export class DashboardRhComponent implements OnInit {
       .then((dcs) => {
         this.dailyChecks = [];
         dcs.forEach(dc => {
-          /*let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
+          let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
           if (dc.check_out)
             workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
           let max = workingTiming
@@ -99,7 +99,7 @@ export class DashboardRhComponent implements OnInit {
             worked += cra.number_minutes;
           });
           dc.taux_cra = ((worked * 100) / max)
-          console.log(dc)*/
+          console.log(dc)
           if (dc && dc.user_id)
             this.dailyChecks.push(dc)
         })
@@ -172,7 +172,7 @@ export class DashboardRhComponent implements OnInit {
 
     this.dailyCheckService.getUserChecks(user_id._id)
       .then((response) => {
-        this.userChecksHistorique = response;
+        this.userChecksHistorique = response.reverse();
         this.defaultUserChecksHistorique = response
         this.showUserChecksHistorique = true;
       })
@@ -252,11 +252,11 @@ export class DashboardRhComponent implements OnInit {
   }
 
   onReinitPointage(check: DailyCheck) {
-    this.dailyCheckService.deleteCheck(check._id).then(d => {
+    this.dailyCheckService.patchCheckIn({ _id: check._id, check_out: null, pause: null, isInPause: false, pause_timing: 0, validated: false, taux_cra: 0 }).then(d => {
       if (this.defaultdailyChecks.indexOf(check) != -1)
-        this.defaultdailyChecks.splice(this.defaultdailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
+        this.defaultdailyChecks.splice(this.defaultdailyChecks.indexOf(check), 1, d)
       if (this.dailyChecks.indexOf(check) != -1)
-        this.dailyChecks.splice(this.dailyChecks.indexOf(check), 1, new DailyCheck(new mongoose.Types.ObjectId().toString(), check.user_id, new Date().toLocaleDateString()))
+        this.dailyChecks.splice(this.dailyChecks.indexOf(check), 1, d)
     })
   }
   craStatutList = [
