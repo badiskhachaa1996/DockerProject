@@ -56,6 +56,7 @@ export class MicrosoftService {
       interactionType: InteractionType.Redirect,
       scopes: ['User.Read.All', 'Directory.Read.All', 'Group.ReadWrite.All'],
     });
+    this.graphClient = Client.initWithMiddleware({ authProvider: authProvider });
     return this.graphClient
       .api('/me/directReports').get().then(salaries => {
         return salaries
