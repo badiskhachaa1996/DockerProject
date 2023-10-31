@@ -4,7 +4,13 @@ import { CV } from 'src/app/models/CV';
 import { Evenements } from 'src/app/models/Evenements';
 import { Matching } from 'src/app/models/Matching';
 import { environment } from 'src/environments/environment';
-
+import jwt_decode from 'jwt-decode';
+import { AuthService } from '../auth.service';
+import { TicketService } from '../ticket.service';
+import { SujetService } from '../sujet.service';
+import { Sujet } from 'src/app/models/Sujet';
+import { Ticket } from 'src/app/models/Ticket';
+import { AnnonceService } from './annonce.service';
 @Injectable({
   providedIn: 'root'
 })

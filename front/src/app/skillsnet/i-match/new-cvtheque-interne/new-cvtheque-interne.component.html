@@ -258,7 +258,7 @@
                             <tr>
                                 <td
                                     [ngClass]="{'bg-green':cv.taux>=60,'bg-red':cv.taux<=10,'bg-orange':(cv.taux>10 && cv.taux<60)}">
-                                    <button type="button" pButton pRipple [pRowToggler]="cv"
+                                    <button type="button" pButton pRipple [pRowToggler]="cv" (click)="expandcv(cv)"
                                         class="p-button-text p-button-rounded p-button-plain"
                                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
@@ -357,8 +357,11 @@
                                     {{cv?.user_id?.postal_adresse}}
                                     {{cv?.user_id?.ville_adresse}} {{cv?.user_id?.pays_adresse}}
                                 </td>
-                                <td>
-                                    <a (click)="downloadOldCV(cv)">Téléchargé l'ancien CV</a>
+                                <td *ngIf="seeCV">
+                                    <a style="cursor: pointer;" (click)="downloadOldCV(cv)">Téléchargé l'ancien CV</a>
+                                </td>
+                                <td *ngIf="!seeCV">
+                                    Aucun CV trouvé
                                 </td>
                                 <td>
                                     {{cv?.user_id?.nationnalite}}

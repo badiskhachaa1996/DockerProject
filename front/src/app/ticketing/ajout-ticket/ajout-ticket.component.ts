@@ -113,8 +113,6 @@ export class AjoutTicketComponent implements OnInit {
     this.uploadedFiles.forEach(element => {
       documents.push({ path: element.name, name: element.name, _id: new mongoose.Types.ObjectId().toString() })
     });
-    console.log(this.TicketForm.value);
-    console.log(this.TicketForm.value.priorite)
     this.TicketService.create({ ...this.TicketForm.value, documents, id: this.token.id, priorite: this.TicketForm.value?.priorite?.includes("true") }).subscribe(data => {
       this.ToastService.add({ severity: 'success', summary: 'Création du ticket avec succès' })
 

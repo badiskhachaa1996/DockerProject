@@ -50,6 +50,9 @@ export class SujetService {
     let registreUrl = this.apiUrl + "getPopulate/" + id;
     return this.http.get<Sujet>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-
+  getAllPopulate() {
+    let registreUrl = this.apiUrl + "getAllPopulate";
+    return this.http.get<Sujet[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
 
 }

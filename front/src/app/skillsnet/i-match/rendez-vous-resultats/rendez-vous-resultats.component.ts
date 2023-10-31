@@ -33,7 +33,7 @@ export class RendezVousResultatsComponent implements OnInit {
           this.meetings = mts
           this.defaultmeetings = this.meetings
         })
-      }else if (this.isEntreprise){
+      } else if (this.isEntreprise) {
         this.MeetingTeamsService.getAllByEmail(userConnected.email_perso).subscribe(mts => {
           this.meetings = mts
           this.defaultmeetings = this.meetings
@@ -102,6 +102,11 @@ export class RendezVousResultatsComponent implements OnInit {
     rdv.statut = statut
     this.MeetingTeamsService.update({ ...rdv }).subscribe(r => {
       this.ToastService.add({ severity: 'success', summary: 'Statut du rendez-vous mis à jour' })
+    })
+  }
+  deleteRDV(rdv) {
+    this.MeetingTeamsService.delete(rdv._id).subscribe(r => {
+      this.meetings.splice(this.meetings.indexOf(rdv), 1)
     })
   }
 }

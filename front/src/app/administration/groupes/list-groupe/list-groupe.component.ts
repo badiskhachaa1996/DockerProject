@@ -359,4 +359,12 @@ export class ListGroupeComponent implements OnInit {
       }
     }, 15);
   }
+  onUpdateGrp(grp: Classe) {
+    if (grp.abbrv.includes('1'))
+      this.formUpdateClasse.patchValue({ annee: this.dropdownAnnee[0] })
+    if (grp.abbrv.includes('2'))
+      this.formUpdateClasse.patchValue({ annee: this.dropdownAnnee[1] })
+    if (grp.abbrv.includes('3'))
+      this.formUpdateClasse.patchValue({ annee: this.dropdownAnnee[2] })
+  }
 }

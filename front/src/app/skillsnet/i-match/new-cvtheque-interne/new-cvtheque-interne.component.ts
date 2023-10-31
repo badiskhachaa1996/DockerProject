@@ -109,8 +109,14 @@ export class NewCvthequeInterneComponent implements OnInit {
       })
     }
   }
-
-
+  seeCV = false
+  expandcv(cv) {
+    this.seeCV = false
+    this.CVService.downloadCV(cv.user_id._id).then(data => {
+      if (data)
+        this.seeCV = true
+    })
+  }
   downloadOldCV(cv: CV) {
     this.CVService.downloadCV(cv.user_id._id).then(data => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -211,7 +217,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   colorFilter = [
     { label: 'Rouge', value: 'red' },
     { label: 'Orange', value: 'orange' },
-    { label: 'Vert',value:'green' }
+    { label: 'Vert', value: 'green' }
   ]
 
   locations = [
@@ -324,13 +330,13 @@ export class NewCvthequeInterneComponent implements OnInit {
         r = false
       }
       if (this.filter_value.search) {
-        if (!val?.a_propos?.includes(this.filter_value.search) &&
-          !val?.centre_interets?.includes(this.filter_value.search) &&
-          !val?.user_id?.lastname?.includes(this.filter_value.search) &&
-          !val?.user_id?.firstname?.includes(this.filter_value.search) &&
-          !val?.mobilite_lieu?.includes(this.filter_value.search) &&
-          !val?.profil?.libelle.includes(this.filter_value.search) &&
-          !strprofile.includes(this.filter_value.search))
+        if (!val?.a_propos?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
+          !val?.centre_interets?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
+          !val?.user_id?.lastname?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
+          !val?.user_id?.firstname?.toLowerCase().includes(this.filter_value.search.toLowerCase()) &&
+          !val?.mobilite_lieu?.includes(this.filter_value.search.toLowerCase()) &&
+          !val?.profil?.libelle.includes(this.filter_value.search.toLowerCase()) &&
+          !strprofile.toLowerCase().includes(this.filter_value.search.toLowerCase()))
           r = false
       }
       if (this.filter_value.taux) {
