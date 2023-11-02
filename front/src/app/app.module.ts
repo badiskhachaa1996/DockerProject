@@ -401,6 +401,7 @@ import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
 import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
 
 
 @NgModule({
@@ -814,6 +815,7 @@ import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.compo
     PreinscriptionComponent,
     PauseReadMoreComponent,
     NewCalendrierComponent,
+    DashboardImatchComponent,
     
     
   ],

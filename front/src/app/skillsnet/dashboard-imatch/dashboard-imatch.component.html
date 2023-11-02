@@ -1,0 +1,292 @@
+<div class="card">
+    <p-tabView styleClass="tabview-custom">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="pi pi-volume-up mr-2"></i>
+                <span>Offre</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtoffreaj [value]="annonceAJR" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffre"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtoffreaj)"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="offres" style="text-align: center;">Nombre des offres
+                                    <p-sortIcon field="offres"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtoffregen [value]="annonceGEN" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffre"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtoffregen)"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="offres" style="text-align: center;">Nombre des offres
+                                    <p-sortIcon field="offres"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                    <p-chart type="bar" [data]="annonceHisto" [options]="basicOptions"
+                        [style]="{'color':'black'}"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="CV">
+            <ng-template pTemplate="header">
+                <i class="pi pi-briefcase mr-2"></i>
+                <span>CV</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtoffreaj [value]="annonceAJR" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffre"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtoffreaj)"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="offres" style="text-align: center;">Nombre des CV
+                                    <p-sortIcon field="offres"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtoffregen [value]="annonceGEN" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterAuteurOffre"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtoffregen)"
+                                    emptyFilterMessage="Pas d'auteur trouvé"
+                                    filterPlaceholder="Choisissez un auteur"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="offres" style="text-align: center;">Nombre des CV
+                                    <p-sortIcon field="offres"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                    <p-chart type="bar" [data]="cvHisto"
+                        [style]="{'color':'black'}"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Matching">
+            <ng-template pTemplate="header">
+                <i class="pi pi-users mr-2"></i>
+                <span>Matching</span>
+            </ng-template>
+            <div>
+                <p-fieldset legend="Aujourd'hui" [toggleable]="true">
+                    <p-table #dtmatchaj [value]="['']" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterCommercialMatch"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtmatchaj)"
+                                    emptyFilterMessage="Pas de commercial trouvé"
+                                    filterPlaceholder="Choisissez un commercial"></p-dropdown>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{annonceAJR.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="text-align: center;">
+                                    Type
+                                </th>
+                                <th style="text-align: center;">
+                                    Nbr Matching
+                                </th>
+                                <th style="text-align: center;">
+                                    Taux de contribution
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                                <td>
+                                    Entreprise
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Candidat
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Commercial
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                                <td>
+                                    NB
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Général" [toggleable]="true">
+                    <p-table #dtmatchgen [value]="matchGEN" dataKey="_id" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
+                        rowExpandMode="single"
+                        [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
+                        responsiveLayout="scroll">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-column sm:flex-row">
+                                <p-dropdown [style]="{'margin':'2px','width':'100%'}" [options]="filterCommercialMatch"
+                                    filter="true" autoWidth="false" (onChange)="onFilter(dtmatchgen)"
+                                    emptyFilterMessage="Pas de commercial trouvé"
+                                    filterPlaceholder="Choisissez un commercial"></p-dropdown>
+                                <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                                <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
+                                    <span style="font-weight: bold;">Total </span>{{matchGEN.length}}
+                                </p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="createur_id._id" style="text-align: center;">Auteur
+                                    <p-sortIcon field="createur_id._id"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="matchings" style="text-align: center;">Nombre des Matchings
+                                    <p-sortIcon field="matchings"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="taux" style="text-align: center;">Taux de contribution
+                                    <p-sortIcon field="taux"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body">
+                            <tr>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-fieldset>
+                <p-fieldset legend="Histogramme" [toggleable]="true">
+                    <p-calendar selectionMode="range" placeholder="Date"></p-calendar>
+                    <p-chart type="bar" [data]="matchHisto" [options]="optionsMatching"
+                        [style]="{'color':'black'}"></p-chart>
+                </p-fieldset>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</div>

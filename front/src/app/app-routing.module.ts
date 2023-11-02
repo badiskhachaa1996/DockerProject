@@ -288,6 +288,7 @@ import { AnnonceViewerComponent } from './skillsnet/annonce-viewer/annonce-viewe
 import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant.component';
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
+import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
 const routes: Routes = [
     {
         path: '',
@@ -714,6 +715,7 @@ const routes: Routes = [
             { path: 'evenements', component: EvenementsComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/externe', component: ExterneSkillsnetComponent, canActivate: [AuthGuardService] },
             { path: 'imatch/cv-etudiant', component: CvEtudiantComponent, canActivate: [AuthGuardService] },
+            { path: 'imatch/reporting', component: DashboardImatchComponent, canActivate: [AuthGuardService] },
             { path: 'stages', component: StageComponent, canActivate: [AuthGuardService] },
             { path: 'stages/:id', component: StageCeoComponent, canActivate: [AuthGuardService] },
             { path: 'livret', component: LivretGeneratorComponent, canActivate: [AuthGuardService] },
@@ -1373,7 +1375,7 @@ const routes: Routes = [
     { path: 'imatch/cv/:id', component: CvComponent },
 
     { path: 'document/:id_doc', component: GendocViewComponent },
-    { path: 'administration/preinscription',component: PreinscriptionComponent}
+    { path: 'administration/preinscription', component: PreinscriptionComponent }
 ]
 
 

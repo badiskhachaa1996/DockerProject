@@ -6225,7 +6225,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-list',
                                         routerLink: ['/cvtheque-interne']
                                     },
-
+                                    {
+                                        label: 'Reporting',
+                                        icon: 'pi pi-chart-line',
+                                        routerLink: ['/imatch/reporting']
+                                    },
                                     /*{
                                         label: 'Gestion des compétences',
                                         icon: 'pi pi-book',

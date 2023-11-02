@@ -449,10 +449,16 @@
 										<button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
 											(click)="clearFilter()"></button>
 									</div>
-									<div class="md:col-9 col-9" style="text-align: center;">
+									<div class="md:col-5 col-5" style="text-align: center;">
 										<input pInputText type="text" style="width: 100%;"
 											[(ngModel)]="filter_value.search" (input)="updateFilter()"
 											placeholder="Recherche" />
+									</div>
+									<div class="md:col-4 col-4" style="text-align: center;">
+										<p-dropdown placeholder="Auteur" [options]="entrepriseFilter"
+											[style]="{'width':'100%'}" autoWidth="false"
+											[(ngModel)]="filter_value.entreprise" (onChange)="updateFilter()">
+										</p-dropdown>
 									</div>
 									<div class="md:col-1 col-3" style="text-align: center;">
 										<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
