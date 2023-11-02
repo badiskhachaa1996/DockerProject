@@ -202,7 +202,7 @@ export class AnnoncesComponent implements OnInit {
                 })
                 if (annonce && annonce.user_id) {
                   let temp = { label: `${annonce.user_id.firstname} ${annonce.user_id.lastname}`, value: annonce.user_id._id }
-                  if (!agent_id.includes(annonce.user_id._id)) {
+                  if (!agent_id.includes(annonce.user_id._id) && annonce.user_id.email && !annonce.user_id.email_perso) {
                     //this.userFilter.push(temp)
                     this.entrepriseFilter.push(temp)
                     agent_id.push(annonce.user_id._id)
@@ -803,12 +803,12 @@ export class AnnoncesComponent implements OnInit {
         this.userService.update({ _id: this.token.id, savedAnnonces: this.matchingList }).subscribe(r => {
           this.activeIndex1 = 0
           setTimeout(() => {
-            this.activeIndex1 = base + this.matchingList.length 
+            this.activeIndex1 = base + this.matchingList.length
           }, 1)
-          
+
         })
       } else {
-        this.activeIndex1 =  ids.indexOf(annonce._id) + 2
+        this.activeIndex1 = ids.indexOf(annonce._id) + 2
       }
     })
 

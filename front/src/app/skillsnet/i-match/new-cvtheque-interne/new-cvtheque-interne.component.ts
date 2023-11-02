@@ -68,14 +68,13 @@ export class NewCvthequeInterneComponent implements OnInit {
     this.CVService.getCvs().then(cvs => {
       this.cvs = cvs
       this.defaultcvs = cvs
-      this.auteurFilter = [{ label: 'Tous les auteurs', value: null }]
+      this.auteurFilter = [{ label: 'Tous les auteurs', value: null }, { label: 'Candidat', value: 'Candidat' }]
       let temp_createur_id = []
       cvs.forEach(val => {
-        if (val.createur_id && !temp_createur_id.includes(val.createur_id._id)) {
+        if (val.createur_id && !temp_createur_id.includes(val.createur_id._id) && val.createur_id._id != val.user_id._id) {
           this.auteurFilter.push({ label: `${val.createur_id.firstname} ${val.createur_id.lastname}`, value: val.createur_id._id })
           temp_createur_id.push(val.createur_id._id)
         }
-
       })
     })
     this.CVService.getAllPicture().subscribe(data => {
@@ -357,8 +356,13 @@ export class NewCvthequeInterneComponent implements OnInit {
         else if (this.filter_value.taux == 'green' && (val.taux <= 60))
           r = false
       }
-      if (this.filter_value.createur_id && this.filter_value.createur_id != val.createur_id._id) {
-        r = false
+      if (this.filter_value.createur_id) {
+        if (!val.createur_id)
+          r = false
+        else if (this.filter_value.createur_id == 'Candidat' && val.createur_id._id != val.user_id._id)
+          r = false
+        else if (this.filter_value.createur_id != 'Candidat' && this.filter_value.createur_id != val.createur_id._id)
+          r = false
       }
       //if(this.filter_value.type && !this.filter_value.type.includes(val))
       if (r)
