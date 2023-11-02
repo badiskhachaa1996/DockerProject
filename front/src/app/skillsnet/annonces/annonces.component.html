@@ -619,8 +619,10 @@
 											<div class="img-card"
 												style="background-image: url('../../../assets/images/imatch/entreprise.png');">
 											</div>
-											<p style="margin-bottom: 28px;font-size: 12px;color: rgb(99, 99, 99);">
+											<p style="font-size: 12px;color: rgb(99, 99, 99);margin:0">
 												{{annonce.custom_id}}</p>
+											<p style="margin-bottom: 16px;font-size: 12px;color: rgb(99, 99, 99);">
+												{{annonce.date_creation | date:'dd MMMM YYYY'}}</p>
 										</ng-template>
 										<!--<a class="offres-btns details" *ngIf="!isEtudiant"
 											(click)="visibleSidebar = true; annonceSelected = annonce"><i
