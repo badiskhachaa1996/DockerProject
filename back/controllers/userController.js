@@ -1430,16 +1430,19 @@ app.patch("/recovery-password", (req, res) => {
 
 app.post('/create', (req, res) => {
   let user = new User({ ...req.body })
-  User.findOne({ email: req.body.email }).then(u => {
-    if (!u)
-      user.save().then(data => {
-        res.send(data)
-      }, error => {
-        res.status(500).send(error)
-      })
-    else
-      res.status(500).send(error)
+  user.save().then(data => {
+    res.send(data)
+  }, error => {
+    res.status(500).send(error)
   })
+  /*
+  User.findOne({ email: req.body.email }).then(u => {
+    if (!u || !req.body.email)
+
+    else {
+      res.status(500).send('Email déjà existant')
+    }
+  })*/
 
 })
 

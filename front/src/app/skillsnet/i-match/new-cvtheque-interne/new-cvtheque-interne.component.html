@@ -194,17 +194,23 @@
                             </div>
                         </div>
                         <div class="col-12 grid" style="text-align: right;">
-                            <div class="md:col-1 col-6" style="text-align: center;">
+                            <div class="md:col-1 col-3" style="text-align: center;">
                                 <button pButton label="Filtrer" class="p-button" icon="pi pi-filter"
                                     (click)="displayFilter=true"></button>
                             </div>
-                            <div class="md:col-1 col-6" style="text-align: center;">
+                            <div class="md:col-1 col-3" style="text-align: center;">
                                 <button pButton label="Vider&nbsp;" class="p-button" icon="pi pi-filter-slash"
                                     (click)="clearFilter()"></button>
                             </div>
-                            <div class="md:col-8 col-6" style="text-align: center;">
+                            <div class="md:col-4 col-6" style="text-align: center;">
                                 <input pInputText type="text" style="width: 100%;" [(ngModel)]="filter_value.search"
                                     (input)="updateFilter()" placeholder="Recherche" />
+                            </div>
+                            <div class="md:col-4 col-6" style="text-align: center;">
+                                <p-dropdown placeholder="Auteur" [options]="auteurFilter" [style]="{'width':'100%'}"
+                                    autoWidth="false" [(ngModel)]="filter_value.createur_id" [filter]="true"
+                                    (onChange)="updateFilter()">
+                                </p-dropdown>
                             </div>
                             <div class="md:col-1 col-3" style="text-align: center;">
                                 <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
@@ -531,6 +537,9 @@
         <p-dropdown [options]="colorFilter" placeholder="Choisissez une couleur" autoWidth="false"
             [style]="{'width':'27em'}" filter="true" class="mb-2" appendTo="body" [(ngModel)]="filter_value.taux"
             (onChange)="updateFilter()"></p-dropdown>
+        <p-dropdown placeholder="Auteur" [options]="auteurFilter" [style]="{'width':'27em'}" autoWidth="false"
+            class="mb-2" appendTo="body" [(ngModel)]="filter_value.createur_id" (onChange)="updateFilter()">
+        </p-dropdown>
         <!--<p-dropdown [options]="userFilter" autoWidth="false" [style]="{'width':'27em'}" filter="true" class="mb-2"
 			[(ngModel)]="filter_value.user" (onChange)="updateFilter()"></p-dropdown>-->
         <button pButton label="Valider les filtres" class="p-button" icon="pi pi-filter"
