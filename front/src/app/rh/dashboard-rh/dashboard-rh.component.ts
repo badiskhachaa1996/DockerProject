@@ -91,7 +91,7 @@ export class DashboardRhComponent implements OnInit {
         this.dailyChecks = [];
         dcs.forEach(dc => {
           let pauseTiming = 0;
-          if(dc && dc.pause && dc.pause.length!=0){
+          if (dc && dc.pause && dc.pause.length != 0) {
             dc?.pause.forEach((p) => {
               if (p.out) {
                 pauseTiming = pauseTiming + (moment(new Date(p.out)).diff(moment(new Date(p.in)), 'minutes'));
@@ -243,18 +243,20 @@ export class DashboardRhComponent implements OnInit {
     if (e.length != 0)
       this.defaultdailyChecks.forEach(check => {
         if (check.user_id) {
-          let localisations: string[] = []
-          if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof 'str')
-            localisations = [this.dicCollaborateurs[check.user_id._id].localisation]
-          else if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof ['str'])
-            localisations = this.dicCollaborateurs[check.user_id._id].localisation
-          let r = false
-          localisations.forEach(val => {
-            if (this.siteSelected.includes(val))//this.siteSelected
-              r = true
-          })
-          if (r) {
-            this.dailyChecks.push(check)
+          if ((this.dicCollaborateurs[check.user_id._id] && this.dicCollaborateurs[check.user_id._id]?.localisation)) {
+            let localisations: string[] = []
+            if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof 'str')
+              localisations = [this.dicCollaborateurs[check.user_id._id].localisation]
+            else if (typeof this.dicCollaborateurs[check.user_id._id].localisation == typeof ['str'])
+              localisations = this.dicCollaborateurs[check.user_id._id].localisation
+            let r = false
+            localisations.forEach(val => {
+              if (this.siteSelected.includes(val))//this.siteSelected
+                r = true
+            })
+            if (r) {
+              this.dailyChecks.push(check)
+            }
           }
         }
       })

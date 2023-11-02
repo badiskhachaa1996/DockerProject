@@ -68,6 +68,15 @@ export class NewCvthequeInterneComponent implements OnInit {
     this.CVService.getCvs().then(cvs => {
       this.cvs = cvs
       this.defaultcvs = cvs
+      this.auteurFilter = [{ label: 'Tous les auteurs', value: null }]
+      let temp_createur_id = []
+      cvs.forEach(val => {
+        if (val.createur_id && !temp_createur_id.includes(val.createur_id._id)) {
+          this.auteurFilter.push({ label: `${val.createur_id.firstname} ${val.createur_id.lastname}`, value: val.createur_id._id })
+          temp_createur_id.push(val.createur_id._id)
+        }
+
+      })
     })
     this.CVService.getAllPicture().subscribe(data => {
       this.dicPicture = data.files // {id:{ file: string, extension: string }}
@@ -183,8 +192,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     })
   }
   saveAdd() {
-    this.AuthService.create({ ...this.formAdd.value, type: 'Prospect' }).subscribe(user => {
-      this.CVService.postCv({ user_id: user._id }).then(cv => {
+    this.AuthService.create({ ...this.formAdd.value, type: 'Prospect', }).subscribe(user => {
+      this.CVService.postCv({ user_id: user._id, createur_id: this.token.id }).then(cv => {
         this.ToastService.add({ severity: 'success', summary: 'Création du cv avec succès.' })
         this.formAdd.reset()
         this.formAdd.patchValue({ civilite: 'Monsieur' })
@@ -285,7 +294,7 @@ export class NewCvthequeInterneComponent implements OnInit {
   competencesList = [
 
   ]
-
+  auteurFilter = []
   etudes = [
     { label: 'Baccalauréat', value: 'Baccalauréat' },
     { label: 'BTS (Brevet de Technicien Supérieur)', value: 'BTS (Brevet de Technicien Supérieur)' },
@@ -302,7 +311,8 @@ export class NewCvthequeInterneComponent implements OnInit {
     winner: '',
     search: '',
     type: null,
-    taux: ''
+    taux: '',
+    createur_id: null
   }
   updateFilter() {
     this.cvs = []
@@ -347,6 +357,9 @@ export class NewCvthequeInterneComponent implements OnInit {
         else if (this.filter_value.taux == 'green' && (val.taux <= 60))
           r = false
       }
+      if (this.filter_value.createur_id && this.filter_value.createur_id != val.createur_id._id) {
+        r = false
+      }
       //if(this.filter_value.type && !this.filter_value.type.includes(val))
       if (r)
         this.cvs.push(val)
@@ -363,7 +376,8 @@ export class NewCvthequeInterneComponent implements OnInit {
       winner: '',
       search: '',
       type: null,
-      taux: ''
+      taux: '',
+      createur_id: null
     }
     this.cvs = this.defaultcvs
   }
