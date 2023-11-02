@@ -58,7 +58,7 @@ const user_schema = new mongoose.Schema({
     type: {
         type: String,
         required: false,
-        default:'Externe-InProgress'
+        default: 'Externe-InProgress'
     },
     entreprise: {
         type: String,
@@ -142,7 +142,8 @@ const user_schema = new mongoose.Schema({
     savedMatching: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
     },
-    linksnames: [{ type: String }]
+    linksnames: [{ type: String }],
+    haveNewAccess: { type: Boolean, default: false }
 
 
 

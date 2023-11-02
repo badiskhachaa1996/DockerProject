@@ -40,7 +40,7 @@
             <i class="pi pi-calendar" pTooltip="Mes rendez vous" tooltipPosition="bottom"></i>
             <span>Mes rendez-vous</span>
         </a>
-        <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="!isAdmin || !isAgent || !isCEO">
+        <a href="#/calendar" class="p-link layout-topbar-button" *ngIf="seeCRA">
             <i #cra class="pi pi-calendar" pTooltip="CRA" tooltipPosition="bottom"></i>
         </a>
         <a href="#/Links" class="p-link layout-topbar-button">
