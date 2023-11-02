@@ -67,7 +67,7 @@ export class CvService {
     const url = `${this.apiUrl}/get-cvs-public`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })}).subscribe({
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) }).subscribe({
         next: (response) => resolve(response),
         error: (error) => reject(error),
         complete: () => console.log('CVs récupérés'),
@@ -162,6 +162,28 @@ export class CvService {
         error: (error) => reject(error),
         complete: () => console.log('CV supprimé'),
       })
+    });
+  }
+
+  getAllToday() {
+    const url = `${this.apiUrl}/getAllToday`;
+
+    return new Promise<CV[]>((resolve, reject) => {
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
+  getAllByDate(date1, date2) {
+    const url = `${this.apiUrl}/getAllByDate/${date1}/${date2}`;
+
+    return new Promise<CV[]>((resolve, reject) => {
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
     });
   }
 }

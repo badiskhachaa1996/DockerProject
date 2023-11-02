@@ -3,7 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
+import { Collaborateur } from 'src/app/models/Collaborateur';
+import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
+import { RhService } from 'src/app/services/rh.service';
 import { ServService } from 'src/app/services/service.service';
 import { environment } from 'src/environments/environment';
 
@@ -21,7 +24,15 @@ export class UpdateAgentComponent implements OnInit {
   ]
   paysDropdown = environment.pays
   roles_list: { role?: string, module?: string, _id?: string }[] = []
-
+  typeList = [
+    { label: 'Non défini', value: null },
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+  ]
+  roleList = [
+    { label: 'User', value: 'user' },
+    { label: 'Admin', value: 'Admin' },
+  ]
   dropdownModule = [
     { value: "Admission", label: "Admission" },
     { value: "Partenaire", label: "Partenaire" },
@@ -40,7 +51,7 @@ export class UpdateAgentComponent implements OnInit {
     { value: "Questionnaire", label: "Questionnaire" },
     { value: "Intuns", label: "Intuns" },
     { value: "Gestions des emails", label: "Gestions des emails" },
-    {value :"Links",label:"Links"}
+    { value: "Links", label: "Links" }
   ]
 
   dropdownRole = [
@@ -84,17 +95,42 @@ export class UpdateAgentComponent implements OnInit {
     phone: new FormControl(''),
     mention: new FormControl('', Validators.required),
     service_id: new FormControl(''),
+    role: new FormControl('user', Validators.required),
+    type: new FormControl(null),
     _id: new FormControl('', Validators.required)
   })
-
+  localisationList: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
+  SITE = []
   onAdd() {
-    console.log({ ...this.addForm.value, roles_list: this.roles_list })
-    this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list }).subscribe(data => {
+    this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
       this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
-      this.router.navigate(['/agent/list'])
+      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur')
+        this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
+          if (!c)
+            this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
+              this.router.navigate(['/agent/list'])
+            })
+          else
+            this.router.navigate(['/agent/list'])
+        })
+
+      else
+        this.router.navigate(['/agent/list'])
     })
   }
-  constructor(private UserService: AuthService, private ToastService: MessageService, private ServiceS: ServService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private UserService: AuthService, private ToastService: MessageService,
+    private ServiceS: ServService, private route: ActivatedRoute, private router: Router,
+    private CollaborateurService: RhService) { }
   addRole() {
     this.roles_list.push({ role: null, module: null, _id: new mongoose.Types.ObjectId().toString() })
   }
@@ -102,15 +138,26 @@ export class UpdateAgentComponent implements OnInit {
   deleteRole(ri) {
     this.roles_list.splice(ri, 1)
   }
+  USER: User
   ngOnInit(): void {
     this.ServiceS.getAll().subscribe(services => {
       services.forEach(val => { this.serviceList.push({ label: val.label, value: val._id }) })
       this.UserService.getPopulate(this.ID).subscribe(data => {
+        this.USER = data
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
         this.roles_list = data.roles_list
+        this.CollaborateurService.getCollaborateurByUserId(this.ID).then(val => {
+          if (val) {
+            this.addForm.patchValue({ type: 'Collaborateur' })
+            this.SITE = val.localisation
+          }
+          else
+            this.addForm.patchValue({ type: null })
+        })
       })
     })
+
 
   }
 
