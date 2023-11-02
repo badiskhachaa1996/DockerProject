@@ -110,4 +110,26 @@ export class AnnonceService {
     });
 
   }
+
+  getAllToday() {
+    const url = `${this.apiUrl}getAllToday`;
+
+    return new Promise<Annonce[]>((resolve, reject) => {
+      this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
+  getAllByDate(date1, date2) {
+    const url = `${this.apiUrl}getAllByDate/${date1}/${date2}`;
+
+    return new Promise<Annonce[]>((resolve, reject) => {
+      this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
 }
