@@ -1430,6 +1430,7 @@ app.patch("/recovery-password", (req, res) => {
 
 app.post('/create', (req, res) => {
   let user = new User({ ...req.body })
+
   user.save().then(data => {
     res.send(data)
   }, error => {
