@@ -39,15 +39,23 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Formateur', value: 'Formateur' },
     { label: 'Commercial', value: 'Commercial' },
     { label: 'Visitor', value: 'Visitor' },
+    //ACCES V3
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+    { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+    { label: 'Initial', value: 'Initial' },
+    { label: 'Alternant', value: 'Alternant' },
   ];
 
   roleList: any = [
     { label: 'Tous les rôles', value: null },
     { label: 'Admin', value: 'Admin' },
-    { label: 'user', value: 'user' },
+    { label: 'User', value: 'user' },
     { label: 'Agent', value: 'Agent' },
     { label: 'Responsable', value: 'Responsable' },
     { label: 'Watcher', value: 'Watcher' },
+    //ACCES V3
+    { label: 'Etudiant', value: 'Etudiant' },
   ];
 
   civiliteList: any = [
@@ -118,7 +126,8 @@ export class UsersSettingsComponent implements OnInit {
       rue_adresse: [''],
       ville_adresse: [''],
       date_creation: [''],
-      campus: ['']
+      campus: [''],
+      type_supp: [[]]
     });
   }
 
@@ -211,7 +220,8 @@ export class UsersSettingsComponent implements OnInit {
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,
       date_creation: this.formatDate(this.userToUpdate.date_creation),
-      campus: this.userToUpdate.campus
+      campus: this.userToUpdate.campus,
+      type_supp: this.userToUpdate.type_supp
     });
   }
   private formatDate(date) {
@@ -246,6 +256,7 @@ export class UsersSettingsComponent implements OnInit {
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
+    user.type_supp = this.formUpdate.value.type_supp
     console.log(this.formUpdate.value);
 
     this.userService.patchById(user)

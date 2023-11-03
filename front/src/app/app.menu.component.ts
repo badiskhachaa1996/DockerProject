@@ -4546,7 +4546,7 @@ export class AppMenuComponent implements OnInit {
                             }
                         ]
                         if (response.type == 'Collaborateur') {
-                        } else if (response.type == 'Responsable') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
                             services_list.push('Ressources Humaines')
                         }
                     }
@@ -4698,7 +4698,7 @@ export class AppMenuComponent implements OnInit {
                             },
                         ]
                         if (response.type == 'Collaborateur') {
-                        } else if (response.type == 'Responsable') {
+                        } else if (response.type == 'Responsable' || response.type_supp.includes('Responsable')) {
                             services_list.push('Ressources Humaines')
                         }
                     }

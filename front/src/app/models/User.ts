@@ -58,7 +58,8 @@ export class User {
         public savedMatching?: Matching[],
         public linksnames?: string[],
         public last_connection?: Date,
-        public haveNewAccess?: Boolean
+        public haveNewAccess?: Boolean,
+        public type_supp?: string[]
     ) { }
 
 

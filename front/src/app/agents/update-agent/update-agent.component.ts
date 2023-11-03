@@ -29,8 +29,17 @@ export class UpdateAgentComponent implements OnInit {
     { label: 'Collaborateur', value: 'Collaborateur' },
     { label: 'Responsable', value: 'Responsable' },
   ]
+  typeList2 = [
+    { label: 'Non défini', value: null },
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+    { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+    { label: 'Initial', value: 'Initial' },
+    { label: 'Alternant', value: 'Alternant' },
+  ]
   roleList = [
     { label: 'User', value: 'user' },
+    { label: 'Etudiant', value: 'Etudiant' },
     { label: 'Admin', value: 'Admin' },
   ]
   dropdownModule = [
@@ -97,7 +106,8 @@ export class UpdateAgentComponent implements OnInit {
     service_id: new FormControl(''),
     role: new FormControl('user', Validators.required),
     type: new FormControl(null),
-    _id: new FormControl('', Validators.required)
+    _id: new FormControl('', Validators.required),
+    type_supp: new FormControl([])
   })
   localisationList: any[] = [
     { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
@@ -160,6 +170,20 @@ export class UpdateAgentComponent implements OnInit {
 
 
   }
-
+  onSelectRole() {
+    if (this.addForm.value.role == 'user' || this.addForm.value.role == 'Admin') {
+      this.typeList = [
+        { label: 'Non défini', value: null },
+        { label: 'Collaborateur', value: 'Collaborateur' },
+        { label: 'Responsable', value: 'Responsable' },
+      ]
+    } else {
+      this.typeList = [
+        { label: 'Externe-InProgress', value: 'Externe-InProgress' },
+        { label: 'Initial', value: 'Initial' },
+        { label: 'Alternant', value: 'Alternant' },
+      ]
+    }
+  }
 
 }
