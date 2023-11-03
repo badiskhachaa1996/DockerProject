@@ -76,12 +76,12 @@
             <label For="service">Type<span style="color:red"> *</span></label>
             <p-dropdown [options]="typeList" placeholder="Choisissez un type" formControlName="type"></p-dropdown>
         </div>
-        <div class="field col-12" *ngIf="addForm.value.type">
-            <label htmlFor="localisation">Site</label>
-            <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
-                [(ngModel)]="SITE"></p-multiSelect>
-        </div>
     </form>
+    <div class="field col-12" style="width: 100%;" *ngIf="addForm.value.type">
+        <label htmlFor="localisation">Site</label><br>
+        <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"[style]="{'width':'100%'}"
+            [(ngModel)]="SITE"></p-multiSelect>
+    </div>
     <div class="col-12 grid">
         <p-table #dtrole dataKey="_id" [value]="roles_list" class="col-12" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">

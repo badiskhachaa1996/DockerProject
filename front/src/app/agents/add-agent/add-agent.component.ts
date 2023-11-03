@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import mongoose from 'mongoose';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
+import { RhService } from 'src/app/services/rh.service';
 import { ServService } from 'src/app/services/service.service';
 import { environment } from 'src/environments/environment';
 
@@ -80,16 +81,33 @@ export class AddAgentComponent implements OnInit {
     phone: new FormControl(''),
     mention: new FormControl('', Validators.required),
     service_id: new FormControl('', Validators.required),
+    type: new FormControl(null),
+    role: new FormControl('user'),
+    haveNewAccess: new FormControl(false, Validators.required)
   })
-
+  localisationList: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
+  SITE = []
   onAdd() {
     this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list, role: "Agent", type: "Salarié" }).subscribe(data => {
       this.ToastService.add({ summary: 'Création de l\'agent avec succès', severity: 'success' })
       this.addForm.reset()
       this.roles_list = []
+      if (this.addForm.value.type == 'Collaborateur')
+        this.CollaborateurService.postCollaborateur({ user_id: data, localisation: this.SITE }).then(c => {
+        })
     })
   }
-  constructor(private UserService: AuthService, private ToastService: MessageService, private ServiceS: ServService) { }
+  constructor(private UserService: AuthService, private ToastService: MessageService, private ServiceS: ServService, private CollaborateurService: RhService) { }
   addRole() {
     this.roles_list.push({ role: null, module: null, _id: new mongoose.Types.ObjectId().toString() })
   }
@@ -102,5 +120,15 @@ export class AddAgentComponent implements OnInit {
       services.forEach(val => { this.serviceList.push({ label: val.label, value: val._id }) })
     })
   }
+
+  typeList = [
+    { label: 'Non défini', value: null },
+    { label: 'Collaborateur', value: 'Collaborateur' },
+    { label: 'Responsable', value: 'Responsable' },
+  ]
+  roleList = [
+    { label: 'User', value: 'user' },
+    { label: 'Admin', value: 'Admin' },
+  ]
 
 }
