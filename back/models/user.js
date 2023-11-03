@@ -33,7 +33,7 @@ const user_schema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "Etudiant",
+        default: "user",
         required: false
     },
     etat: {

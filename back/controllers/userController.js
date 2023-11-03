@@ -820,6 +820,8 @@ app.post("/AuthMicrosoft", (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: req.body.email,
+        role: 'Etudiant',
+        type: 'Externe-InProgress',
         service_id: null,
         haveNewAccess: true
       });
