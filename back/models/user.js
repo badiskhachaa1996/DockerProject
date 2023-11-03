@@ -33,7 +33,7 @@ const user_schema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: "user",
+        default: "Etudiant",
         required: false
     },
     etat: {
@@ -143,7 +143,8 @@ const user_schema = new mongoose.Schema({
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "cv_type" }], default: []
     },
     linksnames: [{ type: String }],
-    haveNewAccess: { type: Boolean, default: false }
+    haveNewAccess: { type: Boolean, default: false },
+    type_supp: { type: [String], default: [] }
 
 
 

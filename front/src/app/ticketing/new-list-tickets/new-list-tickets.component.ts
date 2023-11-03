@@ -206,7 +206,7 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
       this.isAgent = (r.role != 'user')
-      if (r.haveNewAccess && r.type != null)
+      if (r.haveNewAccess && (r.type == 'Reponsable' || r.type == 'Collaborateur' || r.type_supp.includes('Collaborateur') || r.type_supp.includes('Reponsable')))
         this.isAgent = true
       this.ticketsOnglets = r.savedTicket
       this.updateTicketList()

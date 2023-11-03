@@ -34,6 +34,9 @@
                 <th pSortableColumn="type" scope="col" style="text-align: center;">
                     Type <p-sortIcon field="type"></p-sortIcon>
                 </th>
+                <th pSortableColumn="type_supp" scope="col" style="text-align: center;">
+                    Type Supp<p-sortIcon field="type_supp"></p-sortIcon>
+                </th>
                 <!--<th>
                     Accès<br>
                     Module : Role
@@ -80,6 +83,9 @@
                 </td>
                 <td *ngIf="!agent.type">
                     Non défini
+                </td>
+                <td>
+                    {{agent.type_supp}}
                 </td>
                 <!--<td>
                     <ng-container *ngFor="let role of agent.roles_list">
