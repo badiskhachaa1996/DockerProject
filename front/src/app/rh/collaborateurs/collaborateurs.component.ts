@@ -163,7 +163,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [new Date()],
       date_naissance: [new Date()],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -176,7 +176,7 @@ export class CollaborateursComponent implements OnInit {
       matricule: [''],
       date_demarrage: [''],
       date_naissance: [''],
-      localisation: [''],
+      localisation: [[]],
       intitule_poste: [''],
       contrat_type: ['', Validators.required],
       statut: [''],
@@ -273,14 +273,16 @@ export class CollaborateursComponent implements OnInit {
     this.formUpdate.patchValue({
       user_id: collaborateur.user_id._id,
       matricule: collaborateur.matricule,
-      date_demarrage: new Date(collaborateur.date_demarrage),
-      date_naissance: new Date(collaborateur.date_naissance),
       localisation: collaborateur.localisation,
       intitule_poste: collaborateur.intitule_poste,
       contrat_type: collaborateur.contrat_type,
       statut: collaborateur.statut,
       h_cra: collaborateur.h_cra,
     });
+    if (collaborateur.date_demarrage)
+      this.formUpdate.patchValue({ date_demarrage: new Date(collaborateur.date_demarrage), })
+    if (collaborateur.date_naissance)
+      this.formUpdate.patchValue({ date_naissance: new Date(collaborateur.date_naissance), })
 
     // masque les autres formulaires
     this.showFormAdd = false;

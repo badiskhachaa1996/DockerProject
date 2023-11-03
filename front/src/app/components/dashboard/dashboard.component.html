@@ -3,7 +3,7 @@
     <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
         accept=".pdf,.jpg,.png,.jpeg" style="display: none;" pInputFile />
 </div>
-<div *ngIf="isUnknow">
+<!--<div *ngIf="isUnknow">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
     </h2>
     <div class="card">
@@ -16,7 +16,7 @@
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
         <p>Merci de votre patience!</p>
     </div>
-</div>
+</div>-->
 
 <p-dialog [style]="{width: '50vw'}" [(visible)]="displayPointeuse" header="Heure de Pointage" [modal]="true">
     <p-table #dtPoi dataKey="_id" [value]="histoPointage" responsiveLayout="scroll" styleClass="p-datatable-gridlines"
