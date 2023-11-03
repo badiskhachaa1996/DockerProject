@@ -206,6 +206,8 @@ export class NewListTicketsComponent implements OnInit {
     this.AuthService.getPopulate(this.token.id).subscribe(r => {
       this.USER = r
       this.isAgent = (r.role != 'user')
+      if (r.haveNewAccess && r.type != null)
+        this.isAgent = true
       this.ticketsOnglets = r.savedTicket
       this.updateTicketList()
     })
