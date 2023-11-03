@@ -23,51 +23,79 @@
         <h3 class="text-center col-12" style="font-weight: bold;">
             Modification des champs supplémentaires
         </h3>
-        <div class="col-6">
-            <input type="text" pInputText [style]="{'width':'45%','margin-right':'10%'}" class="mb-2" autoWidth="false"
-                placeholder="Nom" [(ngModel)]="addExtra.extraInfo.title1" />
-            <input type="text" pInputText [style]="{'width':'45%'}" class="mb-2" autoWidth="false" placeholder="Nom"
-                [(ngModel)]="addExtra.extraInfo.placeholder1" />
-            <p-virtualScroller [value]="addExtra.extra1" scrollHeight="500px" [itemSize]="100">
+        <div class="col-6 grid">
+            <div class="col-6">
+                <label>Titre du champ :</label><br>
+                <input type="text" pInputText [style]="{'width':'100%'}" class="mb-2" autoWidth="false"
+                    placeholder="Nom" [(ngModel)]="addExtra.extraInfo.title1" />
+            </div>
+            <div class="col-6">
+                <label>Placeholder du champ :</label><br>
+                <input type="text" [style]="{'width':'100%'}" 
+                    pTooltip="Un placeholder est le texte qui s'affiche par défaut dans la liste quand rien n'est choisi"  tooltipPosition="bottom"
+                    pInputText class="mb-2" autoWidth="false" placeholder="Nom"
+                    [(ngModel)]="addExtra.extraInfo.placeholder1" />
+            </div>
+            <h3 class="col-12">Contenu de la liste déroulante :</h3>
+            <p-virtualScroller [value]="addExtra.extra1" scrollHeight="500px" [itemSize]="100" class="col-12" [style]="{'border':'rgb(73, 80, 87) solid 1px','padding':'10px','border-radius':'1%'}">
                 <ng-template let-extra pTemplate="item" let-i="index">
                     <div [style]="{'width':'100%'}" class="grid">
-                        <div class="col-8">
+                        <div class="col-11">
                             {{extra}}
                         </div>
-                        <div class="col-4">
+                        <div class="col-1" style="text-align: right;">
                             <i pTooltip="Supprimer cette extra" style="margin-left: 2%; cursor: pointer;"
                                 class="pi pi-trash" (click)="removeExtra1(i)" aria-hidden="true"></i>
                         </div>
                     </div>
                 </ng-template>
             </p-virtualScroller>
-            <input type="text" pInputText [style]="{'width':'100%'}" class="mb-2" autoWidth="false"
-                [(ngModel)]="textExtra1" />
-            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Ajouter un extras"
-                (click)="addExtra1()"></button>
+            <p class="col-12" [style]="{'width':'100%'}" class="mb-2">Ajouter un choix dans la liste :</p>
+            <div class="col-8 mb-2">
+                <input type="text" pInputText [style]="{'width':'100%'}" autoWidth="false" [(ngModel)]="textExtra1" />
+            </div>
+            <div class="col-4 mb-2">
+                <button autoWidth="false" pButton label="Ajouter" (click)="addExtra1()"
+                    [style]="{'width':'100%'}"></button>
+            </div>
+
+
         </div>
-        <div class="col-6">
-            <input type="text" pInputText [style]="{'width':'45%','margin-right':'10%'}" class="mb-2" autoWidth="false" placeholder="Nom"
-                [(ngModel)]="addExtra.extraInfo.title2" />
-            <input type="text" pInputText [style]="{'width':'45%'}" class="mb-2" autoWidth="false" placeholder="Nom"
-                [(ngModel)]="addExtra.extraInfo.placeholder2" />
-            <p-virtualScroller [value]="addExtra.extra2" scrollHeight="500px" [itemSize]="100">
+        <div class="col-6 grid">
+            <div class="col-6">
+                <label>Titre du champ :</label><br>
+                <input type="text" pInputText [style]="{'width':'100%'}" class="mb-2" autoWidth="false"
+                    placeholder="Nom" [(ngModel)]="addExtra.extraInfo.title2" />
+            </div>
+            <div class="col-6">
+                <label>Placeholder du champ :</label><br>
+                <input type="text" tooltipPosition="bottom"
+                    pTooltip="Un placeholder est le texte qui s'affiche par défaut dans la liste quand rien n'est choisi"
+                    pInputText [style]="{'width':'100%'}" class="mb-2" autoWidth="false" placeholder="Nom"
+                    [(ngModel)]="addExtra.extraInfo.placeholder2" />
+            </div>
+            <h3 class="col-12">Contenu de la liste déroulante :</h3>
+            <p-virtualScroller [value]="addExtra.extra2" scrollHeight="500px" [itemSize]="100" class="col-12" [style]="{'border':'rgb(73, 80, 87) solid 1px','padding':'10px','border-radius':'1%'}">
                 <ng-template let-extra pTemplate="item" let-i="index">
                     <div [style]="{'width':'100%'}" class="grid">
-                        <div class="col-8">
+                        <div class="col-11">
                             {{extra}}
                         </div>
-                        <div class="col-4">
+                        <div class="col-1" style="text-align: right;">
                             <i pTooltip="Supprimer cette extra" style="margin-left: 2%; cursor: pointer;"
                                 class="pi pi-trash" (click)="removeExtra2(i)" aria-hidden="true"></i>
                         </div>
                     </div>
                 </ng-template>
             </p-virtualScroller>
-            <input type="text" pInputText [style]="{'width':'100%'}" class="mb-2" autoWidth="false"
-                [(ngModel)]="textExtra2" />
-            <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Ajouter un extras"
-                (click)="addExtra2()"></button>
+            <p class="col-12" [style]="{'width':'100%'}" class="mb-2">Ajouter un choix dans la liste :</p>
+            <div class="col-8 mb-2">
+                <input type="text" pInputText [style]="{'width':'100%'}" autoWidth="false" [(ngModel)]="textExtra2" />
+            </div>
+            <div class="col-4 mb-2">
+                <button autoWidth="false" pButton label="Ajouter" (click)="addExtra2()"
+                    [style]="{'width':'100%'}"></button>
+            </div>
         </div>
         <button [style]="{'width':'100%'}" autoWidth="false" pButton label="Sauvegarder les extras"
             (click)="saveExtra()"></button>
