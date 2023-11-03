@@ -820,8 +820,8 @@ app.post("/AuthMicrosoft", (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: req.body.email,
-        role: "user",
         service_id: null,
+        haveNewAccess: true
       });
       newUser.save().then(
         (userFromDb) => {
