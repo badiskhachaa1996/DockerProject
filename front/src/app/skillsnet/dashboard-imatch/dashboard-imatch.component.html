@@ -49,7 +49,7 @@
                 <p-fieldset legend="Général" [toggleable]="true">
                     <p-table #dtoffregen [value]="dataTabGEN" dataKey="_id" [rows]="3" [rowHover]="true"
                         styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
-                        rowExpandMode="single"
+                        rowExpandMode="single" (onFilter)="onFilter($event, 'dataTabGEN')"
                         [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"
                         responsiveLayout="scroll">
                         <ng-template pTemplate="caption">
@@ -141,7 +141,7 @@
                     </p-table>
                 </p-fieldset><br>
                 <p-fieldset legend="Général" [toggleable]="true">
-                    <p-table #dtcvgen [value]="dataTabCVGEN" [rows]="3" [rowHover]="true"
+                    <p-table #dtcvgen [value]="dataTabCVGEN" [rows]="3" [rowHover]="true" (onFilter)="onFilter($event, 'dataTabCVGEN')"
                         styleClass="p-datatable-gridlines" style="width: 100%;" [paginator]="true"
                         rowExpandMode="single"
                         [globalFilterFields]="['user_id.firstname','user_id.lastname','user_id.email', 'user_id.email_perso', 'user_id.type', 'user_id._id']"

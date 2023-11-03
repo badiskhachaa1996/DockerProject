@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { Matching } from 'src/app/models/Matching';
 import { MatchingService } from 'src/app/services/skillsnet/matching.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-annonces',
@@ -785,8 +786,8 @@ export class AnnoncesComponent implements OnInit {
 
   }
   refresh = true
+  refreshORDER: Subject<void> = new Subject<void>();
   formExit(e: { ID: string, offre_id: string }) {
-    console.log('HI', e, this.rdvList, this.offreList)
     this.refresh = false
     this.rdvList.forEach((rdv, idx) => {
       if (rdv.offer_id == e.offre_id && rdv.ID == e.ID)
@@ -797,7 +798,7 @@ export class AnnoncesComponent implements OnInit {
         this.refresh = true
         this.activeIndex1 = 2 + idx2
       }
-
+      this.refreshORDER.next();
     })
 
   }

@@ -9,6 +9,7 @@ import { MatchingService } from 'src/app/services/skillsnet/matching.service';
   styleUrls: ['./dashboard-imatch.component.scss']
 })
 export class DashboardImatchComponent implements OnInit {
+
   filterAuteurOffre = [{ label: 'Tous les auteurs', value: null }]
   filterAuteurOffreGEN = [{ label: 'Tous les auteurs', value: null }]
   filterAuteurCV = [{ label: 'Tous les auteurs', value: null }]
@@ -136,6 +137,7 @@ export class DashboardImatchComponent implements OnInit {
           label: `Aucun`,
           nb
         })
+      this.dataTabGENFiltered = this.dataTabGEN
     })
     this.CVService.getAllToday().then(val => {
       let agent_id = []
@@ -176,6 +178,7 @@ export class DashboardImatchComponent implements OnInit {
           label: `Aucun`,
           nb
         })
+      this.dataTabCVGENFiltered = this.dataTabCVGEN
     })
     this.MatchingService.getAllToday().subscribe(val => {
       this.matchingAJR = val
@@ -218,6 +221,7 @@ export class DashboardImatchComponent implements OnInit {
             label: `Aucun`,
             nb
           })
+        this.dataTabGENFiltered = this.dataTabGEN
       })
     } else {
       this.AnnonceService.getAnnonces().then(val => {
@@ -240,6 +244,7 @@ export class DashboardImatchComponent implements OnInit {
             label: `Aucun`,
             nb
           })
+        this.dataTabGENFiltered = this.dataTabGEN
       })
     }
   }
@@ -319,8 +324,9 @@ export class DashboardImatchComponent implements OnInit {
             label: `Aucun`,
             nb
           })
+        this.dataTabCVGENFiltered = this.dataTabCVGEN
       })
-    }else{
+    } else {
       this.CVService.getCvs().then(val => {
         this.cvGEN = val
         let agent_id = []
@@ -341,6 +347,7 @@ export class DashboardImatchComponent implements OnInit {
             label: `Aucun`,
             nb
           })
+        this.dataTabCVGENFiltered = this.dataTabCVGEN
       })
     }
   }
@@ -387,8 +394,13 @@ export class DashboardImatchComponent implements OnInit {
       })
     }
   }
-  onFilter(tab) {
-    console.log(tab)
+  dataTabCVGENFiltered
+  dataTabGENFiltered
+  onFilter(event, dt) {
+    if (dt == 'dataTabCVGEN')
+      this.dataTabCVGENFiltered = event.filteredValue;
+    else if (dt == 'dataTabGEN')
+      this.dataTabGENFiltered = event.filteredValue
   }
 
 }
