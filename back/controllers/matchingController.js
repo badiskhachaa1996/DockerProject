@@ -27,13 +27,13 @@ app.post('/create', (req, res) => {
                         User.findById(req.body.created_by).then(auteur => {
                             Service.findOne({ label: 'Commercial' }).then(s => {
                                 if (s) Sujet.findOne({ service_id: s._id, label: 'iMatch' }).then(sujet => {
-                                    if (sujet && (!auteur || auteur.type == 'CEO Entreprise' || auteur.type == 'Entreprise' || auteur.type == 'Tuteur'))
+                                    if (sujet && (!auteur || auteur.type == 'CEO Entreprise' || auteur.type == 'Entreprise' || auteur.type == 'Tuteur') && newMatching.cv_id.user_id)
                                         createTicket(req.body?.created_by,
                                             `L'entreprise ${ent_name} a fait un match avec le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Entreprise')
-                                    else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin'))
+                                    else if (sujet && auteur && (auteur.type == 'Commercial' || auteur.role == 'Admin') && newMatching.cv_id.user_id)
                                         createTicket(req.body?.created_by,
                                             `${auteur?.firstname} ${auteur?.lastname} a fait un match entre le candidat ${newMatching.cv_id.user_id.firstname} ${newMatching.cv_id.user_id.lastname} et l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Commercial', auteur._id)
-                                    else if (sujet && auteur && (auteur.type == 'Initial' || auteur.type == 'Alternant' || auteur.type == 'Prospect' || auteur.type.startWith('Externe')))
+                                    else if (sujet && auteur && (auteur.type == 'Initial' || auteur.type == 'Alternant' || auteur.type == 'Prospect' || auteur.type.startWith('Externe')) && newMatching.cv_id.user_id)
                                         createTicket(req.body?.created_by,
                                             `Le candidat ${auteur?.firstname} ${auteur?.lastname} a fait un match entre pour l'offre ${newMatching.offre_id.custom_id} le ${new Date().toLocaleDateString()}`, sujet, 'Matching - Candidat')
                                 })

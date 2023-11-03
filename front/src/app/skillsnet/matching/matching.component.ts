@@ -128,10 +128,11 @@ export class MatchingComponent implements OnInit {
       this.MatchingService.create(matching).subscribe(match => {
         this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
         this.matching.push(match)
+        this.matching =  Object.assign([], this.matching); 
         this.matchingsPotentiel.forEach((m, idx) => {
-          let b1: any = m.cv_id.user_id
+          let b1: any = cv.user_id
           let b2: any = m.cv_id.user_id
-          if (b1._id == b2._id)
+          if (b1 && b2 && b1?._id == b2?._id)
             this.matchingsPotentiel.splice(idx, 1)
         })
       })
@@ -139,10 +140,11 @@ export class MatchingComponent implements OnInit {
       this.MatchingService.update(match._id, matching).subscribe(match => {
         this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
         this.matching.push(match)
+        this.matching =  Object.assign([], this.matching); 
         this.matchingsPotentiel.forEach((m, idx) => {
-          let b1: any = m.cv_id.user_id
+          let b1: any = match.cv_id.user_id
           let b2: any = m.cv_id.user_id
-          if (b1._id == b2._id)
+          if (b1 && b2 && b1?._id == b2?._id)
             this.matchingsPotentiel.splice(idx, 1)
         })
       })
@@ -245,7 +247,7 @@ export class MatchingComponent implements OnInit {
   takeRDV(match: Matching) {
     //OFFER LA
     let ID = this.ID
-    if(!this.ID)
+    if (!this.ID)
       ID = this.route.snapshot.paramMap.get('offre_id')
     this.rdv.emit({ ID: match?.cv_id?.user_id?._id, offer_id: ID, label: `${this.offre.custom_id} - ${match?.cv_id?.user_id.firstname} ${match?.cv_id?.user_id.lastname}` })
     //this.router.navigate(['rendez-vous/', match?.cv_id?.user_id?._id])
