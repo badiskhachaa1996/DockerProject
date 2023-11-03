@@ -59,7 +59,7 @@
                                     (onChange)="dtoffregen.filter($event.value,'label','equals')"
                                     emptyFilterMessage="Pas d'auteur trouvé"
                                     filterPlaceholder="Choisissez un auteur"></p-dropdown>
-                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceGENbyDate"
+                                <p-calendar selectionMode="range" placeholder="Date" [(ngModel)]="AnnonceGENbyDate" 
                                     (onSelect)="getAnnonceGENbyDate()" (onBlur)="getAnnonceGENbyDate()"></p-calendar>
                                 <p style="padding: 10px; border:1px lightgray solid;width: 10%;text-align: center;">
                                     <span style="font-weight: bold;">Total </span>{{annonceGEN.length}}

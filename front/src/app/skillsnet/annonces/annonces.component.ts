@@ -211,6 +211,7 @@ export class AnnoncesComponent implements OnInit {
                 }
 
               })
+              this.updateFilter()
 
             })
             .catch((error) => console.error(error));
@@ -236,6 +237,7 @@ export class AnnoncesComponent implements OnInit {
               }
 
             })
+            this.updateFilter()
           })
         }
 
@@ -253,6 +255,7 @@ export class AnnoncesComponent implements OnInit {
           this.entrepriseFilter2.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
           this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
+          this.updateFilter()
         });
       }),
       ((error) => console.error(error))
@@ -639,7 +642,8 @@ export class AnnoncesComponent implements OnInit {
     user: null,
     date: '',
     search: '',
-    entreprise_id: null
+    entreprise_id: null,
+    archived: false
   }
 
   updateFilter() {
@@ -679,6 +683,8 @@ export class AnnoncesComponent implements OnInit {
           !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
           r = false
       }
+      if (!this.filter_value.archived && val.archived)
+        r = false
 
       if (r)
         this.annoncesFiltered.push(val)
@@ -696,7 +702,8 @@ export class AnnoncesComponent implements OnInit {
       user: null,
       date: '',
       search: '',
-      entreprise_id: null
+      entreprise_id: null,
+      archived: false
     }
     this.annoncesFiltered = this.annonces
   }
@@ -708,6 +715,11 @@ export class AnnoncesComponent implements OnInit {
       return 'Expiré'
     else
       return "Clôturée"
+  }
+
+  onArchive(annonce: Annonce) {
+    annonce.archived = !annonce.archived
+    this.annonceService.putAnnonce({ _id: annonce._id, archived: annonce.archived }).then()
   }
 
   onDeleteOffre(annonce: Annonce) {

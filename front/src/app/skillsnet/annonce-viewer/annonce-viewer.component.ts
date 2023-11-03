@@ -206,7 +206,7 @@ export class AnnonceViewerComponent implements OnInit {
           }
 
         })
-
+        this.updateFilter()
       })
       .catch((error) => console.error(error));
 
@@ -598,7 +598,8 @@ export class AnnonceViewerComponent implements OnInit {
     user: null,
     date: '',
     search: '',
-    entreprise_id: null
+    entreprise_id: null,
+    archived: false
   }
 
   updateFilter() {
@@ -638,11 +639,16 @@ export class AnnonceViewerComponent implements OnInit {
           !val.entreprise_mail.toLocaleLowerCase().includes(this.filter_value.search))
           r = false
       }
-
+      if (!this.filter_value.archived && val.archived)
+        r = false
       if (r)
         this.annoncesFiltered.push(val)
     })
 
+  }
+  onArchive(annonce: Annonce) {
+    annonce.archived = !annonce.archived
+    this.annonceService.putAnnonce({ _id: annonce._id, archived: annonce.archived }).then()
   }
   displayFilter = false
   clearFilter() {
@@ -655,7 +661,8 @@ export class AnnonceViewerComponent implements OnInit {
       user: null,
       date: '',
       search: '',
-      entreprise_id: null
+      entreprise_id: null,
+      archived: false
     }
     this.annoncesFiltered = this.annonces
   }

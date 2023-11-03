@@ -188,7 +188,7 @@ export class DashboardImatchComponent implements OnInit {
   }
   AnnonceGENbyDate = []
   getAnnonceGENbyDate() {
-    if (this.AnnonceGENbyDate.length == 2 && this.AnnonceGENbyDate[1] != null) {
+    if (this.AnnonceGENbyDate && this.AnnonceGENbyDate.length == 2 && this.AnnonceGENbyDate[1] != null) {
       let day = new Date(this.AnnonceGENbyDate[0]).getDate().toString()
       let month = (new Date(this.AnnonceGENbyDate[0]).getMonth() + 1).toString()
       let year = new Date(this.AnnonceGENbyDate[0]).getFullYear().toString()
@@ -199,6 +199,28 @@ export class DashboardImatchComponent implements OnInit {
       let date2 = `${year}-${month}-${day} 23:59`
       this.filterAuteurOffreGEN = [{ label: 'Tous les auteurs', value: null }]
       this.AnnonceService.getAllByDate(date1, date2).then(val => {
+        this.annonceGEN = val
+        let agent_id = []
+        this.dataTabGEN = []
+        val.forEach(ann => {
+          if (ann.user_id && !agent_id.includes(ann.user_id._id)) {
+            this.dataTabGEN.push({
+              label: `${ann.user_id.firstname} ${ann.user_id.lastname}`,
+              nb: val.reduce((total, next) => total + (next?.user_id?._id == ann.user_id._id ? 1 : 0), 0)
+            })
+            agent_id.push(ann.user_id._id)
+            this.filterAuteurOffreGEN.push({ label: `${ann.user_id.firstname} ${ann.user_id.lastname}`, value: `${ann.user_id.firstname} ${ann.user_id.lastname}` })
+          }
+        })
+        let nb = val.reduce((total, next) => total + (!next?.user_id ? 1 : 0), 0)
+        if (nb != 0)
+          this.dataTabGEN.push({
+            label: `Aucun`,
+            nb
+          })
+      })
+    } else {
+      this.AnnonceService.getAnnonces().then(val => {
         this.annonceGEN = val
         let agent_id = []
         this.dataTabGEN = []
@@ -267,7 +289,7 @@ export class DashboardImatchComponent implements OnInit {
 
   CVGENbyDate = []
   getCVGENbyDate() {
-    if (this.CVGENbyDate.length == 2 && this.CVGENbyDate[1] != null) {
+    if (this.CVGENbyDate && this.CVGENbyDate.length == 2 && this.CVGENbyDate[1] != null) {
       let day = new Date(this.CVGENbyDate[0]).getDate().toString()
       let month = (new Date(this.CVGENbyDate[0]).getMonth() + 1).toString()
       let year = new Date(this.CVGENbyDate[0]).getFullYear().toString()
@@ -278,6 +300,28 @@ export class DashboardImatchComponent implements OnInit {
       let date2 = `${year}-${month}-${day} 23:59`
       this.filterAuteurCVGEN = [{ label: 'Tous les auteurs', value: null }]
       this.CVService.getAllByDate(date1, date2).then(val => {
+        this.cvGEN = val
+        let agent_id = []
+        this.dataTabCVGEN = []
+        val.forEach(ann => {
+          if (ann.createur_id && !agent_id.includes(ann.createur_id._id)) {
+            this.dataTabCVGEN.push({
+              label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`,
+              nb: val.reduce((total, next) => total + (next?.createur_id?._id == ann.createur_id._id ? 1 : 0), 0)
+            })
+            agent_id.push(ann.createur_id._id)
+            this.filterAuteurCVGEN.push({ label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`, value: `${ann.createur_id.firstname} ${ann.createur_id.lastname}` })
+          }
+        })
+        let nb = val.reduce((total, next) => total + (!next?.createur_id ? 1 : 0), 0)
+        if (nb != 0)
+          this.dataTabCVGEN.push({
+            label: `Aucun`,
+            nb
+          })
+      })
+    }else{
+      this.CVService.getCvs().then(val => {
         this.cvGEN = val
         let agent_id = []
         this.dataTabCVGEN = []
