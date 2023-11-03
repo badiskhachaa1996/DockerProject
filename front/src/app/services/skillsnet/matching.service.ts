@@ -43,6 +43,11 @@ export class MatchingService {
     return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllToday() {
+    let url = this.apiUrl + 'getAllToday';
+    return this.httpClient.get<Matching[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   generateMatchingV1(offre_id: string) {
     let url = this.apiUrl + 'generateMatchingV1/' + offre_id;
     return this.httpClient.get<{ cv: CV, taux: number }[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

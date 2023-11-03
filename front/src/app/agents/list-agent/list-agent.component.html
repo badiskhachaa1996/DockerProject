@@ -37,10 +37,10 @@
                 <!--<th>
                     Accès<br>
                     Module : Role
-                </th>
+                </th>-->
                 <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
                     Date de création <p-sortIcon field="date_creation"></p-sortIcon>
-                </th>-->
+                </th>
                 <th>
                     Action
                 </th>
@@ -75,8 +75,11 @@
                 <td>
                     {{agent.role}}
                 </td>
-                <td>
+                <td *ngIf="agent.type">
                     {{agent.type}}
+                </td>
+                <td *ngIf="!agent.type">
+                    Non défini
                 </td>
                 <!--<td>
                     <ng-container *ngFor="let role of agent.roles_list">

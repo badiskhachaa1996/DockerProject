@@ -226,4 +226,20 @@ function createTicket(created_by, description, sujet, resum, agent_id) {
         });
     })
 }
+
+app.get('/getAllToday', (req, res) => {
+    let day = new Date().getDate().toString()
+    let month = (new Date().getMonth() + 1).toString()
+    let year = new Date().getFullYear().toString()
+    console.log(`${year}-${month}-${day}`)
+    Matching.find({ date_creation: { $gte: `${year}-${month}-${day}`, $lte: `${year}-${month}-${day} 23:59` } }).populate({ path: 'cv_id', populate: 'user_id' }).populate({ path: 'offre_id', populate: 'entreprise_id' }).populate({ path: 'offre_id', populate: 'competences' }).populate({ path: 'offre_id', populate: 'user_id' }).then(val => {
+        res.send(val)
+    })
+})
+
+app.get('/getAllByDate/:date1/:date2', (req, res) => {
+    Matching.find({ date_creation: { $gte: req.params.date1, $lte: req.params.date2 } }).sort({ date_creation: 1 }).populate({ path: 'cv_id', populate: 'user_id' }).populate({ path: 'offre_id', populate: 'entreprise_id' }).populate({ path: 'offre_id', populate: 'competences' }).populate({ path: 'offre_id', populate: 'user_id' }).then(val => {
+        res.send(val)
+    })
+})
 module.exports = app;

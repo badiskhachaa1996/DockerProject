@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnnonceService } from 'src/app/services/skillsnet/annonce.service';
 import { CvService } from 'src/app/services/skillsnet/cv.service';
+import { MatchingService } from 'src/app/services/skillsnet/matching.service';
 
 @Component({
   selector: 'app-dashboard-imatch',
@@ -15,6 +16,7 @@ export class DashboardImatchComponent implements OnInit {
   filterCommercialMatch = [{ label: 'TEST TEST TEST', value: null }]
   annonceAJR = []
   cvAJR = []
+  matchingAJR = []
   dataTabAJR = []
   dataCVAJR = []
   annonceGEN = []
@@ -86,7 +88,12 @@ export class DashboardImatchComponent implements OnInit {
       }
     }
   }
-  constructor(private AnnonceService: AnnonceService, private CVService: CvService) { }
+  dicAjrMatching = {
+    entreprise: 0,
+    candidat: 0,
+    commercial: 0
+  }
+  constructor(private AnnonceService: AnnonceService, private CVService: CvService, private MatchingService: MatchingService) { }
 
   ngOnInit(): void {
     this.AnnonceService.getAllToday().then(val => {
@@ -98,24 +105,85 @@ export class DashboardImatchComponent implements OnInit {
             label: `${ann.user_id.firstname} ${ann.user_id.lastname}`,
             nb: val.reduce((total, next) => total + (next?.user_id?._id == ann.user_id._id ? 1 : 0), 0)
           })
+          agent_id.push(ann.user_id._id)
           this.filterAuteurOffre.push({ label: `${ann.user_id.firstname} ${ann.user_id.lastname}`, value: `${ann.user_id.firstname} ${ann.user_id.lastname}` })
         }
       })
+      let nb = val.reduce((total, next) => total + (!next?.user_id ? 1 : 0), 0)
+      if (nb != 0)
+        this.dataTabAJR.push({
+          label: `Aucun`,
+          nb
+        })
+    })
+    this.AnnonceService.getAnnonces().then(val => {
+      this.annonceGEN = val
+      let agent_id = []
+      this.dataTabGEN = []
+      val.forEach(ann => {
+        if (ann.user_id && !agent_id.includes(ann.user_id._id)) {
+          this.dataTabGEN.push({
+            label: `${ann.user_id.firstname} ${ann.user_id.lastname}`,
+            nb: val.reduce((total, next) => total + (next?.user_id?._id == ann.user_id._id ? 1 : 0), 0)
+          })
+          agent_id.push(ann.user_id._id)
+          this.filterAuteurOffreGEN.push({ label: `${ann.user_id.firstname} ${ann.user_id.lastname}`, value: `${ann.user_id.firstname} ${ann.user_id.lastname}` })
+        }
+      })
+      let nb = val.reduce((total, next) => total + (!next?.user_id ? 1 : 0), 0)
+      if (nb != 0)
+        this.dataTabGEN.push({
+          label: `Aucun`,
+          nb
+        })
     })
     this.CVService.getAllToday().then(val => {
-      this.cvAJR = val
-      let agent_id   = []
-      console.log(val)
+      let agent_id = []
       val.forEach(ann => {
         if (ann.createur_id && !agent_id.includes(ann.createur_id._id)) {
           this.dataCVAJR.push({
             label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`,
             nb: val.reduce((total, next) => total + (next?.createur_id?._id == ann.createur_id._id ? 1 : 0), 0)
           })
-          console.log(this.dataCVAJR)
+          agent_id.push(ann.user_id._id)
           this.filterAuteurCV.push({ label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`, value: `${ann.createur_id.firstname} ${ann.createur_id.lastname}` })
         }
       })
+      let nb = val.reduce((total, next) => total + (!next?.createur_id ? 1 : 0), 0)
+      if (nb != 0)
+        this.dataCVAJR.push({
+          label: `Aucun`,
+          nb
+        })
+    })
+    this.CVService.getCvs().then(val => {
+      this.cvGEN = val
+      let agent_id = []
+      this.dataTabCVGEN = []
+      val.forEach(ann => {
+        if (ann.createur_id && !agent_id.includes(ann.createur_id._id)) {
+          this.dataTabCVGEN.push({
+            label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`,
+            nb: val.reduce((total, next) => total + (next?.createur_id?._id == ann.createur_id._id ? 1 : 0), 0)
+          })
+          agent_id.push(ann.createur_id._id)
+          this.filterAuteurCVGEN.push({ label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`, value: `${ann.createur_id.firstname} ${ann.createur_id.lastname}` })
+        }
+      })
+      let nb = val.reduce((total, next) => total + (!next?.createur_id ? 1 : 0), 0)
+      if (nb != 0)
+        this.dataTabCVGEN.push({
+          label: `Aucun`,
+          nb
+        })
+    })
+    this.MatchingService.getAllToday().subscribe(val => {
+      this.matchingAJR = val
+      this.dicAjrMatching = {
+        entreprise: val.reduce((total, next) => total + (next?.type_matching == 'Entreprise' ? 1 : 0), 0),
+        candidat: val.reduce((total, next) => total + (next?.type_matching == 'Candidat' ? 1 : 0), 0),
+        commercial: val.reduce((total, next) => total + (next?.type_matching == 'Commercial' ? 1 : 0), 0)
+      }
     })
   }
   AnnonceGENbyDate = []
@@ -144,6 +212,12 @@ export class DashboardImatchComponent implements OnInit {
             this.filterAuteurOffreGEN.push({ label: `${ann.user_id.firstname} ${ann.user_id.lastname}`, value: `${ann.user_id.firstname} ${ann.user_id.lastname}` })
           }
         })
+        let nb = val.reduce((total, next) => total + (!next?.user_id ? 1 : 0), 0)
+        if (nb != 0)
+          this.dataTabGEN.push({
+            label: `Aucun`,
+            nb
+          })
       })
     }
   }
@@ -208,16 +282,21 @@ export class DashboardImatchComponent implements OnInit {
         let agent_id = []
         this.dataTabCVGEN = []
         val.forEach(ann => {
-          if (ann.user_id && !agent_id.includes(ann.user_id._id)) {
+          if (ann.createur_id && !agent_id.includes(ann.createur_id._id)) {
             this.dataTabCVGEN.push({
-              label: `${ann.user_id.firstname} ${ann.user_id.lastname}`,
-              nb: val.reduce((total, next) => total + (next?.user_id?._id == ann.user_id._id ? 1 : 0), 0)
+              label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`,
+              nb: val.reduce((total, next) => total + (next?.createur_id?._id == ann.createur_id._id ? 1 : 0), 0)
             })
-            agent_id.push(ann.user_id._id)
-            this.filterAuteurCVGEN.push({ label: `${ann.user_id.firstname} ${ann.user_id.lastname}`, value: `${ann.user_id.firstname} ${ann.user_id.lastname}` })
+            agent_id.push(ann.createur_id._id)
+            this.filterAuteurCVGEN.push({ label: `${ann.createur_id.firstname} ${ann.createur_id.lastname}`, value: `${ann.createur_id.firstname} ${ann.createur_id.lastname}` })
           }
         })
-        console.log(this.dataTabCVGEN)
+        let nb = val.reduce((total, next) => total + (!next?.createur_id ? 1 : 0), 0)
+        if (nb != 0)
+          this.dataTabCVGEN.push({
+            label: `Aucun`,
+            nb
+          })
       })
     }
   }
