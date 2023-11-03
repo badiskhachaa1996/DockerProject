@@ -17,6 +17,7 @@ import { Matching } from 'src/app/models/Matching';
 import { MeetingTeamsService } from 'src/app/services/meeting-teams.service';
 import { Table } from 'primeng/table';
 import { MeetingTeams } from 'src/app/models/MeetingTeams';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-matching',
@@ -24,7 +25,9 @@ import { MeetingTeams } from 'src/app/models/MeetingTeams';
   styleUrls: ['./matching.component.scss']
 })
 export class MatchingComponent implements OnInit {
+  private eventsSubscription: Subscription;
   @Input() ID = '';
+  @Input() needToRefresh: Observable<void>
   @Output() rdv = new EventEmitter<{ label: string, ID: string, offer_id: string }>();
   @Output() cv = new EventEmitter<{ label: string, ID: string }>();
   token;
@@ -54,6 +57,9 @@ export class MatchingComponent implements OnInit {
     private router: Router) { }
   rdvDic = {}
   ngOnInit(): void {
+    this.eventsSubscription = this.needToRefresh.subscribe(() => {
+      this.ngOnInit()
+    });
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -103,6 +109,8 @@ export class MatchingComponent implements OnInit {
 
   InitUpdateStatut(match: Matching) {
     this.formUpdateStatut.setValue({ _id: match._id, remarque: match.remarque, statut: match.statut })
+    if (match.cv_id && match.cv_id.user_id && this.rdvDic[match.cv_id.user_id._id])
+      this.formUpdateStatut.patchValue({ statut: 'Entretien' })
     this.showUpdateStatut = true
     //this.messageService.add({ summary: "Mis à jour du statut du matching en cours de dévéloppement", severity: "info", detail: `Pouvoir modifier le statut pour mettre 'Validé du coté Entreprise ou Winner/Alternant'` })
   }
@@ -128,7 +136,7 @@ export class MatchingComponent implements OnInit {
       this.MatchingService.create(matching).subscribe(match => {
         this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
         this.matching.push(match)
-        this.matching =  Object.assign([], this.matching); 
+        this.matching = Object.assign([], this.matching);
         this.matchingsPotentiel.forEach((m, idx) => {
           let b1: any = cv.user_id
           let b2: any = m.cv_id.user_id
@@ -140,7 +148,7 @@ export class MatchingComponent implements OnInit {
       this.MatchingService.update(match._id, matching).subscribe(match => {
         this.messageService.add({ summary: "Matching enregistré", severity: "success", detail: `Type matching:${type_matching}` })
         this.matching.push(match)
-        this.matching =  Object.assign([], this.matching); 
+        this.matching = Object.assign([], this.matching);
         this.matchingsPotentiel.forEach((m, idx) => {
           let b1: any = match.cv_id.user_id
           let b2: any = m.cv_id.user_id
