@@ -188,7 +188,7 @@ export class DashboardImatchComponent implements OnInit {
   }
   AnnonceGENbyDate = []
   getAnnonceGENbyDate() {
-    if (this.AnnonceGENbyDate.length == 2 && this.AnnonceGENbyDate[1] != null) {
+    if (this.AnnonceGENbyDate && this.AnnonceGENbyDate.length == 2 && this.AnnonceGENbyDate[1] != null) {
       let day = new Date(this.AnnonceGENbyDate[0]).getDate().toString()
       let month = (new Date(this.AnnonceGENbyDate[0]).getMonth() + 1).toString()
       let year = new Date(this.AnnonceGENbyDate[0]).getFullYear().toString()
@@ -289,7 +289,7 @@ export class DashboardImatchComponent implements OnInit {
 
   CVGENbyDate = []
   getCVGENbyDate() {
-    if (this.CVGENbyDate.length == 2 && this.CVGENbyDate[1] != null) {
+    if (this.CVGENbyDate && this.CVGENbyDate.length == 2 && this.CVGENbyDate[1] != null) {
       let day = new Date(this.CVGENbyDate[0]).getDate().toString()
       let month = (new Date(this.CVGENbyDate[0]).getMonth() + 1).toString()
       let year = new Date(this.CVGENbyDate[0]).getFullYear().toString()
