@@ -82,13 +82,31 @@ export class DashboardRhComponent implements OnInit {
       })
     })
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
-    this.TeamRHService.MRgetByUSERID(this.token.id).subscribe(members => {
-      members.forEach(m => {
-        if (m.role == 'Responsable')
-          this.teamRHFilter.push({ label: m.team_id.nom, value: m.team_id._id })
+    this.AuthService.getPopulate(this.token.id).subscribe(user => {
+      this.USER = user
+      let services_list = [];
+      let service_dic = {};
+      user.roles_list.forEach((val) => {
+        if (!service_dic[val.module])
+          service_dic[val.module] = val.role
       })
+      services_list = Object.keys(service_dic)
+      if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+        this.TeamRHService.MRgetByUSERID(this.token.id).subscribe(members => {
+          if (members)
+            members.forEach(m => {
+              if (m.role == 'Responsable')
+                this.teamRHFilter.push({ label: m.team_id.nom, value: m.team_id._id })
+            })
+        })
+      else
+        this.TeamRHService.TRgetAll().subscribe(teams => {
+          teams.forEach(m => {
+            this.teamRHFilter.push({ label: m.nom, value: m._id })
+          })
+        })
     })
+
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
