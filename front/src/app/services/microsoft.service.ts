@@ -103,7 +103,7 @@ export class MicrosoftService {
     return this.graphClient
       .api('/me').get().then(user => {
         console.log(user)
-        return this.graphClient.api(`/users/m.hue@intedgroup.com/teamwork/sendActivityNotification`)
+        return this.graphClient.api(`/users/585c6e13-98c1-44b5-848b-fc415c95b655/teamwork/sendActivityNotification`)
           .post(sendActivityNotification);
       })
 

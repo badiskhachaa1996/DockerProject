@@ -40,7 +40,7 @@ export class GestionEquipeRhComponent implements OnInit {
       })
     })
     this.refreshMember()
-    //this.MicrosoftService.sendNotif()
+    this.MicrosoftService.sendNotif()
   }
 
   updateForm: FormGroup = new FormGroup({
