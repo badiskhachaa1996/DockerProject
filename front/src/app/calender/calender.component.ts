@@ -558,14 +558,14 @@ export class CalenderComponent implements OnInit {
       }];
     this.itemsCra = [
       {
-        label: "ticket",
+        label: "Ticket",
         command: () => {
           this.showFormAddCraTicket = true
 
         }
       },
       {
-        label: 'Autre',
+        label: 'Saisir',
         command: () => {
           this.showFormAddCra = true;
         }

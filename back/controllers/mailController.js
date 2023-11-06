@@ -282,7 +282,7 @@ app.post('/sendPerso', (req, res) => {
                 html,
                 attachments
             };
-
+            console.log(mailOptions)
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.error(error);

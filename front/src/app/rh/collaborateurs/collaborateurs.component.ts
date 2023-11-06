@@ -588,7 +588,7 @@ export class CollaborateursComponent implements OnInit {
 
   onEmailType() {
     const { user_id }: any = this.collaborateurToUpdate;
-    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email_perso, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
+    this.emailTypeService.sendPerso({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id.email, send_from: this.formEmailType.value.send_from._id, pieces_jointes: this.piece_jointes, mailTypeSelected: this.mailTypeSelected }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: 'Envoie du mail avec succès' })
       this.emailTypeService.HEcreate({ ...this.formEmailType.value, send_by: this.token.id, send_to: user_id._id, send_from: this.formEmailType.value.send_from.email }).subscribe(data2 => {
         this.formEmailType.reset()

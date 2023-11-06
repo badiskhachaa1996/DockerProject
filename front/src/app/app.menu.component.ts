@@ -1839,7 +1839,7 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ],
                                 },*/
-                                {
+                                /*{
                                     label: 'Ticketing',
                                     icon: 'pi pi-fw pi-ticket',
                                     items: [
@@ -1898,14 +1898,14 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Configuration',
                                             icon: 'pi pi-cog',
                                             routerLink: ['/ticketing/configuration'],
-                                        },*/
+                                        },
                                         {
                                             label: 'Dashboard',
                                             icon: 'pi pi-home',
                                             routerLink: ['/ticketing/dashboard'],
                                         },
                                     ],
-                                },
+                                },*/
                                 /*{
                                     label: 'Projet',
                                     icon: 'pi pi-fw pi-shield',
@@ -4752,7 +4752,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/commissions/reglement']
                                             }
                                         ]
-                                    }, {
+                                    },/* {
                                         label: 'Ticketing',
                                         icon: 'pi pi-fw pi-ticket',
                                         items: [
@@ -4767,7 +4767,7 @@ export class AppMenuComponent implements OnInit {
                                                 routerLink: ['/ticketing/gestion/mes-tickets']
                                             }
                                         ]
-                                    },
+                                    },*/
                                     {
                                         label: 'Dashboard',
                                         icon: 'pi pi-chart-line'
@@ -4802,7 +4802,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/international/actualite']
                                     },
                                 ]
-                            }, {
+                            }, /*{
                             label: 'Ticketing',
                             icon: 'pi pi-fw pi-ticket',
                             items: [
@@ -4817,11 +4817,11 @@ export class AppMenuComponent implements OnInit {
                                     routerLink: ['/ticketing/gestion/mes-tickets']
                                 }
                             ]
-                        }
+                        }*/
                         )
                     }
                 }
-                if (services_list.includes('Ticketing')) {
+                /*if (services_list.includes('Ticketing')) {
                     let role = service_dic['Ticketing']
                     if (role == "Super-Admin") {
                         this.items.push({
@@ -4998,7 +4998,7 @@ export class AppMenuComponent implements OnInit {
                             ],
                         });
                     }
-                }
+                }*/
                 if (services_list.includes('International')) {
                     let role = service_dic['International']
                     if (role == "Super-Admin")
@@ -5321,7 +5321,7 @@ export class AppMenuComponent implements OnInit {
                                 label: "Paiements et documents administratives",
                                 icon: "pi pi-credit-card",
                                 routerLink: ['/admission/lead-paiements/' + p._id]
-                            },
+                            },/*
                             {
                                 label: 'Ticketing',
                                 icon: 'pi pi-fw pi-ticket',
@@ -5337,7 +5337,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/ticketing/gestion/mes-tickets']
                                     }
                                 ]
-                            }
+                            }*/
 
                         ]
                         setTimeout(() => this.showMenu = true, 0);
