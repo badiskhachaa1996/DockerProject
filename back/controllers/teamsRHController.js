@@ -83,8 +83,8 @@ app.get("/MR/getByUSERID/:id", (req, res) => {
         .catch((error) => { console.error(error); res.status(500).send(error); });
 })
 
-app.delete("/MR/delete/:user_id", (req, res) => {
-    MemberRH.findOneAndRemove({ user_id: req.params.user_id })
+app.delete("/MR/delete/:_id", (req, res) => {
+    MemberRH.findByIdAndDelete(req.params._id)
         .then((formFromDb) => {
             res.status(200).send(formFromDb);
             /*User.findByIdAndUpdate(req.params.user_id, { type: null }).then(doc => {

@@ -56,19 +56,19 @@ export class TeamsRHService {
   }
 
   MRgetAllByTeamID(team_id) {
-    let registerUrl = this.apiUrl + 'MR/getAllByTeamID/'+team_id;
+    let registerUrl = this.apiUrl + 'MR/getAllByTeamID/' + team_id;
     return this.http.get<MemberRH[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
 
-  MRdelete(user_id: string) {
-    let registerUrl = this.apiUrl + 'MR/delete/' + user_id;
+  MRdelete(_id: string) {
+    let registerUrl = this.apiUrl + 'MR/delete/' + _id;
     return this.http.delete<MemberRH>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
 
   }
 
   TRdelete(user_id: string) {
-    let registerUrl = this.apiUrl + 'TI/delete/' + user_id;
+    let registerUrl = this.apiUrl + 'TR/delete/' + user_id;
     return this.http.delete<TeamsRH>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 }
