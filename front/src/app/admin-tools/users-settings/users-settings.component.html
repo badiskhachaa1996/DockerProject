@@ -124,6 +124,11 @@
                     <p-multiSelect [options]="typeList" placeholder="Choisissez un type"
                         formControlName="type_supp"></p-multiSelect>
                 </div>
+                <div class="field col-12" style="width: 100%;" *ngIf="formUpdate.value.type || formUpdate.value.type_supp.length!=0">
+                    <label htmlFor="localisation">Site</label><br>
+                    <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"
+                        [style]="{'width':'100%'}" [(ngModel)]="SITE"></p-multiSelect>
+                </div>
                 <div class="field col-12">
                     <label For="role">Campus <span style="color:red">*</span></label>
                     <p-dropdown [options]="campusList" formControlName="campus"></p-dropdown>

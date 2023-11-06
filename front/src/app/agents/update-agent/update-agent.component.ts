@@ -124,7 +124,7 @@ export class UpdateAgentComponent implements OnInit {
   onAdd() {
     this.UserService.update({ ...this.addForm.value, roles_list: this.roles_list, haveNewAccess: true }).subscribe(data => {
       this.ToastService.add({ summary: 'Mise à jour de l\'agent avec succès', severity: 'success' })
-      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur')
+      if (this.addForm.value.type == 'Collaborateur' && this.USER.type != 'Collaborateur' || this.addForm.value.type_supp.includes('Collaborateur') && !this.USER.type_supp.includes('Collaborateur'))
         this.CollaborateurService.getCollaborateurByUserId(this.USER._id).then(c => {
           if (!c)
             this.CollaborateurService.postCollaborateur({ user_id: this.USER, localisation: this.SITE }).then(c => {
@@ -156,6 +156,7 @@ export class UpdateAgentComponent implements OnInit {
         this.USER = data
         let { service_id }: any = data
         this.addForm.patchValue({ ...data, service_id: service_id?._id })
+        this.onSelectRole()
         this.roles_list = data.roles_list
         this.CollaborateurService.getCollaborateurByUserId(this.ID).then(val => {
           if (val) {

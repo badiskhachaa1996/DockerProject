@@ -4583,6 +4583,17 @@ export class AppMenuComponent implements OnInit {
 
                                     },
                                     {
+                                        label: 'Gestion RH',
+                                        icon: 'pi pi-users',
+                                        items: [
+                                            {
+                                                label: 'Gestion des équipes',
+                                                icon: 'pi pi-users',
+                                                routerLink: ['/rh/teams']
+                                            }
+                                        ]
+                                    },
+                                    {
                                         label: 'Ticketing',
                                         icon: 'pi pi-ticket',
                                         routerLink: ['/ticketing/configuration']
@@ -6589,6 +6600,17 @@ export class AppMenuComponent implements OnInit {
                                         },
                                     ]
 
+                                },
+                                {
+                                    label: 'Gestion RH',
+                                    icon: 'pi pi-users',
+                                    items: [
+                                        {
+                                            label: 'Gestion des équipes',
+                                            icon: 'pi pi-users',
+                                            routerLink: ['/rh/teams']
+                                        }
+                                    ]
                                 },
                                 {
                                     label: 'Ticketing',

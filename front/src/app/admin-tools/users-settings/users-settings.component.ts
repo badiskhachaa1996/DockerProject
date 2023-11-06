@@ -13,6 +13,7 @@ import { FormateurService } from '../../services/formateur.service';
 import { ServService } from '../../services/service.service';
 import { MessageService } from 'primeng/api';
 import { CampusService } from 'src/app/services/campus.service';
+import { RhService } from 'src/app/services/rh.service';
 
 @Component({
   selector: 'app-users-settings',
@@ -95,7 +96,7 @@ export class UsersSettingsComponent implements OnInit {
 
   constructor(private userService: AuthService, private etudiantService: EtudiantService,
     private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
-    private serviceService: ServService, private formBuilder: FormBuilder,
+    private serviceService: ServService, private formBuilder: FormBuilder, private CollabService: RhService,
     private messageService: MessageService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
@@ -223,6 +224,14 @@ export class UsersSettingsComponent implements OnInit {
       campus: this.userToUpdate.campus,
       type_supp: this.userToUpdate.type_supp
     });
+    this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(val => {
+      if (val) {
+        this.formUpdate.patchValue({ type: 'Collaborateur' })
+        this.SITE = val.localisation
+      }
+      else
+        this.formUpdate.patchValue({ type: null })
+    })
   }
   private formatDate(date) {
     const d = new Date(date);
@@ -236,7 +245,11 @@ export class UsersSettingsComponent implements OnInit {
   //Methode de modification des infos
   onUpdateUser() {
     const user = new User();
-
+    if (this.formUpdate.value.type == 'Collaborateur' && this.userToUpdate.type != 'Collaborateur' || this.formUpdate.value.type_supp.includes('Collaborateur') && !this.userToUpdate.type_supp.includes('Collaborateur'))
+      this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(c => {
+        if (!c)
+          this.CollabService.postCollaborateur({ user_id: this.userToUpdate, localisation: this.SITE }).then(c => { })
+      })
     user._id = this.userToUpdate._id;
     user.civilite = this.formUpdate.get('civilite')?.value.label;
     user.lastname = this.formUpdate.get('lastname')?.value;
@@ -258,6 +271,7 @@ export class UsersSettingsComponent implements OnInit {
     user.campus = this.formUpdate.value.campus
     user.type_supp = this.formUpdate.value.type_supp
     console.log(this.formUpdate.value);
+
 
     this.userService.patchById(user)
       .then((response) => {
@@ -293,6 +307,17 @@ export class UsersSettingsComponent implements OnInit {
     return r
   }
 
-
+  localisationList: any[] = [
+    { label: 'Paris – Champs sur Marne', value: 'Paris – Champs sur Marne' },
+    { label: 'Paris - Louvre', value: 'Paris - Louvre' },
+    { label: 'Montpellier', value: 'Montpellier' },
+    { label: 'Dubaï', value: 'Dubaï' },
+    { label: 'Congo', value: 'Congo' },
+    { label: 'Maroc', value: 'Maroc' },
+    { label: 'Tunis M1', value: 'Tunis M1' },
+    { label: 'Tunis M4', value: 'Tunis M4' },
+    { label: 'Autre', value: 'Autre' },
+  ];
+  SITE = []
 
 }

@@ -402,6 +402,7 @@ import { PreinscriptionComponent } from './administration-v1/gestion-des-inscrip
 import { PauseReadMoreComponent } from './other/component/pause-read-more/pause-read-more.component';
 import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
 import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
+import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 
 
 @NgModule({
@@ -816,6 +817,7 @@ import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard
     PauseReadMoreComponent,
     NewCalendrierComponent,
     DashboardImatchComponent,
+    GestionEquipeRhComponent,
     
     
   ],

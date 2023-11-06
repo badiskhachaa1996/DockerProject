@@ -289,6 +289,7 @@ import { CvEtudiantComponent } from './skillsnet/i-match/cv-etudiant/cv-etudiant
 import { PreinscriptionComponent } from './administration-v1/gestion-des-inscriptions/preinscription/preinscription/preinscription.component';
 import { NewCalendrierComponent } from './rh/new-calendrier/new-calendrier.component';
 import { DashboardImatchComponent } from './skillsnet/dashboard-imatch/dashboard-imatch.component';
+import { GestionEquipeRhComponent } from './rh/gestion-equipe-rh/gestion-equipe-rh.component';
 const routes: Routes = [
     {
         path: '',
@@ -953,6 +954,11 @@ const routes: Routes = [
             {
                 path: 'international/teams',
                 component: TeamsIntComponent,
+                canActivate: [AuthGuardService],
+            },
+            {
+                path: 'rh/teams',
+                component: GestionEquipeRhComponent,
                 canActivate: [AuthGuardService],
             },
             {

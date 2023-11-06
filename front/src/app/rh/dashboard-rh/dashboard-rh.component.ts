@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Collaborateur } from 'src/app/models/Collaborateur';
 import { DailyCheck } from 'src/app/models/DailyCheck';
@@ -12,6 +12,8 @@ import { User } from 'src/app/models/User';
 import mongoose from 'mongoose';
 import * as moment from 'moment';
 import { PointeuseService } from 'src/app/services/pointeuse.service';
+import { TeamsRHService } from 'src/app/services/teams-rh.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-dashboard-rh',
   templateUrl: './dashboard-rh.component.html',
@@ -35,7 +37,7 @@ export class DashboardRhComponent implements OnInit {
   numberOfOccupe: number = 0;
   collaborateurConnected: Collaborateur
   token;
-
+  teamRHFilter = []
   loading: boolean = true;
   statutList: any[] = [
     { label: 'En congé', value: 'En congé' },
@@ -49,7 +51,7 @@ export class DashboardRhComponent implements OnInit {
   dataMachine;
   USER: User
   constructor(private rhService: RhService, private dailyCheckService: DailyCheckService, private PoiService: PointeuseService,
-    private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService) { }
+    private messageService: MessageService, private PointageService: PointageService, private AuthService: AuthService, private TeamRHService: TeamsRHService) { }
   machineList = []
   machineDic = {}
   uidDic = {}
@@ -81,6 +83,12 @@ export class DashboardRhComponent implements OnInit {
     })
     this.token = jwt_decode(localStorage.getItem('token'));
     this.AuthService.getPopulate(this.token.id).subscribe(user => this.USER = user)
+    this.TeamRHService.MRgetByUSERID(this.token.id).subscribe(members => {
+      members.forEach(m => {
+        if (m.role == 'Responsable')
+          this.teamRHFilter.push({ label: m.team_id.nom, value: m.team_id._id })
+      })
+    })
   }
 
   // recuperation de la liste des checks du jours et des collaborateurs
@@ -100,19 +108,31 @@ export class DashboardRhComponent implements OnInit {
               }
             })
           }
+          if (dc && dc.cra) {
+            let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
+            if (dc.check_out)
+              workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
+            let max = workingTiming - pauseTiming
+            let worked = 0
+            dc?.cra.map((cra) => {
+              worked += cra.number_minutes;
+            });
+            dc.taux_cra = ((worked * 100) / max)
+          }
 
-          let workingTiming = (moment(new Date()).diff(moment(new Date(dc?.check_in)), 'minutes'));
-          if (dc.check_out)
-            workingTiming = (moment(new Date(dc?.check_out)).diff(moment(new Date(dc?.check_in)), 'minutes'));
-          let max = workingTiming - pauseTiming
-          let worked = 0
-          dc?.cra.map((cra) => {
-            worked += cra.number_minutes;
-          });
-          dc.taux_cra = ((worked * 100) / max)
-          console.log(dc)
           if (dc && dc.user_id)
             this.dailyChecks.push(dc)
+        })
+        this.AuthService.getPopulate(this.token.id).subscribe(USER => {
+          let services_list = [];
+          let service_dic = {};
+          USER.roles_list.forEach((val) => {
+            if (!service_dic[val.module])
+              service_dic[val.module] = val.role
+          })
+          services_list = Object.keys(service_dic)
+          if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+            this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
         })
         // nombre de checks
         this.numberOfChecks = this.dailyChecks.length;
@@ -335,5 +355,28 @@ export class DashboardRhComponent implements OnInit {
       })
       this.displayActivite = true
     })
+  }
+  @ViewChild('dt1') dt1: Table;
+  chooseTeam(team_id) {
+    if (team_id)
+      this.TeamRHService.MRgetAllByTeamID(team_id).subscribe(members => {
+        let ids = []
+        members.forEach(m => { ids.push(m.user_id._id) })
+        this.dt1.filter(ids, 'user_id._id', 'in')
+      })
+    else
+      this.AuthService.getPopulate(this.token.id).subscribe(USER => {
+        let services_list = [];
+        let service_dic = {};
+        USER.roles_list.forEach((val) => {
+          if (!service_dic[val.module])
+            service_dic[val.module] = val.role
+        })
+        services_list = Object.keys(service_dic)
+        if (!services_list.includes('Ressources Humaines') || !service_dic['Ressources Humaines'] || service_dic['Ressources Humaines'] != 'Super-Admin')
+          this.dt1.filter('qsdqsdqsdqdsq', 'user_id._id', 'equals')
+        else
+          this.dt1.filter([], 'user_id._id', 'in')
+      })
   }
 }

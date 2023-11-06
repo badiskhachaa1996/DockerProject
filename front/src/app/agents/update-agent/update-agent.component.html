@@ -83,7 +83,7 @@
                 formControlName="type_supp"></p-multiSelect>
         </div>
     </form>
-    <div class="field col-12" style="width: 100%;" *ngIf="addForm.value.type">
+    <div class="field col-12" style="width: 100%;" *ngIf="addForm.value.type || addForm.value.type_supp.length!=0">
         <label htmlFor="localisation">Site</label><br>
         <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"
             [style]="{'width':'100%'}" [(ngModel)]="SITE"></p-multiSelect>
