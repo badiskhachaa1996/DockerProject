@@ -140,6 +140,7 @@ const venteController = require('./controllers/venteCommissionController')
 const factureCommissionController = require('./controllers/factureCommissionController')
 const intunsEtudiantsController = require('./controllers/intunsEtudiantsController')
 const teamsIntController = require('./controllers/teamsIntController')
+const teamsRHController = require('./controllers/teamsRHController')
 const formulaireAdmissionController = require('./controllers/formulaireAdmissionController')
 const admissionFormDubaiController = require('./controllers/admissionFormDubaiController')
 const dailyCheckController = require('./controllers/dailyCheckController')
@@ -386,12 +387,12 @@ app.use('/soc/factureCommission', factureCommissionController)
 
 app.use('/soc/intuns', intunsEtudiantsController)
 app.use('/soc/teamsInt', teamsIntController)
+app.use('/soc/teamsRH', teamsRHController)
 app.use('/soc/formulaireAdmission', formulaireAdmissionController)
 app.use('/soc/admission-dubai', admissionFormDubaiController);
 app.use('/soc/check', dailyCheckController);
 app.use('/soc/rh', rhControlleur);
 app.use('/soc/sujet-booking', bookingController);
-
 
 app.use('/soc/alternantsPartenaire', PAC)
 app.use('/soc/supportMarketing', require('./controllers/SupportMarketingController'))
