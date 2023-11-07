@@ -226,9 +226,10 @@ export class UsersSettingsComponent implements OnInit {
       type_supp: this.userToUpdate.type_supp
     });
     this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(val => {
-      if (val) {
-        this.formUpdate.patchValue({ type: 'Collaborateur', SITE: val.localisation })
-      }
+      if (val && !this.userToUpdate.haveNewAccess)
+        this.formUpdate.patchValue({ type: 'Collaborateur' })
+      if (val)
+        this.formUpdate.patchValue({ SITE: val.localisation })
     })
   }
   private formatDate(date) {
@@ -279,6 +280,7 @@ export class UsersSettingsComponent implements OnInit {
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
     user.type_supp = this.formUpdate.value.type_supp
+    user.haveNewAccess = true
     console.log(this.formUpdate.value);
 
 
