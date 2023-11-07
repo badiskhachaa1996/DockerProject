@@ -113,21 +113,22 @@
                 </div>
                 <div class="field col-6">
                     <label For="type">Type</label>
-                    <p-dropdown [options]="typeList" formControlName="type" optionLabel="label"></p-dropdown>
+                    <p-dropdown [options]="typeList" formControlName="type"></p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label For="role">Rôle</label>
-                    <p-dropdown [options]="roleList" formControlName="role" optionLabel="label"></p-dropdown>
+                    <p-dropdown [options]="roleList" formControlName="role"></p-dropdown>
                 </div>
                 <div class="field col-12" *ngIf="formUpdate.value.role.value=='Etudiant'">
                     <label For="service">Type supplémentaire<span style="color:red"> *</span></label>
                     <p-multiSelect [options]="typeList" placeholder="Choisissez un type"
                         formControlName="type_supp"></p-multiSelect>
                 </div>
-                <div class="field col-12" style="width: 100%;" *ngIf="formUpdate.value.type || formUpdate.value.type_supp.length!=0">
+                <div class="field col-12" style="width: 100%;"
+                    *ngIf="formUpdate.value.type || formUpdate.value.type_supp.length!=0">
                     <label htmlFor="localisation">Site</label><br>
-                    <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false" [filter]="true"
-                        [style]="{'width':'100%'}" [(ngModel)]="SITE"></p-multiSelect>
+                    <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..." autoWidth="false"
+                        [filter]="true" [style]="{'width':'100%'}" formControlName="SITE"></p-multiSelect>
                 </div>
                 <div class="field col-12">
                     <label For="role">Campus <span style="color:red">*</span></label>

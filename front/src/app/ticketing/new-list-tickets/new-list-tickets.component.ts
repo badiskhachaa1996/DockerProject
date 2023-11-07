@@ -126,7 +126,7 @@ export class NewListTicketsComponent implements OnInit {
         })
         //IF this.user ticketing !='Super-Admin'
         let role = service_dic['Ticketing']
-        if (role && role != 'Super-Admin')
+        if (!role || role != 'Super-Admin')
           this.TicketService.getAllNonAssigneV2(this.USER?.service_list || []).subscribe(nonassigne => {
             nonassigne.forEach(e => {
               e.origin = 'Non Assigne'
@@ -218,6 +218,7 @@ export class NewListTicketsComponent implements OnInit {
           if (!service_dic[val.module])
             service_dic[val.module] = val.role
         })
+        this.roleAccess = 'Admin'
         if (service_dic['Ticketing'])
           this.roleAccess = service_dic['Ticketing']
       }

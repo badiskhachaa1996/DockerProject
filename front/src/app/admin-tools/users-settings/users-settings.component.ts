@@ -128,7 +128,8 @@ export class UsersSettingsComponent implements OnInit {
       ville_adresse: [''],
       date_creation: [''],
       campus: [''],
-      type_supp: [[]]
+      type_supp: [[]],
+      SITE: [[]]
     });
   }
 
@@ -214,8 +215,8 @@ export class UsersSettingsComponent implements OnInit {
       email_perso: this.userToUpdate.email_perso,
       mention: this.userToUpdate.mention,
       service: this.userToUpdate?.service_id?._id,
-      type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
-      role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
+      type: this.userToUpdate.type,
+      role: this.userToUpdate.role,
       pays_adresse: { value: this.userToUpdate.pays_adresse, label: this.userToUpdate.pays_adresse, actif: false },
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
@@ -226,11 +227,8 @@ export class UsersSettingsComponent implements OnInit {
     });
     this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(val => {
       if (val) {
-        this.formUpdate.patchValue({ type: 'Collaborateur' })
-        this.SITE = val.localisation
+        this.formUpdate.patchValue({ type: 'Collaborateur', SITE: val.localisation })
       }
-      else
-        this.formUpdate.patchValue({ type: null })
     })
   }
   private formatDate(date) {
@@ -248,7 +246,11 @@ export class UsersSettingsComponent implements OnInit {
     if (this.formUpdate.value.type == 'Collaborateur' && this.userToUpdate.type != 'Collaborateur' || this.formUpdate.value.type_supp.includes('Collaborateur') && !this.userToUpdate.type_supp.includes('Collaborateur'))
       this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(c => {
         if (!c)
-          this.CollabService.postCollaborateur({ user_id: this.userToUpdate, localisation: this.SITE }).then(c => { })
+          this.CollabService.postCollaborateur({ user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => { })
+        else
+          this.CollabService.patchCollaborateurData({ _id: c._id, user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => {
+
+          })
       })
     user._id = this.userToUpdate._id;
     user.civilite = this.formUpdate.get('civilite')?.value.label;
@@ -260,8 +262,8 @@ export class UsersSettingsComponent implements OnInit {
     user.email_perso = this.formUpdate.get('email_perso')?.value;
     user.service_id = this.formUpdate.get('service')?.value;
     user.mention = this.formUpdate.get('mention')?.value;
-    user.type = this.formUpdate.get('type')?.value.value;
-    user.role = this.formUpdate.get('role')?.value.value;
+    user.type = this.formUpdate.get('type')?.value;
+    user.role = this.formUpdate.get('role')?.value;
     user.pays_adresse = this.formUpdate.get('pays_adresse')?.value.value;
     user.postal_adresse = this.formUpdate.get('postal_adresse')?.value;
     user.numero_adresse = this.formUpdate.get('numero_adresse')?.value;
@@ -318,6 +320,5 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Tunis M4', value: 'Tunis M4' },
     { label: 'Autre', value: 'Autre' },
   ];
-  SITE = []
 
 }
