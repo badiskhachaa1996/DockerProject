@@ -4395,40 +4395,12 @@ export class AppMenuComponent implements OnInit {
                 }
 
                 //menu formateur
-                if (response.type === 'Formateur' && response.role === 'user' && !response.haveNewAccess) {
+                if (response.type === 'Formateur' && response.role === 'user') {
                     this.FService.getByUserId(this.token.id).subscribe({
                         next: (dataF: Formateur) => {
-                            this.items = [
+                            this.items.push(
                                 {
-                                    label: 'Accueil',
-                                    icon: 'pi pi-fw pi-home',
-                                    items: [
-                                        {
-                                            label: 'Espace Personnel',
-                                            icon: 'pi pi-fw pi-home',
-                                            routerLink: ['/']
-                                        },
-                                        /*{
-                                            label: 'Signaler un problème technique',
-                                            icon: 'pi pi-fw pi-exclamation-triangle',
-                                            routerLink: ['/ticketing-igs'],
-                                        },*/
-                                    ]
-                                },
-
-                                /*{
-                                    label: 'Ticketing - Ancienne Version',
-                                    icon: 'pi pi-fw pi-ticket',
-                                    items: [
-                                        {
-                                            label: 'Suivi de mes tickets',
-                                            icon: 'pi pi-check-circle',
-                                            routerLink: ['/suivi-ticket'],
-                                        },
-                                    ],
-                                },*/
-                                {
-                                    label: 'Pédagogie',
+                                    label: 'Pédagogie - Formateur',
                                     icon: 'pi pi-fw pi-folder',
                                     items: [
                                         {
@@ -4461,14 +4433,9 @@ export class AppMenuComponent implements OnInit {
                                             icon: 'pi pi-users',
                                             routerLink: '/formateur/etudiants',
                                         },
-                                        /*{ 
-                                            label: 'Gestions des devoirs', 
-                                            icon: 'pi pi-book', 
-                                            routerLink: 'devoirs' 
-                                        }*/
                                     ],
                                 },
-                            ];
+                            );
                         },
                         error: function (error: any) {
                             console.error(error);

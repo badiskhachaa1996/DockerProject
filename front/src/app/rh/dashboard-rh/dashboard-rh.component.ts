@@ -200,33 +200,7 @@ export class DashboardRhComponent implements OnInit {
             })
             this.defaultdailyChecks = this.dailyChecks
             this.loading = false;
-
-            // initialisation à zero
-            this.numberOfDisponible = 0;
-            this.numberOfConge = 0;
-            this.numberOfReunion = 0;
-            this.numberOfOccupe = 0;
-            this.numberOfAbsent = 0;
-            this.numberOfPause = 0;
-            console.log(this.collaborateurs)
-            // remplissage des variables de statuts
-            this.collaborateurs.forEach((collaborateur: Collaborateur) => {
-              const { user_id }: any = collaborateur;
-
-              if (user_id?.statut == 'Disponible') {
-                this.numberOfDisponible++;
-              } else if (user_id?.statut == 'En congé') {
-                this.numberOfConge++;
-              } else if (user_id?.statut == 'En réunion') {
-                this.numberOfReunion++;
-              } else if (user_id?.statut == 'Occupé') {
-                this.numberOfOccupe++;
-              } else if (user_id?.statut == 'Absent') {
-                this.numberOfAbsent++;
-              } else if (user_id?.statut == 'En pause') {
-                this.numberOfPause++;
-              }
-            });
+            this.onUpdateStats()
           })
           .catch((error) => { this.messageService.add({ severity: 'error', summary: 'Erreur système', detail: 'Impossible de récupérer la liste des collaborateurs' }); console.error(error) });
       })
