@@ -917,16 +917,15 @@ export class CalenderComponent implements OnInit {
               this.dailyCheck?.cra.map((cra) => {
                 totalTimeCra += cra.number_minutes;
               });
-              console.log(totalTimeCra, collaborateur.h_cra)
-              if (collaborateur != null && collaborateur.h_cra) {
-                // conversion du taux cra du collaborateur en minutes
-                collaborateur.h_cra *= 60;
-                // partie calcule du pourcentage en fonction du totalTimeCra
-                let percent = (totalTimeCra * 100) / collaborateur.h_cra;
-                console.log(percent)
-                this.craPercent = percent
-              }
 
+              if (!collaborateur || !collaborateur.h_cra) {
+                collaborateur.h_cra = 7
+              }
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              this.craPercent = percent
             })
             .catch((error) => { console.error(error); });
 
@@ -1616,6 +1615,7 @@ export class CalenderComponent implements OnInit {
     contentHeight: 500,
     events: [],
     eventClick: this.eventClickUser.bind(this),
+    dateClick: this.dateClickFC.bind(this),
     //eventDidMount: this.eventToolTip(this),
     defaultView: "dayGridMonth",
     minTime: '08:00:00',
@@ -1686,7 +1686,7 @@ export class CalenderComponent implements OnInit {
 
           })
           //Charger les Réunions Teams
-          
+
           let dateDebut = new Date()
           let dateEnd = new Date()
           dateEnd.setFullYear(dateEnd.getFullYear() - 1)
@@ -1702,6 +1702,10 @@ export class CalenderComponent implements OnInit {
             }
             dateDebut.setDate(dateDebut.getDate() - 1)
           }
+          events.forEach(ev => {
+            if (ev.type == 'Cours' && ev?.personal == this.token.id)
+              this.addEventUser(new EventCalendarRH(null, new Date(ev.date), "Cours", null, null))
+          })
           this.defaultEventUsers = this.eventUsers
           this.onFilter()
         })
@@ -1715,7 +1719,7 @@ export class CalenderComponent implements OnInit {
     if (event.type == 'Jour férié France') {
       backgroundColor = '#D4AC0D'
       borderColor = '#D35400'
-    } else if (event.type == 'Autre événement') {
+    } else if (event.type == 'Autre événement' || event.type == 'Cours') {
       backgroundColor = '#9B59B6'
       borderColor = '#8E44AD'
     } else if (event.type == "Autorisation") {
@@ -1750,6 +1754,30 @@ export class CalenderComponent implements OnInit {
       this.DataCRA = this.PresentDicUser[this.dateCRA]
       this.displayCRA = true
     }
+  }
+  dateClickFC(event) {
+    let r = true
+
+    this.eventUsers.forEach(ev => {
+      if (ev.extendedProps.type == 'Cours' && new Date(event.date).toString() == new Date(ev.extendedProps.date).toString()) {
+        //console.log(ev.extendedProps.type, new Date(event.date).toString(), new Date(ev.extendedProps.date).toString())
+        r = false
+      }
+    })
+    if (r) {
+      this.displayCours = true
+      this.DataDay = event
+    }
+  }
+  DataDay: any
+  displayCours = false
+  onAddJourDeCours() {
+    this.CalendrierRHService.create({ type: 'Cours', created_by: this.token.id, date: this.DataDay.date, personal: this.token.id }).subscribe(newEvent => {
+      this.addEventUser(newEvent)
+      this.displayCours = false
+      this.DataDay = null
+      this.messageService.add({ severity: 'success', summary: 'Ajout d\'un événement avec succès' })
+    })
   }
   isNaN(nb: number) { return isNaN(nb) }
   isInfinity(nb: number) { return nb == Infinity }
