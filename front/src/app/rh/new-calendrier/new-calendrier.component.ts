@@ -195,22 +195,21 @@ export class NewCalendrierComponent implements OnInit {
       this.dailyCheckService.getChecks().then(dcs => {
         this.congeService.getAll().then(conges => {
           //Si conge Vert Si Check Rien Si Weekend Rien Si Absence de check hors Weekend alors Rouge
-          let congesList: Date[] = []
+          let congesList: string[] = []
           let presencesList: Date[] = []
           conges.forEach(c => {
             let dateC = new Date(c.date_debut)
             dateC.setDate(dateC.getDate() - 1)
             while (dateC < new Date(c.date_fin)) {
-
               if (this.CongeDic[dateC.toDateString()]) {
                 this.CongeDic[dateC.toDateString()].push(c)
               } else {
                 this.CongeDic[dateC.toDateString()] = [c]
               }
-              if (!congesList.includes(dateC))
+              if (!congesList.includes(dateC.toString()))
                 this.addEventGlobal(new EventCalendarRH(null, dateC, "Autorisation", "Nous vous souhaitons de bonnes congés, couper votre téléphone, ne pensez pas au travail et reposez-vous bien!", null, "Autorisation"))
               else
-                congesList.push(dateC)
+                congesList.push(dateC.toString())
               dateC.setDate(dateC.getDate() + 1)
             }
           })
