@@ -131,7 +131,9 @@ export class UpdateAgentComponent implements OnInit {
               this.router.navigate(['/agent/list'])
             })
           else
-            this.router.navigate(['/agent/list'])
+            this.CollaborateurService.patchCollaborateurData({ _id: c._id, user_id: this.USER, localisation: this.SITE }).then(c => {
+              this.router.navigate(['/agent/list'])
+            })
         })
 
       else
@@ -160,11 +162,10 @@ export class UpdateAgentComponent implements OnInit {
         this.roles_list = data.roles_list
         this.CollaborateurService.getCollaborateurByUserId(this.ID).then(val => {
           if (val) {
+            console.log(val)
             this.addForm.patchValue({ type: 'Collaborateur' })
             this.SITE = val.localisation
           }
-          else
-            this.addForm.patchValue({ type: null })
         })
       })
     })
