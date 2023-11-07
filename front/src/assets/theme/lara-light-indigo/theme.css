@@ -5739,3 +5739,67 @@ p-treeselect.ng-invalid.ng-dirty > .p-treeselect {
   }
 
 }
+
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+@media print {
+
+  html,
+  body, 
+  .p-tabview-panels,
+  .main-page,
+  .page-pdf {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: white;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust:exact;
+  
+  }
+
+  app-topbar, 
+  .layout-sidebar, 
+  .p-tabview-nav-container,
+  .old-cv,
+  .input-form-cv,
+  .footer-content {
+    display: none !important;
+  }
+
+
+  html, body, app-main, .layout-main-container  {
+    display: block;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 29.7cm !important;
+    height: 42cm !important;
+    margin-top: 0 !important;
+    transform: scale(1) !important;
+    overflow: hidden;
+  }
+
+
+  .page-content,
+  .new-cv,
+  .page-container,
+  .page-inner-content  {
+    display: block !important;
+    width: 29.7cm !important;
+    height: 42cm !important;
+    transform: scale(1) !important;
+  }
+
+
+}
+

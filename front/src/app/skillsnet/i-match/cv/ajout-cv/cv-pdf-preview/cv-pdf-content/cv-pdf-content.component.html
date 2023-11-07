@@ -1,0 +1,58 @@
+<div class="main-content" [ngClass]="school">
+    <div class="section" *ngIf="maintContent.educations && maintContent.educations.length!=0">
+        <h2>Education</h2>
+        <div class="section-content" *ngFor="let exp of maintContent.educations">
+            <div class="section-title">
+                <h3 class="section-training">{{exp?.intitule_experience}}</h3>
+                <p class="section-date" *ngIf="exp?.date_debut && exp?.date_debut.length>0">{{exp?.date_debut| date:'MM/YYYY'}}-{{exp?.date_fin|
+                    date:'MM/YYYY'}}</p>
+            </div>
+            <p class="section-main" *ngIf="exp?.structure && exp?.structure.length>0">{{exp?.structure}}</p>
+            <div class="section-details" *ngIf="exp?.details && exp?.details.length>0">
+                <p>{{exp?.details}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="section" *ngIf="maintContent.experiences_pro && maintContent.experiences_pro.length!=0">
+        <h2>Experiences Professionnelles</h2>
+        <div class="section-content" *ngFor="let exp of maintContent.experiences_pro">
+            <div class="section-title">
+                <h3 class="section-training">{{exp?.intitule_experience}}</h3>
+                <p class="section-date" *ngIf="exp?.date_debut && exp?.date_debut.length>0">{{exp?.date_debut| date:'MM/YYYY'}}-{{exp?.date_fin|
+                    date:'MM/YYYY'}}</p>
+            </div>
+            <p class="section-main" *ngIf="exp?.structure && exp?.structure.length>0">{{exp?.structure}}</p>
+            <div class="section-details" *ngIf="exp?.details && exp?.details.length>0">
+                <p>{{exp?.details}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="section" *ngIf="maintContent.experiences_associatif && maintContent.experiences_associatif.length!=0">
+        <h2>Experiences Associatif</h2>
+        <div class="section-content" *ngFor="let exp of maintContent.experiences_associatif">
+            <div class="section-title">
+                <h3 class="section-training">{{exp?.intitule_experience}}</h3>
+                <p class="section-date" *ngIf="exp?.date_debut && exp?.date_debut.length>0">{{exp?.date_debut| date:'MM/YYYY'}}-{{exp?.date_fin|
+                    date:'MM/YYYY'}}</p>
+            </div>
+            <p class="section-main" *ngIf="exp?.structure && exp?.structure.length>0">{{exp?.structure}}</p>
+            <div class="section-details" *ngIf="exp?.details && exp?.details.length>0">
+                <p>{{exp?.details}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="section" *ngIf="maintContent.informatiques && maintContent.informatiques.length!=0">
+        <h2>Informatique</h2>
+        <div class="section-content" *ngFor="let exp of maintContent.informatiques">
+            <div class="section-title">
+                <h3 class="section-training">{{exp?.intitule_experience}}</h3>
+                <p class="section-date" *ngIf="exp?.date_debut && exp?.date_debut.length>0">{{exp?.date_debut| date:'MM/YYYY'}}-{{exp?.date_fin|
+                    date:'MM/YYYY'}}</p>
+            </div>
+            <p class="section-main" *ngIf="exp?.structure && exp?.structure.length>0">{{exp?.structure}}</p>
+            <div class="section-details" *ngIf="exp?.details && exp?.details.length>0">
+                <p>{{exp?.details}}</p>
+            </div>
+        </div>
+    </div>
+</div>

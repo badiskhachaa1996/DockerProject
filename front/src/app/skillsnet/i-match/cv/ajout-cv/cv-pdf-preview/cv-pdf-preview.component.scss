@@ -1,0 +1,60 @@
+.page-inner-content {
+    padding: 0;
+    background: white;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .content-container {
+    padding: 15mm;
+    padding-top: 10mm;
+    display: flex;
+    height: 100%;
+    padding-bottom: 0;
+    width: 100%;
+
+  }
+
+  .studinfo {
+    height: 80% !important;
+  }
+
+
+  .adg {
+    padding: 15mm;
+    padding-top: 10mm;
+    display: flex;
+    height: 83%;
+    padding-bottom: 20mm;
+    width: 100%;
+    border-bottom: 12mm solid #1D1D1B;
+  }
+
+  .medasup {
+    padding: 15mm;
+    padding-top: 5mm;
+    display: flex;
+    height: 70%;
+    padding-bottom: 0;
+    width: 100%;
+  }
+
+  .bottom-meda {
+    width: 297mm;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }
+
+  .btech {
+    height: 76%;
+  }
+
+  .sidebar {
+    width: 40%;
+  }
+
+  .content {
+    width: 60%;
+  }
