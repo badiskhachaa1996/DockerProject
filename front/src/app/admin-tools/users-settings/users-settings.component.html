@@ -119,7 +119,7 @@
                     <label For="role">Rôle</label>
                     <p-dropdown [options]="roleList" formControlName="role"></p-dropdown>
                 </div>
-                <div class="field col-12" *ngIf="formUpdate.value.role.value=='Etudiant'">
+                <div class="field col-12" *ngIf="formUpdate.value.role=='Etudiant'">
                     <label For="service">Type supplémentaire<span style="color:red"> *</span></label>
                     <p-multiSelect [options]="typeList" placeholder="Choisissez un type"
                         formControlName="type_supp"></p-multiSelect>
