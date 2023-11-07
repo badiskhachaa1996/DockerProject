@@ -101,7 +101,7 @@ export class AddAgentComponent implements OnInit {
     this.UserService.create({ ...this.addForm.value, roles_list: this.roles_list }).subscribe(data => {
       this.ToastService.add({ summary: 'Création de l\'agent avec succès', severity: 'success' })
       this.roles_list = []
-      if (this.addForm.value.type == 'Collaborateur'  || this.addForm.value.type == 'Formateyr')
+      if (this.addForm.value.type == 'Collaborateur'  || this.addForm.value.type == 'Formateur')
         this.CollaborateurService.postCollaborateur({ user_id: data, localisation: this.SITE }).then(c => {
         })
       this.addForm.reset()
