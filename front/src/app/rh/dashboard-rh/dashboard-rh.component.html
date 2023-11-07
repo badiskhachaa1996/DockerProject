@@ -8,7 +8,7 @@
 					<strong>{{ today | date: 'H:mm' }} Paris</strong>
 				</div>
 				<p class="col-12">Site <p-multiSelect [options]="localisationList" placeholder="Paris, Tunis..."
-						[(ngModel)]="siteSelected" (onChange)="filterCollaborateur($event.value)" autoWidth="false"
+						[(ngModel)]="siteSelected" (onChange)="filterCollaborateur($event.value);onUpdateStats()" autoWidth="false"
 						[style]="{'width':'13em'}"></p-multiSelect></p>
 
 				<div class="col-12 md:col-4 align-self-center grid"
@@ -63,7 +63,7 @@
 								class="w-full" />
 						</span>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="teamRHFilter"
-							(onChange)="chooseTeam($event.value)" placeholder="Equipe RH"
+							(onChange)="chooseTeam($event.value);onUpdateStats()" placeholder="Equipe RH"
 							[showClear]="true"></p-dropdown>
 						<p-dropdown [style]="{'margin-bottom':'2px', 'margin-left': '3px'}" [options]="statutList"
 							(onChange)="dt1.filter($event.value, 'user_id.statut', 'equals');" placeholder="Statut"
@@ -91,7 +91,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-check let-expanded="expanded">
 					<tr [pRowToggler]="check" (click)="onGetUserChecksHistorique(check);" style="cursor: pointer;">
-						<td>
+						<td [pRowToggler]="check">
 							<button type="button" pButton pRipple [pRowToggler]="check"
 								class="p-button-text p-button-rounded p-button-plain"
 								[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -198,7 +198,6 @@
 						<th>Pause </th>
 						<th>Checkout</th>
 						<th style="width: 8rem"> Taux CRA </th>
-						<th>Validé </th>
 						<th>Action</th>
 					</tr>
 				</ng-template>
@@ -215,7 +214,8 @@
 						</td>
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
 							style="min-width: 14rem;">
-							WIP
+							<app-pause-read-more [pausemin]="check?.pause_timing"
+								[pauseList]="check?.pause"></app-pause-read-more>
 						</td>
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
 							style="min-width: 10rem;">
@@ -229,12 +229,6 @@
 						<td [ngClass]="{'valid-middle':check?.validated,'non-valid-middle':!check?.validated}"
 							style="min-width: 12rem;" *ngIf="!check.taux_cra">
 							0%
-						</td>
-						<td *ngIf="cra?.validated" class="valid-middle">
-							Validé
-						</td>
-						<td *ngIf="!cra?.validated" class="non-valid-middle">
-							Non Validé
 						</td>
 						<td [ngClass]="{'valid-end':ccheckra?.validated,'non-valid-end':!check?.validated}">
 							<i pTooltip="Valider CRA" style="cursor: pointer;" class="pi pi-check"

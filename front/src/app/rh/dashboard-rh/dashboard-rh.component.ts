@@ -137,9 +137,27 @@ export class DashboardRhComponent implements OnInit {
             });
             dc.taux_cra = ((worked * 100) / max)
           }
+          this.rhService.getCollaborateurByUserId(dc.user_id._id)
+            .then((collaborateur) => {
+              let totalTimeCra = 0;
 
-          if (dc && dc.user_id)
-            this.dailyChecks.push(dc)
+              dc?.cra.map((cra) => {
+                totalTimeCra += cra.number_minutes;
+              });
+
+              if (!collaborateur || !collaborateur.h_cra) {
+                collaborateur.h_cra = 7
+              }
+              // conversion du taux cra du collaborateur en minutes
+              collaborateur.h_cra *= 60;
+              // partie calcule du pourcentage en fonction du totalTimeCra
+              let percent = (totalTimeCra * 100) / collaborateur.h_cra;
+              dc.taux_cra = percent
+              if (dc && dc.user_id)
+                this.dailyChecks.push(dc)
+            })
+            .catch((error) => { console.error(error); });
+
         })
         this.AuthService.getPopulate(this.token.id).subscribe(USER => {
           let services_list = [];
@@ -396,5 +414,39 @@ export class DashboardRhComponent implements OnInit {
         else
           this.dt1.filter([], 'user_id._id', 'in')
       })
+  }
+  onUpdateStats() {
+
+    // initialisation à zero
+    this.numberOfDisponible = 0;
+    this.numberOfConge = 0;
+    this.numberOfReunion = 0;
+    this.numberOfOccupe = 0;
+    this.numberOfAbsent = 0;
+    this.numberOfPause = 0;
+    this.numberOfChecks = 0
+
+    this.dailyChecks.forEach(element => {
+      if (element.check_in)
+        this.numberOfChecks++
+    });;
+    // remplissage des variables de statuts
+    this.dailyChecks.forEach((collaborateur: DailyCheck) => {
+      const user_id: User = collaborateur?.user_id;
+
+      if (user_id?.statut == 'Disponible') {
+        this.numberOfDisponible++;
+      } else if (user_id?.statut == 'En congé') {
+        this.numberOfConge++;
+      } else if (user_id?.statut == 'En réunion') {
+        this.numberOfReunion++;
+      } else if (user_id?.statut == 'Occupé') {
+        this.numberOfOccupe++;
+      } else if (user_id?.statut == 'Absent') {
+        this.numberOfAbsent++;
+      } else if (user_id?.statut == 'En pause') {
+        this.numberOfPause++;
+      }
+    });
   }
 }

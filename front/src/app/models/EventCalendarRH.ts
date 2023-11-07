@@ -9,6 +9,7 @@ export class EventCalendarRH {
         public note?: string,
         public created_by?: User,
         public name?: string,
-        public campus?: string
+        public campus?: string,
+        public personal?: string
     ) { };
 }
