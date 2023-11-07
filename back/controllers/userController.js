@@ -637,7 +637,7 @@ app.get("/getAllAgent/", (req, res) => {
 });
 
 app.get("/getAllAgentPopulate", (req, res) => {
-  User.find({ $or: [{ role: ["Responsable", "Agent", "Admin"] }, { type: ['Collaborateur', 'Responsable', null], haveNewAccess: true }, { type_supp: { $in: ['Collaborateur', 'Responsable'] } }] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
+  User.find({ $or: [{ role: ["Responsable", "Agent", "Admin"] }, { type: ['Collaborateur', 'Responsable', null, 'Formateur'], haveNewAccess: true }, { type_supp: { $in: ['Collaborateur', 'Responsable'] } }] }).populate('service_id').populate('roles_ticketing_list.module').populate('service_list')
 
     .then((result) => {
       res.send(result.length > 0 ? result : []);

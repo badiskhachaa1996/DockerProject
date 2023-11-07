@@ -243,11 +243,18 @@ export class UsersSettingsComponent implements OnInit {
   //Methode de modification des infos
   onUpdateUser() {
     const user = new User();
-    if (this.formUpdate.value.type == 'Collaborateur' && this.userToUpdate.type != 'Collaborateur' || this.formUpdate.value.type_supp.includes('Collaborateur') && !this.userToUpdate.type_supp.includes('Collaborateur'))
+    if (this.formUpdate.value.type == 'Collaborateur' && this.userToUpdate.type != 'Collaborateur' || this.formUpdate.value.type_supp.includes('Collaborateur') && !this.userToUpdate.type_supp.includes('Collaborateur') || this.formUpdate.value.type == 'Formateur' && this.userToUpdate.type != 'Formateur')
       this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(c => {
         if (!c)
           this.CollabService.postCollaborateur({ user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => { })
         else
+          this.CollabService.patchCollaborateurData({ _id: c._id, user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => {
+
+          })
+      })
+    else
+      this.CollabService.getCollaborateurByUserId(this.userToUpdate._id).then(c => {
+        if (c)
           this.CollabService.patchCollaborateurData({ _id: c._id, user_id: this.userToUpdate, localisation: this.formUpdate.value.SITE }).then(c => {
 
           })

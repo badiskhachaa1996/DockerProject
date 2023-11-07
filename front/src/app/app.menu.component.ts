@@ -4395,7 +4395,7 @@ export class AppMenuComponent implements OnInit {
                 }
 
                 //menu formateur
-                if (response.type === 'Formateur' && response.role === 'user') {
+                if (response.type === 'Formateur' && response.role === 'user' && !response.haveNewAccess) {
                     this.FService.getByUserId(this.token.id).subscribe({
                         next: (dataF: Formateur) => {
                             this.items = [
@@ -4536,7 +4536,7 @@ export class AppMenuComponent implements OnInit {
                     ]
                 if (response.haveNewAccess) {
                     //1
-
+                    //console.log('haveNewAccess', this.items)
                     if (response.role == 'user') {
                         this.items = [
                             {
@@ -6842,7 +6842,10 @@ export class AppMenuComponent implements OnInit {
                         }
                     )
                 }
-                setTimeout(() => this.showMenu = true, 0);
+                setTimeout(() => {
+                    this.items = Object.assign([], this.items);
+                    this.showMenu = true
+                }, 0);
                 //this.showMenu=true
             },
             error: (error: any) => {
