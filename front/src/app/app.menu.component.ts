@@ -4395,7 +4395,7 @@ export class AppMenuComponent implements OnInit {
                 }
 
                 //menu formateur
-                if (response.type === 'Formateur' && response.role === 'user' && !response.haveNewAccess) {
+                if (response.type === 'Formateur' && response.role === 'user') {
                     this.FService.getByUserId(this.token.id).subscribe({
                         next: (dataF: Formateur) => {
                             this.items.push(
