@@ -280,6 +280,7 @@ export class UsersSettingsComponent implements OnInit {
     user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
     user.campus = this.formUpdate.value.campus
     user.type_supp = this.formUpdate.value.type_supp
+    user.haveNewAccess = true
     console.log(this.formUpdate.value);
 
 
